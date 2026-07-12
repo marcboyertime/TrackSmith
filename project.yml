@@ -1,0 +1,62 @@
+name: LogicAudioAssistant
+options:
+  bundleIdPrefix: com.example.logicaudioassistant
+  deploymentTarget:
+    macOS: "14.0"
+packages:
+  CorePackage:
+    path: .
+targets:
+  CompanionMacApp:
+    type: application
+    platform: macOS
+    sources: [apps/CompanionMacApp]
+    entitlements:
+      path: apps/CompanionMacApp/CompanionMacApp.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.logicaudioassistant.app
+        PRODUCT_NAME: Logic Audio Assistant
+        SWIFT_VERSION: 6.0
+    dependencies:
+      - package: CorePackage
+        product: SharedIPC
+      - target: AssistantAudioUnitExtension
+        embed: true
+  AssistantAudioUnitExtension:
+    type: app-extension
+    platform: macOS
+    sources: [plugins/AudioUnit/AudioUnitExtension]
+    entitlements:
+      path: plugins/AudioUnit/AudioUnitExtension/AssistantAudioUnitExtension.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.logicaudioassistant.app.AudioUnit
+        PRODUCT_NAME: Logic Audio Assistant AU
+        SWIFT_VERSION: 6.0
+        APPLICATION_EXTENSION_API_ONLY: YES
+    info:
+      path: plugins/AudioUnit/AudioUnitExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Logic Audio Assistant AU
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.AudioUnit-UI
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).AudioUnitViewController
+          NSExtensionAttributes:
+            AudioComponents:
+              - name: "Example: Logic Audio Assistant"
+                description: Conversational deterministic audio processing
+                manufacturer: ExAI
+                type: aufx
+                subtype: LgAA
+                version: 1
+                sandboxSafe: true
+    dependencies:
+      - package: CorePackage
+        product: CAtomics
+      - package: CorePackage
+        product: AudioAnalysis
+      - package: CorePackage
+        product: PlanSchema
+      - package: CorePackage
+        product: SharedIPC
