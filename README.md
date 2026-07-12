@@ -24,6 +24,8 @@ Milestones 0 and 1 are partially implemented. The portable core builds and runs:
   immutable snapshot history; selective compression revision; mock model provider.
 - PCM16/24/32 and Float32 WAV input, Float32 WAV output, analysis, three-preview,
   test-signal, and offline-render CLIs.
+- Native SwiftUI/AVFoundation audition app with synchronized sample-position A/B,
+  waveform/playhead, keyboard switching, measurements, warnings, and plan cards.
 - Atomic file-message IPC prototype and companion/plugin process probes.
 - Generated SwiftUI companion and AUv3 effect project scaffolds.
 
@@ -54,6 +56,7 @@ swift build -c release
 swift run -c release TestRunner
 swift run AnalysisCLI input.wav
 swift run PreviewCLI input.wav --source vocal --prompt "make this clearer and more controlled"
+swift run -c release AuditionApp "/path/to/preview folder"
 swift run OfflineRenderer input.wav processing-plan.json output.wav
 xcodegen generate
 ```
@@ -83,6 +86,16 @@ variant, `manifest.json` with measurements and parameters, and `AUDITION.txt`.
 The input is never modified. See [`HANDS_ON_TESTING.md`](docs/HANDS_ON_TESTING.md)
 for drum/full-mix examples, supported prompt vocabulary, and verification steps.
 
+For sample-position-synchronized comparison, open that folder in the native app:
+
+```sh
+make audition SESSION="/Users/marcboyer/Desktop/My Vocal Research Preview 3"
+```
+
+Press Space to play/pause, `0`–`3` to select a version, and `A` to toggle the
+selected result against the original. The loader validates file containment,
+audio formats, snapshot identity, and saved plans before playback.
+
 ## Repository map
 
 - `packages/`: host-independent schema, DSP, analysis, state, planner, preview,
@@ -91,6 +104,7 @@ for drum/full-mix examples, supported prompt vocabulary, and verification steps.
 - `apps/CompanionMacApp/`: native SwiftUI application scaffold.
 - `apps/CompanionApp/`: buildable command-line product slice.
 - `tools/`: preview/audio generation, offline renderer, analysis CLI, and integration probes.
+- `tools/AuditionApp/`: directly buildable native preview player for blinded-style A/B work.
 - `tests/TestRunner/`: dependency-free executable verification harness used because
   this Command Line Tools installation supplies neither XCTest nor Swift Testing.
 - `docs/`: product, architecture, capability, safety, test, and integration records.

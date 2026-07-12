@@ -214,6 +214,28 @@ enum TestRunner {
         decoder.dateDecodingStrategy = .iso8601
         let decodedManifest = try decoder.decode(PreviewSessionManifest.self, from: manifestData)
         try tests.expect(decodedManifest.sourceFingerprint == result.manifest.sourceFingerprint, "manifest changed on disk")
+        let loadedSession = try PreviewSessionLoader().load(directory: output)
+        try tests.expect(loadedSession.auditionableVariants.count == 3, "safe session loader lost variants")
+        try tests.expect(loadedSession.variants.allSatisfy { $0.planURL.deletingLastPathComponent() == output }, "loader escaped the session directory")
+
+        var unsafeManifest = decodedManifest
+        unsafeManifest.originalAudioFileName = "../escape.wav"
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        encoder.dateEncodingStrategy = .iso8601
+        try encoder.encode(unsafeManifest).write(to: output.appendingPathComponent("manifest.json"), options: .atomic)
+        try tests.expectThrows("unsafe manifest path was accepted") {
+            _ = try PreviewSessionLoader().load(directory: output)
+        }
+
+        try encoder.encode(decodedManifest).write(to: output.appendingPathComponent("manifest.json"), options: .atomic)
+        let linkedPlanName = decodedManifest.variants[0].planFileName
+        let linkedPlanURL = output.appendingPathComponent(linkedPlanName)
+        try FileManager.default.removeItem(at: linkedPlanURL)
+        try FileManager.default.createSymbolicLink(at: linkedPlanURL, withDestinationURL: input)
+        try tests.expectThrows("artifact symlink escape was accepted") {
+            _ = try PreviewSessionLoader().load(directory: output)
+        }
         try tests.expectThrows("existing output directory was accepted") {
             _ = try exporter.export(inputURL: input, prompt: "clearer", sourceType: .vocal, outputDirectory: output)
         }

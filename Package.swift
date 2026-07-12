@@ -21,6 +21,7 @@ let package = Package(
         .executable(name: "LogicIntegrationProbe", targets: ["LogicIntegrationProbe"]),
         .executable(name: "PluginProbe", targets: ["PluginProbe"]),
         .executable(name: "PreviewCLI", targets: ["PreviewCLI"]),
+        .executable(name: "AuditionApp", targets: ["AuditionApp"]),
         .executable(name: "TestSignalGenerator", targets: ["TestSignalGenerator"]),
         .executable(name: "TestRunner", targets: ["TestRunner"]),
     ],
@@ -41,6 +42,7 @@ let package = Package(
         .executableTarget(name: "LogicIntegrationProbe", dependencies: ["LogicBridge"], path: "tools/LogicIntegrationProbe/Sources/LogicIntegrationProbe"),
         .executableTarget(name: "PluginProbe", dependencies: ["SharedIPC"], path: "tools/PluginProbe/Sources/PluginProbe"),
         .executableTarget(name: "PreviewCLI", dependencies: ["PreviewWorkflow", "PlanSchema"], path: "tools/PreviewCLI/Sources/PreviewCLI"),
+        .executableTarget(name: "AuditionApp", dependencies: ["PreviewWorkflow", "DSPCore", "PlanSchema"], path: "tools/AuditionApp/Sources/AuditionApp"),
         .executableTarget(name: "TestSignalGenerator", dependencies: ["DSPCore"], path: "tools/TestSignalGenerator/Sources/TestSignalGenerator"),
         .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "PreviewRenderer", "PreviewWorkflow", "SharedIPC"], path: "tests/TestRunner"),
     ]

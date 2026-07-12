@@ -21,4 +21,8 @@
   and exported objective preview-difference warnings and matching provenance.
 - Added a hash-deduplicated research workflow, complete corpus disposition, and
   research-to-engineering synthesis for 61 unique supplied papers.
+- Added a directly buildable native audition app with synchronized AVAudioEngine
+  A/B switching, waveform, keyboard control, measurements, and processing cards.
+- Added a fail-closed preview-session loader that verifies artifact containment,
+  saved plans, snapshot IDs, variant uniqueness, and WAV format consistency.
 - Added AUv3 and SwiftUI scaffolds; host validation remains blocked by missing Xcode.

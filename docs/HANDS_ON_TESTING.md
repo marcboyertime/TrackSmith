@@ -20,6 +20,25 @@ loudness. Their different SHA-256 hashes confirm they are distinct renders. The 
 source is deliberately artificial and boxy; it tests mechanics, not production
 quality on a real performance.
 
+For a much better comparison than Finder playback, launch the native audition app:
+
+```sh
+cd "/Users/marcboyer/LogicAudioAssistant"
+make audition SESSION="/Users/marcboyer/Desktop/My Vocal Research Preview 3"
+```
+
+The app validates every artifact, loads all versions into one audio engine, and
+keeps them at the same sample position. Controls:
+
+- Space: play or pause.
+- `0`, `1`, `2`, `3`: original, conservative, balanced, strong.
+- `A`: toggle the selected processed result against the original.
+- Command-period: stop and rewind.
+- Command-O: open another preview folder.
+
+Selecting a result reveals its loudness match, true peak, audio delta, every DSP
+node, parameter, confidence, and rationale.
+
 `AUDITION.txt` gives a short summary. `manifest.json` contains analysis, every node,
 parameter, rationale, confidence and rejection status. The `*-plan.json` files can
 be passed directly to `OfflineRenderer`.
@@ -112,6 +131,8 @@ Expected current result: `SUMMARY passed=20 failed=0`.
   after every file succeeds.
 - An existing output directory is refused.
 - Rejected variants are recorded in the manifest but their audio is not presented.
+- The audition loader rejects unsafe artifact paths, missing/changed plans, duplicate
+  strengths, and WAVs whose rate/channel/frame metadata does not match the manifest.
 - Preview matching uses gated BS.1770 loudness for captures of at least 400 ms and
   labels an RMS fallback for shorter captures. Ceiling verification uses estimated
   true peak, while the real-time limiter itself remains a zero-lookahead sample-peak

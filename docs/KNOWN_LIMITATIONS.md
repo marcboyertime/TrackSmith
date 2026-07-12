@@ -41,7 +41,10 @@
   available and explicitly falls back to RMS for shorter captures. It is not a
   substitute for synchronized blinded listening.
 - The CLI writes audible preview WAVs but has no synchronized player, waveform UI,
-  instant switching, or blind comparison mode.
+  while the package-built native audition app now provides synchronized playback,
+  waveform, measurements, and instant switching. It is not yet packaged, signed,
+  notarized, or integrated into the full companion session browser. It loads all
+  variants into memory and currently supports rewind but not waveform seeking.
 
 ## State and operations
 

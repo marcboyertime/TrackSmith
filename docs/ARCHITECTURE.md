@@ -26,6 +26,11 @@ Logic Pro host process                 Companion app process
 Offline tools use the same PlanSchema + DSPCore + AudioAnalysis modules.
 ```
 
+The package-built `AuditionApp` is the first working native companion slice. It
+loads a validated preview-session manifest and runs original plus all valid variants
+simultaneously through one `AVAudioEngine`; gain selection makes A/B changes without
+losing sample position. It remains separate from the signed App Group/plug-in app.
+
 ## Process and trust boundaries
 
 - The AU extension receives only its buses and host-supplied callbacks. It does not

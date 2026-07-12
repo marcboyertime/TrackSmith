@@ -12,7 +12,8 @@ known sine/noise spectrum analysis, BS.1770 997 Hz calibration, relative gating,
 peak detection, PCM24 round-trip, capture wrap chronology, three variants/
 revision, adversarial prompt rejection, level matching, transactional audible export
 with source-byte preservation, long-preview BS.1770 matching, snapshot undo/redo,
-and IPC round-trip.
+and IPC round-trip. The export check now also validates safe session reload and
+rejects a manifest path-traversal attempt.
 
 This Command Line Tools installation includes neither XCTest nor Swift Testing, so
 the repository uses a dependency-free executable harness. After full Xcode is
