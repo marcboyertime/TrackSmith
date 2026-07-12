@@ -1,4 +1,4 @@
-.PHONY: build test demo demo-audio preview-demo audition project verify
+.PHONY: build test demo demo-audio preview-demo audition project au-host-probe native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -22,4 +22,15 @@ audition:
 project:
 	xcodegen generate
 
-verify: project build test
+au-host-probe:
+	swift run -c release AudioUnitHostProbe
+
+native-build: project
+	xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath .build/xcode-derived CODE_SIGNING_ALLOWED=NO build
+
+native-verify: native-build au-host-probe
+
+native-install:
+	./scripts/install-development-build.sh
+
+verify: project build test au-host-probe

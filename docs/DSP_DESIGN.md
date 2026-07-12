@@ -32,14 +32,17 @@ list of parameters, and enabled unimplemented node types fail validation.
 Plan validation and node compilation occur off render. Node/filter/envelope storage
 is allocated at compile. State reset is explicit. Scalar changes require smoothing
 or sample-accurate event handling. A C11 atomic wrapper supports macOS 14 without a
-third-party dependency. The capture producer writes to preallocated raw memory and
-publishes the completed frame count with release ordering; the non-real-time reader
-loads with acquire ordering and allocates the immutable snapshot.
+third-party dependency. Capture samples use atomic Float32 bit storage; a completed
+frame count is published with release ordering and read with acquire ordering. The
+storage reserves 8,192 guard frames beyond the user-visible capacity so an analysis
+copy can proceed while the producer advances; the reader retries if it is delayed
+beyond that guard.
 
-The offline `AudioBuffer` uses Swift arrays and is not itself the AU host-buffer
-adapter. Production AU wiring must operate on borrowed channel pointers, prepare
-capture per host format, avoid Swift copy-on-write, and atomically exchange whole
-compiled graphs only outside active use.
+The offline `AudioBuffer` uses Swift arrays and never enters the AU callback. The AU
+path processes borrowed noninterleaved Float32 channel pointers in place. Tests prove
+sample parity with the offline graph when the same stream is split across irregular
+host blocks. The current graph is prepared before `allocateRenderResources` returns;
+whole-graph publication during active rendering remains intentionally unsupported.
 
 ## Latency
 
@@ -76,7 +79,8 @@ energy ranges and explicitly do not claim a perceptual defect.
 Release tests cover BS.1770 calibration/gating/true peak, bypass identity,
 ceiling/finite safety, 44.1/48/88.2/96/192 kHz
 at 32/64/128/256/512/1024 frames, Float32 WAV round-trip, known 1 kHz sine peak/RMS/
-centroid, capture wrap order, and BS.1770/RMS preview matching. Required next tests include
+centroid, capture wrap order, borrowed-pointer/offline parity, dry-on-layout-failure,
+AU mono/stereo format negotiation, AU capture/state restoration, and BS.1770/RMS preview matching. Required next tests include
 impulse/sweep frequency response, compressor static/time curves, automation ramps,
 denormal timing, channel independence, fuzzed plans, golden hashes with tolerances,
 and callback deadline distributions under release host load.

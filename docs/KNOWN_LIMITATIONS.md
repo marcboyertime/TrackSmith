@@ -2,8 +2,10 @@
 
 ## Host and packaging
 
-- Full Xcode is absent. The AUv3/SwiftUI targets are generated but uncompiled,
-  unsigned, unnotarized, not `auval`-validated, and untested in installed Logic.
+- Xcode 26.6 builds and locally signs the AUv3/SwiftUI targets, but they are not
+  notarized, `auval`-validated, or tested in installed Logic. LaunchServices sees
+  the extension; the running AudioComponentRegistrar did not refresh while Logic
+  remained open, so no discovery claim is made yet.
 - Example bundle IDs, App Group ID, manufacturer and signing configuration must be
   replaced before distribution.
 - Logic project selection, source files, channel strips, plug-in insertion/reorder,
@@ -13,18 +15,20 @@
 
 ## Audio engine
 
-- The AU scaffold applies only output gain. Shared DSP and capture are not wired to
-  host buffer pointers and graph publication yet.
-- `CompiledGraph` is verified offline; its Swift-array `AudioBuffer` must not be
-  passed through a real-time callback as-is.
+- The AU callback uses borrowed noninterleaved Float32 host pointers and the same
+  deterministic graph as offline rendering; parity is tested across irregular host
+  blocks. The Swift-array `AudioBuffer` remains offline-only.
+- A graph can be staged only while render resources are deallocated. Lock-free,
+  verified whole-graph publication during playback is not implemented.
 - Limiting is zero-lookahead sample peak, not true peak. `lookaheadMS` is constrained
   to zero until a fixed-latency lookahead implementation exists.
 - Dynamic EQ, expander/gate, de-esser, transient shaper, M/S EQ, delay and reverb are
   schema entries but intentionally throw unsupported-node errors in DSP compilation.
 - Parameter automation is block-level in the AU scaffold; sample-accurate AU render
   events and smoothing for all parameters are unfinished.
-- Capture concurrency is single-producer. Snapshot consistency under continuous
-  wrap needs an overwrite/version retry protocol before production.
+- Capture is single-producer with atomic Float32 payloads, release/acquire frame
+  publication, reserved overwrite guard frames, and bounded snapshot retry. Sustained
+  host-load performance and callback timing still require Logic measurement.
 
 ## Analysis and intelligence
 
@@ -51,4 +55,7 @@
 - Snapshot storage is in memory; SQLite/App Group persistence, migrations, cache
   garbage collection, named snapshots and restart recovery are pending.
 - File IPC is a proof, not the final authenticated/wake-up protocol.
+- The AU compact UI reports input activity and output gain, but capture controls,
+  waveform, analysis, prompt entry, preview selection, and plan commits are not yet
+  connected to the companion.
 - The license is all-rights-reserved pending an owner decision.

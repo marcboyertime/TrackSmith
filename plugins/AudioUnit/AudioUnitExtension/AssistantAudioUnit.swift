@@ -2,23 +2,45 @@ import AudioAnalysis
 import AudioToolbox
 import AVFoundation
 import CAtomics
+import DSPCore
 import Foundation
+import PlanSchema
 
 final class RealtimeParameters: @unchecked Sendable {
     private let outputGainBits: OpaquePointer
-    init() { outputGainBits = laa_atomic_u64_create(UInt64(Float(1).bitPattern))! }
-    deinit { laa_atomic_u64_destroy(outputGainBits) }
+    private let inputPeakBits: OpaquePointer
+    private let renderCycleCount: OpaquePointer
+    init() {
+        outputGainBits = laa_atomic_u64_create(UInt64(Float(1).bitPattern))!
+        inputPeakBits = laa_atomic_u64_create(UInt64(Float.zero.bitPattern))!
+        renderCycleCount = laa_atomic_u64_create(0)!
+    }
+    deinit {
+        laa_atomic_u64_destroy(outputGainBits)
+        laa_atomic_u64_destroy(inputPeakBits)
+        laa_atomic_u64_destroy(renderCycleCount)
+    }
     func setOutputGain(decibels: Float) { laa_atomic_u64_store_relaxed(outputGainBits, UInt64(pow(10, decibels / 20).bitPattern)) }
     func outputGain() -> Float { Float(bitPattern: UInt32(laa_atomic_u64_load_relaxed(outputGainBits))) }
+    func setInputPeak(_ peak: Float) { laa_atomic_u64_store_relaxed(inputPeakBits, UInt64(peak.bitPattern)) }
+    func inputPeak() -> Float { Float(bitPattern: UInt32(laa_atomic_u64_load_relaxed(inputPeakBits))) }
+    func markRenderCycle() {
+        let current = laa_atomic_u64_load_relaxed(renderCycleCount)
+        laa_atomic_u64_store_relaxed(renderCycleCount, current &+ 1)
+    }
+    func renderCycles() -> UInt64 { laa_atomic_u64_load_relaxed(renderCycleCount) }
 }
 
 public final class AssistantAudioUnit: AUAudioUnit {
+    private static let processingPlanStateKey = "com.example.logicaudioassistant.processing-plan-v1"
     private var inputBus: AUAudioUnitBus!
     private var outputBus: AUAudioUnitBus!
     private var inputBusArray: AUAudioUnitBusArray!
     private var outputBusArray: AUAudioUnitBusArray!
     private let realtimeParameters = RealtimeParameters()
-    private let capture = CaptureRingBuffer(capacityFrames: 48_000 * 30, channelCount: 2, sampleRate: 48_000)
+    private let renderKernel = RealtimeRenderKernel()
+    private let stateLock = NSLock()
+    private var stagedProcessingPlan: ProcessingPlan?
     public override var inputBusses: AUAudioUnitBusArray { inputBusArray }
     public override var outputBusses: AUAudioUnitBusArray { outputBusArray }
 
@@ -38,26 +60,121 @@ public final class AssistantAudioUnit: AUAudioUnit {
     }
 
     public override func allocateRenderResources() throws {
-        guard inputBus.format.channelCount == outputBus.format.channelCount,
-              inputBus.format.sampleRate == outputBus.format.sampleRate else { throw AUError.formatNotSupported }
+        let inputFormat = inputBus.format
+        let outputFormat = outputBus.format
+        guard inputFormat.channelCount == outputFormat.channelCount,
+              inputFormat.sampleRate == outputFormat.sampleRate,
+              inputFormat.channelCount == 1 || inputFormat.channelCount == 2,
+              inputFormat.commonFormat == .pcmFormatFloat32,
+              outputFormat.commonFormat == .pcmFormatFloat32,
+              !inputFormat.isInterleaved,
+              !outputFormat.isInterleaved else { throw AUError.formatNotSupported }
         try super.allocateRenderResources()
+        do {
+            stateLock.lock()
+            let processingPlan = stagedProcessingPlan
+            stateLock.unlock()
+            try renderKernel.prepare(
+                sampleRate: inputFormat.sampleRate,
+                channelCount: Int(inputFormat.channelCount),
+                processingPlan: processingPlan
+            )
+        } catch {
+            super.deallocateRenderResources()
+            throw error
+        }
+    }
+
+    public override func reset() {
+        renderKernel.reset()
+        super.reset()
+    }
+
+    /// Copies recent dry plug-in input for analysis. Never call this from the render thread.
+    public func recentCapturedAudio(maxDurationSeconds: Double? = nil) -> DSPCore.AudioBuffer? {
+        renderKernel.recentCapture(maxDurationSeconds: maxDurationSeconds)
+    }
+
+    /// Stages a validated graph while rendering is stopped. The host activates it on the next allocation.
+    public func setProcessingPlan(_ plan: ProcessingPlan?) throws {
+        guard !renderResourcesAllocated else { throw AUError.renderResourcesMustBeDeallocated }
+        if let plan { try PlanValidator().validate(plan) }
+        stateLock.lock()
+        stagedProcessingPlan = plan
+        stateLock.unlock()
+    }
+
+    public var currentProcessingPlan: ProcessingPlan? {
+        stateLock.lock()
+        defer { stateLock.unlock() }
+        return stagedProcessingPlan
+    }
+
+    public var inputPeakDBFS: Float {
+        let peak = realtimeParameters.inputPeak()
+        return peak > 0 ? 20 * log10(peak) : -160
+    }
+
+    public var completedRenderCycleCount: UInt64 { realtimeParameters.renderCycles() }
+
+    public override var fullState: [String: Any]? {
+        get {
+            var state = super.fullState ?? [:]
+            if let plan = currentProcessingPlan,
+               let encoded = try? JSONEncoder().encode(plan) {
+                state[Self.processingPlanStateKey] = encoded
+            }
+            return state
+        }
+        set {
+            super.fullState = newValue
+            guard let encoded = newValue?[Self.processingPlanStateKey] as? Data,
+                  let plan = try? JSONDecoder().decode(ProcessingPlan.self, from: encoded),
+                  (try? PlanValidator().validate(plan)) != nil else { return }
+            stateLock.lock()
+            stagedProcessingPlan = plan
+            stateLock.unlock()
+        }
     }
 
     public override var internalRenderBlock: AUInternalRenderBlock {
         let parameters = realtimeParameters
+        let kernel = renderKernel
+        let maximumFrames = maximumFramesToRender
         return { actionFlags, timestamp, frameCount, outputBusNumber, outputData, _, pullInputBlock in
             guard let pullInputBlock else { return kAudioUnitErr_NoConnection }
+            guard frameCount <= maximumFrames else { return kAudioUnitErr_TooManyFramesToProcess }
             let status = pullInputBlock(actionFlags, timestamp, frameCount, 0, outputData)
             guard status == noErr else { return status }
             let buffers = UnsafeMutableAudioBufferListPointer(outputData)
-            let gain = parameters.outputGain()
-            for buffer in buffers {
-                guard let data = buffer.mData?.assumingMemoryBound(to: Float.self) else { continue }
-                for frame in 0..<Int(frameCount) { data[frame] *= gain }
+            guard buffers.count == kernel.channelCount,
+                  buffers[0].mNumberChannels == 1,
+                  buffers[0].mData != nil,
+                  let left = buffers[0].mData?.assumingMemoryBound(to: Float.self) else { return noErr }
+            if kernel.channelCount == 2,
+               (buffers[1].mNumberChannels != 1 || buffers[1].mData == nil) { return noErr }
+            let right = kernel.channelCount == 2
+                ? buffers[1].mData?.assumingMemoryBound(to: Float.self)
+                : nil
+            var inputPeak: Float = 0
+            for frame in 0..<Int(frameCount) {
+                inputPeak = max(inputPeak, abs(left[frame]))
+                if let right { inputPeak = max(inputPeak, abs(right[frame])) }
             }
+            parameters.setInputPeak(inputPeak)
+            parameters.markRenderCycle()
+            _ = kernel.process(
+                left: left,
+                right: right,
+                frameCount: Int(frameCount),
+                outputGain: parameters.outputGain()
+            )
             return noErr
         }
     }
 }
 
-private enum AUError: Error { case formatNotSupported }
+private enum AUError: Error {
+    case formatNotSupported
+    case renderResourcesMustBeDeallocated
+}

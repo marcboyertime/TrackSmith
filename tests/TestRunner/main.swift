@@ -36,6 +36,60 @@ enum TestRunner {
             try tests.expect((buffer.channels[0].map(abs).max() ?? 1) <= 0.502, "limiter exceeded ceiling")
             try tests.expect(buffer.channels[0].allSatisfy(\.isFinite), "nonfinite sample escaped")
         }
+        await tests.run("realtime pointer DSP matches offline graph across host blocks") {
+            let nodes = [
+                ProcessingNode(type: .inputTrim, parameters: [.gainDB: -1.5], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .highPass, parameters: [.frequencyHz: 70, .q: 0.707], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .parametricEQ, parameters: [.frequencyHz: 2_500, .q: 1.1, .gainDB: 2], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .compressor, parameters: [.thresholdDB: -20, .ratio: 2.5, .attackMS: 15, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 6, .mix: 0.8], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .saturation, parameters: [.driveDB: 2, .mix: 0.15], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .stereoWidth, parameters: [.width: 1.15, .mix: 0.7], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .limiter, parameters: [.ceilingDB: -1], rationale: "test", confidence: 1, category: .loudness),
+            ]
+            let rate = 48_000.0
+            let left = (0..<4_097).map { Float(0.35 * sin(2 * .pi * 220 * Double($0) / rate)) }
+            let right = (0..<4_097).map { Float(0.28 * sin(2 * .pi * 330 * Double($0) / rate + 0.2)) }
+            let plan = makePlan(nodes: nodes)
+            var offline = AudioBuffer(channels: [left, right], sampleRate: rate)
+            var offlineGraph = try CompiledGraph(plan: plan, sampleRate: rate, channelCount: 2)
+            try offlineGraph.process(&offline)
+
+            var realtimeLeft = left
+            var realtimeRight = right
+            var realtimeGraph = try CompiledGraph(plan: plan, sampleRate: rate, channelCount: 2)
+            let blockSizes = [32, 64, 127, 256, 511, 1_024]
+            var offset = 0
+            var blockIndex = 0
+            while offset < realtimeLeft.count {
+                let count = min(blockSizes[blockIndex % blockSizes.count], realtimeLeft.count - offset)
+                let status = realtimeLeft.withUnsafeMutableBufferPointer { leftBuffer in
+                    realtimeRight.withUnsafeMutableBufferPointer { rightBuffer in
+                        realtimeGraph.processRealtime(
+                            left: leftBuffer.baseAddress!.advanced(by: offset),
+                            right: rightBuffer.baseAddress!.advanced(by: offset),
+                            frameCount: count
+                        )
+                    }
+                }
+                try tests.expect(status == .processed, "pointer graph rejected a valid stereo block")
+                offset += count
+                blockIndex += 1
+            }
+            for frame in realtimeLeft.indices {
+                try tests.expect(abs(realtimeLeft[frame] - offline.channels[0][frame]) < 1e-6, "left output diverged at frame \(frame)")
+                try tests.expect(abs(realtimeRight[frame] - offline.channels[1][frame]) < 1e-6, "right output diverged at frame \(frame)")
+            }
+        }
+        await tests.run("realtime pointer DSP fails dry on layout mismatch") {
+            var samples: [Float] = [0.25, -0.5, 0.75]
+            let original = samples
+            var graph = try CompiledGraph(plan: makePlan(), sampleRate: 48_000, channelCount: 2)
+            let status = samples.withUnsafeMutableBufferPointer {
+                graph.processRealtime(left: $0.baseAddress!, frameCount: $0.count)
+            }
+            try tests.expect(status == .channelMismatch, "stereo graph accepted a missing right channel")
+            try tests.expect(samples == original, "failed pointer processing changed dry audio")
+        }
         await tests.run("required rates and buffer sizes") {
             let node = ProcessingNode(type: .compressor, parameters: [.thresholdDB: -18, .ratio: 3, .attackMS: 10, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 6, .mix: 1], rationale: "test", confidence: 1, category: .corrective)
             for rate in [44_100.0, 48_000, 88_200, 96_000, 192_000] { for frames in [32, 64, 128, 256, 512, 1_024] {

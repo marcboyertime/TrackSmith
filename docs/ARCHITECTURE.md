@@ -39,7 +39,7 @@ losing sample position. It remains separate from the signed App Group/plug-in ap
   analysis. No provider is trusted to produce executable actions.
 - App Group membership is the intended signed sharing boundary. The implemented
   `FileExchange` proves atomic JSON exchange in two local processes; signed App
-  Group resolution and notification/socket wake-up still require Xcode validation.
+  Group entitlements, resolution, and notification/socket wake-up remain open.
 - Accessibility and control-surface actions are separate transactions with explicit
   preconditions and postcondition verification. They never mutate the DSP core.
 
@@ -51,23 +51,25 @@ preallocated ring. It must not allocate, lock, log, access files, call a model,
 perform IPC, or touch UI. Plan compilation, ring snapshots, FFT/DFT analysis,
 preview rendering, serialization, and graph swaps are non-real-time work.
 
-The current offline `CompiledGraph` uses preallocated node state but the public
-`AudioBuffer` owns Swift arrays; the AU adapter must bind host buffers directly to a
-separate render view before the shared graph can be called from Logic. That adapter
-is an explicit open item, not an assumed real-time guarantee.
+`CompiledGraph.processRealtime` binds directly to borrowed noninterleaved Float32
+host pointers; it never constructs the Swift-array `AudioBuffer`. The same graph is
+tested for sample parity offline and across irregular host block boundaries. The AU
+prepares graph state and format-specific atomic capture storage before rendering.
+Active-playback graph publication and sample-accurate AU render events remain open;
+the current API activates a staged plan only on the next resource allocation.
 
 ## State flow
 
 ```text
 request → goals/prohibitions → current analysis → proposed plan
         → validation → offline render → measurements/guardrails
-        → preview snapshot → user commit → atomically published compiled graph
+        → preview snapshot → user commit → staged compiled graph at safe lifecycle boundary
 ```
 
-Snapshots are immutable and parent-linked. The committed AU graph is never replaced
-until a candidate validates and compiles. A failed provider, render, IPC request, or
-save leaves the prior committed graph live. AU `fullStateForDocument` will persist
-the committed plan and snapshot metadata; preview audio remains a managed cache.
+Snapshots are immutable and parent-linked. A failed provider, render, IPC request,
+or save leaves the prior committed graph live. AU `fullState` currently persists the
+validated processing plan; snapshot metadata, migrations, and preview cache links
+remain companion-state work. Preview audio remains a managed cache.
 
 ## Failure recovery
 

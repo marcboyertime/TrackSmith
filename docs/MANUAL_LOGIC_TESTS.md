@@ -1,16 +1,21 @@
 # Manual Logic test protocol
 
-No case below has passed yet. Record exact macOS, Logic, commit, signing identity,
+No Logic-host case below has passed yet. The class-level Apple host probe passes,
+but that does not establish Logic behavior. Record exact macOS, Logic, commit, signing identity,
 sample rate, I/O buffer, channel count, low-latency mode, and result for every run.
 
 ## Prerequisites
 
-1. Install full Xcode, run first-launch components, and select it with `xcode-select`.
-2. Replace example bundle/App Group IDs and select an Apple Development team.
-3. `xcodegen generate`, open the project, build the companion app and extension.
-4. Confirm extension registration with `pluginkit`; run
-   `auval -v aufx LgAA ExAI`. Save complete output.
-5. Create a new disposable Logic test project. Never use unreleased/user work for
+1. Save and quit Logic so it does not retain a pre-install Audio Unit registry.
+2. Run `make native-verify`; require 22/22 core tests, an unsigned native build,
+   and a passing `AudioUnitHostProbe`.
+3. Run `make native-install`, then launch
+   `~/Applications/Logic Audio Assistant.app` once.
+4. Run `auval -v aufx LgAA ExAI` and save complete output. If the component remains
+   absent, restart macOS once, launch the containing app, and retry before Logic.
+5. For distribution, replace example bundle/App Group IDs and select an Apple
+   Development team. The local “Sign to Run Locally” identity is development-only.
+6. Create a new disposable Logic test project. Never use unreleased/user work for
    experimental automation tests.
 
 ## Stable AU cases
@@ -18,7 +23,8 @@ sample rate, I/O buffer, channel count, low-latency mode, and result for every r
 - **AU-01 discovery/instantiate:** open Plug-in Manager, locate the AU3 label, insert
   on mono audio, stereo audio, bus and stereo output; verify audio and UI status.
 - **AU-02 pass-through/bypass:** empty graph must be bit-equivalent in offline host
-  test and audibly transparent; toggle Logic bypass repeatedly without glitches.
+  test and audibly transparent; confirm the live input peak changes, move output
+  gain to -12 dB and back, then toggle Logic bypass repeatedly without glitches.
 - **AU-03 parameter automation:** automate output gain, inspect ramps/clicks, save,
   close Logic, reopen, verify values and automation.
 - **AU-04 formats:** repeat 44.1/48/88.2/96/192 kHz and 32...1024 frame settings

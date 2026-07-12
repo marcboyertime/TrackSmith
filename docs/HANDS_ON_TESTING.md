@@ -122,7 +122,42 @@ Run the complete automated verification:
 make verify
 ```
 
-Expected current result: `SUMMARY passed=20 failed=0`.
+The current expected result is `SUMMARY passed=22 failed=0`, followed by:
+
+```text
+PASS Audio Unit instantiated and rendered mono/stereo host buffers
+```
+
+## Test the native Audio Unit in Logic
+
+Save your Logic project, then quit Logic before installing so its Audio Unit
+registry can observe the new extension cleanly.
+
+```sh
+cd "/Users/marcboyer/LogicAudioAssistant"
+make native-verify
+make native-install
+open "$HOME/Applications/Logic Audio Assistant.app"
+auval -v aufx LgAA ExAI
+```
+
+If `auval` still says it cannot find the component, restart the Mac once, open the
+companion app once, and rerun `auval` before opening Logic. Do not delete audio-unit
+caches or force-terminate shared audio services while a DAW is running.
+
+In Logic:
+
+1. Create a disposable project and add a mono or stereo audio track.
+2. Choose an Audio FX insert, then Audio Units → Example → Logic Audio Assistant.
+3. Play audio. The compact UI should change from “Waiting for audio” to a green
+   “Audio arriving” line with a peak value.
+4. Move Output gain to `-12.0 dB`; the track should become quieter without clicks.
+5. Return it to `0.0 dB`, bypass repeatedly, save, quit, reopen, and confirm the
+   plug-in and parameter state reload.
+
+This first UI build continuously retains only the latest 30 seconds in memory. It
+does not yet expose the captured waveform or run conversational planning inside
+Logic; those remain companion-integration work.
 
 ## Safety behavior to expect
 

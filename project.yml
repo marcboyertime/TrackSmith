@@ -11,6 +11,12 @@ targets:
     type: application
     platform: macOS
     sources: [apps/CompanionMacApp]
+    info:
+      path: apps/CompanionMacApp/Info.plist
+      properties:
+        CFBundleDisplayName: Logic Audio Assistant
+        LSApplicationCategoryType: public.app-category.music
+        NSHighResolutionCapable: true
     entitlements:
       path: apps/CompanionMacApp/CompanionMacApp.entitlements
     settings:
@@ -46,16 +52,21 @@ targets:
             AudioComponents:
               - name: "Example: Logic Audio Assistant"
                 description: Conversational deterministic audio processing
+                factoryFunction: $(PRODUCT_MODULE_NAME).AudioUnitViewController
                 manufacturer: ExAI
                 type: aufx
                 subtype: LgAA
-                version: 1
+                version: 65536
                 sandboxSafe: true
+                tags:
+                  - Effects
     dependencies:
       - package: CorePackage
         product: CAtomics
       - package: CorePackage
         product: AudioAnalysis
+      - package: CorePackage
+        product: DSPCore
       - package: CorePackage
         product: PlanSchema
       - package: CorePackage

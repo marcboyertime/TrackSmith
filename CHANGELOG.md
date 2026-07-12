@@ -25,4 +25,12 @@
   A/B switching, waveform, keyboard control, measurements, and processing cards.
 - Added a fail-closed preview-session loader that verifies artifact containment,
   saved plans, snapshot IDs, variant uniqueness, and WAV format consistency.
-- Added AUv3 and SwiftUI scaffolds; host validation remains blocked by missing Xcode.
+- Added initial AUv3 and SwiftUI scaffolds.
+- Installed Xcode 26.6 support and compiled/locally signed the native containing app
+  and AUv3 extension with metadata aligned to Apple’s current template.
+- Added allocation-free borrowed host-buffer DSP with offline parity tests, dry
+  failure behavior, format-aware capture, live input peak, and compact gain UI.
+- Added atomic Float32 capture payloads plus overwrite guard storage for safe
+  non-real-time snapshots during continuous playback.
+- Added `AudioUnitHostProbe` covering 44.1 kHz mono and 96 kHz stereo render,
+  serialized graph execution, dry capture, AU parameters, and `fullState` restore.

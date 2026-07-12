@@ -6,19 +6,20 @@
 swift run -c release TestRunner
 ```
 
-On 2026-07-12 this passed 20/20 checks: plan round-trip, bounds rejection, bypass
-identity, limiter/nonfinite safety, five rates by six buffer sizes, WAV round-trip,
+On 2026-07-12 this passed 22/22 checks: plan round-trip, bounds rejection, bypass
+identity, limiter/nonfinite safety, borrowed-pointer/offline parity, dry layout
+failure, five rates by six buffer sizes, WAV round-trip,
 known sine/noise spectrum analysis, BS.1770 997 Hz calibration, relative gating, inter-sample true
 peak detection, PCM24 round-trip, capture wrap chronology, three variants/
 revision, adversarial prompt rejection, level matching, transactional audible export
 with source-byte preservation, long-preview BS.1770 matching, snapshot undo/redo,
-and IPC round-trip. The export check now also validates safe session reload and
+and IPC round-trip. The export check also validates safe session reload and
 rejects a manifest path-traversal attempt.
 
-This Command Line Tools installation includes neither XCTest nor Swift Testing, so
-the repository uses a dependency-free executable harness. After full Xcode is
-installed, migrate checks into XCTest without removing the release harness, which
-remains valuable for CI and installed-toolchain diagnostics.
+The repository retains a dependency-free executable harness so the core can run in
+CI and on Command Line Tools-only machines. `make native-verify` additionally builds
+the Xcode targets and runs `AudioUnitHostProbe`; migrate appropriate checks into
+XCTest without removing this release harness.
 
 ## Required expansion
 
@@ -35,6 +36,17 @@ remains valuable for CI and installed-toolchain diagnostics.
   provider and IPC interruption at every transaction state.
 - Performance: release callback percentiles and deadline misses at all formats,
   module/graph CPU, memory stability, analysis/preview latency, app/UI responsiveness.
+
+## Native Audio Unit probe
+
+```sh
+make native-verify
+```
+
+`AudioUnitHostProbe` registers the production AU class in-process and tests 44.1 kHz
+mono plus 96 kHz stereo noninterleaved rendering, serialized graph execution,
+parameter gain, bounded dry capture, and `fullState` restoration. This proves the
+class-level host contract but not system extension discovery or Logic behavior.
 
 ## Perceptual release tests
 

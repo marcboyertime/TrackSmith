@@ -15,6 +15,14 @@ public enum DSPError: Error, Equatable, CustomStringConvertible {
     }
 }
 
+/// Status returned by the allocation-free pointer processing path used by audio hosts.
+/// Invalid buffers are deliberately left unchanged so a host can continue with dry audio.
+public enum RealtimeProcessStatus: Int32, Equatable, Sendable {
+    case processed = 0
+    case invalidFrameCount
+    case channelMismatch
+}
+
 public struct CompiledGraph: Sendable {
     private var nodes: [CompiledNode]
     public let sampleRate: Double
@@ -68,6 +76,24 @@ public struct CompiledGraph: Sendable {
         sanitize(&buffer)
     }
 
+    /// Processes noninterleaved Float32 host buffers in place without allocating, locking, or throwing.
+    /// The graph must have been compiled off the render thread for the current sample rate and layout.
+    public mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>? = nil,
+        frameCount: Int
+    ) -> RealtimeProcessStatus {
+        guard frameCount >= 0 else { return .invalidFrameCount }
+        guard (channelCount == 1 && right == nil) || (channelCount == 2 && right != nil) else {
+            return .channelMismatch
+        }
+        for index in nodes.indices {
+            nodes[index].processRealtime(left: left, right: right, frameCount: frameCount)
+        }
+        sanitizeRealtime(left: left, right: right, frameCount: frameCount)
+        return .processed
+    }
+
     private func sanitize(_ buffer: inout AudioBuffer) {
         for channel in buffer.channels.indices {
             for frame in buffer.channels[channel].indices {
@@ -77,6 +103,23 @@ public struct CompiledGraph: Sendable {
                 else { buffer.channels[channel][frame] = min(max(sample, -8), 8) }
             }
         }
+    }
+
+
+    private func sanitizeRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            left[frame] = safeSample(left[frame])
+            if let right { right[frame] = safeSample(right[frame]) }
+        }
+    }
+
+    private func safeSample(_ sample: Float) -> Float {
+        if !sample.isFinite || abs(sample) < 1e-30 { return 0 }
+        return min(max(sample, -8), 8)
     }
 }
 
@@ -99,6 +142,27 @@ private enum CompiledNode: Sendable {
         case let .saturator(node): node.process(&buffer)
         case let .width(node): node.process(&buffer)
         case let .limiter(node): node.process(&buffer)
+        }
+    }
+
+
+    mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        switch self {
+        case var .gain(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .gain(node)
+        case .polarity:
+            for frame in 0..<frameCount {
+                left[frame] = -left[frame]
+                if let right { right[frame] = -right[frame] }
+            }
+        case var .biquad(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .biquad(node)
+        case var .compressor(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .compressor(node)
+        case let .saturator(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
+        case let .width(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
+        case let .limiter(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         }
     }
 
@@ -126,6 +190,20 @@ private struct GainNode: Sendable {
             current = target + coefficient * (current - target)
             let gain = Float(current)
             for channel in buffer.channels.indices { buffer.channels[channel][frame] *= gain }
+        }
+    }
+
+
+    mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            current = target + coefficient * (current - target)
+            let gain = Float(current)
+            left[frame] *= gain
+            if let right { right[frame] *= gain }
         }
     }
 }
@@ -170,6 +248,33 @@ private struct BiquadNode: Sendable {
                 states[channel].y2 = states[channel].y1; states[channel].y1 = output
                 buffer.channels[channel][frame] = Float(output)
             }
+        }
+    }
+
+
+    mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        processChannel(left, frameCount: frameCount, stateIndex: 0)
+        if let right { processChannel(right, frameCount: frameCount, stateIndex: 1) }
+    }
+
+    private mutating func processChannel(
+        _ samples: UnsafeMutablePointer<Float>,
+        frameCount: Int,
+        stateIndex: Int
+    ) {
+        for frame in 0..<frameCount {
+            let input = Double(samples[frame])
+            let output = b0 * input + b1 * states[stateIndex].x1 + b2 * states[stateIndex].x2
+                - a1 * states[stateIndex].y1 - a2 * states[stateIndex].y2
+            states[stateIndex].x2 = states[stateIndex].x1
+            states[stateIndex].x1 = input
+            states[stateIndex].y2 = states[stateIndex].y1
+            states[stateIndex].y1 = output
+            samples[frame] = Float(output)
         }
     }
 
@@ -221,6 +326,41 @@ private struct CompressorNode: Sendable {
         }
     }
 
+
+    mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            var linkedLevel = abs(Double(left[frame]))
+            if let right { linkedLevel = max(linkedLevel, abs(Double(right[frame]))) }
+            for channel in envelopes.indices {
+                let coefficient = linkedLevel > envelopes[channel] ? attackCoefficient : releaseCoefficient
+                envelopes[channel] = linkedLevel + coefficient * (envelopes[channel] - linkedLevel)
+            }
+            var envelope = 0.0
+            for channelEnvelope in envelopes { envelope = max(envelope, channelEnvelope) }
+            let inputDB = 20 * log10(max(envelope, 1e-12))
+            let overDB = inputDB - thresholdDB
+            let gainReductionDB: Double
+            if kneeDB <= 0 {
+                gainReductionDB = overDB > 0 ? (1 / ratio - 1) * overDB : 0
+            } else if overDB <= -kneeDB / 2 {
+                gainReductionDB = 0
+            } else if overDB >= kneeDB / 2 {
+                gainReductionDB = (1 / ratio - 1) * overDB
+            } else {
+                let kneePosition = overDB + kneeDB / 2
+                gainReductionDB = (1 / ratio - 1) * kneePosition * kneePosition / (2 * kneeDB)
+            }
+            let wetGain = pow(10, gainReductionDB / 20) * makeup
+            let gain = Float((1 - mix) + mix * wetGain)
+            left[frame] *= gain
+            if let right { right[frame] *= gain }
+        }
+    }
+
     mutating func reset() { for index in envelopes.indices { envelopes[index] = 0 } }
 }
 
@@ -238,6 +378,22 @@ private struct SaturatorNode: Sendable {
             buffer.channels[channel][frame] = dry * (1 - mix) + wet * mix
         }}
     }
+
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            left[frame] = processSample(left[frame])
+            if let right { right[frame] = processSample(right[frame]) }
+        }
+    }
+
+    private func processSample(_ dry: Float) -> Float {
+        let wet = tanh(dry * drive) / normalization
+        return dry * (1 - mix) + wet * mix
+    }
 }
 
 private struct WidthNode: Sendable {
@@ -254,6 +410,21 @@ private struct WidthNode: Sendable {
             buffer.channels[1][frame] = right * (1 - mix) + wetR * mix
         }
     }
+
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        guard let right else { return }
+        for frame in 0..<frameCount {
+            let dryLeft = left[frame], dryRight = right[frame]
+            let mid = 0.5 * (dryLeft + dryRight)
+            let side = 0.5 * (dryLeft - dryRight) * width
+            left[frame] = dryLeft * (1 - mix) + (mid + side) * mix
+            right[frame] = dryRight * (1 - mix) + (mid - side) * mix
+        }
+    }
 }
 
 private struct LimiterNode: Sendable {
@@ -265,6 +436,20 @@ private struct LimiterNode: Sendable {
             for channel in buffer.channels.indices { peak = max(peak, abs(buffer.channels[channel][frame])) }
             let gain = peak > ceiling ? ceiling / max(peak, 1e-12) : 1
             for channel in buffer.channels.indices { buffer.channels[channel][frame] *= gain }
+        }
+    }
+
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            var peak = abs(left[frame])
+            if let right { peak = max(peak, abs(right[frame])) }
+            let gain: Float = peak > ceiling ? ceiling / max(peak, 1e-12) : 1
+            left[frame] *= gain
+            if let right { right[frame] *= gain }
         }
     }
 }

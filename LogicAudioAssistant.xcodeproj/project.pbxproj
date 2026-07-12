@@ -10,12 +10,14 @@
 		04A007FEABFBCF18DC80CC8D /* CompanionMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */; };
 		0FCD7A3B857A94ED6854690F /* AudioUnitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E25320E58C365F05026A3D /* AudioUnitViewController.swift */; };
 		120D8EC37A11D6CB92412DD1 /* AudioAnalysis in Frameworks */ = {isa = PBXBuildFile; productRef = A2837E719FB3C5A3511C0FBE /* AudioAnalysis */; };
-		51C417982A47AA0F8600CF6C /* PlanSchema in Frameworks */ = {isa = PBXBuildFile; productRef = D22DCE71AA0744C01925754F /* PlanSchema */; };
+		51C417982A47AA0F8600CF6C /* DSPCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7D04B596ECCA738661E8385F /* DSPCore */; };
+		76D4EE46BC8136A38B585DCB /* RealtimeRenderKernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC110EC7B6EB965720D654D9 /* RealtimeRenderKernel.swift */; };
 		9A9CC98BD77F4E0351A39D45 /* AssistantAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BEA2B8FBEE9384B2E87FFA /* AssistantAudioUnit.swift */; };
-		9D71A280B07D17F955F62327 /* SharedIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 06243F0F93AD016BB2D781AE /* SharedIPC */; };
+		9D71A280B07D17F955F62327 /* PlanSchema in Frameworks */ = {isa = PBXBuildFile; productRef = D22DCE71AA0744C01925754F /* PlanSchema */; };
 		A45D3EE54950CC9AB1EC3E41 /* CAtomics in Frameworks */ = {isa = PBXBuildFile; productRef = 045DD0CB3C893D4865C5DFDB /* CAtomics */; };
 		B3A1C4B6513C1F5B8DC9EF11 /* AssistantAudioUnitExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A2BE0F05C877B36E0AE3E753 /* AssistantAudioUnitExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C0DA6188C3D155D6A64C4B99 /* SharedIPC in Frameworks */ = {isa = PBXBuildFile; productRef = AD8DD72C4B501857C0830B07 /* SharedIPC */; };
+		E9C940F36834AF328DF56350 /* SharedIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 06243F0F93AD016BB2D781AE /* SharedIPC */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		03BEA2B8FBEE9384B2E87FFA /* AssistantAudioUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantAudioUnit.swift; sourceTree = "<group>"; };
+		09A956A5E9C8DD1847457121 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		34D16C5DC2A9D74761EB8C87 /* LogicAudioAssistant */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LogicAudioAssistant; path = .; sourceTree = SOURCE_ROOT; };
 		3826FCB4719C8F43BE127163 /* AssistantAudioUnitExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssistantAudioUnitExtension.entitlements; sourceTree = "<group>"; };
 		790917278D3E6D6B76AB9CAC /* CompanionMacApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CompanionMacApp.entitlements; sourceTree = "<group>"; };
@@ -52,6 +55,7 @@
 		C38C1856B0AD4A7508F32109 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C451AA04E4837DEDF4F2D4A8 /* CompanionMacApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CompanionMacApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionMacApp.swift; sourceTree = "<group>"; };
+		EC110EC7B6EB965720D654D9 /* RealtimeRenderKernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeRenderKernel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,8 +73,9 @@
 			files = (
 				A45D3EE54950CC9AB1EC3E41 /* CAtomics in Frameworks */,
 				120D8EC37A11D6CB92412DD1 /* AudioAnalysis in Frameworks */,
-				51C417982A47AA0F8600CF6C /* PlanSchema in Frameworks */,
-				9D71A280B07D17F955F62327 /* SharedIPC in Frameworks */,
+				51C417982A47AA0F8600CF6C /* DSPCore in Frameworks */,
+				9D71A280B07D17F955F62327 /* PlanSchema in Frameworks */,
+				E9C940F36834AF328DF56350 /* SharedIPC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +89,7 @@
 				3826FCB4719C8F43BE127163 /* AssistantAudioUnitExtension.entitlements */,
 				B8E25320E58C365F05026A3D /* AudioUnitViewController.swift */,
 				C38C1856B0AD4A7508F32109 /* Info.plist */,
+				EC110EC7B6EB965720D654D9 /* RealtimeRenderKernel.swift */,
 			);
 			name = AudioUnitExtension;
 			path = plugins/AudioUnit/AudioUnitExtension;
@@ -94,6 +100,7 @@
 			children = (
 				790917278D3E6D6B76AB9CAC /* CompanionMacApp.entitlements */,
 				D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */,
+				09A956A5E9C8DD1847457121 /* Info.plist */,
 			);
 			name = CompanionMacApp;
 			path = apps/CompanionMacApp;
@@ -144,6 +151,7 @@
 			packageProductDependencies = (
 				045DD0CB3C893D4865C5DFDB /* CAtomics */,
 				A2837E719FB3C5A3511C0FBE /* AudioAnalysis */,
+				7D04B596ECCA738661E8385F /* DSPCore */,
 				D22DCE71AA0744C01925754F /* PlanSchema */,
 				06243F0F93AD016BB2D781AE /* SharedIPC */,
 			);
@@ -213,6 +221,7 @@
 			files = (
 				9A9CC98BD77F4E0351A39D45 /* AssistantAudioUnit.swift in Sources */,
 				0FCD7A3B857A94ED6854690F /* AudioUnitViewController.swift in Sources */,
+				76D4EE46BC8136A38B585DCB /* RealtimeRenderKernel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +313,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = apps/CompanionMacApp/CompanionMacApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = apps/CompanionMacApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -359,6 +369,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = apps/CompanionMacApp/CompanionMacApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = apps/CompanionMacApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -473,6 +484,10 @@
 		06243F0F93AD016BB2D781AE /* SharedIPC */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SharedIPC;
+		};
+		7D04B596ECCA738661E8385F /* DSPCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DSPCore;
 		};
 		A2837E719FB3C5A3511C0FBE /* AudioAnalysis */ = {
 			isa = XCSwiftPackageProductDependency;
