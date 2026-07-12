@@ -13,10 +13,8 @@ than silently doing nothing.
 input → ordered enabled nodes → finite/denormal guard → output
 ```
 
-The peak limiter is a sample-peak safety module, not a true-peak limiter. The
-compressor currently uses hard-knee gain calculation even though the schema reserves
-`kneeDB`; this parameter is validated/serialized but not yet applied. These gaps are
-called out so the UI cannot mislabel the current result.
+The peak limiter is a sample-peak safety module, not a true-peak limiter. Compression
+supports hard or quadratic soft-knee gain calculation.
 
 ## Parameter ranges
 
@@ -24,7 +22,8 @@ Authoritative ranges are in `PlanValidator.ranges`: gain -60...+24 dB; frequency
 10...24 kHz (clamped below Nyquist during compilation); Q 0.1...20; compressor
 threshold -80...0 dBFS; ratio 1...40; attack 0.05...500 ms; release 1...5000 ms;
 makeup -24...+24 dB; ceiling -24...0 dBFS; mix 0...1; width 0...2; drive
-0...36 dB; lookahead 0...20 ms. Each node also has an allow-list of parameters.
+0...36 dB; lookahead is currently constrained to 0 ms. Each node also has an allow-
+list of parameters, and enabled unimplemented node types fail validation.
 
 ## Real-time rules
 

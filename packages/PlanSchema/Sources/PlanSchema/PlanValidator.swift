@@ -3,6 +3,7 @@ import Foundation
 public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Sendable {
     case invalidTimeRange
     case duplicateNodeID(UUID)
+    case unsupportedNode(NodeType)
     case unsupportedParameter(NodeType, ParameterID)
     case parameterOutOfRange(ParameterID, value: Double, allowed: ClosedRange<Double>)
     case invalidConfidence(Double)
@@ -15,6 +16,7 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
         switch self {
         case .invalidTimeRange: "The analysis time range must be finite, nonnegative, and increasing."
         case let .duplicateNodeID(id): "Duplicate processing node ID: \(id)."
+        case let .unsupportedNode(type): "Processing node \(type.rawValue) is not implemented in this engine version."
         case let .unsupportedParameter(type, id): "Parameter \(id.rawValue) is unsupported for \(type.rawValue)."
         case let .parameterOutOfRange(id, value, allowed): "\(id.rawValue)=\(value) is outside \(allowed)."
         case let .invalidConfidence(value): "Confidence \(value) is outside 0...1."
@@ -34,7 +36,12 @@ public struct PlanValidator: Sendable {
         .thresholdDB: -80...0, .ratio: 1...40, .attackMS: 0.05...500,
         .releaseMS: 1...5_000, .makeupGainDB: -24...24, .ceilingDB: -24...0,
         .kneeDB: 0...24, .mix: 0...1, .width: 0...2, .driveDB: 0...36,
-        .enabled: 0...1, .lookaheadMS: 0...20,
+        .enabled: 0...1, .lookaheadMS: 0...0,
+    ]
+
+    public static let implementedNodeTypes: Set<NodeType> = [
+        .inputTrim, .polarity, .highPass, .lowPass, .parametricEQ, .compressor,
+        .softClipper, .saturation, .stereoWidth, .limiter, .outputTrim, .loudnessMatch, .meter,
     ]
 
     public static let allowedParameters: [NodeType: Set<ParameterID>] = [
@@ -61,6 +68,7 @@ public struct PlanValidator: Sendable {
         var addedGain = 0.0
         for node in plan.nodes {
             guard ids.insert(node.id).inserted else { throw PlanValidationError.duplicateNodeID(node.id) }
+            guard !node.enabled || Self.implementedNodeTypes.contains(node.type) else { throw PlanValidationError.unsupportedNode(node.type) }
             guard node.confidence.isFinite, (0...1).contains(node.confidence) else { throw PlanValidationError.invalidConfidence(node.confidence) }
             let allowed = Self.allowedParameters[node.type, default: []]
             for (parameter, value) in node.parameters {

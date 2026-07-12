@@ -3,15 +3,96 @@
   "$id": "https://example.invalid/logic-audio-assistant/processing-plan-1.0.schema.json",
   "title": "Logic Audio Assistant Processing Plan",
   "type": "object",
+  "additionalProperties": false,
   "required": ["schemaVersion", "requestID", "sourceSnapshotID", "scope", "goals", "nodes", "outputConstraints"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
-    "requestID": { "type": "string", "format": "uuid" },
-    "sourceSnapshotID": { "type": "string", "format": "uuid" },
-    "scope": { "type": "object" },
-    "goals": { "type": "array" },
-    "nodes": { "type": "array" },
-    "outputConstraints": { "type": "object" }
+    "requestID": { "$ref": "#/$defs/uuid" },
+    "sourceSnapshotID": { "$ref": "#/$defs/uuid" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "goals": { "type": "array", "items": { "$ref": "#/$defs/goal" }, "maxItems": 64 },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" }, "maxItems": 128 },
+    "outputConstraints": { "$ref": "#/$defs/outputConstraints" }
   },
-  "additionalProperties": false
+  "$defs": {
+    "uuid": { "type": "string", "format": "uuid" },
+    "finiteNumber": { "type": "number" },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "channelFormat", "sourceType"],
+      "properties": {
+        "kind": { "enum": ["pluginInput", "importedFile"] },
+        "channelFormat": { "enum": ["mono", "stereo"] },
+        "sourceType": { "enum": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix", "reference", "unknown"] },
+        "timeRangeSeconds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "number", "minimum": 0 },
+            "end": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        }
+      }
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attribute", "direction", "strength", "locked"],
+      "properties": {
+        "attribute": { "enum": ["clarity", "warmth", "brightness", "harshness", "muddiness", "punch", "closeness", "width", "dynamicControl", "sibilance", "backgroundNoise", "tonalBalance", "loudness", "cymbalHarshness", "lowEnd"] },
+        "direction": { "enum": ["increase", "decrease", "preserve", "doNotIncrease", "doNotDecrease"] },
+        "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+        "locked": { "type": "boolean" }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "enabled", "parameters", "rationale", "confidence", "category", "locked"],
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "type": { "enum": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "expander", "deEsser", "softClipper", "saturation", "transientShaper", "stereoWidth", "midSideEQ", "delay", "reverb", "limiter", "outputTrim", "loudnessMatch", "meter"] },
+        "enabled": { "type": "boolean" },
+        "parameters": { "$ref": "#/$defs/parameters" },
+        "rationale": { "type": "string", "maxLength": 4096 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "category": { "enum": ["corrective", "creative", "loudness"] },
+        "locked": { "type": "boolean" }
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gainDB": { "type": "number", "minimum": -60, "maximum": 24 },
+        "frequencyHz": { "type": "number", "minimum": 10, "maximum": 24000 },
+        "q": { "type": "number", "minimum": 0.1, "maximum": 20 },
+        "thresholdDB": { "type": "number", "minimum": -80, "maximum": 0 },
+        "ratio": { "type": "number", "minimum": 1, "maximum": 40 },
+        "attackMS": { "type": "number", "minimum": 0.05, "maximum": 500 },
+        "releaseMS": { "type": "number", "minimum": 1, "maximum": 5000 },
+        "makeupGainDB": { "type": "number", "minimum": -24, "maximum": 24 },
+        "ceilingDB": { "type": "number", "minimum": -24, "maximum": 0 },
+        "kneeDB": { "type": "number", "minimum": 0, "maximum": 24 },
+        "mix": { "type": "number", "minimum": 0, "maximum": 1 },
+        "width": { "type": "number", "minimum": 0, "maximum": 2 },
+        "driveDB": { "type": "number", "minimum": 0, "maximum": 36 },
+        "enabled": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lookaheadMS": { "const": 0 }
+      }
+    },
+    "outputConstraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxTruePeakDB", "loudnessMatchPreview", "preserveMonoCompatibility", "maxAddedGainDB"],
+      "properties": {
+        "maxTruePeakDB": { "type": "number", "minimum": -24, "maximum": 0 },
+        "loudnessMatchPreview": { "type": "boolean" },
+        "preserveMonoCompatibility": { "type": "boolean" },
+        "maxAddedGainDB": { "type": "number", "minimum": 0, "maximum": 24 }
+      }
+    }
+  }
 }

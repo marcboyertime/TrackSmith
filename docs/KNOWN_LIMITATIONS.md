@@ -17,8 +17,8 @@
   host buffer pointers and graph publication yet.
 - `CompiledGraph` is verified offline; its Swift-array `AudioBuffer` must not be
   passed through a real-time callback as-is.
-- Limiting is zero-lookahead sample peak, not true peak. `lookaheadMS` and compressor
-  `kneeDB` are reserved/validated but not processed.
+- Limiting is zero-lookahead sample peak, not true peak. `lookaheadMS` is constrained
+  to zero until a fixed-latency lookahead implementation exists.
 - Dynamic EQ, expander/gate, de-esser, transient shaper, M/S EQ, delay and reverb are
   schema entries but intentionally throw unsupported-node errors in DSP compilation.
 - Parameter automation is block-level in the AU scaffold; sample-accurate AU render

@@ -21,6 +21,8 @@ enum TestRunner {
         await tests.run("plan bounds fail closed") {
             let plan = makePlan(nodes: [.init(type: .compressor, parameters: [.ratio: 100], rationale: "bad", confidence: 1, category: .corrective)])
             try tests.expectThrows("out-of-range ratio was accepted") { try PlanValidator().validate(plan) }
+            let unsupported = makePlan(nodes: [.init(type: .reverb, parameters: [.mix: 0.2], rationale: "future", confidence: 1, category: .creative)])
+            try tests.expectThrows("unimplemented module was accepted") { try PlanValidator().validate(unsupported) }
         }
         await tests.run("DSP bypass is bit exact") {
             var buffer = AudioBuffer(channels: [[0, 0.1, -0.2, 0.3]], sampleRate: 48_000), graph = try CompiledGraph(plan: makePlan(), sampleRate: 48_000, channelCount: 1)
@@ -34,7 +36,7 @@ enum TestRunner {
             try tests.expect(buffer.channels[0].allSatisfy(\.isFinite), "nonfinite sample escaped")
         }
         await tests.run("required rates and buffer sizes") {
-            let node = ProcessingNode(type: .compressor, parameters: [.thresholdDB: -18, .ratio: 3, .attackMS: 10, .releaseMS: 100, .makeupGainDB: 1, .mix: 1], rationale: "test", confidence: 1, category: .corrective)
+            let node = ProcessingNode(type: .compressor, parameters: [.thresholdDB: -18, .ratio: 3, .attackMS: 10, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 6, .mix: 1], rationale: "test", confidence: 1, category: .corrective)
             for rate in [44_100.0, 48_000, 88_200, 96_000, 192_000] { for frames in [32, 64, 128, 256, 512, 1_024] {
                 var buffer = AudioBuffer(channels: [Array(repeating: 0.5, count: frames), Array(repeating: -0.5, count: frames)], sampleRate: rate)
                 var graph = try CompiledGraph(plan: makePlan(nodes: [node]), sampleRate: rate, channelCount: 2); try graph.process(&buffer)

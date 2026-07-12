@@ -177,12 +177,13 @@ private struct BiquadNode: Sendable {
 }
 
 private struct CompressorNode: Sendable {
-    private let thresholdDB, ratio, attackCoefficient, releaseCoefficient, makeup, mix: Double
+    private let thresholdDB, ratio, kneeDB, attackCoefficient, releaseCoefficient, makeup, mix: Double
     private var envelopes: [Double]
 
     init(parameters: [ParameterID: Double], sampleRate: Double, channelCount: Int) {
         thresholdDB = parameters[.thresholdDB, default: -18]
         ratio = parameters[.ratio, default: 2]
+        kneeDB = parameters[.kneeDB, default: 0]
         let attack = parameters[.attackMS, default: 20] / 1_000
         let release = parameters[.releaseMS, default: 120] / 1_000
         attackCoefficient = exp(-1 / max(attack * sampleRate, 1))
@@ -202,7 +203,18 @@ private struct CompressorNode: Sendable {
             }
             let envelope = envelopes.max() ?? 0
             let inputDB = 20 * log10(max(envelope, 1e-12))
-            let gainReductionDB = inputDB > thresholdDB ? (thresholdDB + (inputDB - thresholdDB) / ratio) - inputDB : 0
+            let overDB = inputDB - thresholdDB
+            let gainReductionDB: Double
+            if kneeDB <= 0 {
+                gainReductionDB = overDB > 0 ? (1 / ratio - 1) * overDB : 0
+            } else if overDB <= -kneeDB / 2 {
+                gainReductionDB = 0
+            } else if overDB >= kneeDB / 2 {
+                gainReductionDB = (1 / ratio - 1) * overDB
+            } else {
+                let kneePosition = overDB + kneeDB / 2
+                gainReductionDB = (1 / ratio - 1) * kneePosition * kneePosition / (2 * kneeDB)
+            }
             let wetGain = pow(10, gainReductionDB / 20) * makeup
             let gain = Float((1 - mix) + mix * wetGain)
             for channel in buffer.channels.indices { buffer.channels[channel][frame] *= gain }
