@@ -69,7 +69,10 @@ public struct PreviewSessionExporter: Sendable {
         guard !fileManager.fileExists(atPath: destination.path) else { throw PreviewExportError.outputAlreadyExists(destination.path) }
         let parent = destination.deletingLastPathComponent()
         try fileManager.createDirectory(at: parent, withIntermediateDirectories: true)
-        let staging = parent.appendingPathComponent(".\(destination.lastPathComponent).staging-\(UUID().uuidString)", isDirectory: true)
+        // A dot-prefixed staging directory receives the macOS hidden flag, which can
+        // propagate to its children after rename. Use a visible random sibling and
+        // publish it only after every artifact succeeds.
+        let staging = parent.appendingPathComponent("\(destination.lastPathComponent)-staging-\(UUID().uuidString)", isDirectory: true)
         try fileManager.createDirectory(at: staging, withIntermediateDirectories: false)
         var moved = false
         defer { if !moved { try? fileManager.removeItem(at: staging) } }

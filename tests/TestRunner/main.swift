@@ -133,6 +133,8 @@ enum TestRunner {
         let exporter = PreviewSessionExporter()
         let result = try exporter.export(inputURL: input, prompt: "make this clearer and more controlled", sourceType: .vocal, outputDirectory: output)
         try tests.expect(result.manifest.validVariantCount == 3, "expected three valid audible previews")
+        let outputIsHidden = try output.resourceValues(forKeys: [.isHiddenKey]).isHidden ?? false
+        try tests.expect(!outputIsHidden, "published preview directory is hidden")
         let sourceBytesAfterExport = try Data(contentsOf: input)
         try tests.expect(sourceBytesAfterExport == sourceBytes, "input WAV was modified")
         let originalURL = output.appendingPathComponent(result.manifest.originalAudioFileName)
@@ -140,8 +142,11 @@ enum TestRunner {
         try tests.expect(original.frameCount == samples.count, "exported original length changed")
         for variant in result.manifest.variants {
             guard let fileName = variant.audioFileName else { throw CheckFailure(message: "valid preview file missing") }
-            let rendered = try WAVFile.read(url: output.appendingPathComponent(fileName))
+            let renderedURL = output.appendingPathComponent(fileName)
+            let rendered = try WAVFile.read(url: renderedURL)
             try tests.expect(rendered.frameCount == samples.count, "preview length changed")
+            let renderedIsHidden = try renderedURL.resourceValues(forKeys: [.isHiddenKey]).isHidden ?? false
+            try tests.expect(!renderedIsHidden, "published preview file is hidden")
             let planURL = output.appendingPathComponent(variant.planFileName)
             try tests.expect(FileManager.default.fileExists(atPath: planURL.path), "plan file missing")
         }
