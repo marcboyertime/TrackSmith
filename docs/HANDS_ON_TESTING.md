@@ -15,8 +15,8 @@ Listen in this order at one unchanged monitoring volume:
 3. `02-balanced.wav`
 4. `03-strong.wav`
 
-All four files are mono, 48 kHz, eight seconds, and level-matched by whole-interval
-RMS. Their different SHA-256 hashes confirm they are distinct renders. The generated
+All four files are mono, 48 kHz, eight seconds, and matched using gated BS.1770
+loudness. Their different SHA-256 hashes confirm they are distinct renders. The generated
 source is deliberately artificial and boxy; it tests mechanics, not production
 quality on a real performance.
 
@@ -103,7 +103,7 @@ Run the complete automated verification:
 make verify
 ```
 
-Expected current result: `SUMMARY passed=15 failed=0`.
+Expected current result: `SUMMARY passed=20 failed=0`.
 
 ## Safety behavior to expect
 
@@ -112,5 +112,7 @@ Expected current result: `SUMMARY passed=15 failed=0`.
   after every file succeeds.
 - An existing output directory is refused.
 - Rejected variants are recorded in the manifest but their audio is not presented.
-- Preview matching is RMS-based, not LUFS, and the limiter is sample-peak rather
-  than true-peak. These are early-product limitations, not mastering claims.
+- Preview matching uses gated BS.1770 loudness for captures of at least 400 ms and
+  labels an RMS fallback for shorter captures. Ceiling verification uses estimated
+  true peak, while the real-time limiter itself remains a zero-lookahead sample-peak
+  limiter. These are early-product limitations, not mastering claims.

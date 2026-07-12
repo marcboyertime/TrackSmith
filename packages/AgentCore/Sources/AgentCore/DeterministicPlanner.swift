@@ -54,7 +54,9 @@ public struct DeterministicPlanner: Sendable {
     public func variants(prompt: String, sourceSnapshotID: UUID, scope: ProcessingScope, analysis: AnalysisReport? = nil) throws -> [PlanVariant] {
         let goals = try parseGoals(prompt: prompt, sourceType: scope.sourceType)
         return try PreviewStrength.allCases.map { strength in
-            let amount: Double = switch strength { case .conservative: 0.55; case .balanced: 1; case .strong: 1.45 }
+            // The spacing is deliberately nonlinear. Closely spaced presets are
+            // difficult to compare reliably after loudness matching.
+            let amount: Double = switch strength { case .conservative: 0.20; case .balanced: 1.20; case .strong: 2.80 }
             let nodes = recipe(sourceType: scope.sourceType, goals: goals, amount: amount, analysis: analysis)
             let plan = ProcessingPlan(sourceSnapshotID: sourceSnapshotID, scope: scope, goals: goals, nodes: nodes)
             try PlanValidator().validate(plan, currentSnapshotID: sourceSnapshotID)
@@ -84,11 +86,23 @@ public struct DeterministicPlanner: Sendable {
             nodes.append(.init(type: .parametricEQ, parameters: [.frequencyHz: 85, .q: 0.8, .gainDB: 1.2 * amount], rationale: "Support low-frequency drum impact conservatively.", confidence: 0.64, category: .corrective))
         }
         if wantsControl || wantsPunch {
-            let attack = wantsPunch ? 28 : 18
+            let measuredRMS = analysis?.metrics["rms_dbfs"]?.value ?? -22
+            let crest = min(max(analysis?.metrics["crest_factor"]?.value ?? 3, 1.42), 12)
+            // Giannoulis et al. derive program-dependent time constants from
+            // 2*tMax/crest^2. Keep musical clamps and use a slower attack for
+            // explicit punch preservation.
+            let automaticAttack = min(80, max(5, 160 / (crest * crest)))
+            let isVocal = sourceType == .vocal || sourceType == .vocalBus
+            let attack = wantsPunch ? max(22, automaticAttack * 1.7) : (isVocal ? max(14, automaticAttack) : automaticAttack)
+            let minimumRelease = isVocal ? 90.0 : 60.0
+            let automaticRelease = min(500, max(minimumRelease, 2_000 / (crest * crest) - attack))
+            // Reference threshold to measured programme RMS so the same request
+            // remains effective on quiet and hot recordings.
+            let threshold = min(-3, max(-48, measuredRMS + 3.2 - 3.8 * (amount - 1)))
             nodes.append(.init(type: .compressor, parameters: [
-                .thresholdDB: -16 - 2 * amount, .ratio: 1.4 + 1.1 * amount, .attackMS: Double(attack),
-                .releaseMS: wantsPunch ? 95 : 130, .makeupGainDB: 0.6 * amount, .kneeDB: 6, .mix: wantsPunch ? 0.75 : 1,
-            ], rationale: wantsPunch ? "Control sustain while preserving leading transients and groove." : "Reduce phrase-level variation with moderate timing and ratio.", confidence: 0.78, category: .corrective))
+                .thresholdDB: threshold, .ratio: 1.35 + 1.18 * amount, .attackMS: attack,
+                .releaseMS: automaticRelease, .makeupGainDB: 0, .kneeDB: 4 + 3 * amount, .mix: wantsPunch ? 0.78 : 1,
+            ], rationale: wantsPunch ? "Use signal-dependent timing to control sustain while preserving leading transients and groove." : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.", confidence: analysis == nil ? 0.62 : 0.82, category: .corrective))
         }
         if protectHighs {
             nodes.append(.init(type: .parametricEQ, parameters: [.frequencyHz: 8_500, .q: 0.6, .gainDB: -0.5 * amount], rationale: "Guard against an unintended increase in upper-frequency harshness.", confidence: 0.55, category: .corrective, locked: true))

@@ -28,13 +28,18 @@
 
 ## Analysis and intelligence
 
-- No true peak, LUFS/LRA, calibrated noise/hum, transient, source-aware vocal/drum,
-  room, masking, time-varying tonal, learned quality or reference analysis exists.
-- Spectrum is a naive first-window DFT and is suitable only for deterministic early
-  tests, not production diagnosis.
+- BS.1770 integrated loudness and a four-phase true-peak estimate are implemented;
+  formal external conformance vectors across every sample rate are still required.
+  LRA, calibrated noise/hum, source-aware vocal/drum, room, masking, frequency-band
+  spatial, learned-quality, and reference analysis do not yet exist.
+- Spectrum is averaged over time with a deterministic FFT, but mono fold-down can
+  hide anti-phase content and descriptive bands do not prove boxiness, harshness,
+  or sibilance.
 - Recipe parsing is keyword-based, source support is shallow, and only a few revision
   forms are implemented. No cloud/local LLM adapter is connected.
-- Preview “loudness matching” currently matches whole-interval RMS, not gated LUFS.
+- Preview matching uses gated BS.1770 loudness when at least one complete block is
+  available and explicitly falls back to RMS for shorter captures. It is not a
+  substitute for synchronized blinded listening.
 - The CLI writes audible preview WAVs but has no synchronized player, waveform UI,
   instant switching, or blind comparison mode.
 

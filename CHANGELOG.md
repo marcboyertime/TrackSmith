@@ -13,4 +13,12 @@
 - Added a transactional prompt-to-three-WAV preview workflow, PCM24/PCM32 input,
   per-variant plan/manifest export, and deterministic demo-audio generation.
 - Fixed macOS hidden flags propagating from the preview staging directory.
+- Added ITU-R BS.1770-5 gated programme loudness and Annex 2 true-peak analysis,
+  with calibration, gating, inter-sample peak, and preview-matching tests.
+- Replaced first-window spectral analysis with time-averaged FFT descriptors for
+  rolloff, flatness, slope, bands, positive flux, and transient density.
+- Made compressor recipes source-level- and crest-aware, widened preview strengths,
+  and exported objective preview-difference warnings and matching provenance.
+- Added a hash-deduplicated research workflow, complete corpus disposition, and
+  research-to-engineering synthesis for 61 unique supplied papers.
 - Added AUv3 and SwiftUI scaffolds; host validation remains blocked by missing Xcode.

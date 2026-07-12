@@ -63,3 +63,15 @@ Metrics catch clipping, peak, phase, loudness-bias and explicit spectral/dynamic
 guardrail mistakes. They do not establish subjective quality. A preview that cannot
 be measured against a requested prohibition is labeled uncertain, not silently
 accepted.
+
+Research review requires five independent evaluation axes: instruction adherence,
+intended target change, non-target preservation, acoustic naturalness, and temporal
+coherence. Safety and locked constraints remain hard gates rather than terms in a
+weighted quality score. Generic audio-language/CLAP similarity is not accepted as a
+production-style or preservation metric without project-specific human calibration.
+
+Future reference matching may use offline inference-time optimization over the
+validated deterministic graph. The optimizer receives bounded parameters and a
+cancellable render budget; it never selects arbitrary plug-ins, executes in the AU
+callback, or commits without approval. See
+[`RESEARCH_SYNTHESIS.md`](../research/analysis/RESEARCH_SYNTHESIS.md).

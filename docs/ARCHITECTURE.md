@@ -81,3 +81,13 @@ Providers return typed goals or plans to `AgentCore`; they do not receive shell,
 filesystem, host, plug-in, or arbitrary network tools. A deterministic provider is
 always available. Audio upload, if later implemented, requires a separate explicit
 consent transaction and a provider-specific disclosure.
+
+## Research-informed optimization boundary
+
+Reference matching and candidate refinement may later run a bounded gradient-free
+search over the same deterministic graph. It is companion/offline work: choose a
+validated graph, render candidates, measure independent trait/penalty objectives,
+cache by graph/source hash, and return previews. An effect-sensitive representation
+must be calibrated against listening tests; a generic semantic embedding is not a
+production-quality oracle. Generative waveform editing remains a separate opt-in
+new-asset transaction, never a hidden graph node.

@@ -16,16 +16,18 @@ Milestones 0 and 1 are partially implemented. The portable core builds and runs:
   linked compression, saturation, width, limiting, bypass, and finite-value safety.
 - Bounded single-producer capture ring with C11 atomic publication and no render-
   side allocation.
-- Initial peak, RMS, DC, clipping, crest, spectral-band, centroid, and stereo-
-  correlation analysis with units, confidence, version, window, and limitations.
-- Conservative, balanced, and strong recipes; loudness-matched preview rendering;
+- BS.1770 gated loudness and true peak; peak/RMS/DC/clipping/crest; time-averaged
+  spectral centroid, rolloff, slope, flatness, bands and flux; stereo correlation,
+  all with units, confidence, version, window, and limitations.
+- Signal-relative conservative, balanced, and strong recipes; labeled BS.1770/RMS
+  preview matching and objective preview-difference measurements;
   immutable snapshot history; selective compression revision; mock model provider.
 - PCM16/24/32 and Float32 WAV input, Float32 WAV output, analysis, three-preview,
   test-signal, and offline-render CLIs.
 - Atomic file-message IPC prototype and companion/plugin process probes.
 - Generated SwiftUI companion and AUv3 effect project scaffolds.
 
-On the development Mac, `swift run -c release TestRunner` passes 15/15 checks and
+On the development Mac, `swift run -c release TestRunner` passes 20/20 checks and
 the two release processes exchange a heartbeat. The installed environment is
 Apple Silicon, macOS 26.3, Logic Pro 11.2.2, Swift 6.2.1, but only Command Line
 Tools are installed. Consequently, the AUv3 bundle and SwiftUI app have **not**
@@ -92,6 +94,8 @@ for drum/full-mix examples, supported prompt vocabulary, and verification steps.
 - `tests/TestRunner/`: dependency-free executable verification harness used because
   this Command Line Tools installation supplies neither XCTest nor Swift Testing.
 - `docs/`: product, architecture, capability, safety, test, and integration records.
+- `research/analysis/`: deduplicated-corpus method, complete disposition catalog,
+  and the research-to-engineering synthesis.
 
 ## Product workflow target
 

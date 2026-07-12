@@ -13,8 +13,10 @@ than silently doing nothing.
 input → ordered enabled nodes → finite/denormal guard → output
 ```
 
-The peak limiter is a sample-peak safety module, not a true-peak limiter. Compression
-supports hard or quadratic soft-knee gain calculation.
+The peak limiter is a sample-peak safety module, not a true-peak limiter. Offline
+analysis and preview ceiling checks use an ITU-R BS.1770-5 true-peak estimate.
+Compression uses a branching feed-forward peak envelope and supports hard or
+quadratic soft-knee gain calculation.
 
 ## Parameter ranges
 
@@ -46,29 +48,35 @@ lookahead limiter, linear-phase process, denoiser, or convolution must report a
 fixed worst-case delay through `AUAudioUnit.latency`; Apple notes that variable
 latency is generally not useful to hosts ([latency API](https://developer.apple.com/documentation/audiotoolbox/auaudiounit/latency)). Reverb/delay tails must report `tailTime`.
 
-## Analysis 1.0
+## Analysis 1.1
 
 Implemented metrics explicitly avoid false precision:
 
 | Metric | Unit / range | Window | Limitation |
 |---|---|---|---|
-| sample peak | dBFS / -240...+24 | full interval | not oversampled true peak |
+| sample peak | dBFS / -240...+24 | full interval | separate from true peak |
+| true peak | dBTP / -240...+24 | full interval | BS.1770 Annex 2 FIR; normative coefficient set is 48 kHz |
+| integrated loudness | LUFS / -240...+24 | 400 ms, 75% overlap | two-stage BS.1770 gate; unavailable below one block |
+| maximum momentary loudness | LUFS / -240...+24 | 400 ms | not the 3 s short-term measure |
 | RMS | dBFS / -240...+24 | full interval | not gated LUFS |
 | DC offset | linear / -1...1 | full interval | channel-folded mean |
 | clipping samples | count | full interval | misses upstream clipped-but-rescaled audio |
 | crest factor | ratio | full interval | sample peak/RMS only |
-| centroid and low/mid/high ratios | Hz / ratios | first max 2048 frames, Hann | one mono-folded DFT, not time varying |
+| centroid, rolloff, flatness, slope, band ratios | typed | 2048 Hann / 1024 hop | averaged mono fold-down; descriptive, not quality diagnoses |
+| positive flux and transient density | ratio / events per second | adjacent spectral frames | event type and tempo are not inferred |
 | stereo correlation | -1...1 | full interval | zero-lag, not frequency dependent |
 
-True peak, EBU R128 loudness, LRA, noise-floor/hum, transient, source-aware, spatial
-band, and reference models remain scheduled work. Until implemented, the UI must
-not show invented values for them.
+LRA, calibrated noise/hum, source-aware vocal/drum, spatial-band, SRMR/YIN, and
+reference models remain scheduled work. Until implemented, the UI must not show
+invented values for them. Band names such as `harshness_band_ratio` report literal
+energy ranges and explicitly do not claim a perceptual defect.
 
 ## Test methodology
 
-Release tests cover bypass identity, ceiling/finite safety, 44.1/48/88.2/96/192 kHz
+Release tests cover BS.1770 calibration/gating/true peak, bypass identity,
+ceiling/finite safety, 44.1/48/88.2/96/192 kHz
 at 32/64/128/256/512/1024 frames, Float32 WAV round-trip, known 1 kHz sine peak/RMS/
-centroid, capture wrap order, and preview level matching. Required next tests include
+centroid, capture wrap order, and BS.1770/RMS preview matching. Required next tests include
 impulse/sweep frequency response, compressor static/time curves, automation ramps,
 denormal timing, channel independence, fuzzed plans, golden hashes with tolerances,
 and callback deadline distributions under release host load.

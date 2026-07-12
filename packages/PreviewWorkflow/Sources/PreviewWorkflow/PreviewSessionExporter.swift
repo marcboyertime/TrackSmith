@@ -26,7 +26,10 @@ public struct PreviewVariantManifest: Codable, Sendable {
     public var audioFileName: String?
     public var planFileName: String
     public var loudnessMatchGainDB: Double
+    public var loudnessMatchMethod: LoudnessMatchMethod
+    public var difference: PreviewDifferenceMetrics
     public var rejectionReasons: [String]
+    public var warnings: [String]
     public var plan: ProcessingPlan
     public var analysis: AnalysisReport
 }
@@ -111,7 +114,10 @@ public struct PreviewSessionExporter: Sendable {
                 audioFileName: audioFileName,
                 planFileName: planFileName,
                 loudnessMatchGainDB: preview.loudnessMatchGainDB,
+                loudnessMatchMethod: preview.loudnessMatchMethod,
+                difference: preview.difference,
                 rejectionReasons: preview.rejectionReasons,
+                warnings: preview.warnings,
                 plan: preview.plan,
                 analysis: preview.analysis
             ))
@@ -163,7 +169,8 @@ public struct PreviewSessionExporter: Sendable {
         ]
         for variant in manifest.variants {
             if let file = variant.audioFileName {
-                lines.append("- \(file): \(variant.strength.rawValue), valid, level-match gain \(String(format: "%.2f", variant.loudnessMatchGainDB)) dB")
+                lines.append("- \(file): \(variant.strength.rawValue), valid, \(variant.loudnessMatchMethod.rawValue) match \(String(format: "%.2f", variant.loudnessMatchGainDB)) dB, difference \(String(format: "%.1f", variant.difference.differenceRMSDBFS)) dBFS")
+                for warning in variant.warnings { lines.append("  Warning: \(warning)") }
             } else {
                 lines.append("- \(variant.strength.rawValue): rejected — \(variant.rejectionReasons.joined(separator: "; "))")
             }

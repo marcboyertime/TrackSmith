@@ -1,6 +1,9 @@
 import Foundation
 
-public enum MetricUnit: String, Codable, Sendable { case decibelsFS, linear, hertz, count, ratio, seconds }
+public enum MetricUnit: String, Codable, Sendable {
+    case decibelsFS, decibelsTruePeak, loudnessUnitsFullScale
+    case linear, hertz, count, ratio, seconds, perSecond, decibelsPerOctave
+}
 
 public struct MetricDefinition: Codable, Equatable, Sendable {
     public var identifier: String

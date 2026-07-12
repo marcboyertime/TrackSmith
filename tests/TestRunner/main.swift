@@ -67,6 +67,56 @@ enum TestRunner {
             try tests.expect(abs(report.metrics["peak_dbfs"]!.value + 6.0206) < 0.02, "peak inaccurate")
             try tests.expect(abs(report.metrics["rms_dbfs"]!.value + 9.03) < 0.1, "RMS inaccurate")
             try tests.expect(abs(report.metrics["spectral_centroid_hz"]!.value - 1_000) < 60, "centroid inaccurate")
+            try tests.expect(report.metrics["spectral_flatness"]!.value < 0.01, "sine was not spectrally tonal")
+        }
+        await tests.run("time-averaged spectrum distinguishes noise and tone") {
+            let rate = 48_000.0
+            var state: UInt64 = 0x1234_5678_9ABC_DEF0
+            let noise: [Float] = (0..<16_384).map { _ in
+                state = state &* 6_364_136_223_846_793_005 &+ 1
+                let unit = Double(state >> 11) / Double(UInt64.max >> 11)
+                return Float((unit * 2 - 1) * 0.2)
+            }
+            let tone: [Float] = (0..<16_384).map { Float(0.2 * sin(2 * .pi * 1_000 * Double($0) / rate)) }
+            let noiseReport = AudioAnalyzer().analyze(AudioBuffer(channels: [noise], sampleRate: rate))
+            let toneReport = AudioAnalyzer().analyze(AudioBuffer(channels: [tone], sampleRate: rate))
+            try tests.expect(noiseReport.metrics["spectral_flatness"]!.value > 0.45, "white noise flatness too low")
+            try tests.expect(noiseReport.metrics["spectral_flatness"]!.value > toneReport.metrics["spectral_flatness"]!.value + 0.4, "flatness did not separate noise and tone")
+        }
+        await tests.run("BS.1770 full-scale 997 Hz calibration") {
+            let rate = 48_000.0
+            let samples = (0..<Int(rate * 3)).map { Float(sin(2 * .pi * 997 * Double($0) / rate)) }
+            let measurement = BS1770Meter().measure(AudioBuffer(channels: [samples], sampleRate: rate))
+            guard let loudness = measurement.integratedLUFS else { throw CheckFailure(message: "integrated loudness missing") }
+            try tests.expect(abs(loudness + 3.01) < 0.08, "997 Hz calibration was \(loudness) LUFS")
+            try tests.expect(abs(measurement.truePeakDBTP) < 0.08, "full-scale sine true peak was \(measurement.truePeakDBTP) dBTP")
+        }
+        await tests.run("BS.1770 relative gate rejects quiet tail") {
+            let rate = 48_000.0
+            let frames = Int(rate * 6)
+            let samples = (0..<frames).map { index -> Float in
+                let amplitude = index < frames / 2 ? 0.1 : 0.001
+                return Float(amplitude * sin(2 * .pi * 997 * Double(index) / rate))
+            }
+            let measurement = BS1770Meter().measure(AudioBuffer(channels: [samples], sampleRate: rate))
+            guard let loudness = measurement.integratedLUFS else { throw CheckFailure(message: "gated loudness missing") }
+            try tests.expect(abs(loudness + 23.01) < 0.35, "relative gate produced \(loudness) LUFS")
+            try tests.expect(measurement.includedBlockCount < measurement.gatingBlockCount, "relative gate included the quiet tail")
+        }
+        await tests.run("true-peak estimator detects inter-sample peak") {
+            let rate = 48_000.0
+            let angularFrequency = 2 * Double.pi * 12_000 / rate
+            let phase = Double.pi / 4
+            let samples: [Float] = (0..<4_800).map { index in
+                Float(0.99 * sin(angularFrequency * Double(index) + phase))
+            }
+            let buffer = AudioBuffer(channels: [samples], sampleRate: rate)
+            let samplePeak = samples.map(abs).max() ?? 0
+            let truePeakDB = BS1770Meter().measure(buffer).truePeakDBTP
+            let samplePeakDB = 20 * log10(Double(samplePeak))
+            let expectedTruePeakDB = 20 * log10(0.99)
+            try tests.expect(truePeakDB > samplePeakDB + 2.5, "inter-sample peak was not detected")
+            try tests.expect(abs(truePeakDB - expectedTruePeakDB) < 0.2, "true peak estimate was \(truePeakDB) dBTP")
         }
         await tests.run("capture ring bounded chronology") {
             let ring = CaptureRingBuffer(capacityFrames: 4, channelCount: 1, sampleRate: 48_000)
@@ -90,6 +140,15 @@ enum TestRunner {
             let preview = try PreviewRenderer().render(plan: makePlan(nodes: [node]), source: source)
             try tests.expect(preview.status == .valid, "preview rejected")
             try tests.expect(abs(preview.analysis.metrics["rms_dbfs"]!.value + 16.99) < 0.3, "preview not level matched")
+        }
+        await tests.run("long preview uses BS.1770 loudness matching") {
+            let rate = 48_000.0
+            let samples = (0..<Int(rate * 3)).map { Float(0.2 * sin(2 * .pi * 997 * Double($0) / rate)) }
+            let source = AudioBuffer(channels: [samples], sampleRate: rate)
+            let node = ProcessingNode(type: .outputTrim, parameters: [.gainDB: 6], rationale: "test", confidence: 1, category: .loudness)
+            let preview = try PreviewRenderer().render(plan: makePlan(nodes: [node]), source: source)
+            try tests.expect(preview.loudnessMatchMethod == .bs1770Integrated, "long preview fell back from BS.1770")
+            try tests.expect(abs(preview.loudnessMatchGainDB + 6) < 0.1, "BS.1770 match gain was \(preview.loudnessMatchGainDB) dB")
         }
         await tests.run("audible preview export preserves input and reloads outputs") {
             try testAudiblePreviewExport(tests)
