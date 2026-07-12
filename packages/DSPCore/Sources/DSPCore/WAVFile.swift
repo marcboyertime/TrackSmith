@@ -7,7 +7,7 @@ public enum WAVError: Error, CustomStringConvertible, Sendable {
     public var description: String {
         switch self {
         case let .invalidFile(reason): "Invalid WAV file: \(reason)"
-        case let .unsupportedFormat(format, bits, channels): "Unsupported WAV format \(format), \(bits)-bit, \(channels) channels. Use mono/stereo PCM16 or Float32."
+        case let .unsupportedFormat(format, bits, channels): "Unsupported WAV format \(format), \(bits)-bit, \(channels) channels. Use mono/stereo PCM16, PCM24, PCM32, or Float32."
         }
     }
 }
@@ -28,26 +28,40 @@ public enum WAVFile {
             guard end <= data.count else { throw WAVError.invalidFile("Chunk exceeds file length") }
             if id == "fmt " {
                 guard size >= 16 else { throw WAVError.invalidFile("Short fmt chunk") }
-                format = (readUInt16(data, start), readUInt16(data, start + 2), readUInt32(data, start + 4), readUInt16(data, start + 14))
+                var audioFormat = readUInt16(data, start)
+                if audioFormat == 0xfffe, size >= 40 {
+                    audioFormat = readUInt16(data, start + 24)
+                }
+                format = (audioFormat, readUInt16(data, start + 2), readUInt32(data, start + 4), readUInt16(data, start + 14))
             } else if id == "data" { audioData = data.subdata(in: start..<end) }
             offset = end + (size % 2)
         }
         guard let format, let audioData else { throw WAVError.invalidFile("Missing fmt or data chunk") }
-        guard (format.channels == 1 || format.channels == 2), (format.audio == 1 && format.bits == 16) || (format.audio == 3 && format.bits == 32) else {
+        let supportedIntegerPCM = format.audio == 1 && [16, 24, 32].contains(format.bits)
+        guard (format.channels == 1 || format.channels == 2), supportedIntegerPCM || (format.audio == 3 && format.bits == 32) else {
             throw WAVError.unsupportedFormat(audioFormat: format.audio, bitsPerSample: format.bits, channels: format.channels)
         }
         let bytesPerSample = Int(format.bits / 8), channelCount = Int(format.channels)
+        guard audioData.count % (bytesPerSample * channelCount) == 0 else { throw WAVError.invalidFile("Audio data is not frame aligned") }
         let frameCount = audioData.count / (bytesPerSample * channelCount)
         var channels = Array(repeating: Array(repeating: Float.zero, count: frameCount), count: channelCount)
         audioData.withUnsafeBytes { raw in
             for frame in 0..<frameCount { for channel in 0..<channelCount {
                 let byteOffset = (frame * channelCount + channel) * bytesPerSample
-                if format.audio == 1 {
+                if format.audio == 1 && format.bits == 16 {
                     let value = Int16(bitPattern: UInt16(raw[byteOffset]) | UInt16(raw[byteOffset + 1]) << 8)
                     channels[channel][frame] = Float(value) / 32_768
+                } else if format.audio == 1 && format.bits == 24 {
+                    var bits = Int32(UInt32(raw[byteOffset]) | UInt32(raw[byteOffset + 1]) << 8 | UInt32(raw[byteOffset + 2]) << 16)
+                    if bits & 0x0080_0000 != 0 { bits |= ~0x00ff_ffff }
+                    channels[channel][frame] = Float(bits) / 8_388_608
+                } else if format.audio == 1 && format.bits == 32 {
+                    let bits = UInt32(raw[byteOffset]) | UInt32(raw[byteOffset + 1]) << 8 | UInt32(raw[byteOffset + 2]) << 16 | UInt32(raw[byteOffset + 3]) << 24
+                    channels[channel][frame] = Float(Int32(bitPattern: bits)) / 2_147_483_648
                 } else {
                     let bits = UInt32(raw[byteOffset]) | UInt32(raw[byteOffset + 1]) << 8 | UInt32(raw[byteOffset + 2]) << 16 | UInt32(raw[byteOffset + 3]) << 24
-                    channels[channel][frame] = Float(bitPattern: bits)
+                    let value = Float(bitPattern: bits)
+                    channels[channel][frame] = value.isFinite ? value : 0
                 }
             }}
         }
@@ -65,6 +79,26 @@ public enum WAVFile {
         appendUInt16(UInt16(buffer.channelCount * 4), to: &output); appendUInt16(32, to: &output)
         output.append(contentsOf: Array("data".utf8)); appendUInt32(UInt32(dataSize), to: &output)
         for frame in 0..<buffer.frameCount { for channel in 0..<buffer.channelCount { appendUInt32(buffer.channels[channel][frame].bitPattern, to: &output) } }
+        try output.write(to: url, options: .atomic)
+    }
+
+    public static func writePCM24(_ buffer: AudioBuffer, url: URL) throws {
+        let bytesPerSample = 3
+        let dataSize = buffer.frameCount * buffer.channelCount * bytesPerSample
+        var output = Data()
+        output.append(contentsOf: Array("RIFF".utf8)); appendUInt32(UInt32(36 + dataSize), to: &output)
+        output.append(contentsOf: Array("WAVEfmt ".utf8)); appendUInt32(16, to: &output)
+        appendUInt16(1, to: &output); appendUInt16(UInt16(buffer.channelCount), to: &output)
+        appendUInt32(UInt32(buffer.sampleRate), to: &output)
+        appendUInt32(UInt32(buffer.sampleRate) * UInt32(buffer.channelCount * bytesPerSample), to: &output)
+        appendUInt16(UInt16(buffer.channelCount * bytesPerSample), to: &output); appendUInt16(24, to: &output)
+        output.append(contentsOf: Array("data".utf8)); appendUInt32(UInt32(dataSize), to: &output)
+        for frame in 0..<buffer.frameCount { for channel in 0..<buffer.channelCount {
+            let sample = min(max(Double(buffer.channels[channel][frame]), -1), 1 - 1 / 8_388_608)
+            let value = Int32((sample * 8_388_608).rounded())
+            let bits = UInt32(bitPattern: value)
+            output.append(UInt8(bits & 0xff)); output.append(UInt8((bits >> 8) & 0xff)); output.append(UInt8((bits >> 16) & 0xff))
+        }}
         try output.write(to: url, options: .atomic)
     }
 

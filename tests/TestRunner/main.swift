@@ -4,6 +4,7 @@ import DSPCore
 import Foundation
 import PlanSchema
 import PreviewRenderer
+import PreviewWorkflow
 import SharedIPC
 import StateStore
 
@@ -50,6 +51,15 @@ enum TestRunner {
             let decoded = try WAVFile.read(url: url)
             try tests.expect(decoded == original, "WAV samples changed")
         }
+        await tests.run("PCM24 WAV round trip") {
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("wav"); defer { try? FileManager.default.removeItem(at: url) }
+            let original = AudioBuffer(channels: [[-1, -0.25, 0, 0.25, 0.999]], sampleRate: 44_100)
+            try WAVFile.writePCM24(original, url: url)
+            let decoded = try WAVFile.read(url: url)
+            for index in original.channels[0].indices {
+                try tests.expect(abs(decoded.channels[0][index] - original.channels[0][index]) <= 1.3e-7, "PCM24 sample outside quantization tolerance")
+            }
+        }
         await tests.run("known sine analysis") {
             let rate = 48_000.0, frames = 2_048
             let samples = (0..<frames).map { Float(0.5 * sin(2 * .pi * 1_000 * Double($0) / rate)) }
@@ -81,6 +91,9 @@ enum TestRunner {
             try tests.expect(preview.status == .valid, "preview rejected")
             try tests.expect(abs(preview.analysis.metrics["rms_dbfs"]!.value + 16.99) < 0.3, "preview not level matched")
         }
+        await tests.run("audible preview export preserves input and reloads outputs") {
+            try testAudiblePreviewExport(tests)
+        }
         await tests.run("snapshot undo and redo") {
             let store = SnapshotStore(), plan = makePlan()
             let root = ProcessingSnapshot(parentID: nil, plan: plan, analysisVersion: "1", sourceIdentity: "plugin", structuredGoals: [], commitStatus: .committed)
@@ -102,6 +115,44 @@ enum TestRunner {
 
     private static func makePlan(nodes: [ProcessingNode] = []) -> ProcessingPlan {
         ProcessingPlan(sourceSnapshotID: UUID(), scope: .init(kind: .pluginInput, channelFormat: .mono, sourceType: .vocal), goals: [], nodes: nodes)
+    }
+
+    @MainActor private static func testAudiblePreviewExport(_ tests: Harness) throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let input = root.appendingPathComponent("input.wav")
+        let output = root.appendingPathComponent("previews", isDirectory: true)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let samples = (0..<8_192).map { index -> Float in
+            let time = Double(index) / 48_000
+            return Float(0.25 * sin(2 * .pi * 220 * time) + 0.08 * sin(2 * .pi * 3_200 * time))
+        }
+        let buffer = AudioBuffer(channels: [samples], sampleRate: 48_000)
+        try WAVFile.writePCM24(buffer, url: input)
+        let sourceBytes = try Data(contentsOf: input)
+        let exporter = PreviewSessionExporter()
+        let result = try exporter.export(inputURL: input, prompt: "make this clearer and more controlled", sourceType: .vocal, outputDirectory: output)
+        try tests.expect(result.manifest.validVariantCount == 3, "expected three valid audible previews")
+        let sourceBytesAfterExport = try Data(contentsOf: input)
+        try tests.expect(sourceBytesAfterExport == sourceBytes, "input WAV was modified")
+        let originalURL = output.appendingPathComponent(result.manifest.originalAudioFileName)
+        let original = try WAVFile.read(url: originalURL)
+        try tests.expect(original.frameCount == samples.count, "exported original length changed")
+        for variant in result.manifest.variants {
+            guard let fileName = variant.audioFileName else { throw CheckFailure(message: "valid preview file missing") }
+            let rendered = try WAVFile.read(url: output.appendingPathComponent(fileName))
+            try tests.expect(rendered.frameCount == samples.count, "preview length changed")
+            let planURL = output.appendingPathComponent(variant.planFileName)
+            try tests.expect(FileManager.default.fileExists(atPath: planURL.path), "plan file missing")
+        }
+        let manifestData = try Data(contentsOf: output.appendingPathComponent("manifest.json"))
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let decodedManifest = try decoder.decode(PreviewSessionManifest.self, from: manifestData)
+        try tests.expect(decodedManifest.sourceFingerprint == result.manifest.sourceFingerprint, "manifest changed on disk")
+        try tests.expectThrows("existing output directory was accepted") {
+            _ = try exporter.export(inputURL: input, prompt: "clearer", sourceType: .vocal, outputDirectory: output)
+        }
     }
 }
 

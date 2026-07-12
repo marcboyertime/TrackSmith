@@ -20,11 +20,12 @@ Milestones 0 and 1 are partially implemented. The portable core builds and runs:
   correlation analysis with units, confidence, version, window, and limitations.
 - Conservative, balanced, and strong recipes; loudness-matched preview rendering;
   immutable snapshot history; selective compression revision; mock model provider.
-- Float32/PCM16 WAV input, Float32 WAV output, analysis and offline-render CLIs.
+- PCM16/24/32 and Float32 WAV input, Float32 WAV output, analysis, three-preview,
+  test-signal, and offline-render CLIs.
 - Atomic file-message IPC prototype and companion/plugin process probes.
 - Generated SwiftUI companion and AUv3 effect project scaffolds.
 
-On the development Mac, `swift run -c release TestRunner` passes 13/13 checks and
+On the development Mac, `swift run -c release TestRunner` passes 15/15 checks and
 the two release processes exchange a heartbeat. The installed environment is
 Apple Silicon, macOS 26.3, Logic Pro 11.2.2, Swift 6.2.1, but only Command Line
 Tools are installed. Consequently, the AUv3 bundle and SwiftUI app have **not**
@@ -41,6 +42,7 @@ Full Xcode is required for the app extension.
 ```sh
 make verify
 make demo
+make preview-demo
 ```
 
 Direct commands:
@@ -49,6 +51,7 @@ Direct commands:
 swift build -c release
 swift run -c release TestRunner
 swift run AnalysisCLI input.wav
+swift run PreviewCLI input.wav --source vocal --prompt "make this clearer and more controlled"
 swift run OfflineRenderer input.wav processing-plan.json output.wav
 xcodegen generate
 ```
@@ -57,6 +60,27 @@ After full Xcode is installed and selected, follow
 [`MANUAL_LOGIC_TESTS.md`](docs/MANUAL_LOGIC_TESTS.md). Do not treat project
 generation alone as plug-in validation.
 
+## Try audible previews now
+
+On this development checkout, a verified demo session is available at
+`fixtures/generated/demo-vocal-previews`. If generated files are absent in a fresh
+clone, run `make preview-demo`. Open the resulting directory and audition
+`00-original.wav`, then the three numbered variants.
+
+To process your own Logic-exported WAV:
+
+```sh
+swift run -c release PreviewCLI "/path/to/My Vocal.wav" \
+  --source vocal \
+  --prompt "make this clearer, warmer, and more controlled" \
+  --output "/Users/marcboyer/Desktop/My Vocal Preview 1"
+```
+
+The output directory must be new. It contains four audible WAVs, one plan per
+variant, `manifest.json` with measurements and parameters, and `AUDITION.txt`.
+The input is never modified. See [`HANDS_ON_TESTING.md`](docs/HANDS_ON_TESTING.md)
+for drum/full-mix examples, supported prompt vocabulary, and verification steps.
+
 ## Repository map
 
 - `packages/`: host-independent schema, DSP, analysis, state, planner, preview,
@@ -64,7 +88,7 @@ generation alone as plug-in validation.
 - `plugins/AudioUnit/`: AUv3 extension scaffold.
 - `apps/CompanionMacApp/`: native SwiftUI application scaffold.
 - `apps/CompanionApp/`: buildable command-line product slice.
-- `tools/`: offline renderer, analysis CLI, Logic capability and plug-in probes.
+- `tools/`: preview/audio generation, offline renderer, analysis CLI, and integration probes.
 - `tests/TestRunner/`: dependency-free executable verification harness used because
   this Command Line Tools installation supplies neither XCTest nor Swift Testing.
 - `docs/`: product, architecture, capability, safety, test, and integration records.

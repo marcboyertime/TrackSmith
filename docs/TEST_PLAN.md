@@ -6,10 +6,11 @@
 swift run -c release TestRunner
 ```
 
-On 2026-07-12 this passed 13/13 checks: plan round-trip, bounds rejection, bypass
+On 2026-07-12 this passed 15/15 checks: plan round-trip, bounds rejection, bypass
 identity, limiter/nonfinite safety, five rates by six buffer sizes, WAV round-trip,
-known sine analysis, capture wrap chronology, three variants/revision, adversarial
-prompt rejection, level matching, snapshot undo/redo, and IPC round-trip.
+known sine analysis, PCM24 round-trip, capture wrap chronology, three variants/
+revision, adversarial prompt rejection, level matching, transactional audible export
+with source-byte preservation, snapshot undo/redo, and IPC round-trip.
 
 This Command Line Tools installation includes neither XCTest nor Swift Testing, so
 the repository uses a dependency-free executable harness. After full Xcode is

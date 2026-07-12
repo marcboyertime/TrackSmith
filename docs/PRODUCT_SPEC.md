@@ -26,10 +26,12 @@ node remains inspectable, bypassable, removable, resettable, and lockable.
 
 ## MVP flow and acceptance
 
-The target MVP is the 15-step workflow in the product brief. The portable slice
-currently proves steps 4-10 for a synthetic source, graph revision for “undo only
-the compression,” and exact bypass for an empty graph. Logic insertion, render-
-thread graph integration, capture UI, project reload, and audio playback A/B remain
+The target MVP is the 15-step workflow in the product brief. The portable slice now
+accepts a real mono/stereo WAV and prompt, analyzes it, renders three independently
+auditionable level-matched WAVs, writes every plan/measurement, refuses overwrite,
+and proves source-byte preservation. It also proves graph revision for “undo only
+the compression” and exact bypass for an empty graph. Logic insertion, render-thread
+graph integration, capture UI, synchronized playback A/B, and project reload remain
 open acceptance gates.
 
 ## Non-goals for 1.0

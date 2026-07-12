@@ -10,4 +10,6 @@
 - Added immutable snapshots, transactions, deterministic planning, revisions,
   three-way preview rendering, and level matching.
 - Added WAV analysis/offline-render tools, IPC probes, and a release test runner.
+- Added a transactional prompt-to-three-WAV preview workflow, PCM24/PCM32 input,
+  per-variant plan/manifest export, and deterministic demo-audio generation.
 - Added AUv3 and SwiftUI scaffolds; host validation remains blocked by missing Xcode.

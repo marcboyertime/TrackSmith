@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "StateStore", targets: ["StateStore"]),
         .library(name: "AgentCore", targets: ["AgentCore"]),
         .library(name: "PreviewRenderer", targets: ["PreviewRenderer"]),
+        .library(name: "PreviewWorkflow", targets: ["PreviewWorkflow"]),
         .library(name: "LogicBridge", targets: ["LogicBridge"]),
         .library(name: "SharedIPC", targets: ["SharedIPC"]),
         .executable(name: "CompanionApp", targets: ["CompanionApp"]),
@@ -19,6 +20,8 @@ let package = Package(
         .executable(name: "AnalysisCLI", targets: ["AnalysisCLI"]),
         .executable(name: "LogicIntegrationProbe", targets: ["LogicIntegrationProbe"]),
         .executable(name: "PluginProbe", targets: ["PluginProbe"]),
+        .executable(name: "PreviewCLI", targets: ["PreviewCLI"]),
+        .executable(name: "TestSignalGenerator", targets: ["TestSignalGenerator"]),
         .executable(name: "TestRunner", targets: ["TestRunner"]),
     ],
     targets: [
@@ -29,6 +32,7 @@ let package = Package(
         .target(name: "StateStore", dependencies: ["PlanSchema"], path: "packages/StateStore/Sources/StateStore"),
         .target(name: "AgentCore", dependencies: ["PlanSchema", "AudioAnalysis", "StateStore"], path: "packages/AgentCore/Sources/AgentCore"),
         .target(name: "PreviewRenderer", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis"], path: "packages/PreviewRenderer/Sources/PreviewRenderer"),
+        .target(name: "PreviewWorkflow", dependencies: ["AgentCore", "PreviewRenderer", "PlanSchema", "DSPCore", "AudioAnalysis"], path: "packages/PreviewWorkflow/Sources/PreviewWorkflow"),
         .target(name: "LogicBridge", dependencies: ["PlanSchema"], path: "packages/LogicBridge/Sources/LogicBridge"),
         .target(name: "SharedIPC", dependencies: ["PlanSchema"], path: "packages/SharedIPC/Sources/SharedIPC"),
         .executableTarget(name: "CompanionApp", dependencies: ["AgentCore", "PreviewRenderer", "SharedIPC", "DSPCore", "AudioAnalysis", "PlanSchema"], path: "apps/CompanionApp/Sources/CompanionApp"),
@@ -36,6 +40,8 @@ let package = Package(
         .executableTarget(name: "AnalysisCLI", dependencies: ["AudioAnalysis", "DSPCore"], path: "tools/AnalysisCLI/Sources/AnalysisCLI"),
         .executableTarget(name: "LogicIntegrationProbe", dependencies: ["LogicBridge"], path: "tools/LogicIntegrationProbe/Sources/LogicIntegrationProbe"),
         .executableTarget(name: "PluginProbe", dependencies: ["SharedIPC"], path: "tools/PluginProbe/Sources/PluginProbe"),
-        .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "PreviewRenderer", "SharedIPC"], path: "tests/TestRunner"),
+        .executableTarget(name: "PreviewCLI", dependencies: ["PreviewWorkflow", "PlanSchema"], path: "tools/PreviewCLI/Sources/PreviewCLI"),
+        .executableTarget(name: "TestSignalGenerator", dependencies: ["DSPCore"], path: "tools/TestSignalGenerator/Sources/TestSignalGenerator"),
+        .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "PreviewRenderer", "PreviewWorkflow", "SharedIPC"], path: "tests/TestRunner"),
     ]
 )

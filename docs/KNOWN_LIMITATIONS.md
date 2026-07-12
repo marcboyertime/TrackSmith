@@ -35,7 +35,8 @@
 - Recipe parsing is keyword-based, source support is shallow, and only a few revision
   forms are implemented. No cloud/local LLM adapter is connected.
 - Preview “loudness matching” currently matches whole-interval RMS, not gated LUFS.
-- No audible preview player or waveform UI is implemented in the buildable CLI.
+- The CLI writes audible preview WAVs but has no synchronized player, waveform UI,
+  instant switching, or blind comparison mode.
 
 ## State and operations
 
