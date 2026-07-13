@@ -6,15 +6,16 @@ sample rate, I/O buffer, channel count, low-latency mode, and result for every r
 
 ## Prerequisites
 
-1. Save and quit Logic so it does not retain a pre-install Audio Unit registry.
-2. Run `make native-verify`; require 22/22 core tests, an unsigned native build,
+1. In Xcode Settings → Accounts, add an Apple Account and create an Apple Development
+   certificate under Manage Certificates. Ad-hoc and Configurator signatures have
+   no Team ID and failed system registration on this machine.
+2. Save and quit Logic so it does not retain a pre-install Audio Unit registry.
+3. Run `make native-verify`; require 22/22 core tests, an unsigned native build,
    and a passing `AudioUnitHostProbe`.
-3. Run `make native-install`, then launch
+4. Run `make native-install`; it must report the same nonempty Team ID for the app
+   and extension. Then launch
    `~/Applications/Logic Audio Assistant.app` once.
-4. Run `auval -v aufx LgAA ExAI` and save complete output. If the component remains
-   absent, restart macOS once, launch the containing app, and retry before Logic.
-5. For distribution, replace example bundle/App Group IDs and select an Apple
-   Development team. The local “Sign to Run Locally” identity is development-only.
+5. Run `auval -v aufx LgAA ExAI` and save complete output.
 6. Create a new disposable Logic test project. Never use unreleased/user work for
    experimental automation tests.
 

@@ -32,7 +32,7 @@ final class RealtimeParameters: @unchecked Sendable {
 }
 
 public final class AssistantAudioUnit: AUAudioUnit {
-    private static let processingPlanStateKey = "com.example.logicaudioassistant.processing-plan-v1"
+    private static let processingPlanStateKey = "com.marcboyer.logicaudioassistant.processing-plan-v1"
     private var inputBus: AUAudioUnitBus!
     private var outputBus: AUAudioUnitBus!
     private var inputBusArray: AUAudioUnitBusArray!

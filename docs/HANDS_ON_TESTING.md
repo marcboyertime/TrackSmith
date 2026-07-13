@@ -133,6 +133,11 @@ PASS Audio Unit instantiated and rendered mono/stereo host buffers
 Save your Logic project, then quit Logic before installing so its Audio Unit
 registry can observe the new extension cleanly.
 
+In Xcode, open Settings → Accounts, add your Apple Account, select its team, open
+Manage Certificates, and create an Apple Development certificate. This is required:
+an ad-hoc “Sign to Run Locally” build has no Team ID and is not registered as this
+AUv3 on the current machine.
+
 ```sh
 cd "/Users/marcboyer/LogicAudioAssistant"
 make native-verify
@@ -141,14 +146,15 @@ open "$HOME/Applications/Logic Audio Assistant.app"
 auval -v aufx LgAA ExAI
 ```
 
-If `auval` still says it cannot find the component, restart the Mac once, open the
-companion app once, and rerun `auval` before opening Logic. Do not delete audio-unit
-caches or force-terminate shared audio services while a DAW is running.
+`make native-install` now detects the certificate and Team ID, development-signs
+both nested bundles, and refuses installation if their Team IDs do not match. If
+`auval` still cannot find that build, send its complete output before clearing any
+caches or terminating shared audio services.
 
 In Logic:
 
 1. Create a disposable project and add a mono or stereo audio track.
-2. Choose an Audio FX insert, then Audio Units → Example → Logic Audio Assistant.
+2. Choose an Audio FX insert, then Audio Units → Marc Boyer → Logic Audio Assistant.
 3. Play audio. The compact UI should change from “Waiting for audio” to a green
    “Audio arriving” line with a peak value.
 4. Move Output gain to `-12.0 dB`; the track should become quieter without clicks.

@@ -1,6 +1,6 @@
 name: LogicAudioAssistant
 options:
-  bundleIdPrefix: com.example.logicaudioassistant
+  bundleIdPrefix: com.marcboyer.logicaudioassistant
   deploymentTarget:
     macOS: "14.0"
 packages:
@@ -21,7 +21,7 @@ targets:
       path: apps/CompanionMacApp/CompanionMacApp.entitlements
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.logicaudioassistant.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.marcboyer.logicaudioassistant
         PRODUCT_NAME: Logic Audio Assistant
         SWIFT_VERSION: 6.0
     dependencies:
@@ -37,7 +37,7 @@ targets:
       path: plugins/AudioUnit/AudioUnitExtension/AssistantAudioUnitExtension.entitlements
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.logicaudioassistant.app.AudioUnit
+        PRODUCT_BUNDLE_IDENTIFIER: com.marcboyer.logicaudioassistant.AudioUnit
         PRODUCT_NAME: Logic Audio Assistant AU
         SWIFT_VERSION: 6.0
         APPLICATION_EXTENSION_API_ONLY: YES
@@ -50,7 +50,7 @@ targets:
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).AudioUnitViewController
           NSExtensionAttributes:
             AudioComponents:
-              - name: "Example: Logic Audio Assistant"
+              - name: "Marc Boyer: Logic Audio Assistant"
                 description: Conversational deterministic audio processing
                 factoryFunction: $(PRODUCT_MODULE_NAME).AudioUnitViewController
                 manufacturer: ExAI

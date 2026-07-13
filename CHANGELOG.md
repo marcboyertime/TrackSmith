@@ -34,3 +34,6 @@
   non-real-time snapshots during continuous playback.
 - Added `AudioUnitHostProbe` covering 44.1 kHz mono and 96 kHz stereo render,
   serialized graph execution, dry capture, AU parameters, and `fullState` restore.
+- Diagnosed failed system discovery as a Team-ID-less ad-hoc signature and changed
+  development installation to require and verify matching Apple Development Team
+  signatures for the containing app and extension.

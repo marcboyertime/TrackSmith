@@ -35,14 +35,15 @@ Milestones 0 and 1 are partially implemented. The portable core builds and runs:
 On the development Mac, `TestRunner` passes 22/22 checks. `AudioUnitHostProbe`
 instantiates the real `AUAudioUnit` class, renders its serialized graph through
 borrowed mono and stereo buffers at 44.1 and 96 kHz, verifies capture, and verifies
-`fullState` restoration. Xcode 26.6 builds and locally signs the companion and
-extension; LaunchServices recognizes the extension metadata. The installed
+`fullState` restoration. Xcode 26.6 builds the companion and extension; LaunchServices
+recognizes the extension metadata. The installed
 environment is Apple Silicon, macOS 26.3, Logic Pro 11.2.2, and Swift 6.2.1.
 
-The extension has not yet passed `auval` or been inserted in Logic: Logic was
-already running and the existing AudioComponentRegistrar did not refresh during
-this build session. No Logic-host success is claimed until the manual restart and
-tests below are recorded. See
+The first installed build was ad-hoc signed (`TeamIdentifier=not set`), Gatekeeper
+rejected it, and the system therefore did not register it with `auval`. The installer
+now fails closed unless Xcode has an Apple Development certificate and verifies that
+the app and extension have the same Team ID. No Logic-host success is claimed until
+that development-signed build passes the tests below. See
 [`KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md).
 
 ## Build and test
@@ -71,8 +72,10 @@ swift run OfflineRenderer input.wav processing-plan.json output.wav
 xcodegen generate
 ```
 
-For the first Logic insertion test, run `make native-install`, close Logic if it
-is open, launch `~/Applications/Logic Audio Assistant.app` once, and reopen Logic.
+Before the first Logic insertion test, add an Apple Account in Xcode Settings →
+Accounts and create an Apple Development certificate under Manage Certificates.
+Then run `make native-install`, close Logic if it is open, launch
+`~/Applications/Logic Audio Assistant.app` once, and reopen Logic.
 Then follow [`MANUAL_LOGIC_TESTS.md`](docs/MANUAL_LOGIC_TESTS.md). A successful
 Xcode build or in-process probe is not the same as Logic-host validation.
 

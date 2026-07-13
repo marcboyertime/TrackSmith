@@ -34,7 +34,7 @@ enum AudioUnitHostProbe {
         AUAudioUnit.registerSubclass(
             AssistantAudioUnit.self,
             as: description,
-            name: "Example: Logic Audio Assistant",
+            name: "Marc Boyer: Logic Audio Assistant",
             version: 0x0001_0000
         )
 

@@ -2,12 +2,12 @@
 
 ## Host and packaging
 
-- Xcode 26.6 builds and locally signs the AUv3/SwiftUI targets, but they are not
-  notarized, `auval`-validated, or tested in installed Logic. LaunchServices sees
-  the extension; the running AudioComponentRegistrar did not refresh while Logic
-  remained open, so no discovery claim is made yet.
-- Example bundle IDs, App Group ID, manufacturer and signing configuration must be
-  replaced before distribution.
+- Xcode 26.6 builds the AUv3/SwiftUI targets, but no Apple Development identity is
+  installed yet. The ad-hoc app and extension had no Team ID, Gatekeeper rejected
+  them, and `auval` did not discover the component even after restart. They are not
+  notarized or tested in Logic.
+- Development bundle IDs now use `com.marcboyer.logicaudioassistant`; App Group,
+  manufacturer-code ownership, release signing, and notarization remain distribution work.
 - Logic project selection, source files, channel strips, plug-in insertion/reorder,
   arbitrary automation, tracks/regions and bounce are not stable capabilities.
 - ARA 2 has not been licensed or integrated. Accessibility, Core MIDI and control-

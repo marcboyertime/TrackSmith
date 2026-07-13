@@ -29,14 +29,17 @@ capability is therefore claimed.
    level matched for the generated signal.
 5. `PluginProbe` wrote an atomic heartbeat; `CompanionApp --ipc-status` read the
    same UUID/kind/text from another release-built process.
-6. Xcode builds and locally signs the native SwiftUI containing app and AUv3.
+6. Xcode builds the native SwiftUI containing app and AUv3. Its first automatic
+   local signature was ad-hoc, with no Team ID.
 7. `AudioUnitHostProbe` registers and instantiates `AssistantAudioUnit`, negotiates
    noninterleaved Float32 mono at 44.1 kHz and stereo at 96 kHz, renders a serialized
    polarity graph plus AU output gain, verifies dry capture, and restores the plan
    through `fullState`.
-8. LaunchServices records the corrected AU extension metadata and factory. Because
-   Logic and AudioComponentRegistrar were already running, `auval` did not refresh
-   to the new component during the session; Logic-host validation remains open.
+8. LaunchServices records the corrected AU extension metadata and factory. After a
+   clean restart, `auval` still could not find it. `codesign` showed
+   `TeamIdentifier=not set` and `spctl` rejected the containing app. Re-signing a
+   disposable copy with the local Configurator identity remained Team-ID-less and
+   was also rejected. The next proof requires an Apple Development certificate.
 
 The IPC proof uses `/tmp` because unsigned command-line processes cannot resolve a
 production App Group. The shipped target must substitute the signed group container.
@@ -65,7 +68,8 @@ unless Logic-host measurements reveal an AUv3-specific blocker.
 
 ## Highest-risk next experiment
 
-Quit Logic, install and launch the signed development containing app, validate with
+Create an Apple Development certificate in Xcode, quit Logic, install and launch
+the team-signed development containing app, validate with
 `auval -v aufx LgAA ExAI`, then run Manual Tests AU-01 through AU-08. The key evidence
 is whether Logic instantiates the AUv3, supplies the
 expected noninterleaved formats/transport callbacks, persists state, and permits the
