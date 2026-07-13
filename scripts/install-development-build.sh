@@ -6,20 +6,14 @@ derived_data="$repo_root/.build/xcode-signed-derived"
 source_app="$derived_data/Build/Products/Debug/Logic Audio Assistant.app"
 destination="$HOME/Applications/Logic Audio Assistant.app"
 
-identity_line="$(security find-identity -v -p codesigning | grep '"Apple Development:' | head -1 || true)"
-identity_hash=""
-development_team=""
-if [[ -n "$identity_line" ]]; then
-  identity_hash="$(print -r -- "$identity_line" | sed -E 's/^[[:space:]]*[0-9]+\) ([0-9A-F]+) .*/\1/')"
-  development_team="$(print -r -- "$identity_line" | sed -E 's/.*\(([A-Z0-9]{10})\)".*/\1/')"
-else
-  certificate_subject="$(
-    security find-certificate -a -c 'Apple Development' -p "$HOME/Library/Keychains/login.keychain-db" 2>/dev/null \
-      | openssl x509 -noout -subject 2>/dev/null \
-      || true
-  )"
-  development_team="$(print -r -- "$certificate_subject" | sed -E 's/.*OU=([A-Z0-9]{10}).*/\1/')"
-fi
+certificate_subject="$(
+  security find-certificate -a -c 'Apple Development' -p "$HOME/Library/Keychains/login.keychain-db" 2>/dev/null \
+    | openssl x509 -noout -subject 2>/dev/null \
+    || true
+)"
+# The parenthesized code in an Apple Development certificate's display name is
+# not necessarily its Team ID. The signed certificate subject's OU is authoritative.
+development_team="$(print -r -- "$certificate_subject" | sed -E 's/.*OU=([A-Z0-9]{10}).*/\1/')"
 
 if ! print -r -- "$development_team" | grep -Eq '^[A-Z0-9]{10}$'; then
   print -u2 "error: no usable Apple Development certificate or Team ID was found"
@@ -27,11 +21,6 @@ if ! print -r -- "$development_team" | grep -Eq '^[A-Z0-9]{10}$'; then
   print -u2 "Open Xcode → Settings → Accounts, add your Apple Account, then"
   print -u2 "Manage Certificates → + → Apple Development. Rerun make native-install."
   exit 2
-fi
-
-signing_overrides=(CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM="$development_team")
-if print -r -- "$identity_hash" | grep -Eq '^[0-9A-F]{40}$'; then
-  signing_overrides+=(CODE_SIGN_IDENTITY="$identity_hash")
 fi
 
 cd "$repo_root"
@@ -43,7 +32,8 @@ xcodebuild \
   -destination 'platform=macOS,arch=arm64' \
   -derivedDataPath "$derived_data" \
   -allowProvisioningUpdates \
-  "${signing_overrides[@]}" \
+  CODE_SIGN_STYLE=Automatic \
+  DEVELOPMENT_TEAM="$development_team" \
   build
 
 app_team="$(codesign -dv --verbose=4 "$source_app" 2>&1 | sed -n 's/^TeamIdentifier=//p')"

@@ -35,15 +35,16 @@ Milestones 0 and 1 are partially implemented. The portable core builds and runs:
 On the development Mac, `TestRunner` passes 22/22 checks. `AudioUnitHostProbe`
 instantiates the real `AUAudioUnit` class, renders its serialized graph through
 borrowed mono and stereo buffers at 44.1 and 96 kHz, verifies capture, and verifies
-`fullState` restoration. Xcode 26.6 builds the companion and extension; LaunchServices
-recognizes the extension metadata. The installed
+`fullState` restoration. Xcode 26.6 builds the companion and extension. A sandboxed,
+Apple-development-signed installation is registered with LaunchServices, and
+`auval -v aufx LgAA ExAI` passes out-of-process AUv3 discovery, properties,
+parameters, mono/stereo rendering, and sample rates through 192 kHz. The installed
 environment is Apple Silicon, macOS 26.3, Logic Pro 11.2.2, and Swift 6.2.1.
 
-The first installed build was ad-hoc signed (`TeamIdentifier=not set`), Gatekeeper
-rejected it, and the system therefore did not register it with `auval`. The installer
-now supports both keychain-listed and Xcode account-managed Apple Development
-certificates, and verifies that the app and extension have the same Team ID. No
-Logic-host success is claimed until that development-signed build passes the tests below. See
+The first ad-hoc build did not register. The installer now supports Xcode
+account-managed Apple Development certificates, derives the actual Team ID from
+the certificate, and verifies matching app/extension signatures. System AU
+validation now passes; direct Logic insertion and project behavior remain unverified. See
 [`KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md).
 
 ## Build and test

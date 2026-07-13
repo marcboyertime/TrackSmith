@@ -35,11 +35,21 @@ capability is therefore claimed.
    noninterleaved Float32 mono at 44.1 kHz and stereo at 96 kHz, renders a serialized
    polarity graph plus AU output gain, verifies dry capture, and restores the plan
    through `fullState`.
-8. LaunchServices records the corrected AU extension metadata and factory. After a
-   clean restart, `auval` still could not find it. `codesign` showed
-   `TeamIdentifier=not set` and `spctl` rejected the containing app. Re-signing a
-   disposable copy with the local Configurator identity remained Team-ID-less and
-   was also rejected. The next proof requires an Apple Development certificate.
+8. The first ad-hoc build had no Team ID and did not register. After creating an
+   Xcode-managed Apple Development certificate, the installer derived Team ID
+   `KDV9RC892F` from the certificate OU, built both bundles with matching signatures,
+   enabled App Sandbox, installed the containing app, and passed strict code-signing
+   verification.
+9. `auval -v aufx LgAA ExAI` discovers version 1.0.0 as an out-of-process AUv3 and
+   passes open, required/recommended properties, class state, host callbacks,
+   parameter persistence/scheduling, mono and stereo render, 11.025–192 kHz sample
+   rates, 64–4096-frame render probes, connection semantics and maximum-frame error.
+   Explicit format validation rejects all probed 4–8-channel layouts. `auval` retains
+   one non-failing warning for a transient 1-in/2-out negotiation; allocation still
+   requires equal mono or stereo channel counts.
+10. `xcrun sdef /Applications/Logic Pro.app` returns only generic application,
+    document, window, text and printing suites. It provides no Logic track/region/
+    mixer/plug-in/automation project model.
 
 The IPC proof uses `/tmp` because unsigned command-line processes cannot resolve a
 production App Group. The shipped target must substitute the signed group container.
@@ -52,9 +62,10 @@ buffer graph processing, bounded dry capture, full-state graph serialization, an
 compact UI with input activity and gain. Plan validation/compilation and capture
 allocation occur before rendering; the callback performs no file/network work.
 
-It is **compiled and class-host tested, not yet Logic validated**. `auval`, Plug-in
-Manager, Logic insertion, automation ramps, bounce, low-latency, multiple instances,
-and save/reload still require a clean host test. Graph changes are staged only while
+It is **compiled, class-host tested, signed, system-registered and `auval` validated,
+but not yet tested inside Logic**. Plug-in Manager discovery, Logic insertion,
+automation ramps, bounce, low-latency, multiple instances, and save/reload still
+require a clean host test. Graph changes are staged only while
 render resources are deallocated; atomic whole-graph publication during playback and
 sample-accurate AU render-event handling remain future work.
 
@@ -68,9 +79,7 @@ unless Logic-host measurements reveal an AUv3-specific blocker.
 
 ## Highest-risk next experiment
 
-Create an Apple Development certificate in Xcode, quit Logic, install and launch
-the team-signed development containing app, validate with
-`auval -v aufx LgAA ExAI`, then run Manual Tests AU-01 through AU-08. The key evidence
-is whether Logic instantiates the AUv3, supplies the
+Run Manual Tests AU-01 through AU-08 in a disposable Logic project. The key evidence
+is whether Logic instantiates the validated AUv3, supplies the
 expected noninterleaved formats/transport callbacks, persists state, and permits the
 signed companion/extension exchange reliably across multiple instances.

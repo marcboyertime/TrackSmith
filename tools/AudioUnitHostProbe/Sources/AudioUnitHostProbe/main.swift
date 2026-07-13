@@ -38,9 +38,17 @@ enum AudioUnitHostProbe {
             version: 0x0001_0000
         )
 
+        try verifyFormatContract(description: description)
         try exercise(description: description, sampleRate: 44_100, channelCount: 1, frameCount: 257)
         try exercise(description: description, sampleRate: 96_000, channelCount: 2, frameCount: 1_024)
         try rejectMismatchedPlan(description: description)
+    }
+
+    private static func verifyFormatContract(description: AudioComponentDescription) throws {
+        let unit = try AssistantAudioUnit(componentDescription: description)
+        guard unit.channelCapabilities?.map(\.intValue) == [1, 1, 2, 2] else {
+            throw ProbeFailure.message("AU did not advertise only mono-to-mono and stereo-to-stereo")
+        }
     }
 
     private static func rejectMismatchedPlan(description: AudioComponentDescription) throws {

@@ -1,7 +1,8 @@
 # Manual Logic test protocol
 
-No Logic-host case below has passed yet. The class-level Apple host probe passes,
-but that does not establish Logic behavior. Record exact macOS, Logic, commit, signing identity,
+No Logic-host case below has passed yet. The class-level Apple host probe and
+system `auval` validation pass, but neither establishes Logic behavior. Record exact
+macOS, Logic, commit, signing identity,
 sample rate, I/O buffer, channel count, low-latency mode, and result for every run.
 
 ## Prerequisites
@@ -15,7 +16,9 @@ sample rate, I/O buffer, channel count, low-latency mode, and result for every r
 4. Run `make native-install`; it must report the same nonempty Team ID for the app
    and extension. Then launch
    `~/Applications/Logic Audio Assistant.app` once.
-5. Run `auval -v aufx LgAA ExAI` and save complete output.
+5. Run `auval -v aufx LgAA ExAI`; require `AU VALIDATION SUCCEEDED` or a zero exit
+   with every section passing. The current build has one non-failing transient
+   mono-input/stereo-output negotiation warning and a preset deprecation warning.
 6. Create a new disposable Logic test project. Never use unreleased/user work for
    experimental automation tests.
 

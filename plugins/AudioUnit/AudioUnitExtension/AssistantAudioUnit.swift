@@ -33,6 +33,7 @@ final class RealtimeParameters: @unchecked Sendable {
 
 public final class AssistantAudioUnit: AUAudioUnit {
     private static let processingPlanStateKey = "com.marcboyer.logicaudioassistant.processing-plan-v1"
+    private static let supportedChannelCapabilities: [NSNumber] = [1, 1, 2, 2]
     private var inputBus: AUAudioUnitBus!
     private var outputBus: AUAudioUnitBus!
     private var inputBusArray: AUAudioUnitBusArray!
@@ -43,6 +44,17 @@ public final class AssistantAudioUnit: AUAudioUnit {
     private var stagedProcessingPlan: ProcessingPlan?
     public override var inputBusses: AUAudioUnitBusArray { inputBusArray }
     public override var outputBusses: AUAudioUnitBusArray { outputBusArray }
+    public override var channelCapabilities: [NSNumber]? { Self.supportedChannelCapabilities }
+
+    public override func shouldChange(to format: AVAudioFormat, for bus: AUAudioUnitBus) -> Bool {
+        guard !renderResourcesAllocated,
+              bus === inputBus || bus === outputBus,
+              format.sampleRate > 0,
+              format.channelCount == 1 || format.channelCount == 2,
+              format.commonFormat == .pcmFormatFloat32,
+              !format.isInterleaved else { return false }
+        return true
+    }
 
     public override init(componentDescription: AudioComponentDescription, options: AudioComponentInstantiationOptions = []) throws {
         try super.init(componentDescription: componentDescription, options: options)

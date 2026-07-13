@@ -2,10 +2,12 @@
 
 ## Host and packaging
 
-- Xcode 26.6 builds the AUv3/SwiftUI targets, but no Apple Development identity is
-  installed yet. The ad-hoc app and extension had no Team ID, Gatekeeper rejected
-  them, and `auval` did not discover the component even after restart. They are not
-  notarized or tested in Logic.
+- Xcode 26.6 builds an Apple-development-signed, sandboxed AUv3/SwiftUI app.
+  `auval` discovers it out of process and passes its complete validation run, but
+  it is not notarized or tested inside Logic yet. The remaining validator warnings
+  are a deprecated preset-property recommendation and a non-failing transient
+  1-input/2-output bridge probe; the render allocator accepts only equal mono or
+  stereo layouts.
 - Development bundle IDs now use `com.marcboyer.logicaudioassistant`; App Group,
   manufacturer-code ownership, release signing, and notarization remain distribution work.
 - Logic project selection, source files, channel strips, plug-in insertion/reorder,

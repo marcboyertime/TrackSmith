@@ -45,8 +45,12 @@ make native-verify
 
 `AudioUnitHostProbe` registers the production AU class in-process and tests 44.1 kHz
 mono plus 96 kHz stereo noninterleaved rendering, serialized graph execution,
-parameter gain, bounded dry capture, and `fullState` restoration. This proves the
-class-level host contract but not system extension discovery or Logic behavior.
+parameter gain, bounded dry capture, `fullState` restoration, and the explicit
+mono-to-mono/stereo-to-stereo capability declaration. This proves the
+class-level host contract. Separately, the Apple-development-signed sandboxed
+installation passes `auval -v aufx LgAA ExAI` out of process across mono/stereo,
+11.025–192 kHz and host render sizes through 4096 frames. Neither proof establishes
+Logic project behavior.
 
 ## Perceptual release tests
 

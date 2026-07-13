@@ -19,6 +19,8 @@ targets:
         NSHighResolutionCapable: true
     entitlements:
       path: apps/CompanionMacApp/CompanionMacApp.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.marcboyer.logicaudioassistant
@@ -35,6 +37,8 @@ targets:
     sources: [plugins/AudioUnit/AudioUnitExtension]
     entitlements:
       path: plugins/AudioUnit/AudioUnitExtension/AssistantAudioUnitExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.marcboyer.logicaudioassistant.AudioUnit
