@@ -146,8 +146,11 @@ open "$HOME/Applications/Logic Audio Assistant.app"
 auval -v aufx LgAA ExAI
 ```
 
-`make native-install` now detects the certificate and Team ID, development-signs
-both nested bundles, and refuses installation if their Team IDs do not match. If
+`make native-install` detects either a keychain-listed or Xcode account-managed
+certificate and its Team ID, development-signs both nested bundles, and refuses
+installation if their Team IDs do not match. The first signing attempt may present
+a macOS private-key authorization dialog; approve it locally and never share the
+password. If
 `auval` still cannot find that build, send its complete output before clearing any
 caches or terminating shared audio services.
 

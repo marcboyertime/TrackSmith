@@ -41,9 +41,9 @@ environment is Apple Silicon, macOS 26.3, Logic Pro 11.2.2, and Swift 6.2.1.
 
 The first installed build was ad-hoc signed (`TeamIdentifier=not set`), Gatekeeper
 rejected it, and the system therefore did not register it with `auval`. The installer
-now fails closed unless Xcode has an Apple Development certificate and verifies that
-the app and extension have the same Team ID. No Logic-host success is claimed until
-that development-signed build passes the tests below. See
+now supports both keychain-listed and Xcode account-managed Apple Development
+certificates, and verifies that the app and extension have the same Team ID. No
+Logic-host success is claimed until that development-signed build passes the tests below. See
 [`KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md).
 
 ## Build and test
