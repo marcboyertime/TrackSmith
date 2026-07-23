@@ -1,0 +1,76 @@
+{
+  "goals" : [
+    {
+      "attribute" : "warmth",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "punch",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "7FED847E-B2FB-4592-B08B-DF14157F50CF",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 220,
+        "gainDB" : 4.800000000000001,
+        "q" : 0.7
+      },
+      "rationale" : "Prefer bounded body EQ over peak-flattening saturation because leading-edge punch is explicitly preserved.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "E678756D-6B85-5182-BF65-FB3C4610CC07",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -0.04520574341541028
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "42CA79B4-A954-4160-8952-8BC39A346C1F",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "AA393420-6B85-4182-BF65-FB3C4610CC07",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "bass",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "CD9CD27B-699F-4302-955F-CE70583A6960"
+}

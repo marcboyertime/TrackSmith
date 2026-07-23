@@ -1,0 +1,503 @@
+{
+  "schemaVersion": "1.0",
+  "product": "TrackSmith",
+  "logicVersionContext": "Logic Pro 12.3",
+  "generatedDate": "2026-07-18",
+  "priorityType": "tracksmith_core_production_coverage_not_global_usage_telemetry",
+  "boundaries": {
+    "globalPluginUsageFrequencyClaimed": false,
+    "artisticImportanceRankingClaimed": false,
+    "fixedProcessingOrderClaimed": false,
+    "automaticInsertionAuthorityClaimed": false,
+    "listeningStillDecisive": true,
+    "explanation": "The queue prioritizes broad recurring production roles and TrackSmith request coverage. A lower tier may be the best artistic choice for a particular song."
+  },
+  "professionalCaseEvidence": {
+    "caseCount": 58,
+    "sources": [
+      {
+        "path": "research/knowledge/PRODUCER_JUDGMENT_CORPUS.jsonl",
+        "sha256": "68a7c18a792e5c6b4d6806cb20e1c60817c4cb1601ecbe01fe03cc4b95258c10"
+      },
+      {
+        "path": "research/knowledge/PRODUCER_JUDGMENT_CORPUS_PART_B.jsonl",
+        "sha256": "d14d73011f8bd3e5470681601f26427df369d1068ac1fc313b1fb879ca3b808a"
+      }
+    ],
+    "recurrenceSignals": {
+      "gain_balance_automation": {
+        "casePresenceCount": 46,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-zach-holmes-002",
+          "pjc-zach-holmes-003",
+          "pjc-zach-holmes-004",
+          "pjc-lukas-002",
+          "pjc-lukas-003",
+          "pjc-lukas-004"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "compression_dynamics": {
+        "casePresenceCount": 29,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-zach-holmes-002",
+          "pjc-zach-holmes-004",
+          "pjc-lukas-001",
+          "pjc-kpop-003",
+          "pjc-kpop-004",
+          "pjc-deftones-001"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "eq_filter_tone": {
+        "casePresenceCount": 26,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-zach-holmes-003",
+          "pjc-kpop-004",
+          "pjc-deftones-003",
+          "pjc-deftones-004",
+          "pjc-21savage-004",
+          "pjc-rhcp-003"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "transient_envelope": {
+        "casePresenceCount": 18,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-lukas-002",
+          "pjc-lukas-004",
+          "pjc-kpop-004",
+          "pjc-deftones-003",
+          "pjc-rhcp-004",
+          "pjc-rhcp-005"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "ambience_reverb_delay": {
+        "casePresenceCount": 16,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-zach-holmes-001",
+          "pjc-deftones-004",
+          "pjc-21savage-003",
+          "pjc-evanescence-003",
+          "pjc-evanescence-004",
+          "pjc-weezer-003"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "pitch_timing_edit": {
+        "casePresenceCount": 14,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-zach-holmes-002",
+          "pjc-kpop-001",
+          "pjc-kpop-003",
+          "pjc-21savage-002",
+          "pjc-rhcp-001",
+          "pjc-rhcp-002"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "cleanup_gate_deess": {
+        "casePresenceCount": 12,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-zach-holmes-001",
+          "pjc-zach-holmes-002",
+          "pjc-zach-holmes-003",
+          "pjc-lukas-001",
+          "pjc-kpop-001",
+          "pjc-kpop-003"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "saturation_distortion": {
+        "casePresenceCount": 10,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-21savage-002",
+          "pjc-rhcp-001",
+          "pjc-rhcp-002",
+          "pjc-evanescence-005",
+          "pjc-weezer-001",
+          "pjc-tinchy-001"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      },
+      "stereo_pan_phase": {
+        "casePresenceCount": 8,
+        "totalCuratedCases": 58,
+        "exampleRecordIDs": [
+          "pjc-rhcp-003",
+          "pjc-evanescence-002",
+          "pjc-evanescence-003",
+          "pjc-evanescence-005",
+          "pjc-weezer-003",
+          "pjc-weezer-004"
+        ],
+        "interpretationBoundary": "keyword presence in a curated case, not plug-in use frequency or an industry prevalence estimate"
+      }
+    }
+  },
+  "lanes": [
+    {
+      "order": 1,
+      "identifier": "foundation_gain_balance_routing_and_metering",
+      "logicTools": [
+        "Gain",
+        "Level Meter",
+        "Loudness Meter",
+        "MultiMeter",
+        "Correlation Meter",
+        "Direction Mixer"
+      ],
+      "whyFirst": "Every processor audition depends on gain, level matching, channel identity, polarity, peak/loudness observation, and mono/stereo translation.",
+      "notEstablished": "That a meter can determine artistic quality or that one loudness/width target fits every source."
+    },
+    {
+      "order": 2,
+      "identifier": "equalization_and_filtering",
+      "logicTools": [
+        "Channel EQ",
+        "Linear Phase EQ",
+        "Single Band EQ"
+      ],
+      "whyFirst": "Tone, resonance, masking, bandwidth, headroom, and pre/post nonlinear drive are recurring production decisions across every source class.",
+      "notEstablished": "That a spectral peak is a defect or that an adjective maps to one frequency curve."
+    },
+    {
+      "order": 3,
+      "identifier": "compression_and_source_dynamics",
+      "logicTools": [
+        "Compressor",
+        "DeEsser 2",
+        "Noise Gate",
+        "Enveloper",
+        "Expander",
+        "Multipressor"
+      ],
+      "whyFirst": "Level contour, transient/sustain balance, consonant events, cleanup, density, groove, and dynamic preservation recur throughout source and bus work.",
+      "notEstablished": "That compression is automatically polish, punch, warmth, or control; detector, timing, level, and source context determine the result."
+    },
+    {
+      "order": 4,
+      "identifier": "reverb_depth_and_ambience",
+      "logicTools": [
+        "ChromaVerb",
+        "Space Designer",
+        "Quantec Room Simulator",
+        "EnVerb",
+        "SilverVerb"
+      ],
+      "whyFirst": "Distance, intimacy, room identity, blend, early/late energy, decay spectrum, and stereo depth are common musician requests that EQ alone cannot satisfy.",
+      "notEstablished": "That one decay or predelay value means intimate, distant, expensive, or professional."
+    },
+    {
+      "order": 5,
+      "identifier": "delay_rhythm_and_depth",
+      "logicTools": [
+        "Stereo Delay",
+        "Tape Delay",
+        "Delay Designer",
+        "Echo",
+        "Sample Delay"
+      ],
+      "whyFirst": "Delay can create rhythm, depth, width, sustain, transitions, and masking; feedback and synchronization make it materially stateful.",
+      "notEstablished": "That delay is always ambience or that repeats remain safe under feedback, filtering, saturation, and automation."
+    },
+    {
+      "order": 6,
+      "identifier": "saturation_drive_and_harmonic_color",
+      "logicTools": [
+        "ChromaGlow",
+        "Overdrive",
+        "Clip Distortion",
+        "Distortion",
+        "Distortion II"
+      ],
+      "whyFirst": "Musicians frequently ask for density, aggression, warmth, edge, vintage color, or energy without merely raising level; nonlinear options have different spectral and dynamic risks.",
+      "notEstablished": "That saturation is inherently warm, analog, flattering, or alias-free, or that louder is better."
+    },
+    {
+      "order": 7,
+      "identifier": "limiting_delivery_and_mastering_observation",
+      "logicTools": [
+        "Limiter",
+        "Adaptive Limiter",
+        "Loudness Meter",
+        "MultiMeter",
+        "Mastering Assistant"
+      ],
+      "whyFirst": "Peak safety, loudness, dynamic preservation, delivery, and gain-biased comparison matter to previews and complete mixes.",
+      "notEstablished": "That one LUFS or true-peak value is universally correct or that Logic's mastering suggestions are normative standards."
+    },
+    {
+      "order": 8,
+      "identifier": "stereo_phase_and_mono_translation",
+      "logicTools": [
+        "Direction Mixer",
+        "Correlation Meter",
+        "Stereo Spread",
+        "Sample Delay"
+      ],
+      "whyFirst": "Width requests can damage localization, low-end focus, or mono translation; source and frequency dependence must stay visible.",
+      "notEstablished": "That correlation or one width number proves a desirable image."
+    },
+    {
+      "order": 9,
+      "identifier": "pitch_and_source_specific_correction",
+      "logicTools": [
+        "Pitch Correction",
+        "Pitch Shifter",
+        "Vocal Transformer"
+      ],
+      "whyFirst": "Pitch assistance is common for vocals and selected instruments but depends on key, scale, confidence, polyphony, formants, performance intent, and artifacts.",
+      "notEstablished": "That correction is required, invisible, or artistically preferable, or that a confidence metric grants permission to tune."
+    },
+    {
+      "order": 10,
+      "identifier": "creative_color_specialized_and_pedalboard",
+      "logicTools": [
+        "Bitcrusher",
+        "Pedalboard",
+        "Step FX",
+        "Phat FX",
+        "Remix FX"
+      ],
+      "whyFirst": "These are valuable creative options after the core production language and safety checks are reliable.",
+      "notEstablished": "That lower product priority means lesser artistic value; this is sequencing for broad request coverage, not a quality ranking."
+    }
+  ],
+  "firstEmpiricalAndPracticeQueue": [
+    {
+      "order": 1,
+      "name": "Gain",
+      "identifier": "logic-pro-12.3:gain",
+      "family": "utility",
+      "documentaryPages": "355-364",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "foundation_gain_and_level_matched_comparison"
+    },
+    {
+      "order": 2,
+      "name": "Channel EQ",
+      "identifier": "logic-pro-12.3:channel-eq",
+      "family": "equalizer",
+      "documentaryPages": "112-138",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "partial",
+      "role": "primary_static_equalization"
+    },
+    {
+      "order": 3,
+      "name": "Compressor",
+      "identifier": "logic-pro-12.3:compressor",
+      "family": "dynamics",
+      "documentaryPages": "87-111",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "partial",
+      "role": "primary_dynamics_and_envelope_control"
+    },
+    {
+      "order": 4,
+      "name": "DeEsser 2",
+      "identifier": "logic-pro-12.3:deesser-2",
+      "family": "dynamics",
+      "documentaryPages": "87-111",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "source_specific_dynamic_high_band_control"
+    },
+    {
+      "order": 5,
+      "name": "Noise Gate",
+      "identifier": "logic-pro-12.3:noise-gate",
+      "family": "dynamics",
+      "documentaryPages": "87-111",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "source_cleanup_and_envelope_boundary"
+    },
+    {
+      "order": 6,
+      "name": "ChromaVerb",
+      "identifier": "logic-pro-12.3:chromaverb",
+      "family": "reverb",
+      "documentaryPages": "309-350",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "algorithmic_reverb_and_depth"
+    },
+    {
+      "order": 7,
+      "name": "Space Designer",
+      "identifier": "logic-pro-12.3:space-designer",
+      "family": "reverb",
+      "documentaryPages": "309-350",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "convolution_reverb_and_space"
+    },
+    {
+      "order": 8,
+      "name": "Stereo Delay",
+      "identifier": "logic-pro-12.3:stereo-delay",
+      "family": "delay",
+      "documentaryPages": "57-77",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "general_stereo_delay"
+    },
+    {
+      "order": 9,
+      "name": "Tape Delay",
+      "identifier": "logic-pro-12.3:tape-delay",
+      "family": "delay",
+      "documentaryPages": "57-77",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "colored_feedback_delay"
+    },
+    {
+      "order": 10,
+      "name": "ChromaGlow",
+      "identifier": "logic-pro-12.3:chromaglow",
+      "family": "distortion",
+      "documentaryPages": "78-86",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "general_saturation_and_harmonic_color"
+    },
+    {
+      "order": 11,
+      "name": "Overdrive",
+      "identifier": "logic-pro-12.3:overdrive",
+      "family": "distortion",
+      "documentaryPages": "78-86",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "bounded_drive_and_harmonic_color"
+    },
+    {
+      "order": 12,
+      "name": "Limiter",
+      "identifier": "logic-pro-12.3:limiter",
+      "family": "dynamics",
+      "documentaryPages": "87-111",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "peak_control_and_delivery_boundary"
+    },
+    {
+      "order": 13,
+      "name": "Adaptive Limiter",
+      "identifier": "logic-pro-12.3:adaptive-limiter",
+      "family": "dynamics",
+      "documentaryPages": "87-111",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "lookahead_peak_and_loudness_boundary"
+    },
+    {
+      "order": 14,
+      "name": "Loudness Meter",
+      "identifier": "logic-pro-12.3:loudness-meter",
+      "family": "metering",
+      "documentaryPages": "166-196",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "standards_related_host_readout"
+    },
+    {
+      "order": 15,
+      "name": "MultiMeter",
+      "identifier": "logic-pro-12.3:multimeter",
+      "family": "metering",
+      "documentaryPages": "166-196",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "combined_spectrum_level_and_correlation_observation"
+    },
+    {
+      "order": 16,
+      "name": "Direction Mixer",
+      "identifier": "logic-pro-12.3:direction-mixer",
+      "family": "imaging",
+      "documentaryPages": "166-196",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "width_mid_side_and_mono_translation"
+    },
+    {
+      "order": 17,
+      "name": "Correlation Meter",
+      "identifier": "logic-pro-12.3:correlation-meter",
+      "family": "metering",
+      "documentaryPages": "166-196",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "stereo_phase_risk_observation"
+    },
+    {
+      "order": 18,
+      "name": "Pitch Correction",
+      "identifier": "logic-pro-12.3:pitch-correction",
+      "family": "pitch",
+      "documentaryPages": "300-308",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "source_specific_pitch_assistance"
+    },
+    {
+      "order": 19,
+      "name": "Enveloper",
+      "identifier": "logic-pro-12.3:enveloper",
+      "family": "dynamics",
+      "documentaryPages": "87-111",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "explicit_attack_and_sustain_shaping"
+    },
+    {
+      "order": 20,
+      "name": "Linear Phase EQ",
+      "identifier": "logic-pro-12.3:linear-phase-eq",
+      "family": "equalizer",
+      "documentaryPages": "112-138",
+      "reviewStatus": "deep_full_relevant_section_read",
+      "empiricalStatus": "notRun",
+      "role": "latency_phase_and_mastering_equalization_alternative"
+    }
+  ],
+  "nextDirectHostProcessingQueue": [
+    "Channel EQ",
+    "Compressor",
+    "DeEsser 2",
+    "Noise Gate",
+    "ChromaVerb",
+    "Space Designer",
+    "Stereo Delay",
+    "Tape Delay",
+    "ChromaGlow",
+    "Limiter",
+    "Direction Mixer",
+    "Pitch Correction"
+  ],
+  "creativeLaneBoundary": {
+    "examples": [
+      "Bitcrusher",
+      "Pedalboard",
+      "Step FX",
+      "Phat FX",
+      "Remix FX"
+    ],
+    "priority": "after_core_processing_roles",
+    "reason": "Retained as important creative vocabulary, but not allowed to displace the processors needed for the widest set of everyday production requests."
+  }
+}

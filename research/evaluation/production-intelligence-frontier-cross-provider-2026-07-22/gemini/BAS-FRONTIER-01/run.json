@@ -1,0 +1,205 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether the 'blurry' character stems primarily from excessive low-mid ringing around 120-350 Hz or uncontrolled dynamic sustain/envelope."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -39.061232348362495,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.157284274112925,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.06713182592456,
+          "planRequestID" : "F0F48B4B-B7C3-4816-AC34-193D48FE08CB",
+          "previewID" : "745618AA-FEF8-421E-8A04-6B0D2F8C7BA3",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.053395898109441,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -38.92454116263402,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : 1.9887601446824519,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "4E5C4AD5-3912-406E-A310-2681590E810C",
+          "previewID" : "B8F08476-1738-4B01-A1FF-526F1B72D9C5",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.7848057903236754,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -48.571753850174076,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.053018475676012145,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.08833752965283,
+          "planRequestID" : "73CB612D-D05F-4E4D-9857-3EF37618A3D8",
+          "previewID" : "C08DF6E6-6561-41ED-831B-C70E7F3CD51F",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -3.074593586673849,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "tight:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+        "lowEndWeight"
+      ],
+      "expectedDesired" : [
+        "tight"
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Clean up overlapping low-mid resonance while preserving fundamental sub weight. | Grounded TrackSmith interpretation: increase tight: For bass fundamental movement, sub allocation, low-mid density, transient definition, and kick relationship, ‘tight’ may request more consistent low/body decay or event separation without reducing low-end weight. This is one hypothesis, not a measured fact.",
+        "Tighten up bass sustain and control peaks without stripping low-end power. | Grounded TrackSmith interpretation: increase tight: For bass fundamental movement, sub allocation, low-mid density, transient definition, and kick relationship, ‘tight’ may request more consistent low/body decay or event separation without reducing low-end weight. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "BAS-FRONTIER-01",
+      "measuredEvidence" : {
+        "bass_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.12639442004982632
+        },
+        "bass_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 2.230661963375026
+        },
+        "bass_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.46312372027241655
+        },
+        "bass_sub_share_20_120_hz" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.17251462612573998
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 1.2618625903574934
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "lowEndWeight:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6950,
+      "providerLatencyMilliseconds" : 3539,
+      "providerOutputTokens" : 576,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:afd39fec38d51c2a7dbe9a784467fe13e7c733f051176903a16a654ea1e91a75",
+      "selectedPreviewID" : "745618AA-FEF8-421E-8A04-6B0D2F8C7BA3",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "bass",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 5, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "a09fa9674d02e694b9c07194ef94eef9faa2f0caf29756a302a187a6d2e016ed",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "bass",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the 'blurry' character stems primarily from excessive low-mid ringing around 120-350 Hz or uncontrolled dynamic sustain/envelope.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the 'blurry' character stems primarily from excessive low-mid ringing around 120-350 Hz or uncontrolled dynamic sustain/envelope."
+      ],
+      "userRequest" : "The bass is huge but blurry. Tighten it without losing the weight.",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:10:09Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "productionHypothesisGeneration",
+      "explanationGeneration",
+      "ambiguityDetection"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

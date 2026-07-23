@@ -1,0 +1,92 @@
+{
+  "goals" : [
+    {
+      "attribute" : "punch",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.325
+    },
+    {
+      "attribute" : "lowEnd",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.25
+    },
+    {
+      "attribute" : "cymbalHarshness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 0.4
+    },
+    {
+      "attribute" : "harshness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 0.4
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "9A0A1990-21C5-490D-9A1A-1E2243D05753",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 24,
+        "kneeDB" : 5.75,
+        "makeupGainDB" : 0,
+        "mix" : 0.4175,
+        "ratio" : 1.775,
+        "releaseMS" : 65,
+        "thresholdDB" : -25.396535554095134
+      },
+      "rationale" : "Use source- and crest-dependent ballistics with a slower attack and parallel dry path to preserve leading transients.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "76599982-B82E-5777-9CCA-93674135F41B",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.2653130459400401
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "7DAB3A0F-628A-46FE-8957-B42F4B7C09F4",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "3A18D8CF-B82E-4777-9CCA-93674135F41B",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "drumBus",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "1D2DEBA9-78BB-4449-8730-CC01F215D645"
+}

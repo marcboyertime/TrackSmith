@@ -1,0 +1,76 @@
+{
+  "goals" : [
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "brightness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "305125E0-D865-4316-8749-BFB2E0EC5E91",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 330,
+        "gainDB" : -5.4,
+        "q" : 0.9
+      },
+      "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "999AC31B-7CB9-51AA-AB60-A4CF3B01B58D",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.505257900380423
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "A78CD7B6-C03E-4D13-B597-21673BE2BEDB",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "D5DB8256-7CB9-41AA-AB60-A4CF3B01B58D",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "synth",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+}

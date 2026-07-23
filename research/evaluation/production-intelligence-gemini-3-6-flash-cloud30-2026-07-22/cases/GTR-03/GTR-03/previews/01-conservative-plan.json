@@ -1,0 +1,80 @@
+{
+  "goals" : [
+    {
+      "attribute" : "punch",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.35
+    },
+    {
+      "attribute" : "harshness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 0.4
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "205F4AED-A91D-4A84-AAEC-FFD341CCB1DD",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 24,
+        "kneeDB" : 6.05,
+        "makeupGainDB" : 0,
+        "mix" : 0.4445,
+        "ratio" : 2.005,
+        "releaseMS" : 65,
+        "thresholdDB" : -17.583128586953702
+      },
+      "rationale" : "Use source- and crest-dependent ballistics with a slower attack and parallel dry path to preserve leading transients.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "9B20DBBF-3FD6-59F8-AEC2-0678DF29D368",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.5000115140074826
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "7FF42E86-842E-41D7-9D42-B5B45035D45C",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "D7619AF2-3FD6-49F8-AEC2-0678DF29D368",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "6DE5601A-CE48-41DB-8166-7F34ACA84CB0"
+}

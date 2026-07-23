@@ -1,0 +1,489 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-channel-eq-default-bell-48k-2026-07-18",
+  "product": "TrackSmith",
+  "recordedAt": "2026-07-19T00:14:26-04:00",
+  "identityIdentifier": "logic-pro-12.3:channel-eq",
+  "identityName": "Channel EQ",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectorySHA256": "be60f7ec31ed955307f7021641d763c26ce4988e976aa8332f21bb9dc4fe8e8a",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured"
+  },
+  "project": {
+    "name": "TrackSmith Logic 12.3 Channel EQ Empirical 48k 2026-07-18",
+    "archivePath": "project/TrackSmith Logic 12.3 Channel EQ Empirical 48k 2026-07-18.logicx.zip",
+    "archiveSHA256": "39543c6bdf622470e3f740c73301331b138f84cde964f800c7b172986d8bb80a",
+    "sampleRateHz": 48000,
+    "tempoBPM": 120,
+    "trackChannelFormat": "mono",
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0,
+    "trackPan": "center",
+    "outputVolumeDB": 0,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "savedState": "Channel EQ active with Peak 3 at 1000 Hz, +6.0 dB, Q 1.00; Bitcrusher retained but bypassed",
+    "postMeasurementUnsavedBypassState": "discarded when the project was closed without saving"
+  },
+  "nativeState": {
+    "presetName": "Default Preset modified",
+    "observedBeforeSave": true,
+    "observedAfterReload": true,
+    "parameters": {
+      "lowCut": "off",
+      "highCut": "off",
+      "peak3": {
+        "enabled": true,
+        "frequencyHz": 1000,
+        "gainDB": 6,
+        "q": 1
+      },
+      "analyzer": "POST",
+      "qCouple": "on",
+      "hq": "off",
+      "outputGainDB": 0
+    },
+    "comparisonState": "Unmodified Default Preset rendered before the Peak 3 edit; all enabled gain bands were at 0 dB and both pass filters were off.",
+    "importantInterpretation": "The settled unmodified default was transparent for this fixture. The controlled 1 kHz bell delivered approximately +6 dB below clipping; louder ladder steps hit the PCM24 export ceiling."
+  },
+  "modelContextSummary": "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: Channel EQ's settled unmodified Default Preset and settled header-bypass path were sample-transparent for the 1 kHz amplitude ladder. A Peak 3 state of 1000 Hz, +6.0 dB, Q 1.00 produced approximately +6 dB at input peaks from -60 through -12 dBFS, reached full scale at -6 dBFS, clipped louder steps, repeated with identical decoded PCM three times, and survived save/reload with identical PCM. First renders after default insertion and bypass differed only in samples 1...1023, so settling repeats remain mandatory. Other bands, filter slopes, Q/frequency grids, HQ, channel modes, phase/group delay, analyzer switching, automation, stereo, other rates, and musical preference remain unmeasured.",
+  "input": {
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureName": "amplitude_ladder_1khz_mono.wav",
+    "artifactPath": "artifacts/source_amplitude_ladder_1khz_mono.wav",
+    "fileSHA256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+    "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+    "sampleRateHz": 48000,
+    "channels": 1,
+    "bitDepth": 24,
+    "frameCount": 384000,
+    "durationSeconds": 8,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The fixture retained its suite hash. Logic's project-local WAVE copy has different container bytes but identical decoded PCM; see artifacts/project-copy-analysis.json."
+  },
+  "renderMethod": {
+    "LogicCommand": "File > Export > Regions as Audio Files",
+    "range": "Trim Silence at File End",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeVolumePanAutomation": false,
+    "includeTempoInformation": false,
+    "bypassEffectPluginsExportOption": false,
+    "bypassMethod": "Channel EQ plug-in header On/Off control",
+    "dither": "not exposed by this export dialog",
+    "renderSchedulingMode": "not exposed; no realtime/offline timing claim is made"
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_this_sample_rate_channel_format_and_fixture",
+      "evidence": "Three settled unmodified-default renders and three settled header-bypass renders matched the source PCM exactly."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_one_peak_band_state_only",
+      "evidence": "Only Peak 3 at 1000 Hz, +6.0 dB, Q 1.00 was measured beyond the unmodified default."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_zero_lag_polarity_gain_and_peak_only",
+      "evidence": "Zero-lag correlation, polarity, per-level gain, peak and clipping were measured. Impulse latency, phase/group delay and tail were not."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_unmodified_default_bypass_and_one_bell_state",
+      "evidence": "Three settled renders in each state were decoded-PCM identical; the bell post-reload render also matched."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_the_measured_bell_state",
+      "evidence": "The 1000 Hz/+6 dB/Q1 state was visually reobserved after reload, reproduced identical PCM, and the source PCM remained unchanged."
+    },
+    "each_band_enable_type_frequency_gain_q_and_pass_filter_slope_states": {
+      "status": "partial_peak3_only",
+      "evidence": "Peak 3 enable, frequency, gain and Q were observed for one state. Other bands, pass-filter slopes and grids remain unmeasured."
+    },
+    "single_band_and_coupled_multiband_magnitude_phase_group_delay_and_headroom": {
+      "status": "partial_single_frequency_gain_and_export_headroom_only",
+      "evidence": "The 1 kHz tone showed approximately +6 dB until the PCM24 ceiling. Broadband magnitude, phase, group delay and coupled multiband behavior remain unmeasured."
+    },
+    "oversampling_output_gain_and_input_level_invariance_or_nonlinearity_rejection": {
+      "status": "partial_hq_off_input_level_ladder_only",
+      "evidence": "HQ was off and output gain was 0 dB. The measured bell was level-invariant below the export ceiling; HQ and output-gain grids remain unmeasured."
+    },
+    "analyzer_pre_post_and_display_state_audio_null_and_save_reload": {
+      "status": "partial_post_state_only",
+      "evidence": "Analyzer POST, Q-Couple on and HQ off were observed. PRE/POST/off null switching and display-state save/reload were not measured."
+    }
+  },
+  "measurements": {
+    "settledBypass": {
+      "renderCount": 3,
+      "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+      "matchesSourcePCM": true,
+      "frameCount": 384000,
+      "zeroLagCorrelation": 1
+    },
+    "settledDefault": {
+      "renderCount": 3,
+      "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+      "matchesSourcePCM": true,
+      "frameCount": 384000,
+      "zeroLagCorrelation": 1
+    },
+    "settledBell": {
+      "preSaveRenderCount": 3,
+      "postReloadRenderCount": 1,
+      "pcmSHA256": "e569edfc3d1e4053b537b8095eea8acf2c399836369ce73889446503f3e0a96f",
+      "allSettledAndPostReloadPCMIdentical": true,
+      "frameCount": 384000,
+      "peakDBFS": 0,
+      "wholeFileLeastSquaresGainDB": 3.938984622206178,
+      "lowLevelGainDBRange": [
+        5.999997188545717,
+        6.000007360947556
+      ],
+      "unclippedThroughInputPeakDBFS": -12,
+      "firstClippedInputPeakDBFS": -6,
+      "clippedSampleCountsByInputPeakDBFS": {
+        "-6": 1400,
+        "-3": 15400,
+        "-1": 21000
+      },
+      "polarity": "noninverted"
+    },
+    "source": {
+      "peakDBFS": -0.9999997091320568,
+      "rmsDBFS": -11.033271918609975,
+      "firstNonzeroSample": 1
+    }
+  },
+  "stateTransitionFindings": [
+    {
+      "finding": "The first unmodified-default export differed only within samples 1 through 1023; all later samples matched the fixture.",
+      "classification": "observed_initialization_artifact_not_valid_baseline",
+      "consequence": "Discard initial renders until at least three settled decoded-PCM repeats agree."
+    },
+    {
+      "finding": "The first header-bypass export differed only within samples 1 through 1023; three settled bypass exports were sample-identical to the fixture.",
+      "classification": "observed_state_transition_artifact_not_valid_baseline",
+      "consequence": "The immediately following first export is not a settled baseline."
+    },
+    {
+      "finding": "Whole-file WAVE hashes varied across settled repeats while decoded PCM hashes were identical.",
+      "classification": "container_metadata_variation",
+      "consequence": "Use decoded PCM identity as the signal criterion while preserving container hashes."
+    }
+  ],
+  "interpretation": {
+    "stronglySupported": [
+      "The settled unmodified Default Preset and settled Channel EQ header-bypass path are sample-transparent for this 48 kHz mono fixture.",
+      "At 1000 Hz, Peak 3 +6.0 dB/Q1 produces approximately +6 dB on every unclipped analyzed input segment.",
+      "Three settled bell renders and one post-reload render are decoded-PCM identical.",
+      "The loud ladder steps clip at the PCM24 export ceiling; whole-file gain is not the configured bell gain."
+    ],
+    "inferences": [
+      "Near-exact low-level gain and repeatability are consistent with deterministic linear filtering in this one state; the run does not identify Apple's topology."
+    ],
+    "notEstablished": [
+      "Private filter topology or coefficient design.",
+      "Any other band, filter type, frequency, gain, Q, slope, channel mode, HQ or output-gain setting.",
+      "Broadband magnitude, phase, group delay, impulse latency, analyzer switching, automation, stereo, other rates, musical preference or universal suitability."
+    ]
+  },
+  "claimBoundary": {
+    "directStateOnly": "Logic Pro 12.3 build 6674, 48 kHz mono, recorded states and named fixture only.",
+    "noPrivateImplementationClaim": true,
+    "noPerceptualSuperiorityClaim": true,
+    "noWholeProcessorMasteryClaim": true,
+    "notTrackSmithHostAuthority": true
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/project-copy-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_default_active_settled_1-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bypassed_settled_1-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_repeat2-vs-repeat1-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_repeat3-vs-repeat1-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_post-reload-vs-settled-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_1-analysis.json",
+      "jsonPath": ["rendered", "pcm_sha256"],
+      "equals": "e569edfc3d1e4053b537b8095eea8acf2c399836369ce73889446503f3e0a96f"
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_1-analysis.json",
+      "jsonPath": ["amplitude_ladder_transfer", "segments", 0, "least_squares_gain_db"],
+      "minimum": 5.999,
+      "maximum": 6.001
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_1-analysis.json",
+      "jsonPath": ["amplitude_ladder_transfer", "segments", 6, "least_squares_gain_db"],
+      "minimum": 5.999,
+      "maximum": 6.001
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_1-analysis.json",
+      "jsonPath": ["amplitude_ladder_transfer", "segments", 7, "clipped_sample_count"],
+      "minimum": 1
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_default_active_transition-analysis.json",
+      "jsonPath": ["comparison", "channel_comparisons", 0, "last_differing_sample"],
+      "equals": 1023
+    },
+    {
+      "artifactPath": "artifacts/channel_eq_bypassed_transition-analysis.json",
+      "jsonPath": ["comparison", "channel_comparisons", 0, "last_differing_sample"],
+      "equals": 1023
+    }
+  ],
+  "artifactFiles": [
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_post_reload-analysis.json",
+      "sha256": "4c7621a60cf52d6b6e26a093957651e6203ce631ceb8c25a71bceed66a04100c",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_post_reload.wav",
+      "sha256": "61c8a604ef0ec9200f72ec4ccca3c808b0fb28727f5c8f2ff8f8d39531eacfae",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_1-analysis.json",
+      "sha256": "78ccdfceab336a4829b9017846eb73971bf0ab9bb8fd7f7c479c21b3236116ef",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_1.wav",
+      "sha256": "8632cd57f4d04c03e8940ec5a87d4549d381abc49b5c02b59c1eed92ec0cf141",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_2-analysis.json",
+      "sha256": "a3446e9d53a95461706e8d039f96770d0931fcf4088016a1214397294fbefd37",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_2.wav",
+      "sha256": "d5c29043bff7691aeba61b95381902f79ad46844a17491cfc52443c3ec5267a9",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_3-analysis.json",
+      "sha256": "178da7c490d9accc643fe168b2fae82ece93003f77255298b2c4eca20f2c852c",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_settled_3.wav",
+      "sha256": "1d4b51972b01dafc6dd8d752d8331bbd883c1aa032026e85d8714b184442589c",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_transition-analysis.json",
+      "sha256": "0eefd87db4dcdeedca86d641493c826c560cd1e7a9d36fc1720b87a2de2f065f",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_transition.wav",
+      "sha256": "df8abae54ff6c944dcbb5872187e81d6d01d84518a01305ef69895f1cdf4345f",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_ui_post_reload.png",
+      "sha256": "55ad76604c111e2a6844e82cb86aa1865880d0c249ecfc7d8c56ca0ec37ea2a7",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_1khz_plus6_q1_ui.png",
+      "sha256": "cda2f2f0ac7563c41e21e92ae58237556cf9a9422b8b49cf83b618e3321f5fb0",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_post-reload-vs-settled-analysis.json",
+      "sha256": "a427db65b870bfa6d7344addece7f29b41b63af611a3f13cbe751db04aa36378",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_repeat2-vs-repeat1-analysis.json",
+      "sha256": "78fe146f9f0eb17ca95277fe298b7389ea2b10e21288dfafa5dde413bbafa36f",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_repeat3-vs-repeat1-analysis.json",
+      "sha256": "3f39302684ae1d47c27c1501d28aea2e1bf3efe76f864e105bf6e4f20c84758c",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bell_transition-vs-settled-analysis.json",
+      "sha256": "1eaa7407a3b533399f90fbe15783214092a90c36e18455ae99afab20c78252b6",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypass_repeat2-vs-repeat1-analysis.json",
+      "sha256": "643ee0dca6d07c2c34871ce7eacf137f65479fa42ee6025c97f598165e39d589",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypass_repeat3-vs-repeat1-analysis.json",
+      "sha256": "bfb1e26d5a55c1f3d1c6afd85cbd205d5d5f2861431633c6ffbb1c303f69f64e",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_settled_1-analysis.json",
+      "sha256": "6e6af3d13ab4911621bd91e9a320115f660a5d4b62dae41f6b0f2fb405eafe01",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_settled_1.wav",
+      "sha256": "3cb6e72935707951e51cbd754c70ea48d5fdba162929656211867940c00521f7",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_settled_2-analysis.json",
+      "sha256": "eadd62ca7d1480dcd0676a35ab3fa6859d8a9b60695db6ae94f85fc20d117369",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_settled_2.wav",
+      "sha256": "7420b0a87f47c32ab7e1bb79b5199cc652e4a99e6db1291f2d8e54f92fde7fa9",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_settled_3-analysis.json",
+      "sha256": "142b24a5246e5973818f2d823938156ed821097ee0ffaf75f4be4f72d430e6b4",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_settled_3.wav",
+      "sha256": "8206ce6b2a3b1da590086f14c92d2ce5536ea08c8211e243a0a217e189cb742f",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_transition-analysis.json",
+      "sha256": "01f49d36acf4723678f48c191e6fb6598b3de8a49e9b9d11ec19462f18d1e207",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_bypassed_transition.wav",
+      "sha256": "75a2b629aa8dc20c13c8ebb145d33e1d6def9ee362ed46123513a88cd7be20aa",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_settled_1-analysis.json",
+      "sha256": "a96182e180629b4fc05fa87368c88d9ad459190748a2ba1f03e5c34b6ea9b4fb",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_settled_1.wav",
+      "sha256": "5bcfecc7fcdae77800389faaa776943ec71213e7eb2e7a7a93cd0fe015099aae",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_settled_2-analysis.json",
+      "sha256": "52f01cc170e77eff85db3534a0b90ac06cf61cc13e1dfa4890f50f923e828d5f",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_settled_2.wav",
+      "sha256": "166bb93cbf7228e37d241a115ea82a061496fe4553ad0963152a0557632f66d5",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_settled_3-analysis.json",
+      "sha256": "6a841f91ace079e2f0b8290278993beec72970f10d9dd4a87a873bfc1e993c64",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_settled_3.wav",
+      "sha256": "62680a76b865112781dcdd92fd86015e7e0eec6b7214626fbccfa4ba2d083fb8",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_transition-analysis.json",
+      "sha256": "9f4883862399cf104dda13cc73738b1a16ba869e9333abb0665b3c02e54cbe44",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_default_active_transition.wav",
+      "sha256": "d8364aeef6ed4349095d32029541381a6b05e6fefd273497a57411b0959ec0df",
+      "role": "direct Logic region export"
+    },
+    {
+      "path": "artifacts/channel_eq_default_repeat2-vs-repeat1-analysis.json",
+      "sha256": "9ccc9207ddd2a35ef37e3ebe73a5ba91173128cc2bb5b28dccd939c578807e5a",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/channel_eq_default_repeat3-vs-repeat1-analysis.json",
+      "sha256": "7c1395994f3e1fab02f122e75b08e47d7f585d30d64d50cb79dbc1c7f070b151",
+      "role": "objective comparison artifact"
+    },
+    {
+      "path": "artifacts/project-copy-analysis.json",
+      "sha256": "75edce5adda5e4e7971fad5814516b850469736b05f43b754ae78ea57acddd04",
+      "role": "project-local source preservation comparison"
+    },
+    {
+      "path": "artifacts/source_amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "immutable source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Channel EQ Empirical 48k 2026-07-18.logicx.zip",
+      "sha256": "39543c6bdf622470e3f740c73301331b138f84cde964f800c7b172986d8bb80a",
+      "role": "closed disposable Logic project archive"
+    }
+  ],
+  "completionClaims": {
+    "allChannelEQStatesCharacterized": false,
+    "exactTransferKnown": false,
+    "stereoAndOtherRatesCovered": false,
+    "musicalPreferenceEstablished": false
+  }
+}

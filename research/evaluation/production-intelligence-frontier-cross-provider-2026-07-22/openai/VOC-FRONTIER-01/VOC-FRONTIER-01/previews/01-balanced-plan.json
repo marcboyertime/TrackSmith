@@ -1,0 +1,82 @@
+{
+  "goals" : [
+    {
+      "attribute" : "closeness",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "brightness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "699B5066-DADA-4649-A812-CF5DDED1405C",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 280,
+        "gainDB" : -2.7,
+        "q" : 0.9
+      },
+      "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "25B6FD1C-42C4-53B6-A0BB-BE92A8BA96C2",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.994901887213949
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "BF645EB8-35F8-4228-ABCA-B72E80B6776E",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "69F7BC51-42C4-43B6-A0BB-BE92A8BA96C2",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "C9D0CF46-7970-4252-9CC0-24E273E05B31"
+}

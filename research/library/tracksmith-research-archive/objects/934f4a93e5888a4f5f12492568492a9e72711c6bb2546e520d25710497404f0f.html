@@ -1,0 +1,3353 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-gb">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Gullfoss vs TEOTE - Effects Forum - KVR Audio</title>
+
+	<link rel="alternate" type="application/atom+xml" title="Feed - KVR Audio" href="/forum/feed?sid=fe65464c94647f5e6b1a9acbbbe1eca4">			<link rel="alternate" type="application/atom+xml" title="Feed - New Topics" href="/forum/feed/topics?sid=fe65464c94647f5e6b1a9acbbbe1eca4">		<link rel="alternate" type="application/atom+xml" title="Feed - Forum - Effects" href="/forum/feed/forum/6?sid=fe65464c94647f5e6b1a9acbbbe1eca4">		
+	<link rel="canonical" href="https://www.kvraudio.com/forum/viewtopic.php?t=563258">
+
+<!--
+	phpBB style name: prosilver
+	Based on style:   prosilver (this is the default phpBB3 style)
+	Original author:  Tom Beddard ( http://www.subBlue.com/ )
+	Modified by:
+-->
+
+<link href="./assets/css/font-awesome.min.css?assets_version=371" rel="stylesheet">
+<link href="./styles/prosilver/theme/stylesheet.css?assets_version=371" rel="stylesheet">
+<link href="./styles/prosilver/theme/en/stylesheet.css?assets_version=371" rel="stylesheet">
+
+
+
+
+
+
+
+<meta property="og:title" content="KVR Forum: Gullfoss vs TEOTE - Effects Forum">
+<meta property="og:description" content="KVR Audio Forum - Gullfoss vs TEOTE - Effects Forum">
+<meta property="og:image" content="https://static.kvraudio.com/i/b/kvr-logo-grey-on-white-300x300.png">
+<meta property="og:image" content="https://static.kvraudio.com/i/b/kvr-logo-grey-on-blue-300x300.png">
+<meta name="msapplication-config" content="none">
+<meta name="msapplication-TileColor" content="#333333">
+<meta name="msapplication-TileImage" content="https://static.kvraudio.com/i/b/kvr-logo-grey-on-white-300x300.png">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async="async" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+
+<link rel="preload" as="font" type="font/woff2" href="/static/fonts/open-sans-v18-latin-ext_latin-regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/static/fonts/open-sans-v18-latin-ext_latin-700.woff2" crossorigin>
+
+<link type="text/css" rel="stylesheet" href="https://static.kvraudio.com/inc/kvr.css?v=698">
+<script src="https://static.kvraudio.com/inc/jquery-3.7.1-ui-1.14.0.kvr.min.js"></script>
+<script src="https://static.kvraudio.com/inc/kvr-pae.js?v=519"></script>
+<script>
+var kvrwidth = kvr_readCookie("kvrwidth");
+$(function(){
+  if(!kvrwidth || (kvrwidth != $(window).width()))
+  {
+    kvr_createCookie("kvrwidth",$(window).width(),365);
+  }
+
+  mykvr = {"logged":"out"}
+
+  if($("#kvrtopicblock").length)
+  {
+    kvr_check_for_vids("#kvrtopicblock");
+  }
+
+  if($("#preview").length)
+  {
+    kvr_check_for_vids("#preview");
+  }
+
+  setTimeout(function(){
+    if($(".checkforvis").length)
+    {
+      kvr_load_vids_and_audios();
+      $(window).on("scrollstop", function() {
+        kvr_load_vids_and_audios();
+      });
+    }
+  },1000);
+  
+
+
+  $(document).on("click", ".kvr_tutd", function(){
+    var t = $(this);
+
+    if(t.hasClass("kvrloginrequired"))
+    {
+      return false;
+    }
+
+    var id = t.data("postid");
+    var ud = t.data("ud");
+
+    var sp = t.find("span");
+    var txt = t.text();
+    sp.append('<span style="position: absolute;margin-left: -22px;">'+kvrloadingcss3an2+'</span>');
+
+    $.get("/account/", {m: "tutd", id: id, ud: ud}, function(data){
+      if(data.s == "100")
+      {
+        $("a[data-postid="+id+"]").removeClass("kvrsuccess");
+        $("a[data-postid="+id+"][data-ud='1']").find("span").text(data.up);
+        $("a[data-postid="+id+"][data-ud='2']").find("span").text(data.down);
+        $("a[data-postid="+id+"][data-ud="+data.my+"]").addClass("kvrsuccess");
+      }else{
+        sp.text(txt);
+        if(data.s == "99")
+        {
+          alert(data.m);
+        }
+      }
+    }, "json");
+    return false;
+  });
+});
+
+window.dataLayer = window.dataLayer || [];
+
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MWNP2F9');
+
+var googletag = googletag || { };
+googletag.cmd = googletag.cmd || [];
+
+googletag.cmd.push(function(){
+googletag.pubads().setRequestNonPersonalizedAds(1);
+var mappingTopC = googletag.sizeMapping().addSize([728, 400], [728, 90]).addSize([468, 200], [468, 60]).addSize([0, 0], [320, 50]).build();
+googletag.defineSlot('/3804147/728x90-Header', [728, 90], 'header320to728').defineSizeMapping(mappingTopC).addService(googletag.pubads());
+var mappingBotC = googletag.sizeMapping().addSize([728, 400], [728, 90]).addSize([468, 200], [468, 60]).addSize([0, 0], [320, 50]).build();
+googletag.defineSlot('/3804147/728x90-Footer',[728, 90], 'div-gpt-ad-1319706183506-3').defineSizeMapping(mappingBotC).addService(googletag.pubads());
+googletag.defineSlot('/3804147/728x90-Floating', [728, 90], 'div-gpt-ad-1319706183506-4').defineSizeMapping(mappingBotC).addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.pubads().setTargeting('kvr_tag', ['gullfoss', 'teote']);
+googletag.enableServices();
+});
+</script>
+
+
+<style>
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+       url('/static/fonts/open-sans-v18-latin-ext_latin-regular.woff2') format('woff2'),
+       url('/static/fonts/open-sans-v18-latin-ext_latin-regular.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+       url('/static/fonts/open-sans-v18-latin-ext_latin-700.woff2') format('woff2'),
+       url('/static/fonts/open-sans-v18-latin-ext_latin-700.woff') format('woff');
+  font-display: swap;
+}
+
+
+#wrap {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  min-width: 220px;
+}
+
+.wrap {
+  border-radius: 0;
+  border-width: 0;
+}
+
+#site-description {display: none;}
+
+.headerbar {
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.search-header {
+  box-shadow: none;
+  margin: 10px;
+}
+
+.dropdown-contents {margin: 0;}
+.post {padding: 30px; margin-bottom: 10px;}
+
+.postbody {
+  width: 100%;
+  position: relative;
+  flex: 8 1 300px;
+  float: none;
+  overflow: initial;
+  min-width: 200px;
+}
+
+.postbody .content {
+  font-size: 1rem;
+}
+
+.content {line-height: 26px;}
+.content > blockquote {margin-left: 0;}
+.postbody .content {overflow: unset; word-wrap: anywhere;}
+#cp-main .postbody .content {overflow-x: auto; word-wrap: anywhere;}
+#cp-main #post_details {clear: both;}
+p.author, .content {clear: initial;}
+
+.forabg, .forumbg {
+  background-image: none;
+  background-color: #eee;
+  padding: 0;
+  border-radius: 0;
+}
+
+.forumbg .header a, .forabg .header a, th a {color: #555;}
+ul.topiclist li.header {border-bottom: 1px solid #BBB;}
+ul.topiclist li.header dt, ul.topiclist li.header dd {padding: 10px;}
+
+ul.topiclist dl {
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+li.header dt, li.header dd {
+  text-transform: none;
+  margin: 0;
+  padding: 0;
+  color: #555;
+}
+
+ul.topiclist dt {flex: 100 1 240px;}
+
+ul.topiclist dd {
+  flex: 1 1 auto;
+  margin-left: auto;
+}
+
+.content, a.topictitle, a.forumtitle {
+  font-family: Verdana, Helvetica, Arial, Sans-serif;
+}
+
+a.topictitle, a.forumtitle {
+  color: #333 !important;
+  font-size: 1.1em;
+}
+
+ul.forums {
+  background-color: #eef5f9;
+  background-image: none;
+}
+
+li.row {
+  border-top-width: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+.search-box {
+  float: left;
+  margin: 0;
+}
+
+.bg1 {background-color: #f8f8f8;}
+.bg2 {background-color: #f1f3f3;}
+.bg3 {background-color: #f9f9f9;}
+
+.panel {border-radius: 0;}
+
+.tabs .tab > a {
+  background: #eee;
+  border-width: 0;
+  margin-right: 3px;
+}
+
+.tabs .activetab > a,
+.tabs .activetab > a:hover {background-image: none;}
+
+#tabs {
+  border-bottom: 1px solid #999 !important;
+  min-width: 220px;
+}
+
+#tabs .activetab > a {
+  background-color: #fff;
+  color: #555;
+  border: 1px solid #999;
+  border-bottom-width: 0;
+}
+
+.navigation {padding-top: 0;}
+
+.navigation a {
+  background-image: none;
+  background-color: #eee;
+}
+
+.navigation .active-subsection a {
+  background: #999;
+  color: #fff !important;
+}
+
+dl.row-item {
+  background-size: 27px 27px;
+  background-position: 10px 12px;
+}
+
+.forum-title > a, .topic-title > a {color: #555 !important;}
+
+.postprofile {
+  margin: 0 20px 0 0;
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  flex: 0 0 auto;
+  width: 110px;
+}
+
+.postprofile dd, .postprofile dt {margin-left: 0;}
+.postprofile a.username {width: 100%;}
+
+.pm .postprofile {
+  margin: 10px -20px 20px 20px;
+  background-color: #eee;
+  padding: 10px;
+  border-radius: 10px;
+  display: none;
+}
+
+#qr_postform #message-box {width: 100%;}
+
+#qr_postform dl {display: none;}
+
+.has-profile .post-buttons {
+  right: -29px;
+  top: -25px;
+}
+
+.has-profile .postbody h3 {margin-right: 0;}
+.postbody h3 {float: none;}
+
+.time {
+  font-size: 1.0em;
+  color: #555;
+}
+
+.forumdesc-text {font-size: 0.9em;}
+ul.navlinks {border-top-color: #ddd;}
+.action-bar {margin: 15px 0;}
+.postlink {border-bottom-width: 0;}
+
+.back2top {
+  position: absolute;
+  right: 30px;
+}
+
+.topic_read a.topictitle,
+.topic_read_locked a.topictitle,
+.topic_read_hot a.topictitle,
+.sticky_read a.topictitle,
+.sticky_read_locked a.topictitle,
+.announce_read a.topictitle,
+.announce_read_locked a.topictitle {font-weight: normal;}
+#quick-links .dropdown-contents {max-height: none;}
+.dropdown-extended {z-index: 2;}
+
+h2:is(.topic-title, .posting-title, .forum-title, .memberlist-title) {
+  background-color: #d2e8f5;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.signature {
+  line-height: 18px;
+  max-height: 54px;
+}
+
+fieldset.fields1 dl.pmlist dd.recipients {padding: 10px 0;}
+
+#pmheader-postingbox fieldset.fields1 ul.recipients input.button2 {
+  font-size: 1.0em;
+  padding: 0 5px;
+}
+
+#pmheader-postingbox fieldset.fields1 dd.recipients {margin-left: 0;}
+
+.dropdown-extended .header {background-image: none;}
+
+.postbody blockquote img.postimage {max-width: 200px;}
+
+dd.posts, dd.topics, dd.views {
+  width: 60px;
+}
+
+.row-item .topic-poster {
+  line-height: 1.8;
+}
+
+.kvr-vf-about {
+  max-height: 22px;
+}
+
+@media only screen and (min-width: 1px) and (max-width: 2000px) {
+  ul.topiclist dt,
+  ul.topiclist dl,
+  dl.row-item dt .list-inner,
+  ul.topiclist dt .list-inner,
+  ul.topiclist.forums dt {margin-right: auto;}
+}
+
+@media only screen and (max-width: 700px) {
+  ul.topiclist dd.posts, ul.topiclist dd.topics {display: none;}
+
+  ul.topiclist dd.lastpost {
+    padding-left: 46px !important;
+    width: 100%;
+    border-width: 0;
+  }
+
+  dd.lastpost br {display: none !important;}
+}
+
+@media only screen and (min-width: 1px) and (max-width: 700px) {
+  ul.topiclist.forums dd.lastpost {display: block;}
+}
+
+h1.topic-title, h1.forum-title {
+  margin: 20px 0 !important;
+}
+
+.shinycbox .kvr_side_scroller_inner {display: flex; gap: 10px;}
+.shinycbox .kvr_side_scroller_inner .kvrcbox {flex: 1 0 300px;}
+.shinycbox .kvrcbox a,
+.shinycbox .kvrcbox .hovthisblueop {
+  border-radius: 5px;
+}
+
+.kvr_mp_sidebar_ads .kvrcbox > div:first-child {
+  padding-top: 75%;
+  background-position: 0 0;
+}
+
+.kvr_scroller_link {border-radius: 5px;}
+
+@media only screen and (max-width: 467px) {
+  .postprofile {
+  	max-width: initial;
+  	max-height: initial;
+  }
+
+  /* expand to edges*/
+  #page-body {
+    margin-left: -30px;
+    margin-right: -30px;
+  }
+
+  .post {
+    padding: 15px 15px 30px 15px;
+  }
+
+  h1.topic-title, h1.forum-title {
+    margin: 0 !important;
+    font-size: 1.0rem;
+    position: sticky;
+    top: 100px;
+    background-color: #fff;
+    z-index: 1;
+    padding: 10px;
+    box-shadow: 0px 10px 10px -10px rgba(0,0,0,0.5);
+  }
+
+  #kvrtopictitle, .topictitle {
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  h2.posting-title {
+    background-color: transparent;
+    margin: 20px !important;
+    padding: 0;
+    border-radius: 0;
+    font-family: "Open Sans", verdana;
+  }
+
+  h2.posting-title a {
+    color: #555 !important;
+  }
+
+  .action-bar > .pagination {
+    padding-top: 10px;
+  }
+
+  .pagination > ul {
+    margin: 10px 0 0;
+  }
+
+  .section-viewtopic .search-box .inputbox {
+    width: auto;
+    max-width: 140px;
+  }
+
+  #page-body h2,
+  .stat-block,
+  .action-bar,
+  .moderator-line
+  {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  #cp-main h2
+  {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .headerbar, .navbar, .forabg, .forumbg, .post, .panel {
+    border-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  dd.topics,
+  dd.posts,
+  dd.views,
+  li.header,
+  ul.topiclist dd br,
+  .signature {display: none !important;}
+
+  ul.topiclist li, h2 {clear: both;}
+
+  ul.topiclist dt, ul.topiclist dd {
+    float: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  ul.topiclist dd {padding-left: 40px !important;}
+  .content > blockquote {clear: right;}
+}
+
+@media only screen and (max-width: 360px) {
+  .has-profile .post-buttons {
+    right: -5px;
+    top: -40px;
+  }
+
+  .back2top {
+    /*
+    right: 20px;
+    bottom: 10px;
+    */
+    display: none;
+  }
+  .post {padding: 10px;}
+}
+
+@media only screen and (max-width: 700px) {
+  .post .postprofile {
+  	margin-right: 0;
+  	min-height: auto;
+  	width: 100%;
+  	overflow: initial;
+    min-width: initial;
+    max-width: initial;
+  }
+
+  .pm .postprofile {
+    margin: 0 0 10px 0;
+    padding-bottom: 10px;
+  }
+
+  .post .postprofile {
+  	box-sizing: border-box;
+    display: flex !important;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    gap: 10px !important;
+  }
+
+  .post .postprofile dt {
+    box-sizing: border-box;
+    display: flex !important;
+    flex: 0 1 auto;
+    align-items: center;
+  }
+
+  .post .postprofile .dropdown-container {display: none !important;}
+  .post .postprofile dd {margin: 0 !important;}
+  .post .postprofile .profile-rank {margin-left: auto !important;}
+}
+
+[id]:not(textarea) {
+  scroll-margin-top: 110px;
+}
+body {background-color: #777D84;}
+li, ul, ol, li ul, li ol {margin: 0;}
+.tags a:hover, .tags a:active {color: #fff !important;}
+.forum_unread, .pm_unread, .topic_unread {background-image: url("./_images/_topic_unread.gif");}
+.forum_unread_locked, .topic_unread_locked {background-image: url("./_images/_topic_unread_locked.gif");}
+.forum_read_subforum {background-image: url("./_images/_forum_read_subforum.gif");}
+.forum_unread_subforum {background-image: url("./_images/_forum_unread_subforum.gif");}
+.forum_read, .pm_read, .topic_read {background-image: url("./_images/_topic_read.gif");}
+.forum_read_locked, .topic_read_locked {background-image: url("./_images/_topic_read_locked.gif");}
+.topic_moved {background-image: url("./_images/_topic_moved.gif");}
+.sticky_read {background-image: url("./_images/_sticky_read.gif");}
+.sticky_unread {background-image: url("./_images/_sticky_unread.gif");}
+.sticky_read_locked {background-image: url("./_images/_sticky_read_locked.gif");}
+.sticky_unread_locked {background-image: url("./_images/_sticky_unread_locked.gif");}
+.announce_read, .global_read {background-image: url("./_images/_announce_read.gif");}
+.announce_unread, .global_unread {background-image: url("./_images/_announce_unread.gif");}
+.announce_read_locked, .global_read_locked {background-image: url("./_images/_announce_read_locked.gif");}
+.announce_unread_locked, .global_unread_locked {background-image: url("./_images/_announce_unread_locked.gif");}
+.topic_read_hot {background-image: url("./_images/_topic_read.gif");}
+.topic_unread_hot {background-image: url("./_images/_topic_unread.gif");}
+
+#kvrforumheader {
+  line-height: 150%;
+  position: relative;
+  margin-bottom: 20px !important;
+  padding: 0 !important;
+}
+
+#kvrforumheader[data-id="0"]::before {
+  content: "This forum is sponsored by:";
+  position: absolute;
+  margin-top: -18px;
+  color: #555;
+  font-size: 0.6rem;
+}
+
+#kvrforumheader[data-id="0"].not-sponsored::before {
+  content: "";
+}
+
+#kvrforumheader[data-id="0"],
+#kvrforumheader[data-id="0"] > a,
+#kvrforumheader[data-id="0"] > a > img {
+  border-radius: 5px;
+}
+
+.section-mcp #main,
+.section-mcp .wrap {max-width: 100%;}
+.section-mcp #column1 {grid-template-columns: auto;}
+
+.section-mcp #kvrforumheader[data-id="0"],
+.section-posting #kvrforumheader[data-id="0"] {
+  display: none;
+}
+
+.kvr-floatedleft {
+  float: left;
+  margin: 0 20px 20px 0;
+  clear: both;
+}
+
+dt.attach-image + dd,
+.kvr-floatedleft dd {display: none;}
+
+.attach-image img {border-width: 0;}
+
+#message-box textarea {
+  padding: 10px;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+.post-buttons a.kvr_tutd {
+  color: #555 !important;
+}
+
+.kvr_tutd.kvrsuccess svg {
+  fill: #065fd4;
+}
+
+.post-buttons.kvrbasicbuttons .button {
+  background-image: none;
+  border-width: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.kvr_tutd span, .kvr_tutd span {
+  color: #777;
+  font-size: 11px !important;
+}
+
+.kvr_tutd:hover span, .kvr_tutd:focus span,
+.kvr_tutd:hover svg, .kvr_tutd:focus svg {
+  fill: #0A8ED0;
+  color: #0A8ED0;
+}
+
+.post {
+  overflow: hidden;
+}
+
+#kvrtopictitle, .topictitle {
+  overflow-wrap: anywhere;
+}
+
+.row .pagination li a, .row .pagination li span {
+  font-size: 0.7rem;
+  font-weight: normal;
+}
+
+dd.lastpost {
+  width: 150px;
+}
+
+.section-index dd.lastpost {
+  width: 250px;
+}
+
+.kvr-vf-about a:hover {
+  text-decoration: underline;
+}
+
+#page-header {
+  position: sticky;
+  top: 45px;
+  background-color: #fff;
+  z-index: 2;
+}
+
+ul.topiclist,
+.postprofile dd,
+.postprofile dt {
+line-height: 1.5;
+}
+
+ul.topiclist dd {
+  border-left-width: 0 !important;
+}
+
+a.topictitle, a.forumtitle {
+  font-size: 0.9rem;
+}
+
+.breadcrumbs .crumb {
+  font-weight: normal;
+}
+
+li.header dt, li.header dd {
+  font-size: 0.8rem;
+  font-family: open sans;
+  font-weight: normal !important;
+}
+
+dl.mini dt {
+  padding-bottom: 10px;
+}
+
+p.post-notice {
+  border-radius: 5px;
+}
+
+#main blockquote {
+  padding: 15px;
+  border-radius: 5px;
+  clear: both;
+}
+
+#kvrblock textarea {
+  border-radius: 5px;
+}
+
+#kvrblock input#subject {
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100% !important;
+}
+
+#format-buttons > * {
+  margin-bottom: 3px;
+}
+
+#main h2 {
+  font-size: 1.0rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-width: 0;
+  padding: 0;
+}
+
+#main h3 {
+  font-size: 0.9rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-width: 0;
+  padding: 0;
+}
+
+h2.posting-title {
+  padding: 20px !important;
+}
+
+.navigation li {
+  font-weight: normal;
+}
+
+.button {
+  font-weight: normal;
+}
+
+ul.linklist > li.rightside, p.rightside, a.rightside {
+  margin-left: 15px;
+}
+
+@media only screen and (max-width: 467px) {
+  #page-header, #kvrforumheader {
+    margin-left: -30px !important;
+    margin-right: -30px !important;
+    padding: 0 10px !important;
+  }
+
+  h2.posting-title {
+    padding: 20px !important;
+    margin: 0.5em 0 0.2em 0 !important;
+  }
+
+  h2.posting-title a {
+    color: #cfc !important;
+  }
+  .topicreview {
+    margin: 0;
+  }
+}
+
+h2.memberlist-title {
+  padding: 20px !important;
+}
+
+.codebox {display: grid;} /* fixes overflowing / stretching */
+
+#pt-pt {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+  padding: 5px 0;
+}
+#pt-pt::-webkit-scrollbar {height: 6px;}
+#pt-pt::-webkit-scrollbar-track {background: transparent;}
+#pt-pt::-webkit-scrollbar-thumb {background-color: #ccc;}
+
+#pt-pt > span {
+  font-family: Open Sans, Verdana, Helvetica, Trebuchet MS;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  line-height: 1.2;
+  color: #555;
+}
+
+#pt-pt .kvr-toggle-id svg {stroke: #555;}
+
+svg path.locked {display: none;}
+.islocked svg path.locked {display: inline; stroke: #fc0;}
+.islocked svg path.unlocked {display: none;}
+.islocked svg rect {fill: #fc0; stroke: #fc0;}
+
+#kvr-pt-holder {
+  display: grid;
+  background-color: #eee;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.kvrptbox {
+  position: relative;
+  background-color: #333;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  gap: 5px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.kvrptbox .buyatkvr {
+  font-size: 13px;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #cccbbb;
+  color: #fff !important;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.kvrptbox .buyatkvr > * {
+  padding: 5px 10px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  color: #fff;
+}
+
+.kvrptbox .buyatkvr > .discountpercent {background-color: #a42b58;}
+.kvrptbox .buyatkvr > .sellingprice {background-color: #83a93a;}
+
+.kvrptbox .buyatkvr > .buynowtext {
+  background-color: #36c;
+  min-width: 44px;
+}
+
+.kvrptbox .kartinmy {
+  z-index: 1;
+  line-height: normal;
+  padding: 5px 10px;
+  text-align: center;
+  background-color: rgb(131, 169, 58);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  align-items: center;
+  border-radius: 3px;
+  gap: 5px;
+}
+
+.kvrptbox .kartinmy a {
+  background-color: #36c;
+  text-shadow: none;
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  color: #fff !important;
+  padding: 5px 0;
+  line-height: 16px;
+  flex: 1 1 auto;
+  border-radius: 3px;
+}
+
+.kvrptbox .kartinmy .kvrdelfromcart {padding: 3px 5px; margin: 0; text-decoration: none;}
+
+.kvrptbox .pt-link {
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff !important;
+  gap: 5px;
+  box-sizing: border-box;
+  display: flex !important;
+  flex: 0 1 auto;
+}
+
+.kvrptbox .pt-link span:first-child {
+  font-size: 0.8rem;
+  flex: 1 1 auto;
+}
+
+.kvrptbox .pt-link span:last-child {
+  flex: 0 0 auto;
+  width: 50px;
+  background-repeat: no-repeat;
+}
+
+.kvrptbox .pt-my {
+  margin-top: auto;
+  gap: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+}
+
+.kvrptbox a:hover, .kvrptbox a:active, .kvrptbox a:focus {color: #fff !important; background-color: #555 !important; text-decoration: none;}
+
+.kvrptbox .pt-admin {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  font-size: 16px;
+}
+
+.kvrptlock, .kvrptdel {
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.kvrptdel svg {stroke: #fff;}
+
+.pt-thumb {
+  position: relative;
+  padding: 10px;
+  color: #fff !important;
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.pt-thumb span:first-child {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+}
+
+.flexthecontainers > .svk_prod_container {
+  margin: 0 0 20px 0;
+  position: relative;
+          flex: 1 1 auto;
+          flex-basis: 300px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  border-radius: 5px;
+}
+
+.flexthecontainers > .svk_prod_container > div.inkvrshop {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #FDFDFD;
+}
+
+.flexthecontainers > .svk_prod_container > .svk_offer_line {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  margin: 0;
+}
+
+.flexthecontainers > .svk_prod_container .svk_prod_img {
+  width: auto;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.flexthecontainers > .svk_prod_container .svk_prod_tags {
+  margin: 10px 0;
+}
+
+.flexthecontainers > .svk_prod_container > div {
+  height: 100%;
+  flex-direction: column;
+}
+
+.flexthecontainers > .svk_prod_container .svk_prod_txt {
+          flex-grow: 50;
+  flex-basis: 100px;
+}
+
+.flexthecontainers .svk_tag {
+  display: block;
+}
+
+.flexthecontainers > .svk_prod_container .svk_prod_buy {
+  align-self: unset;
+}
+
+.flexthecontainers > .svk_prod_container .svk_prod_intro br,
+.flexthecontainers > .svk_prod_container .svk_prod_intro {
+  display: none;
+}
+
+.flexthecontainers > .svk_prod_container .svk_prod_intro .kvrshopmifql:before {
+  content: " ";
+}
+
+.flexthecontainers .buynowtext {
+  min-width: 44px !important;
+}
+
+.tho-universe .product-list {
+  border-width: 0 !important;
+}
+
+.tho-universe .product-list::before {
+  background-color: transparent !important;
+}
+
+.tho-universe .product-list li {
+  max-width: 430px !important;
+  border-radius: 5px !important;
+  border: 1px solid #ddd !important;
+  background-color: #fff !important;
+  color: #333 !important;
+}
+
+.tho-universe .product-list li .column-image img {
+  margin-left: -55px !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+#subcol .tho-universe .product-list li .column-image img {
+  margin-left: -35px !important;
+}
+
+.tho-universe .display-name {
+  font-size: 0.8rem !important;
+}
+
+ul.product-list.horizontal,
+ul.product-list.vertical {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+  @media only screen and (max-width: 467px) {
+    .row-item {
+      background-image: none !important;
+    }
+
+    dl.row-item dt .list-inner {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    dl.row-item dt .list-inner .unread {
+      padding-top: 5px !important;
+
+    }
+
+    a.topictitle, a.forumtitle {
+      font-size: 1.0rem;
+    }
+
+    ul.topiclist dd.lastpost {
+      padding-left: 10px !important;
+    }
+  }
+</style>
+
+</head>
+<body id="phpbb" class="nojs notouch section-viewtopic ltr ">
+
+<div id="kvrtogglemainfixedbarcon"><a href="#" id="kvrtogglemainfixedbar" aria-label="Toggle Main Menu"><span class="kvr-notify-circle" style="position: absolute; left: 24px; top: 4px; width: 20px; height: 20px; font-size: 10px; background-color: #333; border-radius: 50%;"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="#eee" style="transform: none; left: 0; top: 0; position: relative;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span><span class="kvrburger"><span></span><span></span><span></span></span></a><a href="/" id="kvrtogglemainfixedbarlogo" class="flex flexcenter flexselfstretch" style="padding: 10px;"><img src="https://static.kvraudio.com/i/b/kvr-logo-98x40.png" alt="KVR Audio" style="width: 49px; height: 20px;" width="49" height="20"></a></div><div id="kvrmainfixedbar" class="flex flexcolumn kvr-links-trans-05 firstload"><div><a href="/forum/ucp.php?mode=login" class="kvrloginrequired flexflexed" style="background-color: #305060; margin: 0; padding-left: 50px;">Sign In </a><a href="/forum/ucp.php?mode=register" class="flexcenter" style="background-color: #df4141; color: #fff; border-radius: 0; padding-right: 13px; margin-right: -10px;">Create Account <span class="flex flexcenter" style="margin-left: 5px;"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="#eee" style="transform: none; left: 0; top: 0; position: relative;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></a></div><div><a href="/" class="flexflexed">News</a><a href="#" class="togglekvrsection hasarrow" aria-label="Toggle News Sections Menu"><span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"><a href="/deals-tracker">#KVRDeals &amp; Giveaways</a><a href="/news/about/instruments">Instruments</a><a href="/news/about/effects">Effects</a><a href="/news/about/hosts">Hosts</a><a href="/news/about/sounds">Soundware</a><a href="/news/about/mobile">Mobile</a><a href="/news/about/hardware">Hardware</a><a href="/news/about/free">Free</a><a href="/news/about/developers">Developer Tools</a><a href="/news/about/edu">Education, Training, Tutorials, etc.</a><a href="/news/about/offers">Offers, Competitions &amp; Events</a><a href="/namm">NAMM</a><hr style="border-color: #666;"><a href="/news-archive.php">News Archive (by month)</a></div></div><div><a href="/plugins" class="flexflexed">Plugins, Apps, Sounds, etc.</a><a href="#" class="togglekvrsection hasarrow" aria-label="Toggle Products Sections Menu"><span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"><a href="/marketplace/">KVR Marketplace</a><a href="/plugins">What's New?</a><a href="/developer/">Search Developers / Brands</a><a href="/reviews.php">Product Reviews</a><a href="/plugin-ranks.php">Product Rankings</a><a href="/ratings.php">Product Ratings</a><a href="/groups/">Groups: Whats's in?</a><a href="/banks.php" title="Downloads and Uploads">Patches &amp; Presets Downloads &amp; Uploads</a></div></div><div><a href="/marketplace/" class="flexflexed">Marketplace</a><a href="/marketplace/?a=991" class="togglekvrsection hasarrow kvr-fetch-n-menu" aria-label="Toggle Marketplace Sections Menu"><span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"></div></div><div><a href="/forum/" class="flexflexed">Forum</a><a href="#" class="togglekvrsection hasarrow" title="My Forums">My</a><div class="hideflex kvrsection"><div class="flex" style="background-color: #444; border-radius: 5px;"><a href="/account/#myforums">My Forums</a> <a href="/account/#myforums" style="margin-left: auto;">Edit</a></div></div><a href="/forum/latest-posts/index.php?mode=mylt" class="hasarrow" title="Latest Posts in the forum">LP</a><a href="/inc/a.php?w=kvr-forums" class="kvr-fetch-n-display hasarrow" data-requires="kvr-mark-or-hide.js" data-func="kvr_mark_or_hide" data-args='["#kvr-forums-quick-list", "kvr-filter-forums-quick-list"]' title="Show All Forums (Full Screen Popup)" aria-label="Show All Forums in a full screen popup)">All</a><a href="#" class="togglekvrsection hasarrow" aria-label="Toggle Forum Sections Menu"><span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"><a href="/forum/search.php">Search the forum</a><a href="/forum/search.php?search_id=unanswered">Unanswered Posts</a></div></div><a href="/mykvr/" title="MyKVR" class="hasnotify">MyKVR <span class="kvr-notify-circle" style="background-color: #555;"><span>0</span></span></a><a href="/kvr-studio-manager" title="KVR Studio Manager">KVR Studio Manager (Beta)</a><a href="/articles" title="Industry Focus">Articles, Interviews, Reviews &amp; More</a><div><a href="#" class="togglekvrsection flexflexed hasarrowtext">Newsletters, Giveaways, Social &amp; RSS<span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"><a href="/marketplace/kvr-marketplace-news">KVR Marketplace News</a><a href="/newsletter.php">KVR Audio Weekly Newsletter</a><a href="/kvrdeals-newsletter.php">KVRDeals Newsletter</a><a href="/giveaways">Giveaways</a><a href="https://www.facebook.com/pages/KVR-Audio-News/207641972591939" title="KVR Audio on Facebook" target="_blank" rel="noopener"><span class="spit spfacecircle"></span> <span>Facebook</span></a><a href="https://bsky.app/profile/kvraudio.bsky.social" title="@kvraudio on Bluesky" target="_blank" rel="noopener"><span class="spit spblueskycircle"></span> <span>Bluesky</span></a><a href="https://www.instagram.com/kvraudio/" target="_blank" rel="noopener"><span class="spit spinstacircle"></span> <span>Instagram</span></a><a href="https://www.youtube.com/c/KVRAudioNews" target="_blank" rel="noopener"><span class="spit spyoutubecircle">&nbsp;</span> <span>YouTube</span></a><a href="https://x.com/kvraudio" title="@kvraudio on X" target="_blank" rel="noopener"><span class="spit sptwitcircle"></span> <span>X / Twitter</span></a><a href="/news-feed.php"><span class="spit sprss2"></span> <span>RSS Feeds</span></a></div></div><div><a href="#" class="togglekvrsection flexflexed hasarrowtext">Special Events<span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"><a href="/kvr-developer-challenge/">KVR Developer Challenge</a><a href="/readers-choice-awards/">KVR Readers' Choice Awards</a><a href="/kvr-guitar-month">KVR Guitar Month</a><a href="/polls.php">Polls &amp; Surveys</a><a href="/kvr-is-10">KVR Celebrates 10 Years (2010)</a></div></div><a href="/video/">Videos</a><a href="/music.php">Music by KVR Members</a><div><a href="#" class="togglekvrsection flexflexed hasarrowtext">Contact, About, Submit &amp; More<span class="kvrdownarrow"></span></a><div class="hideflex kvrsection"><a href="/devs">Are you an Audio Software or Plugin Developer? Take control of your brand at KVR!</a><a href="/submissions">How to Submit News, Plugins, etc.</a><a href="https://partnerservices.kvraudio.com">Advertise @ KVR Audio</a><a href="/about-kvr">About / Contact Us</a><a href="/forum/viewtopic.php?t=44705">Rules &amp; FAQ</a><a href="/privacy">Privacy Statement</a></div></div></div>
+<img id="kvrgo" src="/static/go/0.gif" alt="" width="1" height="1" style="display: none;">
+<div id="sm2-container"></div>
+<div id="hyperheader" class="kvr-links-trans-05" style="height: 46px; display: grid; grid-template-columns: minmax(110px, 1fr) minmax(200px, 1344px) minmax(0px, 1fr);"><div></div><div class="flex flexcenter" style="font-family: Open Sans, Verdana, Helvetica, Trebuchet MS; text-transform: uppercase; align-items: stretch;"><div class="flex flexcenter" style="padding: 10px 10px 10px 4px; gap: 8px; align-items: stretch;"><a href="/plugins" aria-label="Plugins and Products Database" title="Plugins and Products Database"><span class="kvrhidetiny">Products</span><span class="kvrshowtiny" style="margin-left: 0;">PDB</span></a><a href="/forum/" style="text-decoration-line: underline; text-decoration-thickness: 0.1rem; text-underline-position: under; text-decoration-color: #f4cc7e;" aria-label="Forum" title="Forum"><span class="kvrhidetiny">Forum</span><span class="kvrshowtiny" style="margin-left: 0;">FRM</span></a><a href="/forum/latest-posts/index.php?mode=mylt" aria-label="Forum Latest Posts" title="Forum Latest Posts">LP</a><a href="/marketplace/" aria-label="Marketplace" title="Marketplace"><span class="kvrhidetiny">Marketplace</span><span class="kvrshowtiny" style="margin-left: 0;">MP</span></a><a href="/deals" class="kvrhidesmall">Deals</a><a href="/whats-new-at-kvr.php" class="kvr-fetch-n-display not-full-cover click-bg-to-close" data-func="kvr_lazyload_images"><span><span class="kvrhidesmall">What's</span> New</span></a></div><div class="flex flexcenter nowrap gap5" style="padding: 10px; margin-left: auto; align-items: stretch;"><a href="/marketplace/kvr-points" class="kvr-cen-spit-num posrelit kvrhidesmall" style="padding: 0; background-color: transparent; text-align: center;" aria-label="KVR Points"><span class="spit spbadgegrey" title=""><span class="kvr-points-value">0</span></span></a><a class="memdropit" id="kvrcartsummary" href="#" data-d="999" title="Cart" aria-label="Show Cart"><span class="spit spcartwht"></span><span class="kvrhidemid"><span id="kvrcartsumitems" class="kvrhidemid">0 items</span><span class="kvrhidemid"> | </span> <span>$<span id="kvrcartsumtotal">0.00</span></span></span> <span class="kvrdownarrow kvrhidesmall" style="border-color: #eee; margin-left: 10px; margin-right: 5px;"></span></a><a href="/marketplace/checkout/" class="kvr-checkout-top-bar kvrhidesmall" style="background-color: #ddd; color: #555; padding: 0 10px;"><span>CHECKOUT</span></a><a href="/search" class="narrow-search" style="margin-left: 5px; border-radius: 50%; width: 26px; padding: 0; background: #fff url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAA3NCSVQICAjb4U/gAAAARVBMVEX////7+/v5+fn29vbx8fHq6urn5+fm5ubj4+Pg4ODb29vZ2dnNzc3MzMytra2srKypqamoqKinp6empqalpaWampqZmZl+OQyUAAAACXBIWXMAAAsSAAALEgHS3X78AAAAJXRFWHRTb2Z0d2FyZQBNYWNyb21lZGlhIEZpcmV3b3JrcyBNWCAyMDA0h3aszwAAABZ0RVh0Q3JlYXRpb24gVGltZQAwMi8wNy8xOXRSRxUAAABWSURBVHicXY1LEoAwCENb+rOViqLl/kdVcGHHLB6TCQHnoPPgDk4FRDUsO5lDUnpCHVxtobFSgpk4lOec4Oa1c1kHtqPFlSW/t/H5g1mK+1QkTS79shv/KgMA0KdAOgAAAABJRU5ErkJggg==') no-repeat 50% 50% !important;" aria-label="Open and focus Quick Search KVR"></a><script>$(function(){
+  $(document).on("click", ".narrow-search", function(){
+  if($("#quick-search-kvr-pop").length)
+  {
+    document.getElementById("quick-search-kvr-pop").remove();
+    document.getElementById("kvr-display-full-cover").classList.add("hideflex");
+  }else{
+    $("body").prepend('<div id="quick-search-kvr-pop" class="flex kvrform2019" style="position: fixed; top: 0; right: 0; left: 0; height: 46px; padding: 10px; background-color: #111; z-index: 1022;"><div style="margin: 0 auto;"><form id="quick-search-kvr2" method="get" action="/search/" class="flex" style="margin: 0 auto; height: 26px;"><input id="quick-search-kvr-q" name="q" class="searchbg" type="search" placeholder="QUICK SEARCH KVR" style="margin: 0 !important; padding: 0 24px 0 10px !important; border-color: #fff; font-size: 12px; width: 100% !important; border-radius: 999em;"></form><div class="shaditdrk posrelit" style="background-color: #f6f6f6; padding: 10px; border-radius: 5px; margin-top: 20px; color: #555; box-sizing: border-box; max-width: 320px;"><a href="#" class="narrow-search" style="position: absolute; right: -20px; top: -41px; color: #ccc; font-size: 14px; font-family: open sans; line-height: 14px;" aria-label="Close Quick Search KVR">X</a><div class="kvrbuttonizea"><div class="flex" style="margin-bottom: 5px;"><a href="/forum/ucp.php?mode=login" id="quick-login" class="kvrloginrequired flex flexcenter flexflexed flexcontentcenter" style="background-image: none !important; border-width: 0 !important; color: #fff !important; background-color: #305060 !important; margin-right: 5px !important;">Sign In</a><a href="/forum/ucp.php?mode=register" class="flex flexcenter flexcontentcenter" style="background-image: none !important; border-width: 0 !important; background-color: #df4141 !important; color: #fff !important; margin-left: 5px !important;">Create Account <span class="flex flexcenter" style="margin-left: 5px;"><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="#eee" style="transform: none; left: 0; top: 0; position: relative;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></a></div><div class="bignflat flex flexcolumn"><div style="font-size: 0.8rem; background-color: #ddd; border-radius: 5px; padding: 10px;">Type in the search box above and hit return to quick search KVR. Some useful links are below.</div><a href="/plugins/">Search the KVR Product Database</a><a href="/marketplace/">Buy Plugins in the KVR Marketplace</a><a href="/forum/latest-posts/index.php?mode=mylt">Read the Latest Forum Posts</a><hr><a href="/devs" style="background-color: #df4141 !important; color: #fff !important;">Are you an Audio Software or Plugin Developer? Take control of your brand at KVR!</a></div></div></div></div></div>');
+    $("#quick-search-kvr-q").focus();
+    $("#quick-search-kvr2").submit(function(){var q = $(this).find("input").val(); window.location = "/search/" + encodeURIComponent(q); return false;});
+
+    $("#quick-login").click(function(){$("#quick-search-kvr-pop").remove();});
+
+    var x = document.getElementById("kvr-display-full-cover");
+    if(x)
+    {
+      x.innerHTML = "";
+      x.classList.remove("hideflex");
+      x.classList.add("kvr-darkbg-content-centered");
+    }else{
+      x = document.createElement("div");
+      x.id = "kvr-display-full-cover";
+      x.classList.add("kvr-darkbg-content-centered");
+      document.body.appendChild(x);
+    }
+
+    document.addEventListener("click", function(e){
+      if(e.target.id != "kvr-display-full-cover") return;
+      document.getElementById("kvr-display-full-cover").classList.add("hideflex");
+      $("#quick-search-kvr-pop").remove();
+      e.preventDefault();
+    }, false);
+
+    /* Escape Key */
+    document.addEventListener("keyup", function (e) {
+      if(e.keyCode != 27) return;
+      document.getElementById("quick-search-kvr-q") ? kvr_simulateClick(document.getElementById("kvr-display-full-cover")) : "";
+    }, false);
+  }
+  return false;
+  });
+  });
+  </script></div></div><div></div></div><div id="kvrmenuc" class="shaditpopup kvrhideblur"></div><div class="flex" style="text-align: center; background-color: #333; margin: 45px 0 -45px 0; font-weight: bold; font-family: open sans; font-size: 1rem; position: relative;"><a href="/forum/ucp.php?mode=login" class="flexflexed kvrloginrequired" style="padding: 10px; color: #fff; background-color: #305060; width: 50%;">Log In</a><a href="/forum/ucp.php?mode=register" class="flexflexed" style="padding: 10px; background-color: #df4141; color: #fff; width: 50%;">Create An Account</a></div>
+
+
+<div id="herobar">
+    <header id="header" class="flex" style="max-width: 1344px; margin: 0 auto;">
+    <div id="header320to728" class="kvr320to728">
+              <script>googletag.cmd.push(function(){googletag.display('header320to728')});</script>
+          </div>
+    <div id="kvrheaderflex" class="kvrhidesmall"><a style="display: block; height: 90px; background: url(https://static.kvraudio.com/i/b/giveaway.1783109018.png) no-repeat scroll 0px 50% transparent;" href="/giveaways/win-one-of-five-copies-of-freqtube-ft1-emu-by-freqport-70" title="Giveaway!" aria-label="Giveaway"></a></div>
+    <div id="kvrheader90" class="kvrhidesmall" style="width: 180px;"></div>
+  </header>
+  </div>
+
+<div id="kvrssgrid">
+  <div><div></div></div>
+  <div id="kvrblock">
+    <div id="column1">
+      <div id="main" class="mainforumdiv kvr_sm_inline">
+      
+<!-- KVR Main Content-->
+<div id="kvrforumheader" data-id="0"><a href="https://www.kvraudio.com/more/9235-1" target="_blank" rel="noopener" style="display: block;"><img src="https://static.kvraudio.com/i/a/kvr-2068x300.1782398845.jpg" style="display: block; max-width: 100%; height: auto;" alt="Eventide Pluginpalooza" width="2068" height="300"></a></div>
+<div id="wrap" class="wrap">
+	<a id="top" class="top-anchor" accesskey="t"></a>
+	<div id="page-header">
+		<div class="headerbar" role="banner">
+					<div class="inner">
+
+			<div id="site-description" class="site-description">
+		<a id="logo" class="logo" href="./index.php?sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="KVR Forum index">
+					<span class="site_logo"></span>
+				</a>
+				<h1>KVR Audio</h1>
+				<p>Pro Audio Forum - VST, AU, AAX Plugin and Audio Software Discussion</p>
+				<p class="skiplink"><a href="#start_here">Skip to content</a></p>
+			</div>
+
+									
+			</div>
+					</div>
+				<div class="navbar" role="navigation">
+	<div class="inner">
+
+	<ul id="nav-main" class="nav-main linklist" role="menubar">
+
+		<li id="quick-links" class="quick-links dropdown-container responsive-menu hidden" data-skip-responsive="true">
+			<a href="#" class="dropdown-trigger">
+				<i class="icon fa-bars fa-fw" aria-hidden="true"></i><span>Quick Forum Links</span>
+			</a>
+			<div class="dropdown">
+				<div class="pointer"><div class="pointer-inner"></div></div>
+				<ul class="dropdown-contents" role="menu">
+					
+					
+				  
+					
+					
+											<li class="separator"></li>
+													<li>
+								<a href="./memberlist.php?sid=fe65464c94647f5e6b1a9acbbbe1eca4" role="menuitem">
+									<i class="icon fa-group fa-fw" aria-hidden="true"></i><span>Members</span>
+								</a>
+							</li>
+																			<li class="hidden">
+								<a href="./memberlist.php?mode=team&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" role="menuitem">
+									<i class="icon fa-shield fa-fw" aria-hidden="true"></i><span>The team</span>
+								</a>
+							</li>
+																<li class="separator"></li>
+          <li  data-skip-responsive="true">
+      			<a href="/forum/help/faq?sid=fe65464c94647f5e6b1a9acbbbe1eca4" rel="help" title="Frequently Asked Questions" role="menuitem">
+      				<i class="icon fa-question-circle fa-fw" aria-hidden="true"></i><span>FAQ</span>
+      			</a>
+      		</li>
+					<li class="separator"></li>
+          <li  data-skip-responsive="true">
+      			<a href="/forum/viewtopic.php?t=44705" rel="help" title="Rules" role="menuitem">
+      				<i class="icon fa-question-circle fa-fw" aria-hidden="true"></i><span>KVR Extended FAQ & Rules</span>
+      			</a>
+      		</li>
+      		<li class="separator"></li>
+      		<li><a title="Feed" href="/forum/app.php/feed/forum/6"><i class="icon fa-feed fa-fw" aria-hidden="true"></i>RSS Feed of this forum</a></li><li class="separator"></li>
+					
+									</ul>
+			</div>
+		</li>
+
+		
+		
+			<li class="rightside" data-skip-responsive="true">
+			<a href="./ucp.php?mode=login&amp;redirect=viewtopic.php%3Ft%3D563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Login" accesskey="x" role="menuitem">
+				<i class="icon fa-power-off fa-fw" aria-hidden="true"></i><span>Login</span>
+			</a>
+		</li>
+					<li class="rightside" data-skip-responsive="true">
+				<a href="./ucp.php?mode=register&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" role="menuitem">
+					<i class="icon fa-pencil-square-o  fa-fw" aria-hidden="true"></i><span>Register</span>
+				</a>
+			</li>
+						</ul>
+
+	<ul id="nav-breadcrumbs" class="nav-breadcrumbs linklist navlinks" role="menubar">
+				
+		
+		<li class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+
+			
+							<span class="crumb" itemtype="https://schema.org/ListItem" itemprop="itemListElement" itemscope><a itemprop="item" href="./index.php?sid=fe65464c94647f5e6b1a9acbbbe1eca4" accesskey="h" data-navbar-reference="index"><i class="icon fa-home fa-fw"></i><span itemprop="name">KVR Forum index</span></a><meta itemprop="position" content="1" /></span>
+
+																				
+								<span class="crumb" itemtype="https://schema.org/ListItem" itemprop="itemListElement" itemscope data-forum-id="6"><a itemprop="item" href="./viewforum.php?f=6&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4"><span itemprop="name">Effects</span></a><meta itemprop="position" content="2" /></span>
+										
+					</li>
+
+		
+			</ul>
+
+	</div>
+</div>
+	</div>
+
+	
+	<a id="start_here" class="anchor"></a>
+	<div id="page-body" class="page-body" role="main">
+		
+		
+<h1 class="topic-title" style="margin: 20px 0; font-family: 'Open Sans', verdana;"><a href="./viewtopic.php?t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" id="kvrtopictitle" data-id="563258">Gullfoss vs TEOTE</a></h1>
+<!-- NOTE: remove the style="display: none" when you want to have the forum description on the topic body -->
+<div style="display: none !important;">VST, AU, AAX, CLAP, etc. Plugin Virtual Effects Discussion<br /></div>
+<p class="moderator-line hidden">
+	<strong>Moderator:</strong> <a href="./memberlist.php?mode=group&amp;g=6468&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">KVR Moderators (Main)</a>
+</p>
+
+
+<div class="action-bar bar-top flex flexcenter flexwrap gap5">
+	
+			<a href="./posting.php?mode=reply&amp;t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="button" title="Post a reply" style="margin: 0;">
+							<span>Post Reply</span> <i class="icon fa-reply fa-fw" aria-hidden="true"></i>
+					</a>
+		<a href="./posting.php?mode=post&amp;f=6&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="button" title="Post a new topic" style="margin: 0;">
+			<span>New Topic</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+		</a>
+	
+			
+	
+			<div class="pagination" style="margin-left: auto;">
+			29 posts
+							<ul>
+		<li class="active"><span>1</span></li>
+				<li><a class="button" href="./viewtopic.php?t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4&amp;start=15" role="button">2</a></li>
+				<li class="arrow next"><a class="button button-icon-only" href="./viewtopic.php?t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4&amp;start=15" rel="next" role="button"><i class="icon fa-chevron-right fa-fw" aria-hidden="true"></i><span class="sr-only">Next</span></a></li>
+	</ul>
+					</div>
+		</div>
+
+
+
+<div id="kvr-pt-holder"><div class="flex flexcenter nowrap gap5" id="pt-pt"><span>RELATED<br>PRODUCTS</span> <a href="/inc/a.php?w=frm-pt&amp;id=563258" class="kvr-fetch-n-display not-full-cover click-bg-to-close flex" data-func="kvr_products_by_dev" aria-label="Open Related Products Pop-up"><svg xmlns="http://www.w3.org/2000/svg" width="20"  height="20" viewBox="0 0 24 24" class=" kvricon" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></a> <a href="#" class="kvr-toggle-id flex" data-toggleid="kvr-pt-more" aria-label="Reveal Related Products section"><svg xmlns="http://www.w3.org/2000/svg" width="20"  height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="square" stroke-linejoin="arcs"><path d="M6 9l6 6 6-6"/></svg></a><div id="pt-related-msg">Products related to this topic can be added here</div></div></div>
+<div id="kvr-pt-more" class="flexnoneimp"><div class="gap10 hovthisblue" style="margin-bottom: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr))"></div></div><div id="kvrtopicblock" itemtype="https://schema.org/DiscussionForumPosting" itemscope>
+<meta itemprop="url" content="https://www.kvraudio.com/forum/viewtopic.php?t=563258" />
+<span class="noskimlinks" style="display: none;">
+  <span itemprop="headline">Gullfoss vs TEOTE</span>
+  <span itemprop="datePublished">2021-04-02T20:00:16+00:00</span>
+  <span itemprop="text">Hey i didnt want to hijack the topic before and i already have gullfoss and soothe2.
+I use soothe2 mostly to tame frequencies on single channels and on master bus when too many frequencies are tedious and fiddly to manually adjust eqs  but depends on material of course.
+And gullfoss i use mostly on the master bus lightly. I dont use it often on single channels, dunno why to tell the truth .
+
+I love these 2 plugins, they are really great and help mostly, not just 1 click plugins but they ease some processes nicely.
+So i got very interested here reading about TEOTE, i didnt know it, and i read that many dont use gullfoss cause of it. Why? What does it make better in your opinion than gullfoss? Where and when do you use it? Thx</span>
+  <span itemprop="author" itemtype="https://schema.org/Person" itemscope>
+    <span itemprop="name">Caine123</span>
+    <span itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=212807</span>
+  </span>
+</span>
+
+		
+	<div id="p8072429" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072429" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=212807&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Caine123</a>				          <span class="flexnoneimp" itemprop="name">Caine123</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=212807</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">9679</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 5 Aug, 2009 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072429">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072429&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072429" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=212807&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Caine123</a></strong> &raquo; </span><time datetime="2021-04-02T20:00:16+00:00" itemprop="datePublished" content="2021-04-02T20:00:16+00:00">Fri Apr 02, 2021 8:00 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072429" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072429&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text">Hey i didnt want to hijack the topic before and i already have gullfoss and soothe2.<br>
+I use soothe2 mostly to tame frequencies on single channels and on master bus when too many frequencies are tedious and fiddly to manually adjust eqs <img class="smilies" src="./images/smilies/icon_wink.gif" width="15" height="15" alt=";)" title="Wink"> but depends on material of course.<br>
+And gullfoss i use mostly on the master bus lightly. I dont use it often on single channels, dunno why to tell the truth <img class="smilies" src="./images/smilies/icon_wink.gif" width="15" height="15" alt=";)" title="Wink">.<br>
+<br>
+I love these 2 plugins, they are really great and help mostly, not just 1 click plugins but they ease some processes nicely.<br>
+So i got very interested here reading about TEOTE, i didnt know it, and i read that many dont use gullfoss cause of it. Why? What does it make better in your opinion than gullfoss? Where and when do you use it? Thx</div>
+
+			
+			
+									
+						
+							<div id="sig8072429" class="signature"><strong class="text-strong">DAW</strong> FL Studio <strong class="text-strong">Audio Interface</strong> Focusrite Scarlett 1st Gen 2i2 <strong class="text-strong">CPU</strong> Intel i7-7700K 4.20 GHz, <strong class="text-strong">RAM</strong> 32 GB Dual-Channel DDR4 @2400MHz Corsair Vengeance. <strong class="text-strong">MB</strong> Asus Prime Z270-K, <strong class="text-strong">GPU</strong> Gainward 1070 GTX GS 8GB <strong class="text-strong">NT</strong>	Be Quiet DP 550W OS <strong class="text-strong">Win10</strong> 64Bit</div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8072450" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072450" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=40698&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">fese</a>				          <span class="flexnoneimp" itemprop="name">fese</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=40698</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">2065</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 14 Sep, 2004  from $HOME
+  	  </dd>
+		
+		
+		
+																	
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072450">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072450&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072450" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=40698&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">fese</a></strong> &raquo; </span><time datetime="2021-04-02T20:19:43+00:00" itemprop="datePublished" content="2021-04-02T20:19:43+00:00">Fri Apr 02, 2021 8:19 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072450" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072450&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text">I own both and I think that they actually complement each other. Gullfoss has just a few controls and is a bit easier to use whereas with TEOTE, you can control pretty much everything which can be overwhelming. As you wrote, Gullfoss is best used lightly on the master bus as with higher values it can sound a bit unnatural. TEOTE works better at more drastic settings, smoother and more natural.<br>
+But you can definetely combine them, e.g. first Gullfoss for some overall clarity, “lifting the blanket”, which it does so well, then TEOTE with relatively few bands (5-10) for balance. <br>
+Gullfoss can work nice as a de-esser and in general on vocals, TEOTE is great for evening out an unruly bass guitar.</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8072457" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072457" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=7522&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">sl1200mk2</a>				          <span class="flexnoneimp" itemprop="name">sl1200mk2</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=7522</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRist</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">316</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 6 Jun, 2003 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072457">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072457&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072457" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=7522&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">sl1200mk2</a></strong> &raquo; </span><time datetime="2021-04-02T20:27:25+00:00" itemprop="datePublished" content="2021-04-02T20:27:25+00:00">Fri Apr 02, 2021 8:27 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072457" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>2</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072457&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text">Check out this post by Ploki.  I can't summarize it any better. <br>
+<br>
+<a href="https://www.kvraudio.com/forum/viewtopic.php?f=6&amp;t=563217&amp;p=8072202#p8072202" class="postlink" target="_blank" rel="nofollow noopener">viewtopic.php?f=6&amp;t=563217&amp;p=8072202#p8072202</a><br>
+<br>
+In most instances, TEOTE just sounds better to me in the context of overall EQ and balancing.  It's also much less expensive than Gullfoss if someone doesn't have either. The major 'downside' is that it has a much steeper learning curve (at least for me) with many more controls and things to get your head around.  It took a good bit of time before I was satisfied and confident in what I was doing with it.  In comparison, Gullfoss takes seconds to get results even as a relative novice to it. <br>
+<br>
+I would spend some time with the demo.  If you like Voxengo overall and can wait, he usually does a fantastic sale during the holidays where you can get the 'Premium Membership' for quite a deal, however there is a 15% off sale right now too.</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8072608" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072608" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="avatar"><img class="avatar" src="./download/file.php?avatar=210989_1481048687.gif" width="50" height="50" loading="lazy" alt="User avatar" /></a>														</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a>				          <span class="flexnoneimp" itemprop="name">plexuss</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=210989</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							<div class="dropdown-container dropdown-left" style="margin-left: 10px;">
+					<a href="#" class="dropdown-trigger" title="Contact plexuss">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true" style="color: #555;"></i><span class="sr-only">Contact plexuss</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div class="flex">
+																	<a href="https://soundcloud.com/musicofplexus" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>
+									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+						</dd>
+
+						
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">6285</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 8 Jul, 2009 
+  	  </dd>
+		
+		
+		
+											
+							<dd class="profile-contact hidden">
+				<strong>Contact:</strong>
+				<div class="dropdown-container dropdown-left hidden">
+					<a href="#" class="dropdown-trigger" title="Contact plexuss">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only">Contact plexuss</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div>
+																	<a href="https://soundcloud.com/musicofplexus" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+			</dd>
+				    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072608">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a></strong> &raquo; </span><time datetime="2021-04-02T23:42:03+00:00" itemprop="datePublished" content="2021-04-02T23:42:03+00:00">Fri Apr 02, 2021 11:42 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072608" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text">Update: I sored the issue out. I didn't realize I had a track on record and it was forcing most of the processing to one core. Turned off record and now I have mutliple instances running at 2x @ 44k.<br>
+<br>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?</div>
+
+			
+			
+													<div class="notice">
+					Last edited by <a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a> on Mon Apr 05, 2021 1:58 am, edited 1 time in total.
+									</div>
+			
+						
+							<div id="sig8072608" class="signature">#NONFR <a href="https://plexus.bandcamp.com" class="postlink" target="_blank" rel="nofollow noopener">Check out my music at Bandcamp</a>  <img class="smilies" src="./images/smilies/phones.gif" width="25" height="20" alt=":phones:" title="tsk tsk tsk"> Free Streaming! <br>
+<a href="https://www.patreon.com/musicofplexus" class="postlink" target="_blank" rel="nofollow noopener">Free music with your support on Patreon</a> |  <a href="https://www.youtube.com/channel/UCWkibcV_ZQao4EHqSHAywvg" class="postlink" target="_blank" rel="nofollow noopener">Youtube: Music of Plexus Videos (music videos)</a> | <a href="https://www.youtube.com/channel/UCXMdLxiW1wVFxYcHGBENhYA" class="postlink" target="_blank" rel="nofollow noopener">Youtube: Plexus Productions (audio related)</a>  Stop whining. Make music.</div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8072618" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072618" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=443885&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">fairlyclose</a>				          <span class="flexnoneimp" itemprop="name">fairlyclose</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=443885</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+						  <strong style="color:#AA0000 !important;">Banned</strong>
+      		</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">2524</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 4 Jul, 2019 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072618">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072618&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072618" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=443885&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">fairlyclose</a></strong> &raquo; </span><time datetime="2021-04-02T23:58:30+00:00" itemprop="datePublished" content="2021-04-02T23:58:30+00:00">Fri Apr 02, 2021 11:58 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072618" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072618&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072457&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072457"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=7522&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">sl1200mk2</a> wrote: <a href="./viewtopic.php?p=8072457&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072457" aria-label="View quoted post" data-post-id="8072457" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 8:27 pm</span></cite>
+Check out this post by Ploki.  I can't summarize it any better. <br>
+<br>
+<a href="https://www.kvraudio.com/forum/viewtopic.php?f=6&amp;t=563217&amp;p=8072202#p8072202" class="postlink" target="_blank" rel="nofollow noopener">viewtopic.php?f=6&amp;t=563217&amp;p=8072202#p8072202</a><br>
+<br>
+In most instances, TEOTE just sounds better to me in the context of overall EQ and balancing.  It's also much less expensive than Gullfoss if someone doesn't have either. The major 'downside' is that it has a much steeper learning curve (at least for me) with many more controls and things to get your head around.  It took a good bit of time before I was satisfied and confident in what I was doing with it.  In comparison, Gullfoss takes seconds to get results even as a relative novice to it. <br>
+<br>
+I would spend some time with the demo.  If you like Voxengo overall and can wait, he usually does a fantastic sale during the holidays where you can get the 'Premium Membership' for quite a deal, however there is a 15% off sale right now too.
+</div></blockquote>
+
+is TEOTE similar  in practise to sonible's smart:eq live ?</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8072728" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072728" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=370297&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">MogwaiBoy</a>				          <span class="flexnoneimp" itemprop="name">MogwaiBoy</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=370297</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							<div class="dropdown-container dropdown-left" style="margin-left: 10px;">
+					<a href="#" class="dropdown-trigger" title="Contact MogwaiBoy">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true" style="color: #555;"></i><span class="sr-only">Contact MogwaiBoy</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div class="flex">
+																	<a href="https://soundcloud.com/gangviolins" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>
+									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+						</dd>
+
+						
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">4720</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 26 Nov, 2015  from Way Downunder
+  	  </dd>
+		
+		
+		
+																						
+							<dd class="profile-contact hidden">
+				<strong>Contact:</strong>
+				<div class="dropdown-container dropdown-left hidden">
+					<a href="#" class="dropdown-trigger" title="Contact MogwaiBoy">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only">Contact MogwaiBoy</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div>
+																	<a href="https://soundcloud.com/gangviolins" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+			</dd>
+				    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072728">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072728&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072728" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=370297&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">MogwaiBoy</a></strong> &raquo; </span><time datetime="2021-04-03T07:00:57+00:00" itemprop="datePublished" content="2021-04-03T07:00:57+00:00">Sat Apr 03, 2021 7:00 am</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072728" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072728&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+No, that's not normal! TEOTE gets heavy with oversampling and even heavier in mid-side - but at 1x OS it doesn't compare to Acustica.</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8072764" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8072764" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=5098&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Scotty</a>				          <span class="flexnoneimp" itemprop="name">Scotty</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=5098</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							<div class="dropdown-container dropdown-left" style="margin-left: 10px;">
+					<a href="#" class="dropdown-trigger" title="Contact Scotty">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true" style="color: #555;"></i><span class="sr-only">Contact Scotty</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div class="flex">
+																	<a href="http://www.dotbmusic.ca/" title="Website" class="last-cell">
+										<span class="contact-icon phpbb_website-icon">Website</span>
+									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+						</dd>
+
+						
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">3222</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 23 Dec, 2002 
+  	  </dd>
+		
+		
+		
+											
+							<dd class="profile-contact hidden">
+				<strong>Contact:</strong>
+				<div class="dropdown-container dropdown-left hidden">
+					<a href="#" class="dropdown-trigger" title="Contact Scotty">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only">Contact Scotty</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div>
+																	<a href="http://www.dotbmusic.ca/" title="Website" class="last-cell">
+										<span class="contact-icon phpbb_website-icon">Website</span>									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+			</dd>
+				    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8072764">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=5098&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Scotty</a></strong> &raquo; </span><time datetime="2021-04-03T09:03:56+00:00" itemprop="datePublished" content="2021-04-03T09:03:56+00:00">Sat Apr 03, 2021 9:03 am</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8072764" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+The 2010 12 Core Mac doesn't have the AVX instruction set. Speculating that the Voxengo might be optimized for it  You can't even run Modo Drums on the 2010 Macs for example.</div>
+
+			
+			
+									
+						
+							<div id="sig8072764" class="signature"><a href="http://www.dotbmusic.ca" class="postlink" target="_blank" rel="nofollow noopener">www.dotbmusic.ca</a></div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8073227" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8073227" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="./memberlist.php?mode=viewprofile&amp;u=325803&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="avatar"><img class="avatar" src="./download/file.php?avatar=325803_1541051945.png" width="50" height="50" loading="lazy" alt="User avatar" /></a>														</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=325803&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">dangayle</a>				          <span class="flexnoneimp" itemprop="name">dangayle</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=325803</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRian</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">1426</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 30 Mar, 2014 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8073227">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8073227&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073227" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=325803&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">dangayle</a></strong> &raquo; </span><time datetime="2021-04-03T18:32:05+00:00" itemprop="datePublished" content="2021-04-03T18:32:05+00:00">Sat Apr 03, 2021 6:32 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8073227" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8073227&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=5098&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">Scotty</a> wrote: <a href="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764" aria-label="View quoted post" data-post-id="8072764" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Sat Apr 03, 2021 9:03 am</span></cite>
+<blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+The 2010 12 Core Mac doesn't have the AVX instruction set. Speculating that the Voxengo might be optimized for it  You can't even run Modo Drums on the 2010 Macs for example.
+</div></blockquote>
+
+I wonder how that works for the M1 chips?</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8073231" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8073231" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="avatar"><img class="avatar" src="./download/file.php?avatar=210989_1481048687.gif" width="50" height="50" loading="lazy" alt="User avatar" /></a>														</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a>				          <span class="flexnoneimp" itemprop="name">plexuss</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=210989</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							<div class="dropdown-container dropdown-left" style="margin-left: 10px;">
+					<a href="#" class="dropdown-trigger" title="Contact plexuss">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true" style="color: #555;"></i><span class="sr-only">Contact plexuss</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div class="flex">
+																	<a href="https://soundcloud.com/musicofplexus" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>
+									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+						</dd>
+
+						
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">6285</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 8 Jul, 2009 
+  	  </dd>
+		
+		
+		
+											
+							<dd class="profile-contact hidden">
+				<strong>Contact:</strong>
+				<div class="dropdown-container dropdown-left hidden">
+					<a href="#" class="dropdown-trigger" title="Contact plexuss">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only">Contact plexuss</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div>
+																	<a href="https://soundcloud.com/musicofplexus" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+			</dd>
+				    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8073231">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8073231&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073231" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a></strong> &raquo; </span><time datetime="2021-04-03T18:33:51+00:00" itemprop="datePublished" content="2021-04-03T18:33:51+00:00">Sat Apr 03, 2021 6:33 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8073231" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>3</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8073231&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=5098&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">Scotty</a> wrote: <a href="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764" aria-label="View quoted post" data-post-id="8072764" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Sat Apr 03, 2021 9:03 am</span></cite>
+<blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+The 2010 12 Core Mac doesn't have the AVX instruction set. Speculating that the Voxengo might be optimized for it  You can't even run Modo Drums on the 2010 Macs for example.
+</div></blockquote>
+
+I found the problem. I had a couple tracks in record-arm which was pushing all tracks onto the same CPU core. Once I disarmed TEOTE worked fine even with 4x OS. Interesting tool.... more experimentation needed...</div>
+
+			
+			
+									
+						
+							<div id="sig8073231" class="signature">#NONFR <a href="https://plexus.bandcamp.com" class="postlink" target="_blank" rel="nofollow noopener">Check out my music at Bandcamp</a>  <img class="smilies" src="./images/smilies/phones.gif" width="25" height="20" alt=":phones:" title="tsk tsk tsk"> Free Streaming! <br>
+<a href="https://www.patreon.com/musicofplexus" class="postlink" target="_blank" rel="nofollow noopener">Free music with your support on Patreon</a> |  <a href="https://www.youtube.com/channel/UCWkibcV_ZQao4EHqSHAywvg" class="postlink" target="_blank" rel="nofollow noopener">Youtube: Music of Plexus Videos (music videos)</a> | <a href="https://www.youtube.com/channel/UCXMdLxiW1wVFxYcHGBENhYA" class="postlink" target="_blank" rel="nofollow noopener">Youtube: Plexus Productions (audio related)</a>  Stop whining. Make music.</div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8073693" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8073693" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=7522&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">sl1200mk2</a>				          <span class="flexnoneimp" itemprop="name">sl1200mk2</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=7522</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRist</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">316</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 6 Jun, 2003 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8073693">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8073693&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073693" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=7522&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">sl1200mk2</a></strong> &raquo; </span><time datetime="2021-04-04T13:13:41+00:00" itemprop="datePublished" content="2021-04-04T13:13:41+00:00">Sun Apr 04, 2021 1:13 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8073693" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8073693&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072618&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072618"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=443885&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">fairlyclose</a> wrote: <a href="./viewtopic.php?p=8072618&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072618" aria-label="View quoted post" data-post-id="8072618" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:58 pm</span></cite>
+is TEOTE similar  in practise to sonible's smart:eq live ?
+</div></blockquote>
+
+I'm not familiar with this product, but at a very high level it's similar in that they both apply an overall dynamic EQ and try to balance the incoming signal.  How you interact with the two is quite a bit different though.  In terms of results, I can't tell you.</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8073765" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8073765" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="./memberlist.php?mode=viewprofile&amp;u=473231&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="avatar"><img class="avatar" src="./download/file.php?avatar=473231_1615296810.jpg" width="50" height="50" loading="lazy" alt="User avatar" /></a>														</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=473231&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">crickey13</a>				          <span class="flexnoneimp" itemprop="name">crickey13</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=473231</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRian</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">823</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 27 Aug, 2020 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8073765">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8073765&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073765" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=473231&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">crickey13</a></strong> &raquo; </span><time datetime="2021-04-04T14:53:56+00:00" itemprop="datePublished" content="2021-04-04T14:53:56+00:00">Sun Apr 04, 2021 2:53 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8073765" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>1</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8073765&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text">There is a spring discount going on at Voxengo until the end of April, probably gonna grab TEOTE finally.</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8073773" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8073773" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=221865&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Ploki</a>				          <span class="flexnoneimp" itemprop="name">Ploki</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=221865</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">6780</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 17 Dec, 2009 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8073773">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8073773&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073773" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=221865&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Ploki</a></strong> &raquo; </span><time datetime="2021-04-04T15:03:49+00:00" itemprop="datePublished" content="2021-04-04T15:03:49+00:00">Sun Apr 04, 2021 3:03 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8073773" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8073773&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8073227&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073227"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=325803&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">dangayle</a> wrote: <a href="./viewtopic.php?p=8073227&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073227" aria-label="View quoted post" data-post-id="8073227" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Sat Apr 03, 2021 6:32 pm</span></cite>
+<blockquote cite="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=5098&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">Scotty</a> wrote: <a href="./viewtopic.php?p=8072764&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072764" aria-label="View quoted post" data-post-id="8072764" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Sat Apr 03, 2021 9:03 am</span></cite>
+<blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+The 2010 12 Core Mac doesn't have the AVX instruction set. Speculating that the Voxengo might be optimized for it  You can't even run Modo Drums on the 2010 Macs for example.
+</div></blockquote>
+
+I wonder how that works for the M1 chips?
+</div></blockquote>
+
+TEOTE is Native and it works absolutely fine - i've bugged Alexey about performance and he implemented some M1 specific tricks to make it more efficient.</div>
+
+			
+			
+									
+						
+							<div id="sig8073773" class="signature"><a href="https://www.kvraudio.com/forum/viewtopic.php?t=44705" class="postlink" target="_blank" rel="nofollow noopener"><img src="https://i.imgur.com/XfVb8SO.png" class="postimage" alt="Image" loading="lazy"></a></div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8073791" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8073791" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="./memberlist.php?mode=viewprofile&amp;u=432862&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="avatar"><img class="avatar" src="./download/file.php?avatar=432862_1552679870.jpg" width="50" height="50" loading="lazy" alt="User avatar" /></a>														</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=432862&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">dionenoid</a>				          <span class="flexnoneimp" itemprop="name">dionenoid</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=432862</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">1851</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 3 Jan, 2019  from Holland
+  	  </dd>
+		
+		
+		
+																	
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8073791">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8073791&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073791" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=432862&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">dionenoid</a></strong> &raquo; </span><time datetime="2021-04-04T15:28:17+00:00" itemprop="datePublished" content="2021-04-04T15:28:17+00:00">Sun Apr 04, 2021 3:28 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8073791" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8073791&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+Shinechilla can be very cpu hungry, think it's also stated in the description.</div>
+
+			
+			
+									
+						
+							<div id="sig8073791" class="signature"><span style="color:#0080FF"><span style="font-size:85%;line-height:116%">The loudness war is over, loudness has won</span></span></div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8074011" class="post has-profile bg1" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8074011" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="avatar"><img class="avatar" src="./download/file.php?avatar=210989_1481048687.gif" width="50" height="50" loading="lazy" alt="User avatar" /></a>														</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a>				          <span class="flexnoneimp" itemprop="name">plexuss</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=210989</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRAF</span>			
+							<div class="dropdown-container dropdown-left" style="margin-left: 10px;">
+					<a href="#" class="dropdown-trigger" title="Contact plexuss">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true" style="color: #555;"></i><span class="sr-only">Contact plexuss</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div class="flex">
+																	<a href="https://soundcloud.com/musicofplexus" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>
+									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+						</dd>
+
+						
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">6285</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 8 Jul, 2009 
+  	  </dd>
+		
+		
+		
+											
+							<dd class="profile-contact hidden">
+				<strong>Contact:</strong>
+				<div class="dropdown-container dropdown-left hidden">
+					<a href="#" class="dropdown-trigger" title="Contact plexuss">
+						<i class="icon fa-commenting-o fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only">Contact plexuss</span>
+					</a>
+					<div class="dropdown">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div>
+																	<a href="https://soundcloud.com/musicofplexus" title="SoundCloud" class="last-cell">
+										<span class="contact-icon soundcloud-icon">SoundCloud</span>									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+			</dd>
+				    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8074011">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8074011&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8074011" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">plexuss</a></strong> &raquo; </span><time datetime="2021-04-04T20:03:56+00:00" itemprop="datePublished" content="2021-04-04T20:03:56+00:00">Sun Apr 04, 2021 8:03 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8074011" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8074011&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text"><blockquote cite="./viewtopic.php?p=8073791&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073791"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=432862&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">dionenoid</a> wrote: <a href="./viewtopic.php?p=8073791&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8073791" aria-label="View quoted post" data-post-id="8073791" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Sun Apr 04, 2021 3:28 pm</span></cite>
+<blockquote cite="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608"><div><cite><a href="./memberlist.php?mode=viewprofile&amp;u=210989&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">plexuss</a> wrote: <a href="./viewtopic.php?p=8072608&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8072608" aria-label="View quoted post" data-post-id="8072608" onclick="if(document.getElementById(hash.substr(1)))href=hash"><i class="icon fa-arrow-circle-up fa-fw" aria-hidden="true"></i></a><span class="responsive-hide">Fri Apr 02, 2021 11:42 pm</span></cite>
+I am not very familiar with Voxengo plugins. I decided to demo TEOTE and Shinechilla. Both are too taxing on my CPU. Just one instance of either! I can run multiple AA Acqua's for example so it's a but confusing to me why the Voxengo plugins are so CPU heavy on my system. 2010 mac pro 12-core with Reaper 6. Oversampling is 1x on both. Is this normal for Voxengo?
+</div></blockquote>
+
+Shinechilla can be very cpu hungry, think it's also stated in the description.
+</div></blockquote>
+
+It is but I sorted out the CPU problem. I've been demoing them both in Reaper. I have a demo project with 3 instances of each all at 2x oversampling, project at 44k, and it runs smoothly.</div>
+
+			
+			
+									
+						
+							<div id="sig8074011" class="signature">#NONFR <a href="https://plexus.bandcamp.com" class="postlink" target="_blank" rel="nofollow noopener">Check out my music at Bandcamp</a>  <img class="smilies" src="./images/smilies/phones.gif" width="25" height="20" alt=":phones:" title="tsk tsk tsk"> Free Streaming! <br>
+<a href="https://www.patreon.com/musicofplexus" class="postlink" target="_blank" rel="nofollow noopener">Free music with your support on Patreon</a> |  <a href="https://www.youtube.com/channel/UCWkibcV_ZQao4EHqSHAywvg" class="postlink" target="_blank" rel="nofollow noopener">Youtube: Music of Plexus Videos (music videos)</a> | <a href="https://www.youtube.com/channel/UCXMdLxiW1wVFxYcHGBENhYA" class="postlink" target="_blank" rel="nofollow noopener">Youtube: Plexus Productions (audio related)</a>  Stop whining. Make music.</div>			
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+			
+	<div id="p8074691" class="post has-profile bg2" itemprop="comment" itemtype="https://schema.org/Comment" itemscope>
+		<div class="inner">
+<div class="flex flexwrap">
+		<dl class="postprofile" id="profile8074691" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+			<dt class="has-profile-rank no-avatar">
+				<div class="avatar-container">
+																			</div>
+								<div class="flex">
+				<a href="./memberlist.php?mode=viewprofile&amp;u=505546&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Alex Voellmer</a>				          <span class="flexnoneimp" itemprop="name">Alex Voellmer</span>
+          <span class="flexnoneimp" itemprop="url">https://www.kvraudio.com/forum/memberlist.php?mode=viewprofile&u=505546</span>
+	      </div>
+			</dt>
+
+						<dd class="profile-rank flex flexcenter" style="overflow: initial;">
+
+			
+
+						<span class="kvrhidetiny">KVRer</span>			
+							</dd>
+
+		
+		
+		      <dd class="profile-posts" itemprop="agentInteractionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+  		<span  itemprop="userInteractionCount">7</span> <span itemprop="interactionType" content="https://schema.org/WriteAction">posts</span> since 29 Mar, 2021 
+  	  </dd>
+		
+		
+		
+						
+						    
+    
+    
+		
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content8074691">
+
+			
+		
+		<div class="flex flexwrap flexcenter" style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+		  <div class="flex flexwrap flexcenter" style="padding-bottom: 10px;">
+		      			<p class="author" style="margin: 0; padding: 0;">
+  				  					<a class="unread" href="./viewtopic.php?p=8074691&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4#p8074691" title="Post">
+  						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">Post</span>
+  					</a>
+  				  				<span class="responsive-hideOLD hidden">by <strong><a href="./memberlist.php?mode=viewprofile&amp;u=505546&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="username">Alex Voellmer</a></strong> &raquo; </span><time datetime="2021-04-05T17:28:59+00:00" itemprop="datePublished" content="2021-04-05T17:28:59+00:00">Mon Apr 05, 2021 5:28 pm</time>
+  			</p>
+  					  </div>
+		  <div class="flex flexwrap flexcenter" style="margin-left: auto; padding-bottom: 10px;">
+							    				<ul class="post-buttons kvrbasicbuttons" style="max-width: 100%; position: relative; right: 0; top: 0; margin-left: auto;">
+					<li><a href="#" class="button button-icon-only flex flexcenter kvr_tutd kvrloginrequired" data-postid="8074691" data-ud="1" title="Thumbs Up this post"><svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="24" fill="#909090"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg> <span>0</span></a></li>
+<li></li>
+																																				<li>
+							<a href="./posting.php?mode=quote&amp;p=8074691&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Reply with quote" class="button button-icon-only">
+								<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span>
+							</a>
+						</li>
+														</ul>
+									  </div>
+		</div>
+
+
+
+			
+			
+			
+			<div class="content" itemprop="text">From what i have heard teote is More of an eq balanciNg Tool (Similar to Smart:eq) whereas gullfoss‘ strenght seems to be unmasking and resonance taming (although teote claims to do the same).<br>
+Can anyone confirm this?</div>
+
+			
+			
+									
+						
+										
+						</div>
+
+		</div>
+</div>
+				<div class="back2top">
+						<a href="#top" class="top" title="Top">
+				<i class="icon fa-chevron-circle-up fa-fw icon-gray" aria-hidden="true"></i>
+				<span class="sr-only">Top</span>
+			</a>
+					</div>
+		
+		</div>
+	</div>
+
+      
+	<hr class="divider" />
+	</div>
+
+	<div class="action-bar bar-bottom">
+	
+			<a href="./posting.php?mode=reply&amp;t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="button" title="Post a reply">
+							<span>Post Reply</span> <i class="icon fa-reply fa-fw" aria-hidden="true"></i>
+					</a>
+		
+	
+			<form method="post" action="./viewtopic.php?t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4">
+		<div class="dropdown-container dropdown-container-left dropdown-button-control sort-tools">
+	<span title="Display and sorting options" class="button button-secondary dropdown-trigger dropdown-select">
+		<i class="icon fa-sort-amount-asc fa-fw" aria-hidden="true"></i>
+		<span class="caret"><i class="icon fa-sort-down fa-fw" aria-hidden="true"></i></span>
+	</span>
+	<div class="dropdown">
+		<div class="pointer"><div class="pointer-inner"></div></div>
+		<div class="dropdown-contents">
+			<fieldset class="display-options">
+							<label>Display: <select name="st" id="st"><option value="0" selected="selected">All posts</option><option value="1">1 day</option><option value="7">7 days</option><option value="14">2 weeks</option><option value="30">1 month</option><option value="90">3 months</option><option value="180">6 months</option><option value="365">1 year</option></select></label>
+								<label>Sort by: <select name="sk" id="sk"><option value="a">Author</option><option value="t" selected="selected">Post time</option><option value="s">Subject</option></select></label>
+				<label>Direction: <select name="sd" id="sd"><option value="a" selected="selected">Ascending</option><option value="d">Descending</option></select></label>
+								<hr class="dashed" />
+				<input type="submit" class="button2" name="sort" value="Go" />
+						</fieldset>
+		</div>
+	</div>
+</div>
+		</form>
+	
+	
+	
+			<div class="pagination">
+			29 posts
+							<ul>
+		<li class="active"><span>1</span></li>
+				<li><a class="button" href="./viewtopic.php?t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4&amp;start=15" role="button">2</a></li>
+				<li class="arrow next"><a class="button button-icon-only" href="./viewtopic.php?t=563258&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4&amp;start=15" rel="next" role="button"><i class="icon fa-chevron-right fa-fw" aria-hidden="true"></i><span class="sr-only">Next</span></a></li>
+	</ul>
+					</div>
+	</div>
+
+
+<div class="action-bar actions-jump">
+		<p class="jumpbox-return">
+		<a href="./viewforum.php?f=6&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="left-box arrow-left" accesskey="r">
+			<i class="icon fa-angle-left fa-fw icon-black" aria-hidden="true"></i><span>Return to “Effects”</span>
+		</a>
+	</p>
+	
+		<div class="jumpbox dropdown-container dropdown-container-right dropdown-up dropdown-left dropdown-button-control" id="jumpbox">
+			<span title="Jump to" class="button button-secondary dropdown-trigger dropdown-select">
+				<span>Jump to</span>
+				<span class="caret"><i class="icon fa-sort-down fa-fw" aria-hidden="true"></i></span>
+			</span>
+		<div class="dropdown">
+			<div class="pointer"><div class="pointer-inner"></div></div>
+			<ul class="dropdown-contents">
+																				<li><a href="./viewforum.php?f=253&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-cat-link"> <span> The Main Forums</span></a></li>
+																<li><a href="./viewforum.php?f=91&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; KVR Developer Challenge 2026</span></a></li>
+																<li><a href="./viewforum.php?f=311&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; KVR Studio Manager</span></a></li>
+																<li><a href="./viewforum.php?f=74&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Getting Started (AKA What is the best...?)</span></a></li>
+																<li><a href="./viewforum.php?f=1&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Instruments</span></a></li>
+																<li><a href="./viewforum.php?f=6&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Effects</span></a></li>
+																<li><a href="./viewforum.php?f=7&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Hosts &amp; Applications (Sequencers, DAWs, Audio Editors, etc.)</span></a></li>
+																<li><a href="./viewforum.php?f=298&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Guitars</span></a></li>
+																<li><a href="./viewforum.php?f=166&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Mobile Apps and Hardware</span></a></li>
+																<li><a href="./viewforum.php?f=257&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Soundware</span></a></li>
+																<li><a href="./viewforum.php?f=42&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Samplers, Sampling &amp; Sample Libraries</span></a></li>
+																<li><a href="./viewforum.php?f=102&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Hardware (Instruments and Effects)</span></a></li>
+																<li><a href="./viewforum.php?f=23&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Modular Synthesis</span></a></li>
+																<li><a href="./viewforum.php?f=100&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Sound Design</span></a></li>
+																<li><a href="./viewforum.php?f=62&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Production Techniques</span></a></li>
+																<li><a href="./viewforum.php?f=99&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Music Theory</span></a></li>
+																<li><a href="./viewforum.php?f=16&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Computer Setup and System Configuration</span></a></li>
+																<li><a href="./viewforum.php?f=33&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; DSP and Plugin Development</span></a></li>
+																<li><a href="./viewforum.php?f=180&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; DIY: Build it and they will come</span></a></li>
+																<li><a href="./viewforum.php?f=14&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Music Cafe</span></a></li>
+																<li><a href="./viewforum.php?f=316&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Machine Learning and AI for Music Creation</span></a></li>
+																<li><a href="./viewforum.php?f=43&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Sell &amp; Buy (+Special Offers, Deals &amp; Promos)</span></a></li>
+																<li><a href="./viewforum.php?f=290&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; KVR Experts</span></a></li>
+																<li><a href="./viewforum.php?f=4&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Everything Else (Music related)</span></a></li>
+																<li><a href="./viewforum.php?f=15&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Off Topic</span></a></li>
+																<li><a href="./viewforum.php?f=70&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span><span class="spacer"></span> <span>&#8627; &nbsp; Off Topic Classics</span></a></li>
+																<li><a href="./viewforum.php?f=255&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-cat-link"> <span> Official Company Forums</span></a></li>
+																<li><a href="./viewforum.php?f=295&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; 2getheraudio</span></a></li>
+																<li><a href="./viewforum.php?f=57&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; accSone</span></a></li>
+																<li><a href="./viewforum.php?f=218&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Acon Digital</span></a></li>
+																<li><a href="./viewforum.php?f=162&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AcousticsampleS</span></a></li>
+																<li><a href="./viewforum.php?f=59&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AcousModules</span></a></li>
+																<li><a href="./viewforum.php?f=105&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Agitated State</span></a></li>
+																<li><a href="./viewforum.php?f=265&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AIR Music Technology</span></a></li>
+																<li><a href="./viewforum.php?f=142&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AMG</span></a></li>
+																<li><a href="./viewforum.php?f=245&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Ample Sound</span></a></li>
+																<li><a href="./viewforum.php?f=308&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Antares Audio Technologies</span></a></li>
+																<li><a href="./viewforum.php?f=304&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Apisonic Labs</span></a></li>
+																<li><a href="./viewforum.php?f=317&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; APU Software</span></a></li>
+																<li><a href="./viewforum.php?f=283&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; apulSoft</span></a></li>
+																<li><a href="./viewforum.php?f=143&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AriesCode</span></a></li>
+																<li><a href="./viewforum.php?f=60&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Arts Acoustic</span></a></li>
+																<li><a href="./viewforum.php?f=224&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Arturia</span></a></li>
+																<li><a href="./viewforum.php?f=135&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Audjoo</span></a></li>
+																<li><a href="./viewforum.php?f=154&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AudioSpillage</span></a></li>
+																<li><a href="./viewforum.php?f=177&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Audiority</span></a></li>
+																<li><a href="./viewforum.php?f=199&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Best Service</span></a></li>
+																<li><a href="./viewforum.php?f=18&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Big Tick</span></a></li>
+																<li><a href="./viewforum.php?f=259&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Bitwig</span></a></li>
+																<li><a href="./viewforum.php?f=268&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span><span class="spacer"></span> <span>&#8627; &nbsp; Controller Scripting</span></a></li>
+																<li><a href="./viewforum.php?f=52&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Blue Cat Audio</span></a></li>
+																<li><a href="./viewforum.php?f=296&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Cherry Audio</span></a></li>
+																<li><a href="./viewforum.php?f=213&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; CWITEC</span></a></li>
+																<li><a href="./viewforum.php?f=216&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Embertone</span></a></li>
+																<li><a href="./viewforum.php?f=36&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; energyXT</span></a></li>
+																<li><a href="./viewforum.php?f=299&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Eventide</span></a></li>
+																<li><a href="./viewforum.php?f=85&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Expert Sleepers</span></a></li>
+																<li><a href="./viewforum.php?f=164&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; forward audio</span></a></li>
+																<li><a href="./viewforum.php?f=260&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Future Audio Workshop</span></a></li>
+																<li><a href="./viewforum.php?f=13&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; FXpansion</span></a></li>
+																<li><a href="./viewforum.php?f=203&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; g200kg</span></a></li>
+																<li><a href="./viewforum.php?f=274&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Harrison Mixbus</span></a></li>
+																<li><a href="./viewforum.php?f=149&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; HG Fortune</span></a></li>
+																<li><a href="./viewforum.php?f=133&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Homegrown Sounds</span></a></li>
+																<li><a href="./viewforum.php?f=309&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; HoRNet Plugins</span></a></li>
+																<li><a href="./viewforum.php?f=226&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Ilya Efimov Production</span></a></li>
+																<li><a href="./viewforum.php?f=86&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Image Line</span></a></li>
+																<li><a href="./viewforum.php?f=176&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Impact Soundworks</span></a></li>
+																<li><a href="./viewforum.php?f=157&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Indiginus</span></a></li>
+																<li><a href="./viewforum.php?f=148&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Insert Piz Here</span></a></li>
+																<li><a href="./viewforum.php?f=280&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Ju-X</span></a></li>
+																<li><a href="./viewforum.php?f=225&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Kirk Hunter Studios</span></a></li>
+																<li><a href="./viewforum.php?f=229&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Kirnu</span></a></li>
+																<li><a href="./viewforum.php?f=64&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Kong Audio</span></a></li>
+																<li><a href="./viewforum.php?f=249&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Krotos</span></a></li>
+																<li><a href="./viewforum.php?f=160&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Kuassa</span></a></li>
+																<li><a href="./viewforum.php?f=98&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; KV331 Audio</span></a></li>
+																<li><a href="./viewforum.php?f=94&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; LennarDigital</span></a></li>
+																<li><a href="./viewforum.php?f=58&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Les Productions Zvon</span></a></li>
+																<li><a href="./viewforum.php?f=236&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Liqube Audio</span></a></li>
+																<li><a href="./viewforum.php?f=141&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Loomer</span></a></li>
+																<li><a href="./viewforum.php?f=223&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; LVC-Audio</span></a></li>
+																<li><a href="./viewforum.php?f=113&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Maizesoft</span></a></li>
+																<li><a href="./viewforum.php?f=56&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Manytone Music</span></a></li>
+																<li><a href="./viewforum.php?f=313&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Media Overkill (MOK)</span></a></li>
+																<li><a href="./viewforum.php?f=138&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; MeldaProduction</span></a></li>
+																<li><a href="./viewforum.php?f=305&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Mellowmuse</span></a></li>
+																<li><a href="./viewforum.php?f=289&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; MIDIMood</span></a></li>
+																<li><a href="./viewforum.php?f=310&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; moForte</span></a></li>
+																<li><a href="./viewforum.php?f=269&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Mozaic Beats</span></a></li>
+																<li><a href="./viewforum.php?f=163&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; mucoder</span></a></li>
+																<li><a href="./viewforum.php?f=168&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; MusicDevelopments</span></a></li>
+																<li><a href="./viewforum.php?f=285&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span><span class="spacer"></span> <span>&#8627; &nbsp; Tips &amp; Tricks</span></a></li>
+																<li><a href="./viewforum.php?f=181&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; MusicLab</span></a></li>
+																<li><a href="./viewforum.php?f=79&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; MuTools</span></a></li>
+																<li><a href="./viewforum.php?f=300&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; New Sonic Arts</span></a></li>
+																<li><a href="./viewforum.php?f=29&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; NUSofting</span></a></li>
+																<li><a href="./viewforum.php?f=186&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Oli Larkin Plugins</span></a></li>
+																<li><a href="./viewforum.php?f=139&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Orange Tree Samples</span></a></li>
+																<li><a href="./viewforum.php?f=200&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; patchpool</span></a></li>
+																<li><a href="./viewforum.php?f=155&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Photosounder</span></a></li>
+																<li><a href="./viewforum.php?f=205&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; PlugInGuru</span></a></li>
+																<li><a href="./viewforum.php?f=297&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Polyverse Music</span></a></li>
+																<li><a href="./viewforum.php?f=65&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Precisionsound</span></a></li>
+																<li><a href="./viewforum.php?f=288&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Premier Sound Factory</span></a></li>
+																<li><a href="./viewforum.php?f=78&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Psychic Modulation</span></a></li>
+																<li><a href="./viewforum.php?f=243&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Realitone</span></a></li>
+																<li><a href="./viewforum.php?f=190&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Resonance-Sound</span></a></li>
+																<li><a href="./viewforum.php?f=248&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Reveal Sound</span></a></li>
+																<li><a href="./viewforum.php?f=263&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Roger Linn Design</span></a></li>
+																<li><a href="./viewforum.php?f=129&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; rs-met</span></a></li>
+																<li><a href="./viewforum.php?f=301&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; S3A: Spatial Audio</span></a></li>
+																<li><a href="./viewforum.php?f=282&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; SaschArt</span></a></li>
+																<li><a href="./viewforum.php?f=24&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Smart Electronix</span></a></li>
+																<li><a href="./viewforum.php?f=286&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; sonible</span></a></li>
+																<li><a href="./viewforum.php?f=124&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; SonicBirth</span></a></li>
+																<li><a href="./viewforum.php?f=9&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Sonic Reality / eSoundz.com</span></a></li>
+																<li><a href="./viewforum.php?f=202&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Soundiron</span></a></li>
+																<li><a href="./viewforum.php?f=291&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; SPC Plugins</span></a></li>
+																<li><a href="./viewforum.php?f=108&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Sugar Bytes</span></a></li>
+																<li><a href="./viewforum.php?f=165&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; TAL Software</span></a></li>
+																<li><a href="./viewforum.php?f=210&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Tokyo Dawn Labs</span></a></li>
+																<li><a href="./viewforum.php?f=22&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Tracktion</span></a></li>
+																<li><a href="./viewforum.php?f=89&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Tweakbench</span></a></li>
+																<li><a href="./viewforum.php?f=31&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; u-he</span></a></li>
+																<li><a href="./viewforum.php?f=292&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span><span class="spacer"></span> <span>&#8627; &nbsp; u-he Linux support</span></a></li>
+																<li><a href="./viewforum.php?f=303&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; United Plugins</span></a></li>
+																<li><a href="./viewforum.php?f=147&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; VAZ Synths</span></a></li>
+																<li><a href="./viewforum.php?f=252&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Virharmonic</span></a></li>
+																<li><a href="./viewforum.php?f=125&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; xoxos</span></a></li>
+																<li><a href="./viewforum.php?f=312&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; XSRDO - SynthCraft</span></a></li>
+																<li><a href="./viewforum.php?f=47&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; ZynAddSubFX</span></a></li>
+																<li><a href="./viewforum.php?f=256&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-cat-link"> <span> Site Stuff</span></a></li>
+																<li><a href="./viewforum.php?f=2&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Site Stuff</span></a></li>
+																<li><a href="./viewforum.php?f=262&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-cat-link"> <span> Archived Forums</span></a></li>
+																<li><a href="./viewforum.php?f=44&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; AlgoMusic</span></a></li>
+																<li><a href="./viewforum.php?f=128&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; easytoolz</span></a></li>
+																<li><a href="./viewforum.php?f=53&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Elevayta</span></a></li>
+																<li><a href="./viewforum.php?f=151&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Hollow Sun</span></a></li>
+																<li><a href="./viewforum.php?f=10&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; LinPlug</span></a></li>
+																<li><a href="./viewforum.php?f=45&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Muse Research and Development</span></a></li>
+																<li><a href="./viewforum.php?f=101&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Shuriken</span></a></li>
+																<li><a href="./viewforum.php?f=69&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; SoHa Sound Design</span></a></li>
+																<li><a href="./viewforum.php?f=90&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Soniccouture</span></a></li>
+																<li><a href="./viewforum.php?f=136&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Topten Software</span></a></li>
+																<li><a href="./viewforum.php?f=146&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Valhalla DSP</span></a></li>
+																<li><a href="./viewforum.php?f=184&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; CK Modules &amp; VST</span></a></li>
+																<li><a href="./viewforum.php?f=294&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Sennheiser AMBEO</span></a></li>
+																<li><a href="./viewforum.php?f=11&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Muon Software</span></a></li>
+																<li><a href="./viewforum.php?f=201&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Westgatesounds.net</span></a></li>
+																<li><a href="./viewforum.php?f=270&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Squaredheads</span></a></li>
+																<li><a href="./viewforum.php?f=178&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Sonigen</span></a></li>
+																<li><a href="./viewforum.php?f=158&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; CFA-Sound</span></a></li>
+																<li><a href="./viewforum.php?f=67&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Back In Time Records</span></a></li>
+																<li><a href="./viewforum.php?f=72&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Livelab.dk</span></a></li>
+																<li><a href="./viewforum.php?f=219&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Skytopia</span></a></li>
+																<li><a href="./viewforum.php?f=171&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; audioD3CK</span></a></li>
+																<li><a href="./viewforum.php?f=204&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Inspire Audio</span></a></li>
+																<li><a href="./viewforum.php?f=130&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Krakli</span></a></li>
+																<li><a href="./viewforum.php?f=235&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Drumdrops</span></a></li>
+																<li><a href="./viewforum.php?f=233&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Futucraft</span></a></li>
+																<li><a href="./viewforum.php?f=212&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; OverTone DSP</span></a></li>
+																<li><a href="./viewforum.php?f=250&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; RaXnTraX</span></a></li>
+																<li><a href="./viewforum.php?f=261&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; solar3d-software</span></a></li>
+																<li><a href="./viewforum.php?f=246&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Signaldust</span></a></li>
+																<li><a href="./viewforum.php?f=238&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Soundemote</span></a></li>
+																<li><a href="./viewforum.php?f=315&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; ReleaseLab (Powered by Artist Expansion)</span></a></li>
+																<li><a href="./viewforum.php?f=251&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; Wolfgang Palm</span></a></li>
+																<li><a href="./viewforum.php?f=314&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" class="jumpbox-sub-link"><span class="spacer"></span> <span>&#8627; &nbsp; UJAM</span></a></li>
+											</ul>
+		</div>
+	</div>
+
+	</div>
+
+
+<script src="https://static.kvraudio.com/inc/kvr-pt-inline.js?v=59" defer></script>
+
+			</div>
+
+
+<div id="page-footer" class="page-footer" role="contentinfo">
+	<div class="navbar" role="navigation">
+	<div class="inner">
+
+	<ul id="nav-footer" class="nav-footer linklist" role="menubar">
+		<li class="breadcrumbs">
+									<span class="crumb"><a href="./index.php?sid=fe65464c94647f5e6b1a9acbbbe1eca4" data-navbar-reference="index"><i class="icon fa-home fa-fw" aria-hidden="true"></i><span>KVR Forum index</span></a></span>					</li>
+		
+				<li class="rightside">All times are <span title="UTC">UTC</span></li>
+							<li class="rightside">
+				<a href="/forum/user/delete_cookies?sid=fe65464c94647f5e6b1a9acbbbe1eca4" data-ajax="true" data-refresh="true" role="menuitem">
+					<i class="icon fa-trash fa-fw" aria-hidden="true"></i><span>Delete cookies</span>
+				</a>
+			</li>
+														</ul>
+
+	</div>
+</div>
+
+	<div class="copyright">
+				<p class="footer-row">
+			<span class="footer-copyright">Powered by <a href="https://www.phpbb.com/">phpBB</a>&reg; Forum Software &copy; phpBB Limited</span>
+		</p>
+						<p class="footer-row" role="menu">
+			<a class="footer-link" href="./ucp.php?mode=privacy&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Privacy" role="menuitem">
+				<span class="footer-link-text">Privacy</span>
+			</a>
+			|
+			<a class="footer-link" href="./ucp.php?mode=terms&amp;sid=fe65464c94647f5e6b1a9acbbbe1eca4" title="Terms" role="menuitem">
+				<span class="footer-link-text">Terms</span>
+			</a>
+		</p>
+					</div>
+
+	<div id="darkenwrapper" class="darkenwrapper" data-ajax-error-title="AJAX error" data-ajax-error-text="Something went wrong when processing your request." data-ajax-error-text-abort="User aborted request." data-ajax-error-text-timeout="Your request timed out; please try again." data-ajax-error-text-parsererror="Something went wrong with the request and the server returned an invalid reply.">
+		<div id="darken" class="darken">&nbsp;</div>
+	</div>
+
+	<div id="phpbb_alert" class="phpbb_alert" data-l-err="Error" data-l-timeout-processing-req="Request timed out.">
+		<a href="#" class="alert_close">
+			<i class="icon fa-times-circle fa-fw" aria-hidden="true"></i>
+		</a>
+		<h3 class="alert_title">&nbsp;</h3><p class="alert_text"></p>
+	</div>
+	<div id="phpbb_confirm" class="phpbb_alert">
+		<a href="#" class="alert_close">
+			<i class="icon fa-times-circle fa-fw" aria-hidden="true"></i>
+		</a>
+		<div class="alert_text"></div>
+	</div>
+</div>
+
+</div>
+
+<div>
+	<a id="bottom" class="anchor" accesskey="z"></a>
+	</div>
+
+<script src="./assets/javascript/core.js?assets_version=371"></script>
+
+
+
+<script src="./styles/prosilver/template/forum_fn.js?assets_version=371"></script>
+<script src="./styles/prosilver/template/ajax.js?assets_version=371"></script>
+
+
+</div>
+    <div id="subcol">
+      
+            <div id="wnaside">
+      <div class="kvrbuttonloz flex flexcontentcenter"><a href="/whats-new-at-kvr.php" class="kvr-fetch-n-display not-full-cover click-bg-to-close" data-func="kvr_lazyload_images"><strong>What's New @ KVR Audio?</strong></a></div>
+      </div>
+          </div>
+  </div>
+
+  <div id="foot">
+        <p style="padding: 20px;"><a href="/submissions">Submit: News, Plugins, Hosts &amp; Apps</a> | <a href="https://partnerservices.kvraudio.com/">Advertise @ KVR</a> | <a href="/devs">Developer Account</a> | <a href="/about-kvr">About KVR / Contact Us</a> | <a href="/privacy">Privacy Statement</a></p>
+    <p>&copy; KVR Audio, Inc. 2000-2026</p>
+  </div>
+</div>
+
+  <div>
+    <div></div>
+  </div>
+  </div>
+<div style="position: sticky; left: 0; bottom: 0; right: 0; padding: 10px; z-index: 1; background-color: #333;"><div class="flex flexcontentcenter" style="position: absolute; left: 0; right: 0; margin-top: -50px;"><a href="/forum/ucp.php?mode=login" class="kvrloginrequired shaditpopup" style="padding: 5px 15px; color: #fff; background-color: #36c; border-radius: 999em; font-weight: bold; font-family: open sans; font-size: 1rem;">Log In To KVR Audio</a></div><div class="flex flexcontentcenter gap20"><div id="div-gpt-ad-1319706183506-3" class="flexfixed kvr320to728" style="margin: auto; border-radius: 5px;"><script>googletag.cmd.push(function(){googletag.display('div-gpt-ad-1319706183506-3');});</script></div></div></div>
+<script>
+
+function kvr_log_in(loginbox)
+{
+  if(!loginbox)
+  {
+    loginbox = ' <div class=\"posrelit\" style=\"min-width: 300px;\"> <div class=\"kvrform2019\" style=\"color: #555; font-family: Open Sans;\"> <h1>Please Log In</h1> <form action=\"/forum/ucp.php?mode=login\" method=\"post\" id=\"frmcheckoutpop\" class=\"kvr-fetch-frm-submit\" data-msg=\".frm-msg\" data-func=\"kvr_login_postchk\" data-funcb4=\"kvr_login_prechk\" data-argsb4=\'[{\"form\": \"#frmcheckoutpop\"}]\'> <input type=\"hidden\" name=\"redirect\" value=\"https://www.kvraudio.com/forum/viewtopic.php?t=563258\"> <input type=\"hidden\" name=\"w\" value=\"chk-login\"> <input type=\"hidden\" name=\"login\" value=\"login\"> <input type=\"hidden\" value=\"fe65464c94647f5e6b1a9acbbbe1eca4\" name=\"sid\"> <p>Username:<br> <input type=\"text\" name=\"username\" size=\"12\" maxlength=\"40\" value=\"\" autocomplete=\"username\"></p> <p>Password:<br> <input type=\"password\" name=\"password\" size=\"12\" maxlength=\"100\" value=\"\" autocomplete=\"current-password\"></p> <p><label class=\"flex flexcenter\" style=\"border-width: 0; box-shadow: none; padding: 0 !important;\"><input type=\"checkbox\" name=\"autologin\" checked=\"checked\"> Keep Me Logged In</label></p> <p class=\"flex gap10\" style=\"padding-bottom: 0;\"><input type=\"submit\" name=\"loginbtn\" value=\"Log In\" class=\"flexselfstart\"> <span class=\"frm-msg kvrerror flex flexcenter\" style=\"font-size: 0.8rem; max-width: 150px; font-weight: normal;\">&nbsp;</span></p> <hr> <div style=\"text-align: center; font-size: 0.8rem; line-height: 1.5;\"> <a href=\"/forum/ucp.php?mode=sendpassword\" style=\"color: #36c;\">Forgotten Your Password?</a><br> <a href=\"/forum/ucp.php?mode=resend_act\" style=\"color: #36c;\">Resend Activation E-mail</a><br> <a href=\"/forum/ucp.php?mode=register\" style=\"color: #36c;\">Sign Up / Join / Register (FREE!)</a> </div> <input type=\"hidden\" name=\"creation_time\" value=\"1784189270\" /> <input type=\"hidden\" name=\"form_token\" value=\"062534a243675755d6185ab4b7a612b30abf15bc\" /> </form> </div> <a href=\"#\" class=\"close-kvr-display-full-cover\" id=\"close-kvr-display-full-cover\" style=\"position: absolute;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#555\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"></line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"></line></svg></a> </div>';
+  }
+
+  let div = document.getElementById("kvr-display-full-cover");
+
+  if(!div)
+  {
+    let tmp = document.createElement("div");
+    tmp.id = "kvr-display-full-cover";
+    document.body.appendChild(tmp);
+    div = document.getElementById("kvr-display-full-cover");
+  }else{
+    div.classList.remove("hideflex");
+  }
+
+  div.classList.add("kvr-darkbg-content-centered");
+  div.innerHTML = loginbox;
+  let scrollfix = document.querySelector(".kvr-darkbg-content-centered > div:first-child > div:first-child");
+  if(scrollfix)
+  {
+    scrollfix.scrollTop = 0;
+  }
+}
+
+kvrkart = [];
+kvrkartdata = {total: "0", discount: "0"};
+kvrkartp = [];
+kvrspid = [];
+
+</script>
+<noscript><img src="/static/noscript/" alt=""></noscript>
+
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "4175b10f6888410f96fcf29b01c0967a"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

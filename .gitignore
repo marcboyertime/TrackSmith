@@ -4,19 +4,27 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 *.wav
+# Direct Logic-native empirical runs are versioned evidence. Their run records
+# hash every retained render and keep signal evidence distinct from fixtures.
+!research/evaluation/logic-native-empirical-runs/**/*.wav
 fixtures/generated/*
 !fixtures/generated/.gitkeep
 *.jsonl
 .DS_Store
 tmp/
+__pycache__/
+*.pyc
 
 # User-supplied research corpus. Keep local/copyrighted source material and
 # mechanically generated text out of version control; track synthesis and tools.
 research/extracted/
-research/papers/*.pdf
-research/papers/*.zip
+research/papers/*
+!research/papers/README.md
 research/analysis/text/
 research/analysis/html-text/
 research/analysis/rendered/
 research/analysis/corpus-index.tsv
 research/analysis/html-index.tsv
+research/analysis/source-text-index.tsv
+# Local speech-to-text output is navigation-only copyrighted working material.
+tmp/local-course-transcripts/

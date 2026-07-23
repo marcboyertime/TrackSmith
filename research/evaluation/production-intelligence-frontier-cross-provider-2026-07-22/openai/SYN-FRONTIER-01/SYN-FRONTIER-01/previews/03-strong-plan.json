@@ -1,0 +1,75 @@
+{
+  "goals" : [
+    {
+      "attribute" : "width",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "width",
+      "direction" : "doNotDecrease",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.64,
+      "enabled" : true,
+      "id" : "6ABBE874-5E07-43FA-B66E-15FEEFA7303F",
+      "locked" : false,
+      "parameters" : {
+        "mix" : 0.65,
+        "width" : 1.6600000000000001
+      },
+      "rationale" : "Apply conservative stereo widening scaled down when mono retention or low-band side evidence is concerning.",
+      "type" : "stereoWidth"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "061CA4E4-CABB-507B-A62E-06BF165AD93E",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -0.0823099426098235
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "997755B4-C4C0-42A4-9BE3-FA0A6AE570AF",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "4A5DE5A9-CABB-407B-A62E-06BF165AD93E",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "synth",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "BEA73BD6-FE4E-444A-A2ED-190A4FE1030B"
+}

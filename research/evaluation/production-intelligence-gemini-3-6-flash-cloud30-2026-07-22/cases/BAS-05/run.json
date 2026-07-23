@@ -1,0 +1,203 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -36.05506511443382,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.382163488976186,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0807137791382395,
+          "planRequestID" : "97735DE1-0638-4EBE-BBD4-ECDA1E611F28",
+          "previewID" : "CF927A73-6894-4B87-80D0-A534C149229D",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.5885465080669596,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -26.556056561588257,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.1355247710732304,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.011694993067366,
+          "planRequestID" : "55CD1BCB-AA3C-4DFF-B6E2-647822D3EDAC",
+          "previewID" : "D6FFC96E-606B-4BC7-A421-1EE6843945D7",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.4671865322846482,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -20.669354006811005,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 2.3779737194222648,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "0E1F4AF4-650D-47F4-B2B0-82C5D21F6855",
+          "previewID" : "B636D58F-D2E2-48D9-B641-F4F3231F36CE",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.3822076407169774,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "boomy:decrease"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Attenuate resonant low-mid accumulation causing boominess while preserving fundamental low-end weight. | Grounded TrackSmith interpretation: decrease boomy: For bass fundamental movement, sub allocation, low-mid density, transient definition, and kick relationship, ‘boomy’ may request less excessive low-frequency sustain or concentration without losing weight. This is one hypothesis, not a measured fact.",
+        "Dynamically control low-mid resonances on louder notes to stop boom build-up without thinning quiet notes. | Grounded TrackSmith interpretation: decrease boomy: For bass fundamental movement, sub allocation, low-mid density, transient definition, and kick relationship, ‘boomy’ may request less excessive low-frequency sustain or concentration without losing weight. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "BAS-05",
+      "measuredEvidence" : {
+        "bass_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.1068449146845459
+        },
+        "bass_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 2.424482309177794
+        },
+        "bass_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.45857280774705905
+        },
+        "bass_sub_share_20_120_hz" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.23615889427658734
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 1.0478199991277144
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "lowEndWeight:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6160,
+      "providerLatencyMilliseconds" : 3571,
+      "providerOutputTokens" : 584,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:7e3477e1f7751f7b55a2b6b9077f196a966c8201bc918b523b95ba0e83669acd",
+      "selectedPreviewID" : "D6FFC96E-606B-4BC7-A421-1EE6843945D7",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "bass",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 4, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "c0e94348cdc836155db2fad75e5cbb74f7163eb8c0f12f331cab71fef3b6d974",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "bass",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "reduce the boom without losing the bottom end",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:22:35Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "conversationalReferenceInterpretation",
+      "explanationGeneration",
+      "semanticIntentInterpretation",
+      "productionHypothesisGeneration",
+      "ambiguityDetection"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

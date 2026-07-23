@@ -1,0 +1,213 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -43.26226250409715,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -0.036186938056951945,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "4385CC9A-944B-4A72-A7FF-82A13D502454",
+          "previewID" : "7E0A82A0-F0DD-47B3-B8EC-A9DF79E4A139",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.492499666872644,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -34.41526116930702,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : -3.4167083196768324,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "saturation",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -5.245240108505324,
+          "planRequestID" : "67DF361A-7F96-4F25-97E7-4376A86898EE",
+          "previewID" : "40529014-1D11-4F79-BD9E-675276E99D74",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -4.8168800683017405,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -53.04674215520576,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -0.0234091989836962,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.029669165484836,
+          "planRequestID" : "C78784C9-92FE-4666-BE5C-04B1BD399A68",
+          "previewID" : "EEC70AE4-948D-442D-AE4B-B3E204CBA820",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.512824783666965,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "forward:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Bring the vocal forward using midrange presence enhancement while maintaining existing top-end air. | Grounded TrackSmith interpretation: increase forward: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘forward’ may request greater perceptual salience through balance, presence, density, or reduced ambience. This is one hypothesis, not a measured fact.",
+        "Increase body and forward presence using subtle saturation or parallel compression without altering high-frequency tonal balance. | Grounded TrackSmith interpretation: increase forward: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘forward’ may request greater perceptual salience through balance, presence, density, or reduced ambience. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "VOC-03",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.260542543964851
+        },
+        "vocal_10_20_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.003055171800954298
+        },
+        "vocal_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.6730447358559886
+        },
+        "vocal_200_500_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.2936637635650928
+        },
+        "vocal_5_10_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0014972391495747493
+        },
+        "vocal_high_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        },
+        "vocal_low_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "airy:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6615,
+      "providerLatencyMilliseconds" : 3341,
+      "providerOutputTokens" : 568,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:12f5c6f524894e9607bd5c143a3f5df4d8963a5aa05d1f2a94f59a0197d9c119",
+      "selectedPreviewID" : "7E0A82A0-F0DD-47B3-B8EC-A9DF79E4A139",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "vocal",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 2, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "e2b29a7990e79615848b8871f71d5dc2f82758ae0b754d125b5944a108801da0",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "vocal",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "make this more forward but preserve air",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:17:16Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "productionHypothesisGeneration",
+      "conversationalReferenceInterpretation",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

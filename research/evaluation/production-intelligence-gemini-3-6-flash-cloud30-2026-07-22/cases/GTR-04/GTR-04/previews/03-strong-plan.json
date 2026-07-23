@@ -1,0 +1,80 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "75B0A26D-C13D-441B-B837-DEA1F9A1A2B5",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 24,
+        "kneeDB" : 8.75,
+        "makeupGainDB" : 0,
+        "mix" : 0.6875,
+        "ratio" : 4.075,
+        "releaseMS" : 65,
+        "thresholdDB" : -23.793388267066188
+      },
+      "rationale" : "Control signal-relative variability while preserving the explicitly protected dynamics or onset when present.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "156F55B7-C1D5-5B3D-B74A-7B20BA2DB8B0",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 2.4973444875023993
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "E501D12A-8A30-4B65-9CE5-E543F8FA4A45",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "592E14FA-C1D5-4B3D-B74A-7B20BA2DB8B0",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "7BD2E896-F6B6-457C-BFC9-FDF0AB321ED7"
+}

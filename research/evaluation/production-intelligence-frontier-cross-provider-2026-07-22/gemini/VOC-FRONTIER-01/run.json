@@ -1,0 +1,219 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether 'expensive' requires dynamic control of low-mid build-up or gentle high-frequency enhancement without compromising natural breath texture."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -39.50674333928667,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 2.1580790108730703,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.2110349042593094,
+          "planRequestID" : "A5A154CB-C67A-4157-8B9E-8C79EBF0766E",
+          "previewID" : "6F659F48-56E5-4E25-9E13-9C0DCC63991B",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.137516791425714,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -34.19272865636857,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : -3.419143089004523,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "saturation",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -5.247810684944152,
+          "planRequestID" : "12BFB8C9-8310-46C4-893C-DB8FD1ADE505",
+          "previewID" : "C62F2C80-F1AA-47F2-A7A3-D2195BDC331F",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -5.195690090053038,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -47.10971406820457,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.7563179986670487,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.1799160272055413,
+          "planRequestID" : "B488FC91-1630-421A-B963-4E110786971C",
+          "previewID" : "A3669661-02AA-42C6-B1D3-D0FBAC36AEEF",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -3.106495275230542,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "intimate:increase",
+        "polished:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+        "clear",
+        "controlled",
+        "polished",
+        "warm"
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+        "intimate"
+      ],
+      "expectedPreserved" : [
+        "airy"
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Enhance intimacy and high-end polish by clearing low-mid muddy build-up and gently controlling peaks while preserving natural air and breath. | Grounded TrackSmith interpretation: increase intimate: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘intimate’ may request greater direct-source salience and closeness, often with controlled ambience. This is one hypothesis, not a measured fact. | increase polished: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘polished’ may request resolution of the specifically identified tonal, dynamic, spatial, or artifact issue. This is one hypothesis, not a measured fact.",
+        "Introduce subtle harmonic warmth/richness for an expensive sheen while preserving existing breathiness and dynamic expression. | Grounded TrackSmith interpretation: increase intimate: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘intimate’ may request greater direct-source salience and closeness, often with controlled ambience. This is one hypothesis, not a measured fact. | increase polished: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘polished’ may request resolution of the specifically identified tonal, dynamic, spatial, or artifact issue. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "VOC-FRONTIER-01",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.17733442190302284
+        },
+        "vocal_10_20_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.00320231142883969
+        },
+        "vocal_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.6712077716620437
+        },
+        "vocal_200_500_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.7800062452528247
+        },
+        "vocal_5_10_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0015534085652187026
+        },
+        "vocal_high_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        },
+        "vocal_low_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "airy:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 7031,
+      "providerLatencyMilliseconds" : 3876,
+      "providerOutputTokens" : 713,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:303a31c0006b4cd0319c9834bed3b8f798a2775226db998f7b0c7f598d1f1586",
+      "selectedPreviewID" : "6F659F48-56E5-4E25-9E13-9C0DCC63991B",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "vocal",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 5, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "857c743a634c38766e358dcabf3f402846dc3ad15073a06c685460bb67f81be4",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "vocal",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether 'expensive' requires dynamic control of low-mid build-up or gentle high-frequency enhancement without compromising natural breath texture.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether 'expensive' requires dynamic control of low-mid build-up or gentle high-frequency enhancement without compromising natural breath texture."
+      ],
+      "userRequest" : "Make this vocal feel more intimate and expensive, but keep the breathiness.",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:10:36Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "explanationGeneration",
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "productionHypothesisGeneration",
+      "conversationalReferenceInterpretation"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

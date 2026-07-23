@@ -1,0 +1,235 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether the desired warmth is best achieved through broad spectral low-mid EQ shaping or soft harmonic saturation."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -42.458111171483026,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.19615223741040388,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0808392613480957,
+          "planRequestID" : "CB35190E-6E5C-4C0E-853F-0204EFA09E3E",
+          "previewID" : "0EDD49E2-346C-4642-80F0-29D2A8CFC09C",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.018858544877136,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -41.08990191531373,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : -1.8899213438704372,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "saturation",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.953766325855985,
+          "planRequestID" : "1EEBA104-C05B-4EAB-94AE-A3D745EACE87",
+          "previewID" : "2019E18A-03C2-465A-9EF0-4EEFB194CE2C",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.4606769323774396,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -36.53404500767824,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.38163714354695344,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.076639544963812,
+          "planRequestID" : "A8B67C22-53A0-4DD9-93D2-70523FE92148",
+          "previewID" : "EF1912C9-8DA1-455F-BF64-81B97040780C",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -3.014774026486677,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "warm:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Enhance low-mid warmth via broad equalization while explicitly retaining high-frequency air. | Grounded TrackSmith interpretation: increase warm: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘warm’ may request greater low/low-mid body or harmonic density without obscuring articulation or air. This is one hypothesis, not a measured fact.",
+        "Introduce gentle low-mid harmonic richness without altering the high-frequency spectral balance. | Grounded TrackSmith interpretation: increase warm: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘warm’ may request greater low/low-mid body or harmonic density without obscuring articulation or air. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "MIX-03",
+      "measuredEvidence" : {
+        "integrated_loudness_lufs" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "loudnessUnitsFullScale",
+          "value" : -12.989514632331002
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.33292474309314457
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.035623960938604864
+        },
+        "mix_250_hz_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.04692311722615426
+        },
+        "mix_above_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.00011193321714943339
+        },
+        "mix_below_250_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.9529649495566964
+        },
+        "mix_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 3.3739203776054536
+        },
+        "mix_spectral_slope_db_per_octave" : {
+          "confidence" : 1,
+          "unit" : "decibelsPerOctave",
+          "value" : -2.9424962672163697
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.8879772087694117
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.11202279123058484
+        },
+        "true_peak_dbtp" : {
+          "confidence" : 0.95,
+          "unit" : "decibelsTruePeak",
+          "value" : -3.035807703957341
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "airy:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6863,
+      "providerLatencyMilliseconds" : 3876,
+      "providerOutputTokens" : 648,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:3156155d70693df2cf855f5e79f47b0ecfd80fa0e11e428aacbef07427a4e40e",
+      "selectedPreviewID" : "0EDD49E2-346C-4642-80F0-29D2A8CFC09C",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "fullStereoMix",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 2, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "6b4f9cfe3237030e22756004259a57e481fcc689886fe03f1fe7f73ff1d2d014",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "fullMix",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the desired warmth is best achieved through broad spectral low-mid EQ shaping or soft harmonic saturation.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the desired warmth is best achieved through broad spectral low-mid EQ shaping or soft harmonic saturation."
+      ],
+      "userRequest" : "make this warmer without losing air",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:25:43Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "ambiguityDetection",
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "productionHypothesisGeneration",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

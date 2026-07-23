@@ -1,0 +1,92 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "muddiness",
+      "direction" : "decrease",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.9750000000000001
+    },
+    {
+      "attribute" : "lowEnd",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "A124B801-BA7B-4F7E-947B-C4CD5EC57403",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 32.570445632407576,
+        "kneeDB" : 7.25,
+        "makeupGainDB" : 0,
+        "mix" : 0.6525000000000001,
+        "ratio" : 2.925,
+        "releaseMS" : 374.56012477268706,
+        "thresholdDB" : -12.7610021674916
+      },
+      "rationale" : "Control signal-relative variability while preserving the explicitly protected dynamics or onset when present.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "393DEC28-29E2-50B1-A848-E89E98251A62",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.9887601446824519
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "0D69852A-6288-4C35-93AB-49AAA977D5CB",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "757CAD65-29E2-40B1-A848-E89E98251A62",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "bass",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "417F03B4-8D49-414C-952E-C287AE6E7252"
+}

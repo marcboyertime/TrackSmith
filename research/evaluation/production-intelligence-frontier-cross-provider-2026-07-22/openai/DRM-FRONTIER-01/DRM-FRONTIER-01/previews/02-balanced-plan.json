@@ -1,0 +1,86 @@
+{
+  "goals" : [
+    {
+      "attribute" : "punch",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.8250000000000001
+    },
+    {
+      "attribute" : "cymbalHarshness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "4643E28D-9527-4435-9EB0-80767768FC74",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 24,
+        "kneeDB" : 7.25,
+        "makeupGainDB" : 0,
+        "mix" : 0.5525,
+        "ratio" : 2.925,
+        "releaseMS" : 65,
+        "thresholdDB" : -27.896535554095134
+      },
+      "rationale" : "Use source- and crest-dependent ballistics with a slower attack and parallel dry path to preserve leading transients.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "8FC2ED05-AA43-51C3-8F70-5F4C38858019",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.7216010004719173
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "57CFDA92-E0FD-4EB4-81FE-CDC7C189C33E",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "C383AC48-AA43-41C3-8F70-5F4C38858019",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "drumBus",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "9A2C8A33-6F7A-4703-8658-CB00AF983A43"
+}

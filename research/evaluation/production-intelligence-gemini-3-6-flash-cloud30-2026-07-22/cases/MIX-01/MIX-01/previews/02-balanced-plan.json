@@ -1,0 +1,80 @@
+{
+  "goals" : [
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.75
+    },
+    {
+      "attribute" : "brightness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "FF80CA3B-E4BC-478D-B9E7-2EB783A6D9D0",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 12,
+        "kneeDB" : 7.25,
+        "makeupGainDB" : 0,
+        "mix" : 0.6525000000000001,
+        "ratio" : 2.925,
+        "releaseMS" : 128.54279175710488,
+        "thresholdDB" : -17.380253542683494
+      },
+      "rationale" : "Test a bounded dynamics-led interpretation because the validated hypothesis selected compression; this does not prove the production adjective.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "0596B61D-3E88-512B-ADD1-26DFBED7C1ED",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 2.5609416790473976
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "E753C050-90E8-4621-B069-B19C8BC239D1",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "49D7F750-3E88-412B-ADD1-26DFBED7C1ED",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "fullMix",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "865B6F35-F1B9-4CB9-9FE0-C31711E25285"
+}

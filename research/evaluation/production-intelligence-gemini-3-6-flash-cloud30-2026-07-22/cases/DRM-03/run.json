@@ -1,0 +1,215 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether peak control should target slow level drifts across the section or individual transient peaks."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -61.877099408290064,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.3117390559920601,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0045076773022177,
+          "planRequestID" : "414A6FA2-12BD-42C9-BF28-CD5448EEEA59",
+          "previewID" : "0A3E8D7C-3BA0-4DAA-AC42-958A3B36B2B6",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -1.6308373111218133,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -54.55628252176076,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.7799874235803266,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "6D742C90-6BA6-4B66-83E6-E168332A42DB",
+          "previewID" : "FB3EE145-5F79-40E6-8C9A-9A9F9CADEE5E",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -1.6551127576442695,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -50.497283276442644,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.4520350336901764,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "B9521CA7-CE76-4DBE-A4B7-67FF44F65711",
+          "previewID" : "1BA293C4-B48B-4225-8A98-762072E4BB38",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -1.6864362217959918,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "controlled:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Control peaks and even out drum hits while retaining natural dynamic attack and impact. | Grounded TrackSmith interpretation: increase controlled: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘controlled’ may request reduced unwanted variability or peaks without erasing musical dynamics. This is one hypothesis, not a measured fact.",
+        "Apply mild high-threshold compression to catch extreme outliers without squashing overall performance dynamics. | Grounded TrackSmith interpretation: increase controlled: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘controlled’ may request reduced unwanted variability or peaks without erasing musical dynamics. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "DRM-03",
+      "measuredEvidence" : {
+        "drums_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.04304691570583428
+        },
+        "drums_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 10.427453706044068
+        },
+        "drums_onset_candidate_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 10
+        },
+        "drums_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.9674906519764003
+        },
+        "drums_post_onset_sustain_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.6599739875629416
+        },
+        "drums_transient_20_200_hz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.17075008805102843
+        },
+        "drums_transient_5_10_khz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.1553952176333094
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "dynamic:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6301,
+      "providerLatencyMilliseconds" : 3551,
+      "providerOutputTokens" : 562,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:e968cf08655b1326c3a1d141a4237cfe4ecc8689f6ecbf9591cf8e1a771e43d2",
+      "selectedPreviewID" : "FB3EE145-5F79-40E6-8C9A-9A9F9CADEE5E",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "drums",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 2, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "0600f02ec5dd7da75a4c2a220c3c6b5ac8b0f8bd5221dbddbbb030473b681506",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "drums",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether peak control should target slow level drifts across the section or individual transient peaks.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether peak control should target slow level drifts across the section or individual transient peaks."
+      ],
+      "userRequest" : "make these more controlled but preserve dynamics",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:18:16Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "productionHypothesisGeneration",
+      "semanticIntentInterpretation",
+      "conversationalReferenceInterpretation",
+      "explanationGeneration",
+      "ambiguityDetection"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

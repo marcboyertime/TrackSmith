@@ -1,0 +1,233 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -38.53188290539117,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.3870334910283919,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0267916774962074,
+          "planRequestID" : "1718A0C7-850F-4263-AA78-ECADB715F0B6",
+          "previewID" : "BC7EB804-3A52-474F-933A-BEF84642837B",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.907464291927984,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -29.122508999185026,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.102652325143298,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "63EBC204-2E34-4D42-ACE7-8C8380B10FE3",
+          "previewID" : "C8BF4D8F-D186-4FDC-8F85-8A2754CF82FC",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.865708043168972,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -23.439543060324265,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.9600800341163964,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.017913571974911,
+          "planRequestID" : "0D6579FB-620F-4C60-9458-25E00E416D98",
+          "previewID" : "1A945270-0BBA-4C97-A6FF-88985A4F31AC",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.8748786321281283,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "muddy:decrease"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Attenuate problematic low-mid boxiness/mud while preserving low-end weight. | Grounded TrackSmith interpretation: decrease muddy: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘muddy’ may request less overlapping low-mid density without removing power or warmth. This is one hypothesis, not a measured fact.",
+        "Dynamically suppress low-mid build-up during dense passages without affecting sparse moments. | Grounded TrackSmith interpretation: decrease muddy: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘muddy’ may request less overlapping low-mid density without removing power or warmth. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "MIX-05",
+      "measuredEvidence" : {
+        "integrated_loudness_lufs" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "loudnessUnitsFullScale",
+          "value" : -11.786660686547247
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.5289646798473164
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.036827655041158903
+        },
+        "mix_250_hz_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.04861287778676642
+        },
+        "mix_above_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0001052869771856495
+        },
+        "mix_below_250_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.9512818352360474
+        },
+        "mix_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 2.831080035059081
+        },
+        "mix_spectral_slope_db_per_octave" : {
+          "confidence" : 1,
+          "unit" : "decibelsPerOctave",
+          "value" : -3.0242208263929067
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.8863305333236038
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.11366946667639613
+        },
+        "true_peak_dbtp" : {
+          "confidence" : 0.95,
+          "unit" : "decibelsTruePeak",
+          "value" : -2.9829783958214566
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "warm:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6857,
+      "providerLatencyMilliseconds" : 3818,
+      "providerOutputTokens" : 682,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:378deac78b0ee002a012886ed830af7c4bced1f4b12dd9c372fa781b8e8aaeda",
+      "selectedPreviewID" : "C8BF4D8F-D186-4FDC-8F85-8A2754CF82FC",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "fullStereoMix",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 4, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "f89364e4e0e4caff0fc8967d26190bd738b0d53057b7a0e7686157e35522b4ca",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "fullMix",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "reduce the mud without losing warmth",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:26:12Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "ambiguityDetection",
+      "semanticIntentInterpretation",
+      "productionHypothesisGeneration",
+      "explanationGeneration",
+      "conversationalReferenceInterpretation"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

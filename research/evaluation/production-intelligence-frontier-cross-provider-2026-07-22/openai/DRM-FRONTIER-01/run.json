@@ -1,0 +1,246 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "“Small” could mean insufficient body and impact, a narrow stereo image, or inadequate forwardness.",
+        "“More life” could come from stronger transient-to-body contrast, added density and harmonics, or greater spatial scale.",
+        "The analyzed scope is only 0.5 seconds and may not represent the drum performance or arrangement.",
+        "Most transient-related measurements have very low confidence and cannot identify individual drums or cymbals.",
+        "The presence-band measurement is not a direct harshness measurement.",
+        "Perceptual loudness differences could masquerade as increased life during comparison."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -62.92346297155024,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.3471184733754278,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "BEC6EF9A-0C55-4858-8E9E-81220CA1BD78",
+          "previewID" : "2AE1D953-9175-4E44-AD41-58A89D762129",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.633365809521192,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -57.20168829087679,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.7216010004719173,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "C383AC48-AA43-41C3-8F70-5F4C38858019",
+          "previewID" : "F81FB49A-40F8-4B7C-8860-F881031DAD09",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.633564117464707,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -52.55137489310076,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.300546948410723,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "63E35C5F-8AF4-4955-94DB-F93F0C8A827E",
+          "previewID" : "A09FDAEC-110D-4970-907F-2977EC50A82D",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.633820962144437,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "energetic:increase",
+        "punchy:increase",
+        "dynamic:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+        "aggressive",
+        "forward",
+        "punchy",
+        "wide"
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+        "energetic"
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+        "cymbalHarshness"
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced",
+        "source-aware-v1-h3-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Add transient-preserving body and density so the drums feel larger and more animated, while controlling cymbal-band bursts. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact. | increase punchy: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact. | increase dynamic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘dynamic’ may request preserved or increased meaningful level and transient variation. This is one hypothesis, not a measured fact.",
+        "Increase the contrast and immediacy of drum events without turning the result into a brighter or peakier cymbal presentation. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact. | increase punchy: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact. | increase dynamic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘dynamic’ may request preserved or increased meaningful level and transient variation. This is one hypothesis, not a measured fact.",
+        "Test whether the perceived smallness is mainly missing low-frequency body or spatial scale, using restrained alternatives rather than assuming both are needed. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact. | increase punchy: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact. | increase dynamic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘dynamic’ may request preserved or increased meaningful level and transient variation. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "DRM-FRONTIER-01",
+      "measuredEvidence" : {
+        "drums_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.03953021445577513
+        },
+        "drums_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 12.565372505492908
+        },
+        "drums_onset_candidate_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 12
+        },
+        "drums_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.9591199405820634
+        },
+        "drums_post_onset_sustain_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.8688978875340719
+        },
+        "drums_transient_20_200_hz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.2054157267483987
+        },
+        "drums_transient_5_10_khz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.16306086283090931
+        }
+      },
+      "modelIdentifier" : "gpt-5.6-sol",
+      "preserved" : [
+
+      ],
+      "prohibited" : [
+        "cymbalHarshness:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "openai-responses-v1",
+      "providerInputTokens" : 7833,
+      "providerLatencyMilliseconds" : 28561,
+      "providerOutputTokens" : 1539,
+      "providerReportedModelIdentifier" : "gpt-5.6-sol",
+      "providerResponseID" : "resp_08f132ef96b9a55e016a6152a83e0881a28e5cca07ad7870eb",
+      "selectedPreviewID" : "F81FB49A-40F8-4B7C-8860-F881031DAD09",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "drums",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 5, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "40be2f2e07ed83c89ed28a6bbe2066b5e4922c27fb365063015725e054858bc6",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "drumBus",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "“Small” could mean insufficient body and impact, a narrow stereo image, or inadequate forwardness.",
+        "“More life” could come from stronger transient-to-body contrast, added density and harmonics, or greater spatial scale.",
+        "The analyzed scope is only 0.5 seconds and may not represent the drum performance or arrangement.",
+        "Most transient-related measurements have very low confidence and cannot identify individual drums or cymbals.",
+        "The presence-band measurement is not a direct harshness measurement.",
+        "Perceptual loudness differences could masquerade as increased life during comparison.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "“Small” could mean insufficient body and impact, a narrow stereo image, or inadequate forwardness.",
+        "“More life” could come from stronger transient-to-body contrast, added density and harmonics, or greater spatial scale.",
+        "The analyzed scope is only 0.5 seconds and may not represent the drum performance or arrangement.",
+        "Most transient-related measurements have very low confidence and cannot identify individual drums or cymbals.",
+        "The presence-band measurement is not a direct harshness measurement.",
+        "Perceptual loudness differences could masquerade as increased life during comparison.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "“Small” could mean insufficient body and impact, a narrow stereo image, or inadequate forwardness.",
+        "“More life” could come from stronger transient-to-body contrast, added density and harmonics, or greater spatial scale.",
+        "The analyzed scope is only 0.5 seconds and may not represent the drum performance or arrangement.",
+        "Most transient-related measurements have very low confidence and cannot identify individual drums or cymbals.",
+        "The presence-band measurement is not a direct harshness measurement.",
+        "Perceptual loudness differences could masquerade as increased life during comparison."
+      ],
+      "userRequest" : "The drums feel flat and small. Give them more life without making the cymbals obnoxious.",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:31:46Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "ambiguityDetection",
+      "conversationalReferenceInterpretation",
+      "productionHypothesisGeneration",
+      "explanationGeneration",
+      "semanticIntentInterpretation"
+    ],
+    "displayName" : "OpenAI",
+    "identifier" : "openai-responses-v1",
+    "kind" : "openAI",
+    "modelIdentifier" : "gpt-5.6-sol",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

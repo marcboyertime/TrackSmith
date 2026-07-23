@@ -1,0 +1,86 @@
+{
+  "schema_version": "tracksmith.deep-source-review.v1",
+  "batch_id": "production-language-2026-07-19",
+  "reviewed_at": "2026-07-19",
+  "evidence_boundary": "Primary sources support role, scope, representation, source dependence, and ambiguity architecture. The specific production senses in TrackSmith remain professional-practice hypotheses until source-aware evidence and listening support them.",
+  "records": [
+    {
+      "resource_id": "arxiv-2602-12301",
+      "identity": "Marion Baranes, Romain Hennequin, and Elena V. Epure, Beyond Musical Descriptors: Extracting Preference-Bearing Intent in Music Queries",
+      "version": "arXiv:2602.12301v1, 2026, 7 pages",
+      "sha256": "f101bea39906f4731d657966a975b54531e0089a2bd84f5c96138db8c9eed652",
+      "local_path": "research/papers/tracksmith-producer-judgment-archive/objects/f101bea39906f4731d657966a975b54531e0089a2bd84f5c96138db8c9eed652.pdf",
+      "full_source_read": true,
+      "sections_reviewed": ["all pages", "corpus construction", "annotation protocol", "agreement", "model prompts", "benchmark", "confusion/error analysis", "conclusion", "appendix examples"],
+      "methods_and_evidence": ["2291 Reddit queries", "3935 annotations", "descriptor spans assigned desired/positive, excluded/negative, or referential roles", "two annotators", "77.1 percent descriptor-span agreement", "Cohen kappa 0.927 for roles on mutually extracted descriptors", "Gemma 27B exact F1 0.69 and partial F1 0.76"],
+      "limitations": ["only 31 evaluated negative examples", "generic over-detection", "omissions and span granularity disagreement", "231 referential cases predicted positive", "genuine ambiguity", "retrieval queries rather than production-edit instructions"],
+      "tracksmith_consequences": ["keep desired, prohibited, preserved, and referential roles distinct", "resolve references to typed identities and attribute scope", "use uncertainty or clarification when span/role is ambiguous"],
+      "must_not_infer": ["the corpus establishes acoustic meanings", "the headline agreement proves robust negation", "referential language is a positive global target"]
+    },
+    {
+      "resource_id": "arxiv-2309-03404",
+      "identity": "Soumya Sai Vanka, Maryam Safi, Jean-Baptiste Rolland, and Gyorgy Fazekas, The Role of Communication and Reference Songs in the Mixing Process: Insights from Professional Mix Engineers",
+      "version": "arXiv:2309.03404v3, 2023, 12 pages",
+      "sha256": "ff21c74540262cac4828eb9d1e00674466ab04f7e90e76c31e3f32f555d15f55",
+      "local_path": "research/papers/tracksmith-producer-judgment-archive/objects/ff21c74540262cac4828eb9d1e00674466ab04f7e90e76c31e3f32f555d15f55.pdf",
+      "full_source_read": true,
+      "sections_reviewed": ["methods", "participant profiles", "interview results", "questionnaire results", "demo and reference use", "feedback", "completion", "discussion", "limitations"],
+      "methods_and_evidence": ["five professional engineers in phase one", "22 professional or pro-am engineers with more than three years experience in phase two", "rough mixes, conversation, and references communicate different kinds of intent", "approximately 90 percent of reference users reported more than one reference", "reference scope may be whole mix, element, interaction, emotion, structure, or technical benchmark"],
+      "limitations": ["personal-network convenience sample", "about 95 percent male in phase two", "genre/practice concentration", "descriptive self-report", "no causal test of reference use or processing outcome"],
+      "tracksmith_consequences": ["store reference identity, relation, target, and attribute scope", "retain multiple references separately", "preserve rough-mix constraints", "support iterative revision and contextual stopping"],
+      "must_not_infer": ["sample percentages are global prevalence", "a named record specifies a processor chain", "reference use means exact replication"]
+    },
+    {
+      "resource_id": "dafx-2011-audio-effects-ontology",
+      "identity": "Thomas Wilmering, Gyorgy Fazekas, and Mark B. Sandler, Towards Ontological Representations of Digital Audio Effects",
+      "version": "DAFx-2011 proceedings version, 4 pages",
+      "sha256": "ab3c3203e1a694892e1d0937e7d60bf8ed03aa3f7983f272fff3e84d3a59b2d0",
+      "local_path": "research/library/tracksmith-research-archive/objects/ab3c3203e1a694892e1d0937e7d60bf8ed03aa3f7983f272fff3e84d3a59b2d0.pdf",
+      "full_source_read": true,
+      "sections_reviewed": ["all pages", "perceptual taxonomy", "technical DSP taxonomy", "audio-engineering taxonomy", "RDF and OWL examples", "effect-transform model", "SPARQL provenance query", "conclusion"],
+      "methods_and_evidence": ["multiple linked taxonomy views", "separation of effect phenomenon, implementation, transform/application, parameter state, event, source track, and provenance", "one concrete SPARQL provenance query demonstration"],
+      "limitations": ["no user study", "no acoustic validation", "no completeness or coverage measure", "technical DSP ontology left for future work", "accurate metadata capture assumed"],
+      "tracksmith_consequences": ["keep semantic term, acoustic hypothesis, effect identity, implementation, parameter state, render, and source provenance separate", "use typed IDs and lineage; RDF adoption is not required"],
+      "must_not_infer": ["ontology membership proves sound", "the perceptual mappings are universal", "the ontology is complete"]
+    },
+    {
+      "resource_id": "arxiv-2202-08898",
+      "identity": "Satvik Venkatesh, David Moffat, and Eduardo Reck Miranda, Word Embeddings for Automatic Equalization in Audio Mixing",
+      "version": "arXiv:2202.08898v2, 2022, 10 pages",
+      "sha256": "76d2cf38a375a5bd0d8767cd5e33478341d31c4a0c1bf3b551b43ae34a4a7b8a",
+      "local_path": "research/papers/tracksmith-producer-judgment-archive/objects/76d2cf38a375a5bd0d8767cd5e33478341d31c4a0c1bf3b551b43ae34a4a7b8a.pdf",
+      "full_source_read": true,
+      "sections_reviewed": ["all pages", "SocialEQ data", "fold construction", "embedding inputs", "network architecture", "normalization", "loss", "MAE", "Perceptual Centroid Metric", "plots and examples", "discussion and limitations"],
+      "methods_and_evidence": ["1595 total and 918 English examples", "388 unique words", "three audio files: electric guitar, piano, drums", "40 EQ bands", "frozen 300-dimensional GloVe, Tok2Vec, or Dict2Vec input", "dense layers 300, 200, 100, 80, and 60", "bounded minus 4 to plus 4 dB output", "Tok2Vec MAE 0.760 versus no-embedding 0.836", "Perceptual Centroid Metric human 2.9, GloVe 9.3, Tok2Vec 10.5, no-embedding 35.4"],
+      "limitations": ["no listening test of generated EQ", "only three source recordings", "source class is not a model input", "noisy training labels retained", "metric acknowledged as imperfect", "plausible and implausible descriptor outputs"],
+      "tracksmith_consequences": ["use lexical or embedding similarity only for bounded candidate retrieval", "condition hypotheses on explicit source and measurements", "require listening before perceptual claims"],
+      "must_not_infer": ["semantic embedding selects the correct EQ", "MAE or centroid distance proves perceptual success", "a word means the same thing across source classes"]
+    },
+    {
+      "resource_id": "arxiv-2603-16682",
+      "identity": "Joseph Cameron and Alan Blackwell, A Semantic Timbre Dataset for the Electric Guitar",
+      "version": "arXiv:2603.16682v1, 2026, 5 pages",
+      "sha256": "4cbd805767a2934a9d50e9e59bd83a602fa8ab172fa4ae60c9c070ba3e5752e0",
+      "local_path": "research/papers/tracksmith-producer-judgment-archive/objects/4cbd805767a2934a9d50e9e59bd83a602fa8ab172fa4ae60c9c070ba3e5752e0.pdf",
+      "full_source_read": true,
+      "sections_reviewed": ["all pages", "dataset construction", "descriptor taxonomy", "Guitar Rig control stepping", "VAE training and reconstruction", "classifier", "MOS study", "interpolation ranking", "conclusion"],
+      "methods_and_evidence": ["275310 monophonic guitar notes", "19 descriptors derived from 72 pedals and two software suites", "VAE trained on 1771 E4 through D6 examples", "Griffin-Lim reconstruction", "20 listeners, 18 musically trained and eight guitarists", "Tight MOS 2.91, Stutter MOS 2.74, Wah MOS 2.95", "selected interpolation rankings Kendall tau 0.879"],
+      "limitations": ["monophonic constructed guitar domain", "small listening panel", "selected descriptor pairs", "classifier trained within the constructed descriptor universe", "weak MOS for several terms", "no cross-source validation"],
+      "tracksmith_consequences": ["represent source-specific semantic senses", "treat magnitude/interpolation as candidates for audition", "keep guitar evidence from silently transferring to other source classes"],
+      "must_not_infer": ["the descriptors are universal", "classifier accuracy independently validates the labels", "guitar Tight or Punch defines the same goal elsewhere"]
+    },
+    {
+      "resource_id": "arxiv-2602-17769",
+      "identity": "Rebecca Salganik et al., MusicSem: A Semantically Rich Language--Audio Dataset of Natural Music Descriptions",
+      "version": "arXiv:2602.17769v1, 2026, 51 pages",
+      "sha256": "7961b2d2faf59b93f4ae37650bc1ce7781b74e238b1c733b965203d7dfe829d7",
+      "local_path": "research/papers/tracksmith-producer-judgment-archive/objects/7961b2d2faf59b93f4ae37650bc1ce7781b74e238b1c733b965203d7dfe829d7.pdf",
+      "full_source_read": true,
+      "sections_reviewed": ["taxonomy", "equations 1 through 4", "dataset construction", "GPT-4o extraction and summarization prompts", "Claude 3.7 hallucination check", "manual checks", "statistics", "bias and ethics", "three evaluation lanes", "fine-tuning", "metrics", "limitations", "appendices and hyperparameters"],
+      "methods_and_evidence": ["descriptive, contextual, situational, atmospheric, and metadata categories", "32493 language-audio pairs", "11842 songs", "4430 artists", "five English-language subreddits from 2008 through 2022", "480 human-validated test entries", "50 MusicCaps counterfactual sensitivity pairs written by trained musicians", "generation sensitivity is average one minus cosine similarity", "retrieval sensitivity is one minus top-k overlap ratio", "reported CLaMP3 Recall at 10 is 26.84 percent on MusicSem"],
+      "limitations": ["Reddit, genre, culture, language, and popularity bias", "LLM-assisted extraction and verification", "residual noise and song-entity ambiguity", "caption hallucination", "n-gram metrics do not imply semantic correctness", "FAD depends on embedding and reference", "CLAP score is insensitive to much contextual semantics", "sensitivity measures response change rather than correctness"],
+      "tracksmith_consequences": ["label atmospheric, situational, contextual, and metadata language separately from acoustic evidence", "add counterfactual role and constraint tests", "treat semantic similarity only as a retrieval signal"],
+      "must_not_infer": ["CLAP or caption similarity proves the edit is correct", "fine-tuning proves production competence", "natural music descriptions have one acoustic realization"]
+    }
+  ]
+}

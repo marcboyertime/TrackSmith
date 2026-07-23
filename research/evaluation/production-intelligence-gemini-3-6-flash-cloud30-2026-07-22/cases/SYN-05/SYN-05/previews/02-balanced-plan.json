@@ -1,0 +1,80 @@
+{
+  "goals" : [
+    {
+      "attribute" : "punch",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "harshness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "5AB072FE-9F8D-4D4B-94D2-D8A82F07B6F4",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 29.554399055976983,
+        "kneeDB" : 7.25,
+        "makeupGainDB" : 0,
+        "mix" : 0.5525,
+        "ratio" : 2.925,
+        "releaseMS" : 175.6844832771965,
+        "thresholdDB" : -15.735742894697163
+      },
+      "rationale" : "Use source- and crest-dependent ballistics with a slower attack and parallel dry path to preserve leading transients.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "C74B1DB4-42BF-5451-9B55-B39B6714723E",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.8236820538894225
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "B4595E88-7702-4F3C-A14A-123C566D5957",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "8B0A5CF9-42BF-4451-9B55-B39B6714723E",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "synth",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "D11518E1-0F66-4C1A-AE0D-1A96F4B877D9"
+}

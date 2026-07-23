@@ -1,0 +1,215 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether 'energetic' is best achieved via transient-preserving compression, parallel compression, or subtle harmonic saturation."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -63.969607822486,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.25788639409476843,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000075622847633,
+          "planRequestID" : "12F4FE4C-837F-4D22-919C-8A12253A4261",
+          "previewID" : "21CD9DD8-AD2A-434B-BFB4-1B7E08C66113",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.0268640018785553,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -56.47434903079045,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.7228411599926368,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "D8618309-04B3-45EC-9C9F-37A679C9DF63",
+          "previewID" : "E5840A22-1B21-4A2F-B0C1-2328050B38E8",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -1.8781406529710245,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -51.99032460340099,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.3088751399989,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "A6689429-3CDA-4238-9CAE-57EC78AAD8B2",
+          "previewID" : "1A11B6F3-92EF-4030-9DA4-52F64A848902",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -1.8773967786157273,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "energetic:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Enhance drum punch and transient impact while controlling high-frequency harshness. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact.",
+        "Increase overall drive, density, and energy using parallel compression and saturation without accentuating high-mid harshness. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "DRM-04",
+      "measuredEvidence" : {
+        "drums_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.05450624726364849
+        },
+        "drums_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 11.59746134091891
+        },
+        "drums_onset_candidate_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 12
+        },
+        "drums_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.9580022834936308
+        },
+        "drums_post_onset_sustain_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.6207177094860159
+        },
+        "drums_transient_20_200_hz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.2312570819902446
+        },
+        "drums_transient_5_10_khz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.13483687734034996
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+
+      ],
+      "prohibited" : [
+        "harsh:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6300,
+      "providerLatencyMilliseconds" : 3428,
+      "providerOutputTokens" : 609,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:6e61be2e783a8502a53abbabe09b65449105a43c33e047ca2337dd2e0437311f",
+      "selectedPreviewID" : "E5840A22-1B21-4A2F-B0C1-2328050B38E8",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "drums",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 3, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "b6f3aa688a6e6d598a098f0f210fbdbc8dbde67425f020260811d8dc55f8e5a6",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "drums",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether 'energetic' is best achieved via transient-preserving compression, parallel compression, or subtle harmonic saturation.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether 'energetic' is best achieved via transient-preserving compression, parallel compression, or subtle harmonic saturation."
+      ],
+      "userRequest" : "make these more energetic without making them harsh",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:18:52Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "productionHypothesisGeneration",
+      "explanationGeneration",
+      "ambiguityDetection",
+      "semanticIntentInterpretation",
+      "conversationalReferenceInterpretation"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

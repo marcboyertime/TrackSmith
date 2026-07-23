@@ -1,0 +1,3529 @@
+{
+  "channelCount" : 2,
+  "createdAt" : "2026-07-22T23:24:12Z",
+  "durationSeconds" : 0.5,
+  "frameCount" : 24000,
+  "inputFileName" : "generated-source.wav",
+  "originalAnalysis" : {
+    "channelCount" : 2,
+    "frameCount" : 24000,
+    "metrics" : {
+      "boxiness_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "boxiness_band_ratio",
+          "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.145476279648427
+      },
+      "clipping_samples" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "clipping_samples",
+          "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+          "unit" : "count",
+          "validRange" : [
+            0,
+            48000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0
+      },
+      "crest_factor" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "crest_factor",
+          "limitation" : "Whole-interval sample-peak to RMS ratio.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 3.1217093731919388
+      },
+      "dc_offset" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "dc_offset",
+          "limitation" : "Mean sample value across all channels.",
+          "unit" : "linear",
+          "validRange" : [
+            -1,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 1.7384688059488934e-11
+      },
+      "harshness_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "harshness_band_ratio",
+          "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.054375001967097075
+      },
+      "high_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "high_band_ratio",
+          "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 5.727568043897226e-12
+      },
+      "integrated_loudness_lufs" : {
+        "confidence" : 0.16666666666666666,
+        "definition" : {
+          "identifier" : "integrated_loudness_lufs",
+          "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+          "unit" : "loudnessUnitsFullScale",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -10.832407770407599
+      },
+      "low_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "low_band_ratio",
+          "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.8845622326319732
+      },
+      "maximum_momentary_loudness_lufs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "maximum_momentary_loudness_lufs",
+          "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+          "unit" : "loudnessUnitsFullScale",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -10.789370642338659
+      },
+      "mid_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "mid_band_ratio",
+          "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.11543776736231325
+      },
+      "peak_dbfs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "peak_dbfs",
+          "limitation" : "Sample peak, not oversampled true peak.",
+          "unit" : "decibelsFS",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -3.0980386080356075
+      },
+      "positive_spectral_flux" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "positive_spectral_flux",
+          "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            10
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.021053486793648938
+      },
+      "rms_dbfs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "rms_dbfs",
+          "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+          "unit" : "decibelsFS",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -12.985887975938377
+      },
+      "sibilance_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "sibilance_band_ratio",
+          "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 1.7579633458580605e-13
+      },
+      "sibilance_detector_rms_dbfs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "sibilance_detector_rms_dbfs",
+          "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+          "unit" : "decibelsFS",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -34.87519806057393
+      },
+      "spectral_centroid_hz" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_centroid_hz",
+          "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+          "unit" : "hertz",
+          "validRange" : [
+            0,
+            24000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 315.9620816744525
+      },
+      "spectral_flatness" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_flatness",
+          "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 5.750820157020876e-13
+      },
+      "spectral_rolloff_85_hz" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_rolloff_85_hz",
+          "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+          "unit" : "hertz",
+          "validRange" : [
+            0,
+            24000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 234.375
+      },
+      "spectral_slope_db_per_octave" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_slope_db_per_octave",
+          "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+          "unit" : "decibelsPerOctave",
+          "validRange" : [
+            -100,
+            100
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -18.390821149252524
+      },
+      "stereo_correlation" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "stereo_correlation",
+          "limitation" : "Zero-lag whole-interval Pearson correlation; frequency-dependent phase is not represented.",
+          "unit" : "linear",
+          "validRange" : [
+            -1,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.947808283534837
+      },
+      "transient_density_per_second" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "transient_density_per_second",
+          "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+          "unit" : "perSecond",
+          "validRange" : [
+            0,
+            1000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 12
+      },
+      "true_peak_dbtp" : {
+        "confidence" : 0.95,
+        "definition" : {
+          "identifier" : "true_peak_dbtp",
+          "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+          "unit" : "decibelsTruePeak",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -3.086816493827635
+      }
+    },
+    "sampleRate" : 48000,
+    "series" : {
+      "crest_factor_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.1,
+        "identifier" : "crest_factor_timeline",
+        "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+        "startSeconds" : 0,
+        "unit" : "ratio",
+        "validRange" : [
+          0,
+          1000
+        ],
+        "values" : [
+          3.0476447988675637,
+          3.1282789392842196,
+          3.0785878457092615,
+          3.0705119675609738
+        ],
+        "version" : "1.0",
+        "windowSizeFrames" : 9600
+      },
+      "positive_spectral_flux_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.021333333333333333,
+        "identifier" : "positive_spectral_flux_timeline",
+        "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+        "startSeconds" : 0.021333333333333333,
+        "unit" : "ratio",
+        "validRange" : [
+          0,
+          10
+        ],
+        "values" : [
+          0.0011847546275203303,
+          0.04719743992211785,
+          0.01065024898521688,
+          0.0033937369617415628,
+          0.05066070589277181,
+          0.008511234401170097,
+          0.0054097771256410646,
+          0.05273138505249581,
+          0.005988184899457604,
+          0.007024499146080868,
+          0.0529215730044448,
+          0.003088535206976056,
+          0.008596215993081505,
+          0.0506641919422948,
+          6.925875687852404e-05,
+          0.009937924845114505,
+          0.04570907847873361,
+          0.009832185415946163,
+          0.010979702885853823,
+          0.03822393482253867,
+          0.01934865430055133
+        ],
+        "version" : "1.0",
+        "windowSizeFrames" : 2048
+      },
+      "rms_dbfs_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.1,
+        "identifier" : "rms_dbfs_timeline",
+        "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+        "startSeconds" : 0,
+        "unit" : "decibelsFS",
+        "validRange" : [
+          -240,
+          24
+        ],
+        "values" : [
+          -13.181113954398022,
+          -13.02037518472436,
+          -12.865069616918436,
+          -12.84225449640074
+        ],
+        "version" : "1.0",
+        "windowSizeFrames" : 9600
+      }
+    },
+    "version" : "1.1",
+    "warnings" : [
+
+    ]
+  },
+  "originalAudioFileName" : "00-original.wav",
+  "productionIntentResult" : {
+    "hypotheses" : [
+      {
+        "candidatePlans" : [
+          {
+            "identifier" : "source-aware-v1-h1-conservative",
+            "plan" : {
+              "goals" : [
+                {
+                  "attribute" : "clarity",
+                  "direction" : "increase",
+                  "locked" : false,
+                  "strength" : 0.25
+                },
+                {
+                  "attribute" : "brightness",
+                  "direction" : "preserve",
+                  "locked" : true,
+                  "strength" : 0.25
+                }
+              ],
+              "nodes" : [
+                {
+                  "category" : "corrective",
+                  "confidence" : 0.58,
+                  "enabled" : true,
+                  "id" : "6A0D05A8-7AB7-4DB4-83EF-D37B638663E0",
+                  "locked" : false,
+                  "parameters" : {
+                    "frequencyHz" : 330,
+                    "gainDB" : -0.9,
+                    "q" : 0.9
+                  },
+                  "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+                  "type" : "parametricEQ"
+                },
+                {
+                  "category" : "loudness",
+                  "confidence" : 0.9,
+                  "enabled" : true,
+                  "id" : "192599A7-DE6E-4354-970F-963061EB4B00",
+                  "locked" : false,
+                  "parameters" : {
+                    "ceilingDB" : -3,
+                    "lookaheadMS" : 0,
+                    "releaseMS" : 80
+                  },
+                  "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+                  "type" : "limiter"
+                }
+              ],
+              "outputConstraints" : {
+                "loudnessMatchPreview" : true,
+                "maxAddedGainDB" : 6,
+                "maxTruePeakDB" : -1,
+                "preserveMonoCompatibility" : true
+              },
+              "requestID" : "31DB9499-0500-4442-99F8-40043E3263D2",
+              "schemaVersion" : "1.0",
+              "scope" : {
+                "channelFormat" : "stereo",
+                "kind" : "importedFile",
+                "sourceType" : "synth",
+                "timeRangeSeconds" : {
+                  "end" : 0.5,
+                  "start" : 0
+                }
+              },
+              "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+            },
+            "processingOptions" : [
+              "subtractiveEQ"
+            ],
+            "provenance" : [
+              {
+                "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+                "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+                "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+              },
+              {
+                "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+                "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+                "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+              },
+              {
+                "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+                "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+              },
+              {
+                "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "strength" : "conservative",
+            "summary" : "A conservative source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+            "validationNotes" : [
+              "Validated by PlanValidator.validateForRealtimeActivation.",
+              "Ends in the implemented -3 dBFS sample-peak safety limiter to leave inter-sample margin; rendered true peak still requires measurement.",
+              "Preview loudness matching is required before subjective comparison."
+            ]
+          },
+          {
+            "identifier" : "source-aware-v1-h1-balanced",
+            "plan" : {
+              "goals" : [
+                {
+                  "attribute" : "clarity",
+                  "direction" : "increase",
+                  "locked" : false,
+                  "strength" : 0.75
+                },
+                {
+                  "attribute" : "brightness",
+                  "direction" : "preserve",
+                  "locked" : true,
+                  "strength" : 0.75
+                }
+              ],
+              "nodes" : [
+                {
+                  "category" : "corrective",
+                  "confidence" : 0.58,
+                  "enabled" : true,
+                  "id" : "DB12962C-0C26-4311-AA3D-B50DAA26347C",
+                  "locked" : false,
+                  "parameters" : {
+                    "frequencyHz" : 330,
+                    "gainDB" : -2.7,
+                    "q" : 0.9
+                  },
+                  "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+                  "type" : "parametricEQ"
+                },
+                {
+                  "category" : "loudness",
+                  "confidence" : 0.9,
+                  "enabled" : true,
+                  "id" : "683A6072-2D16-437F-8DDA-EC8D646CEF14",
+                  "locked" : false,
+                  "parameters" : {
+                    "ceilingDB" : -3,
+                    "lookaheadMS" : 0,
+                    "releaseMS" : 80
+                  },
+                  "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+                  "type" : "limiter"
+                }
+              ],
+              "outputConstraints" : {
+                "loudnessMatchPreview" : true,
+                "maxAddedGainDB" : 6,
+                "maxTruePeakDB" : -1,
+                "preserveMonoCompatibility" : true
+              },
+              "requestID" : "61F3A2B9-4746-4210-ABA8-524DB2562FB5",
+              "schemaVersion" : "1.0",
+              "scope" : {
+                "channelFormat" : "stereo",
+                "kind" : "importedFile",
+                "sourceType" : "synth",
+                "timeRangeSeconds" : {
+                  "end" : 0.5,
+                  "start" : 0
+                }
+              },
+              "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+            },
+            "processingOptions" : [
+              "subtractiveEQ"
+            ],
+            "provenance" : [
+              {
+                "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+                "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+                "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+              },
+              {
+                "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+                "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+                "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+              },
+              {
+                "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+                "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+              },
+              {
+                "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "strength" : "balanced",
+            "summary" : "A balanced source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+            "validationNotes" : [
+              "Validated by PlanValidator.validateForRealtimeActivation.",
+              "Ends in the implemented -3 dBFS sample-peak safety limiter to leave inter-sample margin; rendered true peak still requires measurement.",
+              "Preview loudness matching is required before subjective comparison."
+            ]
+          },
+          {
+            "identifier" : "source-aware-v1-h1-strong",
+            "plan" : {
+              "goals" : [
+                {
+                  "attribute" : "clarity",
+                  "direction" : "increase",
+                  "locked" : false,
+                  "strength" : 1
+                },
+                {
+                  "attribute" : "brightness",
+                  "direction" : "preserve",
+                  "locked" : true,
+                  "strength" : 1
+                }
+              ],
+              "nodes" : [
+                {
+                  "category" : "corrective",
+                  "confidence" : 0.58,
+                  "enabled" : true,
+                  "id" : "305125E0-D865-4316-8749-BFB2E0EC5E91",
+                  "locked" : false,
+                  "parameters" : {
+                    "frequencyHz" : 330,
+                    "gainDB" : -5.4,
+                    "q" : 0.9
+                  },
+                  "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+                  "type" : "parametricEQ"
+                },
+                {
+                  "category" : "loudness",
+                  "confidence" : 0.9,
+                  "enabled" : true,
+                  "id" : "A78CD7B6-C03E-4D13-B597-21673BE2BEDB",
+                  "locked" : false,
+                  "parameters" : {
+                    "ceilingDB" : -3,
+                    "lookaheadMS" : 0,
+                    "releaseMS" : 80
+                  },
+                  "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+                  "type" : "limiter"
+                }
+              ],
+              "outputConstraints" : {
+                "loudnessMatchPreview" : true,
+                "maxAddedGainDB" : 6,
+                "maxTruePeakDB" : -1,
+                "preserveMonoCompatibility" : true
+              },
+              "requestID" : "D5DB8256-7CB9-41AA-AB60-A4CF3B01B58D",
+              "schemaVersion" : "1.0",
+              "scope" : {
+                "channelFormat" : "stereo",
+                "kind" : "importedFile",
+                "sourceType" : "synth",
+                "timeRangeSeconds" : {
+                  "end" : 0.5,
+                  "start" : 0
+                }
+              },
+              "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+            },
+            "processingOptions" : [
+              "subtractiveEQ"
+            ],
+            "provenance" : [
+              {
+                "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+                "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+                "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+              },
+              {
+                "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+                "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+                "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+              },
+              {
+                "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+                "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+              },
+              {
+                "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "strength" : "strong",
+            "summary" : "A strong source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+            "validationNotes" : [
+              "Validated by PlanValidator.validateForRealtimeActivation.",
+              "Ends in the implemented -3 dBFS sample-peak safety limiter to leave inter-sample margin; rendered true peak still requires measurement.",
+              "Preview loudness matching is required before subjective comparison."
+            ]
+          }
+        ],
+        "evidenceAgainstIntervention" : [
+          {
+            "confidence" : 0.16666666666666666,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing; Arpeggiation, filter motion, modulation, pick attack, and note changes are conflated.",
+            "metricIdentifier" : "source_positive_spectral_flux_p90",
+            "provenance" : [
+              {
+                "consequence" : "Crest and flux may support timing hypotheses, but do not prescribe attack/release or compression need.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Crest factor, positive spectral flux, timing experiment, limitations",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Parameter Automation in a Dynamic Range Compressor",
+                "sourceVersion" : "JAES 61(10), 2013, SHA-256 d1ac2af3fb7238bafa8c861edc5a907a286983dabffcdbc2e4cbb2f4a29d9bb8"
+              },
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              }
+            ],
+            "relationship" : "arguesAgainstIntervention",
+            "unit" : "ratio",
+            "value" : 0.050664048990754926
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.0146484375
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.3393293845895743
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.0543750015857325
+          },
+          {
+            "confidence" : 0.16666666666666666,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "source_positive_spectral_flux_p90",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.050664048990754926
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "side_energy_share",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.09713800949690032
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "mono_sum_energy_ratio",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.902861990503103
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "low_band_side_energy_share",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.09826828072143495
+          }
+        ],
+        "evidenceSupportingIntervention" : [
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Stereo balance, panning, decorrelation, delay, and ambience are conflated; Windowed or frequency-local cancellation can be hidden by a whole-capture value; Listening position and playback renderer are not represented; Crossover is a TrackSmith product heuristic, not a universal mono-bass boundary.",
+            "metricIdentifier" : "low_band_side_energy_share",
+            "provenance" : [
+              {
+                "consequence" : "Use mid/side, low-band side, mono-sum, and correlation evidence before widening.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Direction Mixer, Stereo Spread, Correlation Meter",
+                "sourceIdentity" : "Apple, Logic Pro Effects for Mac",
+                "sourceVersion" : "current guide downloaded 2026-07-14"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.09826828072143495
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing; A harmonic, note, or intentional voicing can dominate; Concentration does not prove masking.",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "provenance" : [
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.3393293845895743
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Stereo balance, panning, decorrelation, delay, and ambience are conflated; Windowed or frequency-local cancellation can be hidden by a whole-capture value; Listening position and playback renderer are not represented; A value near one does not prove a good mono mix.",
+            "metricIdentifier" : "mono_sum_energy_ratio",
+            "provenance" : [
+              {
+                "consequence" : "Use mid/side, low-band side, mono-sum, and correlation evidence before widening.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Direction Mixer, Stereo Spread, Correlation Meter",
+                "sourceIdentity" : "Apple, Logic Pro Effects for Mac",
+                "sourceVersion" : "current guide downloaded 2026-07-14"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.902861990503103
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Stereo balance, panning, decorrelation, delay, and ambience are conflated; Windowed or frequency-local cancellation can be hidden by a whole-capture value; Listening position and playback renderer are not represented; A wider value is not automatically better.",
+            "metricIdentifier" : "side_energy_share",
+            "provenance" : [
+              {
+                "consequence" : "Use mid/side, low-band side, mono-sum, and correlation evidence before widening.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Direction Mixer, Stereo Spread, Correlation Meter",
+                "sourceIdentity" : "Apple, Logic Pro Effects for Mac",
+                "sourceVersion" : "current guide downloaded 2026-07-14"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.09713800949690032
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing.",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "provenance" : [
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.0543750015857325
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing; Noise, distortion, and long ambience increase occupancy.",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "provenance" : [
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.0146484375
+          }
+        ],
+        "expectedMeasurableDirection" : [
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "source_positive_spectral_flux_p90",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "preserve",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "rationale" : "Explicit preserve constraint for bright."
+          },
+          {
+            "direction" : "preserve",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "rationale" : "Explicit preserve constraint for bright."
+          },
+          {
+            "direction" : "preserve",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "rationale" : "Explicit preserve constraint for bright."
+          }
+        ],
+        "intendedPerceptualChange" : "Improve clarity by cleaning up low-mid frequency build-up while preserving existing high-frequency balance. | Grounded TrackSmith interpretation: increase clear: For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘clear’ may request reduced masking or excess density while preserving desired brightness and body. This is one hypothesis, not a measured fact.",
+        "preservationConstraints" : [
+          "preserve bright"
+        ],
+        "processingOptionsConsidered" : [
+          "subtractiveEQ"
+        ],
+        "provenance" : [
+          {
+            "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+            "evidenceClass" : "professionalPracticeHeuristic",
+            "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+            "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+            "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+          },
+          {
+            "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+            "evidenceClass" : "professionalPracticeHeuristic",
+            "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+            "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+            "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+          },
+          {
+            "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+            "evidenceClass" : "peerReviewedResearchBacked",
+            "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+            "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+            "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+          },
+          {
+            "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+            "evidenceClass" : "peerReviewedResearchBacked",
+            "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+            "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+            "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+          }
+        ],
+        "risks" : [
+          "Excessive cutting in the low-mids can make the synth sound thin or weak.",
+          "Filter movement, envelope, stereo animation, low-end focus, and mono translation can be damaged",
+          "Intelligibility, air, natural consonants, and intimacy can be lost",
+          "Leading transients, cymbal smoothness, room coherence, and groove can be damaged",
+          "Low-end weight, note-to-note balance, pitch audibility, and kick separation can be damaged",
+          "Pick attack, articulation, intended amp character, and arrangement position can be damaged",
+          "Source balance, dynamics, transients, tonal identity, and mono translation can be damaged"
+        ],
+        "selectedStrategyIdentifier" : "source-aware-v1-h1-balanced",
+        "sourceContext" : "synth, stereo, importedFile; analysis v1.0",
+        "subjectiveListeningRemainsDecisive" : true,
+        "uncertainty" : [
+          "Production adjectives do not have unique acoustic definitions.",
+          "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+          "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+          "Whether masking is concentrated in the low-mids (200-500 Hz) or lower resonance bands."
+        ],
+        "version" : "1.0"
+      },
+      {
+        "candidatePlans" : [
+          {
+            "identifier" : "source-aware-v1-h2-conservative",
+            "plan" : {
+              "goals" : [
+                {
+                  "attribute" : "clarity",
+                  "direction" : "increase",
+                  "locked" : false,
+                  "strength" : 0.25
+                },
+                {
+                  "attribute" : "brightness",
+                  "direction" : "preserve",
+                  "locked" : true,
+                  "strength" : 0.25
+                }
+              ],
+              "nodes" : [
+                {
+                  "category" : "corrective",
+                  "confidence" : 0.58,
+                  "enabled" : true,
+                  "id" : "ACD546FC-8393-4863-9C6B-1CB5F3DAACDF",
+                  "locked" : false,
+                  "parameters" : {
+                    "frequencyHz" : 330,
+                    "gainDB" : -0.9,
+                    "q" : 0.9
+                  },
+                  "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+                  "type" : "parametricEQ"
+                },
+                {
+                  "category" : "loudness",
+                  "confidence" : 0.9,
+                  "enabled" : true,
+                  "id" : "A3E6CA74-87A7-402E-966A-F26EB7432670",
+                  "locked" : false,
+                  "parameters" : {
+                    "ceilingDB" : -3,
+                    "lookaheadMS" : 0,
+                    "releaseMS" : 80
+                  },
+                  "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+                  "type" : "limiter"
+                }
+              ],
+              "outputConstraints" : {
+                "loudnessMatchPreview" : true,
+                "maxAddedGainDB" : 6,
+                "maxTruePeakDB" : -1,
+                "preserveMonoCompatibility" : true
+              },
+              "requestID" : "684645DC-6244-491B-A9D2-299746CEF536",
+              "schemaVersion" : "1.0",
+              "scope" : {
+                "channelFormat" : "stereo",
+                "kind" : "importedFile",
+                "sourceType" : "synth",
+                "timeRangeSeconds" : {
+                  "end" : 0.5,
+                  "start" : 0
+                }
+              },
+              "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+            },
+            "processingOptions" : [
+              "subtractiveEQ"
+            ],
+            "provenance" : [
+              {
+                "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+                "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+                "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+              },
+              {
+                "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+                "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+                "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+              },
+              {
+                "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+                "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+              },
+              {
+                "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "strength" : "conservative",
+            "summary" : "A conservative source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+            "validationNotes" : [
+              "Validated by PlanValidator.validateForRealtimeActivation.",
+              "Ends in the implemented -3 dBFS sample-peak safety limiter to leave inter-sample margin; rendered true peak still requires measurement.",
+              "Preview loudness matching is required before subjective comparison."
+            ]
+          },
+          {
+            "identifier" : "source-aware-v1-h2-balanced",
+            "plan" : {
+              "goals" : [
+                {
+                  "attribute" : "clarity",
+                  "direction" : "increase",
+                  "locked" : false,
+                  "strength" : 0.75
+                },
+                {
+                  "attribute" : "brightness",
+                  "direction" : "preserve",
+                  "locked" : true,
+                  "strength" : 0.75
+                }
+              ],
+              "nodes" : [
+                {
+                  "category" : "corrective",
+                  "confidence" : 0.58,
+                  "enabled" : true,
+                  "id" : "0B913EE8-2B4E-4A62-9501-8320F12B8C56",
+                  "locked" : false,
+                  "parameters" : {
+                    "frequencyHz" : 330,
+                    "gainDB" : -2.7,
+                    "q" : 0.9
+                  },
+                  "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+                  "type" : "parametricEQ"
+                },
+                {
+                  "category" : "loudness",
+                  "confidence" : 0.9,
+                  "enabled" : true,
+                  "id" : "4BC40482-B78D-4481-801C-359A902B736A",
+                  "locked" : false,
+                  "parameters" : {
+                    "ceilingDB" : -3,
+                    "lookaheadMS" : 0,
+                    "releaseMS" : 80
+                  },
+                  "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+                  "type" : "limiter"
+                }
+              ],
+              "outputConstraints" : {
+                "loudnessMatchPreview" : true,
+                "maxAddedGainDB" : 6,
+                "maxTruePeakDB" : -1,
+                "preserveMonoCompatibility" : true
+              },
+              "requestID" : "645ACD9A-E88A-4447-AE19-8B00CE7B5FC2",
+              "schemaVersion" : "1.0",
+              "scope" : {
+                "channelFormat" : "stereo",
+                "kind" : "importedFile",
+                "sourceType" : "synth",
+                "timeRangeSeconds" : {
+                  "end" : 0.5,
+                  "start" : 0
+                }
+              },
+              "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+            },
+            "processingOptions" : [
+              "subtractiveEQ"
+            ],
+            "provenance" : [
+              {
+                "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+                "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+                "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+              },
+              {
+                "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+                "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+                "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+              },
+              {
+                "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+                "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+              },
+              {
+                "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "strength" : "balanced",
+            "summary" : "A balanced source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+            "validationNotes" : [
+              "Validated by PlanValidator.validateForRealtimeActivation.",
+              "Ends in the implemented -3 dBFS sample-peak safety limiter to leave inter-sample margin; rendered true peak still requires measurement.",
+              "Preview loudness matching is required before subjective comparison."
+            ]
+          },
+          {
+            "identifier" : "source-aware-v1-h2-strong",
+            "plan" : {
+              "goals" : [
+                {
+                  "attribute" : "clarity",
+                  "direction" : "increase",
+                  "locked" : false,
+                  "strength" : 1
+                },
+                {
+                  "attribute" : "brightness",
+                  "direction" : "preserve",
+                  "locked" : true,
+                  "strength" : 1
+                }
+              ],
+              "nodes" : [
+                {
+                  "category" : "corrective",
+                  "confidence" : 0.58,
+                  "enabled" : true,
+                  "id" : "23A262B6-B336-4D4E-BB74-E3F26B85B3D4",
+                  "locked" : false,
+                  "parameters" : {
+                    "frequencyHz" : 330,
+                    "gainDB" : -5.4,
+                    "q" : 0.9
+                  },
+                  "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+                  "type" : "parametricEQ"
+                },
+                {
+                  "category" : "loudness",
+                  "confidence" : 0.9,
+                  "enabled" : true,
+                  "id" : "29D78D31-C59C-44E6-B019-6CDFCB4DCA13",
+                  "locked" : false,
+                  "parameters" : {
+                    "ceilingDB" : -3,
+                    "lookaheadMS" : 0,
+                    "releaseMS" : 80
+                  },
+                  "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+                  "type" : "limiter"
+                }
+              ],
+              "outputConstraints" : {
+                "loudnessMatchPreview" : true,
+                "maxAddedGainDB" : 6,
+                "maxTruePeakDB" : -1,
+                "preserveMonoCompatibility" : true
+              },
+              "requestID" : "5023BAD9-F8E3-4998-9204-E29D25D519E4",
+              "schemaVersion" : "1.0",
+              "scope" : {
+                "channelFormat" : "stereo",
+                "kind" : "importedFile",
+                "sourceType" : "synth",
+                "timeRangeSeconds" : {
+                  "end" : 0.5,
+                  "start" : 0
+                }
+              },
+              "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+            },
+            "processingOptions" : [
+              "subtractiveEQ"
+            ],
+            "provenance" : [
+              {
+                "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+                "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+                "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+              },
+              {
+                "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+                "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+                "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+              },
+              {
+                "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+                "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+              },
+              {
+                "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "strength" : "strong",
+            "summary" : "A strong source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+            "validationNotes" : [
+              "Validated by PlanValidator.validateForRealtimeActivation.",
+              "Ends in the implemented -3 dBFS sample-peak safety limiter to leave inter-sample margin; rendered true peak still requires measurement.",
+              "Preview loudness matching is required before subjective comparison."
+            ]
+          }
+        ],
+        "evidenceAgainstIntervention" : [
+          {
+            "confidence" : 0.16666666666666666,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing; Arpeggiation, filter motion, modulation, pick attack, and note changes are conflated.",
+            "metricIdentifier" : "source_positive_spectral_flux_p90",
+            "provenance" : [
+              {
+                "consequence" : "Crest and flux may support timing hypotheses, but do not prescribe attack/release or compression need.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Crest factor, positive spectral flux, timing experiment, limitations",
+                "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Parameter Automation in a Dynamic Range Compressor",
+                "sourceVersion" : "JAES 61(10), 2013, SHA-256 d1ac2af3fb7238bafa8c861edc5a907a286983dabffcdbc2e4cbb2f4a29d9bb8"
+              },
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              }
+            ],
+            "relationship" : "arguesAgainstIntervention",
+            "unit" : "ratio",
+            "value" : 0.050664048990754926
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.0146484375
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.3393293845895743
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.0543750015857325
+          },
+          {
+            "confidence" : 0.16666666666666666,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "source_positive_spectral_flux_p90",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.050664048990754926
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "side_energy_share",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.09713800949690032
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "mono_sum_energy_ratio",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.902861990503103
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "Monitor this evidence because ‘bright’ is a preserve constraint, not a target to sacrifice.",
+            "metricIdentifier" : "low_band_side_energy_share",
+            "provenance" : [
+
+            ],
+            "relationship" : "preservationCheck",
+            "unit" : "ratio",
+            "value" : 0.09826828072143495
+          }
+        ],
+        "evidenceSupportingIntervention" : [
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Stereo balance, panning, decorrelation, delay, and ambience are conflated; Windowed or frequency-local cancellation can be hidden by a whole-capture value; Listening position and playback renderer are not represented; Crossover is a TrackSmith product heuristic, not a universal mono-bass boundary.",
+            "metricIdentifier" : "low_band_side_energy_share",
+            "provenance" : [
+              {
+                "consequence" : "Use mid/side, low-band side, mono-sum, and correlation evidence before widening.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Direction Mixer, Stereo Spread, Correlation Meter",
+                "sourceIdentity" : "Apple, Logic Pro Effects for Mac",
+                "sourceVersion" : "current guide downloaded 2026-07-14"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.09826828072143495
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing; A harmonic, note, or intentional voicing can dominate; Concentration does not prove masking.",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "provenance" : [
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.3393293845895743
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Stereo balance, panning, decorrelation, delay, and ambience are conflated; Windowed or frequency-local cancellation can be hidden by a whole-capture value; Listening position and playback renderer are not represented; A value near one does not prove a good mono mix.",
+            "metricIdentifier" : "mono_sum_energy_ratio",
+            "provenance" : [
+              {
+                "consequence" : "Use mid/side, low-band side, mono-sum, and correlation evidence before widening.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Direction Mixer, Stereo Spread, Correlation Meter",
+                "sourceIdentity" : "Apple, Logic Pro Effects for Mac",
+                "sourceVersion" : "current guide downloaded 2026-07-14"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.902861990503103
+          },
+          {
+            "confidence" : 0.5,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Stereo balance, panning, decorrelation, delay, and ambience are conflated; Windowed or frequency-local cancellation can be hidden by a whole-capture value; Listening position and playback renderer are not represented; A wider value is not automatically better.",
+            "metricIdentifier" : "side_energy_share",
+            "provenance" : [
+              {
+                "consequence" : "Use mid/side, low-band side, mono-sum, and correlation evidence before widening.",
+                "evidenceClass" : "professionalPracticeHeuristic",
+                "relevantSection" : "Direction Mixer, Stereo Spread, Correlation Meter",
+                "sourceIdentity" : "Apple, Logic Pro Effects for Mac",
+                "sourceVersion" : "current guide downloaded 2026-07-14"
+              },
+              {
+                "consequence" : "Use source/context-dependent evidence and reject blind high-pass, fixed low-mid cuts, or universal compressor timing.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "EQ/masking, panning/mono compatibility, temporal effects, dynamics",
+                "sourceIdentity" : "Pestana and Reiss, Intelligent Audio Production Strategies Informed by Best Practices",
+                "sourceVersion" : "AES 53rd Conference 2014, SHA-256 5cb46304f10419c7f936d787fdc34ddef07a64d397cacc184288d8b34fb43b19"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.09713800949690032
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing.",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "provenance" : [
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.0543750015857325
+          },
+          {
+            "confidence" : 1,
+            "interpretationBoundary" : "This measurement can constrain a hypothesis but cannot prove ‘clear’. Known failures: Mono fold-down can cancel anti-phase stereo content; No instrument or phoneme separation; Result changes with arrangement, tuning, performance, capture chain, and existing processing; Noise, distortion, and long ambience increase occupancy.",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "provenance" : [
+              {
+                "consequence" : "Low-level descriptors are implementable evidence; library inclusion does not validate a production meaning.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Spectral, temporal, SFX descriptors and aggregation",
+                "sourceIdentity" : "Bogdanov et al., Essentia: An Audio Analysis Library for MIR",
+                "sourceVersion" : "ISMIR 2013, full paper SHA-256 ff3cf5310d0dc3fdb51355525437a5ca8c19ff3a510f1318dc495c179cd574f8"
+              },
+              {
+                "consequence" : "Band energy, crest, and width are descriptive only; do not infer harshness, quality, or an optimum.",
+                "evidenceClass" : "peerReviewedResearchBacked",
+                "relevantSection" : "Feature construction, post-hoc 2-5 kHz band, results, limitations",
+                "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+                "sourceVersion" : "DAFx-13, full paper SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+              }
+            ],
+            "relationship" : "contextual",
+            "unit" : "ratio",
+            "value" : 0.0146484375
+          }
+        ],
+        "expectedMeasurableDirection" : [
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "uncertain",
+            "metricIdentifier" : "source_positive_spectral_flux_p90",
+            "rationale" : "Expected direction is a validation aid for the selected hypothesis, not proof of the perceptual term."
+          },
+          {
+            "direction" : "preserve",
+            "metricIdentifier" : "spectral_occupied_bin_fraction",
+            "rationale" : "Explicit preserve constraint for bright."
+          },
+          {
+            "direction" : "preserve",
+            "metricIdentifier" : "maximum_third_octave_concentration_ratio",
+            "rationale" : "Explicit preserve constraint for bright."
+          },
+          {
+            "direction" : "preserve",
+            "metricIdentifier" : "source_2_5_khz_energy_ratio",
+            "rationale" : "Explicit preserve constraint for bright."
+          }
+        ],
+        "intendedPerceptualChange" : "Dynamic or targeted subtractive equalization to attenuate muddy buildup during active passages without boosting high frequencies. | Grounded TrackSmith interpretation: increase clear: For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘clear’ may request reduced masking or excess density while preserving desired brightness and body. This is one hypothesis, not a measured fact.",
+        "preservationConstraints" : [
+          "preserve bright"
+        ],
+        "processingOptionsConsidered" : [
+          "subtractiveEQ"
+        ],
+        "provenance" : [
+          {
+            "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+            "evidenceClass" : "professionalPracticeHeuristic",
+            "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+            "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+            "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+          },
+          {
+            "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+            "evidenceClass" : "professionalPracticeHeuristic",
+            "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+            "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+            "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+          },
+          {
+            "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+            "evidenceClass" : "peerReviewedResearchBacked",
+            "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+            "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+            "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+          },
+          {
+            "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+            "evidenceClass" : "peerReviewedResearchBacked",
+            "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+            "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+            "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+          }
+        ],
+        "risks" : [
+          "Filter movement, envelope, stereo animation, low-end focus, and mono translation can be damaged",
+          "Intelligibility, air, natural consonants, and intimacy can be lost",
+          "Leading transients, cymbal smoothness, room coherence, and groove can be damaged",
+          "Low-end weight, note-to-note balance, pitch audibility, and kick separation can be damaged",
+          "Over-processing may destabilize the synth's dynamic feel or note body.",
+          "Pick attack, articulation, intended amp character, and arrangement position can be damaged",
+          "Source balance, dynamics, transients, tonal identity, and mono translation can be damaged"
+        ],
+        "selectedStrategyIdentifier" : "source-aware-v1-h2-balanced",
+        "sourceContext" : "synth, stereo, importedFile; analysis v1.0",
+        "subjectiveListeningRemainsDecisive" : true,
+        "uncertainty" : [
+          "Production adjectives do not have unique acoustic definitions.",
+          "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+          "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+          "Whether masking is concentrated in the low-mids (200-500 Hz) or lower resonance bands."
+        ],
+        "version" : "1.0"
+      }
+    ],
+    "interpretation" : {
+      "desiredChanges" : [
+        {
+          "confidence" : 0.58,
+          "direction" : "increase",
+          "evidenceClass" : "professionalPracticeHeuristic",
+          "interpretation" : "For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘clear’ may request reduced masking or excess density while preserving desired brightness and body. This is one hypothesis, not a measured fact.",
+          "matchedPhrase" : "clear",
+          "provenance" : [
+            {
+              "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+              "evidenceClass" : "professionalPracticeHeuristic",
+              "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+              "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+              "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+            },
+            {
+              "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+              "evidenceClass" : "professionalPracticeHeuristic",
+              "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+              "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+              "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+            },
+            {
+              "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+              "evidenceClass" : "peerReviewedResearchBacked",
+              "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+              "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+              "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+            },
+            {
+              "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+              "evidenceClass" : "peerReviewedResearchBacked",
+              "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+              "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+              "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+            }
+          ],
+          "sourceType" : "synth",
+          "strength" : 0.5,
+          "term" : "clear"
+        }
+      ],
+      "originalRequest" : "make this clearer without making it brighter",
+      "preservedAttributes" : [
+        {
+          "confidence" : 0.58,
+          "direction" : "preserve",
+          "evidenceClass" : "professionalPracticeHeuristic",
+          "interpretation" : "For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘bright’ may request greater upper-spectrum prominence without excessive bursts, fatigue, or thinness. This is one hypothesis, not a measured fact.",
+          "matchedPhrase" : "bright",
+          "provenance" : [
+            {
+              "consequence" : "Supplies candidate production interpretations while repeatedly requiring source, arrangement, client intent, and listening context.",
+              "evidenceClass" : "professionalPracticeHeuristic",
+              "relevantSection" : "EQ, dynamics, stereo, ambience, distortion, and complete source-specific mixing chapters",
+              "sourceIdentity" : "iZotope Mixing Guide: Principles, Tips, and Techniques",
+              "sourceVersion" : "2014 edition; SHA-256 285fd062e781d9ead2735309e47d1b1ef088e173a2d3c6fbbdda715bda882373"
+            },
+            {
+              "consequence" : "Defines processor behavior and Logic vocabulary; creative recommendations remain source-dependent heuristics.",
+              "evidenceClass" : "professionalPracticeHeuristic",
+              "relevantSection" : "Dynamics; EQ; distortion; delay; reverb; imaging; metering",
+              "sourceIdentity" : "Apple Logic Pro Effects User Guide",
+              "sourceVersion" : "current payload retrieved 2026-07-14; SHA-256 b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+            },
+            {
+              "consequence" : "Supports bounded dynamics strategies, not semantic claims that compression makes audio polished, punchy, or warm.",
+              "evidenceClass" : "peerReviewedResearchBacked",
+              "relevantSection" : "Static characteristics, detector topologies, ballistics, and implementation tradeoffs",
+              "sourceIdentity" : "Giannoulis, Massberg, and Reiss, Digital Dynamic Range Compressor Design",
+              "sourceVersion" : "JAES 60(6), 2012; SHA-256 dd65e1f91e8fafd855cc994246bfe957d671254a271b83ba8fab2239f7b23b44"
+            },
+            {
+              "consequence" : "No single descriptor or post-hoc frequency band proves a production adjective or quality.",
+              "evidenceClass" : "peerReviewedResearchBacked",
+              "relevantSection" : "Open-ended attributes, descriptor correlations, regressions, and limitations",
+              "sourceIdentity" : "Wilson and Fazenda, Perception & Evaluation of Audio Quality in Music Production",
+              "sourceVersion" : "2013; SHA-256 6809079a119e9d78e47d408223c49b66425ec450f8811260d1826728a0d5b2dd"
+            }
+          ],
+          "sourceType" : "synth",
+          "strength" : 0.5,
+          "term" : "bright"
+        }
+      ],
+      "prohibitedChanges" : [
+
+      ],
+      "requiresClarification" : false,
+      "sourceType" : "synth",
+      "unresolvedAmbiguities" : [
+        "Whether masking is concentrated in the low-mids (200-500 Hz) or lower resonance bands."
+      ],
+      "version" : "1.0"
+    },
+    "vocabularyVersion" : "1.0"
+  },
+  "prompt" : "make this clearer without making it brighter",
+  "providerMetadata" : {
+    "attemptCount" : 1,
+    "inputTokens" : 6324,
+    "latencyMilliseconds" : 3765,
+    "modelIdentifier" : "gemini-3.6-flash",
+    "outputTokens" : 671,
+    "providerIdentifier" : "gemini-interactions-v1",
+    "providerReportedModelIdentifier" : "gemini-3.6-flash",
+    "providerResponseID" : "local-body-sha256:6d423369325ce226fecc30e65d5c60b5a766dfff0ab3501833ce16b615ad8c88"
+  },
+  "sampleRate" : 48000,
+  "schemaVersion" : "1.0",
+  "sourceFingerprint" : "71f09bda9bdb3b8a",
+  "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8",
+  "sourceType" : "synth",
+  "variants" : [
+    {
+      "analysis" : {
+        "channelCount" : 2,
+        "frameCount" : 24000,
+        "metrics" : {
+          "boxiness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "boxiness_band_ratio",
+              "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.1342475706340893
+          },
+          "clipping_samples" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "clipping_samples",
+              "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+              "unit" : "count",
+              "validRange" : [
+                0,
+                48000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0
+          },
+          "crest_factor" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "crest_factor",
+              "limitation" : "Whole-interval sample-peak to RMS ratio.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 3.1199512077337537
+          },
+          "dc_offset" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "dc_offset",
+              "limitation" : "Mean sample value across all channels.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 6.1818902084525e-06
+          },
+          "harshness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "harshness_band_ratio",
+              "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.057859131545217525
+          },
+          "high_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "high_band_ratio",
+              "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 6.08434416855172e-12
+          },
+          "integrated_loudness_lufs" : {
+            "confidence" : 0.16666666666666666,
+            "definition" : {
+              "identifier" : "integrated_loudness_lufs",
+              "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -10.835357887519143
+          },
+          "low_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "low_band_ratio",
+              "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.8867754205568704
+          },
+          "maximum_momentary_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_momentary_loudness_lufs",
+              "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -10.789514805996427
+          },
+          "mid_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "mid_band_ratio",
+              "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.11322457943705809
+          },
+          "peak_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "peak_dbfs",
+              "limitation" : "Sample peak, not oversampled true peak.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -3.122933653502723
+          },
+          "positive_spectral_flux" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "positive_spectral_flux",
+              "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                10
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.021027035442016277
+          },
+          "rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "rms_dbfs",
+              "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -13.005889698117194
+          },
+          "sibilance_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_band_ratio",
+              "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 1.8571817573522457e-13
+          },
+          "sibilance_detector_rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_detector_rms_dbfs",
+              "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -34.648830808068425
+          },
+          "spectral_centroid_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_centroid_hz",
+              "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                24000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 324.58251741625094
+          },
+          "spectral_flatness" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_flatness",
+              "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 6.297952285327918e-13
+          },
+          "spectral_rolloff_85_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_rolloff_85_hz",
+              "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                24000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 234.375
+          },
+          "spectral_slope_db_per_octave" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_slope_db_per_octave",
+              "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+              "unit" : "decibelsPerOctave",
+              "validRange" : [
+                -100,
+                100
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -18.25945455652881
+          },
+          "stereo_correlation" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "stereo_correlation",
+              "limitation" : "Zero-lag whole-interval Pearson correlation; frequency-dependent phase is not represented.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.9468330871379937
+          },
+          "transient_density_per_second" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "transient_density_per_second",
+              "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+              "unit" : "perSecond",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 12
+          },
+          "true_peak_dbtp" : {
+            "confidence" : 0.95,
+            "definition" : {
+              "identifier" : "true_peak_dbtp",
+              "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+              "unit" : "decibelsTruePeak",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -3.1120473381492264
+          }
+        },
+        "sampleRate" : 48000,
+        "series" : {
+          "crest_factor_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "crest_factor_timeline",
+            "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+            "startSeconds" : 0,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              1000
+            ],
+            "values" : [
+              3.0364672758419737,
+              3.1233604129564614,
+              3.075125604466823,
+              3.066961744811274
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 9600
+          },
+          "positive_spectral_flux_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.021333333333333333,
+            "identifier" : "positive_spectral_flux_timeline",
+            "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+            "startSeconds" : 0.021333333333333333,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              10
+            ],
+            "values" : [
+              0.004097488853003163,
+              0.04699438214200526,
+              0.010573553284095767,
+              0.0034125548525249694,
+              0.05022668601951604,
+              0.00848047884536416,
+              0.005370147839722093,
+              0.05228773228180078,
+              0.0059631394201088705,
+              0.006941365471729191,
+              0.052423494933446314,
+              0.003070522774008737,
+              0.00852023080277205,
+              0.050122593478633855,
+              0.0002843303563659346,
+              0.009830434488545444,
+              0.045134922996382894,
+              0.009951071938538884,
+              0.010855762827926472,
+              0.03768188429678102,
+              0.019344966379069985
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 2048
+          },
+          "rms_dbfs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "rms_dbfs_timeline",
+            "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+            "startSeconds" : 0,
+            "unit" : "decibelsFS",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -13.208543631195775,
+              -13.03646840075678,
+              -12.880190840855247,
+              -12.857100831965713
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 9600
+          }
+        },
+        "version" : "1.1",
+        "warnings" : [
+
+        ]
+      },
+      "audioFileName" : "01-conservative.wav",
+      "candidateIdentifier" : "source-aware-v1-h1-conservative",
+      "candidateSummary" : "A conservative source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+      "difference" : {
+        "bandEnergyDistance" : 0.003129920379723114,
+        "crestFactorDeltaDB" : -0.004893323288299162,
+        "differenceRMSDBFS" : -39.377658574997845,
+        "spectralCentroidDeltaHz" : 8.620435741798417
+      },
+      "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+      "loudnessMatchGainDB" : 0.266163578606891,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "pairwiseDifferenceFromPrevious" : {
+        "bandEnergyDistance" : 0.003129920379723114,
+        "crestFactorDeltaDB" : -0.004893323288299162,
+        "differenceRMSDBFS" : -39.377658574997845,
+        "spectralCentroidDeltaHz" : 8.620435741798417
+      },
+      "plan" : {
+        "goals" : [
+          {
+            "attribute" : "clarity",
+            "direction" : "increase",
+            "locked" : false,
+            "strength" : 0.25
+          },
+          {
+            "attribute" : "brightness",
+            "direction" : "preserve",
+            "locked" : true,
+            "strength" : 0.25
+          }
+        ],
+        "nodes" : [
+          {
+            "category" : "corrective",
+            "confidence" : 0.58,
+            "enabled" : true,
+            "id" : "6A0D05A8-7AB7-4DB4-83EF-D37B638663E0",
+            "locked" : false,
+            "parameters" : {
+              "frequencyHz" : 330,
+              "gainDB" : -0.9,
+              "q" : 0.9
+            },
+            "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+            "type" : "parametricEQ"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 1,
+            "enabled" : true,
+            "id" : "7D9AD5D4-0500-5442-99F8-40043E3263D2",
+            "locked" : false,
+            "parameters" : {
+              "gainDB" : 0.266163578606891
+            },
+            "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+            "type" : "loudnessMatch"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 0.9,
+            "enabled" : true,
+            "id" : "192599A7-DE6E-4354-970F-963061EB4B00",
+            "locked" : false,
+            "parameters" : {
+              "ceilingDB" : -3,
+              "lookaheadMS" : 0,
+              "releaseMS" : 80
+            },
+            "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+            "type" : "limiter"
+          }
+        ],
+        "outputConstraints" : {
+          "loudnessMatchPreview" : true,
+          "maxAddedGainDB" : 6,
+          "maxTruePeakDB" : -1,
+          "preserveMonoCompatibility" : true
+        },
+        "requestID" : "31DB9499-0500-4442-99F8-40043E3263D2",
+        "schemaVersion" : "1.0",
+        "scope" : {
+          "channelFormat" : "stereo",
+          "kind" : "importedFile",
+          "sourceType" : "synth",
+          "timeRangeSeconds" : {
+            "end" : 0.5,
+            "start" : 0
+          }
+        },
+        "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+      },
+      "planFileName" : "01-conservative-plan.json",
+      "previewID" : "5D4271F1-C39F-44A7-AE08-9CC1FE84173F",
+      "rejectionReasons" : [
+
+      ],
+      "status" : "valid",
+      "strength" : "conservative",
+      "warnings" : [
+
+      ]
+    },
+    {
+      "analysis" : {
+        "channelCount" : 2,
+        "frameCount" : 24000,
+        "metrics" : {
+          "boxiness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "boxiness_band_ratio",
+              "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.11415854136786113
+          },
+          "clipping_samples" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "clipping_samples",
+              "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+              "unit" : "count",
+              "validRange" : [
+                0,
+                48000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0
+          },
+          "crest_factor" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "crest_factor",
+              "limitation" : "Whole-interval sample-peak to RMS ratio.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 3.1036223574988533
+          },
+          "dc_offset" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "dc_offset",
+              "limitation" : "Mean sample value across all channels.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.653705815215801e-05
+          },
+          "harshness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "harshness_band_ratio",
+              "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.06519353949815888
+          },
+          "high_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "high_band_ratio",
+              "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 6.833692045561129e-12
+          },
+          "integrated_loudness_lufs" : {
+            "confidence" : 0.16666666666666666,
+            "definition" : {
+              "identifier" : "integrated_loudness_lufs",
+              "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -10.8406385040194
+          },
+          "low_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "low_band_ratio",
+              "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.8894671413932658
+          },
+          "maximum_momentary_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_momentary_loudness_lufs",
+              "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -10.789989481486899
+          },
+          "mid_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "mid_band_ratio",
+              "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.1105328585999148
+          },
+          "peak_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "peak_dbfs",
+              "limitation" : "Sample peak, not oversampled true peak.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -3.2110476420877725
+          },
+          "positive_spectral_flux" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "positive_spectral_flux",
+              "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                10
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.021022402895573358
+          },
+          "rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "rms_dbfs",
+              "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -13.048425076593908
+          },
+          "sibilance_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_band_ratio",
+              "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.0585616588889705e-13
+          },
+          "sibilance_detector_rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_detector_rms_dbfs",
+              "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -34.21301989559549
+          },
+          "spectral_centroid_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_centroid_hz",
+              "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                24000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 343.18339840485936
+          },
+          "spectral_flatness" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_flatness",
+              "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 6.880815708714848e-13
+          },
+          "spectral_rolloff_85_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_rolloff_85_hz",
+              "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                24000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 210.9375
+          },
+          "spectral_slope_db_per_octave" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_slope_db_per_octave",
+              "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+              "unit" : "decibelsPerOctave",
+              "validRange" : [
+                -100,
+                100
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -18.164225182241456
+          },
+          "stereo_correlation" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "stereo_correlation",
+              "limitation" : "Zero-lag whole-interval Pearson correlation; frequency-dependent phase is not represented.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.944749231531881
+          },
+          "transient_density_per_second" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "transient_density_per_second",
+              "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+              "unit" : "perSecond",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 12
+          },
+          "true_peak_dbtp" : {
+            "confidence" : 0.95,
+            "definition" : {
+              "identifier" : "true_peak_dbtp",
+              "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+              "unit" : "decibelsTruePeak",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -3.20038070183327
+          }
+        },
+        "sampleRate" : 48000,
+        "series" : {
+          "crest_factor_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "crest_factor_timeline",
+            "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+            "startSeconds" : 0,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              1000
+            ],
+            "values" : [
+              3.025906771607725,
+              3.104463432211374,
+              3.055905800104541,
+              3.0478073454116013
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 9600
+          },
+          "positive_spectral_flux_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.021333333333333333,
+            "identifier" : "positive_spectral_flux_timeline",
+            "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+            "startSeconds" : 0.021333333333333333,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              10
+            ],
+            "values" : [
+              0.010421474953662276,
+              0.046611561948765944,
+              0.01041980813554451,
+              0.0034559961370235212,
+              0.049405911275771715,
+              0.008400903878215758,
+              0.005290657228833005,
+              0.05144271688918996,
+              0.005896099158075436,
+              0.0068238135379798314,
+              0.05145246776188897,
+              0.003016483453765549,
+              0.008377479630148838,
+              0.04904418733337804,
+              0.0010206554637301195,
+              0.009621196414648167,
+              0.04397367196969067,
+              0.010231014647893829,
+              0.010615376066461815,
+              0.03658437834085637,
+              0.019364606581516095
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 2048
+          },
+          "rms_dbfs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "rms_dbfs_timeline",
+            "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+            "startSeconds" : 0,
+            "unit" : "decibelsFS",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -13.264047906489552,
+              -13.072005537939848,
+              -12.913846897193991,
+              -12.890797870051962
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 9600
+          }
+        },
+        "version" : "1.1",
+        "warnings" : [
+
+        ]
+      },
+      "audioFileName" : "02-balanced.wav",
+      "candidateIdentifier" : "source-aware-v1-h1-balanced",
+      "candidateSummary" : "A balanced source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+      "difference" : {
+        "bandEnergyDistance" : 0.006936588493204545,
+        "crestFactorDeltaDB" : -0.0504719333966338,
+        "differenceRMSDBFS" : -29.954887507777453,
+        "spectralCentroidDeltaHz" : 27.22131673040684
+      },
+      "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+      "loudnessMatchGainDB" : 0.7743803188509641,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "pairwiseDifferenceFromPrevious" : {
+        "bandEnergyDistance" : 0.0038066681134814313,
+        "crestFactorDeltaDB" : -0.045578610108334965,
+        "differenceRMSDBFS" : -33.52310140444494,
+        "spectralCentroidDeltaHz" : 18.600880988608424
+      },
+      "plan" : {
+        "goals" : [
+          {
+            "attribute" : "clarity",
+            "direction" : "increase",
+            "locked" : false,
+            "strength" : 0.75
+          },
+          {
+            "attribute" : "brightness",
+            "direction" : "preserve",
+            "locked" : true,
+            "strength" : 0.75
+          }
+        ],
+        "nodes" : [
+          {
+            "category" : "corrective",
+            "confidence" : 0.58,
+            "enabled" : true,
+            "id" : "DB12962C-0C26-4311-AA3D-B50DAA26347C",
+            "locked" : false,
+            "parameters" : {
+              "frequencyHz" : 330,
+              "gainDB" : -2.7,
+              "q" : 0.9
+            },
+            "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+            "type" : "parametricEQ"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 1,
+            "enabled" : true,
+            "id" : "2DB2E3F4-4746-5210-ABA8-524DB2562FB5",
+            "locked" : false,
+            "parameters" : {
+              "gainDB" : 0.7743803188509641
+            },
+            "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+            "type" : "loudnessMatch"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 0.9,
+            "enabled" : true,
+            "id" : "683A6072-2D16-437F-8DDA-EC8D646CEF14",
+            "locked" : false,
+            "parameters" : {
+              "ceilingDB" : -3,
+              "lookaheadMS" : 0,
+              "releaseMS" : 80
+            },
+            "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+            "type" : "limiter"
+          }
+        ],
+        "outputConstraints" : {
+          "loudnessMatchPreview" : true,
+          "maxAddedGainDB" : 6,
+          "maxTruePeakDB" : -1,
+          "preserveMonoCompatibility" : true
+        },
+        "requestID" : "61F3A2B9-4746-4210-ABA8-524DB2562FB5",
+        "schemaVersion" : "1.0",
+        "scope" : {
+          "channelFormat" : "stereo",
+          "kind" : "importedFile",
+          "sourceType" : "synth",
+          "timeRangeSeconds" : {
+            "end" : 0.5,
+            "start" : 0
+          }
+        },
+        "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+      },
+      "planFileName" : "02-balanced-plan.json",
+      "previewID" : "C65706EB-1208-4D7B-81C7-32BE5EC94ABA",
+      "rejectionReasons" : [
+
+      ],
+      "status" : "valid",
+      "strength" : "balanced",
+      "warnings" : [
+
+      ]
+    },
+    {
+      "analysis" : {
+        "channelCount" : 2,
+        "frameCount" : 24000,
+        "metrics" : {
+          "boxiness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "boxiness_band_ratio",
+              "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.08967900989799786
+          },
+          "clipping_samples" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "clipping_samples",
+              "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+              "unit" : "count",
+              "validRange" : [
+                0,
+                48000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0
+          },
+          "crest_factor" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "crest_factor",
+              "limitation" : "Whole-interval sample-peak to RMS ratio.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 3.0850553071689943
+          },
+          "dc_offset" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "dc_offset",
+              "limitation" : "Mean sample value across all channels.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 7.381332741143372e-05
+          },
+          "harshness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "harshness_band_ratio",
+              "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.07725819959118342
+          },
+          "high_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "high_band_ratio",
+              "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 8.06395308542966e-12
+          },
+          "integrated_loudness_lufs" : {
+            "confidence" : 0.16666666666666666,
+            "definition" : {
+              "identifier" : "integrated_loudness_lufs",
+              "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -10.83254070310341
+          },
+          "low_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "low_band_ratio",
+              "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.8892516685169867
+          },
+          "maximum_momentary_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_momentary_loudness_lufs",
+              "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -10.77614634252042
+          },
+          "mid_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "mid_band_ratio",
+              "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.11074833147496549
+          },
+          "peak_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "peak_dbfs",
+              "limitation" : "Sample peak, not oversampled true peak.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -3.3201454193561224
+          },
+          "positive_spectral_flux" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "positive_spectral_flux",
+              "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                10
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.021033998886530174
+          },
+          "rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "rms_dbfs",
+              "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -13.105404503973084
+          },
+          "sibilance_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_band_ratio",
+              "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.388027752472322e-13
+          },
+          "sibilance_detector_rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_detector_rms_dbfs",
+              "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -33.57915754807629
+          },
+          "spectral_centroid_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_centroid_hz",
+              "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                24000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 374.93927340928155
+          },
+          "spectral_flatness" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_flatness",
+              "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 7.905749059787814e-13
+          },
+          "spectral_rolloff_85_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_rolloff_85_hz",
+              "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                24000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 210.9375
+          },
+          "spectral_slope_db_per_octave" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_slope_db_per_octave",
+              "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+              "unit" : "decibelsPerOctave",
+              "validRange" : [
+                -100,
+                100
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -18.013865889085967
+          },
+          "stereo_correlation" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "stereo_correlation",
+              "limitation" : "Zero-lag whole-interval Pearson correlation; frequency-dependent phase is not represented.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.9412902701719892
+          },
+          "transient_density_per_second" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "transient_density_per_second",
+              "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+              "unit" : "perSecond",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 12
+          },
+          "true_peak_dbtp" : {
+            "confidence" : 0.95,
+            "definition" : {
+              "identifier" : "true_peak_dbtp",
+              "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+              "unit" : "decibelsTruePeak",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -3.311846342648854
+          }
+        },
+        "sampleRate" : 48000,
+        "series" : {
+          "crest_factor_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "crest_factor_timeline",
+            "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+            "startSeconds" : 0,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              1000
+            ],
+            "values" : [
+              3.0191036801255504,
+              3.0843851677262943,
+              3.0334388039620728,
+              3.0259435409508675
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 9600
+          },
+          "positive_spectral_flux_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.021333333333333333,
+            "identifier" : "positive_spectral_flux_timeline",
+            "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+            "startSeconds" : 0.021333333333333333,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              10
+            ],
+            "values" : [
+              0.019446947699573978,
+              0.04623251908191414,
+              0.010331247149274367,
+              0.0035937729934421105,
+              0.04834894118238317,
+              0.008242917670883062,
+              0.005162190327992553,
+              0.05026830527288521,
+              0.005758939732429398,
+              0.006693101421536897,
+              0.05007031780874768,
+              0.002896483811162688,
+              0.008181548831391527,
+              0.04745392495548517,
+              0.002092927311146363,
+              0.009320733721580298,
+              0.042240418761270014,
+              0.010697807309120282,
+              0.010267427581435321,
+              0.03500190457132723,
+              0.01941159942215207
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 2048
+          },
+          "rms_dbfs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "rms_dbfs_timeline",
+            "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+            "startSeconds" : 0,
+            "unit" : "decibelsFS",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -13.337172142723766,
+              -13.119412821377674,
+              -12.958850179180867,
+              -12.937361830427703
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 9600
+          }
+        },
+        "version" : "1.1",
+        "warnings" : [
+
+        ]
+      },
+      "audioFileName" : "03-strong.wav",
+      "candidateIdentifier" : "source-aware-v1-h1-strong",
+      "candidateSummary" : "A strong source-aware deterministic plan; parameters scale within validated bounds and preservation constraints remain explicit.",
+      "difference" : {
+        "bandEnergyDistance" : 0.0066318638301157175,
+        "crestFactorDeltaDB" : -0.10259028328580877,
+        "differenceRMSDBFS" : -24.161462910748565,
+        "spectralCentroidDeltaHz" : 58.977191734829034
+      },
+      "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+      "loudnessMatchGainDB" : 1.505257900380423,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "pairwiseDifferenceFromPrevious" : {
+        "bandEnergyDistance" : 0.0003047246630888276,
+        "crestFactorDeltaDB" : -0.05211834988917488,
+        "differenceRMSDBFS" : -30.338504015718485,
+        "spectralCentroidDeltaHz" : 31.755875004422194
+      },
+      "plan" : {
+        "goals" : [
+          {
+            "attribute" : "clarity",
+            "direction" : "increase",
+            "locked" : false,
+            "strength" : 1
+          },
+          {
+            "attribute" : "brightness",
+            "direction" : "preserve",
+            "locked" : true,
+            "strength" : 1
+          }
+        ],
+        "nodes" : [
+          {
+            "category" : "corrective",
+            "confidence" : 0.58,
+            "enabled" : true,
+            "id" : "305125E0-D865-4316-8749-BFB2E0EC5E91",
+            "locked" : false,
+            "parameters" : {
+              "frequencyHz" : 330,
+              "gainDB" : -5.4,
+              "q" : 0.9
+            },
+            "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+            "type" : "parametricEQ"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 1,
+            "enabled" : true,
+            "id" : "999AC31B-7CB9-51AA-AB60-A4CF3B01B58D",
+            "locked" : false,
+            "parameters" : {
+              "gainDB" : 1.505257900380423
+            },
+            "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+            "type" : "loudnessMatch"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 0.9,
+            "enabled" : true,
+            "id" : "A78CD7B6-C03E-4D13-B597-21673BE2BEDB",
+            "locked" : false,
+            "parameters" : {
+              "ceilingDB" : -3,
+              "lookaheadMS" : 0,
+              "releaseMS" : 80
+            },
+            "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+            "type" : "limiter"
+          }
+        ],
+        "outputConstraints" : {
+          "loudnessMatchPreview" : true,
+          "maxAddedGainDB" : 6,
+          "maxTruePeakDB" : -1,
+          "preserveMonoCompatibility" : true
+        },
+        "requestID" : "D5DB8256-7CB9-41AA-AB60-A4CF3B01B58D",
+        "schemaVersion" : "1.0",
+        "scope" : {
+          "channelFormat" : "stereo",
+          "kind" : "importedFile",
+          "sourceType" : "synth",
+          "timeRangeSeconds" : {
+            "end" : 0.5,
+            "start" : 0
+          }
+        },
+        "sourceSnapshotID" : "D3999619-13E3-4977-B517-B53C636BF7D8"
+      },
+      "planFileName" : "03-strong-plan.json",
+      "previewID" : "5A326AB5-03C5-47B6-8268-8F20C7BBB465",
+      "rejectionReasons" : [
+
+      ],
+      "status" : "valid",
+      "strength" : "strong",
+      "warnings" : [
+
+      ]
+    }
+  ]
+}

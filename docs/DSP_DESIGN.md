@@ -2,47 +2,95 @@
 
 ## Signal flow and implementation status
 
-The serialized graph is an ordered acyclic list. Current compiler order is exactly
+The serialized graph is an ordered acyclic list, bounded to 32 nodes and 32 goals
+with rationales no larger than 4 KiB. Current compiler order is exactly
 the list order. Implemented: trim/loudness gain, polarity, high-pass, low-pass,
-single-band peaking EQ, linked feed-forward-style compressor, tanh saturation/soft
-clip, mid/side width, zero-lookahead peak limiter, meter no-op, and global finite
-sample sanitation. Deferred node types fail with `DSPError.unsupportedNode` rather
-than silently doing nothing.
+single-band peaking EQ, linked feed-forward-style compressor, linked split-band
+de-esser, tanh saturation/soft clip, mid/side width, zero-lookahead sample-peak limiter,
+meter no-op, and global finite-sample sanitation. Deferred node types fail with
+`DSPError.unsupportedNode` rather than silently doing nothing.
 
 ```text
 input → ordered enabled nodes → finite/denormal guard → output
 ```
 
 The peak limiter is a sample-peak safety module, not a true-peak limiter. Offline
-analysis and preview ceiling checks use an ITU-R BS.1770-5 true-peak estimate.
+analysis, preview ceiling checks, and fail-closed commit validation use a sample-rate-
+aware approximate true-peak measurement: Annex 2 at 48 kHz and a bounded windowed-
+sinc approximation at other rates.
+Real-time activation also requires the final enabled limiter's sample ceiling to be
+no higher than `outputConstraints.maxTruePeakDB`, including the limiter's implicit
+-1 dB default. This prevents an obvious structural contradiction, but it does not
+make a sample-peak limiter guarantee live inter-sample dBTP compliance.
 Compression uses a branching feed-forward peak envelope and supports hard or
 quadratic soft-knee gain calculation.
+The de-esser uses an exact digital one-pole -3 dB split, calibrates its detector from
+the same linked upper-band RMS metric, and applies shared gain to the upper band.
 
 ## Parameter ranges
 
 Authoritative ranges are in `PlanValidator.ranges`: gain -60...+24 dB; frequency
-10...24 kHz (clamped below Nyquist during compilation); Q 0.1...20; compressor
+10...24 kHz; Q 0.1...20; compressor
 threshold -80...0 dBFS; ratio 1...40; attack 0.05...500 ms; release 1...5000 ms;
 makeup -24...+24 dB; ceiling -24...0 dBFS; mix 0...1; width 0...2; drive
 0...36 dB; lookahead is currently constrained to 0 ms. Each node also has an allow-
 list of parameters, and enabled unimplemented node types fail validation.
+Compilation rejects frequencies that are not valid for the current 8–192 kHz
+sample rate rather than silently changing a de-esser detector frequency.
 
 ## Real-time rules
 
 Plan validation and node compilation occur off render. Node/filter/envelope storage
-is allocated at compile. State reset is explicit. Scalar changes require smoothing
-or sample-accurate event handling. A C11 atomic wrapper supports macOS 14 without a
-third-party dependency. Capture samples use atomic Float32 bit storage; a completed
-frame count is published with release ordering and read with acquire ordering. The
-storage reserves 8,192 guard frames beyond the user-visible capacity so an analysis
-copy can proceed while the producer advances; the reader retries if it is delayed
-beyond that guard.
+is allocated at compile. Mutable biquad, compressor, and de-esser mono/stereo state
+uses fixed scalar fields rather than Swift Arrays, avoiding copy-on-write allocation
+in the callback. State reset is explicit, and a generation counter causes a retained
+graph to reset before its first block after reactivation. Programmatic output-gain
+changes are smoothed over 10 ms. AU immediate and ramp events for output gain apply
+at sample offsets, ramps persist across callback boundaries, and the event walk is
+bounded to 256 entries per render. A later programmatic write cancels scheduled
+ownership while preserving the instantaneous value through the de-zipper. Sample-
+accurate events for general graph-node parameters are still open. A C11 atomic
+wrapper supports macOS 14 without a third-party dependency,
+and startup verifies that every atomic primitive used by the callback is lock-free.
+Capture samples use atomic Float32 bit storage; a completed frame count is published
+with release ordering and read with acquire ordering. Capture allocation is capped at
+24 MiB. Storage reserves one allocation-time `maximumFramesToRender` guard beyond
+the user-visible capacity so the largest accepted callback cannot overwrite the
+reader's protected interval in a single write. A callback larger than that bound is
+rejected without partial capture publication. The reader retries if it is delayed
+beyond the guard and fails closed if it cannot obtain a coherent snapshot.
 
 The offline `AudioBuffer` uses Swift arrays and never enters the AU callback. The AU
-path processes borrowed noninterleaved Float32 channel pointers in place. Tests prove
-sample parity with the offline graph when the same stream is split across irregular
-host blocks. The current graph is prepared before `allocateRenderResources` returns;
-whole-graph publication during active rendering remains intentionally unsupported.
+path processes borrowed noninterleaved Float32 channel pointers. Allocation creates
+a distinct preallocated input ABL and owned null-output storage sized from the
+allocation-time maximum. The callback resets the input ABL before every upstream
+pull, validates channel and byte sizes, copies into the host's original output when
+nonnull, and publishes owned pointers when output `mData` is null. This preserves
+the output contract even if upstream replaces its pull pointers. Tests prove sample
+parity with the offline graph when the same stream is split across irregular host
+blocks. The current graph is prepared before `allocateRenderResources` returns;
+whole replacement graphs may also be published during active rendering. One graph
+pointer/reset snapshot is retained for the complete callback, so publication cannot
+split a block between graphs. Lifecycle allocation/deallocation/reset/publication
+and off-thread status snapshots are serialized without adding a lock to the render
+callback. Host input is sanitized to zero for NaN/infinity before metering, capture,
+global bypass, or graph processing; finite global bypass remains sample-exact.
+
+Host reset and bypass have separate timeline semantics. Reset invalidates graph DSP
+history and any in-flight scheduled gain ramp at the next block boundary. A bypass
+transition invalidates graph history but preserves and advances scheduled gain state
+while graph DSP/output trim are skipped, so un-bypass resumes at the correct host
+timeline. An upstream `OutputIsSilence` flag causes the preallocated pulled input to
+be zeroed. The AU conservatively clears the outgoing flag after processing because
+stateful IIR nodes can emit a tail from zero input.
+
+Source inspection and custom-host tests show no explicit dynamic allocation,
+blocking lock, filesystem/network/database/log/UI work, or unbounded loop in the
+callback after the host pull. A thread-local development interposer covering malloc,
+calloc, realloc, free, aligned allocation, and macOS zone entry points observed zero
+heap operations across 4,000 complete representative callbacks. This is still not a
+formal guarantee that every OS/host/runtime path can never allocate; the measured
+interposer run used the production AU class in the custom host, not inside Logic.
 
 ## Latency
 
@@ -50,6 +98,10 @@ Current implemented modules have zero declared algorithmic latency. A future
 lookahead limiter, linear-phase process, denoiser, or convolution must report a
 fixed worst-case delay through `AUAudioUnit.latency`; Apple notes that variable
 latency is generally not useful to hosts ([latency API](https://developer.apple.com/documentation/audiotoolbox/auaudiounit/latency)). Reverb/delay tails must report `tailTime`.
+The current AU reports a static conservative `tailTime` of 60 seconds. Hosts may
+cache this property, and the supported low-frequency/high-Q IIR can be committed
+after instantiation, so dynamically returning zero for a dry graph would understate
+a later graph's tail. This is a host-scheduling bound, not inserted reverb or delay.
 
 ## Analysis 1.1
 
@@ -58,7 +110,7 @@ Implemented metrics explicitly avoid false precision:
 | Metric | Unit / range | Window | Limitation |
 |---|---|---|---|
 | sample peak | dBFS / -240...+24 | full interval | separate from true peak |
-| true peak | dBTP / -240...+24 | full interval | BS.1770 Annex 2 FIR; normative coefficient set is 48 kHz |
+| true peak | dBTP / -240...+24 | full interval | BS.1770 Annex 2 FIR at 48 kHz; bounded windowed-sinc estimate at other rates, not formally conformance-tested |
 | integrated loudness | LUFS / -240...+24 | 400 ms, 75% overlap | two-stage BS.1770 gate; unavailable below one block |
 | maximum momentary loudness | LUFS / -240...+24 | 400 ms | not the 3 s short-term measure |
 | RMS | dBFS / -240...+24 | full interval | not gated LUFS |
@@ -76,11 +128,40 @@ energy ranges and explicitly do not claim a perceptual defect.
 
 ## Test methodology
 
-Release tests cover BS.1770 calibration/gating/true peak, bypass identity,
-ceiling/finite safety, 44.1/48/88.2/96/192 kHz
-at 32/64/128/256/512/1024 frames, Float32 WAV round-trip, known 1 kHz sine peak/RMS/
-centroid, capture wrap order, borrowed-pointer/offline parity, dry-on-layout-failure,
-AU mono/stereo format negotiation, AU capture/state restoration, and BS.1770/RMS preview matching. Required next tests include
-impulse/sweep frequency response, compressor static/time curves, automation ramps,
-denormal timing, channel independence, fuzzed plans, golden hashes with tolerances,
-and callback deadline distributions under release host load.
+The current portable suite passes 68/68 in Debug and Release with the 14 selected
+official BS.2217-2 vectors; the ordinary Thread Sanitizer lane passes 67/67 with
+those external WAVs omitted and exits without a report. The added coverage exercises
+Short-term Loudness, LRA, source-aware analysis, production-intent hypotheses,
+semantic evaluation, immutable research ingestion, mailbox retention,
+reply-capacity reservation, strict reply correlation, command sequence/expiry, and
+fail-closed message-file quota behavior. The checks cover BS.1770
+calibration/gating and multi-rate approximate true-peak estimates, sample-peak
+limiter release/reset, gain smoothing reset, soft clipping, bypass identity,
+commit-time ceiling/finite safety, stateful-DSP recovery after nonfinite input,
+44.1/48/88.2/96/192 kHz at 32/64/128/256/512/1024 frames, Float32/PCM24 WAV
+round-trips and malformed-rate rejection, known 1 kHz analysis, capture wrap order,
+borrowed-pointer/offline parity, dry-on-layout-failure, fail-closed ring snapshots,
+exact materialized preview graphs, revision/lock preservation, and BS.1770/RMS
+preview matching, final-limiter/declared-peak consistency, bounded IPC retention,
+and checked-in JSON Schema parity with the runtime's 32-goal, 32-node and 4,096-byte
+UTF-8 rationale limits. The suite also rejects EQ frequencies outside the active
+sample rate's stable range and excessive high-band growth under an explicit
+harshness constraint.
+
+The expanded `AudioUnitHostProbe` adds AU mono/stereo negotiation, capture/state
+restoration, atomic publication/reset stress, two-instance isolation, exact
+revision/commit/undo/redo, persisted global bypass, nonfinite bypass sanitation,
+capture teardown/reallocation, atomic commit guards, and callback timing. Current
+probe cases also cover native bypass routing, a 60-second static tail, null output
+buffers, upstream pointer replacement, maximum-frame validation, output-silence
+handling, sample-offset output-gain events, cross-block ramps, reset/bypass timeline
+semantics, and one-graph-per-callback publication isolation. Current Debug, Release,
+and Thread Sanitizer runs succeeded. The 2026-07-14 Release verification measured
+9.6 us mean, 11.2 us p99, and 44.5 us maximum for a representative 128-frame, 48 kHz graph against
+a 2,666.7 us buffer deadline. With the heap interposer loaded, the same path measured
+9.2 us mean, 10.0 us p99, and 37.5 us maximum with zero heap operations across 4,000
+callbacks. These are custom-host results, not Logic-load certification.
+Required next tests include impulse/sweep frequency response, compressor static/time
+curves, denormal timing, channel independence, fuzzed plans, golden hashes with
+tolerances, broader heap/VM instrumentation, and deadline distributions under release
+Logic load.

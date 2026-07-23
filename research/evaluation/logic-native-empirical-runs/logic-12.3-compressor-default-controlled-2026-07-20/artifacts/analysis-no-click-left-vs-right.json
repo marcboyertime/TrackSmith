@@ -1,0 +1,84 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 0,
+          "1024": 0,
+          "16": 0,
+          "256": 0
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 19,
+          "correlation": 1.0,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 384000,
+        "differing_sample_count": 0,
+        "first_differing_sample": null,
+        "last_differing_sample": null,
+        "least_squares_gain": 1.0,
+        "least_squares_gain_db": 0.0,
+        "max_absolute_error_integer": 0,
+        "mean_error_normalized": 0.0,
+        "polarity": "noninverted",
+        "rms_error_dbfs": null,
+        "sample_count_match": true,
+        "sample_exact": true,
+        "zero_lag_correlation": 0.9999999999999999
+      }
+    ],
+    "format_match": true,
+    "frame_count_match": true,
+    "pcm_byte_exact": true
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 0.0,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 383999,
+        "nonzero_sample_count": 368000,
+        "peak_dbfs": -0.9999997091320568,
+        "peak_integer": 7476355,
+        "rms_dbfs": -11.033271918609975,
+        "sample_count": 384000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 8.0,
+    "file_sha256": "3138acb952507359cd05655f9b1e2121a1132ff805fb660c037f8b50ca0cdf0a",
+    "frame_count": 384000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/tmp/logic-native-empirical/runs/2026-07-20-compressor/cycle-bounce-baseline-clean48/baseline-split-no-click.R.wav",
+    "pcm_sha256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+    "sample_rate_hz": 48000
+  },
+  "schema_version": 2,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 0.0,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 383999,
+        "nonzero_sample_count": 368000,
+        "peak_dbfs": -0.9999997091320568,
+        "peak_integer": 7476355,
+        "rms_dbfs": -11.033271918609975,
+        "sample_count": 384000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 8.0,
+    "file_sha256": "ff5a38b9e6c562a176047b79cda9839fcd6bc37279779f1bd1054a5f9498545f",
+    "frame_count": 384000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/tmp/logic-native-empirical/runs/2026-07-20-compressor/cycle-bounce-baseline-clean48/baseline-split-no-click.L.wav",
+    "pcm_sha256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+    "sample_rate_hz": 48000
+  }
+}

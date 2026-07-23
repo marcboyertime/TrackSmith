@@ -1,0 +1,215 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether the perceived harshness is static/spectral across upper frequencies or dynamic/event-specific to vocal consonants/sibilance."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -47.83329582758859,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.024697182808925078,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.1471527129369727,
+          "planRequestID" : "3A787DCF-5E0B-480F-AFA4-E7D949FEE138",
+          "previewID" : "D7F9CB75-5A12-469C-B706-F25F7582EB82",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.8602183460888746,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -38.57118429743859,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.06931329328826408,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.1959746324210214,
+          "planRequestID" : "E65C537B-15F0-4328-B631-0560089BA8B8",
+          "previewID" : "12A4C9A6-C2ED-4669-B577-A0C4963CEC4D",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.9270600394210677,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -32.861413199441074,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.13281270018499924,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0475438408607096,
+          "planRequestID" : "396F12EB-2F64-4C71-A418-3B8A710059B3",
+          "previewID" : "1F17E283-65EE-48FB-94DF-B726AC0D2BBA",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.976212464081307,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "harsh:decrease"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Attenuate harsh upper-mid or sibilant peaks dynamically when present while preserving high-end clarity during quieter/non-harsh passages. | Grounded TrackSmith interpretation: decrease harsh: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘harsh’ may request less fatiguing or event-specific upper-mid energy without burying attack or intelligibility. This is one hypothesis, not a measured fact.",
+        "Apply a narrow, targeted static filter cut in the offensive upper-mid frequency zone to smooth harshness while maintaining clarity. | Grounded TrackSmith interpretation: decrease harsh: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘harsh’ may request less fatiguing or event-specific upper-mid energy without burying attack or intelligibility. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "VOC-05",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.06758238328459854
+        },
+        "vocal_10_20_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0033808535487968995
+        },
+        "vocal_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.6724580266745682
+        },
+        "vocal_200_500_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.6094118770185758
+        },
+        "vocal_5_10_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0011959866843920983
+        },
+        "vocal_high_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        },
+        "vocal_low_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "clear:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6337,
+      "providerLatencyMilliseconds" : 3910,
+      "providerOutputTokens" : 607,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:97d70b1fa258a37219a94bc73385c891ff290ce539da78196f9e3b835f9b382e",
+      "selectedPreviewID" : "12A4C9A6-C2ED-4669-B577-A0C4963CEC4D",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "vocal",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 4, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "0f21b408852f22e355a9dab7e59541e3f18f5fc1b942682cfc4efdf324bf66ca",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "vocal",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the perceived harshness is static/spectral across upper frequencies or dynamic/event-specific to vocal consonants/sibilance.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the perceived harshness is static/spectral across upper frequencies or dynamic/event-specific to vocal consonants/sibilance."
+      ],
+      "userRequest" : "reduce harshness while maintaining clarity",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:17:35Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "explanationGeneration",
+      "productionHypothesisGeneration",
+      "ambiguityDetection"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

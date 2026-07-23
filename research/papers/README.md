@@ -30,3 +30,21 @@ Collected July 12, 2026. Files are numbered to match the requested reading list.
 15. **ITU-R BS.1534-3: Method for the Subjective Assessment of Intermediate Quality Level of Audio Systems (MUSHRA)** — [ITU](https://www.itu.int/dms_pubrec/itu-r/rec/bs/R-REC-BS.1534-3-201510-I%21%21PDF-E.pdf)
 
 All 15 PDFs were checked for readability and page count before packaging.
+
+## Producer judgment expansion
+
+Collected and validated July 14, 2026. These local-use-only internal references are
+stored in the content-addressed research archive and exposed as readable categorized
+copies under `TrackSmith_Producer_Judgment_Expansion/`. Exact byte counts, hashes,
+versions, paths, and handling metadata are recorded in
+`TrackSmith_Producer_Judgment_Expansion/04_manifest/ingestion_results.json`.
+
+16. **The Role of Communication and Reference Songs in the Mixing Process** — [arXiv](https://arxiv.org/abs/2309.03404)
+17. **MixAssist: An Audio-Language Dataset for Co-Creative AI Assistance in Music Mixing** — [arXiv](https://arxiv.org/abs/2507.06329)
+18. **It's All About Speed: AI's Impact on Workflow in Music Production** — [arXiv](https://arxiv.org/abs/2605.29931)
+19. **Word Embeddings for Automatic Equalization in Audio Mixing** — [arXiv](https://arxiv.org/abs/2202.08898)
+20. **Beyond Musical Descriptors: Extracting Preference-Bearing Intent in Music Queries** — [arXiv](https://arxiv.org/abs/2602.12301)
+21. **MusicSem: A Semantically Rich Language--Audio Dataset of Natural Music Descriptions** — [arXiv](https://arxiv.org/abs/2602.17769)
+22. **A Semantic Timbre Dataset for the Electric Guitar** — [arXiv](https://arxiv.org/abs/2603.16682)
+23. **Exploring Trends in Audio Mixes and Masters: Insights from a Dataset Analysis** — [arXiv](https://arxiv.org/abs/2412.03373)
+24. **An Empirical Approach to the Relationship Between Emotion and Music Production Quality** — [arXiv](https://arxiv.org/abs/1803.11154)

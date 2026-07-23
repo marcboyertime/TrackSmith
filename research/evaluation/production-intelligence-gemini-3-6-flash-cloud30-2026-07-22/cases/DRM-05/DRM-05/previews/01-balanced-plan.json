@@ -1,0 +1,76 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "lowEnd",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "4CF864BD-AFEB-459A-BD79-4D258520F370",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 420,
+        "gainDB" : -0.8250000000000001,
+        "q" : 0.85
+      },
+      "rationale" : "Test a conservative masking-reduction interpretation selected by the validated hypothesis.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "42DDC9F2-2FB1-577D-B35E-AF79D0F80155",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.10159464156504328
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "EB42955F-31D9-4484-9A81-0697175288F2",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "0E9C88BF-2FB1-477D-B35E-AF79D0F80155",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "drums",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "3A05813D-2B36-44C7-9FC4-B11CA0E43F03"
+}

@@ -1,0 +1,414 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-compressor-default-controlled-48k-2026-07-20",
+  "product": "TrackSmith",
+  "recordedAt": "2026-07-20T04:29:28-04:00",
+  "identityIdentifier": "logic-pro-12.3:compressor",
+  "identityName": "Compressor",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured"
+  },
+  "project": {
+    "name": "TrackSmith Logic 12.3 Compressor Empirical 48k 2026-07-20",
+    "archivePath": "project/TrackSmith Logic 12.3 Compressor Empirical 48k 2026-07-20.logicx.zip",
+    "archiveSHA256": "7fbb265a70fce49d521503a93cd628c8c74efe05cb1236145214504d7b084f71",
+    "sampleRateHz": 48000,
+    "tempoBPM": 120,
+    "cycleRange": "bars 1 through 5, exactly 8.000 seconds",
+    "trackChannelFormat": "mono source through Stereo Out split bounce",
+    "activeTrack": "Audio 2, unity volume, centered, no sends or automation",
+    "inactiveTrack": "Audio 1 muted; retained only as an invalid earlier import and excluded from the signal path",
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0,
+    "trackPan": "center",
+    "outputVolumeDB": 0,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "savedState": "Compressor active in the controlled state recorded under nativeState.controlled",
+    "projectClosedBeforeArchive": true
+  },
+  "nativeState": {
+    "documentedSource": {
+      "title": "Logic Pro Effects for Mac",
+      "versionScope": "Logic Pro 12.3 publisher payload retrieved 2026-07-15",
+      "pages": "87-111",
+      "payloadSHA256": "b317e4bd9b69238c85040723fa11f14eed7ac58d12ac64cb055fd2e8e342f819"
+    },
+    "defaultObserved": {
+      "presetName": "Default Preset",
+      "thresholdDB": -20,
+      "ratio": 2.1,
+      "attackMS": 15,
+      "releaseMS": 51,
+      "makeUpDB": 0,
+      "knee": 0.7,
+      "detector": "RMS",
+      "autoGain": "-12 dB",
+      "distortion": "Off",
+      "circuitType": "Platinum Digital",
+      "sideChainDetection": "Max",
+      "limiterThresholdDB": 0,
+      "limiterOn": false,
+      "autoRelease": true,
+      "sideChainFilter": "Off",
+      "mixPercent": 100,
+      "inputGainDB": 0,
+      "outputGainDB": 0
+    },
+    "controlled": {
+      "presetName": "Default Preset modified",
+      "observedBeforeSave": true,
+      "observedAfterReload": true,
+      "thresholdDB": -20,
+      "ratio": 4.1,
+      "attackMS": 0,
+      "releaseMS": 51,
+      "makeUpDB": 0,
+      "knee": 0,
+      "detector": "Peak",
+      "autoGain": "Off",
+      "distortion": "Off",
+      "circuitType": "Platinum Digital",
+      "sideChainDetection": "Max",
+      "limiterThresholdDB": 0,
+      "limiterOn": false,
+      "autoRelease": false,
+      "sideChainFilter": "Off",
+      "mixPercent": 100,
+      "inputGainDB": 0,
+      "outputGainDB": 0
+    },
+    "importantInterpretation": "The controlled state isolates one steady Peak/hard-knee/4.1:1 Platinum Digital curve point set. It does not isolate release behavior, identify private topology, compare circuit models, or establish a preferred compressor sound."
+  },
+  "modelContextSummary": "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: the exact observed Compressor Default Preset produced level-dependent gain with Auto Gain -12 dB active and repeated with identical decoded PCM three times. Header bypass matched the source PCM exactly in three renders. In a controlled Platinum Digital state (threshold -20 dB, ratio 4.1:1, hard knee, Peak detector, 0 ms attack, 51 ms release, Auto Gain/Auto Release/distortion/limiter/side-chain filter off, 100% wet), steady ladder reduction matched the exposed hard-knee ratio relation within 0.000128 dB at the five above-threshold steps. The first controlled render differed from stabilized renders only in samples 1...1022; controlled render 2, render 3, and two post-reload renders were decoded-PCM identical. Logic restored the displayed controlled state after project reopen. This does not characterize time behavior, seven models, stereo linking, side-chain filters, distortion, limiter, parallel mix, sample-rate dependence, or musical preference.",
+  "input": {
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureName": "amplitude_ladder_1khz_mono.wav",
+    "artifactPath": "artifacts/source_amplitude_ladder_1khz_mono.wav",
+    "fileSHA256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+    "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+    "sampleRateHz": 48000,
+    "channels": 1,
+    "bitDepth": 24,
+    "frameCount": 384000,
+    "durationSeconds": 8,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The retained source copy is file- and PCM-identical to the suite fixture; see artifacts/source-preservation-analysis.json. The original fixture retained the same SHA-256 after the run."
+  },
+  "renderMethod": {
+    "LogicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "range": "bars 1 through 5",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRateHz": 48000,
+    "outputMode": "Split",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "Off/not selected",
+    "renderSchedulingMode": "Offline",
+    "bypassMethod": "Compressor plug-in header On/Off control",
+    "baselineGate": "No plug-in baseline had to match source PCM exactly and split L/R PCM had to match before effect evidence was admitted",
+    "setupRejections": [
+      "Earlier region-export attempts with wrong project-rate/import-range behavior produced non-384000-frame files and were rejected.",
+      "Earlier cycle bounces with the metronome enabled contaminated quiet ladder segments and were rejected.",
+      "Only the exact 384000-frame, metronome-off, source-transparent baseline lane was retained."
+    ]
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_this_sample_rate_channel_format_fixture_and_observed_default",
+      "evidence": "The complete documented default surface was directly observed; three default renders repeated exactly, and three header-bypass renders matched the source PCM exactly."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_platinum_digital_only",
+      "evidence": "Only Platinum Digital was rendered. RMS and Peak detector states were observed, but they were not isolated from all other state changes; the other six circuit models and other discrete modes remain unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_default_and_one_controlled_state_only",
+      "evidence": "The unmodified default and one explicit threshold/ratio/knee/attack/release state were rendered; no bounded parameter grid or interaction surface was completed."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_zero_lag_polarity_gain_peak_and_frame_count_only",
+      "evidence": "The analyzer measured zero-lag correlation, polarity, per-level gain, peak, clipping count, exact frame count, and channel equality. Impulse latency and tail behavior remain unmeasured."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_default_bypass_and_stabilized_controlled_state",
+      "evidence": "Default repeats 1-3 were decoded-PCM identical; bypass repeats 1-3 were source-exact; controlled repeats 2-3 and both post-reload renders were decoded-PCM identical. The first controlled render is retained as a transition diagnostic."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_the_measured_controlled_state",
+      "evidence": "After close/reopen, the controlled UI values were reobserved and both post-reload renders matched the stabilized pre-reload PCM exactly. The source file and decoded PCM hashes remained unchanged."
+    },
+    "threshold_ratio_knee_static_curve_makeup_autogain_and_level_matched_bypass": {
+      "status": "partial_one_static_curve_default_autogain_and_exact_bypass_without_formal_level_matched_listening",
+      "evidence": "The controlled hard-knee 4.1:1 curve and default Auto Gain behavior were measured on one steady amplitude ladder. Bypass was source-exact, but no musical level-matched listening comparison was performed."
+    },
+    "peak_rms_detector_sidechain_filter_and_external_sidechain_where_safely_available": {
+      "status": "partial_peak_and_rms_states_observed_not_isolated",
+      "evidence": "Default RMS and controlled Peak were observed; Max stereo side-chain detection and filter-off states were recorded. Detector choice was confounded with other edits, and side-chain filters/external side chain remain unmeasured."
+    },
+    "seven_circuit_models_distortion_modes_limiter_and_dry_wet_parallel_behavior": {
+      "status": "partial_platinum_digital_neutral_distortion_limiter_and_mix_only",
+      "evidence": "Only Platinum Digital with distortion off, limiter off, and 100% wet was rendered. Six models, distortion modes, active limiter, and dry/wet parallel behavior remain unmeasured."
+    }
+  },
+  "measurements": {
+    "baseline": {
+      "renderCount": 1,
+      "frameCount": 384000,
+      "durationSeconds": 8,
+      "leftPCMSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+      "matchesSourcePCM": true,
+      "leftRightPCMExact": true,
+      "peakDBFS": -0.9999997091320568
+    },
+    "default": {
+      "renderCount": 3,
+      "pcmSHA256": "c03b9fbb80c24b3214529263c1262e5d661c06e0db84375fd4cbe1c36c31f25b",
+      "repeatPCMExact": true,
+      "leftRightPCMExact": true,
+      "peakDBFS": -6.010533001296411,
+      "rmsDBFS": -15.949322316695296,
+      "declaredInputPeakDBFS": [-60, -48, -36, -30, -24, -18, -12, -6, -3, -1],
+      "measuredSteadyGainDB": [3.405461, 3.405494, 3.40546, 3.405458, 2.99261, 1.182267, -1.208592, -3.885228, -5.323219, -6.294201],
+      "interpretation": "This is the exact observed Default Preset including Auto Gain -12 dB; the positive low-level gain is not a transparent baseline and no level-preference inference is permitted."
+    },
+    "headerBypass": {
+      "renderCount": 3,
+      "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+      "matchesSourcePCM": true,
+      "repeatPCMExact": true,
+      "leftRightPCMExact": true,
+      "frameCount": 384000,
+      "peakDBFS": -0.9999997091320568
+    },
+    "controlled": {
+      "renderCountBeforeReload": 3,
+      "renderCountAfterReload": 2,
+      "stabilizedPCMSHA256": "cfa8b707bede1f82057b2fa0d199d1571a19ea7705c86b9f5f26db562380c269",
+      "stabilizedPreAndPostReloadPCMExact": true,
+      "leftRightPCMExact": true,
+      "peakDBFS": -15.365850384944228,
+      "rmsDBFS": -22.75875298882985,
+      "declaredInputPeakDBFS": [-60, -48, -36, -30, -24, -18, -12, -6, -3, -1],
+      "measuredSteadyGainDB": [0, 0, 0, 0, 0, -1.512067, -6.04871, -10.585293, -12.853588, -14.365784],
+      "hardKneeRatioLawMaximumAbsoluteErrorDBAboveThreshold": 0.0001276272075796392,
+      "clippedSampleCountPerSegment": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  },
+  "stateTransitionFindings": [
+    {
+      "finding": "Controlled render 1 differed from controlled render 2 in 979 samples, all within sample indices 1 through 1022; the remaining 382977 samples matched.",
+      "classification": "observed_initial_state_or_history_transition_not_stabilized_transfer",
+      "consequence": "Retain the transition render, but use stabilized repeats for deterministic transfer claims and require settling/repeat checks after material Compressor state changes."
+    },
+    {
+      "finding": "Controlled render 2, controlled render 3, and both post-reload renders had identical decoded PCM.",
+      "classification": "stabilized_repeatability_and_save_reload_reproduction",
+      "consequence": "The measured state is reproducible after stabilization for this exact host, project, fixture, and render path."
+    },
+    {
+      "finding": "Whole-file WAVE hashes varied while decoded PCM remained identical across several split-output repeats.",
+      "classification": "container_metadata_variation",
+      "consequence": "Use decoded PCM identity as the signal criterion while preserving every container hash."
+    },
+    {
+      "finding": "Metronome-on cycle bounces and wrong-rate/import-range exports failed baseline requirements before effect attribution.",
+      "classification": "rejected_setup_contamination",
+      "consequence": "A same-path source-exact baseline, exact frame count, correct project rate, and metronome-off check are mandatory gates."
+    }
+  ],
+  "interpretation": {
+    "stronglySupported": [
+      "The no-plug-in cycle bounce and Compressor header-bypass path are sample-transparent for this 48 kHz mono fixture after split-channel decoding.",
+      "The exact observed Default Preset is not neutral: with Auto Gain -12 dB active it adds approximately 3.4055 dB below the measured compression region and applies increasing reduction at higher ladder steps.",
+      "The controlled Peak/hard-knee/4.1:1 state follows the exposed static hard-knee ratio relation within 0.000128 dB on the five steady above-threshold ladder steps.",
+      "The stabilized controlled state repeats exactly and survives project save/reload with identical decoded PCM for this run.",
+      "A material state change can create a short history-sensitive first-render difference, so transition renders must not silently become settled baselines."
+    ],
+    "inferences": [
+      "Agreement with the exposed hard-knee ratio equation is consistent with predictable static gain computation in this one Platinum Digital state; it does not reveal detector smoothing, internal precision, or private topology.",
+      "The approximately 21.3 ms transition region may reflect state initialization or prior processing history, but this run does not identify its cause."
+    ],
+    "notEstablished": [
+      "Attack, release, Auto Release, pumping, recovery, overshoot, lookahead, or detector-window behavior.",
+      "Any isolated Peak-versus-RMS comparison, side-chain filter response, external side chain behavior, or Max-versus-Sum stereo linking.",
+      "The other six circuit models, distortion modes, active limiter, dry/wet behavior, harmonic color, noise, aliasing, latency, or sample-rate dependence.",
+      "Stereo-instance behavior; the split outputs here are duplicate channels from a mono source path, not a stereo-link experiment.",
+      "Perceptual superiority, musical suitability, universal settings, or a fixed mapping from words such as punchy, polished, warm, controlled, or aggressive."
+    ]
+  },
+  "claimBoundary": {
+    "directStateOnly": "Logic Pro 12.3 build 6674, 48 kHz mono source, recorded states, exact fixture, and offline split cycle-bounce path only.",
+    "noPrivateImplementationClaim": true,
+    "noPerceptualSuperiorityClaim": true,
+    "noWholeProcessorMasteryClaim": true,
+    "notTrackSmithHostAuthority": true,
+    "listeningDecisiveForProductionUse": true
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/source-preservation-analysis.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-baseline-no-click-left.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-no-click-left-vs-right.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-default-1-vs-2.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-default-1-vs-3.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-bypass-1.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-1-vs-2.json",
+      "jsonPath": ["comparison", "channel_comparisons", 0, "last_differing_sample"],
+      "equals": 1022
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-2-vs-3.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-2-vs-reload-1.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-2-vs-reload-2.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-compressor-controlled-2-L-vs-R.json",
+      "jsonPath": ["comparison", "pcm_byte_exact"],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-2.json",
+      "jsonPath": ["amplitude_ladder_transfer", "segments", 4, "least_squares_gain_db"],
+      "minimum": -0.000001,
+      "maximum": 0.000001
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-2.json",
+      "jsonPath": ["amplitude_ladder_transfer", "segments", 5, "least_squares_gain_db"],
+      "minimum": -1.5123,
+      "maximum": -1.5119
+    },
+    {
+      "artifactPath": "artifacts/analysis-controlled-2.json",
+      "jsonPath": ["amplitude_ladder_transfer", "segments", 9, "least_squares_gain_db"],
+      "minimum": -14.366,
+      "maximum": -14.3655
+    }
+  ],
+  "artifactFiles": [
+    {"path":"artifacts/analysis-baseline-no-click-left.json","sha256":"dde7355bdcfb50a941b2d596f1fb2ec7c09338b20237192919214597fa220312","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-bypass-1.json","sha256":"6a3bed74d4f916dbeef701038d1bdef52be005a711c86a9aa542f8672ef59c73","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-bypass-2.json","sha256":"b9266f3fb1b7fb3f69898367d6e2c7b7ea26a9d42f42ac4c404f7f7bd0ed5a2d","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-bypass-3.json","sha256":"3d67a3d77a5bf28a8f60f96cfe27eb4f8f3c78afd04ec1771dd2ec8487fac142","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-compressor-bypass-1-L-vs-R.json","sha256":"12570cc9c3899c1862a0bbdf99285b2bc5fe104259cfbe69364b53c83d66a3c4","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-compressor-controlled-2-L-vs-R.json","sha256":"b28c56e6a98b731a5677a4060ccaa3525283f7e0f7357da94b5b8060249a6cf7","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-compressor-controlled-reload-1-L-vs-R.json","sha256":"0b0e671475b0049ee4b11fb1138ca95ee288f9b32781197a4df2f5c718fea5c8","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-compressor-default-1-L-vs-R.json","sha256":"e9c58d169535eff42b2733a3c71ce6d0398acced57a600c5b54cc9c923542592","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-1-vs-2.json","sha256":"3e29b83e42100efe59c4b51209d519e56f71d6692a68307c2c3c2e805e477e8f","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-1-vs-3.json","sha256":"cd009cf94ef8eb25319afc93bd66ef7ca112e7ecba32d06935534224f4d952de","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-1.json","sha256":"7b0479e430a2b145bf614d33d30535e1953f7795c1bf8eca0f79213afcc73e17","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-2-vs-3.json","sha256":"5b2c16523933eba03dbc1f07fac48bd578198d19d094e787bacdbdf991505613","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-2-vs-reload-1.json","sha256":"a161da4d76144a3b5665b8938a53a964f369eab56fc283a5452b426cedbea01a","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-2-vs-reload-2.json","sha256":"829b847ad74cc3306fab38f8b40158d4b3fab35b035ddf8374386f5d92a29879","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-2.json","sha256":"dc24958e37827bfc36f4c77d2634227f2cd816a2b5e83394384e6d7ba76737ab","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-3.json","sha256":"5c43f70dbff5c622467f96f99e2f2da5949b2cdc49dadb9e47cfebacd1cccce3","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-reload-1-vs-2.json","sha256":"4a9b05bb6d591c87f7c29306cce0189148a8e61dbe66074ef8fa802f900ead17","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-reload-1.json","sha256":"88d6761633ccef18f10e45e0e0db43f87aa70b6ea13adbbaefde7692ff6f7267","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-controlled-reload-2.json","sha256":"f846a502beec2f6dc4164af8a8c2ef06d953829444db3c24a60c90944fb91729","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-default-1-vs-2.json","sha256":"062df26abdecb9e5bd00eab5a9920a38fd9e50738d13739f2cc635f9dc214834","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-default-1-vs-3.json","sha256":"8dc0c5a5e6382985c06bb9d26eb4b2ff23b6161d050f2ac9435b983f77cc3c7f","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-default-1.json","sha256":"cea2029c949cd5367e67551960a0342338351f6e7ee4bbd2d16a215322c1f266","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-default-2.json","sha256":"11d9f76ab927acf2adb422b927e86cb2c63f1de5f17d08e23cc661768c010aaa","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-default-3.json","sha256":"b267befb5a2c68fc94ef3e7303e55bc8e8d10d323324e7313b8007adfe04318e","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/analysis-no-click-left-vs-right.json","sha256":"bb04bcdf5c7a28bf7ddb56fcc66bef16d7437758b64acac6d31f77c99df70970","role":"objective signal-comparison artifact"},
+    {"path":"artifacts/baseline-split-no-click.L.wav","sha256":"ff5a38b9e6c562a176047b79cda9839fcd6bc37279779f1bd1054a5f9498545f","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/baseline-split-no-click.R.wav","sha256":"3138acb952507359cd05655f9b1e2121a1132ff805fb660c037f8b50ca0cdf0a","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-bypass-1.L.wav","sha256":"06e9d271ad62d87db829766d6e66002f3896d3aa954ee3bed6dcf4fb3a669c70","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-bypass-1.R.wav","sha256":"734289a4998fcf63921a5c962ad0c20f1345c4567ce5c3008a14c942bae6f6b6","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-bypass-2.L.wav","sha256":"a6fa2ae9b8463e8f0f4879f2d2897bff070a86fba85acaa77ff6aa7f7deb8c6f","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-bypass-2.R.wav","sha256":"6a6cba5f74c3e577e92b03be638c62fb33036521b6e73c3609e4f970a1fd1cc5","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-bypass-3.L.wav","sha256":"d75ae4316403610e4faaf503b98c46b9ee4b01b07dffaa6c8b3a7077a1f74fcd","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-bypass-3.R.wav","sha256":"591b6f09f5ac54a7591fb11b81504270e4b3c7015a0eb570de90d4e74016181a","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-1.L.wav","sha256":"020bcde4b87d96c74f4eb5ae31836d84549f3966aa7af5ffdfade5638263ccd2","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-1.R.wav","sha256":"5d88db2a0d78023cb0c2f44abb6f9bee90ffe0a6043342facf811cffdb59e1e0","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-2.L.wav","sha256":"6fceed69083e56b40d7ff9f03d7c14cea4e0b76a92a4c764cb944c1ca038ee22","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-2.R.wav","sha256":"b85789c639cd38c4b6e96cc5bfac7eccdb50dc73ba7680b36b8c2acb5ad18521","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-3.L.wav","sha256":"61da6b63739e0fe369a409333eadcc138f8b9506cb8be421d5a0bef51dc15c41","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-3.R.wav","sha256":"24ee768236a3d2c6c5aa90fa05bece9641d1e9579322d0d0671f65092e8dade3","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-reload-1.L.wav","sha256":"cb4bb6dc1f39310851a83407117858108af2d133be55486bd5eb732242aa0620","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-reload-1.R.wav","sha256":"4cde98c08a8e68039778dab0f22323ecbbcf17f9987e739329cc47a7478ee3b2","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-reload-2.L.wav","sha256":"7690d8fe1bb1fb70a094d13cf6206c2aa50c2cd68ef581c6f9ddb979dfc1d096","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-controlled-reload-2.R.wav","sha256":"17532bb2345a4a8bac2357454268d649f11e5485f7cb06befca629b8526fc803","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-default-1.L.wav","sha256":"148b2ebb3b4a10a7e09af1e3a323ccebf01f2ffbae9d64cc66f801047c0973d9","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-default-1.R.wav","sha256":"46527e6e47031b821bdc77295bd8686a1205b473a497a1fc394684f43ee622c3","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-default-2.L.wav","sha256":"6be7af8b03d8fd4a9232142b2fd47d6ee0b1c32dbcc7d588422ad25ff46e05fe","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-default-2.R.wav","sha256":"456ba8ef1556cbe9193c42d1167e4f79d7beea4b51b4bbd21c7b10184329aaee","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-default-3.L.wav","sha256":"182af686f4cd72b4486d7b068b42749c49585e7356330f5ead3301c2f83fd076","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/compressor-default-3.R.wav","sha256":"7a8b3a8bb0513bffe42a307d13bc4948b9fb9cdf4aae6c27f12971da8e551c18","role":"direct Logic offline cycle bounce"},
+    {"path":"artifacts/source_amplitude_ladder_1khz_mono.wav","sha256":"469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410","role":"immutable source fixture"},
+    {"path":"artifacts/source-preservation-analysis.json","sha256":"304dedd56222f848665aa774588672804f1ae190e8afd70d131cbf78eaf437b6","role":"objective source-preservation comparison"},
+    {"path":"project/TrackSmith Logic 12.3 Compressor Empirical 48k 2026-07-20.logicx.zip","sha256":"7fbb265a70fce49d521503a93cd628c8c74efe05cb1236145214504d7b084f71","role":"closed disposable Logic project archive"}
+  ],
+  "completionClaims": {
+    "allCompressorStatesCharacterized": false,
+    "exactTransferKnown": false,
+    "timeBehaviorCharacterized": false,
+    "allCircuitModelsCovered": false,
+    "stereoAndOtherRatesCovered": false,
+    "musicalPreferenceEstablished": false
+  }
+}

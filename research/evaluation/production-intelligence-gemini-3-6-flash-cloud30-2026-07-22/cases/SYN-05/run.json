@@ -1,0 +1,218 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -43.928907057254264,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.8750649655638583,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.2346409095127466,
+          "planRequestID" : "12E76C11-4147-4183-AD89-358DBAB90532",
+          "previewID" : "A7716442-0AA9-4473-9EE2-C9B2B8AC21F4",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -3.2218524718189023,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -38.28707699599104,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.8236820538894225,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.345836129953197,
+          "planRequestID" : "8B0A5CF9-42BF-4451-9B55-B39B6714723E",
+          "previewID" : "5945D3D5-1904-4165-9659-C53B1EAEC040",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.333126639869197,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -33.54116512162443,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 3.420404271824328,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.3621361122265365,
+          "planRequestID" : "17DC207F-16D4-4EEF-A8E3-E4619169AA7B",
+          "previewID" : "74A328C6-B22A-4A47-A260-9384DC37C56A",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -3.351145443164447,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "energetic:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Enhance rhythmic punch and harmonic energy while keeping upper-mid presence smooth and non-harsh. | Grounded TrackSmith interpretation: increase energetic: For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact.",
+        "Boost perceived energy and presence using gentle additive EQ while dynamic EQ or de-essing controls high-frequency harshness. | Grounded TrackSmith interpretation: increase energetic: For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "SYN-05",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.5383063567103239
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.09826801467732972
+        },
+        "maximum_third_octave_concentration_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.24308082235730025
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.9028428788629002
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.0971571211371019
+        },
+        "source_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.05438656748572463
+        },
+        "source_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.020959914187341243
+        },
+        "spectral_occupied_bin_fraction" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0146484375
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+
+      ],
+      "prohibited" : [
+        "harsh:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6358,
+      "providerLatencyMilliseconds" : 3592,
+      "providerOutputTokens" : 569,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:7b76a5dfb67cc9117250824efb4e5ec8e064704dcbd3598b2c1113bc205f9a8a",
+      "selectedPreviewID" : "5945D3D5-1904-4165-9659-C53B1EAEC040",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "synthKeys",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 4, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "3d26db6c3b379d2404acd8591716c35c58d960f0a35536886eac37953c0b3000",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "synth",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "make this more energetic without making it harsh",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:24:44Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "productionHypothesisGeneration",
+      "ambiguityDetection",
+      "semanticIntentInterpretation",
+      "explanationGeneration",
+      "conversationalReferenceInterpretation"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

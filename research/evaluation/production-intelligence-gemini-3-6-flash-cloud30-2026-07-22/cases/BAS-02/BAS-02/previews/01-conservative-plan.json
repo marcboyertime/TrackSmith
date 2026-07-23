@@ -1,0 +1,82 @@
+{
+  "goals" : [
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.25
+    },
+    {
+      "attribute" : "lowEnd",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.25
+    },
+    {
+      "attribute" : "muddiness",
+      "direction" : "doNotIncrease",
+      "locked" : true,
+      "strength" : 0.25
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "561612DA-3B5E-44CF-B4C5-C238D3661FDF",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 240,
+        "gainDB" : -0.9,
+        "q" : 0.9
+      },
+      "rationale" : "Reduce a source-specific masking candidate without equating the band measurement with a semantic verdict.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "AE522F5D-4BB5-58EB-AC42-4EAADFC389C5",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.14180151071266778
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "0AA1466A-19C9-4DBD-BF1E-111E03B9F319",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "E2136E10-4BB5-48EB-AC42-4EAADFC389C5",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "bass",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "DD4360D2-EC6A-4015-B875-02D908CEB1F0"
+}

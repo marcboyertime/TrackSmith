@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "1.0",
+  "product": "TrackSmith",
+  "logicVersionContext": "Logic Pro for Mac 12.3",
+  "knowledgeStatus": "deep_reviewed_advisory_host_workflow_knowledge",
+  "source": {
+    "identity": "Apple, Logic Pro User Guide for Mac",
+    "pageCount": 1324,
+    "sha256": "aa016d18d7e4f3559cdec54a99937d00b379617fee87510db1ec9853a4996cff",
+    "reviewCompletedDate": "2026-07-15",
+    "inventoryPages": "54-60",
+    "fullRelevantContentRead": true,
+    "localUseOnly": true
+  },
+  "entryCount": 30,
+  "safetyContract": {
+    "advisoryOnly": true,
+    "mayControlLogic": false,
+    "mayEmitAccessibilityActions": false,
+    "mayBecomeDSP": false,
+    "stateScopeAndFocusRequired": true
+  },
+  "entries": [
+    {
+      "name": "Pointer",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Selects, moves, Option-copies, resizes, and in supported contexts loops items; its click zones can temporarily become Fade, Loop, or Marquee behavior.",
+      "stateScope": "selection_region_event_or_view_dependent",
+      "productionConsequenceAndRisk": "Selection, click zone, modifiers, snap, focus, and item type determine the edit; one gesture is not one invariant operation.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Pencil",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Creates regions or events and can select, move, loop, or resize them; in Score it also creates notation symbols.",
+      "stateScope": "region_event_or_score_notation",
+      "productionConsequenceAndRisk": "Created MIDI notes inherit prior/default length, velocity, and channel; Score symbols and playable events are different state.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Eraser",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Deletes a clicked item and, when the clicked item is selected, can delete every currently selected item.",
+      "stateScope": "region_event_or_object",
+      "productionConsequenceAndRisk": "Selection broadening makes a local-looking click a multi-item deletion; host undo availability is not guaranteed to be a complete safety transaction.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Text",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Renames regions or objects and creates text in the Score Editor.",
+      "stateScope": "metadata_or_score_notation",
+      "productionConsequenceAndRisk": "Names and imported text are untrusted metadata; score text is not an acoustic instruction or executable authority.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Scissors",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Splits regions or events at the edit position and applies to all selected items.",
+      "stateScope": "region_or_event_boundaries",
+      "productionConsequenceAndRisk": "Snap, zero-crossing behavior, take/folder state, and selection determine the actual boundary and number of affected items.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Join",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Joins selected regions or events into a single region or event.",
+      "stateScope": "region_event_and_possible_derived_asset",
+      "productionConsequenceAndRisk": "Joining audio, MIDI, looped, Flex-enabled, take, or folder material has different conversion and asset consequences; source identity must be rechecked.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Solo",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Auditions a held region or event in isolation and scrubs items crossed by horizontal movement.",
+      "stateScope": "temporary_audition_transport",
+      "productionConsequenceAndRisk": "This is an audition gesture, not a committed mute/solo mix state; transport focus and monitoring route remain relevant.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Mute",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Toggles item mute state; if multiple items are selected, the clicked item's resulting state applies to all selected items.",
+      "stateScope": "region_or_event_mute_state",
+      "productionConsequenceAndRisk": "Mute is stateful and selection-broadened; it is not deletion, bypass, silence trimming, or track mute.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Zoom",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Changes view magnification around a dragged area and can restore the prior/default zoom.",
+      "stateScope": "view_only",
+      "productionConsequenceAndRisk": "Zoom affects evidence visibility and click precision but not audio; it must never be reported as a production edit.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Fade",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Creates and edits fades and fade-curve shapes on supported material.",
+      "stateScope": "audio_region_fade_state",
+      "productionConsequenceAndRisk": "Fade, crossfade, loop, region edge, and file-edge behavior differ; a fade can change attack, sustain, clicks, or overlap without changing the source file.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Automation Select",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Selects automation data and can create automation points at region borders.",
+      "stateScope": "track_or_region_automation",
+      "productionConsequenceAndRisk": "Parameter identity, automation scope, mode, snap, Move Automation with Regions, and locks must be explicit before an edit.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Automation Curve",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Bends the segment between two automation points to form a nonlinear transition.",
+      "stateScope": "track_or_region_automation",
+      "productionConsequenceAndRisk": "The visible curve is host automation data, not proof of a plug-in's audible smoothing or exact sample trajectory.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Marquee",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Selects time-bounded portions of regions for editing, playback, and Selection-Based Processing.",
+      "stateScope": "temporal_selection",
+      "productionConsequenceAndRisk": "A marquee defines scope but does not identify a source asset, track, take, or safe operation; subsequent commands determine material consequences.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Flex",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Creates or edits fundamental Flex timing controls without requiring the full Flex view.",
+      "stateScope": "audio_region_flex_state",
+      "productionConsequenceAndRisk": "Flex algorithm, tempo metadata, File Tempo, Follow Tempo/Pitch, groups, takes, and transient/tempo markers interact; timing edits can create artifacts.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Slip",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Moves content inside fixed region boundaries by the Snap value when extra source content exists.",
+      "stateScope": "region_content_offset",
+      "productionConsequenceAndRisk": "Session Player regions are first converted to MIDI, losing generative semantics; source availability, snap, and boundaries constrain the move.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Rotate",
+      "areas": [
+        "Tracks area",
+        "area-specific editors"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Moves region content while wrapping overflow to the opposite edge.",
+      "stateScope": "region_content_rotation_and_conversion",
+      "productionConsequenceAndRisk": "Rotating audio converts it to a one-track folder containing two regions; Session Player regions convert to MIDI first.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Finger",
+      "areas": [
+        "Piano Roll Editor",
+        "Step Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Resizes MIDI notes from anywhere in Piano Roll and moves selected steps to another position or lane in Step Editor.",
+      "stateScope": "midi_note_length_or_step_position",
+      "productionConsequenceAndRisk": "Area focus changes the operation; multi-note/step selection and modifiers can preserve or overwrite relative differences.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Quantize",
+      "areas": [
+        "Piano Roll Editor",
+        "Score Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Applies the active quantize value to clicked or selected MIDI events.",
+      "stateScope": "midi_event_timing",
+      "productionConsequenceAndRisk": "Grid value, strength, swing, Q-range, region parameters, and destructive versus playback quantization scope must be distinguished.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Velocity",
+      "areas": [
+        "Piano Roll Editor",
+        "Score Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Adjusts MIDI note velocity for individual or selected notes.",
+      "stateScope": "midi_note_velocity",
+      "productionConsequenceAndRisk": "Velocity may control level, timbre, articulation, modulation, or nothing depending on the instrument; it is not a measured dB change.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Brush",
+      "areas": [
+        "Piano Roll Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Paints MIDI notes or a defined brush pattern using current time-quantize and optional scale constraints.",
+      "stateScope": "midi_note_generation",
+      "productionConsequenceAndRisk": "It can create many events quickly and inherits pattern, quantize, key/scale, velocity, channel, and snap context.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Vibrato",
+      "areas": [
+        "Audio Track Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Adjusts detected Flex Pitch note vibrato by dragging vertically.",
+      "stateScope": "audio_region_flex_pitch_note",
+      "productionConsequenceAndRisk": "Requires Flex Pitch analysis; note segmentation and analysis can be wrong, and vibrato amount is not ordinary pitch correction.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Volume",
+      "areas": [
+        "Audio Track Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Adjusts gain for an analyzed audio note by dragging vertically.",
+      "stateScope": "audio_region_flex_pitch_note_gain",
+      "productionConsequenceAndRisk": "Per-note gain depends on Flex Pitch note boundaries and differs from region gain, clip gain, automation, fader level, compression, and normalization.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Move",
+      "areas": [
+        "Audio File Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Moves a selected section left or right within the audio file editor.",
+      "stateScope": "audio_file_content",
+      "productionConsequenceAndRisk": "The Audio File Editor is a destructive shared-file domain; aliases, other regions, backups, zero crossings, and source hashes must be considered.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Camera",
+      "areas": [
+        "Score Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Selects and exports a Page-view score section as an image.",
+      "stateScope": "score_image_export",
+      "productionConsequenceAndRisk": "Creates a derivative image file and depends on engraving/page state; it does not render audio or prove playback state.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Layout",
+      "areas": [
+        "Score Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Moves notation graphically without changing MIDI event timing, subject to item-specific positioning rules.",
+      "stateScope": "score_display_layout",
+      "productionConsequenceAndRisk": "Graphical position and playback position are distinct; moving some bar-level layout objects can still affect surrounding engraving.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Resize",
+      "areas": [
+        "Score Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Changes the displayed size of notes and supported score symbols.",
+      "stateScope": "score_display_layout",
+      "productionConsequenceAndRisk": "This is notation presentation, not MIDI velocity, duration, arrangement density, or audible level.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Voice Separation",
+      "areas": [
+        "Score Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Draws a split line that assigns notes to predefined voice MIDI channels.",
+      "stateScope": "midi_note_channel_and_score_voice",
+      "productionConsequenceAndRisk": "It changes event-channel/voice assignment and may affect routing or articulation; it is not source separation or audio demixing.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Line",
+      "areas": [
+        "Step Editor"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Creates or edits a linear series of event-beam values; it can edit MIDI events but cannot create MIDI note events.",
+      "stateScope": "step_editor_midi_event_values",
+      "productionConsequenceAndRisk": "Lane/event definition, grid, existing events, and line endpoints determine the affected data; it is not an audio envelope.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "MIDI Thru",
+      "areas": [
+        "MIDI Environment"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Assigns the clicked Environment object to the selected track in the main window.",
+      "stateScope": "environment_object_track_routing",
+      "productionConsequenceAndRisk": "This is host MIDI-routing authority outside TrackSmith's AU and can redirect external or internal destinations; it remains unsupported.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    },
+    {
+      "name": "Gain",
+      "areas": [
+        "Tracks area"
+      ],
+      "inventoryPages": "54-60",
+      "documentedBehavior": "Applies nondestructive audio-region gain in dB to whole regions, selected regions, or a marquee selection.",
+      "stateScope": "audio_region_or_marquee_gain",
+      "productionConsequenceAndRisk": "It differs from file gain, normalization, track fader, automation, plug-in gain, and loudness; selection scope and headroom require validation.",
+      "executionBoundary": "advisory_only_no_tracksmith_host_authority"
+    }
+  ]
+}

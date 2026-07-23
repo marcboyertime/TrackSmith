@@ -1,0 +1,81 @@
+{
+  "goals" : [
+    {
+      "attribute" : "closeness",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.8999999999999999
+    },
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.75
+    },
+    {
+      "attribute" : "brightness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.44,
+      "enabled" : true,
+      "id" : "947036F2-D3E0-4F10-8146-BB2801FC9786",
+      "locked" : false,
+      "parameters" : {
+        "driveDB" : 8.5,
+        "mix" : 0.42000000000000004
+      },
+      "rationale" : "Test a restrained nonlinear-density interpretation selected by the validated hypothesis while preserving the dry source.",
+      "type" : "saturation"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "5EFEF984-8310-56C4-893C-DB8FD1ADE505",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -3.419143089004523
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "950D9603-BA0B-4B75-806C-38B2D7FE5E23",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "12BFB8C9-8310-46C4-893C-DB8FD1ADE505",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "3DB9CF09-ED58-4224-B64C-37E0A2EFBA8F"
+}

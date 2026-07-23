@@ -1,0 +1,76 @@
+{
+  "goals" : [
+    {
+      "attribute" : "harshness",
+      "direction" : "decrease",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "punch",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "9B4ACEC9-410C-4FEA-A830-5E3BABCE0AB0",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 3200,
+        "gainDB" : -5.1,
+        "q" : 1.2
+      },
+      "rationale" : "Test a bounded source-specific presence-band reduction while preserving articulation.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "8D81D5C9-4DE2-54EB-A3BD-8D5AFB18EDDB",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.0784150424449237
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "6489D3E3-12B4-4437-804B-E8BA1E3597AD",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "C1C09484-4DE2-44EB-A3BD-8D5AFB18EDDB",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "91BBE404-E0B3-4C74-B086-81868D20CF81"
+}

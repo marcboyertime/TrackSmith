@@ -1,6 +1,34 @@
 # Corpus review and disposition
 
-This catalog records how every unique PDF family in the supplied corpus affects the product. Duplicate copies and alternate publication downloads are counted once. “Core” means full-text engineering review; “supporting” means method/results/limitations review; “peripheral” means systematic screening with no current MVP dependency.
+This catalog records how every unique PDF family in the original 70-source pre-Logic supplied
+and manifest-driven corpus affects the product. Duplicate copies and alternate
+publication downloads are counted once. “Core” means full-text engineering review;
+“supporting” means method/results/limitations review; “peripheral” means systematic
+screening with no current MVP dependency. Following the 2026-07-19 full relevant
+MusicSem review, those 70 PDFs comprise 27 Core/full-read, 35 Supporting, and eight
+Peripheral payloads. The four separately governed, completely read Logic Pro
+manuals made the original combined review cohort 74 unique PDFs and 31 deep/Core-
+equivalent, 35 Supporting, and eight Peripheral. They are no longer the complete
+current archive denominator.
+Supporting and Peripheral are valid dispositions, but they are **not** claims of
+full-text deep review. The per-slot [SOURCE_AUDIT.md](SOURCE_AUDIT.md) remains scoped to
+the original 61-unique-PDF supplied snapshot; the nine-paper expansion ledger is in
+[TRACKSMITH_PRODUCER_JUDGMENT_EXPANSION.md](TRACKSMITH_PRODUCER_JUDGMENT_EXPANSION.md),
+and the four Logic manuals are covered by their dedicated atlases.
+
+## Producer judgment, language, workflow, and quality
+
+| Source | Review | Product consequence |
+|---|---|---|
+| Communication and Reference Songs in the Mixing Process | Core | Treat rough mixes and references as negotiated, scoped intent with preservation constraints and iterative feedback. |
+| MixAssist | Supporting | Evaluate audio grounding separately from fluent instructional dialogue; favor an explainable teaching assistant over autonomous mixing. |
+| AI's Impact on Workflow in Music Production | Core | Optimize speed and menial work while preserving appropriation, correction, and creative agency. |
+| Word Embeddings for Automatic Equalization | Core | Semantic embeddings can seed source-aware hypotheses but remain below human labels and cannot define universal EQ presets. |
+| Preference-Bearing Intent in Music Queries | Core | Keep desired, rejected, and referential attributes distinct; similarity mentions are not automatically positive targets. |
+| MusicSem | Full relevant source read | Cover descriptive, contextual, situational, atmospheric, and metadata language while retaining subjectivity, metric, model-assisted-construction, and dataset-bias boundaries. |
+| Semantic Timbre Dataset for Electric Guitar | Core | Use source-specific vocabularies and magnitude tests; do not generalize synthetic monophonic-guitar mappings to other sources. |
+| Trends in Audio Mixes and Masters | Core | Use population patterns to prioritize QA, never as universal tonal, dynamics, width, or loudness targets. |
+| Emotion and Music Production Quality | Supporting | Stratify listening tests by expertise and keep emotional outcomes separate from technical defect measures. |
 
 ## Core production, DSP, analysis, and standards
 
@@ -88,11 +116,38 @@ This catalog records how every unique PDF family in the supplied corpus affects 
 | DAC-JAX, DAC docs/repository, and neural-codec sources | Supporting | Possible future model transport/representation; never in the real-time stable graph without profiling. |
 | TTA and detector comparison blogs | Peripheral | Product/web claims are not scientific evidence and do not drive architecture. |
 
+## Non-PDF sources requiring explicit evidence boundaries
+
+| Source | Review | Product consequence |
+|---|---|---|
+| Multimodal Auditory Intelligence pasted synthesis (item 036) | Non-evidence | Navigation aid only. It is a secondary synthesis, so every claim used by the product must be checked against the cited primary source. |
+| AuditEval repository (item 041) | Supporting | Candidate preservation/quality evaluation tooling; it is not yet validated for this product's stable DSP graph. |
+| AudioCraft CLAP-consistency API documentation (item 076) | Peripheral | Implementation reference only; an API definition is not perceptual validation. |
+| CLAP feature-extraction blog (item 079) | Peripheral | Navigation and implementation context only; it is not primary research evidence. |
+
 ## Corpus-level observations
 
 - Duplicate publication copies were common; content hashes prevent double counting.
+- The current live audit contains 131 non-quarantined searchable PDF paths
+  representing 104 unique payloads plus seven quarantined PDF paths. It contains 81
+  non-quarantined searchable HTML paths representing 79 hashes, of which 78 are
+  usable and one is empty; two non-usable paths share that empty digest. Three HTML
+  paths remain quarantined. These current archive counts do not alter the original
+  70-PDF disposition cohort above.
+- The two supplied TXT source payloads are now content-hash indexed separately. Item 023 is a fallback extraction recovered by the standalone WIMP 2017 PDF; item 036 is a pasted synthesis and is not independent evidence.
+- TTA-Bench item 074 is recovered through item 023 and the supplied WIMP 2017 PDF for *Deep Learning and Intelligent Audio Mixing*. Item 075, *Hybrid Transformers for Music Source Separation*, has no supplied payload; the gap is recorded and is nonblocking because source separation is outside the stable MVP.
+- A newly discovered untracked part-02 directory contributes one PDF path and one HTML path but no new payload hash. It remains untouched as user-supplied research and is not part of the commit scope.
 - Several sources are 2026 preprints. They inform experiments, not production promises.
 - Many generative papers evaluate short clips and use proxy metrics. Long-form continuity and non-target preservation remain weakly established.
 - The most mature evidence for the MVP is classic DSP, standards-compliant measurement, immutable state, and structured user control.
 - The most promising research path after MVP is effect-sensitive offline parameter optimization over the same deterministic graph.
+- Archive/index completeness and review depth are separate. In the original
+  70-PDF review cohort, 43 payloads remain below Core/full-read depth. The current
+  104-PDF archive uses the unified per-payload source ledger; no derived claim is made
+  that the newly visible payloads have equivalent review depth.
 
+## Implemented consequences verified against this review
+
+- Preview export now measures each level-matched option against its preceding viable sibling and rejects a collapsed option below the bounded pairwise difference gate. The manifest retains the pairwise metrics, so distinctness is auditable rather than inferred from strength labels.
+- Analysis schema 1.1 now carries versioned, bounded metric series: 200 ms RMS and crest-factor timelines with nominal 50% overlap (maximum 2,048 selected windows), plus normalized positive spectral-flux timelines (maximum 512 analyzed spectral windows).
+- Tests cover sibling identity/distinctness and confirm that the crest timeline is level invariant and that the timeline bounds are enforced.

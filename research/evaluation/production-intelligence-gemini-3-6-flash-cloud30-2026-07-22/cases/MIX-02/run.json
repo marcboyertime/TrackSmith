@@ -1,0 +1,235 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Crest factor and peak variability are already relatively tight, so controlling the mix must rely on gentle/targeted control rather than heavy compression."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -40.89801169751265,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.7576443936702422,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.10826810697912,
+          "planRequestID" : "C4B2A8A0-08F3-4746-8EF2-CA205C9A8116",
+          "previewID" : "B09DF8E0-E666-4DF9-A8FF-CB2A38789795",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.9685662840968834,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -40.82058355791007,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : 0.19990709892795522,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.018054272214133,
+          "planRequestID" : "29100A3C-E2F2-4FCF-8932-97A4CB3F324F",
+          "previewID" : "45AD8295-17EE-44ED-B806-6CF5AF9DB0EC",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.942127827688477,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -29.37587239316372,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 2.2090524546290506,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.1099854280450656,
+          "planRequestID" : "8795F4B8-34A4-4BD7-847B-B93E69D598E9",
+          "previewID" : "2F3F9FA8-1E99-4424-8FD3-DC2C7181BFA2",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.969244729013063,
+          "warnings" : [
+            "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "controlled:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Apply subtle, low-ratio compression to smooth out unpredictable level spikes without flattening dynamic range or transient punch. | Grounded TrackSmith interpretation: increase controlled: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘controlled’ may request reduced unwanted variability or peaks without erasing musical dynamics. This is one hypothesis, not a measured fact.",
+        "Address unneeded low-end resonance or excessive low-mid buildup to make the mix sound tighter and more controlled without affecting overall dynamics. | Grounded TrackSmith interpretation: increase controlled: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘controlled’ may request reduced unwanted variability or peaks without erasing musical dynamics. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "MIX-02",
+      "measuredEvidence" : {
+        "integrated_loudness_lufs" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "loudnessUnitsFullScale",
+          "value" : -11.423935898087864
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.34646544734810725
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.03608606711747272
+        },
+        "mix_250_hz_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.047309258873243096
+        },
+        "mix_above_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.00010670213860514441
+        },
+        "mix_below_250_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.9525840389881508
+        },
+        "mix_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 2.742119751839569
+        },
+        "mix_spectral_slope_db_per_octave" : {
+          "confidence" : 1,
+          "unit" : "decibelsPerOctave",
+          "value" : -2.9792631468981208
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.8866936651469377
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.11330633485307019
+        },
+        "true_peak_dbtp" : {
+          "confidence" : 0.95,
+          "unit" : "decibelsTruePeak",
+          "value" : -3.0234350846780034
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "dynamic:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 7179,
+      "providerLatencyMilliseconds" : 3421,
+      "providerOutputTokens" : 571,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:06e811b8a3bde24a0f39dedf68ad11f256d4a570b7eb2b9df097c34f0ffdfa62",
+      "selectedPreviewID" : "B09DF8E0-E666-4DF9-A8FF-CB2A38789795",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "fullStereoMix",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 1, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "d83f6531e533562b3b6e85678eaf94119c09730aaa5bdfbee485c27cbe90c0a7",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "fullMix",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Crest factor and peak variability are already relatively tight, so controlling the mix must rely on gentle/targeted control rather than heavy compression.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Crest factor and peak variability are already relatively tight, so controlling the mix must rely on gentle/targeted control rather than heavy compression."
+      ],
+      "userRequest" : "make this more controlled but preserve dynamics",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:25:14Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "ambiguityDetection",
+      "explanationGeneration",
+      "conversationalReferenceInterpretation",
+      "productionHypothesisGeneration",
+      "semanticIntentInterpretation"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

@@ -1,0 +1,75 @@
+{
+  "goals" : [
+    {
+      "attribute" : "warmth",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.75
+    },
+    {
+      "attribute" : "clarity",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.75
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.56,
+      "enabled" : true,
+      "id" : "50CD2000-3925-422C-BF2D-F7323FFDF2C5",
+      "locked" : false,
+      "parameters" : {
+        "driveDB" : 6.75,
+        "mix" : 0.5249999999999999
+      },
+      "rationale" : "Use a source-specific low-mix nonlinear density hypothesis; ‘warm’ is not reduced to one EQ band or analog label.",
+      "type" : "saturation"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "370B69E1-51A6-5A2E-995E-0D82BD64BF8A",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -3.536814842757792
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "5321E888-750D-4134-B1D8-FD596C536831",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "7B4A28AC-51A6-4A2E-995E-0D82BD64BF8A",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "E4683DA9-DF08-42A0-A37B-8EFE2584B083"
+}

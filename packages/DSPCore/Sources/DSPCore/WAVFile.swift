@@ -37,6 +37,9 @@ public enum WAVFile {
             offset = end + (size % 2)
         }
         guard let format, let audioData else { throw WAVError.invalidFile("Missing fmt or data chunk") }
+        guard (8_000...768_000).contains(format.sampleRate) else {
+            throw WAVError.invalidFile("Sample rate must be between 8 kHz and 768 kHz")
+        }
         let supportedIntegerPCM = format.audio == 1 && [16, 24, 32].contains(format.bits)
         guard (format.channels == 1 || format.channels == 2), supportedIntegerPCM || (format.audio == 3 && format.bits == 32) else {
             throw WAVError.unsupportedFormat(audioFormat: format.audio, bitsPerSample: format.bits, channels: format.channels)
@@ -69,13 +72,13 @@ public enum WAVFile {
     }
 
     public static func writeFloat32(_ buffer: AudioBuffer, url: URL) throws {
-        let dataSize = buffer.frameCount * buffer.channelCount * 4
+        let (sampleRate, dataSize) = try validatedWriteFormat(buffer, bytesPerSample: 4)
         var output = Data()
         output.append(contentsOf: Array("RIFF".utf8)); appendUInt32(UInt32(36 + dataSize), to: &output)
         output.append(contentsOf: Array("WAVEfmt ".utf8)); appendUInt32(16, to: &output)
         appendUInt16(3, to: &output); appendUInt16(UInt16(buffer.channelCount), to: &output)
-        appendUInt32(UInt32(buffer.sampleRate), to: &output)
-        appendUInt32(UInt32(buffer.sampleRate) * UInt32(buffer.channelCount) * 4, to: &output)
+        appendUInt32(sampleRate, to: &output)
+        appendUInt32(sampleRate * UInt32(buffer.channelCount) * 4, to: &output)
         appendUInt16(UInt16(buffer.channelCount * 4), to: &output); appendUInt16(32, to: &output)
         output.append(contentsOf: Array("data".utf8)); appendUInt32(UInt32(dataSize), to: &output)
         for frame in 0..<buffer.frameCount { for channel in 0..<buffer.channelCount { appendUInt32(buffer.channels[channel][frame].bitPattern, to: &output) } }
@@ -84,13 +87,13 @@ public enum WAVFile {
 
     public static func writePCM24(_ buffer: AudioBuffer, url: URL) throws {
         let bytesPerSample = 3
-        let dataSize = buffer.frameCount * buffer.channelCount * bytesPerSample
+        let (sampleRate, dataSize) = try validatedWriteFormat(buffer, bytesPerSample: bytesPerSample)
         var output = Data()
         output.append(contentsOf: Array("RIFF".utf8)); appendUInt32(UInt32(36 + dataSize), to: &output)
         output.append(contentsOf: Array("WAVEfmt ".utf8)); appendUInt32(16, to: &output)
         appendUInt16(1, to: &output); appendUInt16(UInt16(buffer.channelCount), to: &output)
-        appendUInt32(UInt32(buffer.sampleRate), to: &output)
-        appendUInt32(UInt32(buffer.sampleRate) * UInt32(buffer.channelCount * bytesPerSample), to: &output)
+        appendUInt32(sampleRate, to: &output)
+        appendUInt32(sampleRate * UInt32(buffer.channelCount * bytesPerSample), to: &output)
         appendUInt16(UInt16(buffer.channelCount * bytesPerSample), to: &output); appendUInt16(24, to: &output)
         output.append(contentsOf: Array("data".utf8)); appendUInt32(UInt32(dataSize), to: &output)
         for frame in 0..<buffer.frameCount { for channel in 0..<buffer.channelCount {
@@ -100,6 +103,28 @@ public enum WAVFile {
             output.append(UInt8(bits & 0xff)); output.append(UInt8((bits >> 8) & 0xff)); output.append(UInt8((bits >> 16) & 0xff))
         }}
         try output.write(to: url, options: .atomic)
+    }
+
+    private static func validatedWriteFormat(
+        _ buffer: AudioBuffer,
+        bytesPerSample: Int
+    ) throws -> (sampleRate: UInt32, dataSize: Int) {
+        guard buffer.channelCount == 1 || buffer.channelCount == 2,
+              buffer.sampleRate.isFinite,
+              (8_000...768_000).contains(buffer.sampleRate),
+              buffer.sampleRate.rounded(.towardZero) == buffer.sampleRate else {
+            throw WAVError.invalidFile("WAV output requires mono/stereo audio at an integer sample rate between 8 kHz and 768 kHz")
+        }
+        let (sampleCount, sampleCountOverflow) = buffer.frameCount.multipliedReportingOverflow(
+            by: buffer.channelCount
+        )
+        let (dataSize, dataSizeOverflow) = sampleCount.multipliedReportingOverflow(by: bytesPerSample)
+        guard !sampleCountOverflow,
+              !dataSizeOverflow,
+              dataSize <= Int(UInt32.max) - 36 else {
+            throw WAVError.invalidFile("Audio payload exceeds the RIFF/WAV size limit")
+        }
+        return (UInt32(buffer.sampleRate), dataSize)
     }
 
     private static func readUInt16(_ data: Data, _ offset: Int) -> UInt16 { UInt16(data[offset]) | UInt16(data[offset + 1]) << 8 }

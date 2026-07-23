@@ -1,0 +1,84 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 979,
+          "1024": 24,
+          "16": 922,
+          "256": 468
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 19,
+          "correlation": 0.9999999992932375,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 384000,
+        "differing_sample_count": 979,
+        "first_differing_sample": 1,
+        "last_differing_sample": 1022,
+        "least_squares_gain": 0.9999999899855482,
+        "least_squares_gain_db": -8.698442375896731e-08,
+        "max_absolute_error_integer": 1072,
+        "mean_error_normalized": 2.3034711678822834e-10,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -111.27761586710449,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9999999992967922
+      }
+    ],
+    "format_match": true,
+    "frame_count_match": true,
+    "pcm_byte_exact": false
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": -2.0674119393030804e-08,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 383999,
+        "nonzero_sample_count": 368000,
+        "peak_dbfs": -15.365850384944228,
+        "peak_integer": 1430202,
+        "rms_dbfs": -22.75875298882985,
+        "sample_count": 384000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 8.0,
+    "file_sha256": "6fceed69083e56b40d7ff9f03d7c14cea4e0b76a92a4c764cb944c1ca038ee22",
+    "frame_count": 384000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/tmp/logic-native-empirical/runs/2026-07-20-compressor/validated-cycle-no-click/compressor-controlled-2.L.wav",
+    "pcm_sha256": "cfa8b707bede1f82057b2fa0d199d1571a19ea7705c86b9f5f26db562380c269",
+    "sample_rate_hz": 48000
+  },
+  "schema_version": 2,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": -2.0904466509819032e-08,
+        "first_nonzero_sample": 2,
+        "last_nonzero_sample": 383999,
+        "nonzero_sample_count": 367999,
+        "peak_dbfs": -15.365850384944228,
+        "peak_integer": 1430202,
+        "rms_dbfs": -22.75875290795341,
+        "sample_count": 384000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 8.0,
+    "file_sha256": "020bcde4b87d96c74f4eb5ae31836d84549f3966aa7af5ffdfade5638263ccd2",
+    "frame_count": 384000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/tmp/logic-native-empirical/runs/2026-07-20-compressor/validated-cycle-no-click/compressor-controlled-1.L.wav",
+    "pcm_sha256": "7ab8eb432e65f11afd6ee1b21f8a9fc0ad4cc0575ad3fd7a26e81b7652f3b63d",
+    "sample_rate_hz": 48000
+  }
+}

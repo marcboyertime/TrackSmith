@@ -4,14 +4,16 @@
   "title": "Logic Audio Assistant Processing Plan",
   "type": "object",
   "additionalProperties": false,
+  "x-implementedNodeTypes": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "deEsser", "softClipper", "saturation", "stereoWidth", "limiter", "outputTrim", "loudnessMatch", "meter"],
+  "$comment": "The node enum is the stable serialized vocabulary. PlanValidator rejects enabled node types not listed in x-implementedNodeTypes and performs node-specific parameter, graph, lock, gain, snapshot, and sample-rate validation that JSON Schema cannot fully express.",
   "required": ["schemaVersion", "requestID", "sourceSnapshotID", "scope", "goals", "nodes", "outputConstraints"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
     "requestID": { "$ref": "#/$defs/uuid" },
     "sourceSnapshotID": { "$ref": "#/$defs/uuid" },
     "scope": { "$ref": "#/$defs/scope" },
-    "goals": { "type": "array", "items": { "$ref": "#/$defs/goal" }, "maxItems": 64 },
-    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" }, "maxItems": 128 },
+    "goals": { "type": "array", "items": { "$ref": "#/$defs/goal" }, "maxItems": 32 },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" }, "maxItems": 32 },
     "outputConstraints": { "$ref": "#/$defs/outputConstraints" }
   },
   "$defs": {
@@ -56,11 +58,98 @@
         "type": { "enum": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "expander", "deEsser", "softClipper", "saturation", "transientShaper", "stereoWidth", "midSideEQ", "delay", "reverb", "limiter", "outputTrim", "loudnessMatch", "meter"] },
         "enabled": { "type": "boolean" },
         "parameters": { "$ref": "#/$defs/parameters" },
-        "rationale": { "type": "string", "maxLength": 4096 },
+        "rationale": {
+          "type": "string",
+          "maxLength": 4096,
+          "x-maxUTF8Bytes": 4096,
+          "$comment": "PlanValidator enforces the normative 4096-byte UTF-8 limit; JSON Schema maxLength counts Unicode code points."
+        },
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
         "category": { "enum": ["corrective", "creative", "loudness"] },
         "locked": { "type": "boolean" }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "enum": ["expander", "transientShaper", "midSideEQ", "delay", "reverb"] } } },
+          "then": { "properties": { "enabled": { "const": false } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "inputTrim" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["gainDB"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "polarity" } } },
+          "then": { "properties": { "parameters": { "maxProperties": 0 } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "highPass" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["frequencyHz", "q"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "lowPass" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["frequencyHz", "q"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "parametricEQ" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["frequencyHz", "q", "gainDB"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "compressor" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["thresholdDB", "ratio", "attackMS", "releaseMS", "makeupGainDB", "kneeDB", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "expander" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["thresholdDB", "ratio", "attackMS", "releaseMS", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "deEsser" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["frequencyHz", "thresholdDB", "ratio", "attackMS", "releaseMS", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "softClipper" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["driveDB", "ceilingDB", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "saturation" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["driveDB", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "transientShaper" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["gainDB", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "stereoWidth" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["width", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "midSideEQ" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["frequencyHz", "q", "gainDB", "mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "delay" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "reverb" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["mix"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "limiter" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["ceilingDB", "releaseMS", "lookaheadMS"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "outputTrim" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["gainDB"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "loudnessMatch" } } },
+          "then": { "properties": { "parameters": { "propertyNames": { "enum": ["gainDB"] } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "meter" } } },
+          "then": { "properties": { "parameters": { "maxProperties": 0 } } }
+        }
+      ]
     },
     "parameters": {
       "type": "object",

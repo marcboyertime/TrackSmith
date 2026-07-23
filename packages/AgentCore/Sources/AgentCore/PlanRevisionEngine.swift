@@ -6,6 +6,17 @@ public struct PlanRevisionEngine: Sendable {
 
     public func revise(_ plan: ProcessingPlan, request: String) throws -> ProcessingPlan {
         let text = request.lowercased()
+        if (text.contains("undo") || text.contains("remove"))
+            && text.contains("compress")
+            && text.contains("keep")
+            && text.contains("makeup") {
+            throw PlannerError.contradictoryRequest(
+                "Compressor makeup gain belongs to the compressor node. Choose whether to remove it or replace it with an explicit output trim."
+            )
+        }
+        if text.contains("ignore") && text.contains("lock") {
+            throw PlannerError.unsupportedRequest("Locked processing cannot be changed by a conversational revision.")
+        }
         var revised = plan
         if text.contains("less compression") || text.contains("less of that") {
             revised.nodes = revised.nodes.map { node in
@@ -28,6 +39,9 @@ public struct PlanRevisionEngine: Sendable {
             }
         } else {
             throw PlannerError.unsupportedRequest("This deterministic revision is not implemented; no state was changed.")
+        }
+        guard revised.nodes != plan.nodes else {
+            throw PlannerError.unsupportedRequest("The request did not identify any unlocked processing that can be changed.")
         }
         revised.requestID = UUID()
         try PlanValidator().validate(revised, currentSnapshotID: plan.sourceSnapshotID, basePlan: plan)

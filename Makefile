@@ -1,4 +1,4 @@
-.PHONY: build test demo demo-audio preview-demo audition project au-host-probe native-build native-verify native-install verify
+.PHONY: build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -19,18 +19,29 @@ audition:
 	@test -n "$(SESSION)" || (echo 'usage: make audition SESSION="/path/to/preview folder"' && exit 2)
 	swift run -c release AuditionApp "$(SESSION)"
 
+vertical-slice:
+	@test -n "$(INPUT)" || (echo 'usage: make vertical-slice INPUT="/path/to/audio.wav" OUTPUT="/path/to/new evidence folder"' && exit 2)
+	@test -n "$(OUTPUT)" || (echo 'usage: make vertical-slice INPUT="/path/to/audio.wav" OUTPUT="/path/to/new evidence folder"' && exit 2)
+	swift run -c release VerticalSliceCLI "$(INPUT)" --source vocal --prompt "make this clearer, warmer, and more controlled without sounding overprocessed" --revision "use less compression" --output "$(OUTPUT)"
+
 project:
 	xcodegen generate
 
 au-host-probe:
 	swift run -c release AudioUnitHostProbe
 
+realtime-heap-probe:
+	./scripts/run-realtime-heap-probe.sh
+
+production-language-knowledge-check:
+	python3 research/scripts/build-production-language-knowledge.py --check
+
 native-build: project
 	xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath .build/xcode-derived CODE_SIGNING_ALLOWED=NO build
 
-native-verify: native-build au-host-probe
+native-verify: native-build au-host-probe realtime-heap-probe
 
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project build test au-host-probe
+verify: project production-language-knowledge-check build test au-host-probe

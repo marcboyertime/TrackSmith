@@ -1,0 +1,75 @@
+{
+  "goals" : [
+    {
+      "attribute" : "width",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.35
+    },
+    {
+      "attribute" : "width",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.45
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.64,
+      "enabled" : true,
+      "id" : "7A678BBC-681D-42D0-85CA-0488457B213D",
+      "locked" : false,
+      "parameters" : {
+        "mix" : 0.65,
+        "width" : 1.11
+      },
+      "rationale" : "Apply conservative stereo widening scaled down when mono retention or low-band side evidence is concerning.",
+      "type" : "stereoWidth"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "288F3B72-F87F-5508-BD0E-5E77974E975B",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -0.06326671597820344
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "9CBCD9D1-B61E-432D-AAE0-2550547B9E95",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "64CE7A3F-F87F-4508-BD0E-5E77974E975B",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "synth",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "F8603435-9D9C-4B61-89B0-F8A389A3F52D"
+}

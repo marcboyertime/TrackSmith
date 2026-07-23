@@ -5,12 +5,14 @@ public enum DSPError: Error, Equatable, CustomStringConvertible {
     case unsupportedNode(NodeType)
     case channelFormatChanged(expected: Int, actual: Int)
     case sampleRateChanged(expected: Double, actual: Double)
+    case parameterInvalidForSampleRate(ParameterID, value: Double, sampleRate: Double)
 
     public var description: String {
         switch self {
         case let .unsupportedNode(type): "DSP module \(type.rawValue) is not implemented in this milestone."
         case let .channelFormatChanged(expected, actual): "Graph was prepared for \(expected) channels, received \(actual)."
         case let .sampleRateChanged(expected, actual): "Graph was prepared at \(expected) Hz, received \(actual) Hz."
+        case let .parameterInvalidForSampleRate(parameter, value, sampleRate): "\(parameter.rawValue)=\(value) is invalid at \(sampleRate) Hz."
         }
     }
 }
@@ -32,6 +34,13 @@ public struct CompiledGraph: Sendable {
     public init(plan: ProcessingPlan, sampleRate: Double, channelCount: Int) throws {
         try PlanValidator().validate(plan)
         precondition(channelCount == 1 || channelCount == 2)
+        let expectedFormat: ChannelFormat = channelCount == 1 ? .mono : .stereo
+        guard plan.scope.channelFormat == expectedFormat else {
+            throw DSPError.channelFormatChanged(
+                expected: plan.scope.channelFormat == .mono ? 1 : 2,
+                actual: channelCount
+            )
+        }
         self.sampleRate = sampleRate
         self.channelCount = channelCount
         self.sourcePlan = plan
@@ -43,19 +52,31 @@ public struct CompiledGraph: Sendable {
             case .polarity:
                 return .polarity
             case .highPass:
-                return .biquad(BiquadNode(kind: .highPass, frequency: node.parameters[.frequencyHz, default: 80], q: node.parameters[.q, default: 0.707], gainDB: 0, sampleRate: sampleRate, channelCount: channelCount))
+                return .biquad(try BiquadNode(kind: .highPass, frequency: node.parameters[.frequencyHz, default: 80], q: node.parameters[.q, default: 0.707], gainDB: 0, sampleRate: sampleRate, channelCount: channelCount))
             case .lowPass:
-                return .biquad(BiquadNode(kind: .lowPass, frequency: node.parameters[.frequencyHz, default: 18_000], q: node.parameters[.q, default: 0.707], gainDB: 0, sampleRate: sampleRate, channelCount: channelCount))
+                return .biquad(try BiquadNode(kind: .lowPass, frequency: node.parameters[.frequencyHz, default: 18_000], q: node.parameters[.q, default: 0.707], gainDB: 0, sampleRate: sampleRate, channelCount: channelCount))
             case .parametricEQ:
-                return .biquad(BiquadNode(kind: .peaking, frequency: node.parameters[.frequencyHz, default: 1_000], q: node.parameters[.q, default: 1], gainDB: node.parameters[.gainDB, default: 0], sampleRate: sampleRate, channelCount: channelCount))
+                return .biquad(try BiquadNode(kind: .peaking, frequency: node.parameters[.frequencyHz, default: 1_000], q: node.parameters[.q, default: 1], gainDB: node.parameters[.gainDB, default: 0], sampleRate: sampleRate, channelCount: channelCount))
             case .compressor:
                 return .compressor(CompressorNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
-            case .softClipper, .saturation:
+            case .deEsser:
+                return .deEsser(try DeEsserNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
+            case .softClipper:
+                return .softClipper(SoftClipperNode(
+                    driveDB: node.parameters[.driveDB, default: 0],
+                    ceilingDB: node.parameters[.ceilingDB, default: -1],
+                    mix: node.parameters[.mix, default: 1]
+                ))
+            case .saturation:
                 return .saturator(SaturatorNode(driveDB: node.parameters[.driveDB, default: 0], mix: node.parameters[.mix, default: 1]))
             case .stereoWidth:
                 return .width(WidthNode(width: node.parameters[.width, default: 1], mix: node.parameters[.mix, default: 1]))
             case .limiter:
-                return .limiter(LimiterNode(ceilingDB: node.parameters[.ceilingDB, default: -1]))
+                return .limiter(LimiterNode(
+                    ceilingDB: node.parameters[.ceilingDB, default: -1],
+                    releaseMS: node.parameters[.releaseMS, default: 80],
+                    sampleRate: sampleRate
+                ))
             case .meter:
                 return nil
             default:
@@ -72,6 +93,7 @@ public struct CompiledGraph: Sendable {
     public mutating func process(_ buffer: inout AudioBuffer) throws {
         guard buffer.channelCount == channelCount else { throw DSPError.channelFormatChanged(expected: channelCount, actual: buffer.channelCount) }
         guard buffer.sampleRate == sampleRate else { throw DSPError.sampleRateChanged(expected: sampleRate, actual: buffer.sampleRate) }
+        sanitize(&buffer)
         for index in nodes.indices { nodes[index].process(&buffer) }
         sanitize(&buffer)
     }
@@ -87,6 +109,7 @@ public struct CompiledGraph: Sendable {
         guard (channelCount == 1 && right == nil) || (channelCount == 2 && right != nil) else {
             return .channelMismatch
         }
+        sanitizeRealtime(left: left, right: right, frameCount: frameCount)
         for index in nodes.indices {
             nodes[index].processRealtime(left: left, right: right, frameCount: frameCount)
         }
@@ -128,6 +151,8 @@ private enum CompiledNode: Sendable {
     case polarity
     case biquad(BiquadNode)
     case compressor(CompressorNode)
+    case deEsser(DeEsserNode)
+    case softClipper(SoftClipperNode)
     case saturator(SaturatorNode)
     case width(WidthNode)
     case limiter(LimiterNode)
@@ -139,9 +164,11 @@ private enum CompiledNode: Sendable {
             for channel in buffer.channels.indices { for frame in buffer.channels[channel].indices { buffer.channels[channel][frame] = -buffer.channels[channel][frame] } }
         case var .biquad(node): node.process(&buffer); self = .biquad(node)
         case var .compressor(node): node.process(&buffer); self = .compressor(node)
+        case var .deEsser(node): node.process(&buffer); self = .deEsser(node)
+        case let .softClipper(node): node.process(&buffer)
         case let .saturator(node): node.process(&buffer)
         case let .width(node): node.process(&buffer)
-        case let .limiter(node): node.process(&buffer)
+        case var .limiter(node): node.process(&buffer); self = .limiter(node)
         }
     }
 
@@ -160,18 +187,120 @@ private enum CompiledNode: Sendable {
             }
         case var .biquad(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .biquad(node)
         case var .compressor(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .compressor(node)
+        case var .deEsser(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .deEsser(node)
+        case let .softClipper(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .saturator(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .width(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
-        case let .limiter(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
+        case var .limiter(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .limiter(node)
         }
     }
 
     mutating func reset() {
         switch self {
+        case var .gain(node): node.reset(); self = .gain(node)
         case var .biquad(node): node.reset(); self = .biquad(node)
         case var .compressor(node): node.reset(); self = .compressor(node)
+        case var .deEsser(node): node.reset(); self = .deEsser(node)
+        case var .limiter(node): node.reset(); self = .limiter(node)
         default: break
         }
+    }
+}
+
+/// Linked split-band de-esser. A one-pole crossover isolates the upper band for
+/// detection and gain reduction while leaving the lower band at unity gain.
+private struct DeEsserNode: Sendable {
+    private let crossoverCoefficient: Double
+    private let thresholdDB: Double
+    private let ratio: Double
+    private let attackCoefficient: Double
+    private let releaseCoefficient: Double
+    private let mix: Double
+    private var lowPassLeft = 0.0
+    private var lowPassRight = 0.0
+    private var envelope = 0.0
+
+    init(parameters: [ParameterID: Double], sampleRate: Double, channelCount: Int) throws {
+        let frequency = parameters[.frequencyHz, default: 6_500]
+        guard (2_000...(sampleRate * 0.45)).contains(frequency) else {
+            throw DSPError.parameterInvalidForSampleRate(.frequencyHz, value: frequency, sampleRate: sampleRate)
+        }
+        let omega = 2 * Double.pi * frequency / sampleRate
+        let distance = 1 - cos(omega)
+        crossoverCoefficient = sqrt(distance * distance + 2 * distance) - distance
+        thresholdDB = parameters[.thresholdDB, default: -28]
+        ratio = parameters[.ratio, default: 3]
+        let attackSeconds = parameters[.attackMS, default: 1.5] / 1_000
+        let releaseSeconds = parameters[.releaseMS, default: 70] / 1_000
+        attackCoefficient = exp(-1 / max(attackSeconds * sampleRate, 1))
+        releaseCoefficient = exp(-1 / max(releaseSeconds * sampleRate, 1))
+        mix = parameters[.mix, default: 1]
+        _ = channelCount
+    }
+
+    mutating func process(_ buffer: inout AudioBuffer) {
+        if buffer.channelCount == 1 {
+            for frame in 0..<buffer.frameCount {
+                let dry = Double(buffer.channels[0][frame])
+                lowPassLeft += crossoverCoefficient * (dry - lowPassLeft)
+                let high = dry - lowPassLeft
+                let gain = detectorGain(linkedHigh: abs(high))
+                let wet = lowPassLeft + high * gain
+                buffer.channels[0][frame] = Float(dry * (1 - mix) + wet * mix)
+            }
+        } else {
+            for frame in 0..<buffer.frameCount {
+                let left = Double(buffer.channels[0][frame])
+                let right = Double(buffer.channels[1][frame])
+                lowPassLeft += crossoverCoefficient * (left - lowPassLeft)
+                lowPassRight += crossoverCoefficient * (right - lowPassRight)
+                let highLeft = left - lowPassLeft
+                let highRight = right - lowPassRight
+                let gain = detectorGain(linkedHigh: max(abs(highLeft), abs(highRight)))
+                let wetLeft = lowPassLeft + highLeft * gain
+                let wetRight = lowPassRight + highRight * gain
+                buffer.channels[0][frame] = Float(left * (1 - mix) + wetLeft * mix)
+                buffer.channels[1][frame] = Float(right * (1 - mix) + wetRight * mix)
+            }
+        }
+    }
+
+    mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            let dryLeft = Double(left[frame])
+            lowPassLeft += crossoverCoefficient * (dryLeft - lowPassLeft)
+            let highLeft = dryLeft - lowPassLeft
+            if let right {
+                let dryRight = Double(right[frame])
+                lowPassRight += crossoverCoefficient * (dryRight - lowPassRight)
+                let highRight = dryRight - lowPassRight
+                let gain = detectorGain(linkedHigh: max(abs(highLeft), abs(highRight)))
+                left[frame] = Float(dryLeft * (1 - mix) + (lowPassLeft + highLeft * gain) * mix)
+                right[frame] = Float(dryRight * (1 - mix) + (lowPassRight + highRight * gain) * mix)
+            } else {
+                let gain = detectorGain(linkedHigh: abs(highLeft))
+                left[frame] = Float(dryLeft * (1 - mix) + (lowPassLeft + highLeft * gain) * mix)
+            }
+        }
+    }
+
+    private mutating func detectorGain(linkedHigh: Double) -> Double {
+        let coefficient = linkedHigh > envelope ? attackCoefficient : releaseCoefficient
+        envelope = linkedHigh + coefficient * (envelope - linkedHigh)
+        let levelDB = 20 * log10(max(envelope, 1e-12))
+        let overDB = max(0, levelDB - thresholdDB)
+        let gainReductionDB = (1 / ratio - 1) * overDB
+        return pow(10, gainReductionDB / 20)
+    }
+
+    mutating func reset() {
+        envelope = 0
+        lowPassLeft = 0
+        lowPassRight = 0
     }
 }
 
@@ -206,6 +335,8 @@ private struct GainNode: Sendable {
             if let right { right[frame] *= gain }
         }
     }
+
+    mutating func reset() { current = 1 }
 }
 
 private enum BiquadKind: Sendable { case highPass, lowPass, peaking }
@@ -214,11 +345,18 @@ private struct BiquadState: Sendable { var x1 = 0.0; var x2 = 0.0; var y1 = 0.0;
 
 private struct BiquadNode: Sendable {
     private let b0, b1, b2, a1, a2: Double
-    private var states: [BiquadState]
+    private var leftState = BiquadState()
+    private var rightState = BiquadState()
 
-    init(kind: BiquadKind, frequency: Double, q: Double, gainDB: Double, sampleRate: Double, channelCount: Int) {
-        let f = min(max(frequency, 10), sampleRate * 0.49)
-        let omega = 2 * Double.pi * f / sampleRate
+    init(kind: BiquadKind, frequency: Double, q: Double, gainDB: Double, sampleRate: Double, channelCount: Int) throws {
+        guard frequency <= sampleRate * 0.49 else {
+            throw DSPError.parameterInvalidForSampleRate(
+                .frequencyHz,
+                value: frequency,
+                sampleRate: sampleRate
+            )
+        }
+        let omega = 2 * Double.pi * frequency / sampleRate
         let cosine = cos(omega)
         let sine = sin(omega)
         let alpha = sine / (2 * q)
@@ -236,19 +374,12 @@ private struct BiquadNode: Sendable {
             ca0 = 1 + alpha / amplitude; ca1 = -2 * cosine; ca2 = 1 - alpha / amplitude
         }
         b0 = cb0 / ca0; b1 = cb1 / ca0; b2 = cb2 / ca0; a1 = ca1 / ca0; a2 = ca2 / ca0
-        states = Array(repeating: BiquadState(), count: channelCount)
+        _ = channelCount
     }
 
     mutating func process(_ buffer: inout AudioBuffer) {
-        for channel in buffer.channels.indices {
-            for frame in buffer.channels[channel].indices {
-                let input = Double(buffer.channels[channel][frame])
-                let output = b0 * input + b1 * states[channel].x1 + b2 * states[channel].x2 - a1 * states[channel].y1 - a2 * states[channel].y2
-                states[channel].x2 = states[channel].x1; states[channel].x1 = input
-                states[channel].y2 = states[channel].y1; states[channel].y1 = output
-                buffer.channels[channel][frame] = Float(output)
-            }
-        }
+        processOfflineChannel(&buffer.channels[0], state: &leftState)
+        if buffer.channelCount == 2 { processOfflineChannel(&buffer.channels[1], state: &rightState) }
     }
 
 
@@ -257,33 +388,52 @@ private struct BiquadNode: Sendable {
         right: UnsafeMutablePointer<Float>?,
         frameCount: Int
     ) {
-        processChannel(left, frameCount: frameCount, stateIndex: 0)
-        if let right { processChannel(right, frameCount: frameCount, stateIndex: 1) }
+        Self.processChannel(left, frameCount: frameCount, state: &leftState, coefficients: (b0, b1, b2, a1, a2))
+        if let right { Self.processChannel(right, frameCount: frameCount, state: &rightState, coefficients: (b0, b1, b2, a1, a2)) }
     }
 
-    private mutating func processChannel(
-        _ samples: UnsafeMutablePointer<Float>,
-        frameCount: Int,
-        stateIndex: Int
-    ) {
-        for frame in 0..<frameCount {
+    private func processOfflineChannel(_ samples: inout [Float], state: inout BiquadState) {
+        for frame in samples.indices {
             let input = Double(samples[frame])
-            let output = b0 * input + b1 * states[stateIndex].x1 + b2 * states[stateIndex].x2
-                - a1 * states[stateIndex].y1 - a2 * states[stateIndex].y2
-            states[stateIndex].x2 = states[stateIndex].x1
-            states[stateIndex].x1 = input
-            states[stateIndex].y2 = states[stateIndex].y1
-            states[stateIndex].y1 = output
+            let output = b0 * input + b1 * state.x1 + b2 * state.x2 - a1 * state.y1 - a2 * state.y2
+            state.x2 = state.x1
+            state.x1 = input
+            state.y2 = state.y1
+            state.y1 = output
             samples[frame] = Float(output)
         }
     }
 
-    mutating func reset() { for index in states.indices { states[index] = BiquadState() } }
+    private static func processChannel(
+        _ samples: UnsafeMutablePointer<Float>,
+        frameCount: Int,
+        state: inout BiquadState,
+        coefficients: (Double, Double, Double, Double, Double)
+    ) {
+        let (b0, b1, b2, a1, a2) = coefficients
+        for frame in 0..<frameCount {
+            let input = Double(samples[frame])
+            let output = b0 * input + b1 * state.x1 + b2 * state.x2 - a1 * state.y1 - a2 * state.y2
+            state.x2 = state.x1
+            state.x1 = input
+            state.y2 = state.y1
+            state.y1 = output
+            samples[frame] = Float(output)
+        }
+    }
+
+    mutating func reset() {
+        leftState = BiquadState()
+        rightState = BiquadState()
+    }
 }
 
 private struct CompressorNode: Sendable {
     private let thresholdDB, ratio, kneeDB, attackCoefficient, releaseCoefficient, makeup, mix: Double
-    private var envelopes: [Double]
+    /// Positive gain reduction in dB, smoothed after the gain computer.
+    /// This is the log-domain detector placement analyzed in Giannoulis,
+    /// Massberg, and Reiss (JAES 60(6), 2012, equation 23).
+    private var gainReductionEnvelopeDB = 0.0
 
     init(parameters: [ParameterID: Double], sampleRate: Double, channelCount: Int) {
         thresholdDB = parameters[.thresholdDB, default: -18]
@@ -295,32 +445,15 @@ private struct CompressorNode: Sendable {
         releaseCoefficient = exp(-1 / max(release * sampleRate, 1))
         makeup = pow(10, parameters[.makeupGainDB, default: 0] / 20)
         mix = parameters[.mix, default: 1]
-        envelopes = Array(repeating: 0, count: channelCount)
+        _ = channelCount
     }
 
     mutating func process(_ buffer: inout AudioBuffer) {
         for frame in 0..<buffer.frameCount {
             var linkedLevel = 0.0
             for channel in buffer.channels.indices { linkedLevel = max(linkedLevel, abs(Double(buffer.channels[channel][frame]))) }
-            for channel in envelopes.indices {
-                let coefficient = linkedLevel > envelopes[channel] ? attackCoefficient : releaseCoefficient
-                envelopes[channel] = linkedLevel + coefficient * (envelopes[channel] - linkedLevel)
-            }
-            let envelope = envelopes.max() ?? 0
-            let inputDB = 20 * log10(max(envelope, 1e-12))
-            let overDB = inputDB - thresholdDB
-            let gainReductionDB: Double
-            if kneeDB <= 0 {
-                gainReductionDB = overDB > 0 ? (1 / ratio - 1) * overDB : 0
-            } else if overDB <= -kneeDB / 2 {
-                gainReductionDB = 0
-            } else if overDB >= kneeDB / 2 {
-                gainReductionDB = (1 / ratio - 1) * overDB
-            } else {
-                let kneePosition = overDB + kneeDB / 2
-                gainReductionDB = (1 / ratio - 1) * kneePosition * kneePosition / (2 * kneeDB)
-            }
-            let wetGain = pow(10, gainReductionDB / 20) * makeup
+            updateGainReduction(linkedLevel)
+            let wetGain = pow(10, -gainReductionEnvelopeDB / 20) * makeup
             let gain = Float((1 - mix) + mix * wetGain)
             for channel in buffer.channels.indices { buffer.channels[channel][frame] *= gain }
         }
@@ -335,33 +468,37 @@ private struct CompressorNode: Sendable {
         for frame in 0..<frameCount {
             var linkedLevel = abs(Double(left[frame]))
             if let right { linkedLevel = max(linkedLevel, abs(Double(right[frame]))) }
-            for channel in envelopes.indices {
-                let coefficient = linkedLevel > envelopes[channel] ? attackCoefficient : releaseCoefficient
-                envelopes[channel] = linkedLevel + coefficient * (envelopes[channel] - linkedLevel)
-            }
-            var envelope = 0.0
-            for channelEnvelope in envelopes { envelope = max(envelope, channelEnvelope) }
-            let inputDB = 20 * log10(max(envelope, 1e-12))
-            let overDB = inputDB - thresholdDB
-            let gainReductionDB: Double
-            if kneeDB <= 0 {
-                gainReductionDB = overDB > 0 ? (1 / ratio - 1) * overDB : 0
-            } else if overDB <= -kneeDB / 2 {
-                gainReductionDB = 0
-            } else if overDB >= kneeDB / 2 {
-                gainReductionDB = (1 / ratio - 1) * overDB
-            } else {
-                let kneePosition = overDB + kneeDB / 2
-                gainReductionDB = (1 / ratio - 1) * kneePosition * kneePosition / (2 * kneeDB)
-            }
-            let wetGain = pow(10, gainReductionDB / 20) * makeup
+            updateGainReduction(linkedLevel)
+            let wetGain = pow(10, -gainReductionEnvelopeDB / 20) * makeup
             let gain = Float((1 - mix) + mix * wetGain)
             left[frame] *= gain
             if let right { right[frame] *= gain }
         }
     }
 
-    mutating func reset() { for index in envelopes.indices { envelopes[index] = 0 } }
+    private mutating func updateGainReduction(_ linkedLevel: Double) {
+        let inputDB = 20 * log10(max(linkedLevel, 1e-12))
+        let overDB = inputDB - thresholdDB
+        let slope = 1 - 1 / ratio
+        let targetGainReductionDB: Double
+        if kneeDB <= 0 {
+            targetGainReductionDB = overDB > 0 ? slope * overDB : 0
+        } else if overDB <= -kneeDB / 2 {
+            targetGainReductionDB = 0
+        } else if overDB >= kneeDB / 2 {
+            targetGainReductionDB = slope * overDB
+        } else {
+            let kneePosition = overDB + kneeDB / 2
+            targetGainReductionDB = slope * kneePosition * kneePosition / (2 * kneeDB)
+        }
+        let coefficient = targetGainReductionDB > gainReductionEnvelopeDB
+            ? attackCoefficient
+            : releaseCoefficient
+        gainReductionEnvelopeDB = targetGainReductionDB
+            + coefficient * (gainReductionEnvelopeDB - targetGainReductionDB)
+    }
+
+    mutating func reset() { gainReductionEnvelopeDB = 0 }
 }
 
 private struct SaturatorNode: Sendable {
@@ -392,6 +529,45 @@ private struct SaturatorNode: Sendable {
 
     private func processSample(_ dry: Float) -> Float {
         let wet = tanh(dry * drive) / normalization
+        return dry * (1 - mix) + wet * mix
+    }
+}
+
+/// Bounded waveshaping path distinct from normalized saturation. At full wet,
+/// `ceiling` is a strict asymptotic bound; partial wet intentionally preserves
+/// some dry signal and should be followed by the plan's final safety limiter.
+private struct SoftClipperNode: Sendable {
+    let drive: Float
+    let ceiling: Float
+    let mix: Float
+
+    init(driveDB: Double, ceilingDB: Double, mix: Double) {
+        drive = Float(pow(10, driveDB / 20))
+        ceiling = Float(pow(10, ceilingDB / 20))
+        self.mix = Float(mix)
+    }
+
+    func process(_ buffer: inout AudioBuffer) {
+        for channel in buffer.channels.indices {
+            for frame in buffer.channels[channel].indices {
+                buffer.channels[channel][frame] = processSample(buffer.channels[channel][frame])
+            }
+        }
+    }
+
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            left[frame] = processSample(left[frame])
+            if let right { right[frame] = processSample(right[frame]) }
+        }
+    }
+
+    private func processSample(_ dry: Float) -> Float {
+        let wet = ceiling * tanh(dry * drive / max(ceiling, 1e-6))
         return dry * (1 - mix) + wet * mix
     }
 }
@@ -429,17 +605,25 @@ private struct WidthNode: Sendable {
 
 private struct LimiterNode: Sendable {
     let ceiling: Float
-    init(ceilingDB: Double) { ceiling = Float(pow(10, ceilingDB / 20)) }
-    func process(_ buffer: inout AudioBuffer) {
+    let releaseCoefficient: Float
+    private var gain: Float = 1
+
+    init(ceilingDB: Double, releaseMS: Double, sampleRate: Double) {
+        ceiling = Float(pow(10, ceilingDB / 20))
+        let releaseSeconds = max(releaseMS / 1_000, 1 / sampleRate)
+        releaseCoefficient = Float(exp(-1 / (releaseSeconds * sampleRate)))
+    }
+
+    mutating func process(_ buffer: inout AudioBuffer) {
         for frame in 0..<buffer.frameCount {
             var peak: Float = 0
             for channel in buffer.channels.indices { peak = max(peak, abs(buffer.channels[channel][frame])) }
-            let gain = peak > ceiling ? ceiling / max(peak, 1e-12) : 1
+            updateGain(forPeak: peak)
             for channel in buffer.channels.indices { buffer.channels[channel][frame] *= gain }
         }
     }
 
-    func processRealtime(
+    mutating func processRealtime(
         left: UnsafeMutablePointer<Float>,
         right: UnsafeMutablePointer<Float>?,
         frameCount: Int
@@ -447,9 +631,20 @@ private struct LimiterNode: Sendable {
         for frame in 0..<frameCount {
             var peak = abs(left[frame])
             if let right { peak = max(peak, abs(right[frame])) }
-            let gain: Float = peak > ceiling ? ceiling / max(peak, 1e-12) : 1
+            updateGain(forPeak: peak)
             left[frame] *= gain
             if let right { right[frame] *= gain }
         }
     }
+
+    private mutating func updateGain(forPeak peak: Float) {
+        let target: Float = peak > ceiling ? ceiling / max(peak, 1e-12) : 1
+        if target < gain {
+            gain = target
+        } else {
+            gain = target + releaseCoefficient * (gain - target)
+        }
+    }
+
+    mutating func reset() { gain = 1 }
 }

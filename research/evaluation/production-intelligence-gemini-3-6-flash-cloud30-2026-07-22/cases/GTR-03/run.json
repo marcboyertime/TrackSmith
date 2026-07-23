@@ -1,0 +1,218 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -56.01634615606487,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.5000115140074826,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0969973150002272,
+          "planRequestID" : "D7619AF2-3FD6-49F8-AEC2-0678DF29D368",
+          "previewID" : "A154BD31-4F08-4995-AC80-E96595AE91EB",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.682785435388015,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -49.86755641806504,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.137869107438366,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.088553992974972,
+          "planRequestID" : "C55F9D85-E8D8-4113-9192-C55FDDEC393C",
+          "previewID" : "1CF3F241-8157-434B-8330-5E08D895B39C",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.486789107208594,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -40.267786305367366,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.8328119810625711,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0887143122914233,
+          "planRequestID" : "5EEA2094-804D-4436-B6F6-B91B154CB2AE",
+          "previewID" : "33F4B295-5FD0-42D9-978B-A7055426BA30",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.713274265604749,
+          "warnings" : [
+            "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "aggressive:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Enhance harmonic grit and bite using saturation combined with dynamic high-mid management to avoid harshness. | Grounded TrackSmith interpretation: increase aggressive: For guitar role, pick/strum onset, amp or pedal nonlinearity, spectral density, and arrangement masking, ‘aggressive’ may request greater attack, density, or forward spectral energy, bounded against fatigue. This is one hypothesis, not a measured fact.",
+        "Emphasize pick attack and edge using transient-preserving compression and controlled additive EQ in the upper midrange. | Grounded TrackSmith interpretation: increase aggressive: For guitar role, pick/strum onset, amp or pedal nonlinearity, spectral density, and arrangement masking, ‘aggressive’ may request greater attack, density, or forward spectral energy, bounded against fatigue. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "GTR-03",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 1.680177447418938
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0,
+          "unit" : "ratio",
+          "value" : 0
+        },
+        "maximum_third_octave_concentration_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.4052195905285259
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0,
+          "unit" : "ratio",
+          "value" : 0
+        },
+        "side_energy_share" : {
+          "confidence" : 0,
+          "unit" : "ratio",
+          "value" : 0
+        },
+        "source_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0011465529035369906
+        },
+        "source_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.7270746047385133
+        },
+        "spectral_occupied_bin_fraction" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0322265625
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+
+      ],
+      "prohibited" : [
+        "harsh:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6541,
+      "providerLatencyMilliseconds" : 3517,
+      "providerOutputTokens" : 589,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:42240ee459c5a2f09698cd28238ca64c4e14f32d7ec841057236c81db9088895",
+      "selectedPreviewID" : "1CF3F241-8157-434B-8330-5E08D895B39C",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "guitar",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 2, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "f1e910d270357ff5ec68b37aa7e99b1e61e3b5f0ac17fe256d9d3fabf5166a2a",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "guitar",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "make this more aggressive without making it harsh",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:23:15Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "explanationGeneration",
+      "conversationalReferenceInterpretation",
+      "ambiguityDetection",
+      "semanticIntentInterpretation",
+      "productionHypothesisGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

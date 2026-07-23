@@ -14,6 +14,10 @@ explicit goals and prohibitions, renders conservative/balanced/strong graphs,
 level-matches them, rejects constraint violations, and waits for a commit. Every
 node remains inspectable, bypassable, removable, resettable, and lockable.
 
+That final sentence is the product target. The current companion cards expose
+inspection, enable/bypass and lock; per-card reset, removal, effect solo and advanced
+editing are not yet complete.
+
 ## Requirements
 
 1. The stable product works without project-wide Logic automation.
@@ -29,10 +33,23 @@ node remains inspectable, bypassable, removable, resettable, and lockable.
 The target MVP is the 15-step workflow in the product brief. The portable slice now
 accepts a real mono/stereo WAV and prompt, analyzes it, renders three independently
 auditionable level-matched WAVs, writes every plan/measurement, refuses overwrite,
-and proves source-byte preservation. It also proves graph revision for “undo only
-the compression” and exact bypass for an empty graph. Logic insertion, render-thread
-graph integration, capture UI, synchronized playback A/B, and project reload remain
-open acceptance gates.
+and proves source-byte preservation. A real user-owned vocal run additionally proves
+three pairwise-distinct options, exact audition/committed graph equivalence, “use less
+compression” with a locked EQ and unrelated nodes preserved, typed undo/redo, and
+sample-exact dry bypass.
+
+The custom AU host proves recent-input capture, synchronized preview planning,
+capture-bound exact commit, revision, undo/redo, two-instance isolation, global
+bypass, and AU `fullState` graph/bypass reload using the production AU class. The
+companion's bounded conversation/snapshot/edit history persists locally and restores
+with safe live-AU reconciliation. The current signed AU completed
+the same capture-to-revision-to-commit workflow in disposable Logic Pro 11.2.2 and
+Logic Pro 12.3 projects, including internal bypass/restore, exact graph/lock reload,
+unchanged source hashes, companion reconnect, and two-instance isolation. The 12.3
+lane identifies the exact installed compatibility binary and does not claim the
+uninstalled working tree ran inside Logic. Bus/stereo-output insertion,
+freeze/bounce, low-latency mode, general automation, and the full host matrix remain
+outside the proved MVP scope.
 
 ## Non-goals for 1.0
 

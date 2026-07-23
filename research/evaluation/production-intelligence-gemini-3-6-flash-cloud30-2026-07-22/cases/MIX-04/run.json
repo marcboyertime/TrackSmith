@@ -1,0 +1,233 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -51.87793501050045,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.827493042793332,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.196221471122719,
+          "planRequestID" : "1DB3A929-D89E-48AC-919A-A0FBE6023ECD",
+          "previewID" : "8534488C-9125-45BB-970B-BAB606A2C3D0",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -3.159676373639489,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -45.55520517448087,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.8267156364180934,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.275076399490881,
+          "planRequestID" : "CFF283EE-8584-4081-BEA5-B13784CADEEF",
+          "previewID" : "DE2C83FE-5213-42C2-98CA-C7BC2757CC35",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.2384315553336993,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -40.058766392655436,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 3.5413235561196963,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.38994760724519,
+          "planRequestID" : "6A4038FA-4DF5-44E2-BE16-0BD45983AAA3",
+          "previewID" : "29370F48-6C65-468D-8F7C-91A67F07D58F",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -3.3531937980802025,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "punchy:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Increase impact on leading transients using transient-preserving compression while keeping high-frequency energy controlled. | Grounded TrackSmith interpretation: increase punchy: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact.",
+        "Enhance punch via parallel processing while carving out high-mid harshness. | Grounded TrackSmith interpretation: increase punchy: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "MIX-04",
+      "measuredEvidence" : {
+        "integrated_loudness_lufs" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "loudnessUnitsFullScale",
+          "value" : -13.149794822306596
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.3594433479523076
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.03617093643066933
+        },
+        "mix_250_hz_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.04777252001369804
+        },
+        "mix_above_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.00010521687963974611
+        },
+        "mix_below_250_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.9521222631066611
+        },
+        "mix_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 3.3922940893248676
+        },
+        "mix_spectral_slope_db_per_octave" : {
+          "confidence" : 1,
+          "unit" : "decibelsPerOctave",
+          "value" : -2.8984148667427125
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.8873829229454648
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.1126170770545321
+        },
+        "true_peak_dbtp" : {
+          "confidence" : 0.95,
+          "unit" : "decibelsTruePeak",
+          "value" : -3.0616679427577154
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+
+      ],
+      "prohibited" : [
+        "harsh:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6860,
+      "providerLatencyMilliseconds" : 3492,
+      "providerOutputTokens" : 564,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:8b495db8af4a33f3bffca5616cba14bb9da6fdba57c384f5668149e9bc33cedb",
+      "selectedPreviewID" : "DE2C83FE-5213-42C2-98CA-C7BC2757CC35",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "fullStereoMix",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 3, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "81f1cb270f8f63cf430a44317db1f644331a5573dcd6ab29352c23d53e1519fe",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "fullMix",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "make this punchier without making it harsh",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:25:44Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "productionHypothesisGeneration",
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "conversationalReferenceInterpretation",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

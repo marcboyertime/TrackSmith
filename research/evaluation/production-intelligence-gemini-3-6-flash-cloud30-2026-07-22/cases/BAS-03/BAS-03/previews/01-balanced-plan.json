@@ -1,0 +1,80 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.75
+    },
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "0BD8F78F-35BA-4730-BE94-1C4EF774381E",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 56.937369422029114,
+        "kneeDB" : 7.25,
+        "makeupGainDB" : 0,
+        "mix" : 0.5525,
+        "ratio" : 2.925,
+        "releaseMS" : 338.4610293420619,
+        "thresholdDB" : -12.887990241987278
+      },
+      "rationale" : "Control signal-relative variability while preserving the explicitly protected dynamics or onset when present.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "A86300D0-D1DB-5BD2-9495-6F2FC2218470",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.2750381249436504
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "0C735B13-FE46-470B-850C-F056290D605C",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "E422419D-D1DB-4BD2-9495-6F2FC2218470",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "bass",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "922F0610-2944-4FCD-93CD-CF7570A98FB7"
+}

@@ -1,0 +1,235 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether masking is caused by low-mid accumulation or uncontrolled dynamics in the full mix."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -31.374782008890563,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.0998985765066784,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "B9396ED3-D94A-4CBE-9DB9-4792E80E5CDF",
+          "previewID" : "8F045D6A-AF4A-41B7-9B18-96229FF67C12",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.822441343637738,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -46.59825941559753,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : 2.5609416790473976,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.3039209441360047,
+          "planRequestID" : "49D7F750-3E88-412B-ADD1-26DFBED7C1ED",
+          "previewID" : "B4103E59-C91B-4763-90F6-73C8D4844DFE",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.145433827115264,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -25.710480321607104,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.960553398115616,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.098560041013067,
+          "planRequestID" : "84C7D1DE-F279-4A11-9B39-23E3AF1F5E4B",
+          "previewID" : "C70B6F8B-9637-4518-8EE4-ADC6016DFD98",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.90242055461818,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "clear:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Improve clarity by carving out low-mid resonant masking while keeping high-frequency balance unchanged. | Grounded TrackSmith interpretation: increase clear: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘clear’ may request reduced masking or excess density while preserving desired brightness and body. This is one hypothesis, not a measured fact.",
+        "Enhance clarity by dynamic control in low-mids without boosting high frequencies. | Grounded TrackSmith interpretation: increase clear: For mix-wide tonal distribution, section dynamics, crest behavior, stereo/mono translation, and source balance, ‘clear’ may request reduced masking or excess density while preserving desired brightness and body. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "MIX-01",
+      "measuredEvidence" : {
+        "integrated_loudness_lufs" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "loudnessUnitsFullScale",
+          "value" : -14.166975659847916
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.3627080376062892
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.035003405151147415
+        },
+        "mix_250_hz_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.04678171138162758
+        },
+        "mix_above_4_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.00010261284005551544
+        },
+        "mix_below_250_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.9531156757783176
+        },
+        "mix_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 3.738374105625516
+        },
+        "mix_spectral_slope_db_per_octave" : {
+          "confidence" : 1,
+          "unit" : "decibelsPerOctave",
+          "value" : -2.99468561184604
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.8892046090651096
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.11079539093489024
+        },
+        "true_peak_dbtp" : {
+          "confidence" : 0.95,
+          "unit" : "decibelsTruePeak",
+          "value" : -2.9401518036690897
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+
+      ],
+      "prohibited" : [
+        "bright:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6858,
+      "providerLatencyMilliseconds" : 3440,
+      "providerOutputTokens" : 586,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:37e4e5d7e65764cdb15ecd45c85651352ca230cfe2dd2cee06e0c9124700a306",
+      "selectedPreviewID" : "8F045D6A-AF4A-41B7-9B18-96229FF67C12",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "fullStereoMix",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 0, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "6db27c7fe0347b4139c13a7623a682ca9b51e5784cb6343f78978820e1ead5a7",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "fullMix",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether masking is caused by low-mid accumulation or uncontrolled dynamics in the full mix.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether masking is caused by low-mid accumulation or uncontrolled dynamics in the full mix."
+      ],
+      "userRequest" : "make this clearer without making it brighter",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:25:16Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "productionHypothesisGeneration",
+      "ambiguityDetection",
+      "semanticIntentInterpretation",
+      "conversationalReferenceInterpretation",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

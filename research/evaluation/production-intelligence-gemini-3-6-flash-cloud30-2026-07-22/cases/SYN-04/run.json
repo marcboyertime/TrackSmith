@@ -1,0 +1,220 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Determining whether the perceived roughness stems from narrow upper-mid resonances or harsh transient spikes."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -42.34517401784402,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.1211372506372097,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.1134144209398644,
+          "planRequestID" : "249C033B-10B3-4DF0-85EE-56DD633B1277",
+          "previewID" : "18A66AAF-87E3-4902-8163-70D410A9FDAB",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.097801930808476,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -38.267236312194875,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : 1.829806044255987,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.356662811589819,
+          "planRequestID" : "DDB709D6-1D4A-4520-8F61-69167299FFA8",
+          "previewID" : "BFBA5E07-1718-4755-B2B9-7AF0300C2A47",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.3376634743939664,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -36.35316278991489,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.2411561402699416,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.1228609650620838,
+          "planRequestID" : "8448761A-9478-4B18-B954-5C481C9477D6",
+          "previewID" : "7DBEEA5A-6EBB-45C6-ACD3-CAFED8BDA791",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -3.1071676804701327,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "smooth:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Reduce harsh upper-mid resonances to create a smoother tone while leaving broad dynamic variation intact. | Grounded TrackSmith interpretation: increase smooth: For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘smooth’ may request reduced abrupt spectral or level events while preserving life and definition. This is one hypothesis, not a measured fact.",
+        "Tame dynamic harshness spikes only when they occur, fully preserving overall macro dynamics and transient life. | Grounded TrackSmith interpretation: increase smooth: For keyboard or synth voicing, filter motion, envelope, layer density, stereo modulation, and musical role, ‘smooth’ may request reduced abrupt spectral or level events while preserving life and definition. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "SYN-04",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.4026429567953258
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.09846702009252077
+        },
+        "maximum_third_octave_concentration_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.25690418379092345
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.9026660485809137
+        },
+        "side_energy_share" : {
+          "confidence" : 0.5,
+          "unit" : "ratio",
+          "value" : 0.0973339514190854
+        },
+        "source_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.05440140837869321
+        },
+        "source_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.08701570362159802
+        },
+        "spectral_occupied_bin_fraction" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0146484375
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "dynamic:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6592,
+      "providerLatencyMilliseconds" : 3615,
+      "providerOutputTokens" : 573,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:6c7ecb213d6ad3cdce8abf05d74758bf3e5e799fda5a1a7e4e9b877a7af68d38",
+      "selectedPreviewID" : "18A66AAF-87E3-4902-8163-70D410A9FDAB",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "synthKeys",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 3, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "1973a95b94587a656e0c081334d639d2e613ffae33b83f9b962958e050fe0434",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "synth",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Determining whether the perceived roughness stems from narrow upper-mid resonances or harsh transient spikes.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Determining whether the perceived roughness stems from narrow upper-mid resonances or harsh transient spikes."
+      ],
+      "userRequest" : "make this smoother but preserve dynamics",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:24:42Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "conversationalReferenceInterpretation",
+      "productionHypothesisGeneration",
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

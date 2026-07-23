@@ -1,0 +1,107 @@
+{
+  "goals" : [
+    {
+      "attribute" : "closeness",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.1
+    },
+    {
+      "attribute" : "warmth",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.1
+    },
+    {
+      "attribute" : "brightness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.56,
+      "enabled" : true,
+      "id" : "1E6ACBF9-8C58-4D72-867C-FD78EE9EF6E9",
+      "locked" : false,
+      "parameters" : {
+        "driveDB" : 0.55,
+        "mix" : 0.042
+      },
+      "rationale" : "Use a source-specific low-mix nonlinear density hypothesis; ‘warm’ is not reduced to one EQ band or analog label.",
+      "type" : "saturation"
+    },
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "768C2639-BBA0-4A9A-809F-23F45C7BC672",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 2200,
+        "gainDB" : 0.09000000000000001,
+        "q" : 0.75
+      },
+      "rationale" : "Test restrained direct-source presence while preserving air and avoiding an invented ambience-removal claim.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "creative",
+      "confidence" : 0.42,
+      "enabled" : true,
+      "id" : "B9572860-7130-43C9-9E22-032520D54242",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.034999999999999996
+      },
+      "rationale" : "Test slightly greater direct-source salience; do not invent or remove ambience without a validated ambience metric.",
+      "type" : "outputTrim"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "022BB5B6-4904-5B5B-BEEC-995ADF96CD1B",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -0.14713512845935028
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "3609331B-DFF9-468C-92EA-A64783B20C95",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "4E6AF4FB-4904-4B5B-BEEC-995ADF96CD1B",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "EC05F177-5FA8-4655-A761-C65DAFC656C9"
+}

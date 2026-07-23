@@ -3,8 +3,11 @@ set -euo pipefail
 
 repo_root="${0:A:h:h}"
 derived_data="$repo_root/.build/xcode-signed-derived"
-source_app="$derived_data/Build/Products/Debug/Logic Audio Assistant.app"
+source_app="$derived_data/Build/Products/Release/Logic Audio Assistant.app"
 destination="$HOME/Applications/Logic Audio Assistant.app"
+staged_destination="$HOME/Applications/.Logic Audio Assistant.installing.$$.app"
+source_extension="$source_app/Contents/PlugIns/Logic Audio Assistant AU.appex"
+installed_extension="$destination/Contents/PlugIns/Logic Audio Assistant AU.appex"
 
 certificate_subject="$(
   security find-certificate -a -c 'Apple Development' -p "$HOME/Library/Keychains/login.keychain-db" 2>/dev/null \
@@ -28,7 +31,7 @@ xcodegen generate
 xcodebuild \
   -project LogicAudioAssistant.xcodeproj \
   -scheme CompanionMacApp \
-  -configuration Debug \
+  -configuration Release \
   -destination 'platform=macOS,arch=arm64' \
   -derivedDataPath "$derived_data" \
   -allowProvisioningUpdates \
@@ -45,8 +48,20 @@ if [[ "$app_team" != "$development_team" || "$extension_team" != "$development_t
 fi
 
 mkdir -p "$HOME/Applications"
-ditto "$source_app" "$destination"
+rm -rf "$staged_destination"
+trap 'rm -rf "$staged_destination"' EXIT
+ditto "$source_app" "$staged_destination"
+codesign --verify --deep --strict --verbose=1 "$staged_destination"
+rm -rf "$destination"
+mv "$staged_destination" "$destination"
+trap - EXIT
 codesign --verify --deep --strict --verbose=1 "$destination"
+
+# Xcode's RegisterWithLaunchServices build phase registers the derived-data copy.
+# Remove that transient record and register only the exact installed bundle so hosts
+# cannot discover two equal-version extensions at different paths.
+pluginkit -r "$source_extension" 2>/dev/null || true
+pluginkit -a "$installed_extension"
 
 print "Installed signed development build:"
 print "  $destination"

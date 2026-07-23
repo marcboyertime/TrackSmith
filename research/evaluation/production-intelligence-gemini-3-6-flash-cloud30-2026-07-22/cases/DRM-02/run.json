@@ -1,0 +1,209 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Specific frequency crossover between low-end warmth enhancement and transient snap clarity."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -51.062825945656456,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -0.22054280105641055,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.2193799354255352,
+          "planRequestID" : "0D076D79-3DEB-4925-8B1B-B90EE456774F",
+          "previewID" : "58FFEB67-D4C6-49D8-A18D-5A5CB51FBFD3",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -1.2253166381338194,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -41.362232070328005,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -0.7405016970864899,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.3267506179603332,
+          "planRequestID" : "51B963A6-C32A-432A-8A3A-2631CDBE8409",
+          "previewID" : "179B9C75-B6B2-4FD2-BD76-1A81F4518123",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -1.7439376104774627,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -35.17085325635519,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -1.6901522888077594,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.5712852343752615,
+          "planRequestID" : "2D6F7928-3910-4A82-BB9A-2A27435B545C",
+          "previewID" : "98F7C5DA-8620-4FA8-A229-908A1F220B51",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.692775803411039,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "warm:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Increase low-mid warmth and low-end fullness via subtle EQ or saturation while using transient-conscious dynamics control to safeguard initial attack. | Grounded TrackSmith interpretation: increase warm: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘warm’ may request greater low/low-mid body or harmonic density without obscuring articulation or air. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "DRM-02",
+      "measuredEvidence" : {
+        "drums_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.04326088130125748
+        },
+        "drums_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 12.572553953289512
+        },
+        "drums_onset_candidate_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 12
+        },
+        "drums_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.9589758144549345
+        },
+        "drums_post_onset_sustain_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.872348739216024
+        },
+        "drums_transient_20_200_hz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.20536451232093367
+        },
+        "drums_transient_5_10_khz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.11714118381012849
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "punchy:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6572,
+      "providerLatencyMilliseconds" : 4916,
+      "providerOutputTokens" : 451,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:95b6d5630bf23d4a5fcc46269353fd5036f48a5a63a4d47dca47966f6973cfb9",
+      "selectedPreviewID" : "179B9C75-B6B2-4FD2-BD76-1A81F4518123",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "drums",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 1, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "a4bb8bd641ad47b8132f01761ef827b879cc7e0dbe595d1278f44f407c32b48e",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "drums",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Specific frequency crossover between low-end warmth enhancement and transient snap clarity."
+      ],
+      "userRequest" : "make these warmer but preserve the punch",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:18:16Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "productionHypothesisGeneration",
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "explanationGeneration",
+      "conversationalReferenceInterpretation"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

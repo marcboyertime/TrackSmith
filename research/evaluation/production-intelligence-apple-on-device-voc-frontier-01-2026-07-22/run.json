@@ -1,0 +1,212 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -63.797892750052526,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -0.14713512845935028,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "saturation",
+            "parametricEQ",
+            "outputTrim",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.142272571132507,
+          "planRequestID" : "4E6AF4FB-4904-4B5B-BEEC-995ADF96CD1B",
+          "previewID" : "44990CF5-8CAD-4767-8404-F4F05E014E78",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -3.0824500258307004,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -33.982227093229675,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -4.206250596203146,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "saturation",
+            "parametricEQ",
+            "outputTrim",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -5.182724992827405,
+          "planRequestID" : "650A2B89-E4F5-430E-8C07-0DFBAC819555",
+          "previewID" : "AB06C879-D7AB-4EBA-92AB-4AC3BE6BBB67",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -5.093926825272276,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -21.553334935536995,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : -11.146430295796709,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "saturation",
+            "parametricEQ",
+            "outputTrim",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "45C6806A-11E8-49B2-BD11-E0D90A090906",
+          "previewID" : "5F1A3FC4-EDA5-4F50-84DB-6DE1862E7F38",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.90447970731126,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "intimate:increase",
+        "warm:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+        "clear",
+        "controlled",
+        "polished",
+        "warm"
+      ],
+      "expectedDesired" : [
+        "intimate"
+      ],
+      "expectedPreserved" : [
+        "airy"
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "increase intimate: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘intimate’ may request greater direct-source salience and closeness, often with controlled ambience. This is one hypothesis, not a measured fact. | increase warm: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘warm’ may request greater low/low-mid body or harmonic density without obscuring articulation or air. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "VOC-FRONTIER-01",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.17733442190302284
+        },
+        "vocal_10_20_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.00320231142883969
+        },
+        "vocal_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.6712077716620437
+        },
+        "vocal_200_500_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.7800062452528247
+        },
+        "vocal_5_10_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0015534085652187026
+        },
+        "vocal_high_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        },
+        "vocal_low_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        }
+      },
+      "modelIdentifier" : "apple-system-language-model-default",
+      "preserved" : [
+        "airy:preserve",
+        "bright:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "apple-foundation-models-v1",
+      "providerLatencyMilliseconds" : 25934,
+      "providerReportedModelIdentifier" : "apple-system-language-model-macos-26.3",
+      "selectedPreviewID" : "AB06C879-D7AB-4EBA-92AB-4AC3BE6BBB67",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "vocal",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 5, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "857c743a634c38766e358dcabf3f402846dc3ad15073a06c685460bb67f81be4",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "vocal",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "Make this vocal feel more intimate and expensive, but keep the breathiness.",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : false,
+  "createdAt" : "2026-07-22T06:55:11Z",
+  "credentialSource" : "none; Apple on-device system language model",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "semanticIntentInterpretation",
+      "explanationGeneration",
+      "ambiguityDetection",
+      "conversationalReferenceInterpretation"
+    ],
+    "displayName" : "Apple On-Device",
+    "identifier" : "apple-foundation-models-v1",
+    "kind" : "local",
+    "modelIdentifier" : "apple-system-language-model-default",
+    "usesNetwork" : false
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

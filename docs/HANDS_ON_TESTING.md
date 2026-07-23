@@ -36,8 +36,8 @@ keeps them at the same sample position. Controls:
 - Command-period: stop and rewind.
 - Command-O: open another preview folder.
 
-Selecting a result reveals its loudness match, true peak, audio delta, every DSP
-node, parameter, confidence, and rationale.
+Selecting a result reveals its loudness match, approximate true-peak measurement,
+audio delta, every DSP node, parameter, confidence, and rationale.
 
 `AUDITION.txt` gives a short summary. `manifest.json` contains analysis, every node,
 parameter, rationale, confidence and rejection status. The `*-plan.json` files can
@@ -94,10 +94,12 @@ swift run -c release PreviewCLI "/path/to/Mix.wav" \
 Supported source values are `vocal`, `vocalBus`, `drums`, `drumBus`, `bass`,
 `guitar`, `keyboard`, `synth`, `fullMix`, `reference`, and `unknown`.
 
-The planner is currently deterministic and keyword-based. Useful request concepts
-are clear/clarity, professional, warm, controlled/compressed, punch/hit harder,
-harsh/cymbal, sibilance, boxy/muddy, and wide. Unsupported words do not create new
-DSP capabilities; inspect the emitted plan instead of assuming they were honored.
+`PreviewCLI` uses the deterministic offline interpreter, so its useful language is
+bounded by the checked-in production vocabulary. The native companion can select an
+OpenAI or Gemini semantic adapter for free-form text, but only after a Keychain
+credential and explicit cloud-reasoning consent; those adapters still cannot create
+new DSP or Logic capabilities. Inspect the typed interpretation, evidence,
+hypotheses and emitted graph instead of assuming every word was honored.
 
 ## Inspect and verify
 
@@ -122,11 +124,37 @@ Run the complete automated verification:
 make verify
 ```
 
-The current expected result is `SUMMARY passed=22 failed=0`, followed by:
+For the current source, require `SUMMARY passed=42 failed=0`, followed by:
 
 ```text
-PASS Audio Unit instantiated and rendered mono/stereo host buffers
+PASS Audio Unit rendered, captured, previewed, committed, and reverted
 ```
+
+That host probe executes the complete local session without Logic: AU rendering,
+heartbeat discovery, recent capture, SHA-256 artifact verification, three previews,
+exact commit, EQ lock, “use less compression” revision, undo/redo, `fullState`
+reload, global bypass/restore, two-instance isolation, offline/AU output parity, and
+bit-exact dry revert.
+The current HostProbe source additionally checks null/pointer-replacing host buffers,
+bounded scheduled output-gain events, reset-versus-bypass automation, conservative
+silence/tail reporting, and one graph per callback. Do not proceed to Logic if any
+of those cases fail.
+
+To rerun the redacted real-audio proof with a legally owned vocal WAV and a new
+output directory:
+
+```sh
+swift run -c release VerticalSliceCLI \
+  "/absolute/path/to/vocal.wav" \
+  --source vocal \
+  --prompt "make this clearer, warmer, and more controlled" \
+  --output "/absolute/path/to/new-proof-directory"
+```
+
+Require `overallPassed: true` and all 18 entries in `evidence.json` to pass. The
+runner hashes the external source before and after, but it is an offline public-API
+proof; it does not host the AU or Logic. The recorded run and exact metric boundaries
+are in [`evidence/MVP_VERTICAL_SLICE_2026-07-13.md`](evidence/MVP_VERTICAL_SLICE_2026-07-13.md).
 
 ## Test the native Audio Unit in Logic
 
@@ -147,10 +175,13 @@ auval -v aufx LgAA ExAI
 ```
 
 `make native-install` detects either a keychain-listed or Xcode account-managed
-certificate and its Team ID, development-signs both nested bundles, and refuses
-installation if their Team IDs do not match. The first signing attempt may present
-a macOS private-key authorization dialog; approve it locally and never share the
-password. If
+certificate and its Team ID, builds Release, development-signs both nested bundles,
+strict-verifies a fresh staging bundle, and replaces the installed bundle exactly.
+It refuses installation if the Team IDs do not match. The first signing attempt may
+present a macOS private-key authorization dialog. On this development Mac, do not
+enter an administrator name or password unless the user has opened the authorized
+SafeSight maintenance window; never bypass the delay, disable protection, alter
+SafeSight, or share the password. If
 `auval` still cannot find that build, send its complete output before clearing any
 caches or terminating shared audio services.
 
@@ -164,9 +195,56 @@ In Logic:
 5. Return it to `0.0 dB`, bypass repeatedly, save, quit, reopen, and confirm the
    plug-in and parameter state reload.
 
-This first UI build continuously retains only the latest 30 seconds in memory. It
-does not yet expose the captured waveform or run conversational planning inside
-Logic; those remain companion-integration work.
+Then test the companion session path:
+
+1. Keep the AU inserted and open `~/Applications/Logic Audio Assistant.app`.
+2. Within five seconds, select the active insert shown under **Logic Audio Units**.
+   Confirm the sample rate/channel count and input peak respond to playback.
+3. Play a representative section, stop, then click **Analyze Recent Playback**.
+   The current request asks for up to the most recent 15 seconds from the AU's
+   continuously bounded dry-input ring. The ring holds at most 30 seconds and 24 MiB,
+   so high-rate stereo formats may retain less. It does not arm the next playback.
+4. Confirm a waveform and capture duration appear. Choose a source, enter a supported
+   request, and click **Create 3 Previews**.
+5. Play the preview and switch among Original, Conservative, Balanced, and Strong.
+   All loaded versions should remain at the same sample position and show their
+   loudness-match gains. A collapsed or constraint-violating option may be rejected
+   rather than presented as valid.
+6. Select a processed result and inspect every change card's module, parameters,
+   rationale, category and confidence.
+7. Click **Use as Working**, lock an EQ card, enter “use less compression” under
+   revision, and click **Render Revision**. Confirm the locked EQ and unrelated cards
+   are unchanged, then test **Undo Edit** and **Redo Edit**.
+8. Click **Commit Working Plan**, resume Logic playback, and confirm that the sound
+   matches the audition. Toggle **Bypass All** and **Restore Processing**; bypass must
+   not discard the graph. Then click **Revert** and confirm the pre-capture graph
+   returns.
+9. After preserving any previews you want, choose **Delete Local Audio Cache** in the
+   companion toolbar and confirm. Captures and rendered previews should disappear;
+   the Logic source, inserted AU, committed graph, and active-instance discovery must
+   remain intact.
+
+Direct current-build testing on 2026-07-13/14 completed steps 1–8 in Logic Pro
+11.2.2 on a disposable 44.1 kHz stereo runtime, including verified recent capture,
+three previews, inspection, locked-EQ revision, commit, bypass/restore, project
+save/reload, and isolation between two instances. Source-file hashes remained
+unchanged. The measurements, command/state IDs, fingerprints, and exact proof
+boundary are recorded in
+[`evidence/LOGIC_MVP_VALIDATION_2026-07-14.md`](evidence/LOGIC_MVP_VALIDATION_2026-07-14.md).
+Cache deletion is separately automated and tested but was not performed on the
+preserved Logic evidence session.
+
+A matching commit acknowledgement or heartbeat means the graph was applied and
+published for a callback, not that callback audio was observed or compared.
+There is no old/new graph crossfade yet, so listen for a click at commit/revert and
+record it as a failure if heard.
+
+During Computer Use/permission testing, Logic displayed an instability alert and
+recovered. The disposable insert was undone, no plug-in crash report was present,
+and `SkyComputerUseService` did crash. A lifecycle/status race was fixed afterward
+as a plausible contributor, but no root cause is claimed. If the alert recurs after
+permission is granted, stop the case, undo the test insert, and preserve the exact
+time and diagnostic report.
 
 ## Safety behavior to expect
 
@@ -178,6 +256,8 @@ Logic; those remain companion-integration work.
 - The audition loader rejects unsafe artifact paths, missing/changed plans, duplicate
   strengths, and WAVs whose rate/channel/frame metadata does not match the manifest.
 - Preview matching uses gated BS.1770 loudness for captures of at least 400 ms and
-  labels an RMS fallback for shorter captures. Ceiling verification uses estimated
-  true peak, while the real-time limiter itself remains a zero-lookahead sample-peak
-  limiter. These are early-product limitations, not mastering claims.
+  labels an RMS fallback for shorter captures. Ceiling verification and commit-time
+  rejection use approximate true peak: Annex 2 only at 48 kHz and a bounded
+  windowed-sinc estimate at other rates. The real-time limiter remains a
+  zero-lookahead sample-peak limiter. These are early-product limitations, not
+  mastering or non-48-kHz conformance claims.

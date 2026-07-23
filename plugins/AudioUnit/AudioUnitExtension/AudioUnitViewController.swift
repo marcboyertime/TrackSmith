@@ -11,7 +11,16 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
     private var lastRenderCycleSeen: UInt64 = 0
 
     nonisolated public func createAudioUnit(with componentDescription: AudioComponentDescription) throws -> AUAudioUnit {
-        try DispatchQueue.main.sync {
+        if Thread.isMainThread {
+            let unit: AssistantAudioUnit = try MainActor.assumeIsolated {
+                let unit = try AssistantAudioUnit(componentDescription: componentDescription)
+                audioUnit = unit
+                refreshControls()
+                return unit
+            }
+            return unit
+        }
+        return try DispatchQueue.main.sync {
             let unit = try AssistantAudioUnit(componentDescription: componentDescription)
             audioUnit = unit
             refreshControls()
@@ -23,7 +32,7 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
         let root = NSView(frame: NSRect(x: 0, y: 0, width: 520, height: 250))
         let title = NSTextField(labelWithString: "Logic Audio Assistant")
         title.font = .systemFont(ofSize: 19, weight: .semibold)
-        let subtitle = NSTextField(labelWithString: "Deterministic graph active · dry input retained in a bounded 30-second memory buffer")
+        let subtitle = NSTextField(labelWithString: "Deterministic graph active · recent dry input retained in bounded memory")
         subtitle.textColor = .secondaryLabelColor
         subtitle.maximumNumberOfLines = 2
 
@@ -31,7 +40,9 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
         inputStatusLabel.font = .monospacedSystemFont(ofSize: 12, weight: .medium)
 
         let gainTitle = NSTextField(labelWithString: "Output gain")
-        gainSlider = NSSlider(value: 0, minValue: -24, maxValue: 12, target: self, action: #selector(gainChanged(_:)))
+        // Output trim is post-limiter, so it may attenuate only. Positive gain
+        // belongs inside the validated graph before its final safety limiter.
+        gainSlider = NSSlider(value: 0, minValue: -24, maxValue: 0, target: self, action: #selector(gainChanged(_:)))
         gainSlider.isContinuous = true
         gainValueLabel = NSTextField(labelWithString: "0.0 dB")
         gainValueLabel.alignment = .right

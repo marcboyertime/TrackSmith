@@ -1,0 +1,205 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "Whether the level inconsistency is caused by specific peak bursts (transient spikes) or frequency-dependent resonances (boomy notes)."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -40.110009702792986,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.2750381249436504,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0974277207074916,
+          "planRequestID" : "E422419D-D1DB-4BD2-9495-6F2FC2218470",
+          "previewID" : "ABB70F8C-5A63-4B8F-ACD3-A03C8B7EC889",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.694628210832885,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h2-balanced",
+          "differenceRMSDBFS" : -40.0127350010997,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-2",
+          "loudnessMatchGainDB" : 0.13223874153908355,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "838BF5C8-4C51-4DDC-95C4-92E613B8DFB0",
+          "previewID" : "35D81248-C3F2-4B48-83BF-0EB3DE8C6709",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.5411660988286804,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -33.859971355597764,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 2.421184513883269,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "6221BE89-80AC-4B37-A711-E0ABD530B321",
+          "previewID" : "B4824672-F488-4FB0-8F5D-2A8D9231CD5D",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.985804511525928,
+          "warnings" : [
+            "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "controlled:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Even out macro-level variance across notes using gentle compression while leaving initial transients intact. | Grounded TrackSmith interpretation: increase controlled: For bass fundamental movement, sub allocation, low-mid density, transient definition, and kick relationship, ‘controlled’ may request reduced unwanted variability or peaks without erasing musical dynamics. This is one hypothesis, not a measured fact.",
+        "Control uneven low-mid boominess or resonant notes dynamically or with selective EQ to stabilize level without squeezing overall dynamics. | Grounded TrackSmith interpretation: increase controlled: For bass fundamental movement, sub allocation, low-mid density, transient definition, and kick relationship, ‘controlled’ may request reduced unwanted variability or peaks without erasing musical dynamics. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "BAS-03",
+      "measuredEvidence" : {
+        "bass_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.05973474180472138
+        },
+        "bass_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 2.4351683272105435
+        },
+        "bass_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.45255928906833304
+        },
+        "bass_sub_share_20_120_hz" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.38167064399474787
+        },
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 1.2461172451387554
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "dynamic:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6149,
+      "providerLatencyMilliseconds" : 3530,
+      "providerOutputTokens" : 565,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:eb050d4b85c781c5de020a1bbe89557ee6e810fa46219f9cca0104cd9de7f4d4",
+      "selectedPreviewID" : "ABB70F8C-5A63-4B8F-ACD3-A03C8B7EC889",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "bass",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 2, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "7e7107da4a5593bd76931e0db2bb2d398e947d1c2bdc6267c4ad9ea5916db5ea",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "bass",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the level inconsistency is caused by specific peak bursts (transient spikes) or frequency-dependent resonances (boomy notes).",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Whether the level inconsistency is caused by specific peak bursts (transient spikes) or frequency-dependent resonances (boomy notes)."
+      ],
+      "userRequest" : "make this more controlled but preserve dynamics",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:22:34Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "ambiguityDetection",
+      "productionHypothesisGeneration",
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

@@ -1,0 +1,93 @@
+{
+  "goals" : [
+    {
+      "attribute" : "sibilance",
+      "direction" : "decrease",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "closeness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.72,
+      "enabled" : true,
+      "id" : "88C8B5C5-7970-401B-BDB6-86DFFDF2B8FD",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 1.5,
+        "frequencyHz" : 6500,
+        "mix" : 1,
+        "ratio" : 10.2,
+        "releaseMS" : 70,
+        "thresholdDB" : -42
+      },
+      "rationale" : "Use event-relative upper-band attenuation and preserve air/intelligibility; whole-capture brightness is not treated as sibilance.",
+      "type" : "deEsser"
+    },
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "DE32FEB1-B0CB-454A-B395-A855BC16141C",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 7600,
+        "gainDB" : -3.5999999999999996,
+        "q" : 2.2
+      },
+      "rationale" : "The strong interpretation adds a bounded narrow-band restraint after event-relative de-essing; reject it by listening if air or diction suffers.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "4EE1EE3B-95D8-5A02-B6E3-C95DE4EFAC7D",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.0874559156093131
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "AE8A6E11-B05F-408E-BB07-BFC33F01919C",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "02A0AF76-95D8-4A02-B6E3-C95DE4EFAC7D",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "194088AA-A3A5-405C-904B-90E0B1760378"
+}

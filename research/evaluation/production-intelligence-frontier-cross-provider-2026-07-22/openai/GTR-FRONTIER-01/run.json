@@ -1,0 +1,232 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "The discomfort could come from a narrow resonance, intermittent upper-mid bursts, broad tonal balance, or existing distortion/clipping.",
+        "The analyzed excerpt is only 0.5 seconds, so it may not contain the events that become painful at louder playback.",
+        "The presence-band measurement is evidence only and does not directly establish harshness.",
+        "No measurement distinguishes resonance from clipping, aliasing, or intentional amp/pedal distortion.",
+        "Higher playback level and monitoring conditions are not represented by the supplied analysis."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -50.92419895586269,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.02669873843730386,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.2986514617867826,
+          "planRequestID" : "4F36B6CA-3415-412F-A2F2-022151EB53A5",
+          "previewID" : "71035EF5-64D3-4AF4-8686-CC5C9B113D26",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.8332935767649947,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -41.44163271615851,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.0784150424449237,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.55066753080312,
+          "planRequestID" : "C1C09484-4DE2-44EB-A3BD-8D5AFB18EDDB",
+          "previewID" : "43FBCFC5-C0EA-479E-8AB4-EA9765B40FBA",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.2978489471224828,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -35.31101148110265,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.16732866141048675,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.2280100139102648,
+          "planRequestID" : "072FBF59-886D-4207-A9BB-96C17F687DA6",
+          "previewID" : "9EA1A629-41EC-4084-BC9C-394786C55717",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -3.2280100139102648,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "harsh:decrease"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+        "aggressive"
+      ],
+      "expectedDesired" : [
+        "harsh"
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Reduce a persistent painful spectral concentration while retaining the guitar's aggressive character. | Grounded TrackSmith interpretation: decrease harsh: For guitar role, pick/strum onset, amp or pedal nonlinearity, spectral density, and arrangement masking, ‘harsh’ may request less fatiguing or event-specific upper-mid energy without burying attack or intelligibility. This is one hypothesis, not a measured fact.",
+        "Tame only the bursts that become painful when loud, leaving the steady aggressive tone more intact. | Grounded TrackSmith interpretation: decrease harsh: For guitar role, pick/strum onset, amp or pedal nonlinearity, spectral density, and arrangement masking, ‘harsh’ may request less fatiguing or event-specific upper-mid energy without burying attack or intelligibility. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "GTR-FRONTIER-01",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 1.6355803489873502
+        },
+        "low_band_side_energy_share" : {
+          "confidence" : 0,
+          "unit" : "ratio",
+          "value" : 0
+        },
+        "maximum_third_octave_concentration_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.5808779217792065
+        },
+        "mono_sum_energy_ratio" : {
+          "confidence" : 0,
+          "unit" : "ratio",
+          "value" : 0
+        },
+        "side_energy_share" : {
+          "confidence" : 0,
+          "unit" : "ratio",
+          "value" : 0
+        },
+        "source_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0013332549568909641
+        },
+        "source_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.7660281198542785
+        },
+        "spectral_occupied_bin_fraction" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.046875
+        }
+      },
+      "modelIdentifier" : "gpt-5.6-sol",
+      "preserved" : [
+        "aggressive:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "openai-responses-v1",
+      "providerInputTokens" : 7463,
+      "providerLatencyMilliseconds" : 16307,
+      "providerOutputTokens" : 1011,
+      "providerReportedModelIdentifier" : "gpt-5.6-sol",
+      "providerResponseID" : "resp_0acf65ee193f5181016a6153012858819f923d83c1ba63ed9e",
+      "selectedPreviewID" : "43FBCFC5-C0EA-479E-8AB4-EA9765B40FBA",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "guitar",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 5, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "deb740e3e2962b318847ff624603838a59129a46c724268a98d7e800020c5a41",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "guitar",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "The discomfort could come from a narrow resonance, intermittent upper-mid bursts, broad tonal balance, or existing distortion/clipping.",
+        "The analyzed excerpt is only 0.5 seconds, so it may not contain the events that become painful at louder playback.",
+        "The presence-band measurement is evidence only and does not directly establish harshness.",
+        "No measurement distinguishes resonance from clipping, aliasing, or intentional amp/pedal distortion.",
+        "Higher playback level and monitoring conditions are not represented by the supplied analysis.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "The discomfort could come from a narrow resonance, intermittent upper-mid bursts, broad tonal balance, or existing distortion/clipping.",
+        "The analyzed excerpt is only 0.5 seconds, so it may not contain the events that become painful at louder playback.",
+        "The presence-band measurement is evidence only and does not directly establish harshness.",
+        "No measurement distinguishes resonance from clipping, aliasing, or intentional amp/pedal distortion.",
+        "Higher playback level and monitoring conditions are not represented by the supplied analysis."
+      ],
+      "userRequest" : "This guitar hurts when I turn it up, but don't take away the aggression.",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:32:45Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "explanationGeneration",
+      "productionHypothesisGeneration",
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "ambiguityDetection"
+    ],
+    "displayName" : "OpenAI",
+    "identifier" : "openai-responses-v1",
+    "kind" : "openAI",
+    "modelIdentifier" : "gpt-5.6-sol",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

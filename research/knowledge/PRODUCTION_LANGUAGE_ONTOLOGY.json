@@ -1,0 +1,961 @@
+{
+  "schema_version": "tracksmith.production-language-ontology.v2",
+  "ontology_version": "2026-07-19.deep-source-2",
+  "status": "research artifact; contextual hypothesis vocabulary, not an executable preset table",
+  "evidence_boundary": {
+    "directly_supported": [
+      "Production language is source-, role-, scope-, listener-, and context-dependent.",
+      "Desired, prohibited, preserved, and referential descriptors must remain distinct.",
+      "Reference songs can communicate whole-mix, element, interaction, emotional, structural, and preservation intent.",
+      "Semantic models may generalize some descriptors but do not establish perceptually correct processing.",
+      "Current audio measurements can support or contradict an interpretation but cannot prove an adjective or artistic quality."
+    ],
+    "not_supported": [
+      "A universal adjective-to-frequency, parameter, processor, or preset mapping.",
+      "A genre label as an immutable target curve, loudness, dynamics, or stereo rule.",
+      "A reference recording as a unique target vector or disclosure of its original processing chain.",
+      "Semantic similarity as evidence that an edit sounds good.",
+      "A language model's confidence as calibrated production certainty."
+    ],
+    "primary_evidence_refs": [
+      "arxiv-2309-03404",
+      "arxiv-2202-08898",
+      "arxiv-2602-12301",
+      "arxiv-2602-17769",
+      "arxiv-2603-16682",
+      "dafx-2011-audio-effects-ontology",
+      "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"
+    ]
+  },
+  "alignment_with_existing_product": {
+    "code_catalog": "packages/AgentCore/Sources/AgentCore/ProductionIntentVocabulary.swift",
+    "evaluation_catalog": "research/evaluation/TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1.json",
+    "preserved_architecture": [
+      "ProductionTerm remains a user-facing vocabulary key, not an acoustic fact.",
+      "SourceTermInterpretation remains a set of possible interpretations.",
+      "ProductionHypothesis remains separate from ProcessingPlan.",
+      "Only validated deterministic DSP nodes may execute.",
+      "Provider-neutral model output remains untrusted until typed and validated."
+    ],
+    "existing_terms": [
+      "warm",
+      "bright",
+      "dark",
+      "clear",
+      "muddy",
+      "boxy",
+      "harsh",
+      "sibilant",
+      "punchy",
+      "aggressive",
+      "intimate",
+      "distant",
+      "polished",
+      "raw",
+      "wide",
+      "narrow",
+      "energetic",
+      "smooth",
+      "controlled",
+      "dynamic",
+      "vintage",
+      "modern",
+      "airy",
+      "thin",
+      "boomy",
+      "tight",
+      "soft",
+      "forward",
+      "lowEndWeight",
+      "pickAttack",
+      "monoCompatibility",
+      "cymbalHarshness"
+    ]
+  },
+  "utterance_roles": [
+    {
+      "id": "desired_change",
+      "definition": "A trait the user wants increased, decreased, introduced, or made more salient.",
+      "examples": ["make the chorus wider", "give the bass more note definition"],
+      "execution_effect": "May create hypotheses only after target and scope resolution."
+    },
+    {
+      "id": "prohibited_change",
+      "definition": "A trait, operation, or consequence the user explicitly rejects.",
+      "examples": ["not brighter", "do not tune the vocal", "no extra ambience"],
+      "execution_effect": "Creates a hard candidate constraint unless the user later revises it."
+    },
+    {
+      "id": "preserved_trait",
+      "definition": "A current quality or relationship that must survive the edit.",
+      "examples": ["keep the vocal natural", "preserve the rough mix's drum balance"],
+      "execution_effect": "Creates a preservation test and may authorize a null plan."
+    },
+    {
+      "id": "referential_trait",
+      "definition": "A source or description offered as evidence, comparison, or direction rather than a direct desired change.",
+      "examples": ["like the vocal depth in Reference A", "closer to the energy of the rough"],
+      "execution_effect": "Requires relation and attribute scope; never becomes a global target implicitly."
+    },
+    {
+      "id": "descriptive_observation",
+      "definition": "The user's report of what is currently heard, which may or may not include a requested remedy.",
+      "examples": ["the snare feels small", "the bridge gets harsh"],
+      "execution_effect": "Creates an observation or hypothesis; remedy remains unresolved."
+    },
+    {
+      "id": "structural_or_arrangement_goal",
+      "definition": "A request concerning song form, density, orchestration, performance, or narrative rather than an effect parameter.",
+      "examples": ["the hook does not lift", "the bridge should feel like a private moment"],
+      "execution_effect": "May yield advisory alternatives or abstention; cannot silently compile to cosmetic DSP."
+    },
+    {
+      "id": "emotional_or_atmospheric_goal",
+      "definition": "An intended listener experience that can support multiple acoustic interpretations.",
+      "examples": ["more vulnerable", "menacing but not louder", "weightless"],
+      "execution_effect": "Requires clarification or alternative hypotheses tied to source and arrangement evidence."
+    },
+    {
+      "id": "contextual_or_situational_description",
+      "definition": "Scene, use, audience, platform, era, or cultural context that may constrain a production decision.",
+      "examples": ["small club", "late-night headphones", "1990s demo"],
+      "execution_effect": "Adds context and evaluation conditions; does not directly authorize processing."
+    },
+    {
+      "id": "metadata_or_identity_reference",
+      "definition": "Artist, engineer, song, album, genre, instrument, or era identity.",
+      "examples": ["shoegaze", "like Artist X", "vintage soul"],
+      "execution_effect": "Supports retrieval and clarification only; it is not permission to clone identity or style."
+    },
+    {
+      "id": "epistemic_modifier",
+      "definition": "Language about certainty, preference strength, exploration, or delegation.",
+      "examples": ["maybe", "I think", "show me options", "definitely keep"],
+      "execution_effect": "Changes confidence, candidate count, and clarification policy, not acoustic direction."
+    }
+  ],
+  "scope_model": {
+    "target_kinds": [
+      "source",
+      "source_bus",
+      "relationship_between_sources",
+      "stem_group",
+      "full_mix",
+      "master",
+      "generated_or_repaired_asset",
+      "arrangement_or_performance"
+    ],
+    "time_scopes": [
+      "event",
+      "word_or_syllable",
+      "note_or_hit",
+      "phrase",
+      "section",
+      "transition",
+      "whole_song",
+      "catalog_or_album"
+    ],
+    "attribute_scopes": [
+      "level_and_balance",
+      "spectral_distribution",
+      "dynamics_and_envelope",
+      "transient_and_sustain",
+      "stereo_and_depth",
+      "ambience_and_space",
+      "distortion_and_texture",
+      "timing_and_groove",
+      "pitch_and_tuning",
+      "intelligibility_and_articulation",
+      "performance_and_emotion",
+      "arrangement_and_density",
+      "translation_and_delivery"
+    ],
+    "required_resolution": [
+      "Identify or explicitly mark uncertain target.",
+      "Identify time scope; do not extrapolate one section globally without evidence.",
+      "Identify attribute scope for references and broad adjectives.",
+      "Record non-target dimensions and preservation constraints.",
+      "Record whether a requested relation is absolute, comparative, or bounded."
+    ]
+  },
+  "reference_relation_types": [
+    {
+      "id": "sonic_attribute",
+      "examples": ["its vocal depth", "the kick-to-bass balance"],
+      "valid_use": "Feature-specific comparison with preservation tests."
+    },
+    {
+      "id": "emotional_or_atmospheric",
+      "examples": ["the same sense of threat", "its intimacy"],
+      "valid_use": "Generate multiple source- and arrangement-conditioned hypotheses."
+    },
+    {
+      "id": "structural",
+      "examples": ["the chorus expansion", "the quiet bridge"],
+      "valid_use": "Advisory or arrangement-level reasoning; DSP only when a bounded acoustic component is identified."
+    },
+    {
+      "id": "performance",
+      "examples": ["the vocal urgency", "the drummer's looseness"],
+      "valid_use": "Preservation or performance-selection evidence; do not imply effect reconstruction."
+    },
+    {
+      "id": "translation_or_delivery",
+      "examples": ["small-speaker bass audibility", "broadcast intelligibility"],
+      "valid_use": "Evaluate under named playback or normative delivery conditions."
+    },
+    {
+      "id": "identity_or_context_only",
+      "examples": ["Artist X", "1970s soul", "club record"],
+      "valid_use": "Retrieval and clarification; no literal cloning."
+    }
+  ],
+  "interpretation_state": {
+    "required_fields": [
+      "utterance_span",
+      "role",
+      "target",
+      "time_scope",
+      "attribute_scope",
+      "direction_or_relation",
+      "strength",
+      "confidence",
+      "supporting_evidence",
+      "contradictory_evidence",
+      "preserved_traits",
+      "prohibited_traits",
+      "unresolved_questions"
+    ],
+    "confidence_levels": [
+      "unsupported",
+      "plausible",
+      "moderate",
+      "strong_within_scope"
+    ],
+    "resolution_outcomes": [
+      "single_bounded_hypothesis",
+      "multiple_named_hypotheses",
+      "clarification_required",
+      "non_dsp_advisory",
+      "null_plan_or_abstention",
+      "rejected_as_unsupported_or_unsafe"
+    ]
+  },
+  "resolution_procedure": [
+    {
+      "step": 1,
+      "action": "Parse language roles before acoustic meaning.",
+      "failure_prevented": "Negation, preservation, and references collapsing into positive desired traits."
+    },
+    {
+      "step": 2,
+      "action": "Resolve target, time, relationship, and attribute scope.",
+      "failure_prevented": "A section or source request changing the full mix."
+    },
+    {
+      "step": 3,
+      "action": "Collect current source-aware measurements, graph/capture provenance, and prior accepted decisions.",
+      "failure_prevented": "Language-only preset selection."
+    },
+    {
+      "step": 4,
+      "action": "Retrieve contextual senses and analogous producer decisions, including contradictions.",
+      "failure_prevented": "One tutorial or genre stereotype becoming a rule."
+    },
+    {
+      "step": 5,
+      "action": "Construct competing hypotheses and a valid null hypothesis where evidence permits.",
+      "failure_prevented": "False certainty and compulsory processing."
+    },
+    {
+      "step": 6,
+      "action": "Attach preservation risks, prohibited consequences, bounds, and listening cues.",
+      "failure_prevented": "Improving one metric while erasing identity."
+    },
+    {
+      "step": 7,
+      "action": "Clarify when alternatives differ materially in scope or artistic consequence; otherwise render named candidates.",
+      "failure_prevented": "A hidden weighted average of incompatible goals."
+    },
+    {
+      "step": 8,
+      "action": "Compile only validated deterministic actions and evaluate with matched audition and preservation tests.",
+      "failure_prevented": "Provider or semantic output gaining direct render authority."
+    }
+  ],
+  "ambiguity_policy": {
+    "clarify_when": [
+      "The target source, section, or relationship changes the operation materially.",
+      "A reference could mean whole mix, one element, emotion, arrangement, or literal similarity.",
+      "Desired and preserved traits conflict without an agreed priority.",
+      "A structural or performance problem is being framed as an effect request.",
+      "The available source or role classification is uncertain and would change the plan.",
+      "The requested term has credible interpretations with different preservation risks that cannot be represented as low-cost candidates."
+    ],
+    "offer_multiple_candidates_when": [
+      "Two or more bounded interpretations are plausible and safely auditionable.",
+      "The difference is aesthetic rather than a safety or authority question.",
+      "The user requests exploration or alternatives.",
+      "Reference objectives conflict but can be kept separate."
+    ],
+    "abstain_or_escalate_when": [
+      "Evidence indicates an arrangement, performance, narrative, or recording problem outside current authority.",
+      "Preservation cannot be evaluated with the available context.",
+      "The requested operation is unsupported, unsafe, non-deterministic in the current lane, or requires undocumented Logic authority.",
+      "A model supplies confidence without evidence that passes validation."
+    ]
+  },
+  "contextual_concepts": [
+    {
+      "term": "warm",
+      "possible_senses": [
+        {"context": "vocal", "interpretation": "less distracting upper-mid or sibilant energy, more body, or a softer ambience balance", "candidate_evidence": ["event-conditioned upper-band energy", "body/formant balance", "wet/dry spectral contrast"], "contradictions": ["the vocal may already be dull or masked", "brightness may carry diction"]},
+        {"context": "bass or full mix", "interpretation": "harmonic density, low-mid fullness, or reduced brittle top rather than more sub", "candidate_evidence": ["low-mid distribution", "harmonic audibility", "translation checks"], "contradictions": ["extra low-mid energy may cloud pitch or vocal"]},
+        {"context": "vintage aesthetic", "interpretation": "a bundle of performance, bandwidth, nonlinear, ambience, and balance cues", "candidate_evidence": ["reference scope", "capture provenance", "artist intent"], "contradictions": ["vintage is not a single saturation or EQ curve"]}
+      ],
+      "candidate_strategy_families": ["subtractive_or_dynamic_eq", "bounded_saturation", "ambience_rebalance", "preserve_without_processing"],
+      "preservation_risks": ["diction loss", "mud", "transient softening", "identity-changing coloration"],
+      "evidence_refs": ["arxiv-2202-08898", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "prohibited_mapping": "fixed low-shelf boost or high-shelf cut"
+    },
+    {
+      "term": "bright",
+      "possible_senses": [
+        {"context": "lead vocal", "interpretation": "more diction, presence, air, or forwardness", "candidate_evidence": ["consonant-event density", "presence and air ratios", "masking by accompaniment"], "contradictions": ["sibilance and harshness may already limit brightness", "level can be mistaken for brightness"]},
+        {"context": "drums", "interpretation": "more stick, snap, cymbal detail, or shorter perceived distance", "candidate_evidence": ["onset-band energy", "cymbal sustain", "room/direct balance"], "contradictions": ["cymbal harshness may be the actual problem"]},
+        {"context": "full mix or catalog", "interpretation": "a comparative tonal placement inside an intended envelope", "candidate_evidence": ["loudness-controlled reference set", "section distribution"], "contradictions": ["generic brightness can create fatigue and erase dark intentional songs"]}
+      ],
+      "candidate_strategy_families": ["source_specific_eq", "level_or_masking_revision", "ambience_depth_revision", "null_plan"],
+      "preservation_risks": ["sibilance", "harshness", "cymbal fatigue", "thinness", "catalog homogenization"],
+      "evidence_refs": ["arxiv-2202-08898", "pjc-kpop-004", "uf-b1-004-brightness-harshness-fatigue"],
+      "prohibited_mapping": "global high-shelf boost"
+    },
+    {
+      "term": "dark",
+      "possible_senses": [
+        {"context": "mix", "interpretation": "reduced upper-band salience, deeper ambience, or intentionally muted emotional tone", "candidate_evidence": ["reference envelope", "vocal intelligibility", "ambience spectrum"], "contradictions": ["dark may be an emotional request rather than tonal EQ"]},
+        {"context": "source", "interpretation": "less pick, breath, cymbal, or transient brightness", "candidate_evidence": ["source-specific onset and sustain spectra"], "contradictions": ["the part may become distant or unintelligible"]}
+      ],
+      "candidate_strategy_families": ["source_specific_eq", "ambience_or_depth", "arrangement_or_level", "preserve_without_processing"],
+      "preservation_risks": ["lost articulation", "blanket dullness", "genre mismatch"],
+      "evidence_refs": ["pjc-kpop-004", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "prohibited_mapping": "universal treble reduction"
+    },
+    {
+      "term": "punchy",
+      "possible_senses": [
+        {"context": "kick or snare", "interpretation": "salient onset plus sufficient body and recovery", "candidate_evidence": ["onset/body ratio", "crest and sustain", "kick-bass timing"], "contradictions": ["more peak is not always more punch", "clipping can mimic impact by loudness"]},
+        {"context": "bass", "interpretation": "note definition, envelope control, or interaction with kick", "candidate_evidence": ["transient flux", "note-to-note level", "harmonic translation"], "contradictions": ["fast compression may remove the desired onset"]},
+        {"context": "full mix", "interpretation": "rhythmic contrast and groove rather than a single transient metric", "candidate_evidence": ["section dynamics", "bus detector response", "level-matched audition"], "contradictions": ["bus compression can reduce kick punch or groove"]}
+      ],
+      "candidate_strategy_families": ["envelope_or_level_automation", "transient_preserving_compression", "parallel_compression", "kick_bass_relationship", "null_plan"],
+      "preservation_risks": ["pumping", "lost sustain", "clicky transients", "reduced groove"],
+      "evidence_refs": ["dafx-2012-autonomous-multitrack-drc", "pjc-rhcp-004", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "prohibited_mapping": "one compressor preset"
+    },
+    {
+      "term": "aggressive",
+      "possible_senses": [
+        {"context": "vocal", "interpretation": "forward level, denser envelope, more edge, or assertive performance", "candidate_evidence": ["level hierarchy", "parallel density", "upper-mid events"], "contradictions": ["distortion or brightness may reduce intelligibility"]},
+        {"context": "drums or mix", "interpretation": "stronger rhythmic impact, density, nonlinear edge, or less depth", "candidate_evidence": ["transient/sustain", "crest change", "bus response"], "contradictions": ["heavy compression can sound smaller or less urgent"]}
+      ],
+      "candidate_strategy_families": ["parallel_density", "bounded_saturation", "level_hierarchy", "transient_preservation", "performance_or_arrangement_advisory"],
+      "preservation_risks": ["fatigue", "flattened dynamics", "harshness", "loss of emotional contrast"],
+      "evidence_refs": ["pjc-zach-holmes-002", "pjc-rhcp-003", "dafx-2012-autonomous-multitrack-drc"],
+      "prohibited_mapping": "more distortion and compression"
+    },
+    {
+      "term": "intimate",
+      "possible_senses": [
+        {"context": "vocal", "interpretation": "close perspective, audible detail, restrained level movement, or reduced obvious ambience", "candidate_evidence": ["dry/wet balance", "breath/consonant detail", "vocal hierarchy"], "contradictions": ["some intimate productions retain room noise or long quiet ambience"]},
+        {"context": "section or arrangement", "interpretation": "reduced density and contrast against surrounding sections", "candidate_evidence": ["arrangement density", "section level and space", "narrative role"], "contradictions": ["making one source drier cannot create a structurally intimate section by itself"]}
+      ],
+      "candidate_strategy_families": ["ambience_rebalance", "level_and_density", "automation", "arrangement_advisory", "preserve_environmental_texture"],
+      "preservation_risks": ["sterility", "noise removal that erases place", "overcompression", "lost section contrast"],
+      "evidence_refs": ["pjc-zach-holmes-001", "pjc-kpop-002", "pjc-lukas-004"],
+      "prohibited_mapping": "make the vocal dry"
+    },
+    {
+      "term": "polished",
+      "possible_senses": [
+        {"context": "vocal", "interpretation": "consistent comp, tuning, articulation, level, and controlled defects", "candidate_evidence": ["edit discontinuities", "event harshness", "level consistency"], "contradictions": ["natural performance or genre intent may reject tight correction"]},
+        {"context": "full mix", "interpretation": "absence of distracting defects, coherent hierarchy, translation, and intentional detail", "candidate_evidence": ["technical guardrails", "translation", "accepted references"], "contradictions": ["cleaner can be less authentic, less dynamic, or more generic"]}
+      ],
+      "candidate_strategy_families": ["targeted_repair", "automation", "dynamic_correction", "balance_and_translation", "null_plan"],
+      "preservation_risks": ["generic sound", "performance loss", "over-tuning", "over-brightening", "dynamic loss"],
+      "evidence_refs": ["pjc-kpop-003", "pjc-rhcp-005", "uf-b1-005-generic-context-mismatch"],
+      "prohibited_mapping": "a fixed mastering or vocal chain"
+    },
+    {
+      "term": "raw",
+      "possible_senses": [
+        {"context": "performance", "interpretation": "committed ensemble timing, early-take energy, edge, or limited correction", "candidate_evidence": ["take and edit history", "timing relationships", "prior accepted mix"], "contradictions": ["raw does not require technical failure or prohibit deliberate editing"]},
+        {"context": "texture", "interpretation": "audible capture, distortion, room, or limited bandwidth as identity", "candidate_evidence": ["capture provenance", "environmental sound", "reference intent"], "contradictions": ["unwanted clipping or corruption remains a defect"]}
+      ],
+      "candidate_strategy_families": ["preserve_without_processing", "bounded_cleanup", "performance_selection", "texture_preservation"],
+      "preservation_risks": ["sanitization", "grid correction", "noise removal", "flattened dynamics"],
+      "evidence_refs": ["pjc-rhcp-001", "pjc-rhcp-005", "pjc-zach-holmes-001", "pjc-deftones-001"],
+      "prohibited_mapping": "add distortion or leave every defect"
+    },
+    {
+      "term": "wide",
+      "possible_senses": [
+        {"context": "source or layer", "interpretation": "greater side energy, decorrelation, or separation of independent layers", "candidate_evidence": ["side-energy distribution", "mono sum", "source provenance"], "contradictions": ["phasey width or low-band side energy may reduce translation"]},
+        {"context": "mix relationship", "interpretation": "move accompaniment outward so a focal center source has room", "candidate_evidence": ["focal hierarchy", "pan/width relationship", "mono audition"], "contradictions": ["level or arrangement may solve the issue with less collateral change"]},
+        {"context": "section", "interpretation": "comparative expansion at a chorus or transition", "candidate_evidence": ["section contrast", "automation lineage"], "contradictions": ["constant global width removes the contrast"]}
+      ],
+      "candidate_strategy_families": ["panning_or_independent_layers", "bounded_stereo_width", "section_automation", "level_or_arrangement"],
+      "preservation_risks": ["mono loss", "low-end instability", "diffuse focal source", "phase artifacts"],
+      "evidence_refs": ["pjc-21savage-001", "official-sonible-smart-eq-4-manual", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "prohibited_mapping": "increase one global stereo-width parameter"
+    },
+    {
+      "term": "tight",
+      "possible_senses": [
+        {"context": "kick and bass", "interpretation": "stable timing, controlled overlap, defined envelope, or note consistency", "candidate_evidence": ["onset relationship", "decay overlap", "low-end headroom"], "contradictions": ["genre or feel may require drag, bloom, or overlap"]},
+        {"context": "drums", "interpretation": "precise ensemble, shorter sustain, controlled room, or punchy editing", "candidate_evidence": ["timing variance", "sustain and room ratios"], "contradictions": ["grid alignment can erase groove"]},
+        {"context": "full mix", "interpretation": "clear hierarchy and controlled low end rather than globally short envelopes", "candidate_evidence": ["translation", "interaction graph"], "contradictions": ["ambient or shoegaze goals may favor blur"]}
+      ],
+      "candidate_strategy_families": ["timing_advisory_or_edit", "envelope_control", "low_end_relationship", "ambience_reduction", "null_plan"],
+      "preservation_risks": ["lost groove", "thinness", "sterility", "genre mismatch"],
+      "evidence_refs": ["pjc-21savage-002", "pjc-deftones-001", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "prohibited_mapping": "quantize and shorten decay"
+    },
+    {
+      "term": "clear",
+      "possible_senses": [
+        {"context": "vocal", "interpretation": "word intelligibility, focal level, controlled event harshness, or reduced competing density", "candidate_evidence": ["lyric audibility", "event spectral evidence", "focal hierarchy"], "contradictions": ["brightness is not the only route and can worsen sibilance"]},
+        {"context": "mix", "interpretation": "role separation, readable hierarchy, or fewer distracting elements", "candidate_evidence": ["source roles", "arrangement density", "interaction evidence"], "contradictions": ["desirable blend and overlap may be the style"]}
+      ],
+      "candidate_strategy_families": ["level_automation", "dynamic_eq", "arrangement_advisory", "relational_width_or_panning", "null_plan"],
+      "preservation_risks": ["thinness", "over-separation", "lost ambience", "generic cleanup"],
+      "evidence_refs": ["pjc-rhcp-003", "pjc-21savage-004", "dafx-2008-selective-unmasking"],
+      "prohibited_mapping": "boost presence and cut every overlap"
+    },
+    {
+      "term": "controlled",
+      "possible_senses": [
+        {"context": "vocal", "interpretation": "stable audibility with preserved expression", "candidate_evidence": ["word-level level contour", "dynamic-event distribution"], "contradictions": ["heavy compression can erase the intended delivery"]},
+        {"context": "drums or bus", "interpretation": "bounded peaks, sustain, or groove-consistent density", "candidate_evidence": ["crest and sustain", "detector response", "section groove"], "contradictions": ["lower crest alone does not mean better control"]},
+        {"context": "workflow", "interpretation": "predictable, editable, reversible state", "candidate_evidence": ["candidate lineage", "exact plan"], "contradictions": ["this sense is operational, not acoustic"]}
+      ],
+      "candidate_strategy_families": ["level_automation", "distributed_compression", "dynamic_correction", "bounded_plan_and_revision"],
+      "preservation_risks": ["flattened expression", "pumping", "over-editing"],
+      "evidence_refs": ["pjc-deftones-003", "pjc-zach-holmes-002", "uf-b1-001-black-box-control-trust"],
+      "prohibited_mapping": "reduce dynamic range"
+    },
+    {
+      "term": "dynamic",
+      "possible_senses": [
+        {"context": "performance or arrangement", "interpretation": "meaningful change between or within sections", "candidate_evidence": ["section trajectory", "performance envelope"], "contradictions": ["a high numerical range can still feel flat"]},
+        {"context": "mix or master", "interpretation": "preserved transient and macro contrast under delivery constraints", "candidate_evidence": ["loudness range", "crest", "transient change", "matched listening"], "contradictions": ["more range is not universally preferable or compatible with every use"]}
+      ],
+      "candidate_strategy_families": ["preserve_without_processing", "section_automation", "parallel_or_wet_dry_dynamics", "delivery_specific_loudness"],
+      "preservation_risks": ["loudness mismatch", "lost quiet detail", "flattened chorus/verse contrast"],
+      "evidence_refs": ["pjc-rhcp-004", "pjc-rhcp-005", "uf-b1-003-loudness-dynamics-mismatch"],
+      "prohibited_mapping": "maximize loudness range or crest factor"
+    },
+    {
+      "term": "forward",
+      "possible_senses": [
+        {"context": "vocal or lead", "interpretation": "higher focal level, less depth, increased presence, or denser controlled envelope", "candidate_evidence": ["relative level", "dry/wet relation", "presence events", "masking context"], "contradictions": ["brightness and compression may create fatigue or reduce intimacy"]},
+        {"context": "instrument", "interpretation": "closer depth placement or stronger arrangement priority", "candidate_evidence": ["level, pan, ambience, and competing roles"], "contradictions": ["source tone may not be the limiting factor"]}
+      ],
+      "candidate_strategy_families": ["level_automation", "ambience_reduction", "relational_space", "dynamic_control", "arrangement_advisory"],
+      "preservation_risks": ["fatigue", "flattened depth", "focal competition"],
+      "evidence_refs": ["pjc-rhcp-003", "pjc-21savage-003", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "prohibited_mapping": "raise level or presence EQ"
+    },
+    {
+      "term": "lowEndWeight",
+      "possible_senses": [
+        {"context": "bass or 808", "interpretation": "fundamental energy, note audibility, harmonic translation, or sustained physical impact", "candidate_evidence": ["sub and low-mid distribution", "headroom", "small-speaker translation"], "contradictions": ["more fundamental can reduce headroom without improving audibility"]},
+        {"context": "full mix", "interpretation": "kick/bass hierarchy and perceived foundation relative to vocal and arrangement", "candidate_evidence": ["interaction graph", "section balance", "translation"], "contradictions": ["weight can displace a protected lead or become genre-inappropriate"]}
+      ],
+      "candidate_strategy_families": ["gain_staging", "harmonic_parallel", "kick_bass_relationship", "bounded_eq", "sub_reduction", "null_plan"],
+      "preservation_risks": ["lost headroom", "masking", "pumping", "vocal displacement", "small-speaker disappearance"],
+      "evidence_refs": ["pjc-21savage-002", "pjc-zach-holmes-004", "uf-b1-013-low-end-and-limiter-ambiguity"],
+      "prohibited_mapping": "add a low shelf"
+    }
+  ],
+  "abstract_musician_language": [
+    {
+      "identifier": "expensive",
+      "surface_form": "expensive",
+      "aliases": ["expensive", "more expensive", "premium", "high-end", "luxurious"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["polished", "clear", "controlled", "smooth", "intimate"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus"],
+          "interpretation": "May mean an intentional focal hierarchy, controlled distracting events, stable audibility, and detailed intimacy while retaining breath and performance identity.",
+          "supporting_evidence_categories": ["event-conditioned harshness or sibilance", "level consistency", "spectral balance", "current breath and air evidence"],
+          "contradictory_evidence": ["The vocal may already be over-controlled or over-bright.", "Audible capture texture may be identity-bearing rather than a defect."],
+          "candidate_strategy_categories": ["subtractiveEQ", "dynamicEQOrDeEsser", "gentleCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["comp choice", "tuning and detailed editing", "performance selection", "recording-chain quality"]
+        },
+        {
+          "source_types": ["drums", "drumBus", "bass", "guitar", "keyboard", "synth"],
+          "interpretation": "May mean deliberate tone, envelope, role definition, and an absence of distracting artifacts rather than extra brightness or one fashionable processor.",
+          "supporting_evidence_categories": ["source-specific spectral balance", "transient and sustain evidence", "dynamic consistency", "headroom and safety evidence"],
+          "contradictory_evidence": ["Raw capture, rough edges, or wide dynamics may be artistically intentional.", "The isolated source cannot establish its arrangement role."],
+          "candidate_strategy_categories": ["subtractiveEQ", "additiveEQ", "gentleCompression", "saturation", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["arrangement role", "performance", "re-amping or source replacement", "multitrack balance"]
+        },
+        {
+          "source_types": ["fullMix"],
+          "interpretation": "May mean coherent hierarchy, translation, controlled distractions, and intentional detail; those qualities are relational and cannot be inferred from a mastering curve.",
+          "supporting_evidence_categories": ["loudness-matched tonal balance", "crest and loudness-range evidence", "stereo and mono translation", "peak and true-peak safety"],
+          "contradictory_evidence": ["More density, loudness, brightness, or width can make a mix less distinctive.", "A technically clean mix can still fail the requested emotional goal."],
+          "candidate_strategy_categories": ["subtractiveEQ", "gentleCompression", "saturation", "stereoWidth", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["multitrack balance", "arrangement", "performance", "delivery-specific approval"]
+        }
+      ],
+      "preservation_risks": ["generic polish", "over-brightening", "over-compression", "lost breath or performance identity", "mistaking loudness for quality"],
+      "provenance_refs": ["arxiv-2309-03404", "arxiv-2202-08898", "arxiv-2602-12301", "pjc-lukas-001", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.46,
+      "prohibited_mapping": "No fixed premium vocal chain, mastering chain, EQ curve, loudness target, or processor stack."
+    },
+    {
+      "identifier": "bedroom-recorded",
+      "surface_form": "bedroom-recorded",
+      "aliases": ["bedroom-recorded", "bedroom recorded", "home-recorded", "home recorded", "demo-like", "sounds like a demo"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["polished", "clear", "raw", "intimate", "controlled"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth"],
+          "interpretation": "May report distracting room coloration, noise, resonances, uneven level, or edit artifacts, but it may also describe a valued close and place-specific aesthetic.",
+          "supporting_evidence_categories": ["spectral concentration", "dynamic consistency", "event-conditioned defects", "source-aware proximity or low-mid evidence"],
+          "contradictory_evidence": ["The available analysis does not directly identify room reflections or microphone prestige.", "Environmental texture may support intimacy and authorship."],
+          "candidate_strategy_categories": ["subtractiveEQ", "dynamicEQOrDeEsser", "gentleCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["denoising", "dereverberation", "comping", "re-recording", "room and microphone choice"]
+        },
+        {
+          "source_types": ["drums", "drumBus", "bass", "fullMix"],
+          "interpretation": "May mean uncontrolled capture, small spatial perspective, weak hierarchy, or insufficient translation; each implies a different remedy and some are multitrack or recording problems.",
+          "supporting_evidence_categories": ["tonal distribution", "crest and sustain", "stereo behavior", "loudness-matched translation checks"],
+          "contradictory_evidence": ["Lo-fi, narrow, noisy, or room-heavy production may be deliberate.", "A stereo mix cannot expose which source or recording decision caused the impression."],
+          "candidate_strategy_categories": ["subtractiveEQ", "gentleCompression", "transientPreservingCompression", "stereoWidth", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["multitrack rebalance", "room replacement", "recording repair", "arrangement density"]
+        }
+      ],
+      "preservation_risks": ["sanitizing identity-bearing room or noise", "making the source generic", "removing intimacy", "solving a performance or capture problem with broad DSP"],
+      "provenance_refs": ["pjc-zach-holmes-001", "pjc-lukas-001", "arxiv-2309-03404", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.52,
+      "prohibited_mapping": "Do not infer noise removal, dereverberation, brightness, or a generic professionalizing chain from this phrase."
+    },
+    {
+      "identifier": "vulnerable",
+      "surface_form": "vulnerable",
+      "aliases": ["vulnerable", "more vulnerable", "fragile", "exposed", "emotionally exposed"],
+      "applicable_source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["intimate", "raw", "dynamic", "airy", "soft"],
+      "resolution_policy": "clarificationWhenMaterial",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus"],
+          "interpretation": "Usually describes performance exposure, close perspective, retained breath and microdynamics, sparse support, or limited corrective polish rather than one timbral target.",
+          "supporting_evidence_categories": ["dynamic contour", "breath and air evidence", "proximity evidence", "current processing density"],
+          "contradictory_evidence": ["A quieter or breathier vocal is not automatically more emotionally vulnerable.", "The decisive evidence may be performance and lyrics, which TrackSmith cannot infer from descriptors alone."],
+          "candidate_strategy_categories": ["preserveWithoutProcessing", "gentleCompression", "subtractiveEQ", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["performance selection", "comping", "arrangement density", "lyric and narrative context"]
+        },
+        {
+          "source_types": ["guitar", "keyboard", "synth", "fullMix"],
+          "interpretation": "May describe sparse arrangement, fragile dynamics, exposed imperfections, or a contrast against denser sections; the primary solution may be structural rather than signal processing.",
+          "supporting_evidence_categories": ["macro-dynamic evidence", "crest behavior", "stereo and depth evidence"],
+          "contradictory_evidence": ["More dynamic range or less processing does not prove emotional vulnerability.", "Single-source audio does not reveal arrangement contrast."],
+          "candidate_strategy_categories": ["preserveWithoutProcessing", "gentleCompression", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["arrangement", "performance", "section contrast", "orchestration"]
+        }
+      ],
+      "preservation_risks": ["over-compression", "noise removal that erases place", "breath removal", "mistaking quietness for emotion", "cosmetic DSP on an arrangement request"],
+      "provenance_refs": ["pjc-zach-holmes-001", "pjc-lukas-001", "arxiv-2602-17769", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.43,
+      "prohibited_mapping": "No fixed dry-vocal, breath-boost, reduced-compression, or sparse-EQ recipe."
+    },
+    {
+      "identifier": "alive",
+      "surface_form": "alive",
+      "aliases": ["alive", "more alive", "give it life", "more life", "livelier"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["energetic", "dynamic", "punchy", "raw", "forward"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["drums", "drumBus", "bass"],
+          "interpretation": "May mean stronger groove, transient-to-body contrast, dynamic motion, or harmonic audibility rather than simply more level.",
+          "supporting_evidence_categories": ["transient strength", "onset density", "crest and sustain", "dynamic consistency"],
+          "contradictory_evidence": ["More transient peak or saturation can sound smaller, harsher, or less groovy.", "Groove cannot be reduced to onset density."],
+          "candidate_strategy_categories": ["transientPreservingCompression", "parallelCompression", "saturation", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["performance timing", "sample or take choice", "kick-bass relationship outside the current source"]
+        },
+        {
+          "source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth"],
+          "interpretation": "May mean present articulation, retained microdynamics, movement, or expressive imperfection; the correct dimension depends on musical role.",
+          "supporting_evidence_categories": ["dynamic envelope", "spectral motion", "transient evidence", "current processing density"],
+          "contradictory_evidence": ["Brightness and loudness can be mistaken for life.", "Modulation or distortion may conflict with a stable focal role."],
+          "candidate_strategy_categories": ["transientPreservingCompression", "saturation", "additiveEQ", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["performance", "automation", "MIDI or articulation editing", "arrangement interaction"]
+        },
+        {
+          "source_types": ["fullMix"],
+          "interpretation": "May mean section contrast, rhythmic motion, focal changes, or preserved dynamics; a static master-bus move may not address it.",
+          "supporting_evidence_categories": ["short-term loudness trajectory", "loudness range", "crest behavior", "tonal and stereo change over time"],
+          "contradictory_evidence": ["A high LRA or crest factor can still feel emotionally static.", "Extra loudness is a confound rather than proof of life."],
+          "candidate_strategy_categories": ["transientPreservingCompression", "parallelCompression", "saturation", "preserveWithoutProcessing", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["section automation", "arrangement", "performance", "multitrack balance"]
+        }
+      ],
+      "preservation_risks": ["loudness substitution", "harshness", "flattened groove", "exaggerated transients", "unwanted modulation or distortion"],
+      "provenance_refs": ["arxiv-2602-17769", "pjc-rhcp-004", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.47,
+      "prohibited_mapping": "Do not equate alive with louder, brighter, more compressed, more saturated, or higher crest factor."
+    },
+    {
+      "identifier": "emotionally-boring",
+      "surface_form": "emotionally boring",
+      "aliases": ["emotionally boring", "boring", "lifeless", "emotionless", "flat emotionally", "bland"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["energetic", "dynamic", "intimate", "aggressive", "raw"],
+      "resolution_policy": "clarificationWhenMaterial",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth"],
+          "interpretation": "May concern performance contour, focal hierarchy, timbral motion, depth, or excessive correction; the emotional diagnosis is not a measured acoustic fact.",
+          "supporting_evidence_categories": ["dynamic trajectory", "spectral motion", "transient and sustain variation", "current processing density"],
+          "contradictory_evidence": ["A spectrally or dynamically static source can be musically compelling.", "TrackSmith cannot observe lyric meaning, intention, or the missing arrangement context from an isolated insert."],
+          "candidate_strategy_categories": ["preserveWithoutProcessing", "transientPreservingCompression", "saturation", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["performance", "composition", "arrangement", "automation and musical phrasing"]
+        },
+        {
+          "source_types": ["drums", "drumBus", "bass", "fullMix"],
+          "interpretation": "May mean insufficient groove, section contrast, density change, spatial movement, or focal development; several of these are outside single-insert authority.",
+          "supporting_evidence_categories": ["short-term loudness movement", "crest and sustain", "onset density", "stereo trajectory"],
+          "contradictory_evidence": ["More compression, saturation, or width can create excitement only by loudness or novelty.", "Objective motion metrics do not establish emotional engagement."],
+          "candidate_strategy_categories": ["parallelCompression", "transientPreservingCompression", "saturation", "stereoWidth", "preserveWithoutProcessing", "clarification", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["arrangement", "performance", "section automation", "multitrack hierarchy"]
+        }
+      ],
+      "preservation_risks": ["unnecessary processing", "novelty effects that distract from the song", "loudness bias", "destroyed restraint or negative space"],
+      "provenance_refs": ["arxiv-2602-17769", "arxiv-2309-03404", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.33,
+      "prohibited_mapping": "No excitement preset; do not claim that any metric or effect makes music emotionally engaging."
+    },
+    {
+      "identifier": "glued",
+      "surface_form": "glued",
+      "aliases": ["glued", "more glued", "glue", "cohesive", "more cohesive", "hang together"],
+      "applicable_source_types": ["vocalBus", "drumBus", "fullMix"],
+      "canonical_candidate_terms": ["controlled", "smooth", "dynamic", "punchy", "polished"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["vocalBus", "drumBus", "fullMix"],
+          "interpretation": "May mean shared dynamic motion, tonal compatibility, ambience continuity, harmonic density, or simply a clearer hierarchy; bus compression is one option rather than the definition.",
+          "supporting_evidence_categories": ["crest and loudness movement", "transient and sustain preservation", "tonal distribution", "stereo coherence"],
+          "contradictory_evidence": ["Compression may reduce groove, kick punch, or section contrast.", "An isolated bus cannot establish whether balance or arrangement is the real source of disunity."],
+          "candidate_strategy_categories": ["gentleCompression", "parallelCompression", "subtractiveEQ", "saturation", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["multitrack balance", "shared ambience", "arrangement", "timing relationship"]
+        }
+      ],
+      "preservation_risks": ["lost groove", "reduced kick punch", "pumping", "flattened section contrast", "loudness bias"],
+      "provenance_refs": ["pjc-rhcp-004", "giannoulis-2012-digital-dynamic-range-compressor-design", "arxiv-2309-03404", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.58,
+      "prohibited_mapping": "Do not equate glue with one bus-compressor model, setting, gain-reduction amount, or wet/dry ratio."
+    },
+    {
+      "identifier": "small",
+      "surface_form": "small",
+      "aliases": ["small", "smaller", "tiny", "undersized", "feels little"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["forward", "punchy", "lowEndWeight", "wide", "intimate"],
+      "resolution_policy": "clarificationWhenMaterial",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth"],
+          "interpretation": "May mean low focal level, thin spectral balance, distant depth, narrow image, weak transient definition, or insufficient arrangement role.",
+          "supporting_evidence_categories": ["spectral balance", "crest and envelope", "stereo behavior", "current depth-related evidence"],
+          "contradictory_evidence": ["A narrow or dry source can feel large when it owns the center and level hierarchy.", "Isolated-source measurements cannot establish relative size in the arrangement."],
+          "candidate_strategy_categories": ["additiveEQ", "transientPreservingCompression", "stereoWidth", "saturation", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["relative level", "arrangement", "layering or double-tracking", "ambience design"]
+        },
+        {
+          "source_types": ["drums", "drumBus", "bass", "fullMix"],
+          "interpretation": "May mean weak impact, insufficient body, narrowness, limited depth, or inadequate macro contrast; those senses have different and sometimes opposing remedies.",
+          "supporting_evidence_categories": ["low-frequency balance", "transient-to-sustain behavior", "stereo and mono behavior", "short-term loudness trajectory"],
+          "contradictory_evidence": ["More low end, width, density, or loudness can each reduce clarity and headroom.", "Small may be an intended intimate scale."],
+          "candidate_strategy_categories": ["transientPreservingCompression", "parallelCompression", "additiveEQ", "stereoWidth", "saturation", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["multitrack hierarchy", "arrangement density", "room or ambience", "sample or performance choice"]
+        }
+      ],
+      "preservation_risks": ["loudness substitution", "boomy low end", "phasey width", "lost intimacy", "flattened transients"],
+      "provenance_refs": ["arxiv-2602-17769", "arxiv-2602-12301", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.37,
+      "prohibited_mapping": "Do not equate size with level, bass boost, width, compression, reverb, or saturation without resolving the intended dimension."
+    },
+    {
+      "identifier": "bigger",
+      "surface_form": "bigger",
+      "aliases": ["bigger", "make it big", "huge", "massive", "larger", "larger than life"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["lowEndWeight", "wide", "forward", "punchy", "controlled"],
+      "resolution_policy": "clarificationWhenMaterial",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth"],
+          "interpretation": "May request greater focal scale through level, body, density, width, depth contrast, or layering; several are relational or unsupported by a single inserted AU.",
+          "supporting_evidence_categories": ["spectral body", "dynamic envelope", "stereo behavior", "peak and headroom evidence"],
+          "contradictory_evidence": ["More reverb can make a source feel farther away.", "More width can weaken the center and mono sum.", "More compression can make transients feel smaller."],
+          "candidate_strategy_categories": ["additiveEQ", "parallelCompression", "saturation", "stereoWidth", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["relative level", "layering", "double-tracking", "arrangement", "ambience"]
+        },
+        {
+          "source_types": ["drums", "drumBus", "bass", "fullMix"],
+          "interpretation": "May mean more physical low-frequency weight, impact, density, spatial scale, or macro contrast; a safer candidate set keeps these meanings separate.",
+          "supporting_evidence_categories": ["low-end distribution", "crest and sustain", "stereo and mono translation", "short-term loudness and headroom"],
+          "contradictory_evidence": ["Huge can describe the current state rather than the desired direction.", "Loudness-mismatched candidates will bias size judgments."],
+          "candidate_strategy_categories": ["additiveEQ", "transientPreservingCompression", "parallelCompression", "saturation", "stereoWidth", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["kick-bass relationship", "multitrack balance", "arrangement", "room and ambience"]
+        }
+      ],
+      "preservation_risks": ["lost headroom", "masking", "mono loss", "distant depth", "loudness bias", "role competition"],
+      "provenance_refs": ["arxiv-2602-12301", "arxiv-2309-03404", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.36,
+      "prohibited_mapping": "No universal bigger preset and no assumption that the word is desired rather than descriptive."
+    },
+    {
+      "identifier": "three-dimensional",
+      "surface_form": "three-dimensional",
+      "aliases": ["three-dimensional", "three dimensional", "3d", "more dimensional", "depth and dimension", "immersive"],
+      "applicable_source_types": ["vocalBus", "drumBus", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["wide", "clear", "intimate", "distant", "forward", "monoCompatibility"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["vocalBus", "drumBus", "guitar", "keyboard", "synth"],
+          "interpretation": "May mean stereo extent, front-back depth, direct-versus-ambient contrast, spectral separation, or time-varying movement; width is only one dimension.",
+          "supporting_evidence_categories": ["side-energy share", "mono-sum behavior", "low-band side energy", "spectral density and envelope"],
+          "contradictory_evidence": ["Decorrelated width can sound phasey or collapse in mono.", "The current source may not contain the independent layers needed for convincing spatial scale."],
+          "candidate_strategy_categories": ["stereoWidth", "subtractiveEQ", "preserveWithoutProcessing", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["ambience and delay design", "independent layers", "panning", "multitrack depth hierarchy"]
+        },
+        {
+          "source_types": ["fullMix"],
+          "interpretation": "May mean a coherent depth hierarchy and contrasting center, sides, direct sound, and ambience across sources rather than maximal stereo width.",
+          "supporting_evidence_categories": ["frequency-dependent stereo behavior", "mono translation", "tonal balance", "section-wise spatial change"],
+          "contradictory_evidence": ["A stereo master cannot reconstruct missing independent depth relationships.", "Global widening may damage focal stability and low-end mono compatibility."],
+          "candidate_strategy_categories": ["stereoWidth", "subtractiveEQ", "preserveWithoutProcessing", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["multitrack panning", "send ambience", "front-back source hierarchy", "arrangement"]
+        }
+      ],
+      "preservation_risks": ["mono collapse", "diffuse focal source", "low-end instability", "phase artifacts", "mistaking width for depth"],
+      "provenance_refs": ["arxiv-2309-03404", "arxiv-2602-17769", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.41,
+      "prohibited_mapping": "Do not equate three-dimensional with one stereo-width value, Haas delay, reverb preset, or side boost."
+    },
+    {
+      "identifier": "human",
+      "surface_form": "human",
+      "aliases": ["human", "more human", "keep it human", "organic", "natural", "not robotic"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["raw", "dynamic", "intimate", "soft", "controlled"],
+      "resolution_policy": "clarificationWhenMaterial",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth"],
+          "interpretation": "May ask to preserve performance timing, pitch nuance, microdynamics, breath, touch, noise, or non-repeating variation; those are not interchangeable.",
+          "supporting_evidence_categories": ["dynamic variation", "transient and sustain variation", "source-specific articulation evidence", "current processing density"],
+          "contradictory_evidence": ["Random variation is not equivalent to human performance.", "Tight timing or consistent dynamics can still be an intentional human performance."],
+          "candidate_strategy_categories": ["preserveWithoutProcessing", "gentleCompression", "transientPreservingCompression", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["timing edits", "pitch edits", "performance selection", "MIDI humanization", "comping"]
+        },
+        {
+          "source_types": ["fullMix"],
+          "interpretation": "May mean retaining expressive imperfections, macro dynamics, ensemble relationships, or a recognizable rough-mix identity.",
+          "supporting_evidence_categories": ["loudness range", "crest behavior", "section trajectory", "current graph density"],
+          "contradictory_evidence": ["Higher loudness range does not prove humanity.", "The stereo mix does not expose take, edit, or timing history."],
+          "candidate_strategy_categories": ["preserveWithoutProcessing", "gentleCompression", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["multitrack performance relationships", "edit history", "arrangement", "rough-mix comparison"]
+        }
+      ],
+      "preservation_risks": ["over-tuning", "over-quantization", "over-compression", "noise removal that erases place", "adding fake randomness"],
+      "provenance_refs": ["pjc-zach-holmes-001", "pjc-lukas-001", "arxiv-2602-17769", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.44,
+      "prohibited_mapping": "No randomization, reduced processing amount, saturation, or imperfection preset can be assumed to create humanity."
+    },
+    {
+      "identifier": "blurry",
+      "surface_form": "blurry",
+      "aliases": ["blurry", "blurred", "smeared", "indistinct", "fuzzy in a bad way"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["muddy", "clear", "tight", "controlled", "boomy"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["bass", "drums", "drumBus"],
+          "interpretation": "May mean excessive low-frequency overlap, long sustain, unstable note or hit level, weak leading definition, or kick-bass interaction.",
+          "supporting_evidence_categories": ["sub and low-mid balance", "transient strength", "sustain behavior", "dynamic consistency"],
+          "contradictory_evidence": ["Sustained or blended low end may be intentional.", "A single source cannot reveal kick-bass timing or masking."],
+          "candidate_strategy_categories": ["subtractiveEQ", "gentleCompression", "transientPreservingCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["kick-bass timing", "multitrack masking", "note editing", "source selection"]
+        },
+        {
+          "source_types": ["vocal", "vocalBus", "guitar", "keyboard", "synth", "fullMix"],
+          "interpretation": "May mean spectral masking, diffuse depth, excessive ambience, smeared transients, or dense arrangement rather than one frequency defect.",
+          "supporting_evidence_categories": ["spectral density and concentration", "transient and sustain", "stereo behavior", "source-specific tonal evidence"],
+          "contradictory_evidence": ["Dense or washed texture may be a chosen aesthetic.", "The inserted AU lacks multitrack masking and ambience-send context."],
+          "candidate_strategy_categories": ["subtractiveEQ", "transientPreservingCompression", "stereoWidth", "preserveWithoutProcessing", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["ambience sends", "arrangement density", "multitrack balance", "source editing"]
+        }
+      ],
+      "preservation_risks": ["thinness", "lost sustain", "over-separation", "lost intentional wash", "attacking the wrong source"],
+      "provenance_refs": ["arxiv-2202-08898", "arxiv-2309-03404", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.49,
+      "prohibited_mapping": "Do not equate blurry with one low-mid cut, faster compression, transient boost, or reverb reduction."
+    },
+    {
+      "identifier": "painful-when-loud",
+      "surface_form": "hurts when loud",
+      "aliases": ["hurts when loud", "hurts when I turn it up", "painful", "piercing", "ear-piercing", "fatiguing at volume"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["harsh", "sibilant", "cymbalHarshness", "bright", "aggressive", "pickAttack"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus"],
+          "interpretation": "May indicate event-specific sibilance, upper-mid harshness, clipping, dense sustained brightness, or a monitoring-level interaction; preserve intelligibility and breath while testing alternatives.",
+          "supporting_evidence_categories": ["sibilance-event evidence", "upper-band energy", "peak and nonfinite safety", "air evidence"],
+          "contradictory_evidence": ["Average brightness cannot locate brief painful events.", "The problem may originate in monitoring, another source, or an upstream nonlinear stage."],
+          "candidate_strategy_categories": ["dynamicEQOrDeEsser", "subtractiveEQ", "gentleCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["monitoring calibration", "upstream clipping", "other-source masking or resonance", "event editing"]
+        },
+        {
+          "source_types": ["drums", "drumBus"],
+          "interpretation": "May indicate cymbal-event harshness, clipped transients, resonant upper mids, or cumulative sustain; the drum attack and cymbal tone require separate constraints.",
+          "supporting_evidence_categories": ["transient high-frequency energy", "cymbal sustain", "crest and peak safety", "spectral concentration"],
+          "contradictory_evidence": ["Broad treble cuts can bury stick and snare definition.", "Static spectrum can miss event-specific pain."],
+          "candidate_strategy_categories": ["dynamicEQOrDeEsser", "subtractiveEQ", "transientPreservingCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["cymbal balance", "overhead close-mic relationship", "monitoring calibration"]
+        },
+        {
+          "source_types": ["guitar", "keyboard", "synth", "fullMix"],
+          "interpretation": "May indicate resonant concentration, distortion intermodulation, aliasing, clipping, or sustained tonal balance rather than a generic lack of warmth.",
+          "supporting_evidence_categories": ["2-5 kHz energy", "third-octave concentration", "peak safety", "spectral density"],
+          "contradictory_evidence": ["Aggressive pick or synth edge may be an explicit preserved trait.", "A stereo mix cannot attribute the painful event to one source."],
+          "candidate_strategy_categories": ["dynamicEQOrDeEsser", "subtractiveEQ", "gentleCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["amp or synth patch revision", "monitoring calibration", "multitrack attribution", "upstream nonlinear processing"]
+        }
+      ],
+      "preservation_risks": ["lost aggression", "buried pick or stick attack", "lost diction or air", "blanket dullness", "false attribution"],
+      "provenance_refs": ["arxiv-2202-08898", "arxiv-2603-16682", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.57,
+      "prohibited_mapping": "No universal harsh-frequency notch or high-shelf cut; event timing, source, level, and monitoring remain material."
+    },
+    {
+      "identifier": "surround-the-vocal",
+      "surface_form": "surround the vocal",
+      "aliases": ["surround the vocal", "wrap around the vocal", "sit around the vocal", "make room around the vocal", "outside the vocal"],
+      "applicable_source_types": ["guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["wide", "clear", "monoCompatibility", "distant", "forward"],
+      "resolution_policy": "clarificationWhenMaterial",
+      "possible_senses": [
+        {
+          "source_types": ["guitar", "keyboard", "synth"],
+          "interpretation": "May request a relational change in width, center occupancy, spectral competition, depth, or level so a vocal remains focal; TrackSmith cannot verify that relation without vocal or mix context.",
+          "supporting_evidence_categories": ["source stereo behavior", "low-band side energy", "spectral density", "mono-sum behavior"],
+          "contradictory_evidence": ["Widening can create mono loss without creating vocal space.", "EQ on the accompaniment may target the wrong band without vocal evidence."],
+          "candidate_strategy_categories": ["stereoWidth", "subtractiveEQ", "preserveWithoutProcessing", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["vocal-accompaniment masking", "panning", "sidechain context", "multitrack level and depth"]
+        },
+        {
+          "source_types": ["fullMix"],
+          "interpretation": "Describes a multitrack hierarchy inside the stereo mix; a master-bus insert should usually abstain from pretending it can separately move the accompaniment around the vocal.",
+          "supporting_evidence_categories": ["global stereo and mono behavior", "tonal balance", "focal stability under audition"],
+          "contradictory_evidence": ["Master-bus widening or EQ changes every source.", "The vocal identity is not isolated in current analysis."],
+          "candidate_strategy_categories": ["preserveWithoutProcessing", "clarification", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["multitrack panning", "source-specific EQ", "send ambience", "vocal automation"]
+        }
+      ],
+      "preservation_risks": ["mono loss", "weak center", "incorrect spectral carving", "altering low-end focus", "hallucinated multitrack authority"],
+      "provenance_refs": ["arxiv-2309-03404", "dafx-2011-audio-effects-ontology", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.51,
+      "prohibited_mapping": "Do not treat the current inserted source as if TrackSmith can observe or independently edit the vocal and accompaniment."
+    },
+    {
+      "identifier": "clean-without-sterilizing",
+      "surface_form": "clean without sterilizing",
+      "aliases": ["clean it up without sterilizing", "clean without sterilizing", "cleaner but natural", "polish it but keep it human", "clean but not sterile"],
+      "applicable_source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth", "fullMix"],
+      "canonical_candidate_terms": ["clear", "polished", "raw", "dynamic", "intimate"],
+      "resolution_policy": "multipleNamedHypotheses",
+      "possible_senses": [
+        {
+          "source_types": ["vocal", "vocalBus", "drums", "drumBus", "bass", "guitar", "keyboard", "synth"],
+          "interpretation": "Requests selective control of distracting defects while explicitly preserving performance, place, dynamics, and source identity; the default null hypothesis is material.",
+          "supporting_evidence_categories": ["source-specific event defects", "dynamic consistency", "spectral concentration", "current raw and intimate evidence"],
+          "contradictory_evidence": ["An apparent defect may be identity-bearing.", "Current metrics may not distinguish capture texture from noise or intentional grit."],
+          "candidate_strategy_categories": ["subtractiveEQ", "dynamicEQOrDeEsser", "gentleCompression", "preserveWithoutProcessing", "listeningComparison"],
+          "unsupported_or_non_dsp_considerations": ["comping and editing", "denoising", "timing or pitch repair", "recording replacement"]
+        },
+        {
+          "source_types": ["fullMix"],
+          "interpretation": "May request correction of distracting peaks, resonances, imbalance, or translation problems while preserving macro dynamics, rough-mix identity, and intentional texture.",
+          "supporting_evidence_categories": ["peak and true-peak safety", "tonal balance", "loudness range and crest", "stereo and mono translation"],
+          "contradictory_evidence": ["Master-bus cleanup may mask a source-specific problem.", "More uniform tone or dynamics can erase intentional contrast."],
+          "candidate_strategy_categories": ["subtractiveEQ", "gentleCompression", "preserveWithoutProcessing", "listeningComparison", "clarification"],
+          "unsupported_or_non_dsp_considerations": ["multitrack repair", "arrangement", "source replacement", "delivery approval"]
+        }
+      ],
+      "preservation_risks": ["sterility", "generic tone", "lost dynamics", "lost ambience or noise identity", "over-correction"],
+      "provenance_refs": ["pjc-zach-holmes-001", "pjc-lukas-001", "arxiv-2309-03404", "TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1"],
+      "confidence": 0.61,
+      "prohibited_mapping": "Do not infer blanket noise removal, tuning, quantization, compression, or spectral smoothing."
+    }
+  ],
+  "interaction_relations": [
+    {"id": "competes_with", "definition": "Two sources or traits contend for perceptual or technical capacity; harm is not implied."},
+    {"id": "supports", "definition": "One source or process improves the intended role of another."},
+    {"id": "anchors", "definition": "A source establishes timing, harmony, low-end, narrative, or emotional reference for decisions."},
+    {"id": "focal_over", "definition": "A declared hierarchy relation, not inferred solely from level."},
+    {"id": "blends_with", "definition": "Intentional perceptual fusion where separation may be harmful."},
+    {"id": "contrasts_with", "definition": "A section or source is meaningful because it differs from another."},
+    {"id": "sidechain_context_for", "definition": "One signal informs deterministic dynamics or spectral control of another; this does not imply joint optimization."},
+    {"id": "preserves_identity_of", "definition": "A constraint protecting an accepted source, performance, rough mix, or artist-specific relationship."}
+  ],
+  "validation_rules": [
+    "A prohibited or preserved role cannot be downgraded to desired without an explicit user revision.",
+    "A reference must have relation, target, and attribute scope before it can influence a plan.",
+    "A genre, artist, engineer, or era token cannot compile directly to DSP.",
+    "A metric identifier may support or contradict a hypothesis but cannot be the sole artistic justification.",
+    "A plan must expose target and time scope and cannot silently expand them.",
+    "When interpretations imply materially different operations or preservation risks, clarify or generate named candidates.",
+    "Every executable candidate includes a null comparison when evidence does not establish necessary change.",
+    "Structural, performance, and narrative recommendations remain non-executable unless decomposed into an authorized bounded audio action.",
+    "Provider output cannot introduce a term sense, source fact, reference scope, or operation absent from validated fields.",
+    "A candidate's success requires both target-direction and non-target preservation evidence plus listening evaluation appropriate to the claim."
+  ],
+  "evaluation_links": {
+    "semantic_regression_corpus": "research/evaluation/TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1.json",
+    "producer_decisions": "research/knowledge/PRODUCER_JUDGMENT_CORPUS.jsonl",
+    "genre_context": "research/knowledge/GENRE_AESTHETIC_MAP.json",
+    "traceability": "research/knowledge/TRACEABILITY_MATRIX.jsonl",
+    "required_fixture_families": [
+      "negation and prohibited traits",
+      "preservation and rough-mix locks",
+      "mixed positive, negative, and referential roles",
+      "whole-mix versus source and section scope",
+      "same adjective across source roles",
+      "same adjective across conflicting genres and eras",
+      "arrangement-level requests that require abstention",
+      "multiple valid interpretations",
+      "no-change and deliberate imperfection",
+      "evolving feedback and scoped revision",
+      "unsupported model certainty",
+      "reference alignment that harms a preserved trait"
+    ]
+  }
+}

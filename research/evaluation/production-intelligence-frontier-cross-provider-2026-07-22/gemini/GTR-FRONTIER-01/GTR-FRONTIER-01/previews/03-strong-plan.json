@@ -1,0 +1,76 @@
+{
+  "goals" : [
+    {
+      "attribute" : "harshness",
+      "direction" : "decrease",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "punch",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "0D961292-8F30-465F-B9E8-A1E3CEC88887",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 3200,
+        "gainDB" : -10.2,
+        "q" : 1.2
+      },
+      "rationale" : "Test a bounded source-specific presence-band reduction while preserving articulation.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "78440D11-51B3-599C-8267-1B6BF8A374B8",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.16732866141048675
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "3837370F-C5C0-45CE-9675-09394035F63F",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "34054C5C-51B3-499C-8267-1B6BF8A374B8",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "55D6FCE0-ED04-4CF6-B540-A76F58A42DB6"
+}

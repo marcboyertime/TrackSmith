@@ -1,0 +1,75 @@
+{
+  "goals" : [
+    {
+      "attribute" : "width",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 1
+    },
+    {
+      "attribute" : "width",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 1
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.64,
+      "enabled" : true,
+      "id" : "CFD6CE61-F24A-4266-A67D-97F5AA1F0B6A",
+      "locked" : false,
+      "parameters" : {
+        "mix" : 0.65,
+        "width" : 1.33
+      },
+      "rationale" : "Apply conservative stereo widening scaled down when mono retention or low-band side evidence is concerning.",
+      "type" : "stereoWidth"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "B038434F-8E35-50BB-B605-934CD0D05950",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : -0.11648968282528749
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "FB649BB5-743C-4A51-AFE6-0A6141FF1367",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "FC790202-8E35-40BB-B605-934CD0D05950",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "stereo",
+    "kind" : "importedFile",
+    "sourceType" : "synth",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "95E3900D-4358-4B55-8831-6C2B656E12F0"
+}

@@ -1,0 +1,317 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-bitcrusher-default-48k-2026-07-18",
+  "product": "TrackSmith",
+  "recordedAt": "2026-07-18T22:12:29-04:00",
+  "identityIdentifier": "logic-pro-12.3:bitcrusher",
+  "identityName": "Bitcrusher",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectorySHA256": "be60f7ec31ed955307f7021641d763c26ce4988e976aa8332f21bb9dc4fe8e8a",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured"
+  },
+  "project": {
+    "name": "TrackSmith Logic 12.3 Bitcrusher Empirical 48k 2026-07-18",
+    "archivePath": "project/TrackSmith Logic 12.3 Bitcrusher Empirical 48k 2026-07-18.logicx.zip",
+    "archiveSHA256": "e60082bbb7d1049a2b2a33b66755f151a15eddc061ef586aaceb5f973f523c67",
+    "sampleRateHz": 48000,
+    "tempoBPM": 120,
+    "trackChannelFormat": "mono",
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "savedState": "Bitcrusher active with observed Default Preset values",
+    "postMeasurementUnsavedBypassState": "discarded when the project was closed without saving"
+  },
+  "nativeState": {
+    "presetName": "Default Preset",
+    "observedBeforeSave": true,
+    "observedAfterReload": true,
+    "parameters": {
+      "mode": "Clip",
+      "driveDB": 3.0,
+      "resolutionBits": 8,
+      "downsamplingFactor": 1,
+      "mixPercent": 100.0,
+      "clipLevelDB": 0.0
+    },
+    "importantInterpretation": "The Logic 12.3 default insertion is not neutral and is not an isolated bit-depth reduction. It combines +3 dB Drive, 8-bit Resolution, Clip mode at 0 dB, 100% wet Mix, and 1x Downsampling."
+  },
+  "modelContextSummary": "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: the observed Default Preset was Clip, +3 dB Drive, 8-bit Resolution, 1x Downsampling, 100% Mix, and 0 dB Clip Level. Three settled bypass renders matched the fixture PCM exactly; three settled active renders plus one post-reload render shared one PCM hash. First-transition renders differed briefly, so settled repeats are required. Fold, Wrap, parameter grids, downsampling above 1x, stereo, other rates, musical preference, and Apple's exact implementation remain unmeasured.",
+  "input": {
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureName": "amplitude_ladder_1khz_mono.wav",
+    "artifactPath": "artifacts/source_amplitude_ladder_1khz_mono.wav",
+    "fileSHA256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+    "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+    "sampleRateHz": 48000,
+    "channels": 1,
+    "bitDepth": 24,
+    "frameCount": 384000,
+    "durationSeconds": 8.0,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The fixture file retained the suite-manifest SHA-256. Logic's project-local WAVE copy has different container bytes but retained identical decoded PCM after the run; see artifacts/project-copy-analysis.json."
+  },
+  "renderMethod": {
+    "LogicCommand": "File > Export > Regions as Audio Files",
+    "range": "Trim Silence at File End",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeVolumePanAutomation": false,
+    "includeTempoInformation": false,
+    "bypassEffectPluginsExportOption": false,
+    "bypassMethod": "Bitcrusher plug-in header On/Off control",
+    "dither": "not exposed by this export dialog",
+    "renderSchedulingMode": "not exposed by this export dialog; no realtime/offline timing claim is made"
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_this_sample_rate_channel_format_and_fixture",
+      "evidence": "Default state captured before save and after reload; three settled manual-bypass renders matched the fixture PCM exactly."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "not_run",
+      "evidence": "Fold and Wrap were not rendered; only Clip was measured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "not_run",
+      "evidence": "Only the observed Default Preset values were measured."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial",
+      "evidence": "Zero-lag correlation, polarity, level, peak, and exact frame count were measured on the amplitude fixture. An impulse-based latency/tail lane was not run."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_the_observed_default_and_settled_bypass_states",
+      "evidence": "Three settled active renders and one post-reload active render share one decoded PCM hash; three settled bypass renders share the source PCM hash."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_this_project_run",
+      "evidence": "The UI state was reobserved after save/reload, the post-reload output matched the settled pre-save PCM exactly, the fixture file retained its manifest hash, and the project-local source copy retained identical decoded PCM."
+    }
+  },
+  "measurements": {
+    "settledBypass": {
+      "renderCount": 3,
+      "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+      "matchesSourcePCM": true,
+      "frameCount": 384000,
+      "zeroLagCorrelation": 1.0
+    },
+    "settledDefault": {
+      "preSaveRenderCount": 3,
+      "postReloadRenderCount": 1,
+      "pcmSHA256": "89b449e88b149ca9dc95e188506bfc0fa61412190a2ff2739f2bb28bb5fe48c5",
+      "allSettledAndPostReloadPCMIdentical": true,
+      "frameCount": 384000,
+      "peakDBFS": -0.0000010354387945872,
+      "rmsDBFS": -8.456398843099855,
+      "firstNonzeroSample": 39083,
+      "leastSquaresGainRelativeToSettledBypassDB": 2.5463658609533972,
+      "zeroLagCorrelationRelativeToSettledBypass": 0.9964938879420822,
+      "rmsResidualDBFS": -19.936858466145083,
+      "polarity": "noninverted"
+    },
+    "source": {
+      "peakDBFS": -0.9999997091320568,
+      "rmsDBFS": -11.033271918609975,
+      "firstNonzeroSample": 1
+    }
+  },
+  "stateTransitionFindings": [
+    {
+      "finding": "The first bypass export after a state transition differed only within samples 1 through 1023; samples from 1024 onward matched the fixture.",
+      "classification": "observed_initialization_artifact_not_valid_baseline",
+      "consequence": "A native-effect empirical run must discard initial renders until at least three settled decoded-PCM repeats agree."
+    },
+    {
+      "finding": "The first active export differed from the settled active result only within samples 2 through 478.",
+      "classification": "observed_initialization_artifact_not_valid_steady_state",
+      "consequence": "The first active render is preserved for audit but excluded from steady-state transfer claims."
+    },
+    {
+      "finding": "Whole-file WAVE hashes varied across settled repeats while decoded PCM hashes were identical.",
+      "classification": "container_metadata_variation",
+      "consequence": "Repeatability is evaluated using both immutable whole-file hashes and decoded-PCM hashes; PCM identity is the signal criterion."
+    }
+  ],
+  "interpretation": {
+    "stronglySupported": [
+      "At the observed Logic 12.3 Default Preset state, the settled bypass path is sample-transparent for this 48 kHz mono PCM24 fixture.",
+      "At that same state, three settled pre-save renders and one post-reload render are decoded-PCM identical.",
+      "The observed default state reaches digital full scale and suppresses the quietest ladder material because it is an active +3 dB, 8-bit, Clip-mode process rather than a neutral insertion."
+    ],
+    "inferences": [
+      "The delayed first nonzero output is consistent with coarse amplitude quantization mapping low-amplitude samples to zero; this run does not identify Apple's exact quantizer rounding law."
+    ],
+    "notEstablished": [
+      "The exact private transfer function or quantizer implementation.",
+      "Fold or Wrap behavior.",
+      "Any setting other than the observed Default Preset.",
+      "Downsampling alias behavior because Downsampling was 1x.",
+      "Stereo, other sample rates, tails, impulse latency, automation, musical preference, or universal production suitability."
+    ]
+  },
+  "excludedAttempts": [
+    {
+      "localQuarantinePath": "tmp/logic-native-empirical/runs/2026-07-18-bitcrusher-default",
+      "reason": "The first project was still 44.1 kHz when the 48 kHz fixture was imported, so Logic resampled the project-local source and the resulting renders cannot support the intended 48 kHz transfer comparison.",
+      "evidenceUse": "none",
+      "disposition": "retained locally and excluded rather than overwritten or silently merged"
+    }
+  ],
+  "artifactFiles": [
+    {
+      "path": "artifacts/source_amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "immutable source fixture"
+    },
+    {
+      "path": "artifacts/project-copy-analysis.json",
+      "sha256": "b688979bc470a55f68b04b6698be41ea11d366ecd033b347ab7c073b9fda65e1",
+      "role": "post-run project-local source PCM preservation analysis"
+    },
+    {
+      "path": "artifacts/bitcrusher-default-ui-48k.png",
+      "sha256": "24a863e6a75e34acc2e2d5608da4183a2bcb8c07fef5aa83117153ae8116aebc",
+      "role": "pre-save parameter UI evidence"
+    },
+    {
+      "path": "artifacts/bitcrusher-default-ui-post-reload-48k.png",
+      "sha256": "06a9882fbe72cf0982e4b4ba24d407f72e93e8f1d8ff78f6f58d2ac5b7eef431",
+      "role": "post-reload parameter UI evidence"
+    },
+    {
+      "path": "artifacts/project-reopened-bitcrusher-active-48k.png",
+      "sha256": "0e00a4b2d018fecf475818314c7b114e70367d0122258ed25fa29856a78cb8f8",
+      "role": "reopened project and active insert evidence"
+    },
+    {
+      "path": "artifacts/baseline_bypassed.wav",
+      "sha256": "fd634c73089bf974d198f3f2bd74a38ee1be7b66917b5360736555d908af790a",
+      "role": "retained invalid first-transition bypass render"
+    },
+    {
+      "path": "artifacts/baseline-analysis.json",
+      "sha256": "7403ff971f990e34fbc5477d988de19a9cf649ba91abcfb152cc182d3a26fad5",
+      "role": "initial bypass transition analysis"
+    },
+    {
+      "path": "artifacts/baseline_bypassed_settled_1.wav",
+      "sha256": "dbeede0f964439a7c472d2a9db344b6b54251adfa4604f626f15aa6f13178959",
+      "role": "settled bypass repeat 1"
+    },
+    {
+      "path": "artifacts/baseline_bypassed_settled_2.wav",
+      "sha256": "ebe6ea0ed0f6830bbd8bb207440da03c3fae22b2270f988399d075b732c9e932",
+      "role": "settled bypass repeat 2"
+    },
+    {
+      "path": "artifacts/baseline_bypassed_settled_3.wav",
+      "sha256": "6717bc4fdf465dac85afb147346749b8d09be304436b8486ac4fb0c2e6a87efe",
+      "role": "settled bypass repeat 3"
+    },
+    {
+      "path": "artifacts/baseline-settled1-analysis.json",
+      "sha256": "089adae29fae058672b3c50283c77a0fc197f0448f47c19f95efa78f099a0b8a",
+      "role": "settled bypass versus source analysis"
+    },
+    {
+      "path": "artifacts/baseline-settled2-vs-settled1-analysis.json",
+      "sha256": "c942f2137b08dcf977c24f7e09e0c1f562762dd6373bb00ac7e0da52fc6bfbe1",
+      "role": "settled bypass decoded-PCM repeatability analysis"
+    },
+    {
+      "path": "artifacts/baseline-settled3-vs-settled1-analysis.json",
+      "sha256": "b0fd917ef470bd7d7347158941a4d39248883c0592a737744af55aa852582cc4",
+      "role": "settled bypass decoded-PCM repeatability analysis"
+    },
+    {
+      "path": "artifacts/default_clip_drive3_resolution8_downsample1_mix100_clip0.wav",
+      "sha256": "39fd3d02d08f49c41525b2ecf5b0d02c6808431643707a0147873abe0167d1e5",
+      "role": "retained initial active transition render"
+    },
+    {
+      "path": "artifacts/default_clip_drive3_resolution8_downsample1_mix100_clip0_repeat2.wav",
+      "sha256": "c224455fe036f081768d4fe48fc958b0542351404406d15308f8b308174bf40b",
+      "role": "settled active repeat 1"
+    },
+    {
+      "path": "artifacts/default_clip_drive3_resolution8_downsample1_mix100_clip0_repeat3.wav",
+      "sha256": "daef237358e245d176a7a2231907dda61c6538a7fc7470c9d3b07f0624d1094e",
+      "role": "settled active repeat 2"
+    },
+    {
+      "path": "artifacts/default_clip_drive3_resolution8_downsample1_mix100_clip0_repeat4.wav",
+      "sha256": "3714d2b2f48362beeeecc39f06a9a8a694321d480cc20a577086040799bf56c1",
+      "role": "settled active repeat 3"
+    },
+    {
+      "path": "artifacts/default_clip_drive3_resolution8_downsample1_mix100_clip0_post_reload.wav",
+      "sha256": "6d93d11ba05b48f8d20fea12ef5fc6f250e424c44f427552a3d85b2acfae17fa",
+      "role": "post-reload active render"
+    },
+    {
+      "path": "artifacts/default-initial-vs-repeat2-analysis.json",
+      "sha256": "3d8586888662a1d092a0e4ba66d81d83e23abf52acbf7db9915e4e7032945121",
+      "role": "initial active transition analysis"
+    },
+    {
+      "path": "artifacts/default-repeat4-vs-repeat2-analysis.json",
+      "sha256": "526c4245b3d144fe54173aaf5e58ce228d3b1d456f0afe5e66b7e9c9b907ec55",
+      "role": "settled active decoded-PCM repeatability analysis"
+    },
+    {
+      "path": "artifacts/default-post-reload-vs-repeat2-analysis.json",
+      "sha256": "e9b97cf90475fe1961c730e5614d959bfa5dc9c6c494c30f455aa226686e7577",
+      "role": "save-reload decoded-PCM identity analysis"
+    },
+    {
+      "path": "artifacts/default-repeat2-vs-settled-baseline-analysis.json",
+      "sha256": "2ac95d3347f70af369fe3f689e735168ffee4d30e9d2006d0611d55848c22c38",
+      "role": "steady default transfer metrics versus settled bypass"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Empirical 48k 2026-07-18.logicx.zip",
+      "sha256": "e60082bbb7d1049a2b2a33b66755f151a15eddc061ef586aaceb5f973f523c67",
+      "role": "saved active-state disposable Logic project"
+    }
+  ],
+  "claimBoundary": {
+    "documentaryBehaviorUsed": true,
+    "directSignalEvidenceUsed": true,
+    "privateImplementationClaimed": false,
+    "allBitcrusherModesOrSettingsCharacterized": false,
+    "artisticSuperiorityClaimed": false,
+    "trackSmithExecutionAuthorityGranted": false,
+    "subjectiveListeningCompleted": false
+  }
+}

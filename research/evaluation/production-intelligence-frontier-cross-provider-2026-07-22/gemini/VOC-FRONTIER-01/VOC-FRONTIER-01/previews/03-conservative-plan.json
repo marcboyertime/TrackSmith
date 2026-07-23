@@ -1,0 +1,86 @@
+{
+  "goals" : [
+    {
+      "attribute" : "closeness",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.3
+    },
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.25
+    },
+    {
+      "attribute" : "brightness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.4
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.74,
+      "enabled" : true,
+      "id" : "3DE7FF62-F243-446B-A6A9-FD31F1DC2507",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 16.839970652670974,
+        "kneeDB" : 5.75,
+        "makeupGainDB" : 0,
+        "mix" : 0.5175000000000001,
+        "ratio" : 1.775,
+        "releaseMS" : 193.6596625057162,
+        "thresholdDB" : -13.125825871081473
+      },
+      "rationale" : "Test a bounded dynamics-led interpretation because the validated hypothesis selected compression; this does not prove the production adjective.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "F8C9BDDC-1630-521A-B963-4E110786971C",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.7563179986670487
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "B88A0082-5AC4-4BD0-90BD-561F6CFB14E0",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "B488FC91-1630-421A-B963-4E110786971C",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "3DB9CF09-ED58-4224-B64C-37E0A2EFBA8F"
+}

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SpectraLayers 13 ARA crashing Reaper on Unmix Song - SpectraLayers - Steinberg Forums</title>
+    <meta name="description" content="Steps to reproduce: 
+
+Load any audio file in Reaper (I used 7.76)
+Add SpectraLayers 13 as an FX on that track (VST3 as ARA)
+Select Unmix Song, everything selected (any quality)
+Click Apply
+
+After the ~20s “load time”, “E…">
+    <meta name="generator" content="Discourse 2026.7.0-latest - https://github.com/discourse/discourse version 7b025265d254f731ba1036e550b7475b3d1c74b4">
+<link rel="icon" type="image/png" href="https://europe1.discourse-cdn.com/steinberg/optimized/3X/b/e/becc0b2f3a148c189008691bb9be347bc647ba07_2_32x32.svg">
+<link rel="apple-touch-icon" type="image/png" href="https://europe1.discourse-cdn.com/steinberg/optimized/3X/b/e/becc0b2f3a148c189008691bb9be347bc647ba07_2_180x180.svg">
+<meta name="theme-color" media="all" content="#ffffff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450" />
+
+<meta name="discourse-track-view-session-id" content="UdlghDSanO8yW0GViEwYacQbF00S50Y7"><meta name="discourse-engagement-tracking-enabled" content="true">
+<link rel="search" type="application/opensearchdescription+xml" href="https://forums.steinberg.net/opensearch.xml" title="Steinberg Forums Search">
+
+    
+    <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/color_definitions_wcag-light_2_1_dafe6027970b5d02ab9eb602f48d53f9188190c5.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" class="light-scheme" data-scheme-id="2"/>
+
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/common_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="common"  />
+
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/mobile_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="(width < 40rem)" rel="stylesheet" data-target="mobile"  />
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/desktop_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="(width >= 40rem)" rel="stylesheet" data-target="desktop"  />
+
+
+
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/checklist_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="checklist"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-ai_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-ai"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-akismet_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-akismet"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-cakeday_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-cakeday"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-data-explorer_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-data-explorer"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-details_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-details"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-github_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-github"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-lazy-videos_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-local-dates_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-narrative-bot_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-policy_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-policy"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-presence_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-presence"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-rewind_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-rewind"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-saved-searches_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-saved-searches"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-solved_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-solved"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-templates_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-templates"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-topic-voting_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/footnote_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="footnote"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/hosted-site_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="hosted-site"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/poll_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="poll"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/spoiler-alert_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="spoiler-alert"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-ai_mobile_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="(width < 40rem)" rel="stylesheet" data-target="discourse-ai_mobile"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-rewind_mobile_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="(width < 40rem)" rel="stylesheet" data-target="discourse-rewind_mobile"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/discourse-ai_desktop_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="(width >= 40rem)" rel="stylesheet" data-target="discourse-ai_desktop"  />
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/poll_desktop_3b6fe724cdb7444b9a80987d4b73ee45dfe77a41.css?__ws=forums.steinberg.net" media="(width >= 40rem)" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/common_theme_2_1089b3e8a5466aceb853d3b7730ff263cf672bad.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="category headers theme component"/>
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/common_theme_6_355ff346d64dfda75e9c10aae8d3ad1b7c395dc3.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="6" data-theme-name="custom header links"/>
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/common_theme_7_a1505fa394b95222cbb2670b2ea36194a6e53781.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="7" data-theme-name="work sans and bitter font"/>
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/common_theme_1_25c5da7f74bf3e0a73f8a9d6f4140a98a77c6811.css?__ws=forums.steinberg.net" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="1" data-theme-name="default"/>
+  <link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/mobile_theme_2_d0a8b458447d3dd7c8d3bec662d699e17dc25821.css?__ws=forums.steinberg.net" media="(width < 40rem)" rel="stylesheet" data-target="mobile_theme" data-theme-id="2" data-theme-name="category headers theme component"/>
+<link href="https://dub1.discourse-cdn.com/steinberg/stylesheets/mobile_theme_1_d3c603fc959b16aff709df9c84bd0eb82fe97437.css?__ws=forums.steinberg.net" media="(width < 40rem)" rel="stylesheet" data-target="mobile_theme" data-theme-id="1" data-theme-name="default"/>
+  
+
+    
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;SpectraLayers 13 ARA crashing Reaper on Unmix Song&#39;" href="https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450.rss" />
+    <meta property="og:site_name" content="Steinberg Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="og:image" content="https://europe1.discourse-cdn.com/steinberg/original/3X/b/e/becc0b2f3a148c189008691bb9be347bc647ba07.svg" />
+<meta property="og:url" content="https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450" />
+<meta name="twitter:url" content="https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450" />
+<meta property="og:title" content="SpectraLayers 13 ARA crashing Reaper on Unmix Song" />
+<meta name="twitter:title" content="SpectraLayers 13 ARA crashing Reaper on Unmix Song" />
+<meta property="og:description" content="Steps to reproduce:   Load any audio file in Reaper (I used 7.76) Add SpectraLayers 13 as an FX on that track (VST3 as ARA) Select Unmix Song, everything selected (any quality) Click Apply  After the ~20s “load time”, “Estimating” appears briefly, but when processing should begin, Reaper crashes, just disappearing from the screen … no crash log, nothing." />
+<meta name="twitter:description" content="Steps to reproduce:   Load any audio file in Reaper (I used 7.76) Add SpectraLayers 13 as an FX on that track (VST3 as ARA) Select Unmix Song, everything selected (any quality) Click Apply  After the ~20s “load time”, “Estimating” appears briefly, but when processing should begin, Reaper crashes, just disappearing from the screen … no crash log, nothing." />
+<meta property="og:article:section" content="SpectraLayers" />
+<meta property="og:article:section:color" content="b648b7" />
+<meta property="og:article:tag" content="issue" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="1 min 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="10 ❤" />
+<meta property="article:published_time" content="2026-07-07T11:29:37+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"QAPage","name":"SpectraLayers 13 ARA crashing Reaper on Unmix Song","datePublished":"2026-07-07T11:29:37.136Z","mainEntity":{"@type":"Question","answerCount":9,"author":{"@type":"Person","name":"MrSoundman","url":"https://forums.steinberg.net/u/MrSoundman"},"dateModified":"2026-07-07T11:29:37.291Z","datePublished":"2026-07-07T11:29:37.136Z","name":"SpectraLayers 13 ARA crashing Reaper on Unmix Song","text":"Steps to reproduce:\n\nLoad any audio file in Reaper (I used 7.76)\n\nAdd SpectraLayers 13 as an FX on that track (VST3 as ARA)\n\nSelect Unmix Song, everything selected (any quality)\n\nClick Apply\n\nAfter the ~20s “load time”, “Estimating” appears briefly, but when processing should begin, Reaper crashes, ju&hellip;","upvoteCount":1,"acceptedAnswer":[{"@type":"Answer","author":{"@type":"Person","name":"Robin_Lobel","url":"https://forums.steinberg.net/u/Robin_Lobel"},"dateModified":"2026-07-08T19:04:20.426Z","datePublished":"2026-07-08T19:04:20.371Z","text":"Hi <a class=\"mention\" href=\"/u/mrsoundman\">@MrSoundman<\/a> I could indeed repro the crash with 13.0.0, but the upcoming 13.0.10 seems to run fine in Reaper (tested with Reaper 7.76 on Windows 11, with and without GPU acceleration).\n\nAs for the file handling in Nuendo, it’s not an issue but by design (and by ARA tech limitations, it’s been lik&hellip;","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/8"}],"suggestedAnswer":[{"@type":"Answer","author":{"@type":"Person","name":"digitaldiggo","url":"https://forums.steinberg.net/u/digitaldiggo"},"dateModified":"2026-07-07T12:41:49.012Z","datePublished":"2026-07-07T12:41:48.979Z","text":"Insufficient GPU memory to load all of the models used when unmixing. You have to unmix 1 or 2 models at a time, but it seems SL13 has not delivered a workflow which allows sequential loading/unloading/loading etc","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/2"},{"@type":"Answer","author":{"@type":"Person","name":"MrSoundman","url":"https://forums.steinberg.net/u/MrSoundman"},"dateModified":"2026-07-07T22:22:24.628Z","datePublished":"2026-07-07T22:22:24.582Z","text":"[image] digitaldiggo:\n\nInsufficient GPU memory to load all of the models\n\nNope, doesn’t happen in Nuendo on the same machine.","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/3"},{"@type":"Answer","author":{"@type":"Person","name":"digitaldiggo","url":"https://forums.steinberg.net/u/digitaldiggo"},"dateModified":"2026-07-08T06:13:21.746Z","datePublished":"2026-07-08T06:13:21.705Z","text":"I suggest running multiple examples of Unmix Song (using a typical 3 or 4 minute song) with all models ticked, directly within SL and indirectly via ARA in Nuendo and Reaper.\n\nMaybe 10 tests in each of the 3 scenarios.\n\nThen run the same test with Use Shared Memory selected (or unselected if you usu&hellip;","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/4"},{"@type":"Answer","author":{"@type":"Person","name":"MrSoundman","url":"https://forums.steinberg.net/u/MrSoundman"},"dateModified":"2026-07-08T08:08:46.350Z","datePublished":"2026-07-08T08:08:46.304Z","text":"Thanks for the suggested workarounds, but with respect, I’m not a beta tester. I was reporting an easily reproducible serious issue with SpectraLayers 13 that crashes the host application instantly.\n\n<a class=\"mention\" href=\"/u/robin_lobel\">@Robin_Lobel<\/a> is this the same fix scheduled in patch 1 for the <a href=\"https://forums.steinberg.net/t/spectralayers-pro-13-crashing-protools/1036144\">instant crash in Pro Tools<\/a>?","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/5"},{"@type":"Answer","author":{"@type":"Person","name":"digitaldiggo","url":"https://forums.steinberg.net/u/digitaldiggo"},"dateModified":"2026-07-08T09:04:49.229Z","datePublished":"2026-07-08T09:04:49.170Z","text":"[image] MrSoundman:\n\nThanks for the suggested workarounds, but with respect, I’m not a beta tester\n\nOK - my suggestion was more about whether the crash is inconsistent i.e. is it always stable in Nuendo or standalone under identical circumstances? Perhaps that’s implicit in your original post.\n\n&hellip;","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/6"},{"@type":"Answer","author":{"@type":"Person","name":"MrSoundman","url":"https://forums.steinberg.net/u/MrSoundman"},"dateModified":"2026-07-08T09:58:57.568Z","datePublished":"2026-07-08T09:58:57.521Z","text":"So far SL13 is always stable for me when used standalone or via ARA in Nuendo 15, but there are file-handling problems with both the Pool functions in N15 (<a href=\"https://forums.steinberg.net/t/serious-bug-remove-unused-media/1036288\">link<\/a>), and the way SL13 places files into the Pool that are not in the Nuendo project folder, but in the SL Edits folder instead.","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/7"},{"@type":"Answer","author":{"@type":"Person","name":"MrSoundman","url":"https://forums.steinberg.net/u/MrSoundman"},"dateModified":"2026-07-09T00:48:12.819Z","datePublished":"2026-07-09T00:48:12.755Z","text":"[image] Robin_Lobel:\n\nthe upcoming 13.0.10 seems to run fine in Reaper\n\nExcellent, thank you for this!\n\n[image] Robin_Lobel:\n\nSL has no way to know where the ARA host store its project.\n\nAgreed, this is a separate issue. I “bounce selection” and then keep track of the file locations manual&hellip;","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/9"},{"@type":"Answer","author":{"@type":"Person","name":"MrSoundman","url":"https://forums.steinberg.net/u/MrSoundman"},"dateModified":"2026-07-15T12:19:14.984Z","datePublished":"2026-07-15T12:19:14.942Z","text":"I can confirm this crash is no longer an issue in 13.0.10 – thanks Robin! Seems very stable in Reaper now.","upvoteCount":1,"url":"https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/10"}]}}</script>
+  </head>
+  <body class="crawler ">
+     <script src="https://itp.steinberg.net/?settingsId=RBVlDF2ny" data-variant="CMPv2bundle" async="" nonce="pjEjts4NATNKmiFngjV1oRmvu"></script> 
+
+    <header>
+  <a href="/">Steinberg Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450">SpectraLayers 13 ARA crashing Reaper on Unmix Song</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/c/spectralayers/12" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #b648b7'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>SpectraLayers</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+      <div class="topic-category">
+        <div class='discourse-tags list-tags'>
+            <a href='https://forums.steinberg.net/tag/issue' class='discourse-tag' rel="tag">issue</a>
+        </div>
+      </div>
+  </div>
+
+  
+
+    <div itemscope="itemscope" itemtype="https://schema.org/QAPage">
+      <meta itemprop='name' content='SpectraLayers 13 ARA crashing Reaper on Unmix Song'>
+      <link itemprop='url' href='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450'>
+      <meta itemprop='datePublished' content='2026-07-07T11:29:37Z'>
+      <meta itemprop='keywords' content='issue'>
+
+        <div itemprop="mainEntity" itemscope="itemscope" itemtype="https://schema.org/Question">
+          <meta itemprop='answerCount' content='9'><meta itemprop='datePublished' content='2026-07-07T11:29:37Z'><meta itemprop='name' content='SpectraLayers 13 ARA crashing Reaper on Unmix Song'><meta itemprop='upvoteCount' content='1'>
+
+
+          <div id='post_1' data-qa-question="true" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/MrSoundman'><span itemprop="name">MrSoundman</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/MrSoundman'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2026-07-07T11:29:37Z' class='post-time'>
+                    July 7, 2026, 11:29am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-07T11:29:37Z'>
+              <span itemprop="position">1</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>Steps to reproduce:</p>
+<ol>
+<li>Load any audio file in Reaper (I used 7.76)</li>
+<li>Add SpectraLayers 13 as an FX on that track (VST3 as ARA)</li>
+<li>Select Unmix Song, everything selected (any quality)</li>
+<li>Click Apply</li>
+</ol>
+<p>After the ~20s “load time”, “Estimating” appears briefly, but when processing should begin, Reaper crashes, just disappearing from the screen … no crash log, nothing.</p>
+            </div>
+
+
+
+            
+
+
+          </div>
+          <div id='post_2' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/digitaldiggo'><span itemprop="name">digitaldiggo</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/digitaldiggo'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-07T12:41:48Z' class='post-time'>
+                    July 7, 2026, 12:41pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-07T12:41:48Z'>
+              <span itemprop="position">2</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>Insufficient GPU memory to load all of the models used when unmixing. You have to unmix 1 or 2 models at a time, but it seems SL13 has not delivered a workflow which allows sequential loading/unloading/loading etc</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/2'>
+          </div>
+          <div id='post_3' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/MrSoundman'><span itemprop="name">MrSoundman</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/MrSoundman'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-07T22:22:24Z' class='post-time'>
+                    July 7, 2026, 10:22pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-07T22:22:24Z'>
+              <span itemprop="position">3</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <aside class="quote no-group" data-username="digitaldiggo" data-post="2" data-topic="1036450">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://avatars.discourse-cdn.com/v4/letter/d/2acd7d/48.png" class="avatar"> digitaldiggo:</div>
+<blockquote>
+<p>Insufficient GPU memory to load all of the models</p>
+</blockquote>
+</aside>
+<p>Nope, doesn’t happen in Nuendo on the same machine.</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/3'>
+          </div>
+          <div id='post_4' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/digitaldiggo'><span itemprop="name">digitaldiggo</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/digitaldiggo'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-08T06:13:21Z' class='post-time'>
+                    July 8, 2026,  6:13am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-08T06:13:21Z'>
+              <span itemprop="position">4</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>I suggest running multiple examples of Unmix Song (using a typical 3 or 4 minute song) with all models ticked, directly within SL and indirectly via ARA in Nuendo and Reaper.<br>
+Maybe 10 tests in each of the 3 scenarios.<br>
+Then run the same test with Use Shared Memory selected (or unselected if you usually have it selected)</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/4'>
+          </div>
+          <div id='post_5' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/MrSoundman'><span itemprop="name">MrSoundman</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/MrSoundman'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-08T08:08:46Z' class='post-time'>
+                    July 8, 2026,  8:08am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-08T08:08:46Z'>
+              <span itemprop="position">5</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>Thanks for the suggested workarounds, but with respect, I’m not a beta tester. I was reporting an easily reproducible serious issue with SpectraLayers 13 that crashes the host application instantly.</p>
+<p><a class="mention" href="/u/robin_lobel">@Robin_Lobel</a> is this the same fix scheduled in patch 1 for the <a href="https://forums.steinberg.net/t/spectralayers-pro-13-crashing-protools/1036144">instant crash in Pro Tools</a>?</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/5'>
+          </div>
+          <div id='post_6' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/digitaldiggo'><span itemprop="name">digitaldiggo</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/digitaldiggo'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-08T09:04:49Z' class='post-time'>
+                    July 8, 2026,  9:04am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-08T09:04:49Z'>
+              <span itemprop="position">6</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <aside class="quote no-group" data-username="MrSoundman" data-post="5" data-topic="1036450">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://dub1.discourse-cdn.com/steinberg/user_avatar/forums.steinberg.net/mrsoundman/48/92285_2.png" class="avatar"> MrSoundman:</div>
+<blockquote>
+<p>Thanks for the suggested workarounds, but with respect, I’m not a beta tester</p>
+</blockquote>
+</aside>
+<p>OK - my suggestion was more about whether the crash is inconsistent i.e. is it <em>always</em> stable in Nuendo or standalone under identical circumstances? Perhaps that’s implicit in your original post.<br>
+I stopped using SL12 for Unmix Song because it was inconsistent and too unreliable.<br>
+I no longer use SL.</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/6'>
+          </div>
+          <div id='post_7' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/MrSoundman'><span itemprop="name">MrSoundman</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/MrSoundman'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-08T09:58:57Z' class='post-time'>
+                    July 8, 2026,  9:58am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-08T09:58:57Z'>
+              <span itemprop="position">7</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>So far SL13 is always stable for me when used standalone or via ARA in Nuendo 15, but there are file-handling problems with both the Pool functions in N15 (<a href="https://forums.steinberg.net/t/serious-bug-remove-unused-media/1036288">link</a>), and the way SL13 places files into the Pool that are <em>not</em> in the Nuendo project folder, but in the SL Edits folder instead.</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/7'>
+          </div>
+          <div id='post_8' itemprop="acceptedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/Robin_Lobel'><span itemprop="name">Robin_Lobel</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/Robin_Lobel'>
+                
+              </span>
+
+
+                <link itemprop="image" href="https://europe1.discourse-cdn.com/steinberg/original/4X/c/e/5/ce5f347fd04663de8dd5ef1d2fbd3c3b60dc85b9.jpeg">
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-08T19:04:20Z' class='post-time'>
+                    July 8, 2026,  7:04pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-08T19:04:20Z'>
+              <span itemprop="position">8</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>Hi <a class="mention" href="/u/mrsoundman">@MrSoundman</a> I could indeed repro the crash with 13.0.0, but the upcoming 13.0.10 seems to run fine in Reaper (tested with Reaper 7.76 on Windows 11, with and without GPU acceleration).</p>
+<p>As for the file handling in Nuendo, it’s not an issue but by design (and by ARA tech limitations, it’s been like that since SpectraLayers 6): SL has no way to know where the ARA host store its project. That’s why it’s storing the files you drag and drop into the DAW into a SL Edits folder.</p>
+<p>It’s the responsibility of the user to check “Copy file to project folder” when a layer is dropped into the DAW, so that Cubase or Nuendo can do a local copy into the project folder:</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://europe1.discourse-cdn.com/steinberg/original/4X/c/e/5/ce5f347fd04663de8dd5ef1d2fbd3c3b60dc85b9.jpeg" data-download-href="/uploads/short-url/trEkL94AOto3eLFUKo6Ej8NBgZb.jpeg?dl=1" title="image"><img src="https://europe1.discourse-cdn.com/steinberg/optimized/4X/c/e/5/ce5f347fd04663de8dd5ef1d2fbd3c3b60dc85b9_2_690x433.jpeg" alt="image" data-base62-sha1="trEkL94AOto3eLFUKo6Ej8NBgZb" width="690" height="433" srcset="https://europe1.discourse-cdn.com/steinberg/optimized/4X/c/e/5/ce5f347fd04663de8dd5ef1d2fbd3c3b60dc85b9_2_690x433.jpeg, https://europe1.discourse-cdn.com/steinberg/optimized/4X/c/e/5/ce5f347fd04663de8dd5ef1d2fbd3c3b60dc85b9_2_1035x649.jpeg 1.5x, https://europe1.discourse-cdn.com/steinberg/optimized/4X/c/e/5/ce5f347fd04663de8dd5ef1d2fbd3c3b60dc85b9_2_1380x866.jpeg 2x" data-dominant-color="2A2C2F"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">image</span><span class="informations">1496×940 130 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/8'>
+          </div>
+          <div id='post_9' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/MrSoundman'><span itemprop="name">MrSoundman</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/MrSoundman'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-09T00:48:12Z' class='post-time'>
+                    July 9, 2026, 12:48am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-09T00:48:12Z'>
+              <span itemprop="position">9</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <aside class="quote no-group" data-username="Robin_Lobel" data-post="8" data-topic="1036450">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://avatars.discourse-cdn.com/v4/letter/r/d26b3c/48.png" class="avatar"> Robin_Lobel:</div>
+<blockquote>
+<p>the upcoming 13.0.10 seems to run fine in Reaper</p>
+</blockquote>
+</aside>
+<p>Excellent, thank you for this!</p>
+<aside class="quote no-group" data-username="Robin_Lobel" data-post="8" data-topic="1036450">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://avatars.discourse-cdn.com/v4/letter/r/d26b3c/48.png" class="avatar"> Robin_Lobel:</div>
+<blockquote>
+<p>SL has no way to know where the ARA host store its project.</p>
+</blockquote>
+</aside>
+<p>Agreed, this is a separate issue. I “bounce selection” and then keep track of the file locations manually, but it’s error-prone.</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/9'>
+          </div>
+          <div id='post_10' itemprop="suggestedAnswer" itemscope="itemscope" itemtype="https://schema.org/Answer" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+                <a rel='nofollow' href='https://forums.steinberg.net/u/MrSoundman'><span itemprop="name">MrSoundman</span></a>
+                  <meta itemprop='url' content='https://forums.steinberg.net/u/MrSoundman'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-07-15T12:19:14Z' class='post-time'>
+                    July 15, 2026, 12:19pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-07-15T12:19:14Z'>
+              <span itemprop="position">10</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>I can confirm this crash is no longer an issue in 13.0.10 – thanks Robin! Seems very stable in Reaper now.</p>
+            </div>
+
+
+
+            
+
+<meta itemprop='upvoteCount' content='1'><meta itemprop='url' content='https://forums.steinberg.net/t/spectralayers-13-ara-crashing-reaper-on-unmix-song/1036450/10'>
+          </div>
+
+        </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='/' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='/categories' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='/guidelines' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='https://www.steinberg.net/en/extras/terms_conditions.html' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='https://www.steinberg.net/en/extras/privacy_policy.html' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="https://www.discourse.org">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    
+    
+  </body>
+  
+</html>

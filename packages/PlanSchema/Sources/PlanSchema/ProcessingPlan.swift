@@ -1,14 +1,14 @@
 import Foundation
 
-public enum SchemaVersion: String, Codable, Sendable { case v1 = "1.0" }
+public enum SchemaVersion: String, Codable, CaseIterable, Sendable { case v1 = "1.0" }
 
-public enum ChannelFormat: String, Codable, Sendable { case mono, stereo }
+public enum ChannelFormat: String, Codable, CaseIterable, Sendable { case mono, stereo }
 
 public enum SourceType: String, Codable, CaseIterable, Sendable {
     case vocal, vocalBus, drums, drumBus, bass, guitar, keyboard, synth, fullMix, reference, unknown
 }
 
-public enum ScopeKind: String, Codable, Sendable { case pluginInput, importedFile }
+public enum ScopeKind: String, Codable, CaseIterable, Sendable { case pluginInput, importedFile }
 
 public struct TimeRangeSeconds: Codable, Equatable, Sendable {
     public var start: Double
@@ -36,7 +36,7 @@ public enum GoalAttribute: String, Codable, CaseIterable, Sendable {
     case dynamicControl, sibilance, backgroundNoise, tonalBalance, loudness, cymbalHarshness, lowEnd
 }
 
-public enum GoalDirection: String, Codable, Sendable { case increase, decrease, preserve, doNotIncrease, doNotDecrease }
+public enum GoalDirection: String, Codable, CaseIterable, Sendable { case increase, decrease, preserve, doNotIncrease, doNotDecrease }
 
 public struct ProcessingGoal: Codable, Equatable, Sendable {
     public var attribute: GoalAttribute
@@ -63,7 +63,7 @@ public enum ParameterID: String, Codable, CaseIterable, Sendable {
     case ceilingDB, kneeDB, mix, width, driveDB, enabled, lookaheadMS
 }
 
-public enum ChangeCategory: String, Codable, Sendable { case corrective, creative, loudness }
+public enum ChangeCategory: String, Codable, CaseIterable, Sendable { case corrective, creative, loudness }
 
 public struct ProcessingNode: Codable, Equatable, Identifiable, Sendable {
     public var id: UUID
@@ -93,6 +93,57 @@ public struct ProcessingNode: Codable, Equatable, Identifiable, Sendable {
         self.confidence = confidence
         self.category = category
         self.locked = locked
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, type, enabled, parameters, rationale, confidence, category, locked
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        type = try container.decode(NodeType.self, forKey: .type)
+        enabled = try container.decode(Bool.self, forKey: .enabled)
+        rationale = try container.decode(String.self, forKey: .rationale)
+        confidence = try container.decode(Double.self, forKey: .confidence)
+        category = try container.decode(ChangeCategory.self, forKey: .category)
+        locked = try container.decode(Bool.self, forKey: .locked)
+
+        if let rawParameters = try? container.decode([String: Double].self, forKey: .parameters) {
+            var typedParameters: [ParameterID: Double] = [:]
+            typedParameters.reserveCapacity(rawParameters.count)
+            for (rawKey, value) in rawParameters {
+                guard let key = ParameterID(rawValue: rawKey) else {
+                    throw DecodingError.dataCorruptedError(
+                        forKey: .parameters,
+                        in: container,
+                        debugDescription: "Unknown processing parameter: \(rawKey)"
+                    )
+                }
+                typedParameters[key] = value
+            }
+            parameters = typedParameters
+        } else {
+            // Swift synthesized dictionaries with enum keys as alternating JSON
+            // key/value arrays in early development builds. Decode that form so
+            // saved project state and preview plans migrate without state loss.
+            parameters = try container.decode([ParameterID: Double].self, forKey: .parameters)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(type, forKey: .type)
+        try container.encode(enabled, forKey: .enabled)
+        try container.encode(
+            Dictionary(uniqueKeysWithValues: parameters.map { ($0.key.rawValue, $0.value) }),
+            forKey: .parameters
+        )
+        try container.encode(rationale, forKey: .rationale)
+        try container.encode(confidence, forKey: .confidence)
+        try container.encode(category, forKey: .category)
+        try container.encode(locked, forKey: .locked)
     }
 }
 

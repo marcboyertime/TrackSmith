@@ -21,6 +21,9 @@ targets:
       path: apps/CompanionMacApp/CompanionMacApp.entitlements
       properties:
         com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - KDV9RC892F.com.marcboyer.logicaudioassistant
+        com.apple.security.network.client: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.marcboyer.logicaudioassistant
@@ -29,6 +32,22 @@ targets:
     dependencies:
       - package: CorePackage
         product: SharedIPC
+      - package: CorePackage
+        product: SessionCore
+      - package: CorePackage
+        product: PreviewWorkflow
+      - package: CorePackage
+        product: PreviewAudition
+      - package: CorePackage
+        product: DSPCore
+      - package: CorePackage
+        product: PlanSchema
+      - package: CorePackage
+        product: AgentCore
+      - package: CorePackage
+        product: AudioAnalysis
+      - package: CorePackage
+        product: ProductionIntelligence
       - target: AssistantAudioUnitExtension
         embed: true
   AssistantAudioUnitExtension:
@@ -39,6 +58,8 @@ targets:
       path: plugins/AudioUnit/AudioUnitExtension/AssistantAudioUnitExtension.entitlements
       properties:
         com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - KDV9RC892F.com.marcboyer.logicaudioassistant
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.marcboyer.logicaudioassistant.AudioUnit

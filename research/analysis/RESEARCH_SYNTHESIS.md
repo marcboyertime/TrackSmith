@@ -1,7 +1,15 @@
-# Research synthesis for Logic Audio Assistant
+# Research synthesis for TrackSmith
 
-Date: 2026-07-12  
-Corpus: 61 unique PDFs plus 23 unique HTML snapshots and supplied text sources  
+Date: 2026-07-14
+Corpus counts refreshed: 2026-07-19
+Corpus: 131 non-quarantined searchable PDF paths / 104 unique payloads, seven
+quarantined PDF paths, 81 non-quarantined searchable HTML paths / 79 unique hashes /
+78 usable hashes plus one empty digest, three quarantined HTML paths, and two
+supplied text sources. The unified source index contains 195 records: 184 payloads
+and 11 metadata-only records.
+Review depth: tracked per immutable payload with scope-specific labels in
+`SOURCE_INDEX.jsonl`; the original 70-PDF cohort remains separately auditable and
+must not be used as the denominator for the expanded 104-PDF archive.
 Status: systematic corpus review complete; implementation consequences are active
 
 ## Executive conclusions
@@ -22,7 +30,7 @@ The research also explains why the first preview implementation sounded too simi
 - Its spectral analysis described only the first window.
 - It did not measure whether a rendered option was audibly distinct.
 
-Those are now explicit engineering defects, not matters of taste.
+Those are explicit engineering defects, not matters of taste. Two are now closed: preview export applies a measured sibling-distinctness gate after loudness matching, and analysis schema 1.1 carries bounded time-series evidence rather than only whole-interval dynamics.
 
 ## Evidence hierarchy
 
@@ -68,7 +76,7 @@ The intelligent multitrack compressor adds a crucial qualification: compression 
 
 ### Current implementation versus research target
 
-The current compressor uses a branching peak envelope and a continuous soft knee. This pass changed recipe thresholds to be relative to measured RMS and changed timing based on measured crest factor with musical clamps. It is still a first approximation because the feature is whole-interval rather than the paper’s time-varying 200 ms crest factor. The next compressor revision should calculate a bounded side-chain feature envelope outside or alongside the DSP graph, expose gain-reduction statistics, and add tempo-aware release only when tempo confidence is adequate.
+The current compressor uses a branching peak envelope and a continuous soft knee. Recipe thresholds are relative to measured RMS and timing is derived from measured crest factor with musical clamps. Analysis schema 1.1 now also emits versioned 200 ms RMS and crest-factor timelines with nominal 50% overlap, bounded to 2,048 selected windows, plus a normalized positive spectral-flux timeline bounded to 512 spectral windows. This closes the measurement prerequisite for time-varying control without putting unbounded work on the render thread. The compressor still uses whole-interval features for its initial settings; a later controller may consume the timelines outside or alongside the DSP graph, expose gain-reduction statistics, and add tempo-aware release only when tempo confidence is adequate.
 
 ## 2. Loudness, true peak, and unbiased previewing
 
@@ -161,6 +169,8 @@ ST-ITO generalizes the idea to arbitrary and non-differentiable effects. It lear
 
 General-purpose CLAP and audio embeddings were less sensitive to production effects than the specialized AFx-Rep representation. This is a decisive warning: semantic similarity is not production-style similarity.
 
+The professional communication study adds the missing reference-intent boundary. Engineers used references for different scopes: an entire mix, one source, an interaction between sources, broad spectral/dynamic character, or an emotion. They often used several references and confirmed the intended meaning with the client. A rough mix could also carry explicit preservation constraints. Reference matching therefore begins with scope and attribute negotiation, not feature extraction from a song name or waveform.
+
 ### Product decisions
 
 - Add offline constrained search as a preview optimizer, never in the real-time thread.
@@ -199,6 +209,12 @@ AIR-Bench, SALMONN, Qwen2-Audio/Qwen2.5-Omni, audio-language surveys, and music-
 
 The user study of AI-assisted music production is more actionable for product design than raw model scores. Users valued ideation but asked for tempo/key/beat control, partial revision, preservation of prior results, fine-grained editing, and DAW integration. The desired behavior is “remember this result and change only part of it,” which is exactly a structured snapshot/lock operation—not chat-history improvisation.
 
+MixAssist contributes a concrete evaluation shape—recent audio plus session context and multi-turn instructional dialogue—but its live study also found that fluent answers could remain weakly grounded in the actual mix. TrackSmith must score audio grounding, technical correctness, explanation, and creative usefulness separately.
+
+MusicRecoIntent shows that a descriptor can be desired, rejected, or merely referential. Referential cases were the most likely to be collapsed into positive preference. MusicSem further separates descriptive, atmospheric, situational, contextual, and metadata language. These categories expand clarification and evaluation coverage; they do not all represent executable audio changes.
+
+The automatic-EQ and electric-guitar studies show that semantic models can learn useful structure, including held-out words and controlled descriptor magnitudes, while remaining strongly source- and dataset-dependent. They support source-aware candidate hypotheses, not universal adjective-to-parameter presets. The detailed synthesis and exact payload identities are recorded in `TRACKSMITH_PRODUCER_JUDGMENT_EXPANSION.md`.
+
 ### Product decisions
 
 - Use language models for intent parsing and explanation, behind typed tools.
@@ -212,6 +228,8 @@ The user study of AI-assisted music production is more actionable for product de
 ITU-R BS.1534-3 MUSHRA requires a known reference, hidden reference, anchors, randomized presentation, listener training, documented reproduction conditions, and statistically defensible analysis. It recommends raw-data visualization, medians and interquartile ranges for non-normal data, confidence reporting, and attention to statistical power. A failed significance test is not evidence of equivalence when the study is underpowered.
 
 Production evaluation differs from codec impairment testing because there may be no single correct reference and creative preference matters. Still, MUSHRA contributes useful discipline. The automatic-mixing studies show that experienced engineers can distinguish criteria such as production value, clarity, and excitement, and that a model may improve one while leaving another unchanged. “Better” must be decomposed.
+
+The emotion/production-quality study reinforces the need to record listener expertise and analyze it explicitly. Its clearest high-versus-low mix result came from self-reported perceived emotion, while physiological, facial, and movement measures were noisy or inconclusive. Emotion must remain a separately reported subjective outcome, not an automatic quality oracle.
 
 FAD research shows sample-size, embedding, reference-set, genre, and quality bias. VGGish FAD did not reliably correlate with all human judgments; better choices and infinite-sample extrapolation helped. Speech metrics such as PESQ, POLQA, and ViSQOL are task- and degradation-dependent and cannot be assumed valid for music production edits. General CLAP measures prompt/audio semantics, not transparent preservation or mastering quality.
 
@@ -227,6 +245,8 @@ Automated preview evaluation must have independent gates:
 6. Subjective validation: formal listening tests for release claims.
 
 No weighted sum should hide a hard failure in one axis.
+
+The preview workflow now implements the distinctness axis directly. After loudness matching, each strength is compared with the preceding viable sibling using deterministic sample-difference RMS and supporting crest, centroid, and band-energy deltas. Options below the conservative pairwise floor are rejected instead of being exported under a stronger label. This gate catches collapsed variants; it does not prove that a surviving difference is musically preferable.
 
 ### Listening-test plan
 
@@ -245,8 +265,8 @@ No weighted sum should hide a hard failure in one axis.
 
 - Finish BS.1770 regression vectors at all supported sample rates.
 - Add short-term loudness, loudness range, and gain-reduction statistics.
-- Implement time-varying 200 ms crest factor and normalized spectral flux.
-- Add deterministic preview distinctness checks between siblings.
+- Feed the implemented bounded 200 ms crest/flux timelines into a validated program-dependent controller; the analysis prerequisite is complete.
+- Calibrate the implemented sibling-distinctness threshold through blinded listening tests; deterministic pairwise gating is complete.
 - Add source-aware vocal/drum/full-mix analysis confidence.
 - Implement log-frequency EQ fitting with gain/Q/complexity penalties.
 - Add section-aware measurements so chorus/verse requests have explicit time scopes.
@@ -295,4 +315,18 @@ No weighted sum should hide a hard failure in one axis.
 - ITU-R BS.1770-5, EBU R 128, and ITU-R BS.1534-3.
 - Pan et al., *Audio Editing in the Era of Foundation Models: A Survey*.
 - Gui et al., *Adapting Fréchet Audio Distance for Generative Music Evaluation*.
+- Vanka et al., *The Role of Communication and Reference Songs in the Mixing Process*.
+- Clemens and Marasović, *MixAssist: An Audio-Language Dataset for Co-Creative AI Assistance in Music Mixing*.
+- McClellan and Morreale, *It's All About Speed: AI's Impact on Workflow in Music Production*.
+- Venkatesh, Moffat, and Miranda, *Word Embeddings for Automatic Equalization in Audio Mixing*.
+- Baranes, Hennequin, and Epure, *Beyond Musical Descriptors: Extracting Preference-Bearing Intent in Music Queries*.
+- Salganik et al., *MusicSem: A Semantically Rich Language--Audio Dataset of Natural Music Descriptions*.
+- Cameron and Blackwell, *A Semantic Timbre Dataset for the Electric Guitar*.
+- Mourgela et al., *Exploring Trends in Audio Mixes and Masters*.
+- Ronan, Reiss, and Gunes, *An Empirical Approach to the Relationship Between Emotion and Music Production Quality*.
 
+## Corpus integrity exceptions
+
+- TTA-Bench HTML items 074 and 075 are zero-byte captures and share the empty-file SHA-256 digest. They are labeled `empty`, not counted as usable evidence.
+- Item 074 duplicates the subject of item 023 and is substantively recovered by the supplied WIMP 2017 PDF and fallback text. Item 075 has no supplied payload; its source-separation topic is outside the stable MVP and does not block the present architecture.
+- One live, untracked part-02 directory duplicates already indexed PDF and HTML payloads. It is preserved without modification and intentionally excluded from commits.

@@ -1,0 +1,79 @@
+{
+  "goals" : [
+    {
+      "attribute" : "sibilance",
+      "direction" : "decrease",
+      "locked" : false,
+      "strength" : 0.35
+    },
+    {
+      "attribute" : "closeness",
+      "direction" : "preserve",
+      "locked" : true,
+      "strength" : 0.4
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.72,
+      "enabled" : true,
+      "id" : "9E78D056-DC4F-4243-A75D-293B411CB2B5",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 1.5,
+        "frequencyHz" : 6500,
+        "mix" : 0.55,
+        "ratio" : 2.7,
+        "releaseMS" : 70,
+        "thresholdDB" : -32.39009867424256
+      },
+      "rationale" : "Use event-relative upper-band attenuation and preserve air/intelligibility; whole-capture brightness is not treated as sibilance.",
+      "type" : "deEsser"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "85BF0B31-CECE-5864-AB1C-87112FB95315",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.018874023535961015
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "234306CB-035C-4370-B215-8D0415FC0BB3",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks with inter-sample margin; rendered true peak and loudness matching are measured separately.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "C9FE4A7C-CECE-4864-AB1C-87112FB95315",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 0.5,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "194088AA-A3A5-405C-904B-90E0B1760378"
+}

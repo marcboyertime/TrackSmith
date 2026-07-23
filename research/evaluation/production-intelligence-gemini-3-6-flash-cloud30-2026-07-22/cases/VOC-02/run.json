@@ -1,0 +1,214 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -52.360717072706905,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.018874023535961015,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "deEsser",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.2505000213154753,
+          "planRequestID" : "C9FE4A7C-CECE-4864-AB1C-87112FB95315",
+          "previewID" : "D6CAB716-32A6-4677-B5B5-AA4AEEC33F32",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -3.0831779240813444,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -42.11867480470049,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.059961807438915216,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "deEsser",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.5671757313817496,
+          "planRequestID" : "4FDAFBCB-107B-4D9D-9BD4-2334EFC15391",
+          "previewID" : "88F15876-9C17-485D-B4B6-3C85FE6F11B6",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -3.528363753472195,
+          "warnings" : [
+
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -37.9332886460798,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.0874559156093131,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "deEsser",
+            "parametricEQ",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.7309227666407314,
+          "planRequestID" : "02A0AF76-95D8-4A02-B6E3-C95DE4EFAC7D",
+          "previewID" : "80C38F62-82AA-423D-823E-EF8FC1C87C21",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -3.698949655749448,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "sibilant:decrease"
+      ],
+      "expectedAnyAdditionalDesired" : [
+
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Attenuate harsh sibilant spikes in the 5-8 kHz range while preserving high-frequency air and close proximity detail. | Grounded TrackSmith interpretation: decrease sibilant: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘sibilant’ may request reduced consonant-like high-frequency bursts without lisping or loss of air. This is one hypothesis, not a measured fact.",
+        "Apply narrow subtractive EQ to tame static harsh resonant frequencies while leaving natural consonant attack intact. | Grounded TrackSmith interpretation: decrease sibilant: For vocal consonants, formants, breath, proximity, level contour, and wet/dry depth, ‘sibilant’ may request reduced consonant-like high-frequency bursts without lisping or loss of air. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "VOC-02",
+      "measuredEvidence" : {
+        "level_variability_p90_p10_db" : {
+          "confidence" : 1,
+          "unit" : "decibels",
+          "value" : 0.2829901991351118
+        },
+        "vocal_10_20_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0031093748488020025
+        },
+        "vocal_120_350_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.7316220515417701
+        },
+        "vocal_200_500_hz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.24684991123623723
+        },
+        "vocal_5_10_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.0018217723665501498
+        },
+        "vocal_high_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        },
+        "vocal_low_frequency_burst_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 0
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "intimate:preserve"
+      ],
+      "prohibited" : [
+
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 6346,
+      "providerLatencyMilliseconds" : 3389,
+      "providerOutputTokens" : 570,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:14aa74dd03bd8ca882d51baaef11b13fa776ee625d46429213f5d207f7d22c44",
+      "selectedPreviewID" : "88F15876-9C17-485D-B4B6-3C85FE6F11B6",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 1,
+      "sourceClass" : "vocal",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 1, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "046c23af1b4613e9744368a4d0e482bb8e67196270546832fef42ded68bd199f",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "vocal",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable."
+      ],
+      "userRequest" : "reduce sibilance but keep it intimate",
+      "validationRepairAttempted" : false
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:16:56Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "productionHypothesisGeneration",
+      "explanationGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}

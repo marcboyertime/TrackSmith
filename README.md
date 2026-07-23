@@ -1,51 +1,201 @@
-# Logic Audio Assistant
+# TrackSmith
 
-A native, reversible conversational audio-production assistant designed around a
-reliable Audio Unit effect for Logic Pro. Natural-language intent compiles into a
-typed, validated processing graph; deterministic code renders and measures three
-level-matched options; the user remains in control of commit, revision, bypass,
-and restoration.
+A native, reversible audio-production assistant designed around a reliable Audio
+Unit effect for Logic Pro. The current build combines a deterministic offline
+fallback with provider-neutral OpenAI Responses and Google Gemini Interactions
+adapters. Every model result remains untrusted semantic input to six local
+validation gates; only TrackSmith constructs, renders, measures, and commits bounded
+DSP graphs. The user remains in control of preview selection, revision, locks,
+commit, bypass, and restoration.
+
+The product name is TrackSmith. The development app/AU still use the earlier
+`Logic Audio Assistant` display name and bundle identifiers for compatibility;
+that identity is not silently changed by this research milestone.
 
 ## Current status
 
-Milestones 0 and 1 are partially implemented. The portable core builds and runs:
+The capability spike, deterministic DSP/analysis foundation, and first functional
+AU/companion session slice are implemented. The portable core builds and runs:
 
-- Typed processing-plan schema with bounded parameters, locked-node protection,
-  stale-snapshot rejection, gain limits, and deterministic Codable state.
+- Typed processing-plan schema with bounded parameters, at most 32 nodes and goals,
+  4 KiB rationales, locked-node protection, stale-snapshot rejection, gain limits,
+  and deterministic Codable state. Node parameters use the schema's keyed-object
+  JSON form while legacy development-state arrays remain readable. The checked-in
+  JSON Schema is CI-checked against the runtime enum vocabulary, implemented-node
+  set, node-specific parameter allowlists, numeric ranges and both 32-item limits;
+  it also records the normative 4,096-byte UTF-8 rationale limit.
 - In-place mono/stereo DSP for trim, polarity, high/low-pass and peaking EQ,
-  linked compression, saturation, width, limiting, bypass, and finite-value safety.
+  linked compression, linked split-band de-essing, saturation, width, limiting,
+  bypass, and finite-value safety.
 - Bounded single-producer capture ring with C11 atomic publication and no render-
   side allocation; capture payloads are atomic and the ring reserves an overwrite
-  guard so analysis can safely copy while playback continues.
-- BS.1770 gated loudness and true peak; peak/RMS/DC/clipping/crest; time-averaged
+  guard so analysis can safely copy while playback continues, or fail closed if a
+  coherent snapshot cannot be obtained.
+- BS.1770 gated loudness, EBU Mode 3-second Short-term Loudness, EBU Tech 3342
+  Loudness Range with explicit short-content reliability, and sample-rate-aware
+  approximate true-peak measurement;
+  peak/RMS/DC/clipping/crest; time-averaged
   spectral centroid, rolloff, slope, flatness, bands and flux; stereo correlation,
-  all with units, confidence, version, window, and limitations.
+  plus bounded 200 ms RMS/crest-factor dynamics timelines, all with units,
+  confidence, version, window, and limitations.
+- Typed, versioned source-aware analysis for vocal, drums/drum bus, bass, guitar,
+  synth/keys, and full stereo mix. Each evidence item declares applicability,
+  aggregation, confidence, failure modes, and provenance; descriptive evidence is
+  never promoted directly to `muddy`, `warm`, `punchy`, or another perceptual verdict.
+- A provenance-tagged vocabulary covering all 28 requested production descriptors
+  plus four explicit preservation concepts and a typed intermediate
+  path from user intent to source-aware interpretation, supporting/contradicting
+  evidence, competing production hypotheses, preservation constraints, risk, and
+  validated deterministic DSP plans. Eight representative source-specific flows
+  and a 420-case semantic/adversarial corpus are executable regressions.
+- A generated 14-entry abstract musician-language advisory catalog covers phrases
+  such as *expensive*, *bedroom-recorded*, *alive*, *emotionally boring*, *glued*,
+  *three-dimensional*, *blurry*, and *clean without sterilizing*. It preserves
+  source-dependent alternate senses, contradictions, unsupported/non-DSP causes,
+  risks, and clarification policy. Entries are professional-practice heuristics
+  with explicit false execution authority; they can retrieve bounded evidence but
+  cannot create a DSP node, parameter, measurement, host action, or capability.
 - Signal-relative conservative, balanced, and strong recipes; labeled BS.1770/RMS
-  preview matching and objective preview-difference measurements;
-  immutable snapshot history; selective compression revision; mock model provider.
+  preview matching, objective preview-difference measurements, and pairwise
+  rejection when any two strengths collapse after level matching;
+  immutable snapshot history; typed cross-preview/snapshot/node revision; and a
+  provider-neutral `ModelProvider` boundary. Production Intelligence v1 now has
+  credential-backed live evidence for both OpenAI Responses (`gpt-5.6-sol`) and
+  Gemini Interactions (`gemini-3.6-flash`), while retaining the deterministic
+  offline provider as the no-network fallback. The Apple on-device lane remains
+  optional compatibility work; cloud evidence is recorded separately from
+  historical no-key documentation.
+- Bounded deterministic context construction, strict typed intent/reference/
+  hypothesis contracts, six-stage model-output validation, exact asynchronous AU/
+  capture authority, bounded retry/cost policy, replay rejection, companion-only
+  ephemeral networking, explicit cloud consent, and macOS Keychain credentials.
+  Raw audio, file names/paths, AU state and executable tools are not provider input.
+- Durable versioned companion conversation state with atomic checksummed writes,
+  bounded history, credential redaction, corruption quarantine, an explicit 0.9→1.0
+  migration, complete accepted-result validation audits, configured-versus-provider-
+  reported model identity, and restore-time reconciliation that makes stale AU
+  history view-only.
 - PCM16/24/32 and Float32 WAV input, Float32 WAV output, analysis, three-preview,
   test-signal, and offline-render CLIs.
-- Native SwiftUI/AVFoundation audition app with synchronized sample-position A/B,
-  waveform/playhead, keyboard switching, measurements, warnings, and plan cards.
-- Atomic file-message IPC prototype and companion/plugin process probes.
+- Native SwiftUI/AVFoundation audition engine with synchronized sample-position A/B,
+  waveform, measurements, warnings, and inspectable plan cards.
+- Versioned, atomic App Group IPC with one-second plug-in heartbeats, per-instance
+  runtime epochs, command expiry, bounded messages/artifacts, 0700 directories,
+  0600 files, captured-instance binding, SHA-256 verification, and WAV metadata
+  matching for captured artifacts. A cross-process `flock` protects mailbox
+  maintenance and publication; the mailbox admits at most 2,048 message files/
+  32 MiB and 512 instance files, never evicts a live command to make room, and
+  fails closed when maintenance cannot bring it below quota.
 - Compiled native SwiftUI companion plus AUv3 effect with borrowed host-buffer DSP,
   dry-input capture, live input status, automatable output gain, serialized plan
-  state, and safe mono/stereo format validation.
+  state, safe mono/stereo format validation, and an off-render bridge that handles
+  capture and graph commands while the compact plug-in UI is closed. Preallocated
+  host-I/O scratch accepts null output `mData`, preserves host output pointers when
+  upstream replaces its pull pointers, and rejects undersized or malformed layouts.
+  Output-gain AU events are bounded and sample-accurate, including ramps that span
+  callbacks, while one complete processing graph remains selected per callback.
+- The native companion now performs the functional local path: discover an AU
+  instance, capture recent playback, show a waveform, analyze it, render three
+  synchronized level-matched previews, inspect every change card, and commit or
+  revert the complete processing graph. Graph commit is bound to the immutable
+  capture and expected current plan, and global bypass is independent of the graph.
+- A confirmed privacy action removes all locally cached capture WAVs and preview
+  directories without touching Logic source files, AU project state, heartbeats, or
+  protocol diagnostics.
+- An immutable research-ingestion library/CLI validates HTTP status, content type,
+  length, signatures, PDF/text usability, HTML shells, hashes, duplicate payloads,
+  Git cleanliness/origin/commit identity, rights metadata, quarantine, append-only
+  history, and explicit version/supersession policy before publication.
 
-On the development Mac, `TestRunner` passes 22/22 checks. `AudioUnitHostProbe`
-instantiates the real `AUAudioUnit` class, renders its serialized graph through
-borrowed mono and stereo buffers at 44.1 and 96 kHz, verifies capture, and verifies
-`fullState` restoration. Xcode 26.6 builds the companion and extension. A sandboxed,
-Apple-development-signed installation is registered with LaunchServices, and
-`auval -v aufx LgAA ExAI` passes out-of-process AUv3 discovery, properties,
-parameters, mono/stereo rendering, and sample rates through 192 kHz. The installed
-environment is Apple Silicon, macOS 26.3, Logic Pro 11.2.2, and Swift 6.2.1.
+On the development Mac, the current source passes 68/68 `TestRunner` checks in both
+Debug and Release when the 14 selected official BS.2217-2 vectors are supplied;
+67/67 pass without the external vectors. The latest ordinary Thread Sanitizer lane
+passes 67/67 with no race report, and the sanitized AU host also exits without a
+report. The added checks cover mailbox
+retention, fail-closed quota behavior, command ordering, runtime-bound terminal
+replies, hard command-file expiry, Short-term/LRA behavior, six source classes,
+the 28 requested descriptors plus four explicit preservation concepts, eight
+production flows, the 420-case semantic/adversarial corpus, provider failure and
+state-reference validation, durable conversation reconciliation, competing
+hypotheses, and immutable research ingestion. `AudioUnitHostProbe`
+instantiates the real `AUAudioUnit` class and exercises the full local round trip:
+render input, discover the instance heartbeat, request a recent capture, publish and
+hash its WAV artifact, render three previews, commit the exact balanced audition,
+lock an EQ, render and commit “use less compression,” undo/redo the graph, persist
+and reload it, bypass without discarding it, and revert to bit-exact dry audio. The
+probe also covers two isolated AU instances, lost-acknowledgement reconciliation,
+invalid-state recovery, nonfinite-input sanitation, publication reset behavior,
+capture teardown/reallocation, atomic commit guards, and AU/offline sample parity.
+The current probe also covers native `shouldBypassEffect`, conservative
+60-second tail reporting, null-output/upstream-pointer host layouts, scheduled
+output-gain events, cross-block ramps, distinct reset-versus-bypass automation
+semantics, and conservative output-silence-flag handling. Current
+Debug/Release/Thread Sanitizer runs succeeded; the latest Release verification measured
+9.2 us mean, 9.4 us p99, and 37.0 us maximum at 48 kHz/128 frames against a 2,666.7 us
+deadline. A thread-local DYLD heap interposer additionally observed zero malloc,
+calloc, realloc, free, aligned, or macOS zone heap operations across 4,000 complete
+callbacks of the representative graph; that lane measured 9.2 us mean, 10.0 us p99,
+and 28.0 us maximum.
+The AU commit transaction checks the captured snapshot identity, expected graph,
+locked nodes and captured sample-rate/channel format, then publishes the graph and
+advances serialized state under one lifecycle lock. Current host controls prove
+snapshot mismatch, stale-CAS, changed-format and deallocated commits fail without
+changing graph or saved state. Those custom-host checks do not by themselves prove
+Logic behavior; the independent Logic-hosted run below supplies that evidence for
+the exercised workflow.
+
+An independent real-audio run used an external 10.94-second, 44.1 kHz mono vocal and
+passed all 18 vertical-slice assertions: three safe and measurably distinct
+loudness-matched options, exact audition/graph equivalence, targeted revision with a
+locked EQ preserved, typed undo/redo, sample-exact dry bypass, and unchanged source
+SHA-256. The audio is user-owned and is not committed. Reproducible commands,
+redacted measurements, and proof boundaries are recorded in
+[`MVP_VERTICAL_SLICE_2026-07-13.md`](docs/evidence/MVP_VERTICAL_SLICE_2026-07-13.md).
+
+Xcode 26.6 built the companion and extension as a current Apple Development-signed
+Release, installed it at `~/Applications/Logic Audio Assistant.app`, strict-verified
+both bundles, and passed `auval -v aufx LgAA ExAI` out of process for equal-layout
+mono/stereo rendering through 192 kHz. The only validator warning was Apple's
+`CurrentPreset`/`PresentPreset` deprecation. Direct Logic testing is not inferred
+from `auval`. The development
+environment is Apple Silicon, macOS 26.3, Logic Pro 12.3, and Swift 6.3.3. Exact
+signing and executable fingerprints are recorded in
+[`SIGNED_AU_VALIDATION_2026-07-13.md`](docs/evidence/SIGNED_AU_VALIDATION_2026-07-13.md).
 
 The first ad-hoc build did not register. The installer now supports Xcode
 account-managed Apple Development certificates, derives the actual Team ID from
 the certificate, and verifies matching app/extension signatures. System AU
-validation now passes; direct Logic insertion and project behavior remain unverified. See
+validation passed for that signed build. A fresh 2026-07-13/14 Logic Pro 11.2.2 run
+then proved the current signed AU's insertion, playback, 44.1 kHz stereo companion
+discovery, a hashed 7.01-second recent capture, three distinct level-matched previews,
+graph inspection, locked-EQ compression revision, exact plan commit, internal
+bypass/restore, project save/reload, unchanged source hashes, and two-instance
+command isolation. Exact IDs, measurements, hashes, proof boundaries, and manual
+reproduction steps are recorded in
+[`LOGIC_MVP_VALIDATION_2026-07-14.md`](docs/evidence/LOGIC_MVP_VALIDATION_2026-07-14.md).
+That historical Logic 11.2.2 record remains intact.
+
+A separate Logic Pro 12.3 lane then repeated the production workflow at 44.1 kHz
+mono: discovery/insertion, playback, a descriptor-bound 15-second recent capture,
+three distinct previews, graph inspection, locked 320 Hz EQ, targeted compression
+revision, exact commit, bypass/restore, save/reload into a new AU runtime, unchanged
+external source SHA-256, and two-live-instance targeted bypass isolation. The exact
+host, OS, signing/CDHashes, instance/runtime IDs, artifact/preview hashes, plan
+values, project hashes, source hash, and test-driver boundary are recorded in
+[`LOGIC_12_3_VALIDATION_2026-07-14.md`](docs/evidence/LOGIC_12_3_VALIDATION_2026-07-14.md).
+Bus/output, freeze/bounce, low-latency, full rate/buffer, general automation, and
+subjective-quality matrices remain open; see
 [`KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md).
+
+The live frontier-provider lane is also recorded separately from the historical
+deterministic host reports. OpenAI and Gemini each completed six free-form,
+source-aware cases across vocal, drums, bass, guitar, synth/keys, and full mix;
+Gemini additionally completed 30/30 cloud-assisted cases with three valid
+level-matched previews per case and unchanged source bytes. See the
+[cross-provider report](research/evaluation/production-intelligence-frontier-cross-provider-2026-07-22/README.md)
+and [Gemini cloud-30 report](research/evaluation/production-intelligence-gemini-3-6-flash-cloud30-2026-07-22/README.md).
+The remaining milestone proof is one direct Logic 12.3 frontier session through
+capture-bound commit, save/reload, and provider-offline playback of that graph.
 
 ## Build and test
 
@@ -56,6 +206,7 @@ Full Xcode is required for the app extension.
 make verify
 make native-verify
 make native-install
+make realtime-heap-probe
 make demo
 make preview-demo
 ```
@@ -69,6 +220,7 @@ swift run AnalysisCLI input.wav
 swift run PreviewCLI input.wav --source vocal --prompt "make this clearer and more controlled"
 swift run -c release AuditionApp "/path/to/preview folder"
 swift run -c release AudioUnitHostProbe
+swift run -c release VerticalSliceCLI input.wav --output "/path/to/new proof folder"
 swift run OfflineRenderer input.wav processing-plan.json output.wav
 xcodegen generate
 ```
@@ -78,7 +230,8 @@ Accounts and create an Apple Development certificate under Manage Certificates.
 Then run `make native-install`, close Logic if it is open, launch
 `~/Applications/Logic Audio Assistant.app` once, and reopen Logic.
 Then follow [`MANUAL_LOGIC_TESTS.md`](docs/MANUAL_LOGIC_TESTS.md). A successful
-Xcode build or in-process probe is not the same as Logic-host validation.
+Xcode build, App Group proof, host probe, or `auval` run is not the same as manual
+Logic-host validation.
 
 ## Try audible previews now
 
@@ -113,8 +266,9 @@ audio formats, snapshot identity, and saved plans before playback.
 
 ## Repository map
 
-- `packages/`: host-independent schema, DSP, analysis, state, planner, preview,
-  IPC, and Logic adapter boundaries.
+- `packages/`: host-independent schema, DSP, source-aware analysis, production
+  intent/hypotheses, state, preview, IPC, research ingestion, and Logic adapter
+  boundaries.
 - `plugins/AudioUnit/`: compiled AUv3 extension and reusable host-probe core.
 - `apps/CompanionMacApp/`: native SwiftUI application scaffold.
 - `apps/CompanionApp/`: buildable command-line product slice.
@@ -123,18 +277,56 @@ audio formats, snapshot identity, and saved plans before playback.
 - `tests/TestRunner/`: dependency-free executable verification harness used because
   it runs consistently under both CI/Command Line Tools and full Xcode.
 - `docs/`: product, architecture, capability, safety, test, and integration records.
-- `research/analysis/`: deduplicated-corpus method, complete disposition catalog,
-  and the research-to-engineering synthesis.
+- `research/analysis/`: corpus audit plus the deep primary-source synthesis that
+  separates standards, research evidence, professional heuristics, disputes,
+  perceptual limits, implementation consequences, and non-claims.
+- Logic 12.3's four primary manuals have an every-page, 2,686-page review in the
+  [effects/tool](research/analysis/TRACKSMITH_LOGIC_PRO_12_3_TOOL_ATLAS.md),
+  [instrument](research/analysis/TRACKSMITH_LOGIC_PRO_12_3_INSTRUMENT_ATLAS.md),
+  [workflow](research/analysis/TRACKSMITH_LOGIC_PRO_12_3_WORKFLOW_ATLAS.md), and
+  [control-surface](research/analysis/TRACKSMITH_LOGIC_PRO_CONTROL_SURFACES_ATLAS.md)
+  atlases. The Production Intelligence context builder can retrieve 142 reviewed
+  effects/pedals, 28 reviewed instruments (including the 16-source canonical Quick
+  Sampler supplement), and explicitly named entries from a 30-tool editor catalog.
+  A fail-closed coverage audit verifies all catalog identities against their
+  declared primary-source pages and the dated Logic 12.3 release-notes capture.
+  Instrument retrieval requires an explicit instrument name or reviewed alias so a
+  generic recorded source never causes TrackSmith to invent what created it. This
+  knowledge is advisory; it does not give the AU authority to insert or control
+  Logic-native tools, MIDI, automation, Accessibility, or project state. The
+  [native measurement protocol](docs/LOGIC_NATIVE_EMPIRICAL_MEASUREMENT_PROTOCOL.md)
+  and deterministic 18-fixture generator enumerate a 200-identity empirical
+  campaign separately; every native identity remains marked `not_run` until a
+  versioned Logic render actually exists. The current ledger is 197 `not_run`,
+  three `partial`, and zero `complete`: bounded direct Logic 12.3 evidence exists
+  for [Bitcrusher Default](docs/evidence/LOGIC_NATIVE_BITCRUSHER_EMPIRICAL_2026-07-18.md)
+  [Channel EQ default/bypass plus one 1 kHz bell state](docs/evidence/LOGIC_NATIVE_CHANNEL_EQ_EMPIRICAL_2026-07-18.md),
+  and [Compressor default/bypass plus one controlled static curve](docs/evidence/LOGIC_NATIVE_COMPRESSOR_EMPIRICAL_2026-07-20.md).
+- `research/evaluation/`: the versioned 420-case semantic/adversarial
+  production-intent corpus.
 
 ## Product workflow target
 
-Insert the effect, explicitly capture recent/next playback, enter a request,
-audition three level-matched results, inspect every node, commit one graph, revise
-only selected nodes, and revert perfectly. Project-wide Logic editing remains an
+The implemented companion slice supports recent-playback capture, local analysis,
+three level-matched previews, synchronized audition, graph inspection, exact commit,
+typed multi-turn revision with preview/snapshot/node references and locks,
+undo/redo, non-destructive global bypass, and restore. The installed signed
+compatibility build completed the deterministic workflow in Logic 11.2.2 and again
+in Logic 12.3; Logic project save/reload restored
+the committed graph, lock and bypass state, and two simultaneous instances remained
+isolated. Companion conversation/revision history now persists locally, but restored
+references are view-only unless the live AU runtime, capture, conversation, and
+committed graph reconcile exactly. “Capture next playback” remains open;
+the proven mode is bounded recent playback. Project-wide Logic editing remains an
 optional adapter and never a dependency of the audio product.
 
 ## Privacy default
 
 Core measurement, recipes, graph execution, preview rendering, and manual editing
-are local. No audio upload path or telemetry is implemented. Future providers must
-obtain explicit consent and all responses remain untrusted plan proposals.
+are local. No audio upload path or telemetry is implemented. The required semantic
+path is also local and uses no API key. Optional cloud text/measurement reasoning
+requires provider selection, a Keychain credential, and explicit consent; all
+responses remain untrusted typed proposals. See
+[`PRODUCTION_INTELLIGENCE.md`](docs/PRODUCTION_INTELLIGENCE.md) for the implemented
+boundary and [`PRODUCTION_INTELLIGENCE_NO_KEY_MILESTONE.md`](docs/PRODUCTION_INTELLIGENCE_NO_KEY_MILESTONE.md)
+for the amended completion standard.

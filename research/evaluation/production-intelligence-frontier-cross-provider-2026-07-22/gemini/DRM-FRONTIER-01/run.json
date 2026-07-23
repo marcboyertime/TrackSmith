@@ -1,0 +1,223 @@
+{
+  "cases" : [
+    {
+      "ambiguity" : [
+        "'More life' can be achieved via transient punch, parallel compression, saturation, or top-end presence.",
+        "Whether 'small' refers primarily to narrow stereo image, lack of low-end body, or weak transient impact."
+      ],
+      "candidatePreviews" : [
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-conservative",
+          "differenceRMSDBFS" : -64.99483893027664,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.2653130459400401,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "3A18D8CF-B82E-4777-9CCA-93674135F41B",
+          "previewID" : "15FCF5BD-0A36-41EC-A781-72AFD952FD69",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "conservative",
+          "truePeakDBTP" : -2.6333141036373124,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-balanced",
+          "differenceRMSDBFS" : -57.20168829087679,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 0.7216010004719173,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "6AADE587-662D-4A5E-BDD4-E722E4B01547",
+          "previewID" : "05317BC4-DEB0-4C67-89EC-9B307F66C969",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "balanced",
+          "truePeakDBTP" : -2.633564117464707,
+          "warnings" : [
+            "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+          ]
+        },
+        {
+          "candidateIdentifier" : "source-aware-v1-h1-strong",
+          "differenceRMSDBFS" : -52.55137489310076,
+          "hypothesisIdentifier" : "tracksmith-hypothesis-1",
+          "loudnessMatchGainDB" : 1.300546948410723,
+          "loudnessMatchMethod" : "bs1770Integrated",
+          "nodeTypes" : [
+            "compressor",
+            "loudnessMatch",
+            "limiter"
+          ],
+          "peakDBFS" : -3.0000002493010487,
+          "planRequestID" : "15F353FE-0516-488C-8938-22C55689ED40",
+          "previewID" : "63CA9FDC-1D19-4A75-A94E-6B9201F369C3",
+          "rejectionReasons" : [
+
+          ],
+          "status" : "valid",
+          "strength" : "strong",
+          "truePeakDBTP" : -2.633820962144437,
+          "warnings" : [
+
+          ]
+        }
+      ],
+      "completedValidationStages" : [
+        "decoding",
+        "schema",
+        "semantic",
+        "capability",
+        "stateReference",
+        "constraint"
+      ],
+      "desired" : [
+        "energetic:increase",
+        "punchy:increase"
+      ],
+      "expectedAnyAdditionalDesired" : [
+        "aggressive",
+        "forward",
+        "punchy",
+        "wide"
+      ],
+      "expectedConstraint" : [
+
+      ],
+      "expectedDesired" : [
+        "energetic"
+      ],
+      "expectedPreserved" : [
+
+      ],
+      "expectedProhibited" : [
+        "cymbalHarshness"
+      ],
+      "hypothesisIdentifiers" : [
+        "source-aware-v1-h1-balanced",
+        "source-aware-v1-h2-balanced"
+      ],
+      "hypothesisOutcomes" : [
+        "Enhance dynamic excitement and size using transient-preserving compression and parallel body compression without lifting upper-frequency harshness. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact. | increase punchy: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact.",
+        "Address the 'small' quality by adding low-mid weight and gentle saturation while controlling cymbal harshness. | Grounded TrackSmith interpretation: increase energetic: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘energetic’ may request greater event contrast, motion, density, or section lift without only becoming louder. This is one hypothesis, not a measured fact. | increase punchy: For drum onset, body, post-onset sustain, cymbal energy, room contribution, and groove, ‘punchy’ may request a more salient leading event relative to body or sustain, with groove preserved. This is one hypothesis, not a measured fact."
+      ],
+      "identifier" : "DRM-FRONTIER-01",
+      "measuredEvidence" : {
+        "drums_2_5_khz_energy_ratio" : {
+          "confidence" : 1,
+          "unit" : "ratio",
+          "value" : 0.03953021445577513
+        },
+        "drums_crest_factor_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 12.565372505492908
+        },
+        "drums_onset_candidate_density_per_second" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "perSecond",
+          "value" : 12
+        },
+        "drums_positive_spectral_flux_p90" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.9591199405820634
+        },
+        "drums_post_onset_sustain_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.8688978875340719
+        },
+        "drums_transient_20_200_hz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.2054157267483987
+        },
+        "drums_transient_5_10_khz_energy_ratio" : {
+          "confidence" : 0.16666666666666666,
+          "unit" : "ratio",
+          "value" : 0.16306086283090931
+        }
+      },
+      "modelIdentifier" : "gemini-3.6-flash",
+      "preserved" : [
+        "lowEndWeight:preserve"
+      ],
+      "prohibited" : [
+        "cymbalHarshness:doNotIncrease",
+        "harsh:doNotIncrease"
+      ],
+      "providerAttemptCount" : 1,
+      "providerIdentifier" : "gemini-interactions-v1",
+      "providerInputTokens" : 7109,
+      "providerLatencyMilliseconds" : 4508,
+      "providerOutputTokens" : 878,
+      "providerReportedModelIdentifier" : "gemini-3.6-flash",
+      "providerResponseID" : "local-body-sha256:b61d64498ab263aaa4db288a6ec638de2163821e9b3bdb28de4f3b450004ae62",
+      "selectedPreviewID" : "05317BC4-DEB0-4C67-89EC-9B307F66C969",
+      "selectedRevisionPath" : "Selected balanced preview for a possible next conversational revision; no artistic preference was automated.",
+      "semanticExpectationSatisfied" : true,
+      "sourceChannels" : 2,
+      "sourceClass" : "drums",
+      "sourceFrames" : 24000,
+      "sourceProvenance" : "Generated locally from deterministic synthesis seed 5, algorithm TrackSmith musical-fixture generator v1.",
+      "sourceSHA256" : "40be2f2e07ed83c89ed28a6bbe2066b5e4922c27fb365063015725e054858bc6",
+      "sourceSampleRate" : 48000,
+      "sourceType" : "drumBus",
+      "sourceUnchanged" : true,
+      "success" : true,
+      "uncertainty" : [
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "'More life' can be achieved via transient punch, parallel compression, saturation, or top-end presence.",
+        "Whether 'small' refers primarily to narrow stereo image, lack of low-end body, or weak transient impact.",
+        "Production adjectives do not have unique acoustic definitions.",
+        "The implemented metrics are within-capture descriptors without genre- or role-calibrated semantic thresholds.",
+        "Existing processing, arrangement relationships, monitoring, and user taste are only partially observable.",
+        "'More life' can be achieved via transient punch, parallel compression, saturation, or top-end presence.",
+        "Whether 'small' refers primarily to narrow stereo image, lack of low-end body, or weak transient impact."
+      ],
+      "userRequest" : "The drums feel flat and small. Give them more life without making the cymbals obnoxious.",
+      "validationRepairAttempted" : true
+    }
+  ],
+  "cloudConsentGranted" : true,
+  "createdAt" : "2026-07-22T23:10:46Z",
+  "credentialSource" : "macOS Keychain only; environment variables and command-line credential values are unsupported",
+  "fixtureLicense" : "Generated locally by TrackSmith evaluation code; no third-party audio or copyrighted recording payload.",
+  "generator" : "TrackSmith deterministic musical-fixture generator v1",
+  "provider" : {
+    "acceptsRawAudio" : false,
+    "capabilities" : [
+      "conversationalReferenceInterpretation",
+      "semanticIntentInterpretation",
+      "ambiguityDetection",
+      "explanationGeneration",
+      "productionHypothesisGeneration"
+    ],
+    "displayName" : "Google Gemini",
+    "identifier" : "gemini-interactions-v1",
+    "kind" : "gemini",
+    "modelIdentifier" : "gemini-3.6-flash",
+    "usesNetwork" : true
+  },
+  "subjectiveClaimBoundary" : "No objective measurement or automated pass claims artistic superiority; listening remains decisive.",
+  "version" : "1.1"
+}
