@@ -614,12 +614,26 @@ final class CompanionSessionModel: ObservableObject {
                         artifact: artifact,
                         plan: revision.plan
                     )
-                    try await installWorkingPreview(
+                    guard let installedPlan = try await installWorkingPreview(
                         result,
                         operationID: operationID,
                         capturedInstanceID: capturedInstanceID,
                         capturedRuntimeEpoch: capturedRuntimeEpoch,
                         historyUpdate: .appendCurrent
+                    ) else {
+                        // A rejected render never becomes conversation history.
+                        // The prior working graph remains authoritative.
+                        activeProductionTurnID = nil
+                        return
+                    }
+                    recordRevision(
+                        outcome: outcome,
+                        resolution: revision,
+                        request: request,
+                        // Preview validation can recalibrate loudness matching.
+                        // Persist the exact graph that rendered and is now
+                        // installed as working state, never the pre-render plan.
+                        resultingPlan: installedPlan
                     )
                 } else {
                     appendCurrentPlanToHistory(ifChangingTo: revision.plan)
@@ -633,13 +647,13 @@ final class CompanionSessionModel: ObservableObject {
                     status = "Conversational graph constraint applied"
                     detailStatus = "The typed reference or lock changed graph authority without changing samples, so no redundant audio render was created."
                     statusColor = .green
+                    recordRevision(
+                        outcome: outcome,
+                        resolution: revision,
+                        request: request,
+                        resultingPlan: revision.plan
+                    )
                 }
-                recordRevision(
-                    outcome: outcome,
-                    resolution: revision,
-                    request: request,
-                    resultingPlan: revision.plan
-                )
                 activeProductionTurnID = nil
             } catch {
                 guard activeWorkingRenderID == operationID,
@@ -672,7 +686,7 @@ final class CompanionSessionModel: ObservableObject {
                 guard activeWorkingRenderID == operationID,
                       self.capturedInstanceID == capturedInstanceID,
                       self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return }
-                try await installWorkingPreview(
+                _ = try await installWorkingPreview(
                     result,
                     operationID: operationID,
                     capturedInstanceID: capturedInstanceID,
@@ -858,7 +872,7 @@ final class CompanionSessionModel: ObservableObject {
                 guard activeWorkingRenderID == operationID,
                       self.capturedInstanceID == capturedInstanceID,
                       self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return }
-                try await installWorkingPreview(
+                _ = try await installWorkingPreview(
                     result,
                     operationID: operationID,
                     capturedInstanceID: capturedInstanceID,
@@ -887,20 +901,20 @@ final class CompanionSessionModel: ObservableObject {
         capturedInstanceID: UUID,
         capturedRuntimeEpoch: UUID,
         historyUpdate: WorkingHistoryUpdate
-    ) async throws {
+    ) async throws -> ProcessingPlan? {
         guard result.variant.status == .valid, let audioURL = result.audioURL else {
             activeWorkingRenderID = nil
             isBusy = false
             status = "Revision rejected safely"
             detailStatus = result.variant.rejectionReasons.joined(separator: " ")
             statusColor = .orange
-            return
+            return nil
         }
         let urls = auditionURLs(workingURL: audioURL)
         try await audition.load(urls: urls)
         guard activeWorkingRenderID == operationID,
               self.capturedInstanceID == capturedInstanceID,
-              self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return }
+              self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return nil }
         switch historyUpdate {
         case .appendCurrent:
             appendCurrentPlanToHistory(ifChangingTo: result.variant.plan)
@@ -920,6 +934,7 @@ final class CompanionSessionModel: ObservableObject {
         status = "Working revision ready"
         detailStatus = "The displayed graph is exactly the graph this preview rendered and Commit Working Plan will publish."
         statusColor = .green
+        return result.variant.plan
     }
 
     private func commit(
