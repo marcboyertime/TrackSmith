@@ -4,8 +4,11 @@
 
 The current build has a deterministic keyword/alias fallback plus provider-neutral
 OpenAI Responses and Google Gemini Interactions adapters for free-form semantic
-interpretation. The adapters are implemented and mocked-wire/failure tested; a
-credential-backed frontier evidence run is still pending.
+interpretation. The adapters are implemented and mocked-wire/failure tested.
+OpenAI and Gemini each have credential-backed six-source evidence, Gemini has a
+30-case cloud lane, and one Gemini request completed the full direct Logic Pro 12.3
+capture, preview, natural revision, exact commit, save/reload, and provider-offline
+graph-restoration path.
 Deterministic tools own state and audio. No shipped model provider receives
 arbitrary shell, filesystem, Logic host, plug-in host, or project-editing authority.
 External text, names, tags, metadata, presets, model output, and reference labels

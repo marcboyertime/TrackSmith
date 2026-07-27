@@ -6,8 +6,8 @@
 swift run -c release TestRunner
 ```
 
-On 2026-07-18 the current source passed 68/68 checks in Debug and Release when the
-14 selected official BS.2217-2 vectors were supplied: plan
+On 2026-07-27 the current source passed 68/68 checks in Debug, Release, and Thread
+Sanitizer when the 14 selected official BS.2217-2 vectors were supplied: plan
 round-trip, keyed-object parameter wire format and legacy-state migration, bounds
 and complexity rejection, locked-node protection, bypass identity,
 sample-limiter release/reset, gain smoothing reset, soft-clip/nonfinite safety,
@@ -49,10 +49,9 @@ durable conversation migration/corruption/reconciliation, typed conversational
 references, structurally distinct competing hypotheses, immutable research
 publication/quarantine/version history, and clean pinned Git checkout enforcement.
 
-Current Debug and Release runs pass 68/68 with the optional external vectors and
-67/67 when they are omitted. The ordinary Thread Sanitizer run passes 67/67 with
-those copyrighted external WAVs
-omitted and exits without a report. This is evidence
+Current Debug, Release, and Thread Sanitizer runs pass 68/68 with the optional
+external vectors and 67/67 when they are omitted. The sanitizer exits without a
+report. This is evidence
 for exercised paths, not proof that all possible races or real-time allocations are
 absent.
 
@@ -74,8 +73,8 @@ Interactions wire contracts without spending credentials or relying on network
 availability. These tests are not a substitute for direct host evidence; record
 the exact adapter/model and bounded usage metadata for every live run. Credential-
 backed provider evidence now exists in the dated cross-provider and Gemini cloud-30
-reports, while the remaining host acceptance case is the complete Logic Pro 12.3
-session described below.
+reports. The complete direct Logic Pro 12.3 host acceptance case now exists in
+[`LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md`](evidence/LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md).
 
 The context regression separately verifies that *expensive* can seed relevant
 canonical term/evidence retrieval, *bedroom-recorded* and *clean without
@@ -133,12 +132,14 @@ bounded interpretation of “expensive” among `polished`, `clear`, `controlled
 but neither expands “expensive” nor preserves breathiness. That failure is the live
 provider's semantic baseline, not a reason to weaken the expectation.
 
-Before closing the milestone, retain the live-provider reports and add a direct
-Logic 12.3 AI report covering a genuinely free-form request, typed interpretation/evidence/
-hypotheses, three previews, natural typed revision, lock/constraint preservation,
-commit, bypass/restore, save/reload, provider-offline graph playback, and unchanged
-source hash. Existing deterministic Logic 11.2.2/12.3 reports remain historical and
-must not be rewritten as frontier evidence.
+The closing milestone retains the live-provider reports and a separate direct
+Logic 12.3 AI report covering a genuinely free-form request, typed interpretation/
+evidence/hypotheses, three previews, natural typed revision, lock/constraint
+preservation, commit, bypass/restore, save/reload, provider-offline graph playback,
+multiple-instance isolation, and unchanged source hash. The strong preview's
+loudness compensation was safety-limited and is explicitly reported rather than
+called an exact match. Existing deterministic Logic 11.2.2/12.3 reports remain
+historical and were not rewritten as frontier evidence.
 
 ## Logic-native documentary and empirical knowledge lane
 
@@ -257,12 +258,12 @@ of automation, bypass preservation of the automation timeline, programmatic take
 through the de-zipper, and concurrent graph publication without a mid-block graph
 split. Current Debug, Release and Thread Sanitizer HostProbe runs pass these cases.
 
-The latest custom-host callback timing at 48 kHz/128 frames was 9.2 us mean, 9.4 us
-p99 and 37.0 us maximum in Release against a 2,666.7 us deadline. The expanded probe
+The latest custom-host callback timing at 48 kHz/128 frames was 9.2 us mean, 10.0 us
+p99 and 30.0 us maximum in Release against a 2,666.7 us deadline. The expanded probe
 also exits cleanly under Thread Sanitizer. A separate thread-local DYLD interposer
 run covered standard, aligned and macOS zone heap entry points and reported
 `RT_HEAP callback iterations=4000 operations=0`; under instrumentation it measured
-9.2 us mean, 10.0 us p99 and 28.0 us maximum. These are not Logic-load results.
+9.2 us mean, 9.9 us p99 and 78.4 us maximum. These are not Logic-load results.
 
 Separately, the current Apple-development-signed sandboxed Release passed
 `auval -v aufx LgAA ExAI` out of process across mono/stereo, 11.025–192 kHz and host
@@ -313,6 +314,18 @@ internal bypass/restore, save/reload into a new instance/runtime, reloaded playb
 unchanged external-source SHA-256, and targeted bypass/restore isolation between
 two live AU instances. See
 [`evidence/LOGIC_12_3_VALIDATION_2026-07-14.md`](evidence/LOGIC_12_3_VALIDATION_2026-07-14.md).
+
+On 2026-07-27 a separate frontier-AI Logic Pro 12.3 lane used Gemini
+`gemini-3.6-flash` for a free-form vocal request, retained typed evidence and two
+competing hypotheses, rendered three distinct bounded-loudness-match previews,
+resolved a natural preview/node-lock revision, committed the exact post-render
+graph, bypassed/restored it, and saved/reopened it into a new AU runtime without
+provider availability. The source hash was unchanged and a second instance
+retained its independent graph. See
+[`evidence/LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md`](evidence/LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md)
+and the final matrix in
+[`evidence/PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md`](evidence/PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md).
+
 This does not mark buses/stereo output, freeze/bounce, low-latency mode, general
 automation, every sample-rate/buffer combination, large-project load, or sustained
 many-instance stress as passed. Track macOS, Logic, hardware, app version, signing

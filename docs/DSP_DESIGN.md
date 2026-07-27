@@ -121,16 +121,18 @@ Implemented metrics explicitly avoid false precision:
 | positive flux and transient density | ratio / events per second | adjacent spectral frames | event type and tempo are not inferred |
 | stereo correlation | -1...1 | full interval | zero-lag, not frequency dependent |
 
-LRA, calibrated noise/hum, source-aware vocal/drum, spatial-band, SRMR/YIN, and
-reference models remain scheduled work. Until implemented, the UI must not show
-invented values for them. Band names such as `harshness_band_ratio` report literal
-energy ranges and explicitly do not claim a perceptual defect.
+Calibrated noise/hum, phoneme/event classifiers, frequency-dependent spatial
+analysis, SRMR/YIN, and reference models remain scheduled work. Until implemented,
+the UI must not show invented values for them. LRA and typed source-aware evidence
+for all six declared source classes are implemented, but their confidence and
+failure conditions remain explicit. Band names such as `harshness_band_ratio`
+report literal energy ranges and do not claim a perceptual defect.
 
 ## Test methodology
 
-The current portable suite passes 68/68 in Debug and Release with the 14 selected
-official BS.2217-2 vectors; the ordinary Thread Sanitizer lane passes 67/67 with
-those external WAVs omitted and exits without a report. The added coverage exercises
+The current portable suite passes 68/68 in Debug, Release, and Thread Sanitizer with
+the 14 selected official BS.2217-2 vectors; the sanitizer exits without a report.
+The added coverage exercises
 Short-term Loudness, LRA, source-aware analysis, production-intent hypotheses,
 semantic evaluation, immutable research ingestion, mailbox retention,
 reply-capacity reservation, strict reply correlation, command sequence/expiry, and

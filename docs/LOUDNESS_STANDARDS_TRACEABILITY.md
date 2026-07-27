@@ -1,14 +1,13 @@
 # Loudness standards traceability
 
-Verified against the untouched official publisher payloads through 2026-07-16. This
+Verified against the untouched official publisher payloads through 2026-07-27. This
 document describes the implemented mono/stereo offline analysis only. It is not a
 certificate from ITU, EBU, or an accredited laboratory.
 
-Current verification snapshot: Debug and Release `TestRunner` both pass 68/68
-when the 14 selected publisher-hosted BS.2217-2 WAVs are supplied. The ordinary
-Thread Sanitizer lane passes 67/67 with the optional copyrighted external vectors
-omitted. No result below extends beyond its tested files, channel layouts, rates,
-window definitions, or tolerances.
+Current verification snapshot: Debug, Release, and Thread Sanitizer `TestRunner`
+all pass 68/68 when the 14 selected publisher-hosted BS.2217-2 WAVs are supplied;
+the sanitizer emits no race report. No result below extends beyond its tested
+files, channel layouts, rates, window definitions, or tolerances.
 
 ## Evidence status
 

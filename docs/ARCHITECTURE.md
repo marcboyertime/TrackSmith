@@ -269,7 +269,13 @@ capture/plan/conversation/turn identity is rechecked after inference; stale outp
 discarded. Audio-capable reasoning, if later implemented, requires a separate
 interface, explicit consent transaction, disclosure, and test lane. Provider output
 remains an untrusted semantic proposal. Current adapters pass mocked wire/failure
-tests; credential-backed live-provider and direct Logic AI evidence remain pending.
+tests; OpenAI and Gemini have credential-backed cross-provider evidence; Gemini has
+a 30-case cloud lane and a direct Logic Pro 12.3 session through typed revision,
+exact commit, save/reload, provider-offline graph restoration and unchanged source
+bytes. The direct-host record is
+[`LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md`](evidence/LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md).
+These runs prove the exercised contract and workflow, not universal semantic or
+artistic judgment.
 
 ## Research-informed optimization boundary
 

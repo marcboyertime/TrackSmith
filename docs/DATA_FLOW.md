@@ -146,5 +146,7 @@ measurements over an ephemeral TLS session, validates the untrusted response thr
 six local gates, and records provider/model/version and bounded usage metadata. Raw
 audio, paths, filenames, AU state, credentials and executable plans are excluded.
 A network/credential/validation/staleness failure is typed and local manual/DSP and
-saved-project playback continue. The adapters pass mocked wire/failure tests; live
-credential-backed and direct Logic AI evidence remain pending.
+saved-project playback continue. The adapters pass mocked wire/failure tests,
+OpenAI/Gemini live cross-provider cases, Gemini's 30-case cloud lane, and a direct
+Gemini/Logic Pro 12.3 workflow through save/reload and provider-offline graph
+restoration. Provider output still never crosses directly into AU or DSP authority.

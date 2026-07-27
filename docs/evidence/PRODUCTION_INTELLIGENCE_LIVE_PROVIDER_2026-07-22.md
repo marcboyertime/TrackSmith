@@ -1,6 +1,7 @@
 # TrackSmith live Production Intelligence provider evidence — 2026-07-22
 
-Status: **live provider path proven; direct Logic frontier session still open**
+Status: **live provider path proven; direct Logic frontier follow-up completed
+2026-07-27**
 
 This record indexes the credential-backed provider evidence completed on 2026-07-22.
 It does not replace the historical deterministic Logic 11.2.2 or Logic 12.3
@@ -36,12 +37,17 @@ raw audio, file paths, Logic project state, or hidden reasoning are included in
 the evidence. Provider output remains untrusted and cannot directly execute DSP,
 modify the AU, operate Logic, or write arbitrary files.
 
-## Remaining acceptance proof
+## Completed follow-up
 
-The milestone still requires one direct Logic Pro 12.3 session that demonstrates a
-genuinely free-form provider request, typed evidence and competing hypotheses,
-three previews, a natural multi-turn revision, lock/constraint preservation,
-capture-bound commit, bypass/restore, save/reload, provider-offline playback of
-the committed graph, and unchanged source audio. A final post-session regression
-checkpoint must also be recorded. Until those artifacts exist, the goal remains
-open.
+The remaining host acceptance proof was completed on 2026-07-27 without rewriting
+this provider run. Logic Pro 12.3 demonstrated a genuinely free-form Gemini
+request, typed evidence and competing hypotheses, three distinct bounded-loudness-
+match previews, a natural multi-turn revision, lock/constraint preservation,
+capture-bound commit, bypass/restore, save/reload, provider-offline playback of the
+committed graph, multiple-instance isolation, and unchanged source audio. The
+post-session Debug/Release/TSan/AU-host/heap/`auval` checkpoint also passed.
+
+See
+[`LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md`](LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md)
+and
+[`PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md`](PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md).

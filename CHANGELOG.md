@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-07-27
+
+- Completed the direct Logic Pro 12.3 frontier-AI acceptance lane with Gemini
+  `gemini-3.6-flash`: a nonliteral vocal request produced validated typed intent,
+  measured evidence, competing hypotheses, three distinct bounded-loudness-match
+  previews, an identity-resolved natural revision, a locked EQ, capture-bound
+  commit, bypass/restore, save/reload into a new AU runtime, provider-offline graph
+  restoration, multiple-instance isolation, and unchanged source bytes.
+- Fixed conversational revision persistence so a rejected working render cannot
+  become successful history and an accepted revision records the exact
+  post-render/recalibrated plan installed for audition and commit, rather than the
+  pre-render proposal. The persisted snapshot, working preview, and live/reloaded
+  AU graph now reconcile to the same canonical plan.
+- Closed the current regression matrix: vector-backed `TestRunner` passed 68/68 in
+  Debug, Release, and Thread Sanitizer; `AudioUnitHostProbe` passed Debug, Release,
+  and Thread Sanitizer; the real-time heap interposer observed zero heap operations
+  over 4,000 callbacks; the native Xcode build and installed strict signatures
+  passed; and out-of-process `auval` succeeded through 192 kHz.
+- Added dated direct-host and completion-audit evidence. Updated current
+  architecture, capability, test, limitation, agent, data-flow, live-provider, and
+  README status without rewriting historical Logic 11.2.2, deterministic Logic
+  12.3, no-key sequencing, or earlier regression records.
+
 ## 2026-07-22
 
 - Reconciled current Production Intelligence documentation with the credential-backed

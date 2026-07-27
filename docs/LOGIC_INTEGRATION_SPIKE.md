@@ -32,10 +32,9 @@ capability is therefore claimed.
    protection, exact materialized preview graphs, commit preflight before IPC,
    lost-acknowledgement reconciliation, final-limiter/declared-peak consistency,
    checked-in schema/runtime-bound parity, fail-closed commit-time peak validation,
-   and bounded mailbox retention/message-file quota behavior. Current Debug and
-   Release runs pass 68/68 with 14 official BS.2217-2 vectors; the ordinary Thread
-   Sanitizer lane passes 67/67 with those external WAVs omitted and exits without a
-   report.
+   and bounded mailbox retention/message-file quota behavior. Current Debug,
+   Release, and Thread Sanitizer runs pass 68/68 with 14 official BS.2217-2 vectors;
+   the sanitizer exits without a report.
 4. `swift run -c release CompanionApp make this clearer and more controlled`
    renders conservative/balanced/strong plans and reports all three valid and
    level matched for the generated signal.
@@ -131,10 +130,12 @@ writing and IPC occur off render; the callback performs no file/network work.
 
 The current source is **compiled, class-host tested, development-signed,
 system-registered, `auval` validated, and Logic workflow tested**. It has 68/68
-Debug and Release portable passes with the official vector subset, plus a clean
-67/67 Thread Sanitizer lane and clean HostProbe lanes. Logic 11.2.2 directly proved
+Debug, Release, and Thread Sanitizer portable passes with the official vector
+subset, plus clean HostProbe lanes. Logic 11.2.2 directly proved
 the then-current-build MVP; Logic 12.3 separately proved the same critical workflow
-against the exact installed compatibility binary recorded in its evidence ledger.
+against the exact installed compatibility binary recorded in its evidence ledger
+and later completed the credential-backed frontier-AI workflow through save/reload
+and provider-offline graph restoration.
 The latter is host-compatibility evidence, not proof that every uninstalled working-
 tree change ran inside Logic. Automation, bounce, freeze, low-latency mode, buses,
 stereo output, and the complete rate/buffer matrix remain open. A complete graph can

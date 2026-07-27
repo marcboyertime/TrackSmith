@@ -107,11 +107,10 @@ AU/companion session slice are implemented. The portable core builds and runs:
   Git cleanliness/origin/commit identity, rights metadata, quarantine, append-only
   history, and explicit version/supersession policy before publication.
 
-On the development Mac, the current source passes 68/68 `TestRunner` checks in both
-Debug and Release when the 14 selected official BS.2217-2 vectors are supplied;
-67/67 pass without the external vectors. The latest ordinary Thread Sanitizer lane
-passes 67/67 with no race report, and the sanitized AU host also exits without a
-report. The added checks cover mailbox
+On the development Mac, the current source passes 68/68 `TestRunner` checks in
+Debug, Release, and Thread Sanitizer when the 14 selected official BS.2217-2
+vectors are supplied; 67/67 pass without the external vectors. The sanitizer lanes
+exit without a race report. The added checks cover mailbox
 retention, fail-closed quota behavior, command ordering, runtime-bound terminal
 replies, hard command-file expiry, Short-term/LRA behavior, six source classes,
 the 28 requested descriptors plus four explicit preservation concepts, eight
@@ -130,12 +129,12 @@ The current probe also covers native `shouldBypassEffect`, conservative
 60-second tail reporting, null-output/upstream-pointer host layouts, scheduled
 output-gain events, cross-block ramps, distinct reset-versus-bypass automation
 semantics, and conservative output-silence-flag handling. Current
-Debug/Release/Thread Sanitizer runs succeeded; the latest Release verification measured
-9.2 us mean, 9.4 us p99, and 37.0 us maximum at 48 kHz/128 frames against a 2,666.7 us
+Debug/Release/Thread Sanitizer runs succeeded; the latest Release verification
+measured 9.2 us mean, 10.0 us p99, and 30.0 us maximum at 48 kHz/128 frames against a 2,666.7 us
 deadline. A thread-local DYLD heap interposer additionally observed zero malloc,
 calloc, realloc, free, aligned, or macOS zone heap operations across 4,000 complete
-callbacks of the representative graph; that lane measured 9.2 us mean, 10.0 us p99,
-and 28.0 us maximum.
+callbacks of the representative graph; that lane measured 9.2 us mean, 9.9 us p99,
+and 78.4 us maximum.
 The AU commit transaction checks the captured snapshot identity, expected graph,
 locked nodes and captured sample-rate/channel format, then publishes the graph and
 advances serialized state under one lifecycle lock. Current host controls prove
@@ -194,8 +193,19 @@ Gemini additionally completed 30/30 cloud-assisted cases with three valid
 level-matched previews per case and unchanged source bytes. See the
 [cross-provider report](research/evaluation/production-intelligence-frontier-cross-provider-2026-07-22/README.md)
 and [Gemini cloud-30 report](research/evaluation/production-intelligence-gemini-3-6-flash-cloud30-2026-07-22/README.md).
-The remaining milestone proof is one direct Logic 12.3 frontier session through
-capture-bound commit, save/reload, and provider-offline playback of that graph.
+
+The direct frontier-AI host lane is now complete. In Logic Pro 12.3, Gemini
+interpreted “Make this vocal feel more intimate and expensive, but keep the
+breathiness” into typed source-aware goals and two competing hypotheses. TrackSmith
+rendered three distinct bounded-loudness-match previews, resolved a natural
+preview/node-lock revision, committed the exact post-render graph, bypassed and
+restored it, then recovered the same five-node graph and locked EQ after Logic
+save/reload with the provider unavailable. The source SHA-256 remained unchanged
+and a second AU instance retained its independent graph. Two previews matched the
+source essentially exactly; the strong third candidate disclosed that compensation
+was safety-limited rather than silently exceeding the added-gain bound. See the
+[direct Logic report](docs/evidence/LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md)
+and [v1 closure audit](docs/evidence/PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md).
 
 ## Build and test
 

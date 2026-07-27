@@ -137,18 +137,23 @@
   constrained to the checked-in vocabulary and current capability set. OpenAI
   Responses (`gpt-5.6-sol`) and Gemini Interactions (`gemini-3.6-flash`) now have
   credential-backed live evidence: six cross-provider cases each, plus Gemini's
-  30-case cloud lane. The remaining unproven frontier requirement is one complete
-  direct Logic Pro 12.3 session through commit and save/reload. The 420-case corpus
-  and live/generated-audio lanes establish structural and pipeline behavior, not
-  open-domain semantic accuracy, perceptual correctness, or general mix judgment.
+  30-case cloud lane. A complete direct Gemini/Logic Pro 12.3 session now covers
+  free-form interpretation, competing hypotheses, three distinct previews, typed
+  revision and lock, exact commit, bypass/restore, save/reload, provider-offline
+  graph recovery, instance isolation and unchanged source bytes. One strong preview
+  disclosed a 1.655 LU residual because the conservative gain bound limited exact
+  compensation. The 420-case corpus and live/generated-audio lanes establish
+  structural and pipeline behavior, not open-domain semantic accuracy, perceptual
+  correctness, artistic superiority, or general mix judgment.
 - A separate generated catalog now grounds 14 common abstract phrases such as
   *expensive*, *bedroom-recorded*, *alive*, *emotionally boring*, *glued*,
   *three-dimensional*, and *human*. It supplies source-scoped possible senses,
   contradictions, non-DSP causes and clarification policy only when an exact
   reviewed phrase/alias is present. This improves bounded provider context; it does
   not prove those meanings, infer utterance role by itself, cover arbitrary
-  paraphrases, or authorize a plan. A live frontier run and musician listening are
-  still required to evaluate open-ended understanding beyond the bounded live cases.
+  paraphrases, or authorize a plan. Additional frontier runs and musician listening
+  are still required to evaluate open-ended understanding beyond the bounded live
+  cases.
 - The four Logic 12.3 primary manuals have complete every-page documentary coverage
   (2,686 pages), including every Effects-guide family, all 35 Pedalboard stompboxes,
   Bitcrusher, every Instruments-guide family, the full User Guide, and every Control

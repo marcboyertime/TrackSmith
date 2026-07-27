@@ -287,9 +287,9 @@ ordinary plan/render/safety gates before commit.
 
 ## Evidence
 
-- `TestRunner`: 67/67 Debug and Release without external vectors; 68/68 Debug and
-  Release with the selected official BS.2217-2 vectors on 2026-07-18.
-- Thread Sanitizer: closing 67/67 run on 2026-07-18, no race report.
+- `TestRunner`: 67/67 without external vectors; 68/68 in Debug, Release, and
+  Thread Sanitizer with the selected official BS.2217-2 vectors at the 2026-07-27
+  closing checkpoint. The sanitizer emitted no race report.
 - Provider tests: OpenAI/Gemini request shape, no tools/audio/file names/credentials,
   strict output, consent, missing/inaccessible/rejected credential, timeout,
   cancellation, network loss, malformed/oversized response, rate limit, bounded
@@ -309,19 +309,22 @@ ordinary plan/render/safety gates before commit.
 - Generated-audio evaluation: 30/30 cases and 90/90 valid, pairwise-distinct,
   source-preserving previews using `mock-offline-1`; see
   [`PRODUCTION_INTELLIGENCE_GENERATED_AUDIO_2026-07-14.md`](evidence/PRODUCTION_INTELLIGENCE_GENERATED_AUDIO_2026-07-14.md).
-- Closing native/AU regression: signed installed app and AU fingerprints, strict
-  signatures, Debug/Release/TSan host probes, zero observed callback heap operations,
-  `auval`, and final TestRunner results are recorded in
-  [`PRODUCTION_INTELLIGENCE_REGRESSION_2026-07-15.md`](evidence/PRODUCTION_INTELLIGENCE_REGRESSION_2026-07-15.md).
+- Direct Logic frontier evidence: Logic Pro 12.3 completed a free-form Gemini turn,
+  source-aware evidence and competing hypotheses, three distinct bounded-loudness-
+  match previews, natural preview/node revision, lock preservation, capture-bound
+  commit, bypass/restore, save/reload, provider-offline graph restoration,
+  multiple-instance isolation, and unchanged source bytes. See
+  [`LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md`](evidence/LOGIC_12_3_FRONTIER_AI_VALIDATION_2026-07-27.md).
+- Closing native/AU regression: vector-backed 68/68 Debug/Release/TSan,
+  Debug/Release/TSan host probes, native Xcode build, zero observed callback heap
+  operations, strict installed signatures, `auval`, knowledge/corpus audits, and a
+  criterion-by-criterion milestone review are recorded in
+  [`PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md`](evidence/PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md).
 
-Pending proof before the milestone can be declared complete:
-
-- one direct free-form, multi-turn credential-backed frontier session in Logic Pro
-  12.3, including successful capture-bound commit;
-- saved-project reload and provider-offline playback for that exact committed graph;
-- a final post-session Debug/Release/TSan/AU-host/heap/`auval` regression checkpoint
-  and a dated evidence report that preserves the historical 11.2.2 and earlier
-  12.3 records.
+The milestone proof is complete for the declared v1 scope. The strong direct-Logic
+preview disclosed a safety-limited loudness match rather than silently exceeding
+the plan's gain bound, and neither that workflow nor the larger evaluation suite
+claims objective artistic superiority.
 
 ## Supported and unsupported request boundary
 
