@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tracksmith.local/schemas/audio-evidence-annotation-v1.json",
+  "title": "TrackSmith Audio Evidence Annotation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "annotationID",
+    "datasetID",
+    "assetID",
+    "split",
+    "timeScope",
+    "datasetSupplied",
+    "mechanicallyDerived",
+    "directlyCurated",
+    "productionJudgment",
+    "listeningEvidence",
+    "evaluationLinks"
+  ],
+  "properties": {
+    "annotationID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "datasetID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "assetID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "split": {
+      "type": "string",
+      "enum": [
+        "train",
+        "validation",
+        "test",
+        "evaluation",
+        "unspecified",
+        "tracksmith_holdout"
+      ]
+    },
+    "timeScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startSeconds",
+        "endSeconds",
+        "scopeClass"
+      ],
+      "properties": {
+        "startSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "endSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "scopeClass": {
+          "type": "string",
+          "enum": [
+            "excerpt",
+            "section",
+            "full_song",
+            "isolated_source",
+            "conversation_turn"
+          ]
+        },
+        "sectionLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "datasetSupplied": {
+      "type": "object",
+      "description": "Labels supplied by the dataset; never silently upgraded to TrackSmith measurement or preference.",
+      "additionalProperties": true
+    },
+    "mechanicallyDerived": {
+      "type": "object",
+      "description": "Hash, PCM, alignment, reconstruction, duplicate, section, or objective measurement results.",
+      "additionalProperties": true
+    },
+    "directlyCurated": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceClass",
+        "role",
+        "recordingCondition",
+        "processingCondition",
+        "curatorClass"
+      ],
+      "properties": {
+        "sourceClass": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "recordingCondition": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "processingCondition": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "curatorClass": {
+          "type": "string",
+          "enum": [
+            "direct_human",
+            "research_practice_derived",
+            "adversarial_design",
+            "generated_augmentation"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "productionJudgment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "desired",
+        "preserved",
+        "prohibited",
+        "competingInterpretations",
+        "noProcessingCouldBeCorrect",
+        "nonDSPCouldBeCorrect",
+        "humanListeningDecisive",
+        "evidenceClass"
+      ],
+      "properties": {
+        "desired": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "preserved": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "prohibited": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "competingInterpretations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "noProcessingCouldBeCorrect": {
+          "type": "boolean"
+        },
+        "nonDSPCouldBeCorrect": {
+          "type": "boolean"
+        },
+        "humanListeningDecisive": {
+          "type": "boolean"
+        },
+        "evidenceClass": {
+          "type": "string",
+          "enum": [
+            "unannotated",
+            "direct_human",
+            "research_practice_derived",
+            "adversarial_design",
+            "generated_augmentation"
+          ]
+        }
+      }
+    },
+    "listeningEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "resultIDs"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_run",
+            "protocol_ready",
+            "completed"
+          ]
+        },
+        "resultIDs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "evaluationLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failureMapCaseIDs",
+        "dspFixtureIDs",
+        "languageCaseIDs",
+        "listeningTaskIDs"
+      ],
+      "properties": {
+        "failureMapCaseIDs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "dspFixtureIDs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "languageCaseIDs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "listeningTaskIDs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

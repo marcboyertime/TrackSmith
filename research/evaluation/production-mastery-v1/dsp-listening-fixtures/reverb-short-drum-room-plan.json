@@ -1,0 +1,65 @@
+{
+  "goals" : [
+
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.6,
+      "enabled" : true,
+      "id" : "D37713C4-51EA-5CF1-8906-FF4909628758",
+      "locked" : false,
+      "parameters" : {
+        "algorithmVersion" : 1,
+        "damping" : 0.5,
+        "decayTimeSeconds" : 0.55,
+        "diffusion" : 0.62,
+        "mix" : 0.14,
+        "preDelayMS" : 24,
+        "roomSize" : 0.35
+      },
+      "rationale" : "Test a short room while retaining leading-edge focus.",
+      "type" : "reverb"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "2EE89EBE-E436-5EFB-9DC9-61359B87A518",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.3590003208086876
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "50D85AC9-19F1-56DE-910B-DAEA0EE26F3B",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Retain inter-sample margin while candidate loudness is matched.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -3,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "62A9DFF3-E436-5EFB-9DC9-61359B87A518",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "drums"
+  },
+  "sourceSnapshotID" : "879E5BD5-A269-50BC-8205-373217B40910"
+}

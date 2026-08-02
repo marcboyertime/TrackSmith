@@ -1,0 +1,133 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 0,
+          "1024": 0,
+          "16": 0,
+          "256": 0
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 28,
+          "correlation": 1.0,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 576000,
+        "differing_sample_count": 0,
+        "first_differing_sample": null,
+        "last_differing_sample": null,
+        "least_squares_gain": 1.0,
+        "least_squares_gain_db": 0.0,
+        "max_absolute_error_integer": 0,
+        "mean_error_normalized": 0.0,
+        "polarity": "noninverted",
+        "rms_error_dbfs": null,
+        "sample_count_match": true,
+        "sample_exact": true,
+        "zero_lag_correlation": 1.0
+      },
+      {
+        "absolute_error_threshold_counts": {
+          "1": 0,
+          "1024": 0,
+          "16": 0,
+          "256": 0
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 28,
+          "correlation": 1.0,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 576000,
+        "differing_sample_count": 0,
+        "first_differing_sample": null,
+        "last_differing_sample": null,
+        "least_squares_gain": 1.0,
+        "least_squares_gain_db": 0.0,
+        "max_absolute_error_integer": 0,
+        "mean_error_normalized": 0.0,
+        "polarity": "noninverted",
+        "rms_error_dbfs": null,
+        "sample_count_match": true,
+        "sample_exact": true,
+        "zero_lag_correlation": 1.0
+      }
+    ],
+    "channel_count_match": false,
+    "channel_mapping": [
+      {
+        "rendered_channel_index": 0,
+        "source_channel_index": 0
+      },
+      {
+        "rendered_channel_index": 1,
+        "source_channel_index": 0
+      }
+    ],
+    "format_match": false,
+    "frame_count_match": true,
+    "pcm_byte_exact": false,
+    "sample_rate_and_bit_depth_match": true,
+    "source_broadcast_pcm_exact": true
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 2.312712992231051e-06,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 575998,
+        "nonzero_sample_count": 575998,
+        "peak_dbfs": -12.000000253286988,
+        "peak_integer": 2107123,
+        "rms_dbfs": -15.034713318715093,
+        "sample_count": 576000
+      },
+      {
+        "dc_offset_normalized": 2.312712992231051e-06,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 575998,
+        "nonzero_sample_count": 575998,
+        "peak_dbfs": -12.000000253286988,
+        "peak_integer": 2107123,
+        "rms_dbfs": -15.034713318715093,
+        "sample_count": 576000
+      }
+    ],
+    "channels": 2,
+    "compression_type": "NONE",
+    "duration_seconds": 12.0,
+    "file_sha256": "cd47ead73b3f730b587b7ff2094061a3da62678db584191dc48921667c6f8f7b",
+    "frame_count": 576000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-channel-eq-production-profile-2026-07-27/artifacts/channel-eq-header-bypass-settled-3-48k.wav",
+    "pcm_sha256": "3935f0f2236c7137c251c70f55f8b7aec493b85b845057f71400e741cc5736e3",
+    "sample_rate_hz": 48000
+  },
+  "schema_version": 2,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 2.312712992231051e-06,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 575998,
+        "nonzero_sample_count": 575998,
+        "peak_dbfs": -12.000000253286988,
+        "peak_integer": 2107123,
+        "rms_dbfs": -15.034713318715093,
+        "sample_count": 576000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 12.0,
+    "file_sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+    "frame_count": 576000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-channel-eq-production-profile-2026-07-27/artifacts/source-log-sweep-20hz-20khz-mono-48k.wav",
+    "pcm_sha256": "0eed2a9678ba53e94961486f0add91fd37aa760b2735c31e42b7356febede4ab",
+    "sample_rate_hz": 48000
+  }
+}

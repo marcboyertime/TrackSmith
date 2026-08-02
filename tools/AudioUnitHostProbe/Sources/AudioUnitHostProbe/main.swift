@@ -1759,20 +1759,29 @@ enum AudioUnitHostProbe {
         let frameCount: AVAudioFrameCount = 128
         let unit = try AssistantAudioUnit(componentDescription: description)
         unit.detachSessionBridgeForTesting()
+        let excludedPerformanceNodes = Set(
+            ProcessInfo.processInfo.environment["TRACKSMITH_HOST_PROBE_EXCLUDE_NODES", default: ""]
+                .split(separator: ",")
+                .map(String.init)
+        )
+        let representativeNodes: [ProcessingNode] = [
+            .init(type: .inputTrim, parameters: [.gainDB: -1], rationale: "performance", confidence: 1, category: .corrective),
+            .init(type: .highPass, parameters: [.frequencyHz: 70, .q: 0.707], rationale: "performance", confidence: 1, category: .corrective),
+            .init(type: .parametricEQ, parameters: [.frequencyHz: 2_800, .q: 1.1, .gainDB: 2], rationale: "performance", confidence: 1, category: .corrective),
+            .init(type: .compressor, parameters: [.thresholdDB: -20, .ratio: 3, .attackMS: 12, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 5, .mix: 0.8], rationale: "performance", confidence: 1, category: .corrective),
+            .init(type: .expander, parameters: [.algorithmVersion: 1, .thresholdDB: -52, .ratio: 2, .attackMS: 4, .releaseMS: 100, .holdMS: 30, .hysteresisDB: 4, .rangeDB: 12, .mix: 0.35], rationale: "performance", confidence: 1, category: .corrective),
+            .init(type: .deEsser, parameters: [.frequencyHz: 6_000, .thresholdDB: -28, .ratio: 3, .attackMS: 1, .releaseMS: 60, .mix: 0.7], rationale: "performance", confidence: 1, category: .corrective),
+            .init(type: .saturation, parameters: [.driveDB: 2, .mix: 0.2], rationale: "performance", confidence: 1, category: .creative),
+            .init(type: .stereoWidth, parameters: [.width: 1.1, .mix: 0.6], rationale: "performance", confidence: 1, category: .creative),
+            .init(type: .delay, parameters: [.algorithmVersion: 1, .delayTimeMS: 90, .feedback: 0.2, .damping: 0.35, .stereoCrossfeed: 0.15, .mix: 0.1], rationale: "performance", confidence: 1, category: .creative),
+            .init(type: .reverb, parameters: [.algorithmVersion: 1, .preDelayMS: 12, .decayTimeSeconds: 0.7, .roomSize: 0.4, .damping: 0.45, .diffusion: 0.6, .mix: 0.1], rationale: "performance", confidence: 1, category: .creative),
+            .init(type: .limiter, parameters: [.ceilingDB: -1, .releaseMS: 80, .lookaheadMS: 0], rationale: "performance", confidence: 1, category: .loudness),
+        ].filter { !excludedPerformanceNodes.contains($0.type.rawValue) }
         let plan = ProcessingPlan(
             sourceSnapshotID: UUID(),
             scope: .init(kind: .pluginInput, channelFormat: .stereo, sourceType: .vocalBus),
             goals: [],
-            nodes: [
-                .init(type: .inputTrim, parameters: [.gainDB: -1], rationale: "performance", confidence: 1, category: .corrective),
-                .init(type: .highPass, parameters: [.frequencyHz: 70, .q: 0.707], rationale: "performance", confidence: 1, category: .corrective),
-                .init(type: .parametricEQ, parameters: [.frequencyHz: 2_800, .q: 1.1, .gainDB: 2], rationale: "performance", confidence: 1, category: .corrective),
-                .init(type: .compressor, parameters: [.thresholdDB: -20, .ratio: 3, .attackMS: 12, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 5, .mix: 0.8], rationale: "performance", confidence: 1, category: .corrective),
-                .init(type: .deEsser, parameters: [.frequencyHz: 6_000, .thresholdDB: -28, .ratio: 3, .attackMS: 1, .releaseMS: 60, .mix: 0.7], rationale: "performance", confidence: 1, category: .corrective),
-                .init(type: .saturation, parameters: [.driveDB: 2, .mix: 0.2], rationale: "performance", confidence: 1, category: .creative),
-                .init(type: .stereoWidth, parameters: [.width: 1.1, .mix: 0.6], rationale: "performance", confidence: 1, category: .creative),
-                .init(type: .limiter, parameters: [.ceilingDB: -1, .releaseMS: 80, .lookaheadMS: 0], rationale: "performance", confidence: 1, category: .loudness),
-            ]
+            nodes: representativeNodes
         )
         try unit.setProcessingPlan(plan)
         let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 2)!

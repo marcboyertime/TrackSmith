@@ -32,6 +32,7 @@ let package = Package(
         .executable(name: "TestSignalGenerator", targets: ["TestSignalGenerator"]),
         .executable(name: "ResearchIngestCLI", targets: ["ResearchIngestCLI"]),
         .executable(name: "ProductionIntelligenceEvaluation", targets: ["ProductionIntelligenceEvaluation"]),
+        .executable(name: "ProductionMasteryDSPFixtures", targets: ["ProductionMasteryDSPFixtures"]),
         .executable(name: "TestRunner", targets: ["TestRunner"]),
     ],
     targets: [
@@ -94,6 +95,11 @@ let package = Package(
             name: "ProductionIntelligenceEvaluation",
             dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "PlanSchema", "ProductionIntelligence", "PreviewWorkflow"],
             path: "tools/ProductionIntelligenceEvaluation/Sources/ProductionIntelligenceEvaluation"
+        ),
+        .executableTarget(
+            name: "ProductionMasteryDSPFixtures",
+            dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema", "PreviewRenderer"],
+            path: "tools/ProductionMasteryDSPFixtures/Sources/ProductionMasteryDSPFixtures"
         ),
         .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "ProductionIntelligence", "PreviewRenderer", "PreviewWorkflow", "SharedIPC", "SessionCore", "ResearchIngestion"], path: "tests/TestRunner"),
     ]

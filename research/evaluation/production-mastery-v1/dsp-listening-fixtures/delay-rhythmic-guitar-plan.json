@@ -1,0 +1,64 @@
+{
+  "goals" : [
+
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.58,
+      "enabled" : true,
+      "id" : "6641B2F8-4DA0-5963-BD13-0E77A996074F",
+      "locked" : false,
+      "parameters" : {
+        "algorithmVersion" : 1,
+        "damping" : 0.55,
+        "delayTimeMS" : 250,
+        "feedback" : 0.34,
+        "mix" : 0.2,
+        "stereoCrossfeed" : 0
+      },
+      "rationale" : "Test audible rhythmic repeats with bounded decay and filtering.",
+      "type" : "delay"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "BE57C0A4-BBFE-5F68-99B0-07F74E446A12",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.9685723605154477
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "6F74C90E-CA42-578E-8697-2735BD56CD9F",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Retain inter-sample margin while candidate loudness is matched.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -3,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "F21681E9-BBFE-5F68-99B0-07F74E446A12",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar"
+  },
+  "sourceSnapshotID" : "568E241D-B5EE-5D0C-8416-914F66611D92"
+}

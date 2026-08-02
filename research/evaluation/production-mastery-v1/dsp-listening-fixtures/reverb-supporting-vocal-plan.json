@@ -1,0 +1,65 @@
+{
+  "goals" : [
+
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.56,
+      "enabled" : true,
+      "id" : "3CA309F3-C93D-5AC3-9876-9F297310C39E",
+      "locked" : false,
+      "parameters" : {
+        "algorithmVersion" : 1,
+        "damping" : 0.55,
+        "decayTimeSeconds" : 1.25,
+        "diffusion" : 0.7,
+        "mix" : 0.13,
+        "preDelayMS" : 32,
+        "roomSize" : 0.5
+      },
+      "rationale" : "Test supporting ambience with direct consonants separated by predelay.",
+      "type" : "reverb"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "913915EB-A477-56A4-97C2-8FA3A167D28F",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.216865861726646
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "4E41452F-F6AE-5EAB-BA08-AECC7E029E3B",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Retain inter-sample margin while candidate loudness is matched.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -3,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "DD7854A6-A477-56A4-97C2-8FA3A167D28F",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal"
+  },
+  "sourceSnapshotID" : "79A14526-158D-5B9C-8791-B3327873D033"
+}

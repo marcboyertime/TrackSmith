@@ -1,0 +1,1465 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-channel-eq-production-profile-48k-96k-2026-07-27",
+  "product": "TrackSmith",
+  "recordedAt": "2026-07-27T18:58:58-04:00",
+  "identityIdentifier": "logic-pro-12.3:channel-eq",
+  "identityName": "Channel EQ",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "modelContextSummary": "Bounded direct Logic Pro 12.3 build-6674 Channel EQ evidence on generated PCM24 fixtures at 48 and 96 kHz. At 48 kHz, settled neutral and header-bypass sweep renders reproduced the mono source PCM exactly on both interleaved output channels. Artifact-backed impulse states cover a 1 kHz +6 dB/Q1 bell, a 2.5 kHz -6 dB/Q4 bell, paired shelves, paired 24 dB/octave cuts, and one eight-band multiband shape. The exposed HQ mode measurably changed that shape; Analyzer POST/OFF/PRE and Q-Couple on/off-with-rewritten-Q comparisons nulled in their recorded states; +3 dB output measured 2.999999876 dB. Stereo, Left Only, Right Only, Mid Only, and Side Only were rendered on generated one-sided, in-phase, and anti-phase fixtures. The complex displayed state survived reload, but accepted pre/post reload groups differed by a minute -113.14 dBFS residual, so exact reload PCM is not claimed. A repeated 96 kHz complex-state render was PCM-exact and showed bounded rate-dependent response differences. Automation, exhaustive parameter grids, other channel formats/rates, musical preference, private topology, and any TrackSmith authority to control Logic remain unmeasured or prohibited.",
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": "logic-12.3-channel-eq-default-bell-48k-2026-07-18",
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchemas": [
+      2,
+      3
+    ],
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureCompatibility": "Default 48 kHz generation was byte-identical across two fresh runs and to the frozen v1 suite. Two fresh 96 kHz generations were byte-identical to each other.",
+    "claimClass": "measured_behavior"
+  },
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the offline Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 Channel EQ Empirical 48k 2026-07-18",
+        "archivePath": "project/TrackSmith Logic 12.3 Channel EQ Empirical 48k 2026-07-18.logicx.zip",
+        "archiveSHA256": "0c1a13b43f97a04c018b8d1af52c68146cddd56439919f39e53b76b29da1e71e",
+        "sampleRateHz": 48000
+      },
+      {
+        "name": "TrackSmith Logic 12.3 Channel EQ Production Profile 96k 2026-07-27",
+        "archivePath": "project/TrackSmith Logic 12.3 Channel EQ Production Profile 96k 2026-07-27.logicx.zip",
+        "archiveSHA256": "6ca180a13c2fba72c1eefc44dc9423f0e5ef83272cbd739b13e64eb0d2f58913",
+        "sampleRateHz": 96000
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "Both ZIP archives passed unzip -t.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "impulse": "exactly 6.000 seconds",
+      "sweep": "exactly 12.000 seconds",
+      "stereo": "exactly 8.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono source through interleaved Stereo Out",
+      "stereo source through interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "nativeState": {
+    "presetName": "Default Preset modified through explicitly recorded states",
+    "states": {
+      "neutral": {
+        "lowCut": "off",
+        "lowShelfGainDB": 0.0,
+        "peak1GainDB": 0.0,
+        "peak2GainDB": 0.0,
+        "peak3GainDB": 0.0,
+        "peak4GainDB": 0.0,
+        "highShelfGainDB": 0.0,
+        "highCut": "off",
+        "hq": "off",
+        "qCouple": "on",
+        "analyzer": "POST",
+        "outputGainDB": 0.0
+      },
+      "bellBoost": {
+        "band": "Peak 3",
+        "frequencyHz": 1000.0,
+        "gainDB": 6.0,
+        "q": 1.0
+      },
+      "narrowBellCut": {
+        "band": "Peak 3",
+        "frequencyHz": 2500.0,
+        "gainDB": -6.0,
+        "q": 4.0
+      },
+      "shelves": {
+        "lowShelf": {
+          "frequencyHz": 100.0,
+          "gainDB": 6.0,
+          "q": 0.71
+        },
+        "highShelf": {
+          "frequencyHz": 8000.0,
+          "gainDB": -6.0,
+          "q": 0.71
+        }
+      },
+      "passFilters": {
+        "lowCut": {
+          "frequencyHz": 80.0,
+          "slopeDBPerOctave": 24,
+          "q": 0.71
+        },
+        "highCut": {
+          "frequencyHz": 12000.0,
+          "slopeDBPerOctave": 24,
+          "q": 0.71
+        }
+      },
+      "multiband": {
+        "lowCut": {
+          "frequencyHz": 80.0,
+          "slopeDBPerOctave": 24,
+          "q": 0.71
+        },
+        "lowShelf": {
+          "frequencyHz": 120.0,
+          "gainDB": 2.0,
+          "q": 0.71
+        },
+        "peak1": {
+          "frequencyHz": 200.0,
+          "gainDB": -3.0,
+          "qWithQCoupleOn": 1.0,
+          "qDisplayedAfterQCoupleOff": 1.7
+        },
+        "peak2": {
+          "frequencyHz": 500.0,
+          "gainDB": 2.0,
+          "qWithQCoupleOn": 1.0,
+          "qDisplayedAfterQCoupleOff": 1.1
+        },
+        "peak3": {
+          "frequencyHz": 2500.0,
+          "gainDB": -4.0,
+          "qWithQCoupleOn": 2.0,
+          "qDisplayedAfterQCoupleOff": 4.0
+        },
+        "peak4": {
+          "frequencyHz": 6000.0,
+          "gainDB": 2.0,
+          "qWithQCoupleOn": 1.0,
+          "qDisplayedAfterQCoupleOff": 1.1
+        },
+        "highShelf": {
+          "frequencyHz": 10000.0,
+          "gainDB": -2.0,
+          "q": 0.71
+        },
+        "highCut": {
+          "frequencyHz": 18000.0,
+          "slopeDBPerOctave": 12,
+          "q": 0.71
+        }
+      },
+      "complexSavedState": {
+        "multibandState": "nativeState.states.multiband",
+        "hq": "on",
+        "qCouple": "off",
+        "analyzer": "PRE",
+        "outputGainDB": 3.0,
+        "processingModesRendered": [
+          "Stereo",
+          "Left Only",
+          "Right Only",
+          "Mid Only",
+          "Side Only"
+        ],
+        "observedBeforeSave": true,
+        "observedAfterReload": true,
+        "displayedValuesSurvivedReload": true
+      }
+    },
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They are not a claim about Apple's private topology, every parameter combination, or TrackSmith authority to control Logic."
+  },
+  "input": {
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtures": [
+      {
+        "artifactPath": "artifacts/source-log-sweep-20hz-20khz-mono-48k.wav",
+        "fileSHA256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+        "pcmSHA256": "0eed2a9678ba53e94961486f0add91fd37aa760b2735c31e42b7356febede4ab",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 576000
+      },
+      {
+        "artifactPath": "artifacts/source-single-impulse-mono-48k.wav",
+        "fileSHA256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+        "pcmSHA256": "902898df6987053888e55c00d24894e5e46043c753fc5e277991e77edf4d3538",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 288000
+      },
+      {
+        "artifactPath": "artifacts/source-single-impulse-mono-96k.wav",
+        "fileSHA256": "d4860ad1d6f13d8900f6d4fb3f445473536ea4ba57ee6f65f28797e4939696bc",
+        "pcmSHA256": "1f9edf0a30f8bae8029588bab9bd4feb1ea3f87f5189902e513d10709090d0ec",
+        "sampleRateHz": 96000,
+        "channels": 1,
+        "frameCount": 576000
+      },
+      {
+        "artifactPath": "artifacts/source-stereo-in-phase-48k.wav",
+        "fileSHA256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+        "pcmSHA256": "a780f52073f19c3efc8817464386ff5725f80d04a60758455e8057d23c5be37d",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      },
+      {
+        "artifactPath": "artifacts/source-stereo-left-only-48k.wav",
+        "fileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+        "pcmSHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      },
+      {
+        "artifactPath": "artifacts/source-stereo-right-only-48k.wav",
+        "fileSHA256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+        "pcmSHA256": "e9ec8a7a48e5f17bb6c65b7542133945c533264281cc3178c3bf36ae96ae3031",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      },
+      {
+        "artifactPath": "artifacts/source-stereo-anti-phase-48k.wav",
+        "fileSHA256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+        "pcmSHA256": "ca1391f78463e97f388c51e8f8191ed9c9f86e03ecab984f4c4b599370636e98",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      }
+    ],
+    "bitDepth": 24,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "Every retained source copy preserves its generated suite file SHA-256; the 48 kHz suite is byte-identical to the frozen suite and the 96 kHz suite repeated byte-identically in an independent generation."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000,
+      96000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Preserve first-transition output, then require repeated decoded-PCM identity before making settled-state claims.",
+    "baselineGate": "Neutral and header-bypass sweep renders had to reproduce the mono source PCM exactly on both interleaved output channels before active-state evidence was admitted."
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_48k_mono_sweep_through_interleaved_stereo_out",
+      "evidence": "Neutral and header-bypass first and three settled renders were retained. Every accepted settled render broadcast the mono source PCM exactly to both output channels."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_channel_processing_modes_only",
+      "evidence": "Stereo, Left Only, Right Only, Mid Only, and Side Only were rendered in one complex state. Surround/dual-mono and every host channel-format variant were not run."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_high_value_states_not_full_grid",
+      "evidence": "Neutral, one broad boost, one narrow cut, paired shelves, paired 24 dB/octave pass filters, one coupled multiband state, HQ, output gain, and Q-Couple preservation were measured. A full frequency/gain/Q/slope interaction grid was not run."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "complete_for_recorded_impulse_states",
+      "evidence": "Impulse artifacts record magnitude, phase, coarse sampled group delay, pre-response, first/peak/last nonzero frames, tail duration, polarity, level, and exact frame count for every accepted impulse state at 48 kHz and one complex state at 96 kHz."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "partial_three_repeats_for_baselines_and_key_states_two_for_others",
+      "evidence": "Neutral, bypass, broad bell, and post-reload complex states have three accepted repeats where declared; shelves, multiband, stereo one-sided, output-gain, and 96 kHz states have two repeat artifacts. Accepted pairs were decoded-PCM identical."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_with_bounded_reload_quantization_finding",
+      "evidence": "The complex displayed state survived reload and three post-reload renders were internally PCM-identical. They differed from the two internally identical pre-reload renders by 1167 samples at -113.14 dBFS residual, so exact pre/post reload PCM is explicitly not claimed for the complex state. The historical simple bell state remains an independent exact-reload result."
+    },
+    "each_band_enable_type_frequency_gain_q_and_pass_filter_slope_states": {
+      "status": "partial_representative_all_band_types_and_two_slopes",
+      "evidence": "All eight band roles participated across accepted states: low/high cuts, low/high shelves, and four peak bands. Representative frequencies, gains, Q values, and 12/24 dB-per-octave cut slopes were recorded; exhaustive parameter grids remain unknown."
+    },
+    "single_band_and_coupled_multiband_magnitude_phase_group_delay_and_headroom": {
+      "status": "complete_for_declared_48k_impulse_states_and_historical_level_ladder",
+      "evidence": "The +6 dB/Q1 bell, -6 dB/Q4 bell, shelves, pass filters, multiband HQ-off/on states, and output-gain state have artifact-backed magnitude/phase/tail results. The frozen historical amplitude ladder remains the headroom and level-dependence evidence."
+    },
+    "stereo_left_right_mid_side_processing_and_mono_translation": {
+      "status": "complete_for_declared_complex_state_and_five_generated_stereo_fixtures",
+      "evidence": "Left-only, right-only, in-phase, anti-phase, and frequency-split generated fixtures were retained. Channel-mode comparisons preserve channel independence, Mid/Side relationships, in-phase equality, and anti-phase mono-sum measurements without assigning perceptual value."
+    },
+    "oversampling_output_gain_and_input_level_invariance_or_nonlinearity_rejection": {
+      "status": "partial_hq_output_gain_and_historical_level_ladder",
+      "evidence": "HQ off/on differed measurably in the complex state; +3 dB output measured 2.999999876 dB. The historical level ladder supports one bell's input-level behavior. HQ is treated only as an exposed mode label; no private oversampling topology is claimed."
+    },
+    "analyzer_pre_post_and_display_state_audio_null_and_save_reload": {
+      "status": "complete_for_declared_complex_state",
+      "evidence": "Analyzer POST versus OFF and POST versus PRE were decoded-PCM identical. Analyzer display state and the complex EQ values were captured before and after reload."
+    }
+  },
+  "measurements": {
+    "neutralAndBypass": {
+      "sampleRateHz": 48000,
+      "frameCount": 576000,
+      "sourcePCMPerChannelSHA256": "0eed2a9678ba53e94961486f0add91fd37aa760b2735c31e42b7356febede4ab",
+      "interleavedStereoPCM_SHA256": "3935f0f2236c7137c251c70f55f8b7aec493b85b845057f71400e741cc5736e3",
+      "neutralSettledRenderCount": 3,
+      "headerBypassSettledRenderCount": 3,
+      "sourceBroadcastPCMExact": true
+    },
+    "singleBands": {
+      "peak3_1000Hz_plus6dB_Q1_measuredMagnitudeDB": 5.999963969851176,
+      "peak3_2500Hz_minus6dB_Q4_measuredMagnitudeDB": -6.000277759638055
+    },
+    "shelves": {
+      "20HzDB": 5.887938603507442,
+      "100HzDB": 2.9995439699729327,
+      "1000HzDB": -0.007990427548972286,
+      "8000HzDB": -2.9996798169237584,
+      "20000HzDB": -5.934278194877498
+    },
+    "passFilters": {
+      "20HzDB": -48.33742523186768,
+      "40HzDB": -24.082787055858944,
+      "80HzDB": -2.9515667073693255,
+      "1000HzDB": 0.00048589904444988526,
+      "10000HzDB": -0.45192212643715696,
+      "12500HzDB": -4.238370769515935,
+      "16000HzDB": -19.11291531945327,
+      "20000HzDB": -45.74367877296395,
+      "peakFrameRelativeToImpulse": 2,
+      "lastNonzeroFrameRelativeToImpulse": 3801
+    },
+    "hq": {
+      "hqOffPCM": "12799613f648f0f8eeabe6122280ee5d2f52c18156ff605ce5f93f597f43fb64",
+      "hqOnPCM": "8edebeb40b5d401717df0a34d8704b4cd6a90d2b39a3b764d87af0e264c142e6",
+      "differingSamplesPerChannel": 1169,
+      "residualRMSDBFSPerChannel": -79.47512659521642,
+      "privateTopologyEstablished": false
+    },
+    "outputGain": {
+      "configuredDB": 3.0,
+      "measuredLeastSquaresGainDB": 2.999999876133571,
+      "zeroLagCorrelation": 0.9999999999307184
+    },
+    "reload": {
+      "preReloadPairPCMExact": true,
+      "postReloadTriplePCMExact": true,
+      "preVersusPostReloadPCMExact": false,
+      "differingSamplesPerChannel": 1167,
+      "residualRMSDBFSPerChannel": -113.14156577591787,
+      "displayedStateRestored": true
+    },
+    "stereo": {
+      "leftOnlyStereoModeRepeatPCMExact": true,
+      "rightOnlyStereoModeRepeatPCMExact": true,
+      "leftOnlyStereoModeEqualsLeftOnlyMode": true,
+      "leftOnlyMidVersusSideLeftChannelSampleExact": true,
+      "leftOnlyMidVersusSideRightChannelCorrelation": -0.9999999999981393,
+      "inPhaseMidOnlyLeftRightSampleExact": true,
+      "antiPhaseSideOnlyLeftRightCorrelation": -0.9999999999996787,
+      "antiPhaseSideOnlyMonoSumPeakInteger": 1
+    },
+    "sampleRate": {
+      "complexState48kPCM": "527deb24a7558cdc6a45017f563c78c81c8d36319e7755befac6b78ea12278f6",
+      "complexState96kPCM": "e2fbb8cadecc9f6efab46b4f0267470abc6a54e29aee419a80d20cb9c7288db9",
+      "repeat96kPCMExact": true,
+      "preImpulseNonzeroSamples48k": 14,
+      "preImpulseNonzeroSamples96k": 14,
+      "tailSeconds48k": 0.06864583333333334,
+      "tailSeconds96k": 0.06834375,
+      "interpretation": "Broad response shape was retained but exact magnitudes changed across the measured rates. Raw PCM is not compared across sample rates."
+    },
+    "uncertainty": {
+      "pcm": "Integer PCM24 comparisons are exact after WAVE decode.",
+      "frequencyResponse": "Goertzel DFT at named sampled frequencies; values describe only the finite retained impulse response and exact recorded state.",
+      "phase": "Phase is referenced to the source impulse. Adjacent-point group delay is coarse and unreliable near deep response nulls.",
+      "humanListening": "No controlled preference or musician-outcome listening result was collected in this run."
+    }
+  },
+  "stateTransitionFindings": [
+    {
+      "finding": "First-transition renders were preserved separately and excluded from settled claims until repeated PCM identity was established.",
+      "classification": "state_transition_boundary",
+      "consequence": "Future empirical lanes must preserve transition output and prove settling rather than silently selecting a preferred render."
+    },
+    {
+      "finding": "The complex state reproduced internally exact PCM before and after reload, but the accepted pre-reload and post-reload groups differed by 1167 samples per channel at -113.14 dBFS residual.",
+      "classification": "minute_reload_state_recreation_difference",
+      "consequence": "Displayed restoration is supported; exact pre/post reload PCM is not claimed for this complex state."
+    },
+    {
+      "finding": "Whole-file WAVE hashes differed between several settled repeats while decoded PCM hashes were identical.",
+      "classification": "container_metadata_variation",
+      "consequence": "Decoded PCM identity is the signal-repeatability criterion while every container hash remains in the artifact ledger."
+    }
+  ],
+  "excludedAttempts": [
+    {
+      "artifactPattern": "channel-eq-shelves-*-impulse-first-transition-48k.wav and channel-eq-shelves-*-impulse-settled-1-48k.wav",
+      "reason": "The source impulse region was absent from the active bounce range, producing silent files.",
+      "evidenceUse": "setup-contamination evidence only; no transfer claim"
+    },
+    {
+      "artifactPattern": "channel-eq-multiband-*-impulse-first-transition-48k.wav and channel-eq-multiband-*-impulse-settled-1-48k.wav",
+      "reason": "A prior select-all action left the bounce range spanning the complete 22-second project instead of the six-second impulse region.",
+      "evidenceUse": "range-contamination evidence only; no transfer claim"
+    }
+  ],
+  "interpretation": {
+    "stronglySupported": [
+      "The settled neutral and header-bypass states are sample-transparent for the retained 48 kHz mono sweep through both channels of the interleaved stereo bounce.",
+      "The recorded broad boost, narrow cut, shelf, pass-filter, and multiband states have bounded artifact-backed magnitude, phase, timing, and tail observations.",
+      "HQ, Q-Couple, Analyzer, output-gain, reload, five processing modes, stereo relationships, and one 96 kHz complex-state lane have direct retained evidence.",
+      "The +3 dB output control measured 2.999999876 dB in the retained complex state.",
+      "The 96 kHz repeated render is decoded-PCM identical; response differences from 48 kHz are measured state/rate observations, not raw-PCM comparisons."
+    ],
+    "inferences": [
+      "The exact neutral/bypass PCM and stable finite impulse responses are consistent with deterministic behavior in these settled states, but they do not identify Apple's coefficient design or internal numeric topology.",
+      "The minute pre/post reload residual is consistent with state reconstruction or parameter quantization, but its private cause is unknown.",
+      "The exposed HQ mode materially changed the measured response in the complex state; this run does not establish that the implementation uses any specific oversampling design."
+    ],
+    "notEstablished": [
+      "Apple's private filter topology, coefficient design, internal precision, or proprietary implementation.",
+      "Every frequency, gain, Q, slope, interaction, channel format, sample rate, automation path, smoothing law, or transition behavior.",
+      "Controlled musical preference, genre-specific superiority, universal usefulness, or a preferred Channel EQ strategy.",
+      "TrackSmith authority to inspect, insert, reorder, automate, control, or save Logic-native processors."
+    ]
+  },
+  "listeningBoundary": {
+    "objectiveAuditionMaterialPrepared": true,
+    "controlledHumanListeningPerformed": false,
+    "participantCount": 0,
+    "preferenceClaims": [],
+    "nextRequirement": "Render level-matched candidate states on legally usable representative musical fixtures and collect protocol-bound human responses before making source-role or preference claims."
+  },
+  "claimBoundary": {
+    "directStateOnly": "Logic Pro 12.3 build 6674 on macOS 26.3, the named 48/96 kHz projects, generated fixtures, recorded parameters, and retained render paths only.",
+    "documentaryStatementsAreNotMeasurements": true,
+    "measuredBehaviorIsNotMusicalUsefulness": true,
+    "listeningPreferenceIsNotUniversalTruth": true,
+    "noPrivateImplementationClaim": true,
+    "noPerceptualSuperiorityClaim": true,
+    "noWholeProcessorMasteryClaim": true,
+    "notTrackSmithHostAuthority": true
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/channel-eq-neutral-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "source_broadcast_pcm_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-neutral-settled-2-48k-vs-settled-1-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-header-bypass-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "source_broadcast_pcm_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "frequency_points",
+        16,
+        "magnitude_db"
+      ],
+      "minimum": 5.999,
+      "maximum": 6.001
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-peak3-2500hz-minus6-q4-impulse-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "frequency_points",
+        20,
+        "magnitude_db"
+      ],
+      "minimum": -6.001,
+      "maximum": -5.999
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry-1-48k-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "frequency_points",
+        6,
+        "magnitude_db"
+      ],
+      "minimum": 2.99,
+      "maximum": 3.01
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry-1-48k-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "frequency_points",
+        25,
+        "magnitude_db"
+      ],
+      "minimum": -3.01,
+      "maximum": -2.99
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-pass-filters-lc80-24-hc12000-24-q071-impulse-settled-1-48k.analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "frequency_points",
+        0,
+        "magnitude_db"
+      ],
+      "maximum": -48.0
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-multiband-hq-off-vs-on-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "rms_error_dbfs"
+      ],
+      "maximum": -79.0
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-multiband-hq-on-analyzer-post-vs-off-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-multiband-hq-on-analyzer-post-vs-pre-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-multiband-q-couple-on-vs-off-preserved-shape-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-output-zero-vs-plus3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "least_squares_gain_db"
+      ],
+      "minimum": 2.9999,
+      "maximum": 3.0001
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-output-plus3-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-output-plus3-pre-vs-post-reload-1-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": false
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-output-plus3-pre-vs-post-reload-1-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "rms_error_dbfs"
+      ],
+      "maximum": -110.0
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-stereo-left-only-processing-stereo-vs-left-only-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-stereo-left-only-mid-vs-side-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-stereo-in-phase-source-processing-mid-only-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "stereo_relationships",
+        "left_right_sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-stereo-anti-phase-source-processing-side-only-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "stereo_relationships",
+        "left_right_inverted_within_one_integer_count"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-stereo-anti-phase-source-processing-side-only-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "stereo_relationships",
+        "mono_sum_peak_integer"
+      ],
+      "maximum": 1
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-output-plus3-96k-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-settled-1-96k-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "sample_rate_hz"
+      ],
+      "equals": 96000
+    },
+    {
+      "artifactPath": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-settled-1-96k-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "pre_impulse_nonzero_sample_count"
+      ],
+      "equals": 14
+    }
+  ],
+  "artifactFiles": [
+    {
+      "path": "artifacts/channel-eq-header-bypass-controls-48k.png",
+      "sha256": "6c0dfc116de2a5ec057961095562b7e260b78cdb0f81013feb0f19032907a0e6",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-first-transition-48k-analysis.json",
+      "sha256": "352b09ea286efcbb23f57e151a35a47ebca886cc5a2672e792ec237599257e77",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-first-transition-48k.wav",
+      "sha256": "3db076a118d692cf9197957793f18c534361f0eea5b5d393cb6086f57a4f0ca5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-1-48k-analysis.json",
+      "sha256": "f39e3b083e75a1346af96f3b387501b171d168faaf1903ab5616e4e9cf9cf60c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-1-48k.wav",
+      "sha256": "52d0ef76ce239601306431fa38eae1f8250ec9920c8fdd685f3cd3ecdfe3f272",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-2-48k-analysis.json",
+      "sha256": "b2d6ac581fc03d9b7429ed647700fd2bdf854eb2576bd12ebeaf98e05ab1dae1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-2-48k-vs-settled-1-analysis.json",
+      "sha256": "b5470864eef3eab8998d7e2d181b0c0b0063925f7d264ecda00ac600b9c6f930",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-2-48k.wav",
+      "sha256": "ade3373cef0246c505222dacb972438de9ee698d9e234d1dcf32b8b061dad581",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-3-48k-analysis.json",
+      "sha256": "44a0dd87a6b0da975eb632de64b71a1d500708c501671c5e63a9b1235cdcf2f6",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-3-48k-vs-settled-1-analysis.json",
+      "sha256": "2c6c4ebc7b3edf00401f7e61f60cd446c60416b72236042f8e9ffb4a8023bff8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-header-bypass-settled-3-48k.wav",
+      "sha256": "cd47ead73b3f730b587b7ff2094061a3da62678db584191dc48921667c6f8f7b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-off-vs-on-analysis.json",
+      "sha256": "afa1208ed64ee13f89ba632be536c8375662075549ca899773ecde4839e1a5b8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-off-controls-48k.png",
+      "sha256": "d65277c4accf95fecf335a817924e6043f4d5d134faf1eab91a2178f66f82d2d",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-off-impulse-settled-1-48k.wav",
+      "sha256": "38c6e66854da2fc782542834714e80abac89d7b8080e98bc5c5721bf077ba08b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-controls-48k.png",
+      "sha256": "73eace163a32f6666bcc3e0eee583fa3cf6758f85a948ce36549d96252cfebef",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-impulse-first-transition-48k-analysis.json",
+      "sha256": "5524980d98a03b98d27e02d74708fe269db782997e19bc5b8392ede7bc4338ff",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-impulse-first-transition-48k.wav",
+      "sha256": "4aa121a553adbd7fc225c7e471da87d1f1b080c1fd71547656bf515b27f83530",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-impulse-settled-1-48k-analysis.json",
+      "sha256": "cd5813fc761a1bad2136430fbb2772a8f41235deeca3185bc1d2123bfc45cf16",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-impulse-settled-1-48k.wav",
+      "sha256": "5ffe3147635851f87fdd1ab246c631f32ddca625e849ce43c7dda67562136da1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-vs-off-analysis.json",
+      "sha256": "46271fdabec4673131f7837caf2ded707c8ad41d5cea2b5615d933c99ae5e3f9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-post-vs-pre-analysis.json",
+      "sha256": "bef8132c8daf233557cba520b439cf7371bd205b1f18a308e2cc28940f674e57",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-pre-controls-48k.png",
+      "sha256": "d2f989a112fc533ccd92c7a577f3b36e0cd5e5cb30246e2df761df0927603c65",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-analyzer-pre-impulse-settled-1-48k.wav",
+      "sha256": "9a8e8f760cf702f471f66cc365c881afa61d9b719b066fe622975c090ca6bfcf",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-controls-48k.png",
+      "sha256": "1e3d478eaa418aa21b879089dce486bc8bf03da4ebb08a794384cf3cce65e341",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-impulse-settled-1-48k.wav",
+      "sha256": "a2686fd0642edb962b3b9ea4da1059341dfc2adcb1a420879e16d7cdeb004073",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-controls-48k.png",
+      "sha256": "a6c8dc700b7f08e6eba50356cb4b1848d0221304f34bba19e9a8c35d70e383ae",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-controls-96k.png",
+      "sha256": "66b9542e2d05113c4c9d2cea3dc63954e1f51fde26fc088a8be0e4df0d959478",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-controls-post-reload-48k.png",
+      "sha256": "f76612c9a0dfe41176da49c5963c1f22ca2078e9b00702a4be86fe897af3529b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-post-reload-settled-1-48k-analysis.json",
+      "sha256": "183272a239f58279ebea7155fc3b077b9df6572c3359346b013b9d52d41cb63e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-post-reload-settled-1-48k.wav",
+      "sha256": "ce48205badc0b31618ed466cc2af2265a2d67ea3b8fbbfa5904d05c3f9c0cab2",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-post-reload-settled-2-48k-analysis.json",
+      "sha256": "bbdc02cff6aa5778f6e353995ffd708688ae3efa00a1502f448707bdb7af5b53",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-post-reload-settled-2-48k.wav",
+      "sha256": "32d2868fc5ac2ab79d1f2b5c2b89e011247000291c27691d54a885cd60c7c807",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-post-reload-settled-3-48k-analysis.json",
+      "sha256": "741bb7bbf47ec27ac5ece76ca2a87161849375d657b388f67d1e16c050f6d9a9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-post-reload-settled-3-48k.wav",
+      "sha256": "746b5ad127c500c547374f83aaac85d61290218c9b1b0b600656c7c31ad67da2",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-pre-reload-settled-1-48k-analysis.json",
+      "sha256": "91233421d3a26dfc87482e9aab205a1e8e2c1e92d65036461f1fc483ab86092e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-pre-reload-settled-1-48k.wav",
+      "sha256": "80a6a818e6c330931cd19032bab294c0ac6e52590e9ac1ded652ed0af1e53f84",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-pre-reload-settled-2-48k-analysis.json",
+      "sha256": "acf75d5b65f282ab25c4340a7fe633bac4f1541cf8b407a636bb2a34c1ee8b27",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-pre-reload-settled-2-48k.wav",
+      "sha256": "01b1ec046391aba45b94997bb8076c6fb924220adc12fe1a375f737e5ae5f272",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-settled-1-96k-analysis.json",
+      "sha256": "f03bc8a5450646a7afe39e78a846abe491667d9082a7eb313ff8c2f2f91e5ea5",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-settled-1-96k.wav",
+      "sha256": "3c8239d06419ea259346b6bae61ff0d25ddef73c15544b9e09acbb6b9bc9dac3",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-settled-2-96k-analysis.json",
+      "sha256": "4aa09dcc55d93cc1aafb465346c7d46188bac2a54e2aced1b140ea4e4e85b938",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-q-couple-off-output-plus3-impulse-settled-2-96k.wav",
+      "sha256": "bc8f6a940eab39808b78d5bfa3233da11255f3d334096c756df8eebd4010758f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-hq-on-transition-vs-settled-analysis.json",
+      "sha256": "c558eef61c82ebc90cbed065ff5755908d66c4beda5495c3ad1fa18aa6ba92a1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-controls-48k.png",
+      "sha256": "50bf705400abf492efe0cba90f52b0cc7044511f97a64d5bc04b446a42d48bca",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-first-transition-48k-analysis.json",
+      "sha256": "958140414a7f32b98a4a27113df55db25322d348a15a232558fe9ac932cc0923",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-first-transition-48k.wav",
+      "sha256": "9456022fa80854bf8ab7fe94c590ff3ec0bb464acf01745fc4a48be043b82329",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-retry-1-48k-analysis.json",
+      "sha256": "2db6d6ffc25c821d2345967688f1e6482569f10d623bf1617743dcd827555999",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-retry-1-48k.wav",
+      "sha256": "4500d878b8035165a09ffcb2ae4ec535e789c9ea03a6827014e55a92808173c4",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-retry-2-48k-analysis.json",
+      "sha256": "a63877c86767154384b38fff8618bd0d47ac0704b1f7651f48b65a681b88f4f5",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-retry-2-48k.wav",
+      "sha256": "eaa5817275d1c3035573b594a6b8be01e095a3df4492ef45a5b577b13ac56062",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-settled-1-48k-analysis.json",
+      "sha256": "239b1ec0f719bc293e499400eb9c62b497eefb9ecbd902d6659ed5c7ee5a4b4d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-lc80-24-ls120-plus2-p1-200-minus3-p2-500-plus2-p3-2500-minus4-q2-p4-6000-plus2-hs10000-minus2-hc18000-12-impulse-settled-1-48k.wav",
+      "sha256": "be5f90c54cfd8d612420f60d6b8f09de8a1bfc17585fdbd7ccf0693f249c8fe7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-multiband-q-couple-on-vs-off-preserved-shape-analysis.json",
+      "sha256": "2d340fdc723b4a3eac92da4fe5174b12c6f7a1bca22198170d462a0a3299ea7f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-controls-48k.png",
+      "sha256": "5ccea6c99b1c701fd4d1fbc7a33daad0a6c5d469e415c40ae47ab362e16512af",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-first-transition-48k-analysis.json",
+      "sha256": "3104dd35fadf510b5f61082e20b4fb5aec2abff0f68a165f19ba7f7d273fbb38",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-first-transition-48k.wav",
+      "sha256": "f792ce5666491312e27cc8d1ce3179bb8673228504536b9d63b1cbb1e4482519",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-1-48k-analysis.json",
+      "sha256": "8ea7ac49a6656faa36c6e186e2dbaf588700b91aeb630987f3eda14ea50e16ec",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-1-48k.wav",
+      "sha256": "3bdd01b141c1f409e2c1f8ea3c1db3d6d91ecd478c0ba791ba13f89c09225b6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-2-48k-analysis.json",
+      "sha256": "cd19b14f6c4ae8642c2aec431953603e150d791e688083784e4bdd73c16498d8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-2-48k-vs-settled-1-analysis.json",
+      "sha256": "cab5c1d033fea17f985e235a188cdae6f8b06785db15c44f39e01bb449f20295",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-2-48k.wav",
+      "sha256": "b6bdca4cc9d9414a6c86b99730e57861fba18f6e2ba0be149eb282fec7aeaf76",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-3-48k-analysis.json",
+      "sha256": "aa7036e6fbcb28a1a8436fc431d4db6d5dde8576c42911ae4a78b3fcc62de9ea",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-3-48k-vs-settled-1-analysis.json",
+      "sha256": "87654035dca3c0b77341fe292346341551f001407425c87990aa2ab5c7999e29",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-neutral-settled-3-48k.wav",
+      "sha256": "afd83d8777cda186c1008f2f2b33fbb4f1c21846df7be6112ee14de6062c6a3d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-output-plus3-96k-repeat-analysis.json",
+      "sha256": "88d3a15ab7c67e3bebaa968b633e2b9ebb9b093163811b0c150b1ca19dc69133",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-output-plus3-pre-vs-post-reload-1-analysis.json",
+      "sha256": "8318ef725d5f4331f6f5aac5295682fae7b09f598d4e4719fd4431f0a6bd1b4a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-output-plus3-pre-vs-post-reload-2-analysis.json",
+      "sha256": "9a6746e55903002868797ee27312eda8384f97ff4e0fb49486bc2f25c2613d49",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-output-plus3-pre-vs-post-reload-3-analysis.json",
+      "sha256": "b50faaa1470d6c185a720ef656f4f91bcb3a63555b4edd0164f549dc8a0c00be",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-output-plus3-pre-vs-post-reload-analysis.json",
+      "sha256": "8318ef725d5f4331f6f5aac5295682fae7b09f598d4e4719fd4431f0a6bd1b4a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-output-plus3-repeat-analysis.json",
+      "sha256": "77c9468fa9cf1a3493dae1ade7920b531d563068fee85002d15586ee66707a4d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-output-zero-vs-plus3-analysis.json",
+      "sha256": "a4f031483ca4c877ecb50d4e8f2dac7d511f46e67ecd386a1c51f083feeb50c5",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-pass-filters-lc80-24-hc12000-24-q071-controls-48k.png",
+      "sha256": "fcb932117e0d9fbfd098ef86c8d8b96461fbbbe8ba2dfc1c138da8c90a966d67",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-pass-filters-lc80-24-hc12000-24-q071-impulse-first-transition-48k.analysis.json",
+      "sha256": "72c5484f99b340dc5247c9510284cdd4c532b98eceec48617830410c1f10447d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-pass-filters-lc80-24-hc12000-24-q071-impulse-first-transition-48k.wav",
+      "sha256": "9706e9c6013f2ed9338e54bc96f41cb4c7ea9d95426c12070b7ff868d57c232b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-pass-filters-lc80-24-hc12000-24-q071-impulse-settled-1-48k.analysis.json",
+      "sha256": "17f38e0777ffc304ebb4f2a4e2805e1e16896350dd791c0377e2b81a96270b3f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-pass-filters-lc80-24-hc12000-24-q071-impulse-settled-1-48k.wav",
+      "sha256": "b0e0b32968538b4ef2dcb04c646ce316288ff11291aa04bb20e346014036032c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-controls-48k.png",
+      "sha256": "e648031b1e5f12c7bcd2531747f54867d97fb012402f8d73db7a3cec77e06d6f",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-first-transition-48k-analysis.json",
+      "sha256": "4a6643af377e74d1a6d2608805f200d512edec62f3716206743befc996d59f65",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-first-transition-48k.wav",
+      "sha256": "ca6f1d01307d725a89399b9ab7997bcd9ff6ad3e0a597f8ca7e8ec9f5bd1c5e8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-1-48k-analysis.json",
+      "sha256": "15d8019e69b32423bbf8f86c35e49d31d843e4f6bc3f04abedb7ea9a1a0d9a4b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-1-48k.wav",
+      "sha256": "731fa5094877f6010e6120cceaff93494183b9aa38c9e7940fefc2d910d445b4",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-2-48k-analysis.json",
+      "sha256": "563539ee6a07fcfdfc74fccedb314a370379b7dba8fdc31ae4560f51c3f14359",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-2-48k-vs-settled-1-analysis.json",
+      "sha256": "9fd859a7a36cbec91593a5e7cd0d8944249476c579d55c579e5b235a4e914756",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-2-48k.wav",
+      "sha256": "fdd6dd26cd9ba180afff93ef7df58603f598396ff34d95d18e54faaa073545ff",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-3-48k-analysis.json",
+      "sha256": "faff1a33ecc4515d5caf9f47cf05b93eea135f53f0c795742215da7f46d15a94",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-3-48k-vs-settled-1-analysis.json",
+      "sha256": "4ad130efa90b89146fad11ddeb81644a69b8edde9a9ca3a6582f9a29217a25ef",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-1khz-plus6-q1-impulse-settled-3-48k.wav",
+      "sha256": "d4836705d535c5327e73ff1a029ce0545545e70003f16aeb97cd672361ffb449",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-2500hz-minus6-q4-controls-48k.png",
+      "sha256": "e9e22df28373c28726150739aa4ff353c79f809cd2e75d99062ce7d86da3cffd",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-2500hz-minus6-q4-impulse-first-transition-48k-analysis.json",
+      "sha256": "a5f56da0811abe16afa1fa322322951b74ba09cda0530eabb4e8daf643e3c7d5",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-2500hz-minus6-q4-impulse-first-transition-48k.wav",
+      "sha256": "f3694f4fa90923fd0c69243ae7932c562623382a21ca63b13f1227ac036f7e4c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-2500hz-minus6-q4-impulse-settled-1-48k-analysis.json",
+      "sha256": "074a2a27796bc0c7a1b418df3d864443653c7d7557bc212725fcbe0133541f94",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-2500hz-minus6-q4-impulse-settled-1-48k.wav",
+      "sha256": "2d5077677c6cc27a507068112dfc44eed47796c8cd98575a7bddeb6c0d58e081",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-peak3-2500hz-minus6-q4-impulse-transition-vs-settled-analysis.json",
+      "sha256": "e9fc1859de309b52b191f3ef640e3ce4605ae379ea07291fc648f40f693ef04b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-project-settings-96k.png",
+      "sha256": "0bbdd9b37f87e7b48ec89f14c524de10da65fb014663f79b1c77fb53d9126aaf",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-controls-48k.png",
+      "sha256": "cbf955c44622128bbaffaec07dce6237abc492660fd19b4e50d4835b90445ecb",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-first-transition-48k-analysis.json",
+      "sha256": "3d00af65784f56860a4ef5f1caff19afdb0bbf8fea4b5d9fc8c53623aa055660",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-first-transition-48k.wav",
+      "sha256": "daf858e4c4e8994ed41917fe9639bd37c65eaae30456f97619e0e871af46c7da",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry-1-48k-analysis.json",
+      "sha256": "4af7dedf0658a06924e1277b4535ecaa981d002c8aec6c00b89254e47dff4d85",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry-1-48k.wav",
+      "sha256": "f966df7f6920ac0fc5b569657e360dcf50b82b4183234850688c408e22979d7f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry-2-48k-analysis.json",
+      "sha256": "92dc670d544df254f5ffdee3814ce3ceb1a7e8195829f1071fca4a94e36e14ea",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry-2-48k.wav",
+      "sha256": "df72ea857fe3b991e38b22955e3033610964e432defaae6b76b855f1c8f292e3",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-retry1-vs-retry2-analysis.json",
+      "sha256": "0a95b676b59e3ad56783848883428d1ca94a21518e37c80a23e4f670bb17002d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-settled-1-48k-analysis.json",
+      "sha256": "85fb0d487f47496e0c4c2b17c4bfcaaef1ff8982cb590118017c0541ab935b17",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-settled-1-48k.wav",
+      "sha256": "f217d8bc41e6ac62393fdef0edcf30beddcb6665bfcd490c20870e2533733452",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-shelves-ls100-plus6-hs8000-minus6-q071-impulse-transition-vs-settled-analysis.json",
+      "sha256": "308f2b79d4e41cb37e5116cce5a23024d19fcac0c0528655ec729d4979c8229e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-start-state-48k.png",
+      "sha256": "896a8e0f6e7ab4f18f296d0bd92e324ad2113c5294721cfe75417d64c6e16dee",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-anti-phase-source-processing-side-only-controls-48k.png",
+      "sha256": "d6f92dcf782595f1be6607b88cb432816453e841e2bcdabb3cf08f12732481e5",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-anti-phase-source-processing-side-only-settled-1-48k-analysis.json",
+      "sha256": "662ea1c0c9b65226bc3d0d1946273af7c646f0c2d7171bb2cb3dc783ef3ddee4",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-anti-phase-source-processing-side-only-settled-1-48k.wav",
+      "sha256": "f98a0612272d4006dd7264203ff4571e5850924aef2b38359225c65ac2459d1f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-in-phase-source-processing-mid-only-controls-48k.png",
+      "sha256": "ab485226716df5a7efaed01326a464414cf257935e8cb7af1e440131a9156aa5",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-in-phase-source-processing-mid-only-settled-1-48k-analysis.json",
+      "sha256": "b4b8080335ec27f5c1f3e3ffb2ae57843046b177b57794f2b8a6d63f073c31d2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-in-phase-source-processing-mid-only-settled-1-48k.wav",
+      "sha256": "1f65044279855d9491b385e66e84c648eac60347949867627e1a10c0a2f78eb9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-mid-vs-side-analysis.json",
+      "sha256": "c73b8dcb49ef77f8b98a2bd3ecff4f7b9807f22899c4680b663ff341ff36a6ed",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-processing-stereo-repeat-analysis.json",
+      "sha256": "8d6ea1d4694552a141f43b4d8c9e221aaba601537c2879c2ca533a22f99d7a2f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-processing-stereo-vs-left-only-analysis.json",
+      "sha256": "6a4054a809e77e2a6489400788569188945b5cfe9b5d1900973a64f8329d8b13",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-left-only-controls-48k.png",
+      "sha256": "905596c70c9e0b1c9bbf06796f7787a43f8eae23bbd0fdef8c4c36b573716623",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-left-only-settled-1-48k-analysis.json",
+      "sha256": "f96f5bd1d61a2ddb5ab2bab3cfc70e8522d9fff68731f22604bfd57b0c3f3b55",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-left-only-settled-1-48k.wav",
+      "sha256": "23d46f5ea255da6823973accc994a5c5e3629edd4f74677bbd031306cd0fd897",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-mid-only-controls-48k.png",
+      "sha256": "b2935a3d1920aa816fdfed9d70ff61940a9b84929f879fbfdafcc67f786f8edb",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-mid-only-settled-1-48k-analysis.json",
+      "sha256": "72f91484469a8fa1fcc8f283fbce2e2c2a418c7e195662f4fca1428a5c1fe7ac",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-mid-only-settled-1-48k.wav",
+      "sha256": "b8da072b3e1adc1a479d668b70faa8dfe4590f331e633e2767ee9d46f4933b68",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-right-only-controls-48k.png",
+      "sha256": "e3a452193c58c2e1ee5954fb5318948512f873c8d98a477724ca96ae8c01c39d",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-right-only-settled-1-48k-analysis.json",
+      "sha256": "2595f5cbd6124a600c1e31c9254f16d70ea526fc73f3501fe2ab1b24c079c2e7",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-right-only-settled-1-48k.wav",
+      "sha256": "7a1fe70230f330611aba3994471cbf167c74daaf07ccee550708d18f28a00927",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-side-only-controls-48k.png",
+      "sha256": "1e09e9a0d4a87c4269d7c2fe887af55382080efe49b5c28809d29876a302b7df",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-side-only-settled-1-48k-analysis.json",
+      "sha256": "0fcec91a0ac0b0d8e7f61cd463ccca5642eea7eee0d281d6a97b5a7f0599ca54",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-side-only-settled-1-48k.wav",
+      "sha256": "9b7c00de8360069c2f08b36a71d2104ff8b0a96b18ddcf53986f662d77596218",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-stereo-controls-48k.png",
+      "sha256": "7b8d6eea46a330503efe9479d7b5ba7b4e4be0e9f753339e62b6355601cfd9ce",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-stereo-settled-1-48k-analysis.json",
+      "sha256": "9a7b7f08e1ebd170c33c13e9c9795b675999bb389dcd5464633ee801978dc351",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-stereo-settled-1-48k.wav",
+      "sha256": "fff7ffd2371779a92455ca993f2bdaf0296f3abf35bb4878c80a3c7ba1ada748",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-stereo-settled-2-48k-analysis.json",
+      "sha256": "aa827f234f2782ea9d28e11a8d656b31f4f4a2414e444d7936a5c776e514ccb3",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-left-only-source-processing-stereo-settled-2-48k.wav",
+      "sha256": "09a1bd1cc662adc2a7ada9cadfaa85f341b2c1dacd814864dfc5ef593a55d4a9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-right-only-processing-stereo-repeat-analysis.json",
+      "sha256": "e908b9d310039d4595454ed4fd806f4582720ea7f5d2c4a55827794910e326cc",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-right-only-source-processing-stereo-controls-48k.png",
+      "sha256": "3283b46848d128e109f10c421798d23f20757a9afa72ac236e6ca945d6cc5496",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-right-only-source-processing-stereo-settled-1-48k-analysis.json",
+      "sha256": "6ea8e5b4b2534c38c1f997916d57612bc183dd8141c33b3d82cc4e94a9f2899a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-right-only-source-processing-stereo-settled-1-48k.wav",
+      "sha256": "e475706b626c4e85ece87788be6850058822eda2055ed71d5366d92af122f2fc",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-right-only-source-processing-stereo-settled-2-48k-analysis.json",
+      "sha256": "83e31c9dfc6dcc933fc94dc76605931bb94ee2d1725567c89845c3fa11aa3098",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/channel-eq-stereo-right-only-source-processing-stereo-settled-2-48k.wav",
+      "sha256": "5f2c6e5a6e0e03295b6bf4adb750ded5d0411e06489d7cda447e00b3469a08c3",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/source-fixture-suite-96k-manifest.json",
+      "sha256": "1ed0b8f709f49ac1d5ce3ff1b9d147d6f892929093e84059a6d03714dddc07a2",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-fixture-suite-manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-log-sweep-20hz-20khz-mono-48k.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-single-impulse-mono-48k.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-single-impulse-mono-96k.wav",
+      "sha256": "d4860ad1d6f13d8900f6d4fb3f445473536ea4ba57ee6f65f28797e4939696bc",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-anti-phase-48k.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-in-phase-48k.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-left-only-48k.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-mid-low-side-high-48k.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-right-only-48k.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Channel EQ Empirical 48k 2026-07-18.logicx.zip",
+      "sha256": "0c1a13b43f97a04c018b8d1af52c68146cddd56439919f39e53b76b29da1e71e",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Channel EQ Production Profile 96k 2026-07-27.logicx.zip",
+      "sha256": "6ca180a13c2fba72c1eefc44dc9423f0e5ef83272cbd739b13e64eb0d2f58913",
+      "role": "closed disposable Logic project archive"
+    }
+  ]
+}

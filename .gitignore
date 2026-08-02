@@ -7,6 +7,9 @@ xcuserdata/
 # Direct Logic-native empirical runs are versioned evidence. Their run records
 # hash every retained render and keep signal evidence distinct from fixtures.
 !research/evaluation/logic-native-empirical-runs/**/*.wav
+# Deterministic synthetic dry/candidate pairs are milestone evidence; their
+# manifest hashes every file and explicitly excludes subjective claims.
+!research/evaluation/production-mastery-v1/dsp-listening-fixtures/**/*.wav
 fixtures/generated/*
 !fixtures/generated/.gitkeep
 *.jsonl
@@ -26,5 +29,9 @@ research/analysis/rendered/
 research/analysis/corpus-index.tsv
 research/analysis/html-index.tsv
 research/analysis/source-text-index.tsv
+# Rights-restricted or large natural-audio datasets remain local. Track the
+# acquisition/rights manifests, schemas, indexes, audits, and derived non-audio
+# evidence under research/evaluation/production-mastery-v1 instead.
+research/datasets/
 # Local speech-to-text output is navigation-only copyrighted working material.
 tmp/local-course-transcripts/

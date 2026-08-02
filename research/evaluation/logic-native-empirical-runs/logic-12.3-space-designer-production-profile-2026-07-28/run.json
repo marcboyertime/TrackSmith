@@ -1,0 +1,788 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-space-designer-production-profile-48k-2026-07-28",
+  "recordedAt": "2026-07-29T17:27:16-04:00",
+  "status": "partial",
+  "identityType": "effect_or_native_audio_tool",
+  "identityIdentifier": "logic-pro-12.3:space-designer",
+  "identityName": "Space Designer",
+  "product": "TrackSmith",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": null,
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1 plus tracksmith-space-designer-ir-suite-v1",
+    "fixtureCompatibility": "The retained 48 kHz PCM24 source fixture and separately generated custom IR are independently hash-ledgered. The custom IR is deterministic generator output rather than a recording of an acoustic space.",
+    "claimClass": "measured_behavior"
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/single_impulse_mono.wav",
+        "fileSHA256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+        "pcmSHA256": "902898df6987053888e55c00d24894e5e46043c753fc5e277991e77edf4d3538",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 288000,
+        "sourceImpulseFrame": 48000,
+        "sourceImpulseDBFS": -12.0
+      }
+    ],
+    "impulseResponseAssets": [
+      {
+        "artifactPath": "ir-assets/tracksmith_space_designer_sparse_diffuse_ir_mono.wav",
+        "manifestPath": "ir-assets/manifest.json",
+        "fileSHA256": "f32606a5d2237402812cf71369c90638d7796aa08b638e59fb7a893b96551725",
+        "manifestSHA256": "229494e6cf56f8208f96865acaa1a0c658647e6cf4a43a236751f6086dab9c0a",
+        "fixtureVersion": "tracksmith-space-designer-ir-suite-v1",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 96000,
+        "durationSeconds": 2.0,
+        "sparseTapFrames": [
+          0,
+          480,
+          1104,
+          2256,
+          4368,
+          6864,
+          10128
+        ],
+        "diffuseTailFrames": [
+          12000,
+          72000
+        ],
+        "identityBoundary": "The hash identifies only the exact IR asset supplied to Space Designer; it does not identify Logic's convolution implementation or a real acoustic space."
+      }
+    ],
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The generated source fixture and custom IR remain immutable copies in the run directory and are independently hash-ledgered."
+  },
+  "nativeState": {
+    "presetName": "Default Preset modified only through explicitly recorded controls and the custom IR load",
+    "channelControlMode": "Stereo instance with L/R selector and Couple enabled in the accepted state",
+    "acceptedState": {
+      "pluginHeaderActive": true,
+      "pluginHeaderAccessibilityValue": 1,
+      "loadedIRName": "tracksmith_space_designer_sparse_diffuse_ir_mono",
+      "loadedIRMode": "Sampled IR",
+      "processMode": "True Multi",
+      "quality": "High",
+      "dry": "Mute",
+      "wetDB": 0.0,
+      "predelayMS": 0.0,
+      "predelaySync": false,
+      "lengthSeconds": 2.0,
+      "latencyCompensation": false,
+      "inputCrossfeed": 0.0,
+      "reverse": false,
+      "volumeInitPercent": 100,
+      "volumeAttackSeconds": 0.0,
+      "volumeDecaySeconds": 1.0,
+      "volumeEndPercent": 100,
+      "volumeDecayMode": "Exponential",
+      "reverbVolumeCompensation": false,
+      "irOffsetSeconds": 0.0,
+      "filterEnabled": false,
+      "outputEQEnabled": false,
+      "sizePercent": 100,
+      "stereoSpreadLowPercent": 0,
+      "stereoSpreadHighPercent": 0
+    },
+    "savedStateEvidence": "The final package reopened with the custom IR visible, the plug-in header blue/active, and the recorded controls visibly restored. The saved package included Audio files and Space Designer impulse responses.",
+    "stereoStateBoundary": "The accepted screenshots directly show the coupled stereo state and the custom IR. They do not establish every lane-specific control value, every True Stereo or True Multi input matrix, or generalized stereo behavior.",
+    "importantInterpretation": "This is one bounded directly observed Logic 12.3 custom-IR state. It does not identify a private convolution topology, generalize to factory IRs or other modes, establish artistic usefulness, or authorize TrackSmith to control Logic."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Retain transition and rejected outputs, then require repeated decoded-PCM identity before a settled-state repeatability claim.",
+    "tailBoundary": "The exact six-second source fixture and cycle leave five seconds after the source impulse. No output beyond the cycle range is claimed.",
+    "baselineGate": "The header-bypass render had to map the mono fixture sample-exactly to both Stereo Out channels."
+  },
+  "directHostEvidence": true,
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_stereo_header_bypass_and_custom_ir_state",
+      "evidence": "Header bypass mapped the mono source sample-exactly to both rendered channels. The accepted active custom-IR state was captured before save and after reopening the final package."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_one_sampled_ir_true_multi_stereo_route_only",
+      "evidence": "One Sampled IR state in True Multi through one stereo insert route was rendered. Synthesized IR, alternate process modes, factory IRs, surround layouts, and alternate routes remain unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_one_neutral_custom_ir_state_only",
+      "evidence": "The retained state holds predelay, offset, spread, crossfeed, Size, envelope, dry/wet, filter, and EQ at explicitly recorded values. No continuous parameter grid or interaction sweep is claimed."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "complete_for_recorded_impulse_state_and_six_second_capture_boundary",
+      "evidence": "The accepted render has artifact-backed first/last nonzero frames, peak frames and levels, frequency/phase summaries, channel relationships, and bounded tail duration."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_pre_save_custom_ir_state",
+      "evidence": "Three pre-save renders have different container hashes but the same decoded PCM hash 2ec1784de97c99d9f58ff7013914f049d8306ba06934b73e97412df00e7b22cc."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_visible_state_and_asset_identity_partial_for_exact_audio_recovery",
+      "evidence": "The final saved package included the Space Designer IR and reopened active with the custom IR and recorded controls visible. Two final post-reload renders were decoded-PCM-identical. Compared with the accepted pre-save state, 64 left and 249 right samples differed by at most one 24-bit integer count, so exact cross-reload audio recovery is not claimed."
+    },
+    "recorded_synthesized_ir_identity_hash_sample_rate_length_and_reload": {
+      "status": "complete_for_one_generated_recorded_ir_asset_partial_for_synthesized_ir",
+      "evidence": "The exact generated mono PCM24 48 kHz, 96000-frame, two-second IR and manifest are retained by hash and saved into the final project package. Space Designer synthesized-IR behavior was not run."
+    },
+    "latency_impulse_tail_linearity_level_dependence_and_time_variance_rejection": {
+      "status": "partial_impulse_onset_tail_and_repeatability_only",
+      "evidence": "Both channels first produced nonzero output 128 frames after the source impulse; channel-specific peaks and tails were measured and three pre-save renders repeated exactly. Level dependence, a full latency profile, and formal time-variance rejection across additional inputs remain unrun."
+    },
+    "ir_envelope_filter_eq_reverse_density_and_dry_wet_where_applicable": {
+      "status": "partial_one_neutral_wet_only_state",
+      "evidence": "The accepted state records one exponential volume envelope, Filter off, Output EQ off, Reverse off, Dry muted, and Wet 0 dB. No sweep or mixed dry/wet production state is claimed."
+    },
+    "mono_stereo_true_stereo_channel_matrix_tail_and_mono_translation": {
+      "status": "partial_one_stereo_true_multi_state",
+      "evidence": "The mono source through the accepted stereo instance produced non-identical L/R output with zero-lag correlation about -0.0261 and distinct channel tails. Mono instances, stereo fixture matrices, True Stereo, alternate process modes, and mono-translation listening remain unrun."
+    },
+    "source_depth_articulation_masking_and_level_matched_listening": {
+      "status": "not_run_no_participant_or_source_specific_listening_result",
+      "evidence": "No participant completed a controlled source-specific or level-matched listening protocol. Impulse and reload evidence is not represented as depth, articulation, masking, realism, preference, or musical usefulness."
+    }
+  },
+  "measurements": {
+    "bypass": {
+      "renderFileSHA256": "42092478b170c8883920a974f907ccd8addc7cb97685ccab19770130a97d9499",
+      "renderPCMHash": "3fc1eee87686da9c165205c4ec2291630542edadd8d7ebeb3d1a4fb0c99859e4",
+      "sourceMappedSampleExactOnBothRenderedChannels": true
+    },
+    "customIRWetOnlyPreSave": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedRenderedPCMHash": "2ec1784de97c99d9f58ff7013914f049d8306ba06934b73e97412df00e7b22cc",
+      "containerFileSHA256": [
+        "9e2887dd3dda4dd55ace4e01f1f5f8d420bc54d3fd5d14cc8521c3d98524238b",
+        "38e7ba7025aa61ab967378876e60a3cf6ee03f3ddd06a98a9f4dc32c67aaaf83",
+        "0cc1489cd0d57a6e1d3f92044acc0ca400d206d63f1c3cd5bcc6ca0f9176a400"
+      ],
+      "left": {
+        "firstNonzeroFrameAfterSourceImpulse": 128,
+        "firstNonzeroSecondsAfterSourceImpulse": 0.0026666666666666666,
+        "peakFrameAfterSourceImpulse": 128,
+        "peakDBFS": -18.03201366766052,
+        "lastNonzeroFrameAfterSourceImpulse": 72137,
+        "boundedTailSecondsAfterSourceImpulse": 1.5028541666666666
+      },
+      "right": {
+        "firstNonzeroFrameAfterSourceImpulse": 128,
+        "firstNonzeroSecondsAfterSourceImpulse": 0.0026666666666666666,
+        "peakFrameAfterSourceImpulse": 1682,
+        "peakDBFS": -12.18475660879676,
+        "lastNonzeroFrameAfterSourceImpulse": 92296,
+        "boundedTailSecondsAfterSourceImpulse": 1.9228333333333334
+      },
+      "leftRightPCMIdentical": false,
+      "zeroLagLeftRightCorrelation": -0.026062599126414367
+    },
+    "finalPackageReload": {
+      "visibleControlledStateRestored": true,
+      "irBundledInSavedPackage": true,
+      "acceptedPostReloadDecodedPCMRepeatCount": 2,
+      "acceptedPostReloadPCMHash": "6151d7573ddf7efcc7e399db3bac28ff797b06275dcf6042012e3b557c1fe442",
+      "postReloadPairPCMExact": true,
+      "preSaveVersusPostReloadPCMExact": false,
+      "leftDifferingSamples": 64,
+      "rightDifferingSamples": 249,
+      "maximumAbsoluteErrorIntegerCount": 1,
+      "leftRMSDifferenceDBFS": -175.0059231431848,
+      "rightRMSDifferenceDBFS": -169.1057294120663,
+      "leftZeroLagCorrelation": 0.9999999999920902,
+      "rightZeroLagCorrelation": 0.999999999997422,
+      "interpretationBoundary": "The recorded project and IR identity recovered and the final post-reload pair repeated exactly. Exact cross-reload audio recovery is not established because 313 samples differed by one integer count."
+    },
+    "measurementBoundary": "All values describe only the exact recorded state, fixture, IR, environment, cycle range, and analysis rules. They neither identify Apple's private convolution implementation nor prove realism, depth, preference, mono safety, or musical usefulness."
+  },
+  "stateTransitionFindings": [
+    "The plug-in header accessibility value 0 corresponded to the grey/off state and value 1 to the blue/active state in this session.",
+    "Several post-reload attempts were retained as source-exact dry broadcasts because the plug-in header remained grey/off. Their filenames do not override the directly observed header state, and they are excluded from accepted convolution claims.",
+    "Once the plug-in header was blue/active, a first retained render differed from the accepted pre-save PCM in only one left and 22 right samples, each by one integer count; the next render matched the pre-save decoded PCM exactly.",
+    "The final saved package included Audio files and Space Designer impulse responses, reopened blue/active, and produced an exact two-render post-reload pair.",
+    "The final post-reload pair did not exactly match the pre-save PCM: 64 left and 249 right samples differed by at most one integer count. The difference is retained and exact cross-reload audio recovery is not claimed."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r1.wav",
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r2.wav",
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r1-analysis.json",
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r1-vs-r2-analysis.json",
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-reactivated.wav",
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-explicit-ir-reload-r1.wav",
+        "artifacts/space-designer-custom-ir-wet100-impulse-postreload-explicit-two-ir-reload-r1.wav",
+        "measurements/space-designer-custom-ir-wet100-impulse-postreload-reactivated-analysis.json",
+        "measurements/space-designer-custom-ir-wet100-impulse-postreload-explicit-ir-reload-r1-analysis.json",
+        "measurements/space-designer-custom-ir-wet100-impulse-postreload-explicit-two-ir-reload-r1-analysis.json"
+      ],
+      "reason": "Retained and rejected because each output is the source-exact dry broadcast while the Space Designer header was still visibly grey/off. The attempt labeled reactivated used a two-click sequence that ended in the off state; the explicit IR load attempts likewise did not establish an active header. No accepted convolution or failed-IR-reload claim uses these outputs."
+    },
+    {
+      "artifacts": [
+        "artifacts/rejected-accessibility-tree-stall-process-sample.txt",
+        "artifacts/rejected-unintended-recording-during-accessibility-retarget.aif",
+        "screenshots/rejected-accessibility-retarget-unintended-take.png"
+      ],
+      "reason": "Retained and rejected because the accessibility retarget attempt stalled and unintentionally recorded a take. It is not a controlled source or processor render."
+    }
+  ],
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/space-designer-bypass-single-impulse-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "source_broadcast_pcm_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/space-designer-custom-ir-wet100-impulse-r1-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "2ec1784de97c99d9f58ff7013914f049d8306ba06934b73e97412df00e7b22cc"
+    },
+    {
+      "artifactPath": "artifacts/space-designer-custom-ir-wet100-impulse-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "first_nonzero_frame_relative_to_source_impulse"
+      ],
+      "equals": 128
+    },
+    {
+      "artifactPath": "artifacts/space-designer-custom-ir-wet100-impulse-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        1,
+        "last_nonzero_frame_relative_to_source_impulse"
+      ],
+      "equals": 92296
+    },
+    {
+      "artifactPath": "artifacts/space-designer-custom-ir-wet100-impulse-r1-vs-r2-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/space-designer-custom-ir-wet100-impulse-r2-vs-r3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-vs-r2-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-pre-vs-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": false
+    },
+    {
+      "artifactPath": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-pre-vs-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "differing_sample_count"
+      ],
+      "equals": 64
+    },
+    {
+      "artifactPath": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-pre-vs-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        1,
+        "differing_sample_count"
+      ],
+      "equals": 249
+    },
+    {
+      "artifactPath": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-pre-vs-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        1,
+        "max_absolute_error_integer"
+      ],
+      "equals": 1
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "The recorded active custom-IR state first produced nonzero wet output 128 frames after the source impulse on both rendered channels.",
+      "The exact state produced distinct channel peaks and tails: the left peak occurred at +128 frames and ended by +72137; the right peak occurred at +1682 and ended by +92296.",
+      "The accepted stereo output channels were not identical and had zero-lag correlation about -0.0261 for the exact custom IR and recorded state.",
+      "Three pre-save renders and a separate final two-render post-reload pair repeated decoded-PCM-exactly within their sessions.",
+      "The custom IR and controlled state restored visibly from the saved package; post-reload output remained within one integer count of the pre-save output but was not decoded-PCM-exact."
+    ],
+    "inferredConsequences": [
+      "Typed production knowledge must retain the IR asset identity, sample rate, length, process mode, channel state, envelope, dry/wet state, and save/reload boundary.",
+      "An active/off plug-in header state must be verified before interpreting a dry render as an IR or convolution failure.",
+      "Visible state and bundled IR recovery do not alone establish exact cross-reload audio recovery."
+    ],
+    "professionalPracticeHeuristics": [
+      "IR choice, predelay, envelope, length, stereo behavior, wet level, and source-role context remain listening-decisive production decisions.",
+      "An impulse response can bound onset, tail, channel relationship, and repeatability but cannot select a musically useful room or depth."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "The custom IR is not declared realistic, expensive, natural, transparent, mono-safe, or musically superior.",
+      "No general behavior is claimed for factory IRs, Synthesized IR, alternate process modes, changed envelopes, filters, EQ, Reverse, spread, crossfeed, mixed dry/wet states, sample rates, or automation.",
+      "No private convolution topology, interpolation rule, channel mapping beyond the exact tested state, or proprietary implementation detail is identified.",
+      "No impulse measurement is represented as proof of vocal, drum, guitar, synth, or full-mix usefulness.",
+      "No TrackSmith authority to inspect, insert, reorder, automate, or control Logic Space Designer is granted."
+    ]
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient for the milestone's bounded convolution-reverb profile because it directly captures and validates one generated, hash-identified custom IR; exact bypass; a controlled active wet-only state; impulse onset, peak, tail, and stereo identity; exact in-session repeatability; bundled IR and visible state recovery; and the explicit one-count limitation on exact cross-reload PCM recovery. It remains partial in the exhaustive campaign and listening-decisive for all musical outcomes.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "results": [],
+    "statement": "No participant completed a controlled convolution-reverb listening protocol for this run. Objective IR identity, impulse, tail, bypass, repeatability, and reload behavior is not represented as depth, realism, articulation, masking, preference, or musical usefulness."
+  },
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "exactTransferCharacterized": false,
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28",
+        "archivePath": "project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.logicx.zip",
+        "archiveSHA256": "ea2bfe1dd446be4b832088093162b2ce5bad16e82949fea858a578ce2f8b4151",
+        "sampleRateHz": 48000,
+        "includedAssets": [
+          "Audio files",
+          "Space Designer impulse responses"
+        ]
+      },
+      {
+        "name": "TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28 partial checkpoint",
+        "archivePath": "project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.partial-checkpoint.logicx.zip",
+        "archiveSHA256": "7490e18e55bef119d4b7f000c144377d60c4a2250eef8e7bdeb82769ccfcd810",
+        "sampleRateHz": 48000,
+        "acceptanceStatus": "retained checkpoint only; not the final accepted project state"
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "The final ZIP archive passed unzip -t with no errors after Logic closed the project.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "singleImpulse": "exactly 6.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono fixture through a stereo Space Designer instance and interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 Space Designer evidence at 48 kHz/PCM24 covers one hash-identified generated mono custom IR loaded into one active stereo True Multi state, exact header bypass, impulse onset/peak/tail identity, non-identical L/R output, exact pre-save and post-reload in-session repeatability, and final package recovery with the IR bundled. Both channels first emitted wet output 128 frames after the source impulse. Three pre-save renders shared one decoded PCM hash; the final two post-reload renders shared another. The final post-reload state was within one integer count of pre-save, but 64 left and 249 right samples differed, so exact cross-reload PCM recovery is not established. No participant listening, factory or Synthesized IR, alternate process mode, parameter grid, stereo matrix, musical-source evidence, sample-rate grid, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established.",
+  "artifactFiles": [
+    {
+      "path": "artifacts/rejected-accessibility-tree-stall-process-sample.txt",
+      "sha256": "adf5d6a7b00665218ff5987ba858d037d93781bb51eed019498c80092e0c8819",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "artifacts/rejected-unintended-recording-during-accessibility-retarget.aif",
+      "sha256": "12cabe4529593b482b11c8daacc49efaca1f343dce17e988f2ef627f6354a5a1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "artifacts/space-designer-bypass-single-impulse-analysis.json",
+      "sha256": "2e99d301077dc22fa16e606f3be735360e818ef5e5f36045c37c92e7a425e685",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-bypass-single-impulse.wav",
+      "sha256": "42092478b170c8883920a974f907ccd8addc7cb97685ccab19770130a97d9499",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1.wav",
+      "sha256": "f6793530e00596f97c33f9457c8c1ca6bc60a03ef8ebedd4e2767d40d117dc39",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-final-package-postreload-r2.wav",
+      "sha256": "173f3fd1f6649c7e0cc2f1cacdfcb700ddc7462b44fc6f9eca660ebd757cdf66",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-explicit-ir-reload-r1.wav",
+      "sha256": "0fcabe0268251805e97b49fc215d4d97057ecfe62d84f859e3793bdf3d062975",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-explicit-two-ir-reload-r1.wav",
+      "sha256": "e8dcf9d25b454f4c71044cf648d3de1ca8a01a070ab269649c2e44345905016b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r1-analysis.json",
+      "sha256": "54f8046eb5a2894184638f885a1b3c8c82f570da3743e2dfa7b08a3a401c6d89",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r1-vs-r2-analysis.json",
+      "sha256": "f899faa133afe90980d484a799ec7fb9f0684651b8aaabedf10c00ef4d4b1a1c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r1.wav",
+      "sha256": "60de4618d328427f97a4dbfc212116783ae1f126a3f8f543b879c09cf1ada102",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-r2.wav",
+      "sha256": "85033731ec82bd89558cdc6f8109ccb48379e6a84602c07ededfd67636370098",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-reactivated.wav",
+      "sha256": "accfe56addab166697628861ffa78a59790d45046a3caa33928f22125f639184",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r1.wav",
+      "sha256": "024037800524632a0067f3d75f56509bc4ff8719ca1e03046f0023e1ecb706a1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r2.wav",
+      "sha256": "cdf587781209e425e4ca3389c60bf7a2ba954d030ab4c7840285d769a0abc7cc",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-pre-vs-postreload-analysis.json",
+      "sha256": "b516f3d22c9d37c49b6976bda1a2684ed068d93f3d18b6573cc22763dda41673",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r1-analysis.json",
+      "sha256": "abfe91edd0a695f89dabaf7f7b74995443c710b3177833b71ecac3e017f1144c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r1-vs-r2-analysis.json",
+      "sha256": "a45f546060a46c307ea68ec3f85c5dfa8494ba7255ee23663e026ab24ad5c1a9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r1.wav",
+      "sha256": "9e2887dd3dda4dd55ace4e01f1f5f8d420bc54d3fd5d14cc8521c3d98524238b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r2-analysis.json",
+      "sha256": "5befc2b5ddee32ee2a75f7ae0d858197abf50a9bba7604f54afcebaad7eb002a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r2-vs-r3-analysis.json",
+      "sha256": "ab891df520b61e8b21d50db64916dafa1f3c2a8763888b153b8754b73a9b21fc",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r2.wav",
+      "sha256": "38e7ba7025aa61ab967378876e60a3cf6ee03f3ddd06a98a9f4dc32c67aaaf83",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r3-analysis.json",
+      "sha256": "969bc7a93f22164f904024cafcaed8459765538bf8428760f2d3730f758d0dbd",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/space-designer-custom-ir-wet100-impulse-r3.wav",
+      "sha256": "0cc1489cd0d57a6e1d3f92044acc0ca400d206d63f1c3cd5bcc6ca0f9176a400",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "ir-assets/manifest.json",
+      "sha256": "229494e6cf56f8208f96865acaa1a0c658647e6cf4a43a236751f6086dab9c0a",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "ir-assets/tracksmith_space_designer_sparse_diffuse_ir_mono.wav",
+      "sha256": "f32606a5d2237402812cf71369c90638d7796aa08b638e59fb7a893b96551725",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-analysis.json",
+      "sha256": "53cb66fbf3344ed37e2f25b5f096f9db1d5eff0beb578fa47e31188602c14a46",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-pre-vs-analysis.json",
+      "sha256": "aa9b4c20130a1bba85c11a1dfcd57bd3224ce3a37386298235a59e55cc3538d3",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r1-vs-r2-analysis.json",
+      "sha256": "932edbc804a88c95dd7867685aa0f5060eca1af78342011ccb4bdedf6c51215a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-final-package-postreload-r2-pre-vs-analysis.json",
+      "sha256": "15a17abd4d4f74ac81a069530cee67fc7830d6b54380110e373f20b9238a5e6d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-explicit-ir-reload-r1-analysis.json",
+      "sha256": "8d724d860d3c37977d706b5ce8b6c1202dbb4a722c78d799157abf797c387fdd",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-explicit-two-ir-reload-r1-analysis.json",
+      "sha256": "2abff7d4d974efa5533b49dca5fd3373274b6caa9ac55293080f4d0d1c29c595",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-reactivated-analysis.json",
+      "sha256": "0797db984402f5226fa99c143d04593ad706601ec55fa1110aaf6b9d530e6346",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r1-analysis.json",
+      "sha256": "85f297e9db2cefd404c6ea08929d3d861dd02b5eaf82a58603bc5577bc8205a6",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r1-pre-vs-analysis.json",
+      "sha256": "e14755c9dd559631e1d57b791a53fd624dfa829a3dd2909107d3af81da6aa33e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r1-vs-r2-analysis.json",
+      "sha256": "c24bed2330d97aac144f5a93e8e4fe21dda1405bc5b308a6f367f2990421c78d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r2-pre-vs-analysis.json",
+      "sha256": "5cc2b6d08a0e6dcbe71cba735598e868ac408cf85d7e54614ea590344ab95586",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-pre-vs-postreload-explicit-ir-reload-r1-analysis.json",
+      "sha256": "ca1377c78e46183f359ea4db6eb57a2fd83aef588387210392ed72b28972fe36",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-pre-vs-postreload-explicit-two-ir-reload-r1-analysis.json",
+      "sha256": "9b68e600c3d34f6eb0e7a6bc78416dd1097885ffc6b9cd9bf177ab92f32d7483",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/space-designer-custom-ir-wet100-impulse-pre-vs-postreload-reactivated-analysis.json",
+      "sha256": "81185ea522d1f227dae1220eb2cc6c728366f946fa081e82dc789d57b96af395",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.logicx.zip",
+      "sha256": "ea2bfe1dd446be4b832088093162b2ce5bad16e82949fea858a578ce2f8b4151",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.partial-checkpoint.logicx.zip",
+      "sha256": "7490e18e55bef119d4b7f000c144377d60c4a2250eef8e7bdeb82769ccfcd810",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "screenshots/controlled-neutral-state-right-coupled.png",
+      "sha256": "4561f6f29fe80d10b2d4426369f7715e75ca5d10df1a5fe44b2d08e8c68b1e6a",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/custom-ir-controlled-state-postreload-blue-active.png",
+      "sha256": "b43b830c7a2ad9a30d26ddd84ce1509d205b442d140fb9c3ee9abff32c17a613",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/custom-ir-controlled-state-postreload.png",
+      "sha256": "bf02338e72f4c484062c87ccbd17e5f7e73130d8e07c031dfa3cd2e34facbcb3",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/custom-ir-controlled-state-prereload.png",
+      "sha256": "3b43ffb06b6013e2258f874e47462e67c51caf20ac2dd73f3463bb53f632273c",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/rejected-accessibility-retarget-unintended-take.png",
+      "sha256": "d06df00e88895b8f4228a1384874e608b4850b757d3481bf065b017a908bb35e",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

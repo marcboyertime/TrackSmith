@@ -1,0 +1,1098 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-stereo-delay-production-profile-48k-2026-07-29",
+  "recordedAt": "2026-07-29T19:35:30-04:00",
+  "status": "partial",
+  "identityType": "effect_or_native_audio_tool",
+  "identityIdentifier": "logic-pro-12.3:stereo-delay",
+  "identityName": "Stereo Delay",
+  "product": "TrackSmith",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": null,
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureCompatibility": "The retained source fixtures are deterministic 48 kHz PCM24 files copied into this run and independently hash-ledgered.",
+    "claimClass": "measured_behavior"
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/single_impulse_mono.wav",
+        "fileSHA256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+        "pcmSHA256": "902898df6987053888e55c00d24894e5e46043c753fc5e277991e77edf4d3538",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 288000,
+        "durationSeconds": 6.0
+      },
+      {
+        "artifactPath": "fixtures/stereo_left_only.wav",
+        "fileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 2,
+        "frameCount": 384000,
+        "durationSeconds": 8.0,
+        "renderedCycleSeconds": 6.0
+      },
+      {
+        "artifactPath": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+        "fileSHA256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 420000,
+        "durationSeconds": 8.75,
+        "renderedCycleSeconds": 6.0,
+        "identityBoundary": "This is a deterministic synthetic guitar-range fixture, not a human performance or independent listening case."
+      }
+    ],
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The deterministic fixture files remain immutable copies in the run directory and their hashes match the recorded inputs."
+  },
+  "nativeState": {
+    "presetName": "Default Preset, with separately recorded controlled variants",
+    "channelControlMode": "Mono and stereo fixtures through one stereo Stereo Delay insert and interleaved Stereo Out",
+    "inheritedInsertBoundary": "Inherited Noise Gate and Compressor inserts remained explicitly bypassed for every accepted render.",
+    "defaultTempoSynchronizedState": {
+      "tempoBPM": 120,
+      "tempoSync": true,
+      "leftInput": "Left",
+      "leftNote": "1/4",
+      "leftDisplayedDelayMS": 500.0,
+      "leftDeviationPercent": 0.0,
+      "rightInput": "Right",
+      "rightNote": "1/8",
+      "rightDisplayedDelayMS": 250.0,
+      "rightDeviationPercent": 0.0,
+      "routing": "Straight",
+      "stereoLink": false,
+      "leftFeedbackPercent": 35.0,
+      "rightFeedbackPercent": 35.0,
+      "leftToRightCrossfeedPercent": 0.0,
+      "rightToLeftCrossfeedPercent": 0.0,
+      "leftLowCutHz": 20.0,
+      "leftHighCutHz": 20000.0,
+      "rightLowCutHz": 20.0,
+      "rightHighCutHz": 20000.0,
+      "leftOutputMixPercent": 30.0,
+      "rightOutputMixPercent": 30.0,
+      "allPhaseSwitches": false
+    },
+    "controlledFreeTimeNoFeedbackState": {
+      "tempoSync": false,
+      "leftDisplayedDelayMS": 500.0,
+      "rightDisplayedDelayMS": 250.0,
+      "routing": "Straight",
+      "leftFeedbackPercent": 0.0,
+      "rightFeedbackPercent": 0.0,
+      "leftToRightCrossfeedPercent": 0.0,
+      "rightToLeftCrossfeedPercent": 0.0,
+      "leftOutputMixPercent": 100.0,
+      "rightOutputMixPercent": 100.0,
+      "filters": "20 Hz to 20000 Hz on both delay paths",
+      "allPhaseSwitches": false
+    },
+    "controlledFreeTimeFeedbackState": {
+      "tempoSync": false,
+      "leftDisplayedDelayMS": 500.0,
+      "rightDisplayedDelayMS": 250.0,
+      "routing": "Straight",
+      "leftFeedbackPercent": 35.0,
+      "rightFeedbackPercent": 35.0,
+      "leftToRightCrossfeedPercent": 0.0,
+      "rightToLeftCrossfeedPercent": 0.0,
+      "leftOutputMixPercent": 100.0,
+      "rightOutputMixPercent": 100.0
+    },
+    "controlledCrossfeedState": {
+      "tempoSync": false,
+      "leftDisplayedDelayMS": 500.0,
+      "rightDisplayedDelayMS": 250.0,
+      "routingBeforeSave": "Straight with one manually controlled crossfeed value; the post-reload routing summary displayed Customized",
+      "leftFeedbackPercent": 0.0,
+      "rightFeedbackPercent": 0.0,
+      "leftToRightCrossfeedPercent": 50.0,
+      "rightToLeftCrossfeedPercent": 0.0,
+      "leftOutputMixPercent": 100.0,
+      "rightOutputMixPercent": 100.0,
+      "source": "stereo_left_only.wav"
+    },
+    "savedStateEvidence": "After a normal save, normal Logic quit, and project reopen, the controlled crossfeed state visibly restored with free 500 ms left and 250 ms right delays, feedback 0 percent, left-to-right crossfeed 50 percent, right-to-left crossfeed 0 percent, wet output 100 percent on both channels, Tempo Sync off, full-band displayed filters, and active Stereo Delay. Two post-reload renders exactly matched the settled pre-save decoded PCM.",
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They do not establish every routing, phase, filter, automation, smoothing, sample-rate, preset, or parameter interaction; private topology; musical usefulness; or TrackSmith authority to control Logic."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Retain first-transition output separately and require repeated decoded-PCM identity before a settled-state repeatability claim.",
+    "baselineGate": "The Stereo Delay header-bypass render had to map the correct 48 kHz mono impulse sample-exactly to both Stereo Out channels."
+  },
+  "directHostEvidence": true,
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_stereo_header_bypass_and_default_tempo_synchronized_state",
+      "evidence": "Header bypass mapped the correct 48 kHz mono impulse sample-exactly to both rendered channels. The exact default synchronized state is directly captured and rendered three times."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_straight_routing_and_one_customized_crossfeed_state_only",
+      "evidence": "Straight routing and one manually customized left-to-right crossfeed state were rendered. Other routing menus, right-to-left crossfeed, stereo-link, mono instances, alternate channel layouts, and factory presets remain unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_two_delay_times_two_feedback_values_two_mix_values_and_one_crossfeed_value",
+      "evidence": "The run controls 500 ms left and 250 ms right times, 0 and 35 percent feedback, 30 and 100 percent output mix, and 0 and 50 percent left-to-right crossfeed in explicitly recorded combinations. It is not a continuous grid and does not close higher-order parameter interactions."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_exact_delay_positions_peak_tail_and_channel_metrics_for_recorded_states",
+      "evidence": "The analysis records impulse-relative first, peak, and last nonzero frames, peak and RMS level, polarity, least-squares gain where defined, stereo relationships, and bounded tail for the exact states. No host-reported plug-in latency value was captured."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_settled_recorded_states_with_one_retained_transition",
+      "evidence": "The default synchronized impulse, free-time feedback-35 impulse, Straight stereo-left-only, crossfeed stereo-left-only, and guitar-like states each produced three decoded-PCM-identical renders. The first free-time feedback-0 render differed after the parameter change, while renders two and three were decoded-PCM identical and are treated as settled."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_one_controlled_crossfeed_state",
+      "evidence": "The controlled values visibly restored after normal save/quit/reopen. Two post-reload renders were decoded-PCM identical to each other and exactly matched the settled pre-save PCM hash ecc6fd47eed13b1a4da975f9dd56573beb09925753d98db20b85da6601532bc3."
+    },
+    "left_right_free_sync_time_division_and_tempo_change_accuracy": {
+      "status": "partial_one_120_bpm_synchronized_pair_and_one_free_time_pair",
+      "evidence": "At 120 BPM, the recorded quarter-note left path appeared at 500 ms and eighth-note right path at 250 ms. The same displayed 500/250 ms pair was directly rendered with Tempo Sync off. Other tempos, note values, deviation values, and tempo changes remain unmeasured."
+    },
+    "input_source_crossfeed_feedback_routing_and_runaway_peak_safety": {
+      "status": "partial_left_right_inputs_zero_and_35_feedback_straight_and_one_left_to_right_crossfeed_state",
+      "evidence": "With a stereo-left-only source, Straight routing and zero crossfeed left the right output exactly silent. A 50 percent left-to-right crossfeed state added a nonzero right output beginning at rendered frame 36001 while the left began at frame 24001. Feedback 0 and 35 percent were bounded in the six-second cycle. Other inputs, routing menus, right-to-left crossfeed, feedback extremes, and runaway or overflow safety remain unmeasured."
+    },
+    "filter_phase_and_dry_wet_effect_on_repeat_spectrum_and_mono_sum": {
+      "status": "not_run_beyond_full_band_phase_off_and_two_output_mix_values",
+      "evidence": "Accepted states retained displayed 20 Hz to 20000 Hz filters and all phase switches off, while output mix was recorded at 30 and 100 percent. No filter sweep, phase inversion matrix, detailed repeat-spectrum comparison, dry/wet grid, or mono-sum listening assessment was run."
+    },
+    "tail_decay_transition_repeatability_realtime_offline_and_save_reload": {
+      "status": "partial_zero_and_35_percent_feedback_tail_transition_settled_repeatability_and_one_reload_state",
+      "evidence": "At wet 100 percent, feedback 0 percent isolated the 500 ms and 250 ms paths; feedback 35 percent extended nonzero output to 4.613229 seconds after the source impulse on the left and 4.0011875 seconds on the right within the six-second no-tail cycle. One first-transition difference was retained, settled repeats were exact, and one crossfeed state survived save/reload exactly. Realtime/offline parity, explicit automation transitions, longer tail capture, other feedback values, and overflow limits remain unmeasured."
+    },
+    "rhythmic_masking_width_articulation_and_level_matched_source_listening": {
+      "status": "partial_one_deterministic_guitar_range_render_no_participant_listening",
+      "evidence": "The first six seconds of one deterministic guitar-like pluck fixture were rendered three times through the default synchronized state and were decoded-PCM identical. No participant completed level-matched masking, width, articulation, groove, distance, or preference listening."
+    }
+  },
+  "measurements": {
+    "bypass": {
+      "renderFileSHA256": "cf7038fe7ed2c415d096794f8992839deec88ad72dd2223e02290f7b68d5574a",
+      "renderPCMHash": "3fc1eee87686da9c165205c4ec2291630542edadd8d7ebeb3d1a4fb0c99859e4",
+      "sourceMappedSampleExactOnBothRenderedChannels": true,
+      "leftPeakFrameRelativeToSourceImpulse": 0,
+      "rightPeakFrameRelativeToSourceImpulse": 0,
+      "leastSquaresGainDB": 0.0,
+      "maximumAbsoluteErrorIntegerCount": 0
+    },
+    "defaultTempoSynchronizedImpulse": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "f98e55ad4cbd9b18ce4fef93d964eeb6fa00ae7487cdb551d15d9332af5e0a95",
+      "leftDryPeakFrameRelativeToSourceImpulse": 0,
+      "leftFirstDelayPeakFrameRelativeToSourceImpulse": 24000,
+      "rightDryPeakFrameRelativeToSourceImpulse": 0,
+      "rightFirstDelayPeakFrameRelativeToSourceImpulse": 12000,
+      "leftLastNonzeroFrameRelativeToSourceImpulse": 218170,
+      "rightLastNonzeroFrameRelativeToSourceImpulse": 180030,
+      "leftTailSecondsAfterSourceImpulse": 4.545208333333333,
+      "rightTailSecondsAfterSourceImpulse": 3.750625,
+      "dryPathLeastSquaresGainDB": -3.098039788594307,
+      "interpretationBoundary": "The exact 120 BPM synchronized state produced peaks at the displayed 500 ms and 250 ms times and repeatable feedback echoes. This does not characterize other tempos, note values, modulation, private interpolation, or musical usefulness."
+    },
+    "controlledFreeTimeNoFeedbackImpulse": {
+      "firstTransitionPCMHash": "937f12e7986649f9daa9fc7021a09c161400e5c972fde262c3085cba7d57eb15",
+      "settledDecodedPCMRepeatCount": 2,
+      "settledPCMHash": "514f3955335b7697d5e5bbe1f39247023495439072e637de4335b1591d34c491",
+      "leftPeakFrameRelativeToSourceImpulse": 24000,
+      "rightPeakFrameRelativeToSourceImpulse": 12000,
+      "leftFirstNonzeroFrameRelativeToSourceImpulse": 24000,
+      "rightFirstNonzeroFrameRelativeToSourceImpulse": 12000,
+      "leftLastNonzeroFrameRelativeToSourceImpulse": 34295,
+      "rightLastNonzeroFrameRelativeToSourceImpulse": 22295,
+      "leftPeakDBFS": -14.062039976840257,
+      "rightPeakDBFS": -14.062039976840257,
+      "interpretationBoundary": "The settled wet-only, zero-feedback state isolates exact 500 ms and 250 ms peak positions. Nonzero samples after each peak are retained objective output of the exact full-band displayed state and are not attributed to a private filter or interpolation topology."
+    },
+    "controlledFreeTimeFeedback35Impulse": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "444698cfa800f84abbe675b50e327165b4b63e113889db8f2df484332a72a746",
+      "leftPeakFrameRelativeToSourceImpulse": 24000,
+      "rightPeakFrameRelativeToSourceImpulse": 12000,
+      "leftLastNonzeroFrameRelativeToSourceImpulse": 221435,
+      "rightLastNonzeroFrameRelativeToSourceImpulse": 192057,
+      "leftTailSecondsAfterSourceImpulse": 4.613229166666667,
+      "rightTailSecondsAfterSourceImpulse": 4.0011875,
+      "interpretationBoundary": "These are bounded decay measurements inside a six-second bounce with Include Audio Tail off, not an exhaustive or perceptual decay-quality claim."
+    },
+    "straightStereoLeftOnly": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "07bc54c4d4f51b0ad7eeeb6a01b9eace636ceded628b3bd18c0c269ac02826f3",
+      "leftFirstNonzeroFrame": 24001,
+      "rightNonzeroSampleCount": 0,
+      "rightOutputExactlySilent": true,
+      "leftPeakDBFS": -9.401340983713135,
+      "interpretationBoundary": "This establishes channel independence only for the exact Straight, feedback-zero, crossfeed-zero, wet-only state and the first six seconds of the retained left-only fixture."
+    },
+    "leftToRightCrossfeed50StereoLeftOnly": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "ecc6fd47eed13b1a4da975f9dd56573beb09925753d98db20b85da6601532bc3",
+      "leftFirstNonzeroFrame": 24001,
+      "rightFirstNonzeroFrame": 36001,
+      "leftPeakDBFS": -9.401340983713135,
+      "rightPeakDBFS": -15.924794965469252,
+      "zeroLagLeftRightCorrelation": 0.4657949700658666,
+      "interpretationBoundary": "The added right output is directly observed for one 50 percent left-to-right crossfeed state. It does not define the full crossfeed law, the right-to-left path, or private routing topology."
+    },
+    "controlledCrossfeedReload": {
+      "visibleControlledStateRestored": true,
+      "acceptedPostReloadDecodedPCMRepeatCount": 2,
+      "acceptedPostReloadPCMHash": "ecc6fd47eed13b1a4da975f9dd56573beb09925753d98db20b85da6601532bc3",
+      "postReloadPairPCMExact": true,
+      "settledPreSaveVersusPostReloadPCMExact": true
+    },
+    "defaultTempoSynchronizedGuitarLike": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "4e7e43a7788d43be890b53e5fed3dafce11b6ece293ea8c484c1ad5510d5f00c",
+      "leftPeakDBFS": -8.827064613560964,
+      "rightPeakDBFS": -9.090989029261241,
+      "leftRMSDBFS": -24.995951595829474,
+      "rightRMSDBFS": -24.695837100866548,
+      "renderedDurationSeconds": 6.0,
+      "interpretationBoundary": "This is repeatable behavior on one deterministic synthetic guitar-range fixture. It is not a listening result and does not establish groove, depth, width, preference, or musical usefulness."
+    },
+    "measurementBoundary": "All values describe only the exact recorded states, fixtures, environment, routing, cycle range, and analysis rules. They neither identify Apple's private delay implementation nor prove depth, width, groove, clarity, preference, or musical usefulness."
+  },
+  "stateTransitionFindings": [
+    "The default synchronized impulse, feedback-35 impulse, Straight stereo-left-only, crossfeed stereo-left-only, and guitar-like states each produced three decoded-PCM-identical renders.",
+    "The first free-time, feedback-zero render after the parameter change contained transition residue at the source impulse, while renders two and three began only at the requested delay positions and were decoded-PCM identical.",
+    "The controlled crossfeed state restored visibly after normal save/quit/reopen, and its two post-reload renders exactly matched the settled pre-save decoded PCM.",
+    "WAVE file hashes can differ while decoded PCM remains identical because retained file-container metadata can differ; repeatability claims use decoded PCM identity.",
+    "First-transition output is retained as state-transition evidence and is not silently merged into settled-repeat claims."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/rejected-wrong-8-second-cycle-stereo-delay-bypass-single-impulse.wav"
+      ],
+      "reason": "Retained and rejected because the inherited eight-second cycle did not match the accepted six-second single-impulse fixture range. The later bypass render uses the exact six-second cycle."
+    }
+  ],
+  "measurementAssertions": [
+    {
+      "artifactPath": "measurements/stereo-delay-bypass-single-impulse.analysis.json",
+      "jsonPath": [
+        "comparison",
+        "source_broadcast_pcm_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-default-tempo-sync-straight-impulse-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "f98e55ad4cbd9b18ce4fef93d964eeb6fa00ae7487cdb551d15d9332af5e0a95"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "514f3955335b7697d5e5bbe1f39247023495439072e637de4335b1591d34c491"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "514f3955335b7697d5e5bbe1f39247023495439072e637de4335b1591d34c491"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "444698cfa800f84abbe675b50e327165b4b63e113889db8f2df484332a72a746"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "07bc54c4d4f51b0ad7eeeb6a01b9eace636ceded628b3bd18c0c269ac02826f3"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "ecc6fd47eed13b1a4da975f9dd56573beb09925753d98db20b85da6601532bc3"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-postreload-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "ecc6fd47eed13b1a4da975f9dd56573beb09925753d98db20b85da6601532bc3"
+    },
+    {
+      "artifactPath": "measurements/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "4e7e43a7788d43be890b53e5fed3dafce11b6ece293ea8c484c1ad5510d5f00c"
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "The header-bypass render mapped the correct 48 kHz mono impulse sample-exactly to both rendered channels.",
+      "At 120 BPM, the recorded synchronized quarter-note left path and eighth-note right path produced peaks at 500 ms and 250 ms respectively.",
+      "The controlled free-time, wet-only, feedback-zero state produced settled peaks at exactly 500 ms left and 250 ms right.",
+      "The controlled 35 percent feedback state extended repeatable nonzero output within the six-second render compared with the feedback-zero state.",
+      "Straight routing with a left-only source left the right output exactly silent; 50 percent left-to-right crossfeed produced a separately delayed right output.",
+      "The controlled crossfeed state recovered visibly and decoded-PCM exactly across normal save, quit, and reload.",
+      "The default synchronized state repeated exactly on one deterministic synthetic guitar-like fixture."
+    ],
+    "inferredConsequences": [
+      "Typed production knowledge must preserve tempo-sync state, tempo, note or free-time scope, channel input mapping, feedback, crossfeed, routing, stereo link, filter, phase, mix, source identity, and first-transition versus settled-state provenance.",
+      "A filename, preset label, or displayed delay value is insufficient to establish a stable render; decoded-PCM repeatability and explicit transition handling are required.",
+      "Crossfeed evidence must not be generalized into a full stereo-routing law."
+    ],
+    "professionalPracticeHeuristics": [
+      "Delay time, synchronization, feedback, crossfeed, filtering, phase, dry/wet balance, source rhythm, role, and arrangement density remain source- and role-dependent production decisions.",
+      "A delay can meet objective timing and repeatability bounds while still requiring level-matched listening to judge groove, depth, clutter, masking, width, center preservation, and perceived distance."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "Stereo Delay is not declared deep, wide, clear, musical, superior, or generally useful.",
+      "No general behavior is claimed for untested routing menus, right-to-left crossfeed, nonzero deviation, filter sweeps, phase switches, stereo linking, alternate sample rates, mono instances, automation, parameter smoothing beyond the retained transition, exhaustive presets, or untested interactions.",
+      "No private delay, interpolation, feedback, filter, modulation, routing, or smoothing implementation is identified.",
+      "No deterministic synthetic fixture is represented as independent human musical evidence.",
+      "No TrackSmith authority to inspect, insert, reorder, automate, or control Logic Stereo Delay is granted."
+    ]
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient for a bounded milestone Stereo Delay profile because it directly captures exact bypass; one default tempo-synchronized state; one free-time wet-only feedback-zero state; one free-time 35 percent feedback state; exact 500 ms left and 250 ms right timing; Straight left-only channel independence; one 50 percent left-to-right crossfeed state; first-transition versus settled behavior; exact decoded-PCM repeatability; exact crossfeed-state save/reload recovery; and one deterministic guitar-like fixture. It remains partial in the exhaustive campaign and listening-decisive for musical outcomes.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "results": [],
+    "statement": "No participant completed a controlled Stereo Delay listening protocol for this run. Objective bypass, timing, feedback, crossfeed, repeatability, and reload evidence is not represented as groove, depth, width, clarity, center preservation, preference, or musical usefulness."
+  },
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "exactTransferCharacterized": false,
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29",
+        "archivePath": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx.zip",
+        "archiveSHA256": "49cb4ebaf2c524be1eaa3af5252853c0255b7e3bae6ec82c494c3d2ec1b7f824",
+        "sampleRateHz": 48000,
+        "includedAssets": [
+          "Audio files"
+        ]
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "The ZIP archive passed unzip -t with no errors after Logic closed the project.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "acceptedRenders": "exactly 6.000 seconds",
+      "rejectedInheritedCycle": "exactly 8.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono and stereo fixtures through a stereo Stereo Delay instance and interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 Stereo Delay evidence at 48 kHz/PCM24 covers sample-exact header bypass; one 120 BPM synchronized quarter-note left and eighth-note right state; one free-time 500 ms left and 250 ms right wet-only feedback-zero state; one 35 percent feedback state; Straight routing with exact right-channel silence for a left-only source; one 50 percent left-to-right crossfeed state; first-transition versus settled behavior; decoded-PCM repeatability; exact controlled crossfeed-state save/reload recovery; and one deterministic guitar-like fixture. The measured timing peaks were exactly 500 ms left and 250 ms right in the controlled free-time state. No participant listening, alternate routing menu, right-to-left crossfeed, nonzero deviation, filter sweep, phase matrix, stereo-link profile, sample-rate grid, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established.",
+  "artifactFiles": [
+    {
+      "path": "artifacts/rejected-wrong-8-second-cycle-stereo-delay-bypass-single-impulse.wav",
+      "sha256": "49e1d4f8c5e4136c6c31930e55c5a2d6022e172792577018aee79d3180a81b46",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-bypass-single-impulse.wav",
+      "sha256": "cf7038fe7ed2c415d096794f8992839deec88ad72dd2223e02290f7b68d5574a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-default-tempo-sync-straight-impulse-r1.wav",
+      "sha256": "40e69ebfff3418fc6b025dc701e2fd00250d62fed9e255edc0660e5b2dc8d582",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-default-tempo-sync-straight-impulse-r2.wav",
+      "sha256": "9ead583605cd8864508c23ee99aa0cbcfd06456084f7ee04e413e212f2a54d32",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-default-tempo-sync-straight-impulse-r3.wav",
+      "sha256": "99b492fa08500f770d78676a281ff59145a90940dab295b40a43e78137cf28d1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-postreload-r1.wav",
+      "sha256": "d644be01b546f8f1baaddc80b7372c71588d7a5e66769015e1345925adca4381",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-postreload-r2.wav",
+      "sha256": "45e23745228b115c1bc5144735458af46e9e372c9139296d8fce2e03f0f66b14",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r1.wav",
+      "sha256": "3358850c492d9931142727cfb933d464f8ace111b1b0eaed041ba7fd1249d435",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r2.wav",
+      "sha256": "49f28c0f3270972af19069e4f165979cbe4a1503e6843eb8a44bd07c908a60e9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r3.wav",
+      "sha256": "0685e711fbc845656ec9d10faa4ab5421b260619fb67d2c55f895675d6f147ba",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r1.wav",
+      "sha256": "842e26c2aa158be4a19bb2957ab1168500fbf4645f290a5f7ea7d8b8d9e24dbc",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r2.wav",
+      "sha256": "4c56eb9614ebf4981767d0f4bd0958ebb49693b32856b01b6abf5ca0b95b6c94",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r3.wav",
+      "sha256": "411f8dd768943489c1c2c3bcd55a209330e8e1c4c010dfa30e517e761a3a8957",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r1.wav",
+      "sha256": "9912bad34f055865f63685721809c25c702855660b21a711dc20f442d20e4222",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r2.wav",
+      "sha256": "6bde1dedb1ebe32bc1e703dc7188a7c286e61df4e6b175641d68c920d2b6c720",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r3.wav",
+      "sha256": "43fdb043702f5d6e5beeede0f9d33cc5cb7795158a39410edd60360ac236edd1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r1.wav",
+      "sha256": "d804915dada5c8a5a60407214e01a0b0d9cbf97c9df5027cf068abeed74e5150",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r2.wav",
+      "sha256": "92fd15de3d137a9c9ed2b84c62e850c03b0d133ee7163b0e33012f30fcd7e4c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r3.wav",
+      "sha256": "e4a924e368c4d4b481bf7905ca71bbb9b6190cb8c9cd857663efb8eefd1e70e5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r1.wav",
+      "sha256": "f74edd41bb101fe7f467923b014aa5ca71e63676c76add9a19767128374c87e8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r2.wav",
+      "sha256": "c6e93237eee23084f34d249fa1f18a04168df3574e3f6c5414d4cdd34c6aea5c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r3.wav",
+      "sha256": "ff7797c19d033c0b5fd1fd344b6588b3994e0da71ee565e41cd68938b3146bc2",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "measurements/stereo-delay-bypass-single-impulse.analysis.json",
+      "sha256": "0bcd8a67d59d4ab1d894223aa738a42b6467dde08c69976bc1a99614638a9c2a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-crossfeed-ltr50-postreload-r1-vs-r2.analysis.json",
+      "sha256": "8b4f5e1b35e97c554c0f7fb756bbd5fd760879b69e14bb08e68342983b21c28a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-crossfeed-ltr50-pre-r3-vs-postreload-r1.analysis.json",
+      "sha256": "2b5e15fa01921d3891f9d6ba4b0e7a28cfd12c50db7f8f7103bd8dac2db28ec7",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-default-tempo-sync-straight-impulse-r1-vs-r2.analysis.json",
+      "sha256": "55b9dd12654740f58939222f383bfeae14b900b6708bee26f3de9954a1707bd8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-default-tempo-sync-straight-impulse-r1.analysis.json",
+      "sha256": "4aa9fee1305ffb0e3247bca6c5adb262b522c4f7640b932362c848f9d480ebec",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-default-tempo-sync-straight-impulse-r2-vs-r3.analysis.json",
+      "sha256": "4a3bfa0cb892141a3aefb15ff7dd3378bd49179586eb30fab0cb406483035209",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-default-tempo-sync-straight-impulse-r2.analysis.json",
+      "sha256": "1352b197db7509da691367308f8db84835c42f9ad61ea080bdcf51dd48ec724b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-default-tempo-sync-straight-impulse-r3.analysis.json",
+      "sha256": "5a8239c857b041ef36e4d6ef33b52497254ff28cae1b82726777edaa7e3e59f9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-postreload-r1.analysis.json",
+      "sha256": "ae87842c249d2d7a0f505e30edc72c870b3d58f49fb1e7cb262b96c15767cccf",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-postreload-r2.analysis.json",
+      "sha256": "2029d83e323ab5f0f7b00e8544844a533b5b91bd14dfed92381752322c3946d8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r1-vs-r2.analysis.json",
+      "sha256": "f5e6727d3249d739b7390946d1ded74312207260b657a85bdf729ca399a982c3",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r1.analysis.json",
+      "sha256": "c81a00ffed7f7fa70ad24cd24b5957f42d40082db21b07f17a56bd5ca01cf518",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r2-vs-r3.analysis.json",
+      "sha256": "e211a2011b7c759d69ab8a303a2ceec7244f134ca14ad7cedf6ff338fed5f953",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r2.analysis.json",
+      "sha256": "12634072424a3bc32b16ec19dc0db4c361bfea79dd35e051a3dc3bf08a3b649d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-r3.analysis.json",
+      "sha256": "bb96efeb4ee04987d19f6db2c0f510e2e51bd1437315897d33ef1d74b65c0904",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r1-vs-r2.analysis.json",
+      "sha256": "41329cab11598b8bcaea50e9582f8738ccc24495dade49a9ee3cd98d95af035f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r1.analysis.json",
+      "sha256": "2ac668f022f802eb842900ac9a2e4780e5d3f439e6767b29a5d3d13ff9701118",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r2-vs-r3.analysis.json",
+      "sha256": "e41b3ee828ed5d1e3b353ec65f42e103035fa28503f5f1bdd4580564cc2ab9b0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r2.analysis.json",
+      "sha256": "f010a23d7b956d904b9e292c7f3e74d008ba574b978d992f1dbf7017ef2f5bf2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-impulse-r3.analysis.json",
+      "sha256": "875a1ba75a7a953573a0dae4cbb1dc67f4c43f2ffd4ea4688c4b636850747b94",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r1-vs-r2.analysis.json",
+      "sha256": "bc6845b036f5a003ea2fc9df8e3a8ab12021a7538a8e8b19a4249843d7a035b2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r1.analysis.json",
+      "sha256": "94335d536ab658c9c2687798f8387924a75d3ea190fc5d53f82fe02a55604de0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r2-vs-r3.analysis.json",
+      "sha256": "5890b7f4826fd6c74df3b0b6a206ba68320251a92a2d0bdf19291c3096e4215b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r2.analysis.json",
+      "sha256": "cb97e7a79ef6ee8ca26863a1c44d1feea2ad1d9f7530b674f2f15ffa4ac089c1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback0-stereo-left-only-r3.analysis.json",
+      "sha256": "66930cad13d3b895884858d3ed2fa65acfed67829c4aa781025d788bcaf3c68b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r1-vs-r2.analysis.json",
+      "sha256": "501f1c3471fd63887c6f7075017eb3bba2c8fcb1cf25c18644dac1e3f1fb41e2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r1.analysis.json",
+      "sha256": "5a9d09a4bcdbc32d486a91ab0aa413c5ed80d3fcab92217b7a5a0aa136c04c9e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r2-vs-r3.analysis.json",
+      "sha256": "f43134f90385ce706e5aeabfd6c1eca9174ae320e6d5e59ef565f7feb25e3658",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r2.analysis.json",
+      "sha256": "99b6a6f9ee9cb8c1583348c375520829acea5bbd5f44e8a8099de31d55334a89",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-free-500ms-250ms-straight-wet100-feedback35-impulse-r3.analysis.json",
+      "sha256": "cda62fdff984410dfaeb99b48a4ccd76bb8f40f8506727edc06847d1815903c8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r1-vs-r2.analysis.json",
+      "sha256": "7d245c5a9ebbab5c8f6fbd396dcc0ae891109572e8948331a4b7fbd7861a3975",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r1.analysis.json",
+      "sha256": "bb09fee0bfd58f120e9b1b47fccf964d6c8a0b21eb73710a3f001668bc5ab660",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r2-vs-r3.analysis.json",
+      "sha256": "a3dd0265c931891bcf903d99d08aa3607bfaab12451e72d0135daa5f7766d428",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r2.analysis.json",
+      "sha256": "e0419045970d24ef90df61bc7d218c62457d2411c90e7f491b1052cc4b5ffd39",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/stereo-delay-tempo-sync-quarter-eighth-straight-mix30-feedback35-guitar-like-r3.analysis.json",
+      "sha256": "216642f8e8fbd1be85a29f9204ef8bb896e14ccb01b64c039f88f8a1cbcb948e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/DisplayState.plist",
+      "sha256": "a4306055668eba93f999d48ee2d126f17c9230e8d415eb7a55295273f16394f8",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/DisplayStateArchive",
+      "sha256": "efa1e3f2e3b1dcbd0f1a3dbf4d9c2912ae924a72e217652b9d2b5391f9aabd8b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/MetaData.plist",
+      "sha256": "f1a91e040ca14165bce9f234958531673e846b792480813d3da37868b5feb58f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/00/MetaData.plist",
+      "sha256": "004e57b883a533ca3daa916a3a28548b501173e2bb5f776ab0fd111050a9d1d6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/00/ProjectData",
+      "sha256": "5476b78dc105253a858b200c4935c8bab10a2adc2862b490d9aef788a08400df",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/01/MetaData.plist",
+      "sha256": "004e57b883a533ca3daa916a3a28548b501173e2bb5f776ab0fd111050a9d1d6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/01/ProjectData",
+      "sha256": "dca335925c5757b2f76baa0914870de732e999fbc437b710b2b821cbc53fb622",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/02/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/02/ProjectData",
+      "sha256": "5aa0c552e11051a2eafd6404a6482ddee342fca05f447a1c68c8c6411dcc4e1f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/03/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/03/ProjectData",
+      "sha256": "28dc7d4fc21f440207d709165c643fa9a64c0beeb8f85f40a340bdda4f8e9bf0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/04/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/04/ProjectData",
+      "sha256": "994df05755c13784b7d92c99113030414286bcc411df6a73981fd1f672f429cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/05/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/05/ProjectData",
+      "sha256": "04cf4dbe0bef57c05d5a81339f8c2d6cbbabb9a0c7c21d166df03177b6e57593",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/06/MetaData.plist",
+      "sha256": "defe1ca627e75c422d7cd4079636a75ac33dcfc5ac1694f8eab349e594800982",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/06/ProjectData",
+      "sha256": "5daa4f09ff08630d1fcb9c961de4dd7c910c9bb48f4e1a2befeb0ef5c363b23c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/07/MetaData.plist",
+      "sha256": "ddcb3c2e712bd0ec6e55ec13893debc04533a55d844fadb1a193b7d9337011d2",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/07/ProjectData",
+      "sha256": "176a829e8361e165a79fb4b9d3d2ccc077677e018c18bef5d93584c7d201cef8",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/ProjectData",
+      "sha256": "d08a39d988e10f7a3314063117065592c9cb2aa9f2b5a7a356cbe8bb1fef68de",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Alternatives/000/WindowImage.jpg",
+      "sha256": "73d2066ac4e6b8056effbd3f05ff8f165106819266f3993550e223ce3a323505",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/amplitude_ladder_1khz_mono.wav",
+      "sha256": "b8e3a47ffb444ea8f25df2f37b64df90229afb8befe3e7654c39d2250b2667cf",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/amplitude_ladder_1khz_mono_1.wav",
+      "sha256": "ca7bc6a94d1aa73e6cd7a13a29ccd468ebaf31d385e9c74acaccef751018f37c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/deterministic_noise_bursts_mono.wav",
+      "sha256": "2242bc3b831eccf3309573b3b4f4ba7f5e04952447bf155994fb1f85b9e2ac93",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "a8102f7ef434ada32f552a247218f01b3f9ca3f8bbd9b6c54f1a6cdbcb36348e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/single_impulse_mono.wav",
+      "sha256": "422ae1316bc4a489ea85b845a3b832d94d5d881e11e0cc6acf8993383010e89f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/single_impulse_mono_1.wav",
+      "sha256": "5dd83968ff2a6f8beb2c7e030d3558f5ab758767cc88441a964c8e1e83c22216",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/single_impulse_mono_2.wav",
+      "sha256": "5d88b13adc1f38d5e1c58863a28147d28223488379a5b095992a85dd1a60f362",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-compressor-ballistics-1khz-mono-48k.wav",
+      "sha256": "dc23388172f1af22724364974dfdd0538d6e113237c04e0aee328ee06f1c7c6b",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-compressor-ballistics-1khz-stereo-link-probe-48k.wav",
+      "sha256": "062d0af041f6a88eb2317eefa14db3614c426d09b8a20594ec0a62b7aad1996e",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-deesser-event-probe-mono-48k.wav",
+      "sha256": "a8a2be4a7c064b1f31d4af7b8b8855e962091ab7843e000fe6acf938b1853bca",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-deesser-event-probe-stereo-48k.wav",
+      "sha256": "77decb90760c92709a7444e2b9988fb437cce5859118d3bd7ae175544ae947b0",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-deesser-level-mode-probe-mono-48k.wav",
+      "sha256": "f12b5f6bf3de3968a48075117754907b8367cbf3ceec43badf21f3248a35dbc6",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-stereo-left-only-48k.wav",
+      "sha256": "5ba6c5082c7d84edbe6c3c092a71ca62bcffa854ae73de884f2e1d15a4a8cdec",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/stereo_left_only.wav",
+      "sha256": "bd042a18044c53a0651037be4873e3383245f61752d14bbb218e25bf5e826391",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/stereo_left_only_1.wav",
+      "sha256": "67a4bc0826a7ada3548e8f4ce23f3bcd8df09813ddcac9040973936a869dabee",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/stereo_right_only.wav",
+      "sha256": "b25746f4ce0e641c436a3caa79c5266cb0d3c2ac185678f39e2d0c5ebf69a348",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Media/Audio Files/vocal_like_mono.wav",
+      "sha256": "5a05f71fdde26acf902f22051fe00d61c96f8fed8cecbce5fe6cbbfaac2adb58",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx/Resources/ProjectInformation.plist",
+      "sha256": "b8d208048886037d06f5f2aea24fe1fe875923dab34ead00549f1d4d99c04099",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx.zip",
+      "sha256": "49cb4ebaf2c524be1eaa3af5252853c0255b7e3bae6ec82c494c3d2ec1b7f824",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "screenshots/default-stereo-delay-state.png",
+      "sha256": "fe431fa5985082c9b2aa5134cbb3cfcab0404173793f295aa7db08085aafd123",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-controlled-free-500ms-250ms-wet100-feedback0.png",
+      "sha256": "8c8b9082b14b94eaf14a0e5739c069f21f00aabf4e67a3aefc886e05e6f7962e",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-controlled-free-500ms-250ms-wet100-feedback35.png",
+      "sha256": "901299a2d98f88652e6c9e77b3c4eb1f499727b3cd9b0aa402fbfb8459fea796",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-free-time-before-controlled-state.png",
+      "sha256": "4fb0e1b0f3dcc91cef84c4a85b2a2fc355fc530d68c962492cfff3198b51160b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-postreload-crossfeed-ltr50-state.png",
+      "sha256": "c2ea7c9a5f353114d204e40d15adb05bcafd3f8c77ff3b87aca5d61f397ca89a",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-stereo-left-only-audio9-only-solo.png",
+      "sha256": "dcf48b9ec000e7b02943c3665c53cf35ae60545ad520f85aa138c00c9030fe50",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-straight-wet100-feedback0-crossfeed-ltr50-stereo-left-only-state.png",
+      "sha256": "74e6882d81e75b86993949400f2b321105ec350d3b7165add6bbbfd0ab809c1e",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-straight-wet100-feedback0-stereo-left-only-state.png",
+      "sha256": "2bab94135cfd05105a763084129f2e96ecaa73839cfd8628e23a98eef2971f51",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/stereo-delay-tempo-sync-straight-mix30-feedback35-guitar-like-state.png",
+      "sha256": "b7182bde44c8c3a7631829c122ceeed78bd964c6d5716f9851cae59c0120676c",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

@@ -6,13 +6,21 @@
 swift run -c release TestRunner
 ```
 
-On 2026-07-27 the current source passed 68/68 checks in Debug, Release, and Thread
-Sanitizer when the 14 selected official BS.2217-2 vectors were supplied: plan
+On 2026-07-27 the frozen Production Intelligence v1 baseline passed 68/68 checks
+in Debug, Release, and Thread Sanitizer when the 14 selected official BS.2217-2
+vectors were supplied; that dated baseline is historical. The current harness
+declares 72 unconditional checks plus one optional official-vector lane (73
+possible when `TRACKSMITH_BS2217_VECTORS` is enabled).
+Coverage
+includes: plan
 round-trip, keyed-object parameter wire format and legacy-state migration, bounds
 and complexity rejection, locked-node protection, bypass identity,
 sample-limiter release/reset, gain smoothing reset, soft-clip/nonfinite safety,
 split-band de-esser high-band attenuation with low-band preservation,
-borrowed-pointer/offline parity including de-essing, dry layout failure, five rates
+versioned expander/gate hold/hysteresis/range/link/reset, exact feedback-delay
+timing/crossfeed/reset, bounded algorithmic-reverb decay/tail/rate/reset, temporal
+resource budgets, borrowed-pointer/offline parity including all three new nodes,
+dry layout failure, five rates
 by six buffer sizes, Float32/PCM24 WAV round-trip and malformed-rate rejection,
 known sine/noise spectrum analysis, bounded level-invariant 200 ms dynamics
 timelines, BS.1770 997 Hz calibration, relative gating, inter-sample true peak
@@ -49,9 +57,12 @@ durable conversation migration/corruption/reconciliation, typed conversational
 references, structurally distinct competing hypotheses, immutable research
 publication/quarantine/version history, and clean pinned Git checkout enforcement.
 
-Current Debug, Release, and Thread Sanitizer runs pass 68/68 with the optional
-external vectors and 67/67 when they are omitted. The sanitizer exits without a
-report. This is evidence
+Previously verified current 2026-08-02 Debug and Release runs each pass 72/72
+with `TRACKSMITH_BS2217_VECTORS` omitted (the 72 unconditional checks). The
+same-date vector-enabled Debug and Release runs now each pass 73/73 with
+`TRACKSMITH_BS2217_VECTORS` set to the local directory containing the 14 official
+BS.2217-2 vectors. The current 73-lane Thread Sanitizer run remains
+open/unproven. This is evidence
 for exercised paths, not proof that all possible races or real-time allocations are
 absent.
 

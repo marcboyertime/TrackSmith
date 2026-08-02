@@ -101,7 +101,7 @@ public struct ModelOutputValidator: Sendable {
     public static let defaultSupportedStrategies: Set<ProductionDSPStrategy> = [
         .subtractiveEQ, .additiveEQ, .dynamicEQOrDeEsser,
         .gentleCompression, .transientPreservingCompression, .parallelCompression,
-        .levelAutomation, .saturation, .stereoWidth, .preserveWithoutProcessing,
+        .levelAutomation, .saturation, .stereoWidth, .ambienceOrDelay, .preserveWithoutProcessing,
         .clarification, .listeningComparison,
     ]
 

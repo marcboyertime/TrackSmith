@@ -45,8 +45,8 @@
       "entryCount": 142,
       "status": "all_entry_identities_found_in_declared_primary_source_page_ranges",
       "providerContextEmpiricalStatusCounts": {
-        "notRun": 139,
-        "partial": 3,
+        "notRun": 133,
+        "partial": 9,
         "complete": 0
       },
       "providerContextStatus": "direct-run identities are exposed as bounded evidence while unmeasured identities remain explicitly notRun",
@@ -1313,14 +1313,14 @@
   },
   "empiricalCampaign": {
     "path": "research/knowledge/logic-pro-12.3-empirical-campaign.json",
-    "sha256": "1c1e279e8010c8e9969f638a00103988099e094fdd730a3f16c3a855301b0811",
+    "sha256": "5ba71f14df31a5bc57530b4490e47c834f85a6a405abe71f51df627b35b0cd64",
     "identityCount": 200,
     "statusCounts": {
-      "not_run": 197,
-      "partial": 3,
+      "not_run": 191,
+      "partial": 9,
       "complete": 0
     },
-    "status": "enumerated_with_3_partial_and_0_complete_evidence_identities",
+    "status": "enumerated_with_9_partial_and_0_complete_evidence_identities",
     "evidenceRuns": [
       {
         "runID": "logic-12.3-bitcrusher-default-48k-2026-07-18",
@@ -1330,6 +1330,16 @@
         "artifactCount": 23,
         "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-default-2026-07-18/run.json",
         "runRecordSHA256": "2af4a8f8a1522408e9f193d0d6d6a4bf1eabefb07492f57f6379d85704ee0e11",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-bitcrusher-production-profile-48k-2026-07-29",
+        "identityIdentifier": "logic-pro-12.3:bitcrusher",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 92,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/run.json",
+        "runRecordSHA256": "95f2fb05f4896d655ef0532a9d42e8f09e43e28b49da49ba9e507f8d27dad6de",
         "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
       },
       {
@@ -1343,6 +1353,26 @@
         "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
       },
       {
+        "runID": "logic-12.3-channel-eq-production-profile-48k-96k-2026-07-27",
+        "identityIdentifier": "logic-pro-12.3:channel-eq",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 150,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-channel-eq-production-profile-2026-07-27/run.json",
+        "runRecordSHA256": "7b143962a1753a729f298bff341ebd7bb131f6c2da7e912e000e74fcab9fa6bb",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-chromaverb-production-profile-48k-2026-07-28",
+        "identityIdentifier": "logic-pro-12.3:chromaverb",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 61,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-chromaverb-production-profile-2026-07-28/run.json",
+        "runRecordSHA256": "322ddabf3ba587ea78e2ea148bf341d211ccddcb2437a1e5393f18b87d51fed9",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
         "runID": "logic-12.3-compressor-default-controlled-48k-2026-07-20",
         "identityIdentifier": "logic-pro-12.3:compressor",
         "status": "partial",
@@ -1351,13 +1381,73 @@
         "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-default-controlled-2026-07-20/run.json",
         "runRecordSHA256": "75d15cd5131a3f4e6f904a1093eecb7280bbf9e315bdee09262b23aaf8ac1882",
         "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-compressor-production-profile-48k-2026-07-27",
+        "identityIdentifier": "logic-pro-12.3:compressor",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 95,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-production-profile-2026-07-27/run.json",
+        "runRecordSHA256": "6ad6699d8136022e7c650b8806aecdc222b7144bacc6ba1908c229cf446a4fac",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-deesser-2-production-profile-48k-2026-07-28",
+        "identityIdentifier": "logic-pro-12.3:deesser-2",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 77,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-deesser-2-production-profile-2026-07-28/run.json",
+        "runRecordSHA256": "cfbd5a3f7b364b937be324739c9c05feeace362fdea15b4ae55975dd3d2abd1d",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-noise-gate-production-profile-48k-2026-07-29",
+        "identityIdentifier": "logic-pro-12.3:noise-gate",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 106,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-noise-gate-production-profile-2026-07-29/run.json",
+        "runRecordSHA256": "dcdb88b433e4412ff4448b0d7425c44aaba8ff3bc681a860fa14c2b69c6f8150",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-space-designer-production-profile-48k-2026-07-28",
+        "identityIdentifier": "logic-pro-12.3:space-designer",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 66,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/run.json",
+        "runRecordSHA256": "d2cd8aded8771e90cadd1ce421125b9acaa523c0c872ca0813b64a50eebf94fb",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-stereo-delay-production-profile-48k-2026-07-29",
+        "identityIdentifier": "logic-pro-12.3:stereo-delay",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 125,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-stereo-delay-production-profile-2026-07-29/run.json",
+        "runRecordSHA256": "abe32ef7e6a556d7e76c72561ae724c11071a7cc9f20c545d4d78dc83fbb1755",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
+        "runID": "logic-12.3-tape-delay-production-profile-48k-2026-07-29",
+        "identityIdentifier": "logic-pro-12.3:tape-delay",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 118,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-tape-delay-production-profile-2026-07-29/run.json",
+        "runRecordSHA256": "180b7e0285a1b8dcf9db769ee1fd465eeb8851d93280290182324f019b829193",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
       }
     ],
     "warning": "Documentary coverage is complete; empirical characterization is not. A partial status proves only the dimensions explicitly closed by its hash-validated run record."
   },
   "coreEffectPriority": {
     "path": "research/knowledge/logic-pro-12.3-core-effect-priority.json",
-    "sha256": "5f7c2bb1caf3d85dc1e3ebaafe34c428ef2fd4cec5894b5ebd0633a52b5bffc4",
+    "sha256": "8466501dd76d46bb0823570d631ffb290cde58f28c71ac1e33505611d46da6d1",
     "professionalCaseCount": 58,
     "firstQueueIdentityCount": 20,
     "firstProcessingIdentity": "Channel EQ",

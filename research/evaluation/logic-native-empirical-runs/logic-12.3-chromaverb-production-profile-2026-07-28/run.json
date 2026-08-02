@@ -1,0 +1,815 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-chromaverb-production-profile-48k-2026-07-28",
+  "recordedAt": "2026-07-28T20:25:01-04:00",
+  "status": "partial",
+  "identityType": "effect_or_native_audio_tool",
+  "identityIdentifier": "logic-pro-12.3:chromaverb",
+  "identityName": "ChromaVerb",
+  "product": "TrackSmith",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": null,
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureCompatibility": "The generated manifest hash-ledgers the retained 48 kHz PCM24 fixtures. This run does not claim a separate second-generation identity check.",
+    "claimClass": "measured_behavior"
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/single_impulse_mono.wav",
+        "fileSHA256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+        "pcmSHA256": "902898df6987053888e55c00d24894e5e46043c753fc5e277991e77edf4d3538",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 288000
+      },
+      {
+        "artifactPath": "fixtures/stereo_left_only.wav",
+        "fileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+        "pcmSHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      },
+      {
+        "artifactPath": "fixtures/stereo_right_only.wav",
+        "fileSHA256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+        "pcmSHA256": "e9ec8a7a48e5f17bb6c65b7542133945c533264281cc3178c3bf36ae96ae3031",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      }
+    ],
+    "bitDepth": 24,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "All source fixtures remain generated copies in the run directory and are independently hash-ledgered."
+  },
+  "nativeState": {
+    "presetName": "Default Preset modified only through explicitly recorded controls",
+    "channelControlMode": "Stereo instance with Couple enabled for every accepted controlled render",
+    "roomTypeMenuObserved": [
+      "Room",
+      "Chamber",
+      "Concert Hall",
+      "Theatre",
+      "Synth Hall",
+      "Digital",
+      "Dark Room",
+      "Dense Room",
+      "Smooth Space",
+      "Vocal Hall",
+      "Reflective Hall",
+      "Strange Room",
+      "Airy",
+      "Bloomy"
+    ],
+    "states": {
+      "defaultRoomWetOnly": {
+        "roomType": "Room",
+        "dryPercent": 0,
+        "wetPercent": 100,
+        "predelayMS": 8,
+        "predelaySync": false,
+        "decaySeconds": 1.1,
+        "decaySync": false,
+        "attackPercent": 0,
+        "sizePercent": 60,
+        "densityPercent": 60,
+        "distancePercent": 50,
+        "earlyLateMix": "50 | 50",
+        "quality": "High",
+        "modulationDepthPercent": 25,
+        "modulationSpeedHz": 0.5,
+        "modulationSource": "Random",
+        "modulationSmoothingPercent": 12,
+        "outputEQEnabled": true,
+        "dampingAndOutputEQ": "default values retained and recorded by the closed project; no parameter sweep claim"
+      },
+      "digitalControlledWetOnly": {
+        "roomType": "Digital",
+        "dryPercent": 0,
+        "wetPercent": 100,
+        "predelayMS": 40,
+        "predelaySync": false,
+        "decaySeconds": 1.6,
+        "decaySync": false,
+        "attackPercent": 30,
+        "sizePercent": 75,
+        "densityPercent": 80,
+        "distancePercent": 30,
+        "earlyLateMix": "30 | 70",
+        "quality": "High",
+        "modulationDepthPercent": 25,
+        "modulationSpeedHz": 0.5,
+        "modulationSource": "Random",
+        "modulationSmoothingPercent": 12,
+        "outputEQEnabled": true,
+        "dampingAndOutputEQ": "default values retained and recorded by the closed project; no parameter sweep claim"
+      }
+    },
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They do not identify a private reverb topology, generalize to the other twelve room algorithms, establish artistic usefulness, or authorize TrackSmith to control Logic."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Retain first-transition output, then require repeated decoded-PCM identity before a settled-state repeatability claim.",
+    "tailBoundary": "The exact six-second impulse fixture and cycle leave five seconds after the source impulse. No output beyond the cycle range is claimed.",
+    "baselineGate": "The header-bypass render had to map the mono fixture sample-exactly to both Stereo Out channels."
+  },
+  "directHostEvidence": true,
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_stereo_header_bypass_and_two_wet_only_states",
+      "evidence": "Header bypass mapped the mono source sample-exactly to both output channels. Active Room and Digital states were rendered with both channel controls visibly coupled."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_fourteen_room_types_enumerated_two_rendered_one_stereo_route",
+      "evidence": "The Logic UI exposed fourteen room types and all names are retained. Room and Digital were rendered through one stereo insert route; the other twelve types and alternate routes remain unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_two_multivariable_states_only",
+      "evidence": "Room 8 ms/1.10 s/default structure and Digital 40 ms/1.60 s/30 percent attack/75 percent size/80 percent density/30 percent distance/30|70 early-late states were measured. No exhaustive grid is claimed."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "complete_for_recorded_impulse_states_and_six_second_capture_boundary",
+      "evidence": "Both accepted impulse states have artifact-backed first/last nonzero frames, peak frames and levels, frequency/phase summaries, channel relationships, and bounded tail duration."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_default_room_and_settled_digital_states",
+      "evidence": "Three default Room renders were decoded-PCM-identical. Digital render one differed from later renders in two integer samples per channel; Digital renders two, three, and four were decoded-PCM-identical. A second reload session also produced an exact settled pair after retaining its first transition."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_control_state_partial_for_exact_audio_recovery",
+      "evidence": "Digital, coupled L/R, Dry 0, Wet 100, Predelay 40 ms, Decay 1.60 s, Attack 30, Size 75, Density 80, Distance 30, Early/Late 30|70, High quality, and default modulation visibly reopened. Settled post-reload renders repeated exactly within the reload session, but did not PCM-match the pre-save settled render."
+    },
+    "every_room_algorithm_and_default_impulse_early_late_tail_identity": {
+      "status": "partial_room_and_digital_only",
+      "evidence": "Room and Digital impulse/tail identities were captured; the remaining twelve algorithms were enumerated but not rendered."
+    },
+    "predelay_attack_size_density_distance_dry_wet_and_early_late_interactions": {
+      "status": "partial_two_wet_only_interaction_states",
+      "evidence": "The two controlled states separate 8 versus 40 ms predelay and different attack, size, density, distance, decay, and early/late settings. Dry was held at zero and Wet at 100, so mixed dry/wet production settings remain unmeasured."
+    },
+    "decay_frequency_dependent_damping_output_eq_and_low_frequency_mono": {
+      "status": "partial_two_decay_states_default_damping_and_output_eq_only",
+      "evidence": "Decay and complete impulse spectra were measured for two states. Damping ratios, Output EQ changes, Mono Maker, and low-frequency mono behavior were not swept."
+    },
+    "modulation_quality_width_channel_matrix_tail_repeatability_and_mono_translation": {
+      "status": "partial_default_modulation_high_quality_and_independent_stereo_matrix",
+      "evidence": "High quality and default Random modulation were held. Left-only and right-only fixtures produced no nonzero samples in the opposite output channel in the tested stereo instance. Width, alternate quality, modulation, mono instance, and mono-sum listening remain unrun."
+    },
+    "vocal_drum_guitar_synth_depth_articulation_masking_and_level_matched_listening": {
+      "status": "not_run_no_participant_or_source_specific_listening_result",
+      "evidence": "No participant completed a controlled source-specific or level-matched listening protocol. Impulse and channel-matrix evidence is not represented as depth, articulation, masking, realism, preference, or musical usefulness."
+    }
+  },
+  "measurements": {
+    "defaultRoomWetOnly": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedRenderedPCMHash": "9ecc3b51c60adc1b1ee526f420adb925ef37df9ef07c6a3215140c5609df9825",
+      "firstNonzeroFrameAfterSourceImpulse": 387,
+      "firstNonzeroSecondsAfterSourceImpulse": 0.0080625,
+      "peakFrameAfterSourceImpulse": 1611,
+      "peakDBFS": -33.11999351325537,
+      "lastNonzeroFrameAfterSourceImpulse": 124654,
+      "boundedTailSecondsAfterSourceImpulse": 2.5969583333333333,
+      "leftRightPCMIdentical": true
+    },
+    "digitalControlledWetOnly": {
+      "settledDecodedPCMRepeatCount": 3,
+      "firstRetainedVersusSettledDifferingSamplesPerChannel": 2,
+      "firstRetainedVersusSettledRMSDifferenceDBFS": -190.05742292638385,
+      "acceptedPreSaveRenderedPCMHash": "d0011bc356f844e60bcc98b1c5f93c6491c113428611056253049b6adf75c82d",
+      "firstNonzeroFrameAfterSourceImpulse": 1921,
+      "firstNonzeroSecondsAfterSourceImpulse": 0.04002083333333333,
+      "peakFrameAfterSourceImpulse": 3423,
+      "peakDBFS": -35.874396091358705,
+      "lastNonzeroFrameAfterSourceImpulse": 174800,
+      "boundedTailSecondsAfterSourceImpulse": 3.6416666666666666,
+      "leftRightPCMIdentical": true
+    },
+    "bypassAndStereoMatrix": {
+      "bypassSourceMappedSampleExactOnBothRenderedChannels": true,
+      "leftOnlyInputOppositeOutputNonzeroSamples": 0,
+      "rightOnlyInputOppositeOutputNonzeroSamples": 0,
+      "leftOnlyActiveOutputNonzeroSamples": 382077,
+      "rightOnlyActiveOutputNonzeroSamples": 382077
+    },
+    "reload": {
+      "visibleControlledStateRestored": true,
+      "secondReloadSessionFirstTransitionDifferingSamplesPerChannel": 8,
+      "secondReloadSessionSettledPairPCMExact": true,
+      "preSaveSettledVersusPostReloadSettledPCMExact": false,
+      "preSaveSettledVersusPostReloadSettledDifferingSamplesPerChannel": 99512,
+      "preSaveSettledVersusPostReloadSettledRMSDifferenceDBFS": -82.55340659801797,
+      "preSaveSettledVersusPostReloadSettledCorrelation": 0.9258962181742678,
+      "interpretationBoundary": "Control-state restoration is proven for the recorded state. Exact audio recovery across reload is not proven and is contradicted by the retained renders, consistent with a reset or change in time-varying state but without identifying private behavior."
+    },
+    "measurementBoundary": "All values describe only the exact recorded states, fixtures, environment, cycle range, and analysis rules. They neither identify Apple's private implementation nor prove depth, realism, preference, mono safety, or musical usefulness."
+  },
+  "stateTransitionFindings": [
+    "The first wet-only attempt changed only the selected L controls; the R side remained at Dry 100 and Wet 50. That attempt is retained and rejected.",
+    "After both channels were matched and Couple was enabled, three default Room renders were decoded-PCM-identical even though their container-file hashes differed.",
+    "The first Digital render differed from renders two through four in two integer samples per channel; renders two, three, and four were decoded-PCM-identical.",
+    "The recorded Digital state reopened visibly with Couple enabled and every controlled parameter restored.",
+    "Within a second reload session, the first render differed from the next in eight integer samples per channel; renders two and three were decoded-PCM-identical.",
+    "Pre-save and post-reload settled Digital PCM were not identical. The difference is retained as evidence; no exact post-reload audio-recovery claim is made for this time-varying state."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/rejected-uncoupled-right-dry-contamination-r1.wav",
+        "artifacts/rejected-uncoupled-right-dry-contamination-r1-analysis.json",
+        "artifacts/rejected-uncoupled-right-dry-contamination-r2.wav",
+        "artifacts/rejected-uncoupled-right-dry-contamination-r2-analysis.json",
+        "artifacts/rejected-uncoupled-right-dry-contamination-r3.wav",
+        "artifacts/rejected-uncoupled-right-dry-contamination-r3-analysis.json"
+      ],
+      "reason": "Retained and rejected because Dry 0/Wet 100 was applied only to the selected L channel while R remained at the default Dry 100/Wet 50 state. The R render therefore contained the source impulse at frame zero. No accepted ChromaVerb wet-only claim uses these attempts."
+    }
+  ],
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r1-vs-r2-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r2-vs-r3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "first_nonzero_frame_relative_to_source_impulse"
+      ],
+      "equals": 387
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "tail_seconds_after_source_impulse"
+      ],
+      "minimum": 2.596,
+      "maximum": 2.598
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-r2-vs-r3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-r3-vs-r4-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1-vs-r2-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "differing_sample_count"
+      ],
+      "equals": 2
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "first_nonzero_frame_relative_to_source_impulse"
+      ],
+      "equals": 1921
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        0,
+        "tail_seconds_after_source_impulse"
+      ],
+      "minimum": 3.641,
+      "maximum": 3.642
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-bypass-single-impulse-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-bypass-single-impulse-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        1,
+        "sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-stereo-left-only-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "channel_metrics",
+        1,
+        "nonzero_sample_count"
+      ],
+      "equals": 0
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-stereo-right-only-analysis.json",
+      "jsonPath": [
+        "rendered",
+        "channel_metrics",
+        0,
+        "nonzero_sample_count"
+      ],
+      "equals": 0
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-session2-r2-vs-r3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-pre-settled-vs-postreload-settled-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": false
+    },
+    {
+      "artifactPath": "artifacts/chromaverb-digital-controlled-wet100-impulse-pre-settled-vs-postreload-settled-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "differing_sample_count"
+      ],
+      "equals": 99512
+    },
+    {
+      "artifactPath": "artifacts/rejected-uncoupled-right-dry-contamination-r1-analysis.json",
+      "jsonPath": [
+        "impulse_response_transfer",
+        "channels",
+        1,
+        "first_nonzero_frame_relative_to_source_impulse"
+      ],
+      "equals": 0
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "In the accepted coupled state, the Room 8 ms predelay produced first nonzero wet output 387 frames after the source impulse and the Digital 40 ms predelay produced first nonzero wet output 1921 frames after the source impulse.",
+      "The exact recorded Room and Digital states had distinct bounded peak and tail identities.",
+      "The tested stereo instance processed left-only and right-only inputs independently with no nonzero opposite-channel output.",
+      "Default Room and settled Digital renders repeated decoded-PCM-exactly within one open session after bounded first-transition exclusion.",
+      "The controlled Digital state restored visibly across save/reload and settled to an exact within-session pair, but its settled post-reload PCM did not exactly match pre-save PCM."
+    ],
+    "inferredConsequences": [
+      "Typed production knowledge must treat room algorithm, predelay, decay, structural controls, channel coupling, and time-varying state as consequential.",
+      "A visual save/reload state match is not sufficient evidence for exact audio recovery when a processor contains time-varying state.",
+      "Channel-specific controls must be verified on both sides before accepting stereo wet-only measurements."
+    ],
+    "professionalPracticeHeuristics": [
+      "Predelay, early/late balance, decay, density, distance, and wet level remain source-, role-, tempo-, and arrangement-dependent.",
+      "Impulse and matrix measurements can bound candidate design but cannot choose the artistically useful depth or room."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "No recorded state is declared realistic, expensive, transparent, mono-safe, or musically superior.",
+      "No general behavior is claimed for the twelve unrendered room types, alternate quality modes, width, Mono Maker, changed damping, or changed Output EQ.",
+      "No private algorithm, modulation seed, topology, channel matrix beyond the exact tested state, or automation behavior is identified.",
+      "No impulse measurement is represented as proof of vocal, drum, guitar, synth, or full-mix usefulness.",
+      "No TrackSmith authority to inspect, insert, reorder, automate, or control Logic ChromaVerb is granted."
+    ]
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient for the milestone's bounded ChromaVerb production profile because it directly captures and validates one default Room state, one contrasting controlled Digital state, exact bypass, repeatability and first-transition behavior, predelay/tail identity, left/right matrix behavior, visible save/reload state, and the explicit failure of exact cross-reload PCM recovery for the time-varying Digital state. It remains partial in the exhaustive campaign and listening-decisive for all musical outcomes.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "results": [],
+    "statement": "No participant completed a controlled reverb listening protocol for this run. Objective impulse, tail, bypass, repeatability, reload, and matrix behavior is not represented as depth, realism, articulation, masking, preference, or musical usefulness."
+  },
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "exactTransferCharacterized": false,
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 ChromaVerb Production Profile 48k 2026-07-28",
+        "archivePath": "project/TrackSmith Logic 12.3 ChromaVerb Production Profile 48k 2026-07-28.logicx.zip",
+        "archiveSHA256": "77d69334fcb437ed65c3acdc6bba427eaedd1dc8a926039aa2333d0a4e8cf91d",
+        "sampleRateHz": 48000
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "The ZIP archive passed unzip -t with no errors.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "singleImpulse": "exactly 6.000 seconds",
+      "stereoLeftOnly": "exactly 8.000 seconds",
+      "stereoRightOnly": "exactly 8.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono fixture through a stereo ChromaVerb instance and interleaved Stereo Out",
+      "stereo fixture through a stereo ChromaVerb instance and interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 ChromaVerb evidence at 48 kHz/PCM24 covers a default Room wet-only state, a controlled Digital wet-only state, exact header bypass, impulse onset/peak/tail identity, in-session repeatability, independent left/right matrix behavior, and save/reload. Room first wet output followed the source impulse by 387 frames at the recorded 8 ms predelay and had a 2.597-second bounded tail. Digital first wet output followed by 1921 frames at the recorded 40 ms predelay and had a 3.642-second bounded tail. Default Room repeated exactly three times; Digital repeated exactly after bounded first-transition exclusion. Digital controls restored visibly across reload and settled within-session, but pre-save and post-reload settled PCM were not exact. No participant listening, other twelve room algorithms, mixed dry/wet state, alternate quality, width, Mono Maker, damping/Output EQ sweep, automation, sample-rate grid, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established.",
+  "artifactFiles": [
+    {
+      "path": "artifacts/chromaverb-bypass-single-impulse-analysis.json",
+      "sha256": "e10107a6b327efc326fbcc4c248c930387edb190e2a0a021089bc06b9f895c59",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-bypass-single-impulse.wav",
+      "sha256": "b9098d4503c2efaeea2bd0f7ccbfd7de10205783ca6e1c3b3e96b8926bf861ca",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r1-analysis.json",
+      "sha256": "e6401be339d4b6ec275a1725ef6bdc2ec1fb8c2f61696a5021b49e4e4c037612",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r1-vs-r2-analysis.json",
+      "sha256": "a42707b3d18e2e2cc68a5b2e64d6588034d202e655144f27c5de450f2e2b60b9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r1.wav",
+      "sha256": "855d866dcb7817621fde31bf948179098f29a632fedf53349b225f5d3839c986",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r2-analysis.json",
+      "sha256": "d3c7dc6bbd6d79f5a63faa03af6253a07e9a9d38a56fcf3a87535887bd05cd22",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r2-vs-r3-analysis.json",
+      "sha256": "0ad6038e0a173efa5da5a81d9c91c24928f16bae8deaa58b0d0fe0eaf749880d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r2.wav",
+      "sha256": "9bb23f37ac54a417d65fadb1be40f201ae9ca89ee5ffd17dd914786dd9c965a5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r3-analysis.json",
+      "sha256": "1f62cea74fbfe4f18f04104349f5572d99c21cc5dc1c47acebc754616ee442c2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-default-room-wet100-impulse-accepted-r3.wav",
+      "sha256": "f3d584beccc413e7462761a5e6f40b2e786ca1b65f898f7e3d4d1c45d9094923",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-analysis.json",
+      "sha256": "d43e02b3a8e61b4646828a42cc151859959903822f5e2793ec4abce689fc4b1d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-session2-r1-vs-r2-analysis.json",
+      "sha256": "7edf290beec40ad3ce8dccd77988f12eb24ed8ae121dfbf8cc851d86e0031c8e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-session2-r1.wav",
+      "sha256": "e219a043fff0a186db1cbd7dbb1c1a4cc82ca3a791c12bfc405e34227a9aac8e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-session2-r2-vs-r3-analysis.json",
+      "sha256": "baa4a3ea5f09f887905918d84fe139a8c11593756a8008bf0a9e19711cf5c24c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-session2-r2.wav",
+      "sha256": "d6db40ff2eb5fd3431687c326e3f195b11feec233f9df906c943cb6264d725f0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload-session2-r3.wav",
+      "sha256": "55ebe5306d7ab4204e1ecff745be7e5f16a3c7e4408271e387fd1fd3596f3c6d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-postreload.wav",
+      "sha256": "f51a4b0b82144ab79ff1f1aff7490049215e2bafd0b604401d579faf4745cf87",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-pre-settled-vs-postreload-settled-analysis.json",
+      "sha256": "d2cd662a79c397ead246ec6180bd972858f14e6ca4c3577e1e59a1c86851b80e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-pre-vs-postreload-analysis.json",
+      "sha256": "b6e4a6275442d6069d25cd9b7299ca2e55ef6ae4834ca3c327cf61a4b53eda0d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1-analysis.json",
+      "sha256": "f802d6e8bd7ebf81e88c2a26c56260b286be7e6239a9ccf1bdcffeb801d2cf6e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1-vs-r2-analysis.json",
+      "sha256": "930461022d9808c620995c55f05cd69e0de6d698b2b8a1aa41c7bb9531932d93",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1-vs-r4-analysis.json",
+      "sha256": "e464a4ef70be19486eea62ff9cc13e79d7b649f4e78c83b5ff7385404630ab78",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r1.wav",
+      "sha256": "a4655265a545af8fb3630330824d720b874ec9793d1ff3379c1d032bf46eedb4",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r2-vs-r3-analysis.json",
+      "sha256": "c2ff40bae778e9b6b47dba4860feba91ba543a680256a9dfc83766d98b62fb7c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r2.wav",
+      "sha256": "c88763323c5e95483cbd234fc3134bfe51bb5ce32482f2898a84196d6859eb23",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r3-vs-r4-analysis.json",
+      "sha256": "18ecc389844936fb216bcb2e66c4fa2c1f6f8e336c26b36c747b369d92185a3e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r3.wav",
+      "sha256": "305868ebdc2c5d5f4aa64bc5002a0604a007cc8067f77c2d8f9ef656bbb3faa1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r4-analysis.json",
+      "sha256": "9402d0bd2dd8b6f0e926059b0d88ef1b2de5bb8248a32e8654e4df56ecf7217d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-impulse-r4.wav",
+      "sha256": "45fd69bfe1f1514af088557064b022fd69268d984e7b3c0ca2f5ddcb20b3ef47",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-stereo-left-only-analysis.json",
+      "sha256": "7661cae360422c567616655d0291534471478dfbd9444b62a7bb105e1f3399b9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-stereo-left-only.wav",
+      "sha256": "f8687b7917a1f70838a7928b053c5dd479ca098f1af726e404d533b8868f1363",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-stereo-right-only-analysis.json",
+      "sha256": "ee23a3f39e57dde365f0fff51eaf99f8c958709fc23848e53466bd85205c4c58",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/chromaverb-digital-controlled-wet100-stereo-right-only.wav",
+      "sha256": "a39cf60554527277684c08e25ceff4de82947459e5c1ed58ea116f3b2fea4d8b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-uncoupled-right-dry-contamination-r1-analysis.json",
+      "sha256": "5e828979d1f5203d7fc7e9835e1068782954cd1b3a27ea7746869123c6410afe",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/rejected-uncoupled-right-dry-contamination-r1.wav",
+      "sha256": "a245419a08e7c7f8379ea2fdf8a22f4ff43b793b282daa7e0891272bba38d556",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-uncoupled-right-dry-contamination-r2-analysis.json",
+      "sha256": "55e2c12e27ad73c93db05b237a06b7f8df0e38af02ceb768278b0e105206b059",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/rejected-uncoupled-right-dry-contamination-r2.wav",
+      "sha256": "b615417f3b638eb5e92f70cf71472ab39cd69580839a7b231eb36039d7a282b9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-uncoupled-right-dry-contamination-r3-analysis.json",
+      "sha256": "60ee1de1bc57dbb415d3ba8c4a9bebd1cb69a223808f746d3372d2d41329cce4",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/rejected-uncoupled-right-dry-contamination-r3.wav",
+      "sha256": "7089449740c987b29ba57d9e9e38950dbbf3480e7c693f2954e07cbf68b3cb63",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 ChromaVerb Production Profile 48k 2026-07-28.logicx.zip",
+      "sha256": "77d69334fcb437ed65c3acdc6bba427eaedd1dc8a926039aa2333d0a4e8cf91d",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "screenshots/chromaverb-digital-controlled-postreload-controls.png",
+      "sha256": "51eb7a3ae2e91d58c218c22f108760a0d7095458efc1940c55fa9b461b0c57e6",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/chromaverb-room-type-menu.png",
+      "sha256": "17cd670d8331be3bcd0d3f42d474f5d4ca612d22b53b7a811dde8746c458f7be",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

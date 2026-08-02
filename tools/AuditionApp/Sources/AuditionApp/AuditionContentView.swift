@@ -253,16 +253,29 @@ private struct ProcessingNodeCard: View {
         case .driveDB: "Drive"
         case .enabled: "Enabled"
         case .lookaheadMS: "Lookahead"
+        case .algorithmVersion: "Algorithm version"
+        case .delayTimeMS: "Delay time"
+        case .feedback: "Feedback"
+        case .damping: "Damping"
+        case .stereoCrossfeed: "Stereo crossfeed"
+        case .preDelayMS: "Predelay"
+        case .decayTimeSeconds: "Decay time"
+        case .roomSize: "Room size"
+        case .diffusion: "Diffusion"
+        case .holdMS: "Hold"
+        case .hysteresisDB: "Hysteresis"
+        case .rangeDB: "Range"
         }
     }
 
     private func format(_ value: Double, key: ParameterID) -> String {
         switch key {
         case .frequencyHz: value >= 1_000 ? String(format: "%.2f kHz", value / 1_000) : String(format: "%.0f Hz", value)
-        case .attackMS, .releaseMS, .lookaheadMS: String(format: "%.1f ms", value)
-        case .thresholdDB, .makeupGainDB, .gainDB, .ceilingDB, .driveDB, .kneeDB: String(format: "%+.2f dB", value)
+        case .attackMS, .releaseMS, .lookaheadMS, .delayTimeMS, .preDelayMS, .holdMS: String(format: "%.1f ms", value)
+        case .thresholdDB, .makeupGainDB, .gainDB, .ceilingDB, .driveDB, .kneeDB, .hysteresisDB, .rangeDB: String(format: "%+.2f dB", value)
+        case .decayTimeSeconds: String(format: "%.2f s", value)
         case .ratio: String(format: "%.2f:1", value)
-        case .mix: String(format: "%.0f%%", value * 100)
+        case .mix, .feedback, .damping, .stereoCrossfeed, .roomSize, .diffusion: String(format: "%.0f%%", value * 100)
         default: String(format: "%.3f", value)
         }
     }

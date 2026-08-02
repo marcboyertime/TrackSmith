@@ -62,7 +62,7 @@ enum TestRunner {
         await tests.run("plan bounds fail closed") {
             let plan = makePlan(nodes: [.init(type: .compressor, parameters: [.ratio: 100], rationale: "bad", confidence: 1, category: .corrective)])
             try tests.expectThrows("out-of-range ratio was accepted") { try PlanValidator().validate(plan) }
-            let unsupported = makePlan(nodes: [.init(type: .reverb, parameters: [.mix: 0.2], rationale: "future", confidence: 1, category: .creative)])
+            let unsupported = makePlan(nodes: [.init(type: .transientShaper, parameters: [.mix: 0.2], rationale: "future", confidence: 1, category: .creative)])
             try tests.expectThrows("unimplemented module was accepted") { try PlanValidator().validate(unsupported) }
             var invalidConstraints = makePlan()
             invalidConstraints.outputConstraints.maxAddedGainDB = .nan
@@ -154,7 +154,17 @@ enum TestRunner {
             try testSchemaRuntimeParity(tests)
         }
         await tests.run("DSP bypass is bit exact") {
-            var buffer = AudioBuffer(channels: [[0, 0.1, -0.2, 0.3]], sampleRate: 48_000), graph = try CompiledGraph(plan: makePlan(), sampleRate: 48_000, channelCount: 1)
+            let disabledNodes = [
+                ProcessingNode(type: .expander, enabled: false, rationale: "disabled", confidence: 1, category: .corrective),
+                ProcessingNode(type: .delay, enabled: false, rationale: "disabled", confidence: 1, category: .creative),
+                ProcessingNode(type: .reverb, enabled: false, rationale: "disabled", confidence: 1, category: .creative),
+            ]
+            var buffer = AudioBuffer(channels: [[0, 0.1, -0.2, 0.3]], sampleRate: 48_000)
+            var graph = try CompiledGraph(
+                plan: makePlan(nodes: disabledNodes),
+                sampleRate: 48_000,
+                channelCount: 1
+            )
             let original = buffer; try graph.process(&buffer); try tests.expect(buffer == original, "bypass changed samples")
         }
         await tests.run("limiter and nonfinite safety") {
@@ -262,7 +272,10 @@ enum TestRunner {
                 ProcessingNode(type: .highPass, parameters: [.frequencyHz: 70, .q: 0.707], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .parametricEQ, parameters: [.frequencyHz: 2_500, .q: 1, .gainDB: 2], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .compressor, parameters: [.thresholdDB: -20, .ratio: 3, .attackMS: 5, .releaseMS: 80, .makeupGainDB: 0, .kneeDB: 3, .mix: 1], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .expander, parameters: [.algorithmVersion: 1, .thresholdDB: -45, .ratio: 3, .attackMS: 2, .releaseMS: 70, .holdMS: 10, .hysteresisDB: 4, .rangeDB: 20, .mix: 0.5], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .deEsser, parameters: [.frequencyHz: 5_500, .thresholdDB: -30, .ratio: 4, .attackMS: 1, .releaseMS: 50, .mix: 1], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .delay, parameters: [.algorithmVersion: 1, .delayTimeMS: 7, .feedback: 0.3, .damping: 0.4, .stereoCrossfeed: 0, .mix: 0.2], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .reverb, parameters: [.algorithmVersion: 1, .preDelayMS: 0, .decayTimeSeconds: 0.3, .roomSize: 0.2, .damping: 0.5, .diffusion: 0.5, .mix: 0.1], rationale: "test", confidence: 1, category: .creative),
             ]
             var graph = try CompiledGraph(plan: makePlan(nodes: nodes), sampleRate: 48_000, channelCount: 1)
             var poison = [Float.nan, .infinity, -.infinity, .greatestFiniteMagnitude]
@@ -327,15 +340,291 @@ enum TestRunner {
             try freshGraph.process(&fresh)
             try tests.expect(afterReset == fresh, "de-esser reset did not restore initial state")
         }
+        await tests.run("production-mastery nodes require explicit bounded algorithm versions") {
+            let missingVersion = ProcessingNode(
+                type: .delay,
+                parameters: [.delayTimeMS: 120, .feedback: 0.2, .mix: 0.2],
+                rationale: "missing version",
+                confidence: 1,
+                category: .creative
+            )
+            try tests.expectThrows("enabled delay accepted an implicit algorithm version") {
+                try PlanValidator().validate(makePlan(nodes: [missingVersion]))
+            }
+
+            let validNodes = [
+                ProcessingNode(
+                    type: .expander,
+                    parameters: [
+                        .algorithmVersion: 1, .thresholdDB: -42, .ratio: 4,
+                        .attackMS: 5, .releaseMS: 180, .holdMS: 80,
+                        .hysteresisDB: 6, .rangeDB: 30, .mix: 1,
+                    ],
+                    rationale: "bounded expander",
+                    confidence: 1,
+                    category: .corrective
+                ),
+                ProcessingNode(
+                    type: .delay,
+                    parameters: [
+                        .algorithmVersion: 1, .delayTimeMS: 180, .feedback: 0.35,
+                        .damping: 0.4, .stereoCrossfeed: 0.15, .mix: 0.2,
+                    ],
+                    rationale: "bounded delay",
+                    confidence: 1,
+                    category: .creative
+                ),
+                ProcessingNode(
+                    type: .reverb,
+                    parameters: [
+                        .algorithmVersion: 1, .preDelayMS: 18, .decayTimeSeconds: 1.2,
+                        .roomSize: 0.5, .damping: 0.45, .diffusion: 0.65, .mix: 0.15,
+                    ],
+                    rationale: "bounded reverb",
+                    confidence: 1,
+                    category: .creative
+                ),
+            ]
+            let plan = makePlan(nodes: validNodes)
+            try PlanValidator().validate(plan)
+            let roundTrip = try JSONDecoder().decode(
+                ProcessingPlan.self,
+                from: JSONEncoder().encode(plan)
+            )
+            try tests.expect(roundTrip == plan, "new node state changed during serialization")
+
+            let disabledLegacyPlaceholder = ProcessingNode(
+                type: .reverb,
+                enabled: false,
+                parameters: [.mix: 0.2],
+                rationale: "old disabled placeholder",
+                confidence: 1,
+                category: .creative
+            )
+            try PlanValidator().validate(makePlan(nodes: [disabledLegacyPlaceholder]))
+            try tests.expectThrows("delay accepted feedback above the stability bound") {
+                try PlanValidator().validate(
+                    makePlan(nodes: [
+                        ProcessingNode(
+                            type: .delay,
+                            parameters: [.algorithmVersion: 1, .feedback: 0.951],
+                            rationale: "unsafe feedback",
+                            confidence: 1,
+                            category: .creative
+                        ),
+                    ])
+                )
+            }
+            let tooManyReverbs = (0...PlanValidator.maximumReverbNodeCount).map { _ in
+                ProcessingNode(
+                    type: .reverb,
+                    parameters: [.algorithmVersion: 1],
+                    rationale: "bounded-count check",
+                    confidence: 1,
+                    category: .creative
+                )
+            }
+            try tests.expectThrows("reverb callback budget accepted too many instances") {
+                try PlanValidator().validate(makePlan(nodes: tooManyReverbs))
+            }
+            try tests.expectThrows("temporal DSP allocated above the supported sample-rate bound") {
+                _ = try CompiledGraph(plan: makePlan(nodes: validNodes), sampleRate: 384_000, channelCount: 1)
+            }
+        }
+        await tests.run("expander gate is linked, tail-aware, deterministic, and resettable") {
+            let rate = 48_000.0
+            let node = ProcessingNode(
+                type: .expander,
+                parameters: [
+                    .algorithmVersion: 1, .thresholdDB: -30, .ratio: 4,
+                    .attackMS: 2, .releaseMS: 50, .holdMS: 20,
+                    .hysteresisDB: 6, .rangeDB: 40, .mix: 1,
+                ],
+                rationale: "bounded noise reduction",
+                confidence: 1,
+                category: .corrective
+            )
+            let source =
+                Array(repeating: Float(0.005), count: 4_800)
+                + Array(repeating: Float(0.2), count: 9_600)
+                + Array(repeating: Float(0.005), count: 14_400)
+            var first = AudioBuffer(channels: [source], sampleRate: rate)
+            var graph = try CompiledGraph(
+                plan: makePlan(nodes: [node]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            try graph.process(&first)
+            try tests.expect(abs(first.channels[0][4_000]) < 0.001, "expander did not reduce settled low-level noise")
+            try tests.expect(abs(first.channels[0][13_000]) > 0.18, "expander failed to open for wanted signal")
+            try tests.expect(abs(first.channels[0][14_800]) > abs(first.channels[0].last ?? 1) * 3, "hold/release did not distinguish a recent tail from settled noise")
+            try tests.expect(abs(first.channels[0].last ?? 1) < 0.001, "expander did not close to its bounded range")
+
+            graph.reset()
+            var afterReset = AudioBuffer(channels: [source], sampleRate: rate)
+            var fresh = AudioBuffer(channels: [source], sampleRate: rate)
+            try graph.process(&afterReset)
+            var freshGraph = try CompiledGraph(
+                plan: makePlan(nodes: [node]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            try freshGraph.process(&fresh)
+            try tests.expect(afterReset == fresh, "expander reset retained detector or gate state")
+
+            var stereo = AudioBuffer(
+                channels: [
+                    Array(repeating: Float(0.2), count: 9_600),
+                    Array(repeating: Float(0.01), count: 9_600),
+                ],
+                sampleRate: rate
+            )
+            var stereoGraph = try CompiledGraph(
+                plan: makePlan(nodes: [node], channelFormat: .stereo),
+                sampleRate: rate,
+                channelCount: 2
+            )
+            try stereoGraph.process(&stereo)
+            let linkedRatio = stereo.channels[0][8_000] / stereo.channels[1][8_000]
+            try tests.expect(abs(linkedRatio - 20) < 0.01, "linked expander changed stereo balance")
+        }
+        await tests.run("delay has exact repeats, bounded stereo crossfeed, and constant-time reset semantics") {
+            let rate = 48_000.0
+            let node = ProcessingNode(
+                type: .delay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 10, .feedback: 0.5,
+                    .damping: 0, .stereoCrossfeed: 0, .mix: 1,
+                ],
+                rationale: "impulse response",
+                confidence: 1,
+                category: .creative
+            )
+            var impulse = [Float](repeating: 0, count: 2_000)
+            impulse[0] = 1
+            var first = AudioBuffer(channels: [impulse], sampleRate: rate)
+            var graph = try CompiledGraph(
+                plan: makePlan(nodes: [node]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            try graph.process(&first)
+            try tests.expect(first.channels[0][0] == 0, "full-wet delay leaked the dry impulse")
+            try tests.expect(abs(first.channels[0][480] - 1) < 1e-7, "first delay repeat missed its exact time")
+            try tests.expect(abs(first.channels[0][960] - 0.5) < 1e-7, "feedback repeat missed its exact gain")
+            try tests.expect(abs(first.channels[0][1_440] - 0.25) < 1e-7, "third repeat was not deterministic")
+
+            graph.reset()
+            var afterReset = AudioBuffer(channels: [impulse], sampleRate: rate)
+            var fresh = AudioBuffer(channels: [impulse], sampleRate: rate)
+            try graph.process(&afterReset)
+            var freshGraph = try CompiledGraph(
+                plan: makePlan(nodes: [node]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            try freshGraph.process(&fresh)
+            try tests.expect(afterReset == fresh, "delay reset exposed stale samples")
+
+            let crossfeedNode = ProcessingNode(
+                type: .delay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 10, .feedback: 0.5,
+                    .damping: 0, .stereoCrossfeed: 1, .mix: 1,
+                ],
+                rationale: "stereo crossfeed",
+                confidence: 1,
+                category: .creative
+            )
+            var left = [Float](repeating: 0, count: 1_500)
+            left[0] = 1
+            var stereo = AudioBuffer(
+                channels: [left, Array(repeating: 0, count: left.count)],
+                sampleRate: rate
+            )
+            var crossfeedGraph = try CompiledGraph(
+                plan: makePlan(nodes: [crossfeedNode], channelFormat: .stereo),
+                sampleRate: rate,
+                channelCount: 2
+            )
+            try crossfeedGraph.process(&stereo)
+            try tests.expect(abs(stereo.channels[0][480] - 1) < 1e-7, "stereo delay lost the first left repeat")
+            try tests.expect(abs(stereo.channels[1][960] - 0.5) < 1e-7, "cross-feedback did not move the second repeat")
+            try tests.expect(abs(stereo.channels[0][960]) < 1e-7, "full cross-feedback leaked the second repeat left")
+        }
+        await tests.run("algorithmic reverb is bounded, rate-aware, deterministic, and resettable") {
+            func reverbNode(decay: Double) -> ProcessingNode {
+                ProcessingNode(
+                    type: .reverb,
+                    parameters: [
+                        .algorithmVersion: 1, .preDelayMS: 12,
+                        .decayTimeSeconds: decay, .roomSize: 0.45,
+                        .damping: 0.35, .diffusion: 0.7, .mix: 1,
+                    ],
+                    rationale: "bounded algorithmic room",
+                    confidence: 1,
+                    category: .creative
+                )
+            }
+            let rate = 48_000.0
+            var impulse = [Float](repeating: 0, count: 96_000)
+            impulse[0] = 1
+            var fast = AudioBuffer(channels: [impulse], sampleRate: rate)
+            var slow = AudioBuffer(channels: [impulse], sampleRate: rate)
+            var fastGraph = try CompiledGraph(
+                plan: makePlan(nodes: [reverbNode(decay: 0.3)]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            var slowGraph = try CompiledGraph(
+                plan: makePlan(nodes: [reverbNode(decay: 2.0)]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            try fastGraph.process(&fast)
+            try slowGraph.process(&slow)
+            try tests.expect(fast.channels[0][0] == 0 && slow.channels[0][0] == 0, "predelayed full-wet reverb leaked dry input")
+            try tests.expect(rms(Array(slow.channels[0][24_000..<72_000])) > rms(Array(fast.channels[0][24_000..<72_000])) * 2, "decay parameter did not produce a longer bounded tail")
+            try tests.expect(slow.channels[0].allSatisfy(\.isFinite), "reverb emitted nonfinite samples")
+            try tests.expect((slow.channels[0].map(abs).max() ?? 0) < 1, "reverb topology exceeded its bounded injection")
+
+            slowGraph.reset()
+            var afterReset = AudioBuffer(channels: [impulse], sampleRate: rate)
+            var fresh = AudioBuffer(channels: [impulse], sampleRate: rate)
+            try slowGraph.process(&afterReset)
+            var freshGraph = try CompiledGraph(
+                plan: makePlan(nodes: [reverbNode(decay: 2.0)]),
+                sampleRate: rate,
+                channelCount: 1
+            )
+            try freshGraph.process(&fresh)
+            try tests.expect(afterReset == fresh, "reverb reset exposed stale delay state")
+
+            for checkRate in [44_100.0, 96_000, 192_000] {
+                var signal = [Float](repeating: 0, count: Int(checkRate * 0.12))
+                signal[0] = 0.5
+                var buffer = AudioBuffer(channels: [signal, signal], sampleRate: checkRate)
+                var rateGraph = try CompiledGraph(
+                    plan: makePlan(nodes: [reverbNode(decay: 0.5)], channelFormat: .stereo),
+                    sampleRate: checkRate,
+                    channelCount: 2
+                )
+                try rateGraph.process(&buffer)
+                try tests.expect(buffer.channels.flatMap { $0 }.allSatisfy(\.isFinite), "reverb failed at \(checkRate) Hz")
+            }
+        }
         await tests.run("realtime pointer DSP matches offline graph across host blocks") {
             let nodes = [
                 ProcessingNode(type: .inputTrim, parameters: [.gainDB: -1.5], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .highPass, parameters: [.frequencyHz: 70, .q: 0.707], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .parametricEQ, parameters: [.frequencyHz: 2_500, .q: 1.1, .gainDB: 2], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .compressor, parameters: [.thresholdDB: -20, .ratio: 2.5, .attackMS: 15, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 6, .mix: 0.8], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .expander, parameters: [.algorithmVersion: 1, .thresholdDB: -48, .ratio: 2, .attackMS: 4, .releaseMS: 90, .holdMS: 20, .hysteresisDB: 4, .rangeDB: 12, .mix: 0.4], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .deEsser, parameters: [.frequencyHz: 5_800, .thresholdDB: -28, .ratio: 3, .attackMS: 1, .releaseMS: 60, .mix: 0.7], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .saturation, parameters: [.driveDB: 2, .mix: 0.15], rationale: "test", confidence: 1, category: .creative),
                 ProcessingNode(type: .stereoWidth, parameters: [.width: 1.15, .mix: 0.7], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .delay, parameters: [.algorithmVersion: 1, .delayTimeMS: 23, .feedback: 0.2, .damping: 0.3, .stereoCrossfeed: 0.25, .mix: 0.12], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .reverb, parameters: [.algorithmVersion: 1, .preDelayMS: 7, .decayTimeSeconds: 0.45, .roomSize: 0.35, .damping: 0.4, .diffusion: 0.6, .mix: 0.1], rationale: "test", confidence: 1, category: .creative),
                 ProcessingNode(type: .limiter, parameters: [.ceilingDB: -1], rationale: "test", confidence: 1, category: .loudness),
             ]
             let rate = 48_000.0
@@ -394,10 +683,15 @@ enum TestRunner {
             }
         }
         await tests.run("required rates and buffer sizes") {
-            let node = ProcessingNode(type: .compressor, parameters: [.thresholdDB: -18, .ratio: 3, .attackMS: 10, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 6, .mix: 1], rationale: "test", confidence: 1, category: .corrective)
+            let nodes = [
+                ProcessingNode(type: .compressor, parameters: [.thresholdDB: -18, .ratio: 3, .attackMS: 10, .releaseMS: 100, .makeupGainDB: 1, .kneeDB: 6, .mix: 1], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .expander, parameters: [.algorithmVersion: 1, .thresholdDB: -48, .ratio: 2, .attackMS: 3, .releaseMS: 80, .holdMS: 20, .hysteresisDB: 4, .rangeDB: 12, .mix: 0.25], rationale: "test", confidence: 1, category: .corrective),
+                ProcessingNode(type: .delay, parameters: [.algorithmVersion: 1, .delayTimeMS: 11, .feedback: 0.2, .damping: 0.4, .stereoCrossfeed: 0.2, .mix: 0.1], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .reverb, parameters: [.algorithmVersion: 1, .preDelayMS: 3, .decayTimeSeconds: 0.3, .roomSize: 0.2, .damping: 0.5, .diffusion: 0.5, .mix: 0.08], rationale: "test", confidence: 1, category: .creative),
+            ]
             for rate in [44_100.0, 48_000, 88_200, 96_000, 192_000] { for frames in [32, 64, 128, 256, 512, 1_024] {
                 var buffer = AudioBuffer(channels: [Array(repeating: 0.5, count: frames), Array(repeating: -0.5, count: frames)], sampleRate: rate)
-                var graph = try CompiledGraph(plan: makePlan(nodes: [node], channelFormat: .stereo), sampleRate: rate, channelCount: 2); try graph.process(&buffer)
+                var graph = try CompiledGraph(plan: makePlan(nodes: nodes, channelFormat: .stereo), sampleRate: rate, channelCount: 2); try graph.process(&buffer)
                 try tests.expect(buffer.channels.flatMap { $0 }.allSatisfy(\.isFinite), "nonfinite output at \(rate)/\(frames)")
             }}
         }
@@ -564,7 +858,7 @@ enum TestRunner {
             let decoded = try JSONDecoder().decode(ProductionIntentVocabulary.self, from: encoded)
             try tests.expect(decoded == vocabulary, "production-intent vocabulary changed during serialization")
         }
-        await tests.run("eight source-aware requests produce evidence-grounded editable plans") {
+        await tests.run("nine source-aware requests produce evidence-grounded editable plans") {
             let rate = 48_000.0
             let duration = 6.0
             let frameCount = Int(rate * duration)
@@ -609,6 +903,7 @@ enum TestRunner {
                 .init(request: "make this tighter without losing low-end weight", sourceType: .bass, channelFormat: .mono, analysis: bass, desired: .tight, preserved: .lowEndWeight, expectedNode: .compressor),
                 .init(request: "make this less harsh without burying the pick attack", sourceType: .guitar, channelFormat: .mono, analysis: guitar, desired: .harsh, preserved: .pickAttack, expectedNode: .parametricEQ),
                 .init(request: "make this wider without damaging mono compatibility", sourceType: .synth, channelFormat: .stereo, analysis: synth, desired: .wide, preserved: .monoCompatibility, expectedNode: .stereoWidth),
+                .init(request: "make this more distant but keep it clear", sourceType: .vocal, channelFormat: .mono, analysis: vocal, desired: .distant, preserved: .clear, expectedNode: .reverb),
                 .init(request: "make this clearer without making it brighter", sourceType: .fullMix, channelFormat: .stereo, analysis: mix, desired: .clear, prohibited: .bright, expectedNode: .parametricEQ),
                 .init(request: "make this more controlled but preserve dynamics", sourceType: .fullMix, channelFormat: .stereo, analysis: mix, desired: .controlled, preserved: .dynamic, expectedNode: .compressor),
             ]
@@ -949,14 +1244,16 @@ enum TestRunner {
             try tests.expect(
                 bitcrusherKnowledge.empiricalStatus == .partial
                     && bitcrusherKnowledge.measuredRunIDs == [
-                        "logic-12.3-bitcrusher-default-48k-2026-07-18"
+                        "logic-12.3-bitcrusher-default-48k-2026-07-18",
+                        "logic-12.3-bitcrusher-production-profile-48k-2026-07-29",
                     ],
                 "Bitcrusher lost its bounded direct-host evidence identity"
             )
             try tests.expect(
                 bitcrusherContext.empiricalTransferCharacterizationStatus
                     == "PARTIAL_DIRECT_HOST_EVIDENCE_EXACT_TRANSFER_NOT_CHARACTERIZED"
-                    && bitcrusherContext.empiricalEvidenceSummary?.contains("Fold, Wrap") == true
+                    && bitcrusherContext.empiricalEvidenceSummary?
+                        .contains("Fold, Clip, and Wrap") == true
                     && !bitcrusherContext.exactImplementationInternalsKnown,
                 "partial Bitcrusher evidence was omitted or promoted into exact implementation knowledge"
             )
@@ -974,10 +1271,13 @@ enum TestRunner {
             try tests.expect(
                 channelEQ.empiricalStatus == .partial
                     && channelEQ.measuredRunIDs == [
-                        "logic-12.3-channel-eq-default-bell-48k-2026-07-18"
+                        "logic-12.3-channel-eq-default-bell-48k-2026-07-18",
+                        "logic-12.3-channel-eq-production-profile-48k-96k-2026-07-27",
                     ]
                     && channelEQContext.empiricalEvidenceSummary?
                         .contains("1000 Hz, +6.0 dB, Q 1.00") == true
+                    && channelEQContext.empiricalEvidenceSummary?
+                        .contains("settled neutral and header-bypass sweep renders") == true
                     && channelEQContext.empiricalEvidenceSummary?
                         .contains("remain unmeasured") == true
                     && channelEQContext.empiricalTransferCharacterizationStatus
@@ -998,7 +1298,8 @@ enum TestRunner {
             try tests.expect(
                 compressor.empiricalStatus == .partial
                     && compressor.measuredRunIDs == [
-                        "logic-12.3-compressor-default-controlled-48k-2026-07-20"
+                        "logic-12.3-compressor-default-controlled-48k-2026-07-20",
+                        "logic-12.3-compressor-production-profile-48k-2026-07-27",
                     ]
                     && compressorContext.empiricalEvidenceSummary?
                         .contains("Auto Gain -12 dB active") == true
@@ -1017,16 +1318,75 @@ enum TestRunner {
                         == "CURATED_58_CASE_ROLE_RECURRENCE_NOT_GLOBAL_USAGE_TELEMETRY_OR_FIXED_PROCESSING_ORDER",
                 "Compressor core priority lost its anti-overclaim boundary"
             )
-            guard let unmeasuredDeEsser = catalog.entries.first(where: { $0.name == "DeEsser 2" }) else {
+            guard let measuredDeEsser = catalog.entries.first(where: { $0.name == "DeEsser 2" }) else {
                 throw CheckFailure(message: "DeEsser 2 knowledge was missing")
             }
-            let unmeasuredContext = LogicNativeToolContext(unmeasuredDeEsser)
+            let measuredDeEsserContext = LogicNativeToolContext(measuredDeEsser)
             try tests.expect(
-                unmeasuredDeEsser.empiricalStatus == .notRun
-                    && unmeasuredDeEsser.measuredRunIDs.isEmpty
-                    && unmeasuredContext.empiricalEvidenceSummary == nil
-                    && unmeasuredContext.empiricalTransferCharacterizationStatus.contains("NOT_YET_MEASURED"),
-                "an unmeasured native effect was mislabeled as direct evidence"
+                measuredDeEsser.empiricalStatus == .partial
+                    && measuredDeEsser.measuredRunIDs == [
+                        "logic-12.3-deesser-2-production-profile-48k-2026-07-28"
+                    ]
+                    && measuredDeEsserContext.empiricalEvidenceSummary?
+                        .contains("Relative/Absolute level dependence") == true
+                    && measuredDeEsserContext.empiricalEvidenceSummary?
+                        .contains("No human listening") == true
+                    && measuredDeEsserContext.empiricalTransferCharacterizationStatus
+                        == "PARTIAL_DIRECT_HOST_EVIDENCE_EXACT_TRANSFER_NOT_CHARACTERIZED"
+                    && !measuredDeEsserContext.exactImplementationInternalsKnown,
+                "DeEsser 2 lost its bounded direct-host evidence or overclaimed exact transfer"
+            )
+            guard let measuredChromaVerb = catalog.entries.first(where: { $0.name == "ChromaVerb" }) else {
+                throw CheckFailure(message: "ChromaVerb knowledge was missing")
+            }
+            let measuredChromaVerbContext = LogicNativeToolContext(measuredChromaVerb)
+            try tests.expect(
+                measuredChromaVerb.empiricalStatus == .partial
+                    && measuredChromaVerb.measuredRunIDs == [
+                        "logic-12.3-chromaverb-production-profile-48k-2026-07-28"
+                    ]
+                    && measuredChromaVerbContext.empiricalEvidenceSummary?
+                        .contains("default Room wet-only state") == true
+                    && measuredChromaVerbContext.empiricalEvidenceSummary?
+                        .contains("pre-save and post-reload settled PCM were not exact") == true
+                    && measuredChromaVerbContext.empiricalEvidenceSummary?
+                        .contains("No participant listening") == true
+                    && measuredChromaVerbContext.empiricalTransferCharacterizationStatus
+                        == "PARTIAL_DIRECT_HOST_EVIDENCE_EXACT_TRANSFER_NOT_CHARACTERIZED"
+                    && !measuredChromaVerbContext.exactImplementationInternalsKnown,
+                "ChromaVerb lost its bounded direct-host evidence or overclaimed exact transfer"
+            )
+            try tests.expect(
+                measuredChromaVerbContext.coreProductionPriorityRank == 6
+                    && measuredChromaVerbContext.productionPriorityEvidenceBoundary
+                        == "CURATED_58_CASE_ROLE_RECURRENCE_NOT_GLOBAL_USAGE_TELEMETRY_OR_FIXED_PROCESSING_ORDER",
+                "ChromaVerb core priority lost its anti-overclaim boundary"
+            )
+            guard let measuredSpaceDesigner = catalog.entries.first(where: { $0.name == "Space Designer" }) else {
+                throw CheckFailure(message: "Space Designer knowledge was missing")
+            }
+            let measuredSpaceDesignerContext = LogicNativeToolContext(measuredSpaceDesigner)
+            try tests.expect(
+                measuredSpaceDesigner.empiricalStatus == .partial
+                    && measuredSpaceDesigner.measuredRunIDs == [
+                        "logic-12.3-space-designer-production-profile-48k-2026-07-28"
+                    ]
+                    && measuredSpaceDesignerContext.empiricalEvidenceSummary?
+                        .contains("hash-identified generated mono custom IR") == true
+                    && measuredSpaceDesignerContext.empiricalEvidenceSummary?
+                        .contains("exact cross-reload PCM recovery is not established") == true
+                    && measuredSpaceDesignerContext.empiricalEvidenceSummary?
+                        .contains("No participant listening") == true
+                    && measuredSpaceDesignerContext.empiricalTransferCharacterizationStatus
+                        == "PARTIAL_DIRECT_HOST_EVIDENCE_EXACT_TRANSFER_NOT_CHARACTERIZED"
+                    && !measuredSpaceDesignerContext.exactImplementationInternalsKnown,
+                "Space Designer lost its bounded direct-host evidence or overclaimed exact transfer"
+            )
+            try tests.expect(
+                measuredSpaceDesignerContext.coreProductionPriorityRank == 7
+                    && measuredSpaceDesignerContext.productionPriorityEvidenceBoundary
+                        == "CURATED_58_CASE_ROLE_RECURRENCE_NOT_GLOBAL_USAGE_TELEMETRY_OR_FIXED_PROCESSING_ORDER",
+                "Space Designer core priority lost its anti-overclaim boundary"
             )
             let commonGuitarWarmth = catalog.select(
                 request: "Make this guitar warmer but not darker.",
@@ -2264,9 +2624,9 @@ enum TestRunner {
             var hallucinatingContract = cloudContract
             hallucinatingContract.hypothesisProposals = [
                 .init(
-                    identifier: "invented-reverb-authority",
-                    intendedOutcome: "Insert an unsupported ambience processor.",
-                    strategyCategories: [.ambienceOrDelay],
+                    identifier: "invented-arrangement-authority",
+                    intendedOutcome: "Rewrite an unsupported arrangement.",
+                    strategyCategories: [.sourceOrArrangementChange],
                     relevantMetricIdentifiers: [],
                     risks: ["unsupported"]
                 )
@@ -3187,6 +3547,123 @@ enum TestRunner {
                 try tests.expect((modeCounts[mode] ?? 0) > 0, "semantic corpus omitted \(mode.rawValue) cases")
             }
         }
+        await tests.run("production-mastery language v2 audits 1,000 plus meaningful cases without inflating human evidence") {
+            let repositoryRoot = URL(fileURLWithPath: #filePath)
+                .deletingLastPathComponent()
+                .deletingLastPathComponent()
+                .deletingLastPathComponent()
+            let foundationURL = repositoryRoot.appendingPathComponent(
+                "research/evaluation/TRACKSMITH_PRODUCTION_INTENT_CORPUS_V1.json"
+            )
+            let corpusURL = repositoryRoot.appendingPathComponent(
+                "research/evaluation/TRACKSMITH_PRODUCTION_INTENT_CORPUS_V2.json"
+            )
+            let foundationData = try Data(contentsOf: foundationURL)
+            let data = try Data(contentsOf: corpusURL)
+            let corpus = try JSONDecoder().decode(SemanticCorpusFixture.self, from: data)
+            try tests.expect(corpus.version == "2.0", "production-mastery corpus version changed")
+            let expandedCount = corpus.sources.count * corpus.templates.count
+            try tests.expect(expandedCount >= 1_000, "v2 corpus expands to only \(expandedCount) cases")
+
+            guard let root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let foundation = root["foundation"] as? [String: Any],
+                  let summary = root["summary"] as? [String: Any],
+                  let templates = root["templates"] as? [[String: Any]],
+                  let tagCounts = summary["coverageTagCaseCounts"] as? [String: Any],
+                  let claimBoundary = root["claimBoundary"] as? [String: Any] else {
+                throw CheckFailure(message: "v2 corpus audit metadata is malformed")
+            }
+            try tests.expect(
+                foundation["sha256"] as? String == ResearchPayloadValidator.sha256(foundationData),
+                "v2 corpus no longer pins the frozen v1 foundation"
+            )
+            try tests.expect(
+                (foundation["historicalArtifactModified"] as? NSNumber)?.boolValue == false,
+                "v2 corpus claims the frozen foundation was modified"
+            )
+            try tests.expect(
+                (claimBoundary["generatedCasesCountAsIndependentHumanEvidence"] as? NSNumber)?.boolValue == false
+                    && (summary["independentHumanEvidenceCount"] as? NSNumber)?.intValue == 0,
+                "generated augmentation was promoted to independent human evidence"
+            )
+            let minima = [
+                "multi_turn_sequence": 120,
+                "preservation_or_prohibited_change": 100,
+                "genuinely_ambiguous": 100,
+                "genre_era_role_dependent": 75,
+                "metaphorical_emotional_nontechnical": 75,
+                "non_dsp_arrangement_recording_performance": 50,
+                "unsupported_or_unsafe": 50,
+            ]
+            for (tag, minimum) in minima {
+                try tests.expect(
+                    (tagCounts[tag] as? NSNumber)?.intValue ?? 0 >= minimum,
+                    "v2 corpus \(tag) coverage fell below \(minimum)"
+                )
+            }
+
+            var expandedIDs = Set<String>()
+            var sequenceCount = 0
+            for source in corpus.sources {
+                for template in templates {
+                    guard let id = template["id"] as? String,
+                          let request = template["request"] as? String,
+                          let provenance = template["provenance_class"] as? String,
+                          let tags = template["coverage_tags"] as? [String],
+                          let turns = template["turns"] as? [[String: Any]],
+                          let expectation = template["expected"] as? [String: Any],
+                          let alternatives = expectation["competing_interpretations"] as? [String],
+                          let capability = expectation["capability_policy"] as? String,
+                          let revision = expectation["revision_behavior"] as? String else {
+                        throw CheckFailure(message: "v2 template metadata is incomplete")
+                    }
+                    let caseID = "\(source.id)-\(id)"
+                    try tests.expect(expandedIDs.insert(caseID).inserted, "duplicate v2 expanded case \(caseID)")
+                    try tests.expect(!request.isEmpty && !alternatives.isEmpty, "\(caseID) lacks a meaningful request or alternate interpretation")
+                    try tests.expect(!capability.isEmpty && !revision.isEmpty, "\(caseID) lacks capability or revision policy")
+                    if provenance == "generated_structured_augmentation" {
+                        try tests.expect(
+                            (template["independent_human_evidence"] as? NSNumber)?.boolValue == false,
+                            "\(caseID) generated case claims human provenance"
+                        )
+                    }
+                    if tags.contains("multi_turn_sequence") {
+                        try tests.expect(turns.count >= 2, "\(caseID) is not a real multi-turn sequence")
+                        sequenceCount += 1
+                    }
+                }
+            }
+            try tests.expect(expandedIDs.count == expandedCount, "v2 expanded case count drifted")
+            try tests.expect(sequenceCount >= 120, "v2 actual multi-turn sequence count is \(sequenceCount)")
+
+            // Re-run every v2 template that declares an executable semantic
+            // assertion. Catalog-only entries retain an explicit false claim
+            // boundary until their dedicated state/provider evaluators run.
+            let engine = ProductionIntentEngine()
+            for source in corpus.sources {
+                for template in corpus.templates where template.assertionMode != .catalogOnly {
+                    let request = template.request
+                        .replacingOccurrences(of: "{{style_reference}}", with: source.styleReference)
+                        .replacingOccurrences(of: "{{inappropriate_request}}", with: source.inappropriateRequest)
+                        .replacingOccurrences(of: "{{source_name}}", with: source.displayName)
+                    let scope = ProcessingScope(
+                        kind: .pluginInput,
+                        channelFormat: source.channelFormat,
+                        sourceType: source.sourceType
+                    )
+                    switch template.assertionMode {
+                    case .interpret, .clarification:
+                        _ = try engine.interpret(request: request, scope: scope)
+                    case .safetyReject:
+                        try tests.expectThrows("v2 safety assertion was accepted") {
+                            _ = try engine.interpret(request: request, scope: scope)
+                        }
+                    case .catalogOnly:
+                        break
+                    }
+                }
+            }
+        }
         await tests.run("research ingestion validates before immutable publication") {
             let fileManager = FileManager.default
             let root = fileManager.temporaryDirectory.appendingPathComponent("tracksmith-research-ingest-\(UUID())", isDirectory: true)
@@ -3226,6 +3703,16 @@ enum TestRunner {
             guard let objectPath = first.localPath else { throw CheckFailure(message: "accepted capture omitted object path") }
             try tests.expect(fileManager.fileExists(atPath: root.appendingPathComponent(objectPath).path), "content-addressed object was not published")
 
+            var repeatedTypeMetadata = metadata
+            repeatedTypeMetadata.mediaType = "text/html; charset=utf-8, text/html; charset=utf-8"
+            let repeatedType = try archive.ingestPayload(payload, request: request, metadata: repeatedTypeMetadata)
+            try tests.expect(repeatedType.captureStatus == .duplicate, "identical repeated Content-Type values were rejected")
+            var conflictingTypeMetadata = metadata
+            conflictingTypeMetadata.mediaType = "text/html, application/pdf"
+            try tests.expectThrows("conflicting repeated Content-Type values were accepted") {
+                _ = try archive.ingestPayload(payload, request: request, metadata: conflictingTypeMetadata)
+            }
+
             let duplicate = try archive.ingestPayload(payload, request: request, metadata: metadata)
             try tests.expect(duplicate.captureStatus == .duplicate, "duplicate payload was republished")
             let initialHash = first.sha256!
@@ -3254,7 +3741,7 @@ enum TestRunner {
             let objects = try fileManager.contentsOfDirectory(atPath: root.appendingPathComponent("objects").path)
             try tests.expect(objects.count == 2, "content-addressed archive did not retain both accepted versions")
             let history = try fileManager.contentsOfDirectory(atPath: root.appendingPathComponent("manifests/history").path)
-            try tests.expect(history.count == 4, "audit history did not retain every ingestion attempt")
+            try tests.expect(history.count == 6, "audit history did not retain every ingestion attempt")
 
             var shellRequest = request
             shellRequest.resourceID = "javascript-shell"
@@ -3879,6 +4366,17 @@ enum TestRunner {
         try tests.expect(
             Set(root["x-implementedNodeTypes"] as? [String] ?? []) == Set(PlanValidator.implementedNodeTypes.map(\.rawValue)),
             "schema implemented-node annotation differs from PlanValidator"
+        )
+        guard let resourceLimits = root["x-realtimeResourceLimits"] as? [String: Any] else {
+            throw CheckFailure(message: "schema real-time resource annotations are missing")
+        }
+        try tests.expect(
+            number(resourceLimits["maximumDelayNodeCount"]) == Double(PlanValidator.maximumDelayNodeCount)
+                && number(resourceLimits["maximumTotalDelayTimeMS"]) == PlanValidator.maximumTotalDelayTimeMS
+                && number(resourceLimits["maximumReverbNodeCount"]) == Double(PlanValidator.maximumReverbNodeCount)
+                && number(resourceLimits["maximumExpanderNodeCount"]) == Double(PlanValidator.maximumExpanderNodeCount)
+                && number(resourceLimits["maximumSampleRateHz"]) == 192_000,
+            "schema real-time resource annotations differ from runtime bounds"
         )
         guard let unsupportedRule = nodeRules.first,
               let unsupportedIf = unsupportedRule["if"] as? [String: Any],

@@ -1,0 +1,67 @@
+{
+  "goals" : [
+
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.55,
+      "enabled" : true,
+      "id" : "BF841845-F14D-519F-85EC-1895EEBE9EE2",
+      "locked" : false,
+      "parameters" : {
+        "algorithmVersion" : 1,
+        "attackMS" : 2,
+        "holdMS" : 65,
+        "hysteresisDB" : 8,
+        "mix" : 1,
+        "rangeDB" : 30,
+        "ratio" : 5,
+        "releaseMS" : 120,
+        "thresholdDB" : -38
+      },
+      "rationale" : "Expose the preservation risk of a firmer bounded gate interpretation.",
+      "type" : "expander"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "251CEB28-3C36-55D1-8F5D-541DACB51483",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.00010802613341098777
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "4E3B195D-DBCC-58D5-BB51-48F8AA097E11",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Retain inter-sample margin while candidate loudness is matched.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -3,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "695DAA65-3C36-55D1-8F5D-541DACB51483",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal"
+  },
+  "sourceSnapshotID" : "D8310C49-E3E3-5C6F-9745-9E4332866B9A"
+}

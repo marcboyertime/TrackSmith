@@ -1,0 +1,53 @@
+{
+  "baseFrequencyHz" : 500,
+  "detectorFrequencyHz" : 7000,
+  "epistemicBoundary" : [
+    "These synthetic tones expose gain behavior for exact recorded DeEsser 2 states; they are not speech, phonemes, or a listening-quality reference.",
+    "Relative/Absolute, Split/Wide, filter, threshold, maximum reduction, channel format, sample rate, routing, render path, input hash, and output hash must be retained with every result.",
+    "A detected 7 kHz change does not establish consonant intelligibility, breath preservation, air preservation, lisp avoidance, or musical usefulness.",
+    "The stereo probe supports only channel-gain observations for the exact tested state; it does not reveal a private detector or linking topology."
+  ],
+  "eventEndSecondsWithinSegment" : 0.52,
+  "eventStartSecondsWithinSegment" : 0.4,
+  "fixtureVersion" : "logic-deesser-event-suite-v1",
+  "fixtures" : [
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 6,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "deesser_level_mode_probe_mono.wav",
+      "frameCount" : 288000,
+      "purpose" : "Same-ratio quiet/loud pairs plus bounded high-band levels for Relative/Absolute and Split/Wide comparisons.",
+      "sampleRate" : 48000,
+      "sha256" : "bde0227d60544687f660256229630ac1fc6afb2948328d8bb0483fac29d6bbf3"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 6,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "deesser_event_probe_mono.wav",
+      "frameCount" : 288000,
+      "purpose" : "Short 7 kHz events and static 7 kHz intervals over a controlled 500 Hz base for objective event/static comparisons.",
+      "sampleRate" : 48000,
+      "sha256" : "cd97aed61588ddde4b54e3d8f3de9a32e8a0b093ca4d58470315f2f74997ee74"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 6,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "deesser_event_probe_stereo.wav",
+      "frameCount" : 288000,
+      "purpose" : "Left-channel 7 kHz events over a two-channel 500 Hz base for bounded stereo-link and collateral-gain observations.",
+      "sampleRate" : 48000,
+      "sha256" : "801526df8e733d7c9d0439352a8efdf5660c3ffa8a08f9950336a10882060f4a"
+    }
+  ],
+  "generatedBy" : "TestSignalGenerator",
+  "product" : "TrackSmith",
+  "sampleRate" : 48000,
+  "schemaVersion" : "1.0",
+  "segmentSeconds" : 1
+}

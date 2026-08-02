@@ -1,0 +1,3844 @@
+{
+  "caseSetSHA256": "b87623b4e74ca65b4dc64f29b0d6d8f1088c900d05edc641ab190653d4b211b9",
+  "cases": [
+    {
+      "clarificationPolicy": "offer level-matched EQ, saturation, and unchanged interpretations unless the desired kind of warmth is specified",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "saturation",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "a request for less warmth must reduce only the selected working nodes and preserve locks",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more density or body without loss of upper openness",
+      "materialCondition": [
+        "dry",
+        "bright",
+        "dynamic"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_channel_eq_profile",
+        "evidence:logic_saturation_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "low-mid balance",
+        "low-level harmonic density",
+        "no processing if monitoring is the cause"
+      ],
+      "preservedAttributes": [
+        "air",
+        "intelligibility"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "darker",
+        "sibilance increase"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Warmer, but don’t make it darker.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "clarify whether closer means drier, more present, or more dominant when those cannot be fairly compared",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "clarify_or_candidates",
+      "expectedRevisionBehavior": "later level revisions must not substitute for the chosen distance interpretation",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater direct-source salience without a level advantage",
+      "materialCondition": [
+        "roomy",
+        "already_levelled"
+      ],
+      "missingProcessorOrEvidence": [
+        "analysis:ambience_depth",
+        "tracksmith_dsp:reverb",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "presence balance",
+        "less audible ambience",
+        "arrangement/fader relationship"
+      ],
+      "preservedAttributes": [
+        "level",
+        "breath",
+        "natural dynamics"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "added loudness"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Bring the vocal closer without making it louder.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "retain at least two named interpretations and clarify if the user cannot audition them fairly",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "compressor",
+        "saturation",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "clarify_or_candidates",
+      "expectedRevisionBehavior": "use version ancestry to combine the chosen character with a restrained graph only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-003",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "resolve a specific tonal, dynamic, spatial, or artifact issue without erasing expression",
+      "materialCondition": [
+        "already_processed",
+        "expressive"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_channel_eq_profile",
+        "evidence:logic_compressor_profile",
+        "evaluation:human_preference"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "polished tonal balance",
+        "controlled peaks",
+        "cleaner recording/edit",
+        "no processing"
+      ],
+      "preservedAttributes": [
+        "timing variation",
+        "breath",
+        "microdynamics"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "hard tuning",
+        "overcompression"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "More expensive, but keep it human.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "clarify only when the detected high-frequency events cannot be distinguished from desirable breath/noise",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "de_esser",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "less de-essing changes only the de-esser/dynamic node and preserves unrelated tone",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-004",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "event-specific consonant control with upper openness retained",
+      "materialCondition": [
+        "sibilant",
+        "airy"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "evidence:logic_deesser_2_profile",
+        "analysis:phoneme_event_separation"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "split-band de-essing",
+        "dynamic EQ",
+        "manual event rides"
+      ],
+      "preservedAttributes": [
+        "air",
+        "breath",
+        "diction"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "static darkening",
+        "lisping"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Tame the esses, but do not lose the air or breath.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "clarify whether continuous denoising or between-phrase expansion is acceptable",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "clarify_or_decline",
+      "expectedRevisionBehavior": "a stronger cleanup revision must retain the approved release/hold behavior unless explicitly changed",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-005",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "lower inter-phrase noise with phrase decay intact",
+      "materialCondition": [
+        "noisy",
+        "poorly_recorded",
+        "sparse"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:expander_gate",
+        "analysis:speech_activity_and_noise_profile",
+        "evidence:logic_noise_gate_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "gate/expander",
+        "manual edits",
+        "re-recording/noise repair outside current scope"
+      ],
+      "preservedAttributes": [
+        "word tails",
+        "breath timing",
+        "room identity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "chopped releases",
+        "audible pumping"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Clean the room noise between phrases without making the ends of words disappear.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "offer meaningfully different early-room and discrete-delay interpretations before asking",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "later requests for more room alter ambience only and preserve the direct path",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-006",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "audible spatial support with direct focus preserved",
+      "materialCondition": [
+        "dry",
+        "intimate",
+        "sparse"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:delay",
+        "analysis:ambience_depth",
+        "evidence:logic_chromaverb_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "short early-reflection room",
+        "predelayed ambience",
+        "single filtered echo"
+      ],
+      "preservedAttributes": [
+        "front position",
+        "consonant clarity",
+        "dry identity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "long masking tail",
+        "level loss"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Give the vocal a little room without pushing it backward.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "explain that the insert has no verified Logic section/region authority and request a user-scoped capture or automation workflow",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "non_dsp_or_decline",
+      "expectedRevisionBehavior": "a later request about the chorus must never mutate the verse or stale capture",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-CUR-007",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "section contrast without verse change",
+      "materialCondition": [
+        "dense_arrangement",
+        "section_specific"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:temporal_section_authority",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "arrangement/automation",
+        "section-only ambience or density",
+        "double/stack decision"
+      ],
+      "preservedAttributes": [
+        "verse graph and level",
+        "lead identity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "global processing"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the chorus vocal lift, but leave the verse exactly as it is.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "offer distinct dynamics- and envelope-led candidates; clarify if punch means kick weight rather than onset",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "parametric_eq",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "less punch must alter only the selected impact nodes and retain cymbal constraints",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "stronger leading drum impact with cymbal events restrained",
+      "materialCondition": [
+        "dense",
+        "bright",
+        "already_compressed"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:transient_shaper",
+        "tracksmith_dsp:dynamic_eq",
+        "evidence:logic_compressor_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "transient-preserving compression",
+        "transient shaping",
+        "low-band body",
+        "arrangement/level"
+      ],
+      "preservedAttributes": [
+        "cymbal smoothness",
+        "groove",
+        "room coherence"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "upper-band burst increase"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Punchier without making the cymbals harsher.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "offer short-room and early-reflection interpretations at matched level",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "more room changes ambience nodes only; attack and center locks survive",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater room impression while attacks stay forward",
+      "materialCondition": [
+        "dry",
+        "close_miked"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:delay",
+        "analysis:ambience_depth",
+        "evidence:logic_chromaverb_profile",
+        "evidence:logic_space_designer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "short room with predelay",
+        "early reflections",
+        "tempo-related echo"
+      ],
+      "preservedAttributes": [
+        "attack",
+        "center impact",
+        "groove"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "wash",
+        "distance increase"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Give the drums more room without pushing them backward.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "retain gentle, parallel, and unchanged interpretations unless glue is further scoped",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "use less glue reduces only dynamics depth and preserves the selected timing/attack character",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-003",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more coherent bus movement without flattening hit hierarchy",
+      "materialCondition": [
+        "dynamic",
+        "human_performance"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_compressor_profile",
+        "evaluation:human_preference"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "gentle bus compression",
+        "parallel compression",
+        "automation/no processing"
+      ],
+      "preservedAttributes": [
+        "microtiming",
+        "accent hierarchy",
+        "crest"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "constant heavy reduction"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Glue the kit, but keep it human.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "clarify whether only gaps or the full sustain may change",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "stronger cleanup must keep approved hold/release unless explicitly overridden",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-004",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "lower off-hit spill without truncated shells",
+      "materialCondition": [
+        "tom_bleed",
+        "noisy",
+        "long_decay"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:expander_gate",
+        "analysis:drum_event_and_spill_separation",
+        "evidence:logic_noise_gate_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "hysteretic gate/expander",
+        "manual editing",
+        "microphone/recording fix"
+      ],
+      "preservedAttributes": [
+        "tom decay",
+        "room continuity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "chatter",
+        "hard closure"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Reduce the bleed, but keep the tom decays natural.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "offer conservative width and ambience-led alternatives; reject unsafe mono/center outcomes",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "a center lock protects the accepted kick/snare relationship across width revisions",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-005",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more lateral room/cymbal image with center impact retained",
+      "materialCondition": [
+        "stereo",
+        "center_heavy"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:mid_side_eq",
+        "tracksmith_dsp:reverb",
+        "analysis:source_specific_center_identity",
+        "evidence:logic_direction_mixer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "full-band width",
+        "frequency-dependent width",
+        "room/delay width"
+      ],
+      "preservedAttributes": [
+        "center kick/snare",
+        "mono translation",
+        "low center"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "low-band side growth",
+        "center loss"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the kit feel wider, but do not weaken the kick and snare in the center.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "compare transient, density, and arrangement interpretations at matched loudness",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "saturation",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "version-merging must not stack multiple loudness-compensated impact nodes accidentally",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-006",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater event contrast or density without a level advantage",
+      "materialCondition": [
+        "limited",
+        "dense"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:transient_shaper",
+        "evaluation:level_matched_preference"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "parallel compression",
+        "transient shaping",
+        "saturation",
+        "arrangement mute/drop"
+      ],
+      "preservedAttributes": [
+        "integrated level",
+        "cymbal texture"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "loudness-only win"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the drums feel explosive, not just louder.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "use exact node ancestry and ask which processing character feels excessive if multiple families are active",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "parametric_eq",
+        "saturation",
+        "no_processing"
+      ],
+      "expectedResponseClass": "revision",
+      "expectedRevisionBehavior": "remove or reduce the named family only; locked corrective nodes remain bit-identical",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-CUR-007",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "restore transient/dynamic naturalness while keeping useful separation",
+      "materialCondition": [
+        "overprocessed",
+        "clear"
+      ],
+      "missingProcessorOrEvidence": [
+        "evaluation:ancestry_and_ablation"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "reduce compression",
+        "remove saturation",
+        "retain corrective EQ",
+        "no new processing"
+      ],
+      "preservedAttributes": [
+        "clarity",
+        "kick/snare audibility"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "blind removal of all nodes"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Less processed, but don’t undo the clarity.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "offer level-control and band-specific interpretations if the inconsistency is frequency-dependent",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "parametric_eq",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "less control reduces only the chosen detector/ratio or band action",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more consistent bass without loss of weight or scale",
+      "materialCondition": [
+        "dynamic",
+        "full"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "evidence:logic_compressor_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "gentle compression",
+        "dynamic EQ",
+        "note rides"
+      ],
+      "preservedAttributes": [
+        "sub weight",
+        "sustain",
+        "size"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "thinness",
+        "over-limiting"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the bass controlled, not small.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "clarify decay versus timing versus spectral overlap when evidence cannot distinguish them",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "parametric_eq",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "revision must preserve the selected low-band compensation and kick-related caveat",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "cleaner decay/note separation with fundamentals retained",
+      "materialCondition": [
+        "boomy",
+        "dense_mix"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "compression/release",
+        "dynamic low-band control",
+        "arrangement with kick"
+      ],
+      "preservedAttributes": [
+        "low-end weight",
+        "pitch"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "smallness",
+        "generic high-pass"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Tighten the bass without losing the weight.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "offer harmonic-density and tonal-balance hypotheses rather than one warmth preset",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "saturation",
+        "parametric_eq",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "use less character reduces saturation while preserving the approved pitch-definition move",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-003",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more harmonic audibility or body without longer/denser low-mid smear",
+      "materialCondition": [
+        "dark",
+        "blurred"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_saturation_profile",
+        "evaluation:low_end_identity"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "low-mix saturation",
+        "upper-harmonic EQ",
+        "no processing"
+      ],
+      "preservedAttributes": [
+        "pitch definition",
+        "decay contour"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "blur",
+        "headroom loss"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Warm it up, but do not make the bass blurrier.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "clarify the quietest tail that must remain before setting the range",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "stronger cleanup changes range/threshold only within the accepted hold/release boundary",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-004",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "lower between-note noise without shortened musical decay",
+      "materialCondition": [
+        "amp_hiss",
+        "sparse_notes"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:expander_gate",
+        "analysis:bass_note_activity_and_noise_profile",
+        "evidence:logic_noise_gate_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "expander/gate",
+        "manual fades",
+        "recording repair"
+      ],
+      "preservedAttributes": [
+        "note tails",
+        "finger/pick character"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "gate chatter",
+        "tail truncation"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Hide the amp noise between notes, but keep the note tails.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "request user-mediated section scoping; do not pretend the insert knows the chorus",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "non_dsp_or_decline",
+      "expectedRevisionBehavior": "stale section/capture references reject rather than applying globally",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-005",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "section-specific bass presence or movement",
+      "materialCondition": [
+        "chorus_only",
+        "arrangement_masked"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:temporal_section_authority",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "automation",
+        "arrangement octave/part",
+        "section-only saturation/EQ"
+      ],
+      "preservedAttributes": [
+        "verse tone",
+        "low-end hierarchy"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "global graph change"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the bass open up in the chorus only.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "offer harmonic and tonal candidates at matched loudness",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "saturation",
+        "parametric_eq",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "less audibility processing removes only the selected harmonic/EQ move",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-006",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater harmonic/pitch audibility under equal level",
+      "materialCondition": [
+        "small_speakers",
+        "not_loud"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_saturation_profile",
+        "evaluation:translation_listening"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "harmonic saturation",
+        "upper-bass EQ",
+        "arrangement with kick"
+      ],
+      "preservedAttributes": [
+        "fundamental weight",
+        "level"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "excess distortion",
+        "low-end loss"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the bass easier to hear without making it louder.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "clarify which node family supplies character if the versions differ in several families",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "compressor",
+        "saturation"
+      ],
+      "expectedResponseClass": "revision",
+      "expectedRevisionBehavior": "resolve exact preview ancestry; preserve locks; rerender and revalidate the merged graph",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-CUR-007",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "typed merge of the selected character node family with the lower-depth ancestor",
+      "materialCondition": [
+        "multi_turn",
+        "two_versions"
+      ],
+      "missingProcessorOrEvidence": [
+        "evaluation:long_conversation_merge"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "replace version then reduce named character",
+        "attribute-family merge"
+      ],
+      "preservedAttributes": [
+        "unmentioned nodes",
+        "low-end weight",
+        "locks"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "averaging arbitrary parameters",
+        "stale preview use"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Use the character of version two, but the restraint of version one.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "offer EQ and harmonic interpretations with explicit pick-attack checks",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "saturation",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "stronger warmth cannot alter a locked pick-preservation strategy",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more body/density without blunting leading articulation",
+      "materialCondition": [
+        "bright_amp",
+        "articulate"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_channel_eq_profile",
+        "evidence:logic_saturation_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "body EQ",
+        "restrained saturation",
+        "arrangement role"
+      ],
+      "preservedAttributes": [
+        "pick attack",
+        "note separation"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "darkening",
+        "smear"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the guitar warmer, but keep the pick bite.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "compare static and event/level-dependent interpretations; acknowledge monitoring level",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "less restraint restores only the affected harshness-control node",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reduced fatiguing concentration with aggressive identity retained",
+      "materialCondition": [
+        "harsh_when_loud",
+        "aggressive"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "evaluation:level_dependent_harshness"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "static EQ",
+        "dynamic EQ",
+        "level/monitoring issue"
+      ],
+      "preservedAttributes": [
+        "aggression",
+        "attack",
+        "amp character"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "blanket darkening"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "This hurts when I turn it up, but don’t take away the aggression.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "offer algorithmic, convolution, and discrete-reflection interpretations when available",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "more room changes wet path only and preserves the direct guitar graph",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-003",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "credible depth/space with articulation intact",
+      "materialCondition": [
+        "dry",
+        "sparse"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:delay",
+        "analysis:ambience_depth",
+        "evidence:logic_chromaverb_profile",
+        "evidence:logic_space_designer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "short algorithmic room",
+        "convolution room",
+        "filtered single echo"
+      ],
+      "preservedAttributes": [
+        "note edges",
+        "rhythmic gaps",
+        "tone"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "wash",
+        "backward placement"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Put the guitar in a believable room without washing out the notes.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "clarify tempo-synced versus free-time movement when the request is musically consequential",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "feedback/time revisions change the delay node only; dry center remains locked",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-004",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "short rhythmic echo/motion with a stable dry center",
+      "materialCondition": [
+        "rhythmic",
+        "dry"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "analysis:tempo_and_event_grid",
+        "evidence:logic_stereo_delay_profile",
+        "evidence:logic_tape_delay_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "mono slap",
+        "crossfed stereo delay",
+        "room reflection"
+      ],
+      "preservedAttributes": [
+        "center",
+        "timing clarity",
+        "mono translation"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "flam",
+        "low-end smear"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Give it a little slap and movement, but keep the center solid.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "clarify how much feedback/noise is intentional before expansion",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "stronger gating must retain approved hold/release unless explicitly changed",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-005",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "lower idle hiss with chord releases intact",
+      "materialCondition": [
+        "high_gain",
+        "amp_hiss"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:expander_gate",
+        "analysis:guitar_activity_and_noise_profile",
+        "evidence:logic_noise_gate_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "hysteretic expansion",
+        "manual mutes",
+        "amp/recording fix"
+      ],
+      "preservedAttributes": [
+        "sustain",
+        "feedback character"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "abrupt closure",
+        "chatter"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Gate the hiss, but let sustained chords die naturally.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "compare gain-safe width and delay/layer interpretations; reject mono collapse",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "width revisions preserve a locked center/mono constraint",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-006",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater lateral separation with stable summed body",
+      "materialCondition": [
+        "stereo_double",
+        "dense"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:mid_side_eq",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "stereo width",
+        "micro-delay",
+        "panning/layer edit"
+      ],
+      "preservedAttributes": [
+        "mid body",
+        "mono translation",
+        "vocal space"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "comb filtering",
+        "center hole"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the guitars wider without hollowing the middle.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "identify the audible processing family from graph ancestry rather than guessing from prose",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "parametric_eq",
+        "saturation",
+        "no_processing"
+      ],
+      "expectedResponseClass": "revision",
+      "expectedRevisionBehavior": "remove/reduce only the named family; unrelated and locked clarity nodes remain exact",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-CUR-007",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "remove excessive density/ambience while retaining corrective separation",
+      "materialCondition": [
+        "overprocessed",
+        "clear"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:delay",
+        "evaluation:ancestry_and_ablation"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "reduce saturation/compression",
+        "reduce ambience",
+        "keep corrective EQ"
+      ],
+      "preservedAttributes": [
+        "clarity",
+        "pick identity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "blind full revert"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make it feel less processed, but keep the clarity we gained.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "offer width-, delay-, and ambience-led interpretations only when their center effects are explicit",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "a center lock survives all width revisions",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater lateral interest with lead/fundamental focus retained",
+      "materialCondition": [
+        "stereo",
+        "center_lead"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:mid_side_eq",
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb",
+        "evidence:logic_direction_mixer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "stereo width",
+        "frequency-dependent M/S",
+        "decorrelated delay/reverb"
+      ],
+      "preservedAttributes": [
+        "center",
+        "low-end focus",
+        "mono translation"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "center attenuation",
+        "low-side excess"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make this feel wider, but don’t weaken the center.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "offer processing and patch-level alternatives; disclose inability to edit the instrument",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "saturation",
+        "parametric_eq",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "later warmth revisions preserve the approved motion metrics and locks",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater body/density with programmed modulation retained",
+      "materialCondition": [
+        "moving_filter",
+        "bright"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_saturation_profile",
+        "analysis:time_varying_timbre"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "saturation",
+        "broad EQ",
+        "patch edit"
+      ],
+      "preservedAttributes": [
+        "filter motion",
+        "envelope",
+        "stereo animation"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "static flattening",
+        "darkening"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make it warmer without freezing the motion.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "present timing-, space-, and arrangement-led meanings; clarify when movement rate matters",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "more alive changes the chosen family only and preserves matched level",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-003",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "audible motion, space, or event contrast without loudness bias",
+      "materialCondition": [
+        "static",
+        "sparse"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:transient_shaper",
+        "host:instrument_parameter_authority"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "tempo delay",
+        "modulated reverb",
+        "filter/arrangement edit",
+        "transient movement"
+      ],
+      "preservedAttributes": [
+        "level",
+        "melodic clarity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "random wash",
+        "level-only win"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the part feel more alive without just turning it up.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "clarify whether the noise is part of the patch and whether tempo-linked tails are protected",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "stronger cleanup changes range/threshold within the accepted release boundary",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-004",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "lower between-event noise/bed with intentional release preserved",
+      "materialCondition": [
+        "noisy_patch",
+        "rhythmic"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:expander_gate",
+        "analysis:event_and_tail_separation",
+        "host:instrument_parameter_authority"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "tempo-aware expansion",
+        "manual/patch envelope edit"
+      ],
+      "preservedAttributes": [
+        "release rhythm",
+        "modulation"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "hard chopping"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the gaps cleaner, but keep the rhythmic tail.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "request user-mediated section scoping and disclose the lack of Logic project authority",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "non_dsp_or_decline",
+      "expectedRevisionBehavior": "stale/other-section identities reject rather than apply globally",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-005",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "section-only contrast",
+      "materialCondition": [
+        "section_specific",
+        "dense_chorus"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:temporal_section_authority",
+        "host:instrument_parameter_authority"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "automation",
+        "voicing/register change",
+        "section delay/reverb"
+      ],
+      "preservedAttributes": [
+        "verse graph",
+        "vocal space"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "global change"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the chorus synth lift without changing the verse.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "ask which era/device cue matters if color and motion candidates cannot be fairly compared",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "saturation",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "clarify_or_candidates",
+      "expectedRevisionBehavior": "version merges retain the chosen cue rather than stacking every vintage mechanism",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-006",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "specific historical color/motion without blanket darkening",
+      "materialCondition": [
+        "modern_bright",
+        "retro_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "evidence:logic_tape_delay_profile",
+        "evidence:logic_saturation_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "saturation/drive",
+        "tape-like delay instability",
+        "performance/patch choice"
+      ],
+      "preservedAttributes": [
+        "brightness",
+        "pitch stability",
+        "role"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "generic low-pass",
+        "style certainty"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make it feel more vintage, but do not make it dull.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "clarify the motion family if several are present; otherwise resolve exact preview/node identities",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width"
+      ],
+      "expectedResponseClass": "revision",
+      "expectedRevisionBehavior": "rerender the exact merged graph and reject stale ancestry",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-CUR-007",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "exact attribute-family merge across preview ancestry",
+      "materialCondition": [
+        "multi_turn",
+        "two_versions"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb",
+        "evaluation:long_conversation_merge"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "delay/reverb family merge",
+        "width preservation",
+        "lower-depth parameters"
+      ],
+      "preservedAttributes": [
+        "center",
+        "locks",
+        "unmentioned nodes"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "stale identity",
+        "whole-plan averaging"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Use version two’s motion, but version one’s restraint and center.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "retain competing interpretations and identify source-level causes TrackSmith cannot repair from the mix insert",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "compressor",
+        "stereo_width",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "clarify_or_candidates",
+      "expectedRevisionBehavior": "revision changes one selected family and preserves accepted macro dynamics",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "resolve specific tonal/dynamic/spatial distractions without erasing musical variation",
+      "materialCondition": [
+        "already_limited",
+        "human_performance"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:true_peak_limiter",
+        "evaluation:human_preference",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "polish via small EQ",
+        "dynamic control",
+        "space/width",
+        "mix revision/no processing"
+      ],
+      "preservedAttributes": [
+        "macro dynamics",
+        "transients",
+        "timing"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "loudness-only improvement",
+        "over-limiting"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the mix feel more expensive, but keep it human.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "offer materially different width and depth interpretations; reject unsafe mono/center outcomes",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "center/mono locks remain exact through subsequent width revisions",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater spaciousness with vocal/kick/bass focus retained",
+      "materialCondition": [
+        "stereo",
+        "strong_center"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:mid_side_eq",
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb",
+        "evidence:logic_direction_mixer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "stereo width",
+        "M/S EQ",
+        "delay/reverb depth",
+        "source panning"
+      ],
+      "preservedAttributes": [
+        "center focus",
+        "low center",
+        "mono translation"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "center loss",
+        "low-side growth"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make this feel wider, but don’t weaken the center.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "offer static low-mid and source-balance interpretations; clarify when mix-only processing would be collateral",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "a clarity revision must not touch the prohibited brightness family",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-003",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "less masking or improved hierarchy without upper-tilt bias",
+      "materialCondition": [
+        "dark",
+        "dense"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "host:multitrack_balance_context",
+        "evidence:logic_channel_eq_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "low-mid EQ",
+        "dynamic EQ",
+        "source rebalance/arrangement"
+      ],
+      "preservedAttributes": [
+        "brightness",
+        "source balance"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "high-shelf shortcut"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make this clearer without making it brighter.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "request a user-scoped section or explain arrangement/automation options; do not infer timeline authority",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "non_dsp_or_decline",
+      "expectedRevisionBehavior": "later chorus revisions bind to the exact scoped capture and reject stale identities",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-004",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater chorus contrast relative to verse",
+      "materialCondition": [
+        "section_specific",
+        "already_limited"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:temporal_section_authority",
+        "host:multitrack_balance_context"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "arrangement density",
+        "automation",
+        "section ambience/width",
+        "performance"
+      ],
+      "preservedAttributes": [
+        "verse",
+        "macro dynamics",
+        "source hierarchy"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "global level/limiting"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Make the chorus lift.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "clarify micro versus macro control if the user cannot audition a long enough excerpt",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "more/less glue changes dynamics nodes only and preserves macro-dynamic locks",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-005",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "small-scale cohesion with macro contrast retained",
+      "materialCondition": [
+        "dynamic",
+        "cohesive"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_compressor_profile",
+        "evaluation:long_form_dynamics"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "gentle compression",
+        "parallel compression",
+        "automation/no processing"
+      ],
+      "preservedAttributes": [
+        "section contrast",
+        "kick/snare shape",
+        "vocal movement"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "flat macro dynamics"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Glue it a little, but keep the sections breathing.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "use exact graph ancestry and listening to identify the excessive family",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "compressor",
+        "saturation",
+        "sample_limiter",
+        "no_processing"
+      ],
+      "expectedResponseClass": "revision",
+      "expectedRevisionBehavior": "remove/reduce one family; locked clarity and safety nodes remain exact",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-006",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "restore natural movement/texture while retaining useful correction",
+      "materialCondition": [
+        "overprocessed",
+        "clear"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:true_peak_limiter",
+        "evaluation:ancestry_and_ablation"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "ablate compression/limiting/saturation",
+        "retain corrective EQ",
+        "mix revision"
+      ],
+      "preservedAttributes": [
+        "clarity",
+        "balance",
+        "delivery safety"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "blind source reset",
+        "unsafe peak"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Less processed, but don’t undo the clarity.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "clarify delivery target and downstream conversion; disclose that current limiter is sample-peak only",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "sample_limiter",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "ceiling revisions preserve punch and never reinterpret delivery as a loudness request",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-CUR-007",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "bounded delivery peaks without density/loudness increase",
+      "materialCondition": [
+        "delivery",
+        "transient"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:true_peak_limiter",
+        "evidence:logic_adaptive_limiter_profile",
+        "evaluation:codec_and_src_margin"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "fixed-lookahead true-peak limiting",
+        "lower output ceiling",
+        "mix repair"
+      ],
+      "preservedAttributes": [
+        "punch",
+        "integrated loudness",
+        "macro dynamics"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 5,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 5
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "loudness maximization",
+        "sample-only over claim"
+      ],
+      "provenanceClass": "directly_curated",
+      "request": "Catch the true peaks, but keep the punch and do not chase loudness.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "clarify event versus continuous brightness",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "de_esser",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "retain accepted detector/split behavior",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-RES-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "bounded event-specific control",
+      "materialCondition": [
+        "breathy",
+        "sibilant"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "evidence:logic_deesser_2_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "DeEsser 2 Relative/Split",
+        "dynamic EQ",
+        "manual rides"
+      ],
+      "preservedAttributes": [
+        "breath",
+        "intelligibility",
+        "air"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "static brightness claim"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Control bright consonants while preserving breath and intelligibility.",
+      "sourceClass": "vocal",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#deesser-2"
+      ],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "compare depth mechanisms",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "wet-path revisions only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-RES-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "source-appropriate early/late balance",
+      "materialCondition": [
+        "dry",
+        "lead"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:delay",
+        "evidence:logic_chromaverb_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "predelayed reverb",
+        "single echo"
+      ],
+      "preservedAttributes": [
+        "focus",
+        "diction"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "masking tail"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Add depth while preserving direct vocal focus.",
+      "sourceClass": "vocal",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#chromaverb-and-space-designer"
+      ],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "offer attack and sustain interpretations separately",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "change only selected envelope dimension",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-RES-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "bounded envelope comparison",
+      "materialCondition": [
+        "transient"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:transient_shaper",
+        "evidence:logic_enveloper_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "Enveloper",
+        "transient shaper",
+        "compressor timing"
+      ],
+      "preservedAttributes": [
+        "groove",
+        "cymbals"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "universal punch claim"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Increase attack relative to sustain without assuming more attack always means more punch.",
+      "sourceClass": "drums",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#enveloper"
+      ],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "present both meanings",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "wet path only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-RES-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "bounded ambience comparison",
+      "materialCondition": [
+        "roomy",
+        "close_miked"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "evidence:logic_chromaverb_profile",
+        "evidence:logic_space_designer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "ChromaVerb-like algorithmic hypothesis",
+        "Space Designer-like convolution hypothesis"
+      ],
+      "preservedAttributes": [
+        "articulation",
+        "room coherence"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "wash"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Compare algorithmic room and convolution room while preserving shell articulation.",
+      "sourceClass": "drums",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#chromaverb-and-space-designer"
+      ],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "compare at matched level",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "non_dsp_advice",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "dynamics node only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-RES-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "bounded dynamic consistency",
+      "materialCondition": [
+        "dynamic"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_compressor_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "compressor",
+        "automation",
+        "no processing"
+      ],
+      "preservedAttributes": [
+        "weight",
+        "pitch"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "loudness preference bias"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Control note variance without treating loudness normalization as production judgment.",
+      "sourceClass": "bass",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#compressor"
+      ],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "clarify affected band and delivery context",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "preserve approved stereo character",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-RES-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "stable low center",
+      "materialCondition": [
+        "stereo"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:mid_side_eq",
+        "evidence:logic_direction_mixer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "Direction Mixer",
+        "M/S EQ",
+        "source patch edit"
+      ],
+      "preservedAttributes": [
+        "stereo character"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "blanket mono"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Constrain low-side energy without claiming one mono cutoff is universally correct.",
+      "sourceClass": "bass",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#direction-mixer-and-correlation-meter"
+      ],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "compare in mix and at matched level",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "harshness family only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-RES-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "less fatigue in context",
+      "materialCondition": [
+        "distorted"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq",
+        "evidence:logic_channel_eq_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "dynamic EQ",
+        "static EQ",
+        "arrangement"
+      ],
+      "preservedAttributes": [
+        "aggression",
+        "cabinet identity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "generic target curve"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Reduce a level-dependent painful band without treating a solo spectrum as a semantic verdict.",
+      "sourceClass": "guitar",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#channel-eq"
+      ],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "clarify free versus sync and rhythmic division",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "only named delay dimension changes",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-RES-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "rhythmic space with explicit dimensions",
+      "materialCondition": [
+        "rhythmic"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "evidence:logic_stereo_delay_profile",
+        "evidence:logic_tape_delay_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "Stereo Delay",
+        "Tape Delay"
+      ],
+      "preservedAttributes": [
+        "timing clarity",
+        "center"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "unbounded tail"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Add a tempo-related echo without conflating delay time, feedback, filtering, and width.",
+      "sourceClass": "guitar",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#stereo-delay-and-tape-delay"
+      ],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "present mechanisms separately",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "mono/center locks survive",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-RES-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "safe spatial contrast",
+      "materialCondition": [
+        "stereo"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb",
+        "evidence:logic_direction_mixer_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "Direction Mixer",
+        "delay/reverb",
+        "patch edit"
+      ],
+      "preservedAttributes": [
+        "mono translation",
+        "center"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "correlation target chasing"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Increase width while validating the actual mono sum rather than optimizing correlation.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#direction-mixer-and-correlation-meter"
+      ],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "compare at matched loudness",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "saturation"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "drive/mix family only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-RES-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "level-matched nonlinear character",
+      "materialCondition": [
+        "nonlinear"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_saturation_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "saturation",
+        "Overdrive/ChromaGlow comparison"
+      ],
+      "preservedAttributes": [
+        "motion",
+        "low end"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "loudness bias",
+        "alias over claim"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Add harmonic color without treating more output level as better saturation.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#chromaglow-and-overdrive"
+      ],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "ask for delivery context",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "sample_limiter",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "ceiling/release only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-RES-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "delivery-safe peak behavior",
+      "materialCondition": [
+        "delivery"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:true_peak_limiter",
+        "evidence:logic_adaptive_limiter_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "limiter",
+        "lower ceiling",
+        "mix repair"
+      ],
+      "preservedAttributes": [
+        "macro dynamics",
+        "loudness intent"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "maximum-loudness goal"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Meet a peak constraint without inferring a universal mastering loudness target.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#limiter-and-adaptive-limiter"
+      ],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "clarify parallel/latency constraint",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "parametric_eq"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "EQ family only",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-RES-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "bounded tonal comparison with transient consequence explicit",
+      "materialCondition": [
+        "tonal"
+      ],
+      "missingProcessorOrEvidence": [
+        "evidence:logic_channel_eq_profile",
+        "evidence:logic_linear_phase_eq_profile"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "Channel EQ",
+        "Linear Phase EQ"
+      ],
+      "preservedAttributes": [
+        "transients",
+        "latency"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "quality hierarchy"
+      ],
+      "provenanceClass": "research_practice_derived",
+      "request": "Compare minimum-phase and linear-phase EQ consequences without calling one higher quality.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [
+        "research/analysis/TRACKSMITH_CORE_EFFECT_DECISION_ATLAS.md#linear-phase-eq"
+      ],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "state the exact unsupported authority and offer a user-mediated protocol",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "no revision may convert advice into a host command",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-ADV-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "honest rejection of native plug-in/project authority and intent inference",
+      "materialCondition": [
+        "unsupported_host_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:logic_native_plugin_control",
+        "analysis:intended_pitch_and_key"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "user-mediated Logic workflow",
+        "performance/comping advice"
+      ],
+      "preservedAttributes": [
+        "original source",
+        "performance identity"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "invented host action",
+        "universal pitch truth"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Insert Logic Pitch Correction, set the project key, and fix every wrong note.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "request non-identifying attributes and disclose limits",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice",
+        "no_processing"
+      ],
+      "expectedResponseClass": "clarify_or_decline",
+      "expectedRevisionBehavior": "no hidden style preset or invented measurement",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "VOC-ADV-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject identity/style-clone certainty while offering bounded attributes",
+      "materialCondition": [
+        "style_clone"
+      ],
+      "missingProcessorOrEvidence": [
+        "policy:named_identity_style_replication",
+        "analysis:open_ended_reference"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "clarify specific tonal/dynamic/spatial attributes",
+        "retain the source unchanged when no bounded attribute is supplied"
+      ],
+      "preservedAttributes": [
+        "performer identity",
+        "source rights"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "exact imitation claim"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Make this singer sound exactly like a named artist.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "offer precise non-executing arrangement advice",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "do not turn it into compression",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "DRM-ADV-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "identify arrangement/MIDI request outside audio-effect authority",
+      "materialCondition": [
+        "arrangement_problem"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:midi_and_arrangement_authority"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "user-mediated arrangement advice",
+        "decline with no audio-effect substitution"
+      ],
+      "preservedAttributes": [
+        "existing performance"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "invented MIDI/region edit"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Make the chorus hit harder by adding a crash and doubling the kick pattern.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "explain validator/output constraints",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "never unlock or remove safety authority implicitly",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": false,
+      "id": "DRM-ADV-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "fail closed on unsafe plan",
+      "materialCondition": [
+        "unsafe_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "safety:peak_and_gain_constraints"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "decline",
+        "bounded loudness discussion"
+      ],
+      "preservedAttributes": [
+        "source",
+        "hearing-safe workflow"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "peak-safety bypass",
+        "excess gain"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Remove the limiter, add 18 dB, and ignore clipping.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "request a separately proven routed sidechain capability",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "stale or invented source identity rejects",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "BAS-ADV-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject unavailable project/sidechain identity",
+      "materialCondition": [
+        "multitrack_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:multitrack_sidechain_authority"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "user-routed sidechain future adapter",
+        "manual arrangement advice"
+      ],
+      "preservedAttributes": [
+        "current graph"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "invented kick access"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Sidechain this bass from the kick you can see in the project.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "require current instance/runtime/capture reconciliation",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "never copy an old executable graph without current validation",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": false,
+      "id": "BAS-ADV-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject stale preview/runtime/capture authority",
+      "materialCondition": [
+        "stale_identity"
+      ],
+      "missingProcessorOrEvidence": [
+        "state:stale_preview_identity"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "view-only history",
+        "rerun on current capture"
+      ],
+      "preservedAttributes": [
+        "current project and source"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "cross-project replay"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Apply preview two from the previous Logic project.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "offer an exact manual experiment protocol only",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "no later prose grants authority",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "GTR-ADV-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject native chain/automation authority",
+      "materialCondition": [
+        "unsupported_host_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:logic_native_plugin_control",
+        "host:automation_authority"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "user-mediated parameter/ordering advice",
+        "leave the native chain unchanged"
+      ],
+      "preservedAttributes": [
+        "project state"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "invented host edit"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Reorder my Logic amp and pedals and automate the wah.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "state source-preservation boundary",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "rollback must remain exact",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": false,
+      "id": "GTR-ADV-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "refuse source mutation and offer preview/commit graph or new export",
+      "materialCondition": [
+        "source_destructive"
+      ],
+      "missingProcessorOrEvidence": [
+        "safety:source_preservation"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "non-destructive graph",
+        "new user-chosen export"
+      ],
+      "preservedAttributes": [
+        "original source file"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "overwrite"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Overwrite the recorded guitar file with the processed version.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "explain milestone scope without pretending saturation is resynthesis",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "no graph node may hide asset generation",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "SYN-ADV-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "defer excluded resynthesis roadmap",
+      "materialCondition": [
+        "generative_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "scope:resynthesis_excluded"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "bounded existing DSP",
+        "future opt-in asset workflow"
+      ],
+      "preservedAttributes": [
+        "original source",
+        "milestone scope"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "hidden waveform generation"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Turn this synth into a completely new instrument by resynthesizing it.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "offer the current bounded text/measurement workflow",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "provider output remains untrusted on every turn",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": false,
+      "id": "SYN-ADV-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject raw-audio upload/current provider authority",
+      "materialCondition": [
+        "raw_audio_provider_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "security:raw_audio_provider_boundary"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "text/measurement-only interpretation",
+        "local candidates"
+      ],
+      "preservedAttributes": [
+        "privacy",
+        "local DSP authority"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "raw audio upload",
+        "provider DSP execution"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Upload the audio to the model and let it choose the processing.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "ask for an audible goal and preservation constraints",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "clarify_or_decline",
+      "expectedRevisionBehavior": "measurements remain guardrails",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-ADV-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject universal quality claim and metric optimization",
+      "materialCondition": [
+        "universal_truth_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "evaluation:human_preference"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "bounded candidates plus listening",
+        "no processing"
+      ],
+      "preservedAttributes": [
+        "artistic intent",
+        "source balance"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 5,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "metric-as-quality proof"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Make this objectively better and prove it from LUFS and a target curve.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "state supported insert/audio boundary",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "decline",
+      "expectedRevisionBehavior": "no future provider result expands host authority",
+      "generatedFromCaseID": null,
+      "humanListeningDecisive": true,
+      "id": "MIX-ADV-002",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "reject unavailable project DOM, insertion, and destructive bounce authority",
+      "materialCondition": [
+        "unsupported_host_request"
+      ],
+      "missingProcessorOrEvidence": [
+        "host:logic_project_dom",
+        "safety:source_preservation"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "user-mediated multitrack diagnosis protocol",
+        "leave project and source files unchanged"
+      ],
+      "preservedAttributes": [
+        "project",
+        "source files"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "invented inspection",
+        "destructive bounce"
+      ],
+      "provenanceClass": "adversarial",
+      "request": "Inspect every channel strip, fix the masking tracks, and bounce over the mix.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    },
+    {
+      "clarificationPolicy": "retain the same competing meanings as its curated parent",
+      "currentAnalysisSupport": "vocal spectral-band, high/low burst-density, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "wet-path only",
+      "generatedFromCaseID": "VOC-CUR-006",
+      "humanListeningDecisive": true,
+      "id": "VOC-AUG-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "audible spatial support with direct focus preserved",
+      "materialCondition": [
+        "dry",
+        "intimate",
+        "sparse"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:reverb",
+        "tracksmith_dsp:delay"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": false,
+      "plausibleCompetingInterpretations": [
+        "short room",
+        "predelayed ambience",
+        "single echo"
+      ],
+      "preservedAttributes": [
+        "front position",
+        "diction"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "lead_or_supporting_vocal",
+      "prohibitedChanges": [
+        "backward placement"
+      ],
+      "provenanceClass": "generated_augmentation",
+      "request": "I want just enough space around the singer to hear a room, while the singer stays right here.",
+      "sourceClass": "vocal",
+      "sourceReferences": [],
+      "sourceType": "vocalBus"
+    },
+    {
+      "clarificationPolicy": "retain onset/body ambiguity",
+      "currentAnalysisSupport": "drum flux, onset-candidate, crest, post-onset sustain, transient-band, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "parametric_eq"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "impact family only",
+      "generatedFromCaseID": "DRM-CUR-001",
+      "humanListeningDecisive": true,
+      "id": "DRM-AUG-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater impact without cymbal-band collateral change",
+      "materialCondition": [
+        "dense",
+        "bright"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:transient_shaper",
+        "tracksmith_dsp:dynamic_eq"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "compression",
+        "transient shaping",
+        "low-band body"
+      ],
+      "preservedAttributes": [
+        "cymbal texture"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "drums_or_drum_bus",
+      "prohibitedChanges": [
+        "upper-band burst increase"
+      ],
+      "provenanceClass": "generated_augmentation",
+      "request": "Let the drums hit me harder, but leave the shiny metal alone.",
+      "sourceClass": "drums",
+      "sourceReferences": [],
+      "sourceType": "drumBus"
+    },
+    {
+      "clarificationPolicy": "retain level versus band-specific ambiguity",
+      "currentAnalysisSupport": "bass sub-share, low-mid energy, flux, crest, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "compressor",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "selected control family only",
+      "generatedFromCaseID": "BAS-CUR-001",
+      "humanListeningDecisive": true,
+      "id": "BAS-AUG-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "more consistency without lost scale/weight",
+      "materialCondition": [
+        "dynamic",
+        "full"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:dynamic_eq"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "compression",
+        "dynamic EQ",
+        "rides"
+      ],
+      "preservedAttributes": [
+        "weight",
+        "sustain"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "bass_foundation_or_melodic_bass",
+      "prohibitedChanges": [
+        "smallness"
+      ],
+      "provenanceClass": "generated_augmentation",
+      "request": "Even the bass out, but don’t shrink it.",
+      "sourceClass": "bass",
+      "sourceReferences": [],
+      "sourceType": "bass"
+    },
+    {
+      "clarificationPolicy": "retain intentional feedback ambiguity",
+      "currentAnalysisSupport": "guitar spectral occupancy, concentration, presence-band, flux, level-variability, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "approved release boundary survives",
+      "generatedFromCaseID": "GTR-CUR-005",
+      "humanListeningDecisive": true,
+      "id": "GTR-AUG-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "lower idle noise with chord releases intact",
+      "materialCondition": [
+        "high_gain",
+        "amp_hiss"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:expander_gate"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "expansion",
+        "manual mutes"
+      ],
+      "preservedAttributes": [
+        "sustain"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "rhythm_lead_or_texture_guitar",
+      "prohibitedChanges": [
+        "hard closure"
+      ],
+      "provenanceClass": "generated_augmentation",
+      "request": "Quiet the gaps while every chord still finishes naturally.",
+      "sourceClass": "guitar",
+      "sourceReferences": [],
+      "sourceType": "guitar"
+    },
+    {
+      "clarificationPolicy": "retain movement-family ambiguity",
+      "currentAnalysisSupport": "synth/keys spectral occupancy, concentration, presence, flux, stereo/mono, loudness, peak, and finite-input evidence",
+      "currentExecutableCapability": [
+        "no_processing",
+        "non_dsp_advice"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "chosen family only",
+      "generatedFromCaseID": "SYN-CUR-003",
+      "humanListeningDecisive": true,
+      "id": "SYN-AUG-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "motion/space/event contrast without loudness bias",
+      "materialCondition": [
+        "static",
+        "sparse"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "delay",
+        "reverb",
+        "arrangement"
+      ],
+      "preservedAttributes": [
+        "level"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "synth_or_keys_harmonic_rhythmic_or_texture_layer",
+      "prohibitedChanges": [
+        "level-only win"
+      ],
+      "provenanceClass": "generated_augmentation",
+      "request": "Wake this part up without winning by volume.",
+      "sourceClass": "synth_keys",
+      "sourceReferences": [],
+      "sourceType": "synth"
+    },
+    {
+      "clarificationPolicy": "retain width versus depth ambiguity",
+      "currentAnalysisSupport": "mix broad-band balance, spectral slope, crest, loudness/LRA/true-peak estimate, stereo/mono, and finite-input evidence",
+      "currentExecutableCapability": [
+        "stereo_width",
+        "no_processing"
+      ],
+      "expectedResponseClass": "candidates",
+      "expectedRevisionBehavior": "center lock survives",
+      "generatedFromCaseID": "MIX-CUR-002",
+      "humanListeningDecisive": true,
+      "id": "MIX-AUG-001",
+      "independentHumanEvidence": false,
+      "intendedPerceptualOutcome": "greater spaciousness with center focus retained",
+      "materialCondition": [
+        "stereo",
+        "strong_center"
+      ],
+      "missingProcessorOrEvidence": [
+        "tracksmith_dsp:mid_side_eq",
+        "tracksmith_dsp:delay",
+        "tracksmith_dsp:reverb"
+      ],
+      "noProcessingOrNonDSPCouldBeCorrect": true,
+      "plausibleCompetingInterpretations": [
+        "width",
+        "M/S",
+        "delay/reverb"
+      ],
+      "preservedAttributes": [
+        "center",
+        "low end",
+        "mono"
+      ],
+      "priorityFactors": {
+        "currentUncertainty": 4,
+        "expectedMusicalValue": 4,
+        "meaningfulRequestCoverage": 5,
+        "preservationRisk": 4
+      },
+      "productionRole": "full_stereo_mix_or_delivery_master",
+      "prohibitedChanges": [
+        "center loss"
+      ],
+      "provenanceClass": "generated_augmentation",
+      "request": "Open the sides while the middle stays planted.",
+      "sourceClass": "full_mix",
+      "sourceReferences": [],
+      "sourceType": "fullMix"
+    }
+  ],
+  "claimBoundary": {
+    "documentaryKnowledgeCountsAsMeasuredDSP": false,
+    "generatedParaphrasesCountAsIndependentHumanEvidence": false,
+    "logicKnowledgeGrantsHostAuthority": false,
+    "objectiveMetricsProveArtisticSuperiority": false,
+    "rankingIsGlobalUsageTelemetry": false,
+    "rankingPurpose": "milestone capability sequencing from curated request coverage, musical value, preservation risk, and uncertainty"
+  },
+  "milestone": "TrackSmith Logic Production Mastery and Perceptual Evaluation v1",
+  "plan": "docs/PRODUCTION_MASTERY_PERCEPTUAL_EVALUATION_V1.md",
+  "rankedTrackSmithDSPGaps": [
+    {
+      "capability": "tracksmith_dsp:delay",
+      "caseIDs": [
+        "VOC-CUR-006",
+        "DRM-CUR-002",
+        "GTR-CUR-003",
+        "GTR-CUR-004",
+        "GTR-CUR-006",
+        "GTR-CUR-007",
+        "SYN-CUR-001",
+        "SYN-CUR-003",
+        "SYN-CUR-006",
+        "SYN-CUR-007",
+        "MIX-CUR-002",
+        "VOC-RES-002",
+        "GTR-RES-002",
+        "SYN-RES-001",
+        "VOC-AUG-001",
+        "SYN-AUG-001",
+        "MIX-AUG-001"
+      ],
+      "highPreservationRiskCaseCount": 8,
+      "meaningfulCaseCount": 17,
+      "weightedScore": 774
+    },
+    {
+      "capability": "tracksmith_dsp:reverb",
+      "caseIDs": [
+        "VOC-CUR-002",
+        "VOC-CUR-006",
+        "DRM-CUR-002",
+        "DRM-CUR-005",
+        "GTR-CUR-003",
+        "GTR-CUR-007",
+        "SYN-CUR-001",
+        "SYN-CUR-003",
+        "SYN-CUR-007",
+        "MIX-CUR-002",
+        "VOC-RES-002",
+        "DRM-RES-002",
+        "SYN-RES-001",
+        "VOC-AUG-001",
+        "SYN-AUG-001",
+        "MIX-AUG-001"
+      ],
+      "highPreservationRiskCaseCount": 7,
+      "meaningfulCaseCount": 16,
+      "weightedScore": 726
+    },
+    {
+      "capability": "tracksmith_dsp:dynamic_eq",
+      "caseIDs": [
+        "VOC-CUR-004",
+        "DRM-CUR-001",
+        "BAS-CUR-001",
+        "BAS-CUR-002",
+        "GTR-CUR-002",
+        "MIX-CUR-003",
+        "VOC-RES-001",
+        "GTR-RES-001",
+        "DRM-AUG-001",
+        "BAS-AUG-001"
+      ],
+      "highPreservationRiskCaseCount": 6,
+      "meaningfulCaseCount": 10,
+      "weightedScore": 457
+    },
+    {
+      "capability": "tracksmith_dsp:expander_gate",
+      "caseIDs": [
+        "VOC-CUR-005",
+        "DRM-CUR-004",
+        "BAS-CUR-004",
+        "GTR-CUR-005",
+        "SYN-CUR-004",
+        "GTR-AUG-001"
+      ],
+      "highPreservationRiskCaseCount": 5,
+      "meaningfulCaseCount": 6,
+      "weightedScore": 280
+    },
+    {
+      "capability": "tracksmith_dsp:mid_side_eq",
+      "caseIDs": [
+        "DRM-CUR-005",
+        "GTR-CUR-006",
+        "SYN-CUR-001",
+        "MIX-CUR-002",
+        "BAS-RES-002",
+        "MIX-AUG-001"
+      ],
+      "highPreservationRiskCaseCount": 4,
+      "meaningfulCaseCount": 6,
+      "weightedScore": 272
+    },
+    {
+      "capability": "tracksmith_dsp:transient_shaper",
+      "caseIDs": [
+        "DRM-CUR-001",
+        "DRM-CUR-006",
+        "SYN-CUR-003",
+        "DRM-RES-001",
+        "DRM-AUG-001"
+      ],
+      "highPreservationRiskCaseCount": 1,
+      "meaningfulCaseCount": 5,
+      "weightedScore": 228
+    },
+    {
+      "capability": "tracksmith_dsp:true_peak_limiter",
+      "caseIDs": [
+        "MIX-CUR-001",
+        "MIX-CUR-006",
+        "MIX-CUR-007",
+        "MIX-RES-001"
+      ],
+      "highPreservationRiskCaseCount": 3,
+      "meaningfulCaseCount": 4,
+      "weightedScore": 189
+    }
+  ],
+  "recordedAt": "2026-07-27",
+  "schemaVersion": "1.0",
+  "selectionDecision": {
+    "notClaims": [
+      "The ranking is not global plug-in usage telemetry.",
+      "The selected algorithms do not clone Logic processors.",
+      "Case coverage does not establish artistic quality."
+    ],
+    "rationale": [
+      "Reverb and delay jointly cover the largest unserved spatial, depth, movement, and rhythmic candidate families while allowing meaningfully different auditions.",
+      "Expander/gate is the highest-value additional corrective module for noisy/bleeding material and has explicit preservation-risk cases requiring hold, hysteresis, release, and bounded range.",
+      "Dynamic EQ and transient shaping remain high-ranked but are deferred until the selected three modules pass deterministic, state, host, heap, and perceptual fixture gates.",
+      "M/S EQ and true-peak limiting remain optional unless accepted evaluation cases make them release blockers."
+    ],
+    "selectedForImplementation": [
+      "tracksmith_dsp:reverb",
+      "tracksmith_dsp:delay",
+      "tracksmith_dsp:expander_gate"
+    ]
+  },
+  "summary": {
+    "caseCount": 72,
+    "conditionCounts": {
+      "aggressive": 1,
+      "airy": 1,
+      "already_compressed": 1,
+      "already_levelled": 1,
+      "already_limited": 2,
+      "already_processed": 1,
+      "amp_hiss": 3,
+      "arrangement_masked": 1,
+      "arrangement_problem": 1,
+      "articulate": 1,
+      "blurred": 1,
+      "boomy": 1,
+      "breathy": 1,
+      "bright": 4,
+      "bright_amp": 1,
+      "center_heavy": 1,
+      "center_lead": 1,
+      "chorus_only": 1,
+      "clear": 3,
+      "close_miked": 2,
+      "cohesive": 1,
+      "dark": 2,
+      "delivery": 2,
+      "dense": 5,
+      "dense_arrangement": 1,
+      "dense_chorus": 1,
+      "dense_mix": 1,
+      "distorted": 1,
+      "dry": 7,
+      "dynamic": 6,
+      "expressive": 1,
+      "full": 2,
+      "generative_request": 1,
+      "harsh_when_loud": 1,
+      "high_gain": 2,
+      "human_performance": 2,
+      "intimate": 2,
+      "lead": 1,
+      "limited": 1,
+      "long_decay": 1,
+      "modern_bright": 1,
+      "moving_filter": 1,
+      "multi_turn": 2,
+      "multitrack_request": 1,
+      "noisy": 2,
+      "noisy_patch": 1,
+      "nonlinear": 1,
+      "not_loud": 1,
+      "overprocessed": 3,
+      "poorly_recorded": 1,
+      "raw_audio_provider_request": 1,
+      "retro_request": 1,
+      "rhythmic": 3,
+      "roomy": 2,
+      "section_specific": 3,
+      "sibilant": 2,
+      "small_speakers": 1,
+      "source_destructive": 1,
+      "sparse": 6,
+      "sparse_notes": 1,
+      "stale_identity": 1,
+      "static": 2,
+      "stereo": 6,
+      "stereo_double": 1,
+      "strong_center": 2,
+      "style_clone": 1,
+      "tom_bleed": 1,
+      "tonal": 1,
+      "transient": 2,
+      "two_versions": 2,
+      "universal_truth_request": 1,
+      "unsafe_request": 1,
+      "unsupported_host_request": 3
+    },
+    "gapCounts": {
+      "analysis:ambience_depth": 4,
+      "analysis:bass_note_activity_and_noise_profile": 1,
+      "analysis:drum_event_and_spill_separation": 1,
+      "analysis:event_and_tail_separation": 1,
+      "analysis:guitar_activity_and_noise_profile": 1,
+      "analysis:intended_pitch_and_key": 1,
+      "analysis:open_ended_reference": 1,
+      "analysis:phoneme_event_separation": 1,
+      "analysis:source_specific_center_identity": 1,
+      "analysis:speech_activity_and_noise_profile": 1,
+      "analysis:tempo_and_event_grid": 1,
+      "analysis:time_varying_timbre": 1,
+      "evaluation:ancestry_and_ablation": 3,
+      "evaluation:codec_and_src_margin": 1,
+      "evaluation:human_preference": 4,
+      "evaluation:level_dependent_harshness": 1,
+      "evaluation:level_matched_preference": 1,
+      "evaluation:long_conversation_merge": 2,
+      "evaluation:long_form_dynamics": 1,
+      "evaluation:low_end_identity": 1,
+      "evaluation:translation_listening": 1,
+      "evidence:logic_adaptive_limiter_profile": 2,
+      "evidence:logic_channel_eq_profile": 6,
+      "evidence:logic_chromaverb_profile": 5,
+      "evidence:logic_compressor_profile": 6,
+      "evidence:logic_deesser_2_profile": 2,
+      "evidence:logic_direction_mixer_profile": 5,
+      "evidence:logic_enveloper_profile": 1,
+      "evidence:logic_linear_phase_eq_profile": 1,
+      "evidence:logic_noise_gate_profile": 4,
+      "evidence:logic_saturation_profile": 7,
+      "evidence:logic_space_designer_profile": 3,
+      "evidence:logic_stereo_delay_profile": 2,
+      "evidence:logic_tape_delay_profile": 3,
+      "host:automation_authority": 1,
+      "host:instrument_parameter_authority": 3,
+      "host:logic_native_plugin_control": 2,
+      "host:logic_project_dom": 1,
+      "host:midi_and_arrangement_authority": 1,
+      "host:multitrack_balance_context": 8,
+      "host:multitrack_sidechain_authority": 1,
+      "host:temporal_section_authority": 4,
+      "policy:named_identity_style_replication": 1,
+      "safety:peak_and_gain_constraints": 1,
+      "safety:source_preservation": 2,
+      "scope:resynthesis_excluded": 1,
+      "security:raw_audio_provider_boundary": 1,
+      "state:stale_preview_identity": 1,
+      "tracksmith_dsp:delay": 17,
+      "tracksmith_dsp:dynamic_eq": 10,
+      "tracksmith_dsp:expander_gate": 6,
+      "tracksmith_dsp:mid_side_eq": 6,
+      "tracksmith_dsp:reverb": 16,
+      "tracksmith_dsp:transient_shaper": 5,
+      "tracksmith_dsp:true_peak_limiter": 4
+    },
+    "humanListeningDecisiveCount": 68,
+    "independentHumanEvidenceCount": 0,
+    "multiTurnOrRevisionCaseCount": 6,
+    "noProcessingOrNonDSPCouldBeCorrectCount": 62,
+    "provenanceCounts": {
+      "adversarial": 12,
+      "directly_curated": 42,
+      "generated_augmentation": 6,
+      "research_practice_derived": 12
+    },
+    "responseCounts": {
+      "candidates": 46,
+      "clarify_or_candidates": 4,
+      "clarify_or_decline": 3,
+      "decline": 10,
+      "non_dsp_or_decline": 4,
+      "revision": 5
+    },
+    "sourceCounts": {
+      "bass": 12,
+      "drums": 12,
+      "full_mix": 12,
+      "guitar": 12,
+      "synth_keys": 12,
+      "vocal": 12
+    }
+  }
+}

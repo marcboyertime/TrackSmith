@@ -1,0 +1,64 @@
+{
+  "goals" : [
+
+  ],
+  "nodes" : [
+    {
+      "category" : "creative",
+      "confidence" : 0.62,
+      "enabled" : true,
+      "id" : "33718485-9D7F-5AC1-95C3-D51F424100CF",
+      "locked" : false,
+      "parameters" : {
+        "algorithmVersion" : 1,
+        "damping" : 0.4,
+        "delayTimeMS" : 92,
+        "feedback" : 0.08,
+        "mix" : 0.16,
+        "stereoCrossfeed" : 0
+      },
+      "rationale" : "Test a short discrete echo without claiming room simulation.",
+      "type" : "delay"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "86D36BA4-7EC8-537B-8A32-91E293E36902",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 1.5107686226092962
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "DF774789-E1AC-5867-9C43-E691234B8E54",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Retain inter-sample margin while candidate loudness is matched.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -3,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "CA922AE9-7EC8-537B-8A32-91E293E36902",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "guitar"
+  },
+  "sourceSnapshotID" : "D80BFC79-7AA7-5394-8D97-271484F1FBAF"
+}

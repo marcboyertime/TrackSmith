@@ -5,6 +5,7 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
     case duplicateNodeID(UUID)
     case unsupportedNode(NodeType)
     case unsupportedParameter(NodeType, ParameterID)
+    case missingRequiredParameter(NodeType, ParameterID)
     case parameterOutOfRange(ParameterID, value: Double, allowed: ClosedRange<Double>)
     case invalidConfidence(Double)
     case invalidGoalStrength(Double)
@@ -12,6 +13,7 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
     case planTooComplex(nodes: Int, goals: Int)
     case rationaleTooLong(UUID)
     case excessiveGain(Double)
+    case resourceBudgetExceeded(kind: String, actual: Double, maximum: Double)
     case missingFinalSafetyLimiter
     case safetyLimiterCeilingExceedsConstraint(ceilingDB: Double, maxTruePeakDB: Double)
     case staleSourceSnapshot(expected: UUID, actual: UUID)
@@ -23,6 +25,7 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
         case let .duplicateNodeID(id): "Duplicate processing node ID: \(id)."
         case let .unsupportedNode(type): "Processing node \(type.rawValue) is not implemented in this engine version."
         case let .unsupportedParameter(type, id): "Parameter \(id.rawValue) is unsupported for \(type.rawValue)."
+        case let .missingRequiredParameter(type, id): "Processing node \(type.rawValue) requires \(id.rawValue)."
         case let .parameterOutOfRange(id, value, allowed): "\(id.rawValue)=\(value) is outside \(allowed)."
         case let .invalidConfidence(value): "Confidence \(value) is outside 0...1."
         case let .invalidGoalStrength(value): "Goal strength \(value) is outside 0...1."
@@ -30,6 +33,8 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
         case let .planTooComplex(nodes, goals): "Plan complexity exceeds the bounded real-time budget: \(nodes) nodes, \(goals) goals."
         case let .rationaleTooLong(id): "Processing rationale for node \(id) exceeds the 4 KiB text limit."
         case let .excessiveGain(value): "Cumulative requested gain \(value) dB exceeds the plan limit."
+        case let .resourceBudgetExceeded(kind, actual, maximum):
+            "\(kind) resource request \(actual) exceeds the bounded plan maximum \(maximum)."
         case .missingFinalSafetyLimiter: "Every non-dry real-time graph must end with an enabled safety limiter (meters may follow it)."
         case let .safetyLimiterCeilingExceedsConstraint(ceilingDB, maxTruePeakDB):
             "The final limiter ceiling (\(ceilingDB) dBFS) is above the plan peak constraint (\(maxTruePeakDB) dBTP)."
@@ -45,6 +50,10 @@ public struct PlanValidator: Sendable {
     public static let maximumNodeCount = 32
     public static let maximumGoalCount = 32
     public static let maximumRationaleBytes = 4_096
+    public static let maximumDelayNodeCount = 4
+    public static let maximumTotalDelayTimeMS = 4_000.0
+    public static let maximumReverbNodeCount = 2
+    public static let maximumExpanderNodeCount = 4
 
     public static let ranges: [ParameterID: ClosedRange<Double>] = [
         .gainDB: -60...24, .frequencyHz: 10...24_000, .q: 0.1...20,
@@ -52,20 +61,34 @@ public struct PlanValidator: Sendable {
         .releaseMS: 1...5_000, .makeupGainDB: -24...24, .ceilingDB: -24...0,
         .kneeDB: 0...24, .mix: 0...1, .width: 0...2, .driveDB: 0...36,
         .enabled: 0...1, .lookaheadMS: 0...0,
+        .algorithmVersion: 1...1, .delayTimeMS: 1...2_000, .feedback: 0...0.95,
+        .damping: 0...1, .stereoCrossfeed: 0...1, .preDelayMS: 0...250,
+        .decayTimeSeconds: 0.1...8, .roomSize: 0...1, .diffusion: 0...1,
+        .holdMS: 0...1_000, .hysteresisDB: 0...24, .rangeDB: 0...80,
     ]
 
     public static let implementedNodeTypes: Set<NodeType> = [
-        .inputTrim, .polarity, .highPass, .lowPass, .parametricEQ, .compressor, .deEsser,
+        .inputTrim, .polarity, .highPass, .lowPass, .parametricEQ, .compressor, .expander, .deEsser,
         .softClipper, .saturation, .stereoWidth, .limiter, .outputTrim, .loudnessMatch, .meter,
+        .delay, .reverb,
     ]
 
     public static let allowedParameters: [NodeType: Set<ParameterID>] = [
         .inputTrim: [.gainDB], .polarity: [], .highPass: [.frequencyHz, .q], .lowPass: [.frequencyHz, .q],
         .parametricEQ: [.frequencyHz, .q, .gainDB], .compressor: [.thresholdDB, .ratio, .attackMS, .releaseMS, .makeupGainDB, .kneeDB, .mix],
-        .expander: [.thresholdDB, .ratio, .attackMS, .releaseMS, .mix], .deEsser: [.frequencyHz, .thresholdDB, .ratio, .attackMS, .releaseMS, .mix],
+        .expander: [.algorithmVersion, .thresholdDB, .ratio, .attackMS, .releaseMS, .holdMS, .hysteresisDB, .rangeDB, .mix],
+        .deEsser: [.frequencyHz, .thresholdDB, .ratio, .attackMS, .releaseMS, .mix],
         .softClipper: [.driveDB, .ceilingDB, .mix], .saturation: [.driveDB, .mix], .transientShaper: [.gainDB, .mix],
-        .stereoWidth: [.width, .mix], .midSideEQ: [.frequencyHz, .q, .gainDB, .mix], .delay: [.mix], .reverb: [.mix],
+        .stereoWidth: [.width, .mix], .midSideEQ: [.frequencyHz, .q, .gainDB, .mix],
+        .delay: [.algorithmVersion, .delayTimeMS, .feedback, .damping, .stereoCrossfeed, .mix],
+        .reverb: [.algorithmVersion, .preDelayMS, .decayTimeSeconds, .roomSize, .damping, .diffusion, .mix],
         .limiter: [.ceilingDB, .releaseMS, .lookaheadMS], .outputTrim: [.gainDB], .loudnessMatch: [.gainDB], .meter: [],
+    ]
+
+    public static let requiredParameters: [NodeType: Set<ParameterID>] = [
+        .expander: [.algorithmVersion],
+        .delay: [.algorithmVersion],
+        .reverb: [.algorithmVersion],
     ]
 
     public func validate(_ plan: ProcessingPlan, currentSnapshotID: UUID? = nil, basePlan: ProcessingPlan? = nil) throws {
@@ -93,6 +116,10 @@ public struct PlanValidator: Sendable {
         }
         var ids = Set<UUID>()
         var addedGain = 0.0
+        var delayNodeCount = 0
+        var totalDelayTimeMS = 0.0
+        var reverbNodeCount = 0
+        var expanderNodeCount = 0
         for node in plan.nodes {
             guard ids.insert(node.id).inserted else { throw PlanValidationError.duplicateNodeID(node.id) }
             guard !node.enabled || Self.implementedNodeTypes.contains(node.type) else { throw PlanValidationError.unsupportedNode(node.type) }
@@ -101,6 +128,11 @@ public struct PlanValidator: Sendable {
                 throw PlanValidationError.rationaleTooLong(node.id)
             }
             let allowed = Self.allowedParameters[node.type, default: []]
+            for required in Self.requiredParameters[node.type, default: []] where node.enabled {
+                guard node.parameters[required] != nil else {
+                    throw PlanValidationError.missingRequiredParameter(node.type, required)
+                }
+            }
             for (parameter, value) in node.parameters {
                 guard allowed.contains(parameter) else { throw PlanValidationError.unsupportedParameter(node.type, parameter) }
                 guard let range = Self.ranges[parameter], value.isFinite, range.contains(value) else {
@@ -113,8 +145,48 @@ public struct PlanValidator: Sendable {
                     addedGain += value
                 }
             }
+            guard node.enabled else { continue }
+            switch node.type {
+            case .delay:
+                delayNodeCount += 1
+                totalDelayTimeMS += node.parameters[.delayTimeMS, default: 250]
+            case .reverb:
+                reverbNodeCount += 1
+            case .expander:
+                expanderNodeCount += 1
+            default:
+                break
+            }
         }
         guard addedGain <= plan.outputConstraints.maxAddedGainDB else { throw PlanValidationError.excessiveGain(addedGain) }
+        guard delayNodeCount <= Self.maximumDelayNodeCount else {
+            throw PlanValidationError.resourceBudgetExceeded(
+                kind: "delayNodeCount",
+                actual: Double(delayNodeCount),
+                maximum: Double(Self.maximumDelayNodeCount)
+            )
+        }
+        guard totalDelayTimeMS <= Self.maximumTotalDelayTimeMS else {
+            throw PlanValidationError.resourceBudgetExceeded(
+                kind: "totalDelayTimeMS",
+                actual: totalDelayTimeMS,
+                maximum: Self.maximumTotalDelayTimeMS
+            )
+        }
+        guard reverbNodeCount <= Self.maximumReverbNodeCount else {
+            throw PlanValidationError.resourceBudgetExceeded(
+                kind: "reverbNodeCount",
+                actual: Double(reverbNodeCount),
+                maximum: Double(Self.maximumReverbNodeCount)
+            )
+        }
+        guard expanderNodeCount <= Self.maximumExpanderNodeCount else {
+            throw PlanValidationError.resourceBudgetExceeded(
+                kind: "expanderNodeCount",
+                actual: Double(expanderNodeCount),
+                maximum: Double(Self.maximumExpanderNodeCount)
+            )
+        }
         if let basePlan {
             let candidates = Dictionary(uniqueKeysWithValues: plan.nodes.map { ($0.id, $0) })
             for original in basePlan.nodes where original.locked {

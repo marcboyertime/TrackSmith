@@ -1,10 +1,11 @@
 # Logic Pro 12.3 Native Effect Empirical Measurement Protocol
 
 Status: protocol and deterministic fixture generator implemented 2026-07-16;
-revised 2026-07-20 after partial direct-host Bitcrusher, Channel EQ, and
-Compressor runs exposed first-render settling, project-rate/import-range, active
-metronome, and split-bounce container hazards. The full native-effect campaign
-remains open.
+revised 2026-07-30. The current 200-identity ledger contains 191 `not_run`, 9
+`partial`, and 0 `complete` records. Partial direct-host evidence covers
+Bitcrusher, Channel EQ, Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space
+Designer, Stereo Delay, and Tape Delay; partial runs do not establish complete
+models, Logic equivalence, or perceptual claims. The full campaign remains open.
 This distinction is deliberate. Apple documents controls and intended behavior,
 but documentation does not expose every coefficient, transfer curve,
 oversampling choice, nonlinear state, tolerance, or signal-dependent interaction.

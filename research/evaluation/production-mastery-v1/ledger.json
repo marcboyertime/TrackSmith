@@ -1,0 +1,489 @@
+{
+  "schemaVersion": "1.0",
+  "milestone": "TrackSmith Logic Production Mastery and Perceptual Evaluation v1",
+  "status": "active",
+  "plan": "docs/PRODUCTION_MASTERY_PERCEPTUAL_EVALUATION_V1.md",
+  "openedAt": "2026-07-27",
+  "frozenPredecessor": {
+    "name": "Production Intelligence v1",
+    "closureRecord": "docs/evidence/PRODUCTION_INTELLIGENCE_V1_CLOSURE_2026-07-27.md",
+    "closureCommit": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "implementationCommitNamedByClosure": "97d52ea6023af2b79188b966f4f0b77211f5c557",
+    "historicalEvidenceMutable": false
+  },
+  "gates": [
+    {
+      "id": "G0",
+      "name": "frozen_baseline",
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/PRODUCTION_MASTERY_V1_BASELINE_2026-07-27.md"
+      ]
+    },
+    {
+      "id": "G1",
+      "name": "production_judgment_failure_map",
+      "status": "passed",
+      "evidence": [
+        "research/evaluation/production-mastery-v1/failure-map.json",
+        "research/scripts/build-production-mastery-failure-map.py"
+      ]
+    },
+    {
+      "id": "G1.5",
+      "name": "annotated_natural_audio_evidence_corpus",
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/PRODUCTION_MASTERY_V1_AUDIO_EVIDENCE_CORPUS_ACCEPTANCE_2026-07-28.md",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/README.md",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/acquisition-plan.json",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/dataset-manifest.json",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/acquisition-ledger.json",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/annotation-schema.json",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/natural-audio-index.json",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/tracksmith-annotations.json",
+        "research/evaluation/production-mastery-v1/audio-evidence-corpus/audit-report.json",
+        "research/scripts/acquire-audio-evidence-corpus.py",
+        "research/scripts/build-audio-evidence-annotations.py",
+        "research/scripts/build-audio-evidence-index.py",
+        "research/scripts/promote-audio-evidence-captures.py",
+        "research/scripts/audit-audio-evidence-corpus.py"
+      ]
+    },
+    {
+      "id": "G2",
+      "name": "logic_native_bounded_profiles",
+      "status": "in_progress",
+      "evidence": [
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-channel-eq-production-profile-2026-07-27/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-production-profile-2026-07-27/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-deesser-2-production-profile-2026-07-28/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-noise-gate-production-profile-2026-07-29/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-noise-gate-production-profile-2026-07-29/project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx.zip",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-chromaverb-production-profile-2026-07-28/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.logicx.zip",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.partial-checkpoint.logicx.zip",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-stereo-delay-production-profile-2026-07-29/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-stereo-delay-production-profile-2026-07-29/project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx.zip",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx.zip",
+        "research/knowledge/logic-pro-12.3-empirical-campaign.json",
+        "research/knowledge/logic-pro-12.3-effects-knowledge.json",
+        "packages/ProductionIntelligence/Sources/ProductionIntelligence/LogicNativeToolKnowledge.generated.swift",
+        "research/knowledge/logic-pro-12.3-knowledge-coverage.json"
+      ]
+    },
+    {
+      "id": "G3",
+      "name": "ranked_deterministic_dsp",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "G4",
+      "name": "production_language_evaluation_v2",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "G5",
+      "name": "perceptual_and_workflow_evidence",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "G6",
+      "name": "installed_host_and_recovery_regression",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "G7",
+      "name": "closure",
+      "status": "pending",
+      "evidence": []
+    }
+  ],
+  "baseline": {
+    "head": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "worktreeCleanBeforeExpansion": true,
+    "trackedFileCount": 900,
+    "trackedPerFileDigestSHA256": "f70632a25e81487b4c9f33f6c39fd7fbd8a05601770aeda1214710016bc28c8e",
+    "testRunner": {
+      "debug": "68_of_68_passed",
+      "release": "68_of_68_passed",
+      "threadSanitizer": "68_of_68_passed_no_race_report"
+    },
+    "audioUnitHostProbe": {
+      "debug": "passed",
+      "release": "passed",
+      "threadSanitizer": "passed_no_race_report_repeat_max_below_deadline",
+      "realtimeHeap": "4000_callbacks_zero_observed_heap_operations"
+    },
+    "installedAU": {
+      "appBundleID": "com.marcboyer.logicaudioassistant",
+      "audioUnitBundleID": "com.marcboyer.logicaudioassistant.AudioUnit",
+      "component": "aufx/LgAA/ExAI",
+      "appGroup": "KDV9RC892F.com.marcboyer.logicaudioassistant",
+      "auval": "passed"
+    },
+    "logicEmpiricalStatus": {
+      "notRun": 197,
+      "partial": 3,
+      "complete": 0
+    },
+    "researchCorpus": "10_archives_125_of_125_members_hash_matched"
+  },
+  "capabilitySelection": {
+    "status": "selected_from_failure_map",
+    "selectedModules": [
+      "tracksmith_dsp:reverb",
+      "tracksmith_dsp:delay",
+      "tracksmith_dsp:expander_gate"
+    ],
+    "deferredModules": [
+      "tracksmith_dsp:dynamic_eq",
+      "tracksmith_dsp:transient_shaper",
+      "tracksmith_dsp:mid_side_eq",
+      "tracksmith_dsp:true_peak_limiter"
+    ],
+    "rationaleArtifact": "research/evaluation/production-mastery-v1/failure-map.json",
+    "selectionEvidence": {
+      "delayMeaningfulCases": 17,
+      "reverbMeaningfulCases": 16,
+      "expanderGateMeaningfulCases": 6,
+      "expanderGateMaximumPreservationRiskCases": 5
+    }
+  },
+  "audioEvidenceCorpus": {
+    "status": "passed",
+    "decisionClass": "product_decision",
+    "rationale": "The current generated PCM and synthetic listening fixtures are necessary deterministic controls but do not supply natural full-song distribution, aligned raw/stem/mix relationships, diverse recording conditions, or audio-grounded human production language.",
+    "planSection": "docs/PRODUCTION_MASTERY_PERCEPTUAL_EVALUATION_V1.md#G15--annotated-natural-audio-evidence-corpus",
+    "manifest": "research/evaluation/production-mastery-v1/audio-evidence-corpus/dataset-manifest.json",
+    "payloadRoot": "research/datasets/production-mastery-v1",
+    "payloadTrackedByGit": false,
+    "trainingAuthorized": false,
+    "providerUploadAuthorized": false,
+    "redistributionAuthorizedByMilestone": false,
+    "acceptanceRecord": "docs/evidence/PRODUCTION_MASTERY_V1_AUDIO_EVIDENCE_CORPUS_ACCEPTANCE_2026-07-28.md",
+    "acceptedCaptureCount": 19,
+    "acceptedByteCount": 632714727,
+    "indexedAssetCount": 390,
+    "summedAssetDurationSeconds": 10668.909007794784,
+    "annotationCount": 14,
+    "acceptedDatasetIDs": [
+      "audioset",
+      "medleydb",
+      "mixassist"
+    ],
+    "materialFindings": [
+      "AudioSet official page split counts disagree with the exact v1 CSV headers and data; both claims are retained and artifact-backed counts govern indexed scope.",
+      "Nine MixAssist audio assets are reused across the released train, validation, or test turn splits, so TrackSmith uses a session-disjoint local evaluation and holdout assignment.",
+      "Four exact MixAssist duplicate-audio groups are retained and do not cross the TrackSmith local split boundary.",
+      "MixAssist processed clips are 16 kHz mono and remain contextual audio-language evidence, not high-fidelity timbre, stereo, phase, or mastering preference references.",
+      "The MedleyDB sample supplies two full songs with aligned mixes, nine processed stems, ten raw sources, and dataset annotations at 44.1 kHz PCM."
+    ],
+    "requiredLanes": [
+      "natural_multitrack_or_known_stem_audio",
+      "audio_grounded_production_or_music_language",
+      "tracksmith_case_annotation_overlay"
+    ],
+    "supplementalLanes": [
+      "audioset_event_noise_and_source_presence_metadata_or_features"
+    ],
+    "spaceDesignerCheckpoint": {
+      "milestoneStatus": "unaccepted_partial_checkpoint",
+      "artifact": "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.partial-checkpoint.logicx.zip",
+      "sha256": "7490e18e55bef119d4b7f000c144377d60c4a2250eef8e7bdeb82769ccfcd810",
+      "archiveIntegrity": "unzip_test_passed",
+      "promotionClaimed": false
+    }
+  },
+  "logicNativeProfiles": {
+    "status": "in_progress",
+    "lastValidatedAt": "2026-07-30T01:29:46-04:00",
+    "profiles": [
+      {
+        "priority": 1,
+        "identity": "logic-pro-12.3:channel-eq",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-channel-eq-production-profile-48k-96k-2026-07-27",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-channel-eq-production-profile-2026-07-27/run.json",
+        "acceptedScope": [
+          "48k_neutral_and_header_bypass_source_exact",
+          "representative_single_band_shelf_pass_filter_and_multiband_impulse_profiles",
+          "hq_q_couple_analyzer_and_output_gain_behavior_in_recorded_states",
+          "stereo_left_right_mid_side_processing_on_generated_fixtures",
+          "bounded_save_reload_difference",
+          "one_repeated_96k_complex_state"
+        ],
+        "unmeasuredOrDecisive": [
+          "exhaustive_frequency_gain_q_slope_and_interaction_grid",
+          "parameter_automation_and_smoothing",
+          "additional_rates_and_channel_formats",
+          "controlled_level_matched_musical_preference",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 150 hash-ledgered artifacts and 24 bounded measurement assertions"
+      },
+      {
+        "priority": 2,
+        "identity": "logic-pro-12.3:compressor",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-compressor-production-profile-48k-2026-07-27",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-production-profile-2026-07-27/run.json",
+        "acceptedScope": [
+          "controlled_platinum_static_curve_from_minus60_through_minus1_dbfs",
+          "bounded_attack_0_50ms_and_release_51_490ms_tone_step_behavior",
+          "matched_control_platinum_and_vintage_vca_fet_opto_profiles",
+          "peak_max_sum_left_only_and_asymmetric_stereo_link_behavior",
+          "pcm_exact_settled_repeatability_with_first_transitions_retained",
+          "pcm_exact_vintage_opto_save_reload",
+          "source_exact_header_bypass_and_settled_exact_restoration"
+        ],
+        "unmeasuredOrDecisive": [
+          "studio_vca_studio_fet_and_classic_vca_modes",
+          "threshold_ratio_knee_makeup_autogain_and_full_parameter_grids",
+          "rms_auto_release_sidechain_filter_and_external_sidechain",
+          "active_distortion_limiter_and_parallel_mix",
+          "parameter_automation_smoothing_latency_tail_other_rates_and_formats",
+          "controlled_level_matched_musical_preference",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 95 hash-ledgered artifacts and 20 bounded measurement assertions"
+      },
+      {
+        "priority": 3,
+        "identity": "logic-pro-12.3:deesser-2",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-deesser-2-production-profile-48k-2026-07-28",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-deesser-2-production-profile-2026-07-28/run.json",
+        "acceptedScope": [
+          "relative_absolute_same_ratio_quiet_loud_level_dependence_at_threshold_minus9_5_db",
+          "split_wide_band_stop_and_shelving_behavior_at_detector_7001_hz",
+          "maximum_reduction_20_and_6_db_states",
+          "short_and_static_7khz_events_over_a_controlled_500hz_base",
+          "mono_and_stereo_channel_specific_event_behavior",
+          "pcm_exact_settled_repeatability_with_first_transitions_retained",
+          "source_exact_stereo_header_bypass_and_settled_exact_restoration",
+          "pcm_exact_relative_split_band_stop_stereo_save_reload"
+        ],
+        "unmeasuredOrDecisive": [
+          "broader_threshold_and_detector_frequency_grids",
+          "filter_solo_and_external_sidechain",
+          "parameter_automation_and_smoothing",
+          "dedicated_latency_tail_other_rates_and_channel_formats",
+          "controlled_vocal_listening_for_intelligibility_breath_air_and_lisp_risk",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 77 hash-ledgered artifacts and 21 bounded measurement assertions"
+      },
+      {
+        "priority": 4,
+        "identity": "logic-pro-12.3:noise-gate",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-noise-gate-production-profile-48k-2026-07-29",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-noise-gate-production-profile-2026-07-29/run.json",
+        "acceptedScope": [
+          "source_exact_header_bypass_on_the_correct_48khz_mono_fixture",
+          "default_and_controlled_gate_states_with_threshold_depth_hysteresis_and_two_attack_hold_release_states",
+          "one_controlled_ducker_state",
+          "one_240hz_to_6900hz_internal_detector_bandpass_state",
+          "first_transition_outputs_retained_separately_from_pcm_exact_settled_repeats",
+          "three_pcm_exact_default_burst_repeats_and_three_pcm_exact_controlled_vocal_like_repeats",
+          "visible_controlled_state_save_reload_and_exact_cross_reload_settled_pcm",
+          "one_deterministic_vocal_like_fixture_with_no_listening_claim"
+        ],
+        "unmeasuredOrDecisive": [
+          "external_sidechain_monitor_and_alternate_routing",
+          "lookahead_above_zero_and_exhaustive_threshold_depth_hysteresis_timing_and_filter_grids",
+          "mono_stereo_detector_linking_other_channel_layouts_and_sample_rates",
+          "parameter_automation_smoothing_and_dedicated_latency_profile",
+          "real_breath_room_decay_cymbal_tail_note_end_and_noise_floor_preservation",
+          "controlled_level_matched_musical_preference",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 106 hash-ledgered artifacts and 9 bounded measurement assertions"
+      },
+      {
+        "priority": 5,
+        "identity": "logic-pro-12.3:chromaverb",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-chromaverb-production-profile-48k-2026-07-28",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-chromaverb-production-profile-2026-07-28/run.json",
+        "acceptedScope": [
+          "default_room_wet_only_impulse_onset_peak_tail_and_three_render_pcm_repeatability",
+          "controlled_digital_wet_only_predelay_decay_attack_size_density_distance_and_early_late_state",
+          "pcm_exact_settled_digital_repeatability_with_first_transition_retained",
+          "source_exact_header_bypass_mapped_to_both_stereo_output_channels",
+          "independent_left_only_and_right_only_channel_matrix_in_the_recorded_stereo_instance",
+          "visible_coupled_control_state_save_reload_and_exact_within_reload_settled_pair",
+          "retained_nonexact_pre_save_versus_post_reload_time_varying_pcm_result"
+        ],
+        "unmeasuredOrDecisive": [
+          "twelve_other_room_algorithms",
+          "mixed_dry_wet_and_broader_parameter_interaction_grid",
+          "alternate_quality_width_mono_maker_modulation_damping_and_output_eq_states",
+          "parameter_automation_smoothing_other_rates_and_channel_formats",
+          "controlled_level_matched_vocal_drum_guitar_synth_and_mix_listening",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 61 hash-ledgered artifacts and 17 bounded measurement assertions"
+      },
+      {
+        "priority": 6,
+        "identity": "logic-pro-12.3:space-designer",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-space-designer-production-profile-48k-2026-07-28",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/run.json",
+        "acceptedScope": [
+          "one_generated_hash_identified_mono_custom_ir_at_48khz_pcm24_and_two_seconds",
+          "one_active_stereo_true_multi_wet_only_state_with_explicit_neutral_controls",
+          "source_exact_header_bypass_mapped_to_both_stereo_output_channels",
+          "channel_specific_impulse_onset_peak_tail_spectrum_phase_and_relationship_measurements",
+          "three_pre_save_pcm_exact_repeats",
+          "final_package_with_audio_files_and_space_designer_ir_bundled",
+          "visible_active_control_and_ir_state_recovery",
+          "two_post_reload_pcm_exact_repeats",
+          "retained_one_integer_count_cross_reload_limit_in_313_samples"
+        ],
+        "unmeasuredOrDecisive": [
+          "factory_and_synthesized_ir_behavior",
+          "alternate_process_modes_mono_true_stereo_surround_and_stereo_fixture_matrices",
+          "ir_envelope_filter_output_eq_reverse_spread_crossfeed_dry_wet_and_parameter_grids",
+          "level_dependence_automation_smoothing_tempo_sync_other_rates_and_formats",
+          "controlled_level_matched_source_specific_listening",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 66 hash-ledgered artifacts and 11 bounded measurement assertions"
+      },
+      {
+        "priority": 7,
+        "identity": "logic-pro-12.3:stereo-delay",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-stereo-delay-production-profile-48k-2026-07-29",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-stereo-delay-production-profile-2026-07-29/run.json",
+        "acceptedScope": [
+          "source_exact_header_bypass_on_the_correct_48khz_six_second_mono_impulse",
+          "one_120_bpm_quarter_note_left_and_eighth_note_right_default_synchronized_state",
+          "one_free_time_wet_only_500ms_left_and_250ms_right_feedback_zero_state",
+          "one_free_time_wet_only_35_percent_feedback_state_with_bounded_six_second_decay",
+          "straight_left_only_channel_independence_with_exact_right_channel_silence",
+          "one_50_percent_left_to_right_crossfeed_state",
+          "first_transition_output_retained_separately_from_pcm_exact_settled_repeats",
+          "visible_crossfeed_state_save_reload_and_exact_cross_reload_settled_pcm",
+          "one_deterministic_guitar_like_fixture_with_no_listening_claim"
+        ],
+        "unmeasuredOrDecisive": [
+          "other_routing_menus_right_to_left_crossfeed_stereo_link_mono_instances_and_channel_layouts",
+          "other_tempos_note_values_free_times_deviation_values_and_tempo_changes",
+          "feedback_extremes_runaway_peak_safety_and_longer_include_tail_capture",
+          "filter_phase_dry_wet_and_repeat_spectrum_grids",
+          "parameter_automation_smoothing_realtime_offline_parity_other_rates_and_presets",
+          "controlled_level_matched_rhythmic_masking_width_articulation_and_preference_listening",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 125 hash-ledgered artifacts and 9 bounded measurement assertions"
+      },
+      {
+        "priority": 8,
+        "identity": "logic-pro-12.3:tape-delay",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-tape-delay-production-profile-48k-2026-07-29",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-tape-delay-production-profile-2026-07-29/run.json",
+        "acceptedScope": [
+          "source_exact_header_bypass_on_the_correct_48khz_six_second_mono_impulse",
+          "one_exact_displayed_120bpm_synchronized_default_state",
+          "one_free_time_wet_only_500ms_clean_feedback_zero_state_with_exact_settled_peak_timing",
+          "one_free_time_wet_only_clean_50_percent_feedback_state_bounded_by_the_six_second_no_tail_render",
+          "one_free_time_wet_only_diffuse_feedback_zero_state_with_mode_dependent_impulse_behavior",
+          "first_transition_outputs_retained_separately_from_pcm_exact_settled_repeats",
+          "visible_diffuse_state_save_reload_and_exact_cross_reload_settled_pcm",
+          "one_deterministic_guitar_like_fixture_with_no_listening_claim"
+        ],
+        "unmeasuredOrDecisive": [
+          "broader_tempo_note_deviation_smoothing_delay_time_and_interaction_grids",
+          "clip_threshold_transfer_filter_feedback_extremes_freeze_and_runaway_peak_safety",
+          "lfo_flutter_sidebands_pitch_stability_spread_stereo_matrix_and_mono_sum",
+          "parameter_automation_smoothing_realtime_offline_parity_other_rates_and_presets",
+          "controlled_level_matched_rhythmic_masking_articulation_depth_character_and_preference_listening",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 118 hash-ledgered artifacts and 8 bounded measurement assertions"
+      },
+      {
+        "priority": 9,
+        "identity": "logic-pro-12.3:bitcrusher",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-bitcrusher-production-profile-48k-2026-07-29",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/run.json",
+        "acceptedScope": [
+          "source_exact_48khz_mono_to_stereo_header_bypass",
+          "fold_clip_and_wrap_matched_state_three_repeat_pcm_identity_and_pairwise_distinction",
+          "bounded_one_factor_drive_resolution_downsampling_mix_and_clip_level_grid",
+          "normal_save_reload_exact_wrap_state_and_pcm_recovery",
+          "one_deterministic_guitar_like_fixture_with_three_repeat_pcm_identity_and_no_listening_claim",
+          "project_media_source_preservation_pcm_exactness"
+        ],
+        "unmeasuredOrDecisive": [
+          "exhaustive_continuous_and_higher_order_parameter_grids",
+          "harmonic_imd_alias_dc_noise_and_sample_rate_profiles",
+          "true_stereo_and_channel_independence",
+          "parameter_automation_and_smoothing",
+          "host_reported_latency_and_impulse_tail",
+          "controlled_level_matched_musical_listening",
+          "private_implementation",
+          "logic_host_control_authority"
+        ],
+        "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 92 hash-ledgered artifacts and 18 bounded measurement assertions"
+      }
+    ],
+    "nextRequiredIdentity": "logic-pro-12.3:adaptive-limiter"
+  },
+  "claimClasses": [
+    "frozen_predecessor_evidence",
+    "documentary_source",
+    "professional_practice_heuristic",
+    "tracksmith_measurement",
+    "inferred_consequence",
+    "subjective_listening_result",
+    "product_decision"
+  ],
+  "openManualDependencies": [],
+  "knownAnomalies": [
+    {
+      "id": "git-metadata-ds-store",
+      "scope": ".git/refs/.DS_Store",
+      "effect": "git fsck reports invalid ref name; HEAD, index, tracked digest, worktree, builds, and product gates are unaffected",
+      "action": "preserved_existing_machine_metadata"
+    }
+  ]
+}

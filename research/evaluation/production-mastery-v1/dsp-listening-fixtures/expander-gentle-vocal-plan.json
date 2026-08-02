@@ -1,0 +1,67 @@
+{
+  "goals" : [
+
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.65,
+      "enabled" : true,
+      "id" : "281B2AE8-8EB3-58DF-BF00-FF2B2940771A",
+      "locked" : false,
+      "parameters" : {
+        "algorithmVersion" : 1,
+        "attackMS" : 4,
+        "holdMS" : 90,
+        "hysteresisDB" : 6,
+        "mix" : 1,
+        "rangeDB" : 14,
+        "ratio" : 2,
+        "releaseMS" : 180,
+        "thresholdDB" : -48
+      },
+      "rationale" : "Reduce inter-phrase noise gently while protecting word tails.",
+      "type" : "expander"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "D6CEBD35-D402-5499-ADC7-CC352FA0CDB0",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 3.379320640206629e-05
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "7F311904-81B8-5261-BEDB-43E6CE3613B0",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -3,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Retain inter-sample margin while candidate loudness is matched.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 6,
+    "maxTruePeakDB" : -3,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "9A8FFC78-D402-5499-ADC7-CC352FA0CDB0",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal"
+  },
+  "sourceSnapshotID" : "8FB95134-3443-5C7D-B696-51AE37F71702"
+}

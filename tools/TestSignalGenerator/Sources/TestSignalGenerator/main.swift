@@ -3,17 +3,59 @@ import DSPCore
 import Foundation
 
 @main
+@MainActor
 enum TestSignalGenerator {
     static func main() {
         do {
             let arguments = Array(CommandLine.arguments.dropFirst())
             if arguments.first == "--logic-measurement-suite" {
-                guard arguments.count == 2 else {
+                guard arguments.count == 2 || arguments.count == 4 else {
                     throw GeneratorError.usage(
-                        "usage: TestSignalGenerator --logic-measurement-suite OUTPUT_DIRECTORY"
+                        "usage: TestSignalGenerator --logic-measurement-suite OUTPUT_DIRECTORY "
+                            + "[--sample-rate HZ]"
                     )
                 }
+                try configureSampleRate(arguments)
                 try writeLogicMeasurementSuite(to: URL(fileURLWithPath: arguments[1], isDirectory: true))
+                return
+            }
+            if arguments.first == "--logic-compressor-ballistics" {
+                guard arguments.count == 2 || arguments.count == 4 else {
+                    throw GeneratorError.usage(
+                        "usage: TestSignalGenerator --logic-compressor-ballistics "
+                            + "OUTPUT_DIRECTORY [--sample-rate HZ]"
+                    )
+                }
+                try configureSampleRate(arguments)
+                try writeLogicCompressorBallistics(
+                    to: URL(fileURLWithPath: arguments[1], isDirectory: true)
+                )
+                return
+            }
+            if arguments.first == "--logic-deesser-event-suite" {
+                guard arguments.count == 2 || arguments.count == 4 else {
+                    throw GeneratorError.usage(
+                        "usage: TestSignalGenerator --logic-deesser-event-suite "
+                            + "OUTPUT_DIRECTORY [--sample-rate HZ]"
+                    )
+                }
+                try configureSampleRate(arguments)
+                try writeLogicDeEsserEventSuite(
+                    to: URL(fileURLWithPath: arguments[1], isDirectory: true)
+                )
+                return
+            }
+            if arguments.first == "--logic-space-designer-ir-suite" {
+                guard arguments.count == 2 || arguments.count == 4 else {
+                    throw GeneratorError.usage(
+                        "usage: TestSignalGenerator --logic-space-designer-ir-suite "
+                            + "OUTPUT_DIRECTORY [--sample-rate HZ]"
+                    )
+                }
+                try configureSampleRate(arguments)
+                try writeLogicSpaceDesignerIRSuite(
+                    to: URL(fileURLWithPath: arguments[1], isDirectory: true)
+                )
                 return
             }
 
@@ -35,6 +77,21 @@ enum TestSignalGenerator {
             FileHandle.standardError.write(Data("error: \(error)\n".utf8))
             exit(2)
         }
+    }
+
+    private static func configureSampleRate(_ arguments: [String]) throws {
+        guard arguments.count == 4 else { return }
+        guard arguments[2] == "--sample-rate",
+              let requestedRate = Double(arguments[3]),
+              requestedRate.isFinite,
+              requestedRate.rounded() == requestedRate,
+              (44_100 ... 192_000).contains(requestedRate)
+        else {
+            throw GeneratorError.usage(
+                "--sample-rate must be an integer from 44100 through 192000 Hz"
+            )
+        }
+        sampleRate = requestedRate
     }
 
     private static func writeLogicMeasurementSuite(to directory: URL) throws {
@@ -64,6 +121,11 @@ enum TestSignalGenerator {
                 "amplitude_ladder_1khz_mono.wav",
                 "Input/output curve, threshold, knee, gain staging, clipping, gating, and level-dependent tone characterization.",
                 makeAmplitudeLadder()
+            ),
+            (
+                "dc_offset_probe_mono.wav",
+                "DC-removal and very-low-frequency preservation probe with separate silence, DC-only, DC-plus-30-Hz, and zero-mean-30-Hz sections.",
+                makeDCOffsetProbe()
             ),
             (
                 "multitone_mono.wav",
@@ -177,7 +239,197 @@ enum TestSignalGenerator {
         print("fixtures=\(records.count) sample_rate=\(Int(sampleRate)) manifest=manifest.json")
     }
 
-    private static let sampleRate = 48_000.0
+    private static func writeLogicCompressorBallistics(to directory: URL) throws {
+        try FileManager.default.createDirectory(
+            at: directory,
+            withIntermediateDirectories: true
+        )
+        let fileName = "compressor_ballistics_1khz_mono.wav"
+        let url = directory.appendingPathComponent(fileName)
+        let buffer = makeCompressorBallistics()
+        try WAVFile.writePCM24(buffer, url: url)
+        let stereoLinkFileName = "compressor_ballistics_1khz_stereo_link_probe.wav"
+        let stereoLinkURL = directory.appendingPathComponent(stereoLinkFileName)
+        let stereoLinkBuffer = makeCompressorStereoLinkProbe()
+        try WAVFile.writePCM24(stereoLinkBuffer, url: stereoLinkURL)
+        let levels = [-30.0, -6.0, -30.0, -6.0, -30.0, -6.0, -30.0]
+        let manifest = CompressorBallisticsManifest(
+            schemaVersion: "1.0",
+            fixtureVersion: "logic-compressor-ballistics-v2",
+            product: "TrackSmith",
+            generatedBy: "TestSignalGenerator",
+            fileName: fileName,
+            sha256: try fileSHA256(url),
+            stereoLinkProbeFileName: stereoLinkFileName,
+            stereoLinkProbeSHA256: try fileSHA256(stereoLinkURL),
+            sampleRate: Int(sampleRate),
+            channelCount: buffer.channelCount,
+            stereoLinkProbeChannelCount: stereoLinkBuffer.channelCount,
+            frameCount: buffer.frameCount,
+            durationSeconds: Double(buffer.frameCount) / buffer.sampleRate,
+            encoding: "PCM signed 24-bit WAV",
+            toneFrequencyHz: 1_000,
+            segmentSeconds: 1,
+            segmentPeakLevelsDBFS: levels,
+            stereoLinkProbeChannelPeakLevelsDBFS: [
+                levels,
+                Array(repeating: -30.0, count: levels.count),
+            ],
+            transitionKinds: [
+                "attack", "release", "attack", "release", "attack", "release",
+            ],
+            deterministic: true,
+            epistemicBoundary: [
+                "The fixture exposes level-step response under an exact recorded compressor state; it does not identify a private detector or gain-smoothing topology.",
+                "Attack and release observations require the exact Logic version, processor mode, detector, threshold, ratio, knee, gain controls, routing, sample rate, render path, hashes, and repeated output.",
+                "The stereo link probe holds the right channel at -30 dBFS while the left channel steps between -30 and -6 dBFS; correlated right-channel gain movement is evidence only for the exact tested stereo state.",
+                "Objective settling behavior is not proof of musical usefulness or a preferred compressor sound.",
+            ]
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        try encoder.encode(manifest).write(
+            to: directory.appendingPathComponent("manifest.json"),
+            options: .atomic
+        )
+        print("Wrote Logic Compressor ballistics fixture:")
+        print(directory.standardizedFileURL.path)
+        print(
+            "fixture=\(fileName) sample_rate=\(Int(sampleRate)) "
+                + "frames=\(buffer.frameCount) stereo_link_fixture=\(stereoLinkFileName) "
+                + "manifest=manifest.json"
+        )
+    }
+
+    private static func writeLogicDeEsserEventSuite(to directory: URL) throws {
+        try FileManager.default.createDirectory(
+            at: directory,
+            withIntermediateDirectories: true
+        )
+        let fixtures: [(String, String, AudioBuffer)] = [
+            (
+                "deesser_level_mode_probe_mono.wav",
+                "Same-ratio quiet/loud pairs plus bounded high-band levels for Relative/Absolute and Split/Wide comparisons.",
+                makeDeEsserLevelModeProbe()
+            ),
+            (
+                "deesser_event_probe_mono.wav",
+                "Short 7 kHz events and static 7 kHz intervals over a controlled 500 Hz base for objective event/static comparisons.",
+                makeDeEsserEventProbe(stereo: false)
+            ),
+            (
+                "deesser_event_probe_stereo.wav",
+                "Left-channel 7 kHz events over a two-channel 500 Hz base for bounded stereo-link and collateral-gain observations.",
+                makeDeEsserEventProbe(stereo: true)
+            ),
+        ]
+        var records: [MeasurementFixtureRecord] = []
+        for (fileName, purpose, buffer) in fixtures {
+            let url = directory.appendingPathComponent(fileName)
+            try WAVFile.writePCM24(buffer, url: url)
+            records.append(
+                MeasurementFixtureRecord(
+                    fileName: fileName,
+                    sha256: try fileSHA256(url),
+                    purpose: purpose,
+                    sampleRate: Int(buffer.sampleRate),
+                    channelCount: buffer.channelCount,
+                    frameCount: buffer.frameCount,
+                    durationSeconds: Double(buffer.frameCount) / buffer.sampleRate,
+                    encoding: "PCM signed 24-bit WAV",
+                    deterministic: true
+                )
+            )
+        }
+        let manifest = DeEsserEventSuiteManifest(
+            schemaVersion: "1.0",
+            fixtureVersion: "logic-deesser-event-suite-v1",
+            product: "TrackSmith",
+            generatedBy: "TestSignalGenerator",
+            sampleRate: Int(sampleRate),
+            baseFrequencyHz: 500,
+            detectorFrequencyHz: 7_000,
+            segmentSeconds: 1,
+            eventStartSecondsWithinSegment: 0.40,
+            eventEndSecondsWithinSegment: 0.52,
+            fixtures: records,
+            epistemicBoundary: [
+                "These synthetic tones expose gain behavior for exact recorded DeEsser 2 states; they are not speech, phonemes, or a listening-quality reference.",
+                "Relative/Absolute, Split/Wide, filter, threshold, maximum reduction, channel format, sample rate, routing, render path, input hash, and output hash must be retained with every result.",
+                "A detected 7 kHz change does not establish consonant intelligibility, breath preservation, air preservation, lisp avoidance, or musical usefulness.",
+                "The stereo probe supports only channel-gain observations for the exact tested state; it does not reveal a private detector or linking topology.",
+            ]
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        try encoder.encode(manifest).write(
+            to: directory.appendingPathComponent("manifest.json"),
+            options: .atomic
+        )
+        print("Wrote Logic DeEsser 2 event suite:")
+        print(directory.standardizedFileURL.path)
+        print(
+            "fixtures=\(records.count) sample_rate=\(Int(sampleRate)) "
+                + "manifest=manifest.json"
+        )
+    }
+
+    private static func writeLogicSpaceDesignerIRSuite(to directory: URL) throws {
+        try FileManager.default.createDirectory(
+            at: directory,
+            withIntermediateDirectories: true
+        )
+        let fileName = "tracksmith_space_designer_sparse_diffuse_ir_mono.wav"
+        let url = directory.appendingPathComponent(fileName)
+        let buffer = makeSpaceDesignerCustomIR()
+        try WAVFile.writePCM24(buffer, url: url)
+        let tapTimesSeconds = [0.0, 0.010, 0.023, 0.047, 0.091, 0.143, 0.211]
+        let manifest = SpaceDesignerIRSuiteManifest(
+            schemaVersion: "1.0",
+            fixtureVersion: "tracksmith-space-designer-ir-suite-v1",
+            product: "TrackSmith",
+            generatedBy: "TestSignalGenerator",
+            fixtureDate: "2026-07-28",
+            sampleRate: Int(sampleRate),
+            ir: MeasurementFixtureRecord(
+                fileName: fileName,
+                sha256: try fileSHA256(url),
+                purpose: "Identity-bearing mono convolution IR with sparse early taps and a bounded deterministic diffuse tail.",
+                sampleRate: Int(buffer.sampleRate),
+                channelCount: buffer.channelCount,
+                frameCount: buffer.frameCount,
+                durationSeconds: Double(buffer.frameCount) / buffer.sampleRate,
+                encoding: "PCM signed 24-bit WAV",
+                deterministic: true
+            ),
+            impulseTapFrames: tapTimesSeconds.map { Int(($0 * sampleRate).rounded()) },
+            impulseTapAmplitudes: [0.5, 0.32, -0.24, 0.18, -0.12, 0.09, -0.07],
+            diffuseTailStartFrame: Int((0.25 * sampleRate).rounded()),
+            diffuseTailEndFrame: Int((1.5 * sampleRate).rounded()),
+            diffuseTailMaximumAmplitude: 0.015,
+            diffuseTailSeed: 0x5350414345444553,
+            epistemicBoundary: [
+                "This generated WAV identifies the exact IR asset supplied to Space Designer; it does not identify Logic's convolution implementation.",
+                "Any accepted render must retain the Logic version/build, loaded IR filename and hash, channel format, quality, IR sample-rate/length state, envelope/filter/EQ state, latency compensation, routing, source/output hashes, and reload evidence.",
+                "A convolution match or difference is evidence for the exact recorded state only and is not proof of realism, depth, preference, or musical usefulness.",
+                "The diffuse tail is deterministic generator output, not a recording of a real acoustic space.",
+            ]
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        try encoder.encode(manifest).write(
+            to: directory.appendingPathComponent("manifest.json"),
+            options: .atomic
+        )
+        print("Wrote Logic Space Designer custom IR suite:")
+        print(directory.standardizedFileURL.path)
+        print(
+            "fixture=\(fileName) sample_rate=\(Int(sampleRate)) "
+                + "frames=\(buffer.frameCount) manifest=manifest.json"
+        )
+    }
+
+    private static var sampleRate = 48_000.0
 
     private static func makeSilence() -> AudioBuffer {
         AudioBuffer(channels: [Array(repeating: 0, count: Int(sampleRate * 4))], sampleRate: sampleRate)
@@ -194,6 +446,34 @@ enum TestSignalGenerator {
         let levels: [Double] = [-48, -36, -24, -18, -12, -6, -1]
         for (index, level) in levels.enumerated() {
             samples[Int(sampleRate * Double(index + 1))] = dbAmplitude(level)
+        }
+        return AudioBuffer(channels: [samples], sampleRate: sampleRate)
+    }
+
+    private static func makeSpaceDesignerCustomIR() -> AudioBuffer {
+        let frameCount = Int(sampleRate * 2)
+        var samples = Array(repeating: Float.zero, count: frameCount)
+        let taps: [(Double, Float)] = [
+            (0.0, 0.5),
+            (0.010, 0.32),
+            (0.023, -0.24),
+            (0.047, 0.18),
+            (0.091, -0.12),
+            (0.143, 0.09),
+            (0.211, -0.07),
+        ]
+        for (timeSeconds, amplitude) in taps {
+            samples[Int((timeSeconds * sampleRate).rounded())] = amplitude
+        }
+
+        let tailStart = Int((0.25 * sampleRate).rounded())
+        let tailEnd = Int((1.5 * sampleRate).rounded())
+        var generator = LCG(state: 0x5350414345444553)
+        for frame in tailStart..<tailEnd {
+            let progress = Double(frame - tailStart) / Double(max(1, tailEnd - tailStart))
+            let envelope = exp(-5 * progress)
+            let noise = generator.nextUnit() * 2 - 1
+            samples[frame] += Float(0.015 * envelope * noise)
         }
         return AudioBuffer(channels: [samples], sampleRate: sampleRate)
     }
@@ -234,6 +514,122 @@ enum TestSignalGenerator {
             }
         }
         return AudioBuffer(channels: [samples], sampleRate: sampleRate)
+    }
+
+    private static func makeDCOffsetProbe() -> AudioBuffer {
+        let frameCount = Int(sampleRate * 8)
+        var samples = Array(repeating: Float.zero, count: frameCount)
+        for frame in samples.indices {
+            let time = Double(frame) / sampleRate
+            switch time {
+            case 1..<3:
+                samples[frame] = 0.125
+            case 3..<5:
+                samples[frame] = Float(0.125 + 0.2 * sin(2 * Double.pi * 30 * time))
+            case 5..<7:
+                samples[frame] = Float(0.2 * sin(2 * Double.pi * 30 * time))
+            default:
+                samples[frame] = 0
+            }
+        }
+        return AudioBuffer(channels: [samples], sampleRate: sampleRate)
+    }
+
+    private static func makeCompressorBallistics() -> AudioBuffer {
+        let levels = [-30.0, -6.0, -30.0, -6.0, -30.0, -6.0, -30.0]
+        let framesPerSegment = Int(sampleRate)
+        var samples = Array(
+            repeating: Float.zero,
+            count: framesPerSegment * levels.count
+        )
+        for frame in samples.indices {
+            let segment = min(frame / framesPerSegment, levels.count - 1)
+            let time = Double(frame) / sampleRate
+            samples[frame] = dbAmplitude(levels[segment])
+                * Float(sin(2 * Double.pi * 1_000 * time))
+        }
+        applyFade(to: &samples, durationSeconds: 0.01)
+        return AudioBuffer(channels: [samples], sampleRate: sampleRate)
+    }
+
+    private static func makeCompressorStereoLinkProbe() -> AudioBuffer {
+        let driver = makeCompressorBallistics().channels[0]
+        var opposite = Array(repeating: Float.zero, count: driver.count)
+        for frame in opposite.indices {
+            let time = Double(frame) / sampleRate
+            opposite[frame] = dbAmplitude(-30)
+                * Float(sin(2 * Double.pi * 1_000 * time))
+        }
+        applyFade(to: &opposite, durationSeconds: 0.01)
+        return AudioBuffer(channels: [driver, opposite], sampleRate: sampleRate)
+    }
+
+    private static func makeDeEsserLevelModeProbe() -> AudioBuffer {
+        let baseLevelsDBFS = [-30.0, -30.0, -18.0, -18.0, -18.0, -18.0]
+        let highLevelsDBFS: [Double?] = [nil, -18.0, nil, -6.0, -24.0, -6.0]
+        let framesPerSegment = Int(sampleRate)
+        var samples = Array(
+            repeating: Float.zero,
+            count: framesPerSegment * baseLevelsDBFS.count
+        )
+        for frame in samples.indices {
+            let segment = min(frame / framesPerSegment, baseLevelsDBFS.count - 1)
+            let time = Double(frame) / sampleRate
+            let base = dbAmplitude(baseLevelsDBFS[segment])
+                * Float(sin(2 * Double.pi * 500 * time))
+            let high = highLevelsDBFS[segment].map {
+                dbAmplitude($0) * Float(sin(2 * Double.pi * 7_000 * time))
+            } ?? 0
+            samples[frame] = base + high
+        }
+        applyFade(to: &samples, durationSeconds: 0.01)
+        return AudioBuffer(channels: [samples], sampleRate: sampleRate)
+    }
+
+    private static func makeDeEsserEventProbe(stereo: Bool) -> AudioBuffer {
+        let segmentKinds = [
+            "base_only",
+            "event_minus_6",
+            "static_minus_24",
+            "event_minus_12",
+            "static_minus_12",
+            "event_minus_6_repeat",
+        ]
+        let framesPerSegment = Int(sampleRate)
+        let frameCount = framesPerSegment * segmentKinds.count
+        var left = Array(repeating: Float.zero, count: frameCount)
+        var right = Array(repeating: Float.zero, count: frameCount)
+        for frame in 0..<frameCount {
+            let segment = min(frame / framesPerSegment, segmentKinds.count - 1)
+            let localTime = Double(frame % framesPerSegment) / sampleRate
+            let time = Double(frame) / sampleRate
+            let base = dbAmplitude(-18)
+                * Float(sin(2 * Double.pi * 500 * time))
+            let highLevel: Double?
+            switch segmentKinds[segment] {
+            case "event_minus_6", "event_minus_6_repeat":
+                highLevel = (0.40 ..< 0.52).contains(localTime) ? -6 : nil
+            case "event_minus_12":
+                highLevel = (0.40 ..< 0.52).contains(localTime) ? -12 : nil
+            case "static_minus_24":
+                highLevel = -24
+            case "static_minus_12":
+                highLevel = -12
+            default:
+                highLevel = nil
+            }
+            let high = highLevel.map {
+                dbAmplitude($0) * Float(sin(2 * Double.pi * 7_000 * time))
+            } ?? 0
+            left[frame] = base + high
+            right[frame] = base
+        }
+        applyFade(to: &left, durationSeconds: 0.01)
+        if stereo {
+            applyFade(to: &right, durationSeconds: 0.01)
+            return AudioBuffer(channels: [left, right], sampleRate: sampleRate)
+        }
+        return AudioBuffer(channels: [left], sampleRate: sampleRate)
     }
 
     private static func makeMultitone() -> AudioBuffer {
@@ -428,6 +824,62 @@ private struct LogicMeasurementSuiteManifest: Codable {
     var sampleRate: Int
     var epistemicBoundary: [String]
     var fixtures: [MeasurementFixtureRecord]
+}
+
+private struct CompressorBallisticsManifest: Codable {
+    var schemaVersion: String
+    var fixtureVersion: String
+    var product: String
+    var generatedBy: String
+    var fileName: String
+    var sha256: String
+    var stereoLinkProbeFileName: String
+    var stereoLinkProbeSHA256: String
+    var sampleRate: Int
+    var channelCount: Int
+    var stereoLinkProbeChannelCount: Int
+    var frameCount: Int
+    var durationSeconds: Double
+    var encoding: String
+    var toneFrequencyHz: Int
+    var segmentSeconds: Int
+    var segmentPeakLevelsDBFS: [Double]
+    var stereoLinkProbeChannelPeakLevelsDBFS: [[Double]]
+    var transitionKinds: [String]
+    var deterministic: Bool
+    var epistemicBoundary: [String]
+}
+
+private struct DeEsserEventSuiteManifest: Codable {
+    var schemaVersion: String
+    var fixtureVersion: String
+    var product: String
+    var generatedBy: String
+    var sampleRate: Int
+    var baseFrequencyHz: Int
+    var detectorFrequencyHz: Int
+    var segmentSeconds: Int
+    var eventStartSecondsWithinSegment: Double
+    var eventEndSecondsWithinSegment: Double
+    var fixtures: [MeasurementFixtureRecord]
+    var epistemicBoundary: [String]
+}
+
+private struct SpaceDesignerIRSuiteManifest: Codable {
+    var schemaVersion: String
+    var fixtureVersion: String
+    var product: String
+    var generatedBy: String
+    var fixtureDate: String
+    var sampleRate: Int
+    var ir: MeasurementFixtureRecord
+    var impulseTapFrames: [Int]
+    var impulseTapAmplitudes: [Double]
+    var diffuseTailStartFrame: Int
+    var diffuseTailEndFrame: Int
+    var diffuseTailMaximumAmplitude: Double
+    var diffuseTailSeed: UInt64
+    var epistemicBoundary: [String]
 }
 
 private struct MeasurementFixtureRecord: Codable {

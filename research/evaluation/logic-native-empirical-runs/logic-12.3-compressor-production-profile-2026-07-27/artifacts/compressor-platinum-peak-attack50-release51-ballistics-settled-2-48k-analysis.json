@@ -1,0 +1,946 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 275933,
+          "1024": 165045,
+          "16": 177995,
+          "256": 169302
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 16,
+          "correlation": 0.9645234594729387,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 336000,
+        "differing_sample_count": 275933,
+        "first_differing_sample": 48002,
+        "last_differing_sample": 335975,
+        "least_squares_gain": 0.3146204165733004,
+        "least_squares_gain_db": -10.044261964997043,
+        "max_absolute_error_integer": 2960171,
+        "mean_error_normalized": 2.2534755369027454e-05,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -15.880497181515924,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9645193733895494
+      },
+      {
+        "absolute_error_threshold_counts": {
+          "1": 275933,
+          "1024": 165045,
+          "16": 177995,
+          "256": 169302
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 16,
+          "correlation": 0.9645234594729387,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 336000,
+        "differing_sample_count": 275933,
+        "first_differing_sample": 48002,
+        "last_differing_sample": 335975,
+        "least_squares_gain": 0.3146204165733004,
+        "least_squares_gain_db": -10.044261964997043,
+        "max_absolute_error_integer": 2960171,
+        "mean_error_normalized": 2.2534755369027454e-05,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -15.880497181515924,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9645193733895494
+      }
+    ],
+    "channel_count_match": false,
+    "channel_mapping": [
+      {
+        "rendered_channel_index": 0,
+        "source_channel_index": 0
+      },
+      {
+        "rendered_channel_index": 1,
+        "source_channel_index": 0
+      }
+    ],
+    "format_match": false,
+    "frame_count_match": true,
+    "pcm_byte_exact": false,
+    "sample_rate_and_bit_depth_match": true,
+    "source_broadcast_pcm_exact": false
+  },
+  "compressor_ballistics_transfer": {
+    "analysis_boundary": "Objective windowed gain settling for the exact recorded state only; does not identify a private detector or smoothing topology and does not establish musical usefulness.",
+    "channels": [
+      {
+        "rendered_channel_index": 0,
+        "segments": [
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": 0.0,
+            "maximum_window_gain_db": 0.0,
+            "minimum_window_gain_db": 0.0,
+            "rendered_rms_dbfs_first_window": -37.78316265900592,
+            "sampled_gain_db": [
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 0,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 0.0,
+            "source_rms_dbfs_first_window": -37.78316265900592,
+            "steady_last_200ms_median_gain_db": 0.0,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -1.2583432611750265,
+            "maximum_window_gain_db": -1.2583432611750265,
+            "minimum_window_gain_db": -10.576764239090803,
+            "rendered_rms_dbfs_first_window": -10.268643446921699,
+            "sampled_gain_db": [
+              {
+                "gain_db": -1.2583432611750265,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -3.6762935105507877,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -5.641233913149417,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.268574252366802,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -10.316079169342594,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -10.57410769197438,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 1,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "source_rms_dbfs_first_window": -9.010300185746672,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "maximum_window_gain_db": -0.0002790780085646452,
+            "minimum_window_gain_db": -10.513853855797127,
+            "rendered_rms_dbfs_first_window": -43.524149482073724,
+            "sampled_gain_db": [
+              {
+                "gain_db": -10.513853855797127,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -10.181779421630164,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -9.626360972948723,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.163682750575616,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -3.9972497917723198,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -0.061953409755345315,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 2,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "source_rms_dbfs_first_window": -33.0102956262766,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "maximum_window_gain_db": -1.2585999847394258,
+            "minimum_window_gain_db": -10.576764239090803,
+            "rendered_rms_dbfs_first_window": -10.268900170486097,
+            "sampled_gain_db": [
+              {
+                "gain_db": -1.2585999847394258,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -3.6765023247743516,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -5.641386327699235,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.268656522674808,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -10.316086433908993,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -10.57410769197438,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 3,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "source_rms_dbfs_first_window": -9.010300185746672,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "maximum_window_gain_db": -0.0002790780085646452,
+            "minimum_window_gain_db": -10.513853855797127,
+            "rendered_rms_dbfs_first_window": -43.524149482073724,
+            "sampled_gain_db": [
+              {
+                "gain_db": -10.513853855797127,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -10.181779421630164,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -9.626360972948723,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.163682750575616,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -3.9972497917723198,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -0.061953409755345315,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 4,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "source_rms_dbfs_first_window": -33.0102956262766,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "maximum_window_gain_db": -1.2585999847394258,
+            "minimum_window_gain_db": -10.576764239090803,
+            "rendered_rms_dbfs_first_window": -10.268900170486097,
+            "sampled_gain_db": [
+              {
+                "gain_db": -1.2585999847394258,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -3.6765023247743516,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -5.641386327699235,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.268656522674808,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -10.316086433908993,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -10.57410769197438,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 5,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "source_rms_dbfs_first_window": -9.010300185746672,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "maximum_window_gain_db": -0.0002774079954749852,
+            "minimum_window_gain_db": -10.513853855797127,
+            "rendered_rms_dbfs_first_window": -43.524149482073724,
+            "sampled_gain_db": [
+              {
+                "gain_db": -10.513853855797127,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -10.181779421630164,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -9.626360972948723,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.163682750575616,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -3.9972497917723198,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -0.061953409755345315,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 6,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "source_rms_dbfs_first_window": -33.0102956262766,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "window_count": 100
+          }
+        ],
+        "transitions": [
+          {
+            "from_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -1.2583432611750265,
+            "kind": "attack",
+            "maximum_absolute_deviation_from_steady_db": 9.318420977915777,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "to_source_peak_dbfs": -6.0,
+            "transition_at_seconds": 1.0,
+            "transition_index": 0
+          },
+          {
+            "from_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "kind": "release",
+            "maximum_absolute_deviation_from_steady_db": 10.513574777788563,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "to_source_peak_dbfs": -30.0,
+            "transition_at_seconds": 2.0,
+            "transition_index": 1
+          },
+          {
+            "from_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "kind": "attack",
+            "maximum_absolute_deviation_from_steady_db": 9.318164254351377,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "to_source_peak_dbfs": -6.0,
+            "transition_at_seconds": 3.0,
+            "transition_index": 2
+          },
+          {
+            "from_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "kind": "release",
+            "maximum_absolute_deviation_from_steady_db": 10.513574777788563,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "to_source_peak_dbfs": -30.0,
+            "transition_at_seconds": 4.0,
+            "transition_index": 3
+          },
+          {
+            "from_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "kind": "attack",
+            "maximum_absolute_deviation_from_steady_db": 9.318164254351377,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "to_source_peak_dbfs": -6.0,
+            "transition_at_seconds": 5.0,
+            "transition_index": 4
+          },
+          {
+            "from_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "kind": "release",
+            "maximum_absolute_deviation_from_steady_db": 10.513574777788563,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "to_source_peak_dbfs": -30.0,
+            "transition_at_seconds": 6.0,
+            "transition_index": 5
+          }
+        ]
+      },
+      {
+        "rendered_channel_index": 1,
+        "segments": [
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": 0.0,
+            "maximum_window_gain_db": 0.0,
+            "minimum_window_gain_db": 0.0,
+            "rendered_rms_dbfs_first_window": -37.78316265900592,
+            "sampled_gain_db": [
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": 0.0,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 0,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 0.0,
+            "source_rms_dbfs_first_window": -37.78316265900592,
+            "steady_last_200ms_median_gain_db": 0.0,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -1.2583432611750265,
+            "maximum_window_gain_db": -1.2583432611750265,
+            "minimum_window_gain_db": -10.576764239090803,
+            "rendered_rms_dbfs_first_window": -10.268643446921699,
+            "sampled_gain_db": [
+              {
+                "gain_db": -1.2583432611750265,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -3.6762935105507877,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -5.641233913149417,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.268574252366802,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -10.316079169342594,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -10.57410769197438,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 1,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "source_rms_dbfs_first_window": -9.010300185746672,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "maximum_window_gain_db": -0.0002790780085646452,
+            "minimum_window_gain_db": -10.513853855797127,
+            "rendered_rms_dbfs_first_window": -43.524149482073724,
+            "sampled_gain_db": [
+              {
+                "gain_db": -10.513853855797127,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -10.181779421630164,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -9.626360972948723,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.163682750575616,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -3.9972497917723198,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -0.061953409755345315,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 2,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "source_rms_dbfs_first_window": -33.0102956262766,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "maximum_window_gain_db": -1.2585999847394258,
+            "minimum_window_gain_db": -10.576764239090803,
+            "rendered_rms_dbfs_first_window": -10.268900170486097,
+            "sampled_gain_db": [
+              {
+                "gain_db": -1.2585999847394258,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -3.6765023247743516,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -5.641386327699235,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.268656522674808,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -10.316086433908993,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -10.57410769197438,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 3,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "source_rms_dbfs_first_window": -9.010300185746672,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "maximum_window_gain_db": -0.0002790780085646452,
+            "minimum_window_gain_db": -10.513853855797127,
+            "rendered_rms_dbfs_first_window": -43.524149482073724,
+            "sampled_gain_db": [
+              {
+                "gain_db": -10.513853855797127,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -10.181779421630164,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -9.626360972948723,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.163682750575616,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -3.9972497917723198,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -0.061953409755345315,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 4,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "source_rms_dbfs_first_window": -33.0102956262766,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "maximum_window_gain_db": -1.2585999847394258,
+            "minimum_window_gain_db": -10.576764239090803,
+            "rendered_rms_dbfs_first_window": -10.268900170486097,
+            "sampled_gain_db": [
+              {
+                "gain_db": -1.2585999847394258,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -3.6765023247743516,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -5.641386327699235,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.268656522674808,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -10.316086433908993,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -10.57410769197438,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -10.576764239090803,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 5,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "source_rms_dbfs_first_window": -9.010300185746672,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "window_count": 100
+          },
+          {
+            "declared_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "maximum_window_gain_db": -0.0002774079954749852,
+            "minimum_window_gain_db": -10.513853855797127,
+            "rendered_rms_dbfs_first_window": -43.524149482073724,
+            "sampled_gain_db": [
+              {
+                "gain_db": -10.513853855797127,
+                "time_after_segment_start_ms": 5.0
+              },
+              {
+                "gain_db": -10.181779421630164,
+                "time_after_segment_start_ms": 15.0
+              },
+              {
+                "gain_db": -9.626360972948723,
+                "time_after_segment_start_ms": 25.0
+              },
+              {
+                "gain_db": -8.163682750575616,
+                "time_after_segment_start_ms": 45.0
+              },
+              {
+                "gain_db": -3.9972497917723198,
+                "time_after_segment_start_ms": 95.0
+              },
+              {
+                "gain_db": -0.061953409755345315,
+                "time_after_segment_start_ms": 195.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 495.0
+              },
+              {
+                "gain_db": -0.0002790780085646452,
+                "time_after_segment_start_ms": 895.0
+              }
+            ],
+            "segment_index": 6,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "source_rms_dbfs_first_window": -33.0102956262766,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "window_count": 100
+          }
+        ],
+        "transitions": [
+          {
+            "from_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -1.2583432611750265,
+            "kind": "attack",
+            "maximum_absolute_deviation_from_steady_db": 9.318420977915777,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "to_source_peak_dbfs": -6.0,
+            "transition_at_seconds": 1.0,
+            "transition_index": 0
+          },
+          {
+            "from_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "kind": "release",
+            "maximum_absolute_deviation_from_steady_db": 10.513574777788563,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "to_source_peak_dbfs": -30.0,
+            "transition_at_seconds": 2.0,
+            "transition_index": 1
+          },
+          {
+            "from_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "kind": "attack",
+            "maximum_absolute_deviation_from_steady_db": 9.318164254351377,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "to_source_peak_dbfs": -6.0,
+            "transition_at_seconds": 3.0,
+            "transition_index": 2
+          },
+          {
+            "from_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "kind": "release",
+            "maximum_absolute_deviation_from_steady_db": 10.513574777788563,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "to_source_peak_dbfs": -30.0,
+            "transition_at_seconds": 4.0,
+            "transition_index": 3
+          },
+          {
+            "from_source_peak_dbfs": -30.0,
+            "initial_10ms_gain_db": -1.2585999847394258,
+            "kind": "attack",
+            "maximum_absolute_deviation_from_steady_db": 9.318164254351377,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 80.0,
+            "steady_last_200ms_median_gain_db": -10.576764239090803,
+            "to_source_peak_dbfs": -6.0,
+            "transition_at_seconds": 5.0,
+            "transition_index": 4
+          },
+          {
+            "from_source_peak_dbfs": -6.0,
+            "initial_10ms_gain_db": -10.513853855797127,
+            "kind": "release",
+            "maximum_absolute_deviation_from_steady_db": 10.513574777788563,
+            "settling_time_ms_within_0_5_db_for_remaining_segment": 150.0,
+            "steady_last_200ms_median_gain_db": -0.0002790780085646452,
+            "to_source_peak_dbfs": -30.0,
+            "transition_at_seconds": 6.0,
+            "transition_index": 5
+          }
+        ]
+      }
+    ],
+    "fixture_assumption": "deterministic continuous-phase 1 kHz mono tone with seven one-second peak-level segments alternating -30 and -6 dBFS",
+    "settling_tolerance_db": 0.5,
+    "steady_estimate": "median gain over the final 200 ms of each segment",
+    "window_duration_ms": 10.0
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 2.2534761400449845e-05,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 335998,
+        "nonzero_sample_count": 321999,
+        "peak_dbfs": -6.052872292004714,
+        "peak_integer": 4178749,
+        "rms_dbfs": -22.397633858717228,
+        "sample_count": 336000
+      },
+      {
+        "dc_offset_normalized": 2.2534761400449845e-05,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 335998,
+        "nonzero_sample_count": 321999,
+        "peak_dbfs": -6.052872292004714,
+        "peak_integer": 4178749,
+        "rms_dbfs": -22.397633858717228,
+        "sample_count": 336000
+      }
+    ],
+    "channels": 2,
+    "compression_type": "NONE",
+    "duration_seconds": 7.0,
+    "file_sha256": "3f011a9b6129fe9d0fe9f006424ac8746a38ead0e63899b623fdd9e041624790",
+    "frame_count": 336000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-production-profile-2026-07-27/artifacts/compressor-platinum-peak-attack50-release51-ballistics-settled-2-48k.wav",
+    "pcm_sha256": "6089cc6ef9348c2185e2d1bef2579585ad462041612d9a474fee16a6d4b94e4c",
+    "sample_rate_hz": 48000,
+    "stereo_relationships": {
+      "analysis_boundary": "Objective inter-channel identity, polarity, correlation, mono-sum, and side-difference measurements only; no width, compatibility, or perceptual-quality conclusion.",
+      "left_right_inverted_exact": false,
+      "left_right_inverted_within_one_integer_count": false,
+      "left_right_sample_exact": true,
+      "mono_sum_nonzero_sample_count": 321999,
+      "mono_sum_peak_dbfs_per_channel_full_scale": -0.032272378725090575,
+      "mono_sum_peak_integer": 8357498,
+      "sample_count": 336000,
+      "side_difference_nonzero_sample_count": 0,
+      "side_difference_peak_dbfs_per_channel_full_scale": null,
+      "side_difference_peak_integer": 0,
+      "zero_lag_correlation": 0.9999999999999999
+    }
+  },
+  "schema_version": 3,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 6.0314223879859564e-12,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 335998,
+        "nonzero_sample_count": 321999,
+        "peak_dbfs": -6.0000004906757844,
+        "peak_integer": 4204263,
+        "rms_dbfs": -12.667152787109641,
+        "sample_count": 336000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 7.0,
+    "file_sha256": "3212e9b25b9c7f02dec9977611aa9ae947bd92689f01a574cefa1b62775ab6a4",
+    "frame_count": 336000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-production-profile-2026-07-27/artifacts/source-compressor-ballistics-1khz-mono-48k.wav",
+    "pcm_sha256": "af9cd7e7d74f0cd5ccedc89efdb2450b295fedf5c5e29417fd0d63967e582383",
+    "sample_rate_hz": 48000
+  }
+}

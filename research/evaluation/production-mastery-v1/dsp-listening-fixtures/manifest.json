@@ -1,0 +1,294 @@
+{
+  "claimBoundary" : {
+    "logicAlgorithmEquivalenceClaimed" : false,
+    "objectiveMetricsProveArtisticSuperiority" : false,
+    "subjectivePreferenceRecorded" : false,
+    "syntheticFixturesAreHumanEvidence" : false
+  },
+  "fixtures" : [
+    {
+      "algorithmVersion" : 1,
+      "analysisArtifact" : {
+        "path" : "expander-gentle-vocal-analysis.json",
+        "role" : "objective guardrail measurements",
+        "sha256" : "cfc5ca380e94589e7dff9b708f6ae19b22cbbfa866dd359d4f71c3a0021aa3c7"
+      },
+      "candidateArtifact" : {
+        "path" : "expander-gentle-vocal-candidate.wav",
+        "role" : "exact validator-gated level-matched candidate",
+        "sha256" : "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42"
+      },
+      "difference" : {
+        "bandEnergyDistance" : 1.3261399439001055e-05,
+        "crestFactorDeltaDB" : 0.0001423814440557323,
+        "differenceRMSDBFS" : -71.20725736953075,
+        "spectralCentroidDeltaHz" : 0.006011222764868762
+      },
+      "identifier" : "expander-gentle-vocal",
+      "intendedComparison" : "Does gentle expansion lower gaps without shortening phrase endings or breath timing?",
+      "loudnessMatchGainDB" : 3.379320640206629e-05,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "planArtifact" : {
+        "path" : "expander-gentle-vocal-plan.json",
+        "role" : "exact committed processing graph",
+        "sha256" : "dee82206f876af5b65ff38365b43de5cd553acddbd8eb2b65b0fe5045803b48d"
+      },
+      "preservationBoundary" : "Word tails, breaths, and direct-vocal tone remain listening-decisive.",
+      "processor" : "expander",
+      "rejectionReasons" : [
+
+      ],
+      "sourceArtifact" : {
+        "path" : "expander-gentle-vocal-source.wav",
+        "role" : "level-match reference with rendered-tail allowance",
+        "sha256" : "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+      },
+      "sourceFixture" : "vocal_like_mono.wav",
+      "sourceInputSHA256" : "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged" : true,
+      "status" : "valid",
+      "subjectivePreferenceRecorded" : false,
+      "warnings" : [
+        "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+      ]
+    },
+    {
+      "algorithmVersion" : 1,
+      "analysisArtifact" : {
+        "path" : "expander-firm-vocal-analysis.json",
+        "role" : "objective guardrail measurements",
+        "sha256" : "4226cfe74c35afa578209630e087d2ddb490dad42f4023d4e2877ec44d6e0168"
+      },
+      "candidateArtifact" : {
+        "path" : "expander-firm-vocal-candidate.wav",
+        "role" : "exact validator-gated level-matched candidate",
+        "sha256" : "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763"
+      },
+      "difference" : {
+        "bandEnergyDistance" : 5.356204809328377e-07,
+        "crestFactorDeltaDB" : 0.00017945769214166625,
+        "differenceRMSDBFS" : -67.43985908224019,
+        "spectralCentroidDeltaHz" : 0.0030330200372645777
+      },
+      "identifier" : "expander-firm-vocal",
+      "intendedComparison" : "Does stronger gap cleanup remain natural, or does it audibly truncate phrase detail?",
+      "loudnessMatchGainDB" : 0.00010802613341098777,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "planArtifact" : {
+        "path" : "expander-firm-vocal-plan.json",
+        "role" : "exact committed processing graph",
+        "sha256" : "e118fca8ac73bc8c22171b80feacfb6d513b63ea6022e5c2c673a53c6733f6fd"
+      },
+      "preservationBoundary" : "A cleaner metric cannot override audible tail loss or chatter.",
+      "processor" : "expander",
+      "rejectionReasons" : [
+
+      ],
+      "sourceArtifact" : {
+        "path" : "expander-firm-vocal-source.wav",
+        "role" : "level-match reference with rendered-tail allowance",
+        "sha256" : "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+      },
+      "sourceFixture" : "vocal_like_mono.wav",
+      "sourceInputSHA256" : "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged" : true,
+      "status" : "valid",
+      "subjectivePreferenceRecorded" : false,
+      "warnings" : [
+        "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+      ]
+    },
+    {
+      "algorithmVersion" : 1,
+      "analysisArtifact" : {
+        "path" : "delay-slap-guitar-analysis.json",
+        "role" : "objective guardrail measurements",
+        "sha256" : "9ef872fd2ac7f813a26917777dd1aca6818851b5029fc641d178da87db14b53b"
+      },
+      "candidateArtifact" : {
+        "path" : "delay-slap-guitar-candidate.wav",
+        "role" : "exact validator-gated level-matched candidate",
+        "sha256" : "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5"
+      },
+      "difference" : {
+        "bandEnergyDistance" : 0.03614835091410647,
+        "crestFactorDeltaDB" : 0.09051106635963202,
+        "differenceRMSDBFS" : -36.78252028914784,
+        "spectralCentroidDeltaHz" : 5.372985223961621
+      },
+      "identifier" : "delay-slap-guitar",
+      "intendedComparison" : "Does the short echo add dimension while preserving pick articulation?",
+      "loudnessMatchGainDB" : 1.5107686226092962,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "planArtifact" : {
+        "path" : "delay-slap-guitar-plan.json",
+        "role" : "exact committed processing graph",
+        "sha256" : "bb3ff30f4ea599cad63337cfc702555dee0b200459afde7451be49256757d1d2"
+      },
+      "preservationBoundary" : "Pick attack, rhythmic precision, and unchanged dry source are protected.",
+      "processor" : "delay",
+      "rejectionReasons" : [
+
+      ],
+      "sourceArtifact" : {
+        "path" : "delay-slap-guitar-source.wav",
+        "role" : "level-match reference with rendered-tail allowance",
+        "sha256" : "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+      },
+      "sourceFixture" : "guitar_like_dynamic_plucks_mono.wav",
+      "sourceInputSHA256" : "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "sourceInputUnchanged" : true,
+      "status" : "valid",
+      "subjectivePreferenceRecorded" : false,
+      "warnings" : [
+        "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+      ]
+    },
+    {
+      "algorithmVersion" : 1,
+      "analysisArtifact" : {
+        "path" : "delay-rhythmic-guitar-analysis.json",
+        "role" : "objective guardrail measurements",
+        "sha256" : "e4d6a29dd5d21bb7fc4dd7a78401fa5eace79516d0dddb1d0d4497cb788fb6d6"
+      },
+      "candidateArtifact" : {
+        "path" : "delay-rhythmic-guitar-candidate.wav",
+        "role" : "exact validator-gated level-matched candidate",
+        "sha256" : "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2"
+      },
+      "difference" : {
+        "bandEnergyDistance" : 0.048705558805035826,
+        "crestFactorDeltaDB" : -0.051849514805369604,
+        "differenceRMSDBFS" : -34.85112981719739,
+        "spectralCentroidDeltaHz" : 10.655782016555179
+      },
+      "identifier" : "delay-rhythmic-guitar",
+      "intendedComparison" : "Are the repeats musically supportive rather than masking the next pluck?",
+      "loudnessMatchGainDB" : 1.9685723605154477,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "planArtifact" : {
+        "path" : "delay-rhythmic-guitar-plan.json",
+        "role" : "exact committed processing graph",
+        "sha256" : "bbaf3d3e9d1f61755d13688d788724242c698bc4c1f3367260d273270fb5dd1a"
+      },
+      "preservationBoundary" : "Tempo intent is external context; this free-time fixture proves no sync claim.",
+      "processor" : "delay",
+      "rejectionReasons" : [
+
+      ],
+      "sourceArtifact" : {
+        "path" : "delay-rhythmic-guitar-source.wav",
+        "role" : "level-match reference with rendered-tail allowance",
+        "sha256" : "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+      },
+      "sourceFixture" : "guitar_like_dynamic_plucks_mono.wav",
+      "sourceInputSHA256" : "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "sourceInputUnchanged" : true,
+      "status" : "valid",
+      "subjectivePreferenceRecorded" : false,
+      "warnings" : [
+
+      ]
+    },
+    {
+      "algorithmVersion" : 1,
+      "analysisArtifact" : {
+        "path" : "reverb-short-drum-room-analysis.json",
+        "role" : "objective guardrail measurements",
+        "sha256" : "3282e3644656b13c03c53e098adfba49862cc3a264670fc535099d96a4fdc34f"
+      },
+      "candidateArtifact" : {
+        "path" : "reverb-short-drum-room-candidate.wav",
+        "role" : "exact validator-gated level-matched candidate",
+        "sha256" : "e782e1e2a1bfe998610307b407398e5859fff8fbcfa48c83f009d9aefde3cb35"
+      },
+      "difference" : {
+        "bandEnergyDistance" : 0.003070389651341903,
+        "crestFactorDeltaDB" : 0.014237983502254081,
+        "differenceRMSDBFS" : -49.42400914788323,
+        "spectralCentroidDeltaHz" : 28.93550281089847
+      },
+      "identifier" : "reverb-short-drum-room",
+      "intendedComparison" : "Does the short room add space without pushing burst attacks backward?",
+      "loudnessMatchGainDB" : 0.3590003208086876,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "planArtifact" : {
+        "path" : "reverb-short-drum-room-plan.json",
+        "role" : "exact committed processing graph",
+        "sha256" : "acc919597a05983e8e6043dce5297b3215d240c61978a9d4d481731fc905e974"
+      },
+      "preservationBoundary" : "Attack focus and gap clarity are listening-decisive; bursts are not real drums.",
+      "processor" : "reverb",
+      "rejectionReasons" : [
+
+      ],
+      "sourceArtifact" : {
+        "path" : "reverb-short-drum-room-source.wav",
+        "role" : "level-match reference with rendered-tail allowance",
+        "sha256" : "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+      },
+      "sourceFixture" : "deterministic_noise_bursts_mono.wav",
+      "sourceInputSHA256" : "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "sourceInputUnchanged" : true,
+      "status" : "valid",
+      "subjectivePreferenceRecorded" : false,
+      "warnings" : [
+        "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+      ]
+    },
+    {
+      "algorithmVersion" : 1,
+      "analysisArtifact" : {
+        "path" : "reverb-supporting-vocal-analysis.json",
+        "role" : "objective guardrail measurements",
+        "sha256" : "f6a9b1e6b62c11ea2b7e887d261226bab82593ab934fbf8c0399938e32313f3f"
+      },
+      "candidateArtifact" : {
+        "path" : "reverb-supporting-vocal-candidate.wav",
+        "role" : "exact validator-gated level-matched candidate",
+        "sha256" : "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281"
+      },
+      "difference" : {
+        "bandEnergyDistance" : 0.0016922871781985924,
+        "crestFactorDeltaDB" : -0.07915603678778292,
+        "differenceRMSDBFS" : -50.959388529582846,
+        "spectralCentroidDeltaHz" : 1.3013064742060578
+      },
+      "identifier" : "reverb-supporting-vocal",
+      "intendedComparison" : "Does the ambience support the vocal without obscuring consonants or increasing perceived distance too far?",
+      "loudnessMatchGainDB" : 1.216865861726646,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "planArtifact" : {
+        "path" : "reverb-supporting-vocal-plan.json",
+        "role" : "exact committed processing graph",
+        "sha256" : "d41947758c1c8bf9c096664de0414d9bedd73ef95ad9c68bb33c18383f0db42b"
+      },
+      "preservationBoundary" : "Synthetic vocal-like material cannot establish real-vocal production quality.",
+      "processor" : "reverb",
+      "rejectionReasons" : [
+
+      ],
+      "sourceArtifact" : {
+        "path" : "reverb-supporting-vocal-source.wav",
+        "role" : "level-match reference with rendered-tail allowance",
+        "sha256" : "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+      },
+      "sourceFixture" : "vocal_like_mono.wav",
+      "sourceInputSHA256" : "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged" : true,
+      "status" : "valid",
+      "subjectivePreferenceRecorded" : false,
+      "warnings" : [
+        "The level-matched result may be difficult to distinguish; increase processing strength or choose a more representative capture."
+      ]
+    }
+  ],
+  "generatedAt" : "2026-07-27",
+  "schemaVersion" : "1.0",
+  "sourceSuiteManifest" : {
+    "path" : "manifest.json",
+    "role" : "deterministic PCM24 source-suite identity",
+    "sha256" : "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1"
+  },
+  "suiteVersion" : "tracksmith-production-mastery-dsp-listening-v1"
+}

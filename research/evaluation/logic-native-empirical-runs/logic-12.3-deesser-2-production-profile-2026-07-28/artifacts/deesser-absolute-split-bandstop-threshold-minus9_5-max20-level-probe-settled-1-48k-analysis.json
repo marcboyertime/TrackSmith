@@ -1,0 +1,454 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 90193,
+          "1024": 86608,
+          "16": 88522,
+          "256": 87538
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 14,
+          "correlation": 0.999758186594342,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 288000,
+        "differing_sample_count": 90193,
+        "first_differing_sample": 48027,
+        "last_differing_sample": 287961,
+        "least_squares_gain": 0.9608634322641543,
+        "least_squares_gain_db": -0.34676668635437086,
+        "max_absolute_error_integer": 219608,
+        "mean_error_normalized": -1.8460883034600152e-08,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -40.15171713685998,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9997583091378078
+      },
+      {
+        "absolute_error_threshold_counts": {
+          "1": 90193,
+          "1024": 86608,
+          "16": 88522,
+          "256": 87538
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 14,
+          "correlation": 0.999758186594342,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 288000,
+        "differing_sample_count": 90193,
+        "first_differing_sample": 48027,
+        "last_differing_sample": 287961,
+        "least_squares_gain": 0.9608634322641543,
+        "least_squares_gain_db": -0.34676668635437086,
+        "max_absolute_error_integer": 219608,
+        "mean_error_normalized": -1.8460883034600152e-08,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -40.15171713685998,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9997583091378078
+      }
+    ],
+    "channel_count_match": false,
+    "channel_mapping": [
+      {
+        "rendered_channel_index": 0,
+        "source_channel_index": 0
+      },
+      {
+        "rendered_channel_index": 1,
+        "source_channel_index": 0
+      }
+    ],
+    "format_match": false,
+    "frame_count_match": true,
+    "pcm_byte_exact": false,
+    "sample_rate_and_bit_depth_match": true,
+    "source_broadcast_pcm_exact": false
+  },
+  "deesser_transfer": {
+    "analysis_boundary": "Exact-tone steady-window measurements only. Same-ratio quiet/loud pairs can expose bounded level dependence, but they do not identify detector internals or musical quality.",
+    "channels": [
+      {
+        "rendered_channel_index": 0,
+        "segments": [
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -30.0,
+            "declared_high_peak_dbfs": null,
+            "name": "quiet_base_only",
+            "segment_index": 0,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -30.000000028018064,
+                "source_amplitude_dbfs": -30.000000028018064
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": null,
+                "rendered_amplitude_dbfs": -314.51423347194014,
+                "source_amplitude_dbfs": -314.51423347194014
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -30.0,
+            "declared_high_peak_dbfs": -18.0,
+            "name": "quiet_same_ratio_high_minus_18",
+            "segment_index": 1,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 2.1927155576893683e-07,
+                "rendered_amplitude_dbfs": -29.999997942977036,
+                "source_amplitude_dbfs": -29.99999816224859
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": -1.698837112563521e-07,
+                "rendered_amplitude_dbfs": -18.000000339179234,
+                "source_amplitude_dbfs": -18.00000016929552
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": null,
+            "name": "loud_base_only",
+            "segment_index": 2,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -18.00000080287473,
+                "source_amplitude_dbfs": -18.00000080287473
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": null,
+                "rendered_amplitude_dbfs": -305.5589669361494,
+                "source_amplitude_dbfs": -305.5589669361494
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": -6.0,
+            "name": "loud_same_ratio_high_minus_6",
+            "segment_index": 3,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": -0.0019052954005739308,
+                "rendered_amplitude_dbfs": -18.00190539040639,
+                "source_amplitude_dbfs": -18.000000095005817
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": -0.45867097258378015,
+                "rendered_amplitude_dbfs": -6.45867116951529,
+                "source_amplitude_dbfs": -6.000000196931511
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": -24.0,
+            "name": "loud_static_high_minus_24",
+            "segment_index": 4,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -18.00000097622759,
+                "source_amplitude_dbfs": -18.00000097622759
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -24.00000070069789,
+                "source_amplitude_dbfs": -24.00000070069789
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": -6.0,
+            "name": "loud_strong_high_minus_6_repeat",
+            "segment_index": 5,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": -0.001905353211074871,
+                "rendered_amplitude_dbfs": -18.00190544821691,
+                "source_amplitude_dbfs": -18.000000095005834
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": -0.4586808638475342,
+                "rendered_amplitude_dbfs": -6.45868106077915,
+                "source_amplitude_dbfs": -6.000000196931616
+              }
+            ]
+          }
+        ],
+        "source_channel_index": 0
+      },
+      {
+        "rendered_channel_index": 1,
+        "segments": [
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -30.0,
+            "declared_high_peak_dbfs": null,
+            "name": "quiet_base_only",
+            "segment_index": 0,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -30.000000028018064,
+                "source_amplitude_dbfs": -30.000000028018064
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": null,
+                "rendered_amplitude_dbfs": -314.51423347194014,
+                "source_amplitude_dbfs": -314.51423347194014
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -30.0,
+            "declared_high_peak_dbfs": -18.0,
+            "name": "quiet_same_ratio_high_minus_18",
+            "segment_index": 1,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 2.1927155576893683e-07,
+                "rendered_amplitude_dbfs": -29.999997942977036,
+                "source_amplitude_dbfs": -29.99999816224859
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": -1.698837112563521e-07,
+                "rendered_amplitude_dbfs": -18.000000339179234,
+                "source_amplitude_dbfs": -18.00000016929552
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": null,
+            "name": "loud_base_only",
+            "segment_index": 2,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -18.00000080287473,
+                "source_amplitude_dbfs": -18.00000080287473
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": null,
+                "rendered_amplitude_dbfs": -305.5589669361494,
+                "source_amplitude_dbfs": -305.5589669361494
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": -6.0,
+            "name": "loud_same_ratio_high_minus_6",
+            "segment_index": 3,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": -0.0019052954005739308,
+                "rendered_amplitude_dbfs": -18.00190539040639,
+                "source_amplitude_dbfs": -18.000000095005817
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": -0.45867097258378015,
+                "rendered_amplitude_dbfs": -6.45867116951529,
+                "source_amplitude_dbfs": -6.000000196931511
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": -24.0,
+            "name": "loud_static_high_minus_24",
+            "segment_index": 4,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -18.00000097622759,
+                "source_amplitude_dbfs": -18.00000097622759
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": 0.0,
+                "rendered_amplitude_dbfs": -24.00000070069789,
+                "source_amplitude_dbfs": -24.00000070069789
+              }
+            ]
+          },
+          {
+            "analysis_window_seconds_within_segment": [
+              0.2,
+              0.8
+            ],
+            "declared_base_peak_dbfs": -18.0,
+            "declared_high_peak_dbfs": -6.0,
+            "name": "loud_strong_high_minus_6_repeat",
+            "segment_index": 5,
+            "tones": [
+              {
+                "frequency_hz": 500.0,
+                "gain_db": -0.001905353211074871,
+                "rendered_amplitude_dbfs": -18.00190544821691,
+                "source_amplitude_dbfs": -18.000000095005834
+              },
+              {
+                "frequency_hz": 7000.0,
+                "gain_db": -0.4586808638475342,
+                "rendered_amplitude_dbfs": -6.45868106077915,
+                "source_amplitude_dbfs": -6.000000196931616
+              }
+            ]
+          }
+        ],
+        "source_channel_index": 0
+      }
+    ],
+    "fixture_assumption": "TrackSmith deterministic six-segment 500 Hz plus 7 kHz DeEsser level/mode probe",
+    "probe_kind": "level"
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 6.745342165231705e-06,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 287998,
+        "nonzero_sample_count": 283842,
+        "peak_dbfs": -4.206821860580215,
+        "peak_integer": 5168313,
+        "rms_dbfs": -13.458908598237382,
+        "sample_count": 288000
+      },
+      {
+        "dc_offset_normalized": 6.745342165231705e-06,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 287998,
+        "nonzero_sample_count": 283842,
+        "peak_dbfs": -4.206821860580215,
+        "peak_integer": 5168313,
+        "rms_dbfs": -13.458908598237382,
+        "sample_count": 288000
+      }
+    ],
+    "channels": 2,
+    "compression_type": "NONE",
+    "duration_seconds": 6.0,
+    "file_sha256": "24038a6ea8da77992fd91526a372cc8d4c30dab0cbfb833c6013fca46d6ae8cb",
+    "frame_count": 288000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-deesser-2-production-profile-2026-07-28/artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k.wav",
+    "pcm_sha256": "a13d252841b31bd08476a104435d4a6ac53738ac6a6dae754ff2c73a66e59128",
+    "sample_rate_hz": 48000,
+    "stereo_relationships": {
+      "analysis_boundary": "Objective inter-channel identity, polarity, correlation, mono-sum, and side-difference measurements only; no width, compatibility, or perceptual-quality conclusion.",
+      "left_right_inverted_exact": false,
+      "left_right_inverted_within_one_integer_count": false,
+      "left_right_sample_exact": true,
+      "mono_sum_nonzero_sample_count": 283842,
+      "mono_sum_peak_dbfs_per_channel_full_scale": 1.813778052699409,
+      "mono_sum_peak_integer": 10336626,
+      "sample_count": 288000,
+      "side_difference_nonzero_sample_count": 0,
+      "side_difference_peak_dbfs_per_channel_full_scale": null,
+      "side_difference_peak_integer": 0,
+      "zero_lag_correlation": 1.0
+    }
+  },
+  "schema_version": 4,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 6.763803048266305e-06,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 287998,
+        "nonzero_sample_count": 281999,
+        "peak_dbfs": -4.206821860580215,
+        "peak_integer": 5168313,
+        "rms_dbfs": -13.114241465770258,
+        "sample_count": 288000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 6.0,
+    "file_sha256": "bde0227d60544687f660256229630ac1fc6afb2948328d8bb0483fac29d6bbf3",
+    "frame_count": 288000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-deesser-2-production-profile-2026-07-28/artifacts/source-deesser-level-mode-probe-mono-48k.wav",
+    "pcm_sha256": "0d07531a357f9bf08b3acc48e59c9e5e7ce9502381f27c79506ba8d39f0f1ded",
+    "sample_rate_hz": 48000
+  }
+}

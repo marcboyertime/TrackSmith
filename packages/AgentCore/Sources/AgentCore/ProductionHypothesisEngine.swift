@@ -575,7 +575,7 @@ public struct ProductionIntentEngine: Sendable {
         let executableStrategies: Set<ProductionDSPStrategy> = [
             .subtractiveEQ, .additiveEQ, .dynamicEQOrDeEsser,
             .gentleCompression, .transientPreservingCompression, .parallelCompression,
-            .levelAutomation, .saturation, .stereoWidth,
+            .levelAutomation, .saturation, .stereoWidth, .ambienceOrDelay,
         ]
         let protectedStrategyTerms = Set(preservationTerms.map(\.term))
         func isViable(_ strategy: ProductionDSPStrategy) -> Bool {
@@ -586,6 +586,8 @@ public struct ProductionIntentEngine: Sendable {
                 ])
             case .stereoWidth:
                 return scope.channelFormat == .stereo
+            case .ambienceOrDelay:
+                return !protectedStrategyTerms.contains(.raw)
             default:
                 return true
             }
@@ -599,7 +601,7 @@ public struct ProductionIntentEngine: Sendable {
         let fallbackPriority: [ProductionDSPStrategy] = [
             .transientPreservingCompression, .gentleCompression,
             .subtractiveEQ, .additiveEQ, .dynamicEQOrDeEsser, .parallelCompression,
-            .saturation, .stereoWidth,
+            .saturation, .ambienceOrDelay, .stereoWidth,
         ]
         let defaultFallback = fallbackPriority.first(where: sourceExecutableOptions.contains)
             .map { Set([$0]) } ?? sourceExecutableOptions
@@ -636,6 +638,7 @@ public struct ProductionIntentEngine: Sendable {
         // remain free to produce distinct competing hypotheses.
         let requiredCoverage: [ProductionTerm: ProductionDSPStrategy] = [
             .intimate: .additiveEQ,
+            .distant: .ambienceOrDelay,
             .level: .levelAutomation,
         ]
         for term in desiredTerms {
@@ -832,6 +835,7 @@ public struct ProductionIntentEngine: Sendable {
         let allowsCompression = allows([.gentleCompression, .transientPreservingCompression, .parallelCompression])
         let allowsSaturation = allows([.saturation])
         let allowsWidth = allows([.stereoWidth])
+        let allowsAmbience = allows([.ambienceOrDelay])
 
         func addEQ(_ frequency: Double, _ gain: Double, q: Double, rationale: String, locked: Bool = false) {
             let gainDB = budgetedGainDB(gain * scale)
@@ -1073,6 +1077,29 @@ public struct ProductionIntentEngine: Sendable {
             ))
         }
 
+        if allowsAmbience, desiredDirections[.distant] == .increase {
+            let protectsClarity = protectedTerms.contains(.clear)
+                || protectedTerms.contains(.forward)
+                || protectedTerms.contains(.punchy)
+                || protectedTerms.contains(.pickAttack)
+            let wetScale = protectsClarity ? 0.55 : 1
+            nodes.append(.init(
+                type: .reverb,
+                parameters: [
+                    .algorithmVersion: 1,
+                    .preDelayMS: protectsClarity ? 28 : 14,
+                    .decayTimeSeconds: min(3, 0.55 + 0.38 * scale),
+                    .roomSize: min(0.9, 0.3 + 0.14 * scale),
+                    .damping: 0.48,
+                    .diffusion: 0.68,
+                    .mix: min(0.42, 0.08 + 0.08 * scale) * wetScale,
+                ],
+                rationale: "Test a bounded TrackSmith algorithmic-room interpretation of distance; predelay and wet depth are constrained when clarity, onset, or forwardness is preserved.",
+                confidence: 0.53,
+                category: .creative
+            ))
+        }
+
         // Intimacy is not implemented as a fixed reverb preset. A level-only
         // move would be cancelled by mandatory preview level matching, so pair
         // direct-source salience with a bounded presence hypothesis.
@@ -1123,6 +1150,21 @@ public struct ProductionIntentEngine: Sendable {
                     ],
                     rationale: "Test a restrained nonlinear-density interpretation selected by the validated hypothesis while preserving the dry source.",
                     confidence: 0.44,
+                    category: .creative
+                ))
+            } else if allowsAmbience {
+                nodes.append(.init(
+                    type: .delay,
+                    parameters: [
+                        .algorithmVersion: 1,
+                        .delayTimeMS: sourceType == .vocal || sourceType == .vocalBus ? 92 : 145,
+                        .feedback: min(0.45, 0.12 + 0.08 * scale),
+                        .damping: 0.45,
+                        .stereoCrossfeed: channelFormat == .stereo ? 0.2 : 0,
+                        .mix: min(0.3, 0.06 + 0.06 * scale),
+                    ],
+                    rationale: "Materialize the selected bounded ambience/delay interpretation as a discrete TrackSmith echo; this is not a Logic processor model or a universal distance mapping.",
+                    confidence: 0.43,
                     category: .creative
                 ))
             } else if allowsEQ {

@@ -89,9 +89,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.intimate, .distant, .wide, .clear, .energetic],
                 documentedMechanism: "Independent left/right delays with selectable input source, crossfeed, phase controls, filters, feedback, and routing modes.",
                 productionConsequence: "Can create stable stereo echoes or cross-channel motion. Crossfeed and phase choices can build cancellation or runaway density; check both stereo and mono.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-stereo-delay-production-profile-48k-2026-07-29"],
+                empiricalEvidenceSummary: "Bounded direct Logic 12.3 build-6674 Stereo Delay evidence at 48 kHz/PCM24 covers sample-exact header bypass; one 120 BPM synchronized quarter-note left and eighth-note right state; one free-time 500 ms left and 250 ms right wet-only feedback-zero state; one 35 percent feedback state; Straight routing with exact right-channel silence for a left-only source; one 50 percent left-to-right crossfeed state; first-transition versus settled behavior; decoded-PCM repeatability; exact controlled crossfeed-state save/reload recovery; and one deterministic guitar-like fixture. The measured timing peaks were exactly 500 ms left and 250 ms right in the controlled free-time state. No participant listening, alternate routing menu, right-to-left crossfeed, nonzero deviation, filter sweep, phase matrix, stereo-link profile, sample-rate grid, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established."
             ),
             .init(
                 identifier: "logic-pro-12.3:tape-delay",
@@ -103,9 +103,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.intimate, .distant, .wide, .clear, .energetic],
                 documentedMechanism: "A delay with tempo/free timing, deviation and smoothing, feedback filtering, clipping threshold, clean/diffuse head choices, LFO/flutter, spread, freeze, and dry/wet control.",
                 productionConsequence: "Time instability, bandwidth loss, saturation, and feedback filtering can make repeats feel less literal. Those dimensions are separate: “tape” is not one tone. Freeze and high feedback require output and transition safety checks.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-tape-delay-production-profile-48k-2026-07-29"],
+                empiricalEvidenceSummary: "Bounded direct Logic 12.3 build-6674 Tape Delay evidence at 48 kHz/PCM24 covers sample-exact header bypass; one exact displayed 120 BPM synchronized default state; one free-time 500 ms wet-only Clean feedback-zero state; one 50 percent feedback state; one Diffuse feedback-zero state; an exact settled Clean peak at 500 ms; directly observed Clean-versus-Diffuse onset, peak, duration, and level differences; first-transition versus settled behavior; decoded-PCM repeatability; exact controlled Diffuse-state save/reload recovery; and one deterministic guitar-like fixture. No participant listening, threshold transfer, filter or modulation grid, feedback extreme, Freeze, spread or stereo matrix, alternate sample-rate profile, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established."
             ),
             .init(
                 identifier: "logic-pro-12.3:bitcrusher",
@@ -118,8 +118,8 @@ extension LogicNativeToolKnowledgeCatalog {
                 documentedMechanism: "Separates amplitude quantization, effective sample-rate division, input drive, thresholded Fold/Clip/Wrap behavior, and dry/effect mixing.",
                 productionConsequence: "Downsampling intentionally aliases without changing pitch or speed; bit reduction is not inherently warm and downsampling is not merely dark. Exact nonlinear equations remain undocumented.",
                 empiricalStatus: .partial,
-                measuredRunIDs: ["logic-12.3-bitcrusher-default-48k-2026-07-18"],
-                empiricalEvidenceSummary: "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: the observed Default Preset was Clip, +3 dB Drive, 8-bit Resolution, 1x Downsampling, 100% Mix, and 0 dB Clip Level. Three settled bypass renders matched the fixture PCM exactly; three settled active renders plus one post-reload render shared one PCM hash. First-transition renders differed briefly, so settled repeats are required. Fold, Wrap, parameter grids, downsampling above 1x, stereo, other rates, musical preference, and Apple's exact implementation remain unmeasured."
+                measuredRunIDs: ["logic-12.3-bitcrusher-default-48k-2026-07-18", "logic-12.3-bitcrusher-production-profile-48k-2026-07-29"],
+                empiricalEvidenceSummary: "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: the observed Default Preset was Clip, +3 dB Drive, 8-bit Resolution, 1x Downsampling, 100% Mix, and 0 dB Clip Level. Three settled bypass renders matched the fixture PCM exactly; three settled active renders plus one post-reload render shared one PCM hash. First-transition renders differed briefly, so settled repeats are required. Fold, Wrap, parameter grids, downsampling above 1x, stereo, other rates, musical preference, and Apple's exact implementation remain unmeasured. Bounded direct Logic 12.3 build-6674 evidence at 48 kHz mono-to-stereo extends the preserved July 18 Bitcrusher default run without rewriting it. Header bypass was sample-exact to both output channels. Fold, Clip, and Wrap at +3 dB, 8 bit, 1x, 100 percent Mix, and 0 dB Clip Level were each decoded-PCM exact across three renders and pairwise distinct. A one-factor Clip grid directly covered Drive 0, 3, and 11.5 dB; Resolution 4, 8, and 24 bit; Downsampling 1x, 4x, and 16x; Mix 50.40 and 100 percent; and Clip Level -6 and 0 dB. One Wrap state restored exactly after normal save/reload and rendered a deterministic guitar-range fixture identically three times. Harmonic, IMD, alias-spectrum, other-rate, true-stereo, automation, exhaustive-interaction, and human-listening claims remain open. This grants no Logic control authority."
             ),
             .init(
                 identifier: "logic-pro-12.3:chromaglow",
@@ -230,8 +230,8 @@ extension LogicNativeToolKnowledgeCatalog {
                 documentedMechanism: "Seven circuit models plus threshold, ratio, knee, attack/release, detector, channel linking, side-chain filter, make-up, parallel mix, output limiter, and distortion.",
                 productionConsequence: "“Compression” is a family of envelope decisions. Strategy must state whether it preserves transients, increases density, controls peaks, changes sustain, or reacts to a filtered side chain.",
                 empiricalStatus: .partial,
-                measuredRunIDs: ["logic-12.3-compressor-default-controlled-48k-2026-07-20"],
-                empiricalEvidenceSummary: "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: the exact observed Compressor Default Preset produced level-dependent gain with Auto Gain -12 dB active and repeated with identical decoded PCM three times. Header bypass matched the source PCM exactly in three renders. In a controlled Platinum Digital state (threshold -20 dB, ratio 4.1:1, hard knee, Peak detector, 0 ms attack, 51 ms release, Auto Gain/Auto Release/distortion/limiter/side-chain filter off, 100% wet), steady ladder reduction matched the exposed hard-knee ratio relation within 0.000128 dB at the five above-threshold steps. The first controlled render differed from stabilized renders only in samples 1...1022; controlled render 2, render 3, and two post-reload renders were decoded-PCM identical. Logic restored the displayed controlled state after project reopen. This does not characterize time behavior, seven models, stereo linking, side-chain filters, distortion, limiter, parallel mix, sample-rate dependence, or musical preference."
+                measuredRunIDs: ["logic-12.3-compressor-default-controlled-48k-2026-07-20", "logic-12.3-compressor-production-profile-48k-2026-07-27"],
+                empiricalEvidenceSummary: "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: the exact observed Compressor Default Preset produced level-dependent gain with Auto Gain -12 dB active and repeated with identical decoded PCM three times. Header bypass matched the source PCM exactly in three renders. In a controlled Platinum Digital state (threshold -20 dB, ratio 4.1:1, hard knee, Peak detector, 0 ms attack, 51 ms release, Auto Gain/Auto Release/distortion/limiter/side-chain filter off, 100% wet), steady ladder reduction matched the exposed hard-knee ratio relation within 0.000128 dB at the five above-threshold steps. The first controlled render differed from stabilized renders only in samples 1...1022; controlled render 2, render 3, and two post-reload renders were decoded-PCM identical. Logic restored the displayed controlled state after project reopen. This does not characterize time behavior, seven models, stereo linking, side-chain filters, distortion, limiter, parallel mix, sample-rate dependence, or musical preference. Bounded direct Logic 12.3 build-6674 Compressor evidence at 48 kHz/PCM24 extends the frozen controlled Platinum curve. Continuous 1 kHz steps separated attack 0/50 ms and release 51/490 ms; matched controls distinguished Platinum and Vintage VCA/FET/Opto. All admitted state pairs were PCM-identical after transition exclusion. Left-only Max versus Sum differed by 4.54587 dB; an asymmetric probe showed the same linked gain on the low-level opposite channel. Vintage Opto displayed state and PCM survived reload exactly. Header bypass matched the source on both output channels, and settled re-enable restored exact pre-bypass PCM. Other circuits, RMS, auto gain/release, side-chain filters/external side chain, distortion, limiter, mix, grids, rates, automation, latency/tail, listening, private topology, and TrackSmith Logic authority remain unproven or prohibited."
             ),
             .init(
                 identifier: "logic-pro-12.3:deesser-2",
@@ -243,9 +243,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.sibilant, .airy, .intimate, .smooth, .controlled],
                 documentedMechanism: "Relative or absolute detection, selectable frequency/range, split-band or wideband attenuation, and bounded maximum reduction.",
                 productionConsequence: "Sibilance is event- and phoneme-dependent. High-frequency energy supports a hypothesis but is not a diagnosis; preserve intelligibility and breath.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-deesser-2-production-profile-48k-2026-07-28"],
+                empiricalEvidenceSummary: "Bounded direct Logic 12.3 build-6674 DeEsser 2 evidence at 48 kHz/PCM24 covers Relative/Absolute level dependence, Split/Wide range behavior, Band Stop/Shelving at 7001 Hz, 20 and 6 dB maximum-reduction states, short/static 7 kHz events, mono/stereo channel behavior, repeatability, source-exact bypass, restoration, and save/reload. Relative reduced quiet/loud same-ratio pairs equally; Absolute did not. Split left 500 Hz effectively unchanged while Wide reduced 500 Hz and 7 kHz together. A 6 dB maximum state bounded measured 7 kHz reduction at 6 dB. Accepted settled pairs were PCM-identical after explicitly retained first-transition exclusions. No human listening, phoneme claim, alternate frequency/sample-rate grid, automation, dedicated latency/tail profile, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established."
             ),
             .init(
                 identifier: "logic-pro-12.3:enveloper",
@@ -313,9 +313,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.controlled, .tight, .raw, .dynamic],
                 documentedMechanism: "Gate or ducker behavior with threshold, hysteresis, reduction, attack/hold/release, lookahead, and side-chain filtering.",
                 productionConsequence: "Hysteresis and hold reduce chatter; aggressive gating can truncate breaths, decays, and room. Ducker mode and gate mode solve different routing problems.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-noise-gate-production-profile-48k-2026-07-29"],
+                empiricalEvidenceSummary: "Bounded direct Logic 12.3 build-6674 Noise Gate evidence at 48 kHz/PCM24 covers sample-exact header bypass; one default and one controlled Gate state; one controlled Ducker state; threshold, depth, hysteresis, and two attack/hold/release states at zero lookahead; one 240 Hz to 6900 Hz internal-detector bandpass state; first-transition versus settled behavior; decoded-PCM repeatability; exact controlled-state save/reload recovery; and one deterministic vocal-like fixture. The default -50 dB Gate strongly suppressed the analyzed -60 dBFS steady segment while -48 dBFS and higher segments passed at unity. Transition-sensitive variants produced a distinct first render followed by exact settled repeats. No participant listening, real-source decay-preservation result, external sidechain, lookahead above zero, mono/stereo detector matrix, sample-rate grid, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established."
             ),
             .init(
                 identifier: "logic-pro-12.3:surround-compressor",
@@ -342,8 +342,8 @@ extension LogicNativeToolKnowledgeCatalog {
                 documentedMechanism: "Eight bands with high/low pass, shelves and bells, spectrum analysis, output gain, oversampling, and stereo/L/R/Mid/Side modes.",
                 productionConsequence: "General corrective and shaping tool. Analyzer peaks are evidence, not automatic cut targets. Mid/Side edits require mono and center/side preservation checks.",
                 empiricalStatus: .partial,
-                measuredRunIDs: ["logic-12.3-channel-eq-default-bell-48k-2026-07-18"],
-                empiricalEvidenceSummary: "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: Channel EQ's settled unmodified Default Preset and settled header-bypass path were sample-transparent for the 1 kHz amplitude ladder. A Peak 3 state of 1000 Hz, +6.0 dB, Q 1.00 produced approximately +6 dB at input peaks from -60 through -12 dBFS, reached full scale at -6 dBFS, clipped louder steps, repeated with identical decoded PCM three times, and survived save/reload with identical PCM. First renders after default insertion and bypass differed only in samples 1...1023, so settling repeats remain mandatory. Other bands, filter slopes, Q/frequency grids, HQ, channel modes, phase/group delay, analyzer switching, automation, stereo, other rates, and musical preference remain unmeasured."
+                measuredRunIDs: ["logic-12.3-channel-eq-default-bell-48k-2026-07-18", "logic-12.3-channel-eq-production-profile-48k-96k-2026-07-27"],
+                empiricalEvidenceSummary: "Partial direct Logic 12.3 build-6674 evidence at 48 kHz mono: Channel EQ's settled unmodified Default Preset and settled header-bypass path were sample-transparent for the 1 kHz amplitude ladder. A Peak 3 state of 1000 Hz, +6.0 dB, Q 1.00 produced approximately +6 dB at input peaks from -60 through -12 dBFS, reached full scale at -6 dBFS, clipped louder steps, repeated with identical decoded PCM three times, and survived save/reload with identical PCM. First renders after default insertion and bypass differed only in samples 1...1023, so settling repeats remain mandatory. Other bands, filter slopes, Q/frequency grids, HQ, channel modes, phase/group delay, analyzer switching, automation, stereo, other rates, and musical preference remain unmeasured. Bounded direct Logic Pro 12.3 build-6674 Channel EQ evidence on generated PCM24 fixtures at 48 and 96 kHz. At 48 kHz, settled neutral and header-bypass sweep renders reproduced the mono source PCM exactly on both interleaved output channels. Artifact-backed impulse states cover a 1 kHz +6 dB/Q1 bell, a 2.5 kHz -6 dB/Q4 bell, paired shelves, paired 24 dB/octave cuts, and one eight-band multiband shape. The exposed HQ mode measurably changed that shape; Analyzer POST/OFF/PRE and Q-Couple on/off-with-rewritten-Q comparisons nulled in their recorded states; +3 dB output measured 2.999999876 dB. Stereo, Left Only, Right Only, Mid Only, and Side Only were rendered on generated one-sided, in-phase, and anti-phase fixtures. The complex displayed state survived reload, but accepted pre/post reload groups differed by a minute -113.14 dBFS residual, so exact reload PCM is not claimed. A repeated 96 kHz complex-state render was PCM-exact and showed bounded rate-dependent response differences. Automation, exhaustive parameter grids, other channel formats/rates, musical preference, private topology, and any TrackSmith authority to control Logic remain unmeasured or prohibited."
             ),
             .init(
                 identifier: "logic-pro-12.3:linear-phase-eq",
@@ -1825,9 +1825,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.intimate, .distant, .wide, .narrow, .clear, .warm, .dark, .bright],
                 documentedMechanism: "Algorithmic room models with predelay, attack/early/late relationships, size/density/decay, frequency-dependent damping, modulation, distance, width, low-frequency mono, and output EQ.",
                 productionConsequence: "Depth is multivariable: dry/wet, predelay, early energy, tail, spectrum and width all matter. Damping changes the decay process; output EQ changes the returned result.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-chromaverb-production-profile-48k-2026-07-28"],
+                empiricalEvidenceSummary: "Bounded direct Logic 12.3 build-6674 ChromaVerb evidence at 48 kHz/PCM24 covers a default Room wet-only state, a controlled Digital wet-only state, exact header bypass, impulse onset/peak/tail identity, in-session repeatability, independent left/right matrix behavior, and save/reload. Room first wet output followed the source impulse by 387 frames at the recorded 8 ms predelay and had a 2.597-second bounded tail. Digital first wet output followed by 1921 frames at the recorded 40 ms predelay and had a 3.642-second bounded tail. Default Room repeated exactly three times; Digital repeated exactly after bounded first-transition exclusion. Digital controls restored visibly across reload and settled within-session, but pre-save and post-reload settled PCM were not exact. No participant listening, other twelve room algorithms, mixed dry/wet state, alternate quality, width, Mono Maker, damping/Output EQ sweep, automation, sample-rate grid, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established."
             ),
             .init(
                 identifier: "logic-pro-12.3:enverb",
@@ -1881,9 +1881,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.intimate, .distant, .wide, .narrow, .clear, .warm, .dark, .bright],
                 documentedMechanism: "Convolution with recorded or synthesized impulse responses, including IR sample-rate/length/envelope/filter/EQ and stereo/surround handling.",
                 productionConsequence: "Captures an IR's linear time-invariant response, not every nonlinear or time-varying property of hardware/space. IR changes may require recalculation and not all parameters are automatable.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-space-designer-production-profile-48k-2026-07-28"],
+                empiricalEvidenceSummary: "Bounded direct Logic 12.3 build-6674 Space Designer evidence at 48 kHz/PCM24 covers one hash-identified generated mono custom IR loaded into one active stereo True Multi state, exact header bypass, impulse onset/peak/tail identity, non-identical L/R output, exact pre-save and post-reload in-session repeatability, and final package recovery with the IR bundled. Both channels first emitted wet output 128 frames after the source impulse. Three pre-save renders shared one decoded PCM hash; the final two post-reload renders shared another. The final post-reload state was within one integer count of pre-save, but 64 left and 249 right samples differed, so exact cross-reload PCM recovery is not established. No participant listening, factory or Synthesized IR, alternate process mode, parameter grid, stereo matrix, musical-source evidence, sample-rate grid, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established."
             ),
             .init(
                 identifier: "logic-pro-12.3:exciter",

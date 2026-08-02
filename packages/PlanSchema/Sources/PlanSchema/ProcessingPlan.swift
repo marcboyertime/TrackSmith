@@ -61,6 +61,9 @@ public enum NodeType: String, Codable, CaseIterable, Sendable {
 public enum ParameterID: String, Codable, CaseIterable, Sendable {
     case gainDB, frequencyHz, q, thresholdDB, ratio, attackMS, releaseMS, makeupGainDB
     case ceilingDB, kneeDB, mix, width, driveDB, enabled, lookaheadMS
+    case algorithmVersion, delayTimeMS, feedback, damping, stereoCrossfeed
+    case preDelayMS, decayTimeSeconds, roomSize, diffusion
+    case holdMS, hysteresisDB, rangeDB
 }
 
 public enum ChangeCategory: String, Codable, CaseIterable, Sendable { case corrective, creative, loudness }

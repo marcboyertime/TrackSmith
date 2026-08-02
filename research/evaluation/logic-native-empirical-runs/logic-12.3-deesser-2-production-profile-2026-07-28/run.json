@@ -1,0 +1,956 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-deesser-2-production-profile-48k-2026-07-28",
+  "product": "TrackSmith",
+  "recordedAt": "2026-07-28T19:38:58-04:00",
+  "identityIdentifier": "logic-pro-12.3:deesser-2",
+  "identityName": "DeEsser 2",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 DeEsser 2 evidence at 48 kHz/PCM24 covers Relative/Absolute level dependence, Split/Wide range behavior, Band Stop/Shelving at 7001 Hz, 20 and 6 dB maximum-reduction states, short/static 7 kHz events, mono/stereo channel behavior, repeatability, source-exact bypass, restoration, and save/reload. Relative reduced quiet/loud same-ratio pairs equally; Absolute did not. Split left 500 Hz effectively unchanged while Wide reduced 500 Hz and 7 kHz together. A 6 dB maximum state bounded measured 7 kHz reduction at 6 dB. Accepted settled pairs were PCM-identical after explicitly retained first-transition exclusions. No human listening, phoneme claim, alternate frequency/sample-rate grid, automation, dedicated latency/tail profile, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established.",
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": null,
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-deesser-event-suite-v1 plus logic-native-measurement-suite-v1",
+    "fixtureCompatibility": "Two independent logic-deesser-event-suite-v1 generations were byte-identical for all three WAV files and the manifest.",
+    "claimClass": "measured_behavior"
+  },
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 DeEsser 2 Production Profile 48k 2026-07-28",
+        "archivePath": "project/TrackSmith Logic 12.3 DeEsser 2 Production Profile 48k 2026-07-28.logicx.zip",
+        "archiveSHA256": "d24705d0f85c6759108784e5a83e680732d3f20f2679e914ab2400737e8724a0",
+        "sampleRateHz": 48000
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "The ZIP archive passed unzip -t with no errors.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "levelModeProbe": "exactly 6.000 seconds",
+      "monoEventProbe": "exactly 6.000 seconds",
+      "stereoEventProbe": "exactly 6.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono source through interleaved Stereo Out",
+      "stereo source through a stereo DeEsser 2 instance and interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "nativeState": {
+    "presetName": "Default Preset modified only through explicitly recorded controls",
+    "commonControlledParameters": {
+      "thresholdDB": -9.5,
+      "detectorFrequencyHz": 7001,
+      "thresholdMode": "Relative unless an Absolute state is explicitly named",
+      "range": "Split unless a Wide state is explicitly named",
+      "filterMode": "Band Stop unless a Shelving state is explicitly named",
+      "filterSolo": "Off",
+      "maximumReductionDB": 20.0,
+      "sideChainSource": "Internal"
+    },
+    "states": {
+      "relativeSplitBandStop": {
+        "thresholdMode": "Relative",
+        "range": "Split",
+        "filterMode": "Band Stop",
+        "thresholdDB": -9.5,
+        "detectorFrequencyHz": 7001,
+        "maximumReductionDB": 20.0
+      },
+      "absoluteSplitBandStop": {
+        "thresholdMode": "Absolute",
+        "range": "Split",
+        "filterMode": "Band Stop",
+        "thresholdDB": -9.5,
+        "detectorFrequencyHz": 7001,
+        "maximumReductionDB": 20.0
+      },
+      "relativeWideBandStop": {
+        "thresholdMode": "Relative",
+        "range": "Wide",
+        "filterMode": "Band Stop",
+        "thresholdDB": -9.5,
+        "detectorFrequencyHz": 7001,
+        "maximumReductionDB": 20.0
+      },
+      "relativeSplitShelving": {
+        "thresholdMode": "Relative",
+        "range": "Split",
+        "filterMode": "Shelving",
+        "thresholdDB": -9.5,
+        "detectorFrequencyHz": 7001,
+        "maximumReductionDB": 20.0
+      },
+      "relativeSplitMaximum6": {
+        "thresholdMode": "Relative",
+        "range": "Split",
+        "filterMode": "Band Stop",
+        "thresholdDB": -9.5,
+        "detectorFrequencyHz": 7001,
+        "maximumReductionDB": 6.0
+      }
+    },
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They are not phoneme detectors, a private-topology claim, general processor mastery, or authority for TrackSmith to control Logic."
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "artifacts/source-deesser-level-mode-probe-mono-48k.wav",
+        "fileSHA256": "bde0227d60544687f660256229630ac1fc6afb2948328d8bb0483fac29d6bbf3",
+        "pcmSHA256": "0d07531a357f9bf08b3acc48e59c9e5e7ce9502381f27c79506ba8d39f0f1ded",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 288000
+      },
+      {
+        "artifactPath": "artifacts/source-deesser-event-probe-mono-48k.wav",
+        "fileSHA256": "cd97aed61588ddde4b54e3d8f3de9a32e8a0b093ca4d58470315f2f74997ee74",
+        "pcmSHA256": "9f5f5d6a10632d672e12699b720192474ea53f4d76793f0a6e1d23e32f797729",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 288000
+      },
+      {
+        "artifactPath": "artifacts/source-deesser-event-probe-stereo-48k.wav",
+        "fileSHA256": "801526df8e733d7c9d0439352a8efdf5660c3ffa8a08f9950336a10882060f4a",
+        "pcmSHA256": "662ed1cdb2a5c74772d6245bc5dab81842d0582bbbd5fba1a3bd1d7d68021bf5",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 288000
+      }
+    ],
+    "bitDepth": 24,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "Every source copy is hash-ledgered, and two independent generator runs reproduced every fixture and manifest byte."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Preserve first-transition output, then require repeated decoded-PCM identity before making settled-state claims.",
+    "baselineGate": "The stereo header-bypass state had to reproduce the two-channel source sample-exactly."
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_header_bypass_and_restoration_path",
+      "evidence": "Two bypass renders were PCM-identical to each other and sample-exact to the two-channel source. The first re-enabled render was retained as a transition; the next render exactly restored accepted pre-bypass PCM."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_relative_absolute_split_wide_band_stop_shelving_internal_route",
+      "evidence": "Relative and Absolute threshold modes, Split and Wide ranges, Band Stop and Shelving filters, and the internal route were rendered. Filter Solo and external side-chain behavior were not measured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_one_threshold_one_detector_frequency_two_maximum_reductions",
+      "evidence": "Threshold -9.5 dB and detector 7001 Hz were held across the primary grid; maximum reduction 20 and 6 dB were compared. Broader threshold, detector-frequency, and interaction grids remain unrun."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_gain_peak_frame_count_and_zero_lag_only",
+      "evidence": "Per-channel gain, peak, frame count, polarity/correlation, and bounded zero-lag comparisons are artifact-backed. Dedicated impulse latency and tail tests were not run."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "partial_two_identical_settled_renders_per_admitted_state",
+      "evidence": "Every admitted state has at least two decoded-PCM-identical settled renders. Three accepted renders were retained for stereo Band Stop, Shelving, and post-reload states where first-transition output required exclusion."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_recorded_relative_split_band_stop_stereo_state",
+      "evidence": "Relative, Split, Band Stop, threshold -9.5 dB, detector 7001 Hz, maximum reduction 20 dB, Filter Solo off, active bypass state, stereo channel format, and source-region mute state reopened visibly. Accepted post-reload PCM exactly matched accepted pre-save PCM."
+    },
+    "relative_absolute_detection_threshold_and_level_dependence": {
+      "status": "complete_for_same_ratio_quiet_loud_pairs_at_one_threshold",
+      "evidence": "Relative produced approximately -9.216 dB at 7 kHz for both same-ratio quiet and loud pairs. Absolute produced approximately 0.000 and -0.459 dB respectively. Other thresholds and source spectra remain unknown."
+    },
+    "frequency_range_split_wide_and_maximum_reduction_response": {
+      "status": "complete_for_7001_hz_band_stop_shelving_split_wide_and_6_20_db_maximum_states",
+      "evidence": "At 7001 Hz, Split left the 500 Hz base within about 0.02 dB while reducing 7 kHz; Wide reduced 500 Hz and 7 kHz by about 9.21 dB together. Shelving and Band Stop were separated, and the 6 dB maximum state bounded measured 7 kHz reduction to approximately -6.000 dB."
+    },
+    "short_high_band_event_reduction_versus_static_brightness_nontrigger": {
+      "status": "partial_synthetic_7_khz_events_and_static_intervals_only",
+      "evidence": "Short and static 7 kHz intervals over a 500 Hz base were measured at controlled levels. Static -24 dBFS high content still produced about -2.604 dB in the mono Relative/Split/Band Stop state, so a universal static-brightness nontrigger is explicitly not claimed."
+    },
+    "consonant_intelligibility_breath_air_and_lisp_risk_on_vocal_material": {
+      "status": "not_run_no_human_vocal_listening_result",
+      "evidence": "No participant completed a controlled vocal listening protocol. Synthetic 7 kHz tones are not represented as consonants, breath, air, or lisp evidence."
+    },
+    "stereo_link_channel_specific_events_latency_and_level_matched_bypass": {
+      "status": "partial_channel_specific_events_and_exact_bypass_without_dedicated_latency",
+      "evidence": "Left-only 7 kHz events over a two-channel 500 Hz base were rendered through the stereo instance. Split-mode 500 Hz movement remained within about 0.02 dB on both channels; no 7 kHz tone was introduced on the opposite channel. Bypass was source-exact. Dedicated latency and a broader stereo-link grid remain unrun."
+    }
+  },
+  "measurements": {
+    "relativeAbsoluteLevelDependence": {
+      "relativeQuietSameRatio7kHzGainDB": -9.215929754034498,
+      "relativeLoudSameRatio7kHzGainDB": -9.215923014063543,
+      "absoluteQuietSameRatio7kHzGainDB": -1.698837112563521e-07,
+      "absoluteLoudSameRatio7kHzGainDB": -0.45867097258378015
+    },
+    "splitWide": {
+      "relativeSplitQuietPair500HzGainDB": -0.016104832704457214,
+      "relativeSplitQuietPair7kHzGainDB": -9.215929754034498,
+      "relativeWideQuietPair500HzGainDB": -9.213379047018408,
+      "relativeWideQuietPair7kHzGainDB": -9.21578179674668
+    },
+    "eventAndMaximumReduction": {
+      "monoBandStopMinus6Event7kHzMedianGainDB": -9.18693152577918,
+      "monoBandStopStaticMinus24High7kHzGainDB": -2.603722769929548,
+      "stereoBandStopMaximum6EventMinimum7kHzGainDB": -5.9999980799258,
+      "stereoShelvingMinus6Event7kHzMedianGainDB": -4.227360502224752
+    },
+    "stereoReloadAndBypass": {
+      "acceptedStereoSettledTwoVersusThreePCMExact": true,
+      "bypassSourcePCMExact": true,
+      "bypassRepeatedPCMExact": true,
+      "firstReEnableTransitionDifferingSamplesPerChannel": 468,
+      "firstReEnableTransitionLastDifferingFrame": 478,
+      "secondReEnableVersusPreBypassPCMExact": true,
+      "preSaveVersusPostReloadPCMExact": true,
+      "postReloadSettledTwoVersusThreePCMExact": true
+    },
+    "measurementBoundary": "All values describe only the exact recorded states, fixtures, environment, and analysis rules. They neither identify Apple's private implementation nor prove phoneme handling or musical usefulness."
+  },
+  "stateTransitionFindings": [
+    "Mono Relative/Absolute/Split/Wide accepted state pairs were PCM-identical on their first and second retained settled renders.",
+    "The first stereo render after switching the channel format differed from the next render by one integer count at frame 1 on each channel; the next two renders were PCM-identical.",
+    "Header bypass produced source-exact PCM on both channels and repeated PCM-identically.",
+    "The first render after re-enabling processing differed from the accepted state in 468 samples through frame 478 per channel; the next render exactly restored accepted pre-bypass PCM.",
+    "After save/reload, the first pair differed by one integer count at frame 1; the second and third post-reload renders were PCM-identical, and the second exactly matched accepted pre-save PCM.",
+    "The first Shelving pair differed in two samples through frame 4 per channel; the second and third Shelving renders were PCM-identical."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/rejected-overlap-contaminated-compressor-source-48k.wav",
+        "artifacts/rejected-overlap-contaminated-compressor-source-48k-analysis.json"
+      ],
+      "reason": "Retained and rejected because an overlapping unmuted Compressor fixture produced 1 kHz output instead of the selected DeEsser source. No DeEsser claim uses this attempt."
+    },
+    {
+      "artifacts": [
+        "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-1-48k.wav",
+        "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-repeat-analysis.json"
+      ],
+      "reason": "Retained as the first stereo post-channel-mode transition. It is excluded from settled-repeat claims because it differs from the next render by one integer count at frame 1 on each channel."
+    },
+    {
+      "artifacts": [
+        "artifacts/deesser-relative-split-stereo-restored-after-bypass-1-48k.wav",
+        "artifacts/deesser-relative-split-stereo-restored-after-bypass-repeat-analysis.json"
+      ],
+      "reason": "Retained as the first post-bypass re-enable transition. It differs from the accepted restored state in 468 samples through frame 478 per channel."
+    },
+    {
+      "artifacts": [
+        "artifacts/deesser-relative-split-stereo-post-reload-settled-1-48k.wav",
+        "artifacts/deesser-relative-split-stereo-post-reload-repeat-analysis.json"
+      ],
+      "reason": "Retained as the first post-reload transition. It differs from the next render by one integer count at frame 1 on each channel; the second and third renders form the accepted post-reload state."
+    },
+    {
+      "artifacts": [
+        "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-1-48k.wav",
+        "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-repeat-analysis.json"
+      ],
+      "reason": "Retained as the first post-filter-mode transition. It differs from the next render in two samples through frame 4 per channel; the second and third renders form the accepted Shelving state."
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "Relative and Absolute did not behave as interchangeable threshold modes on same-ratio quiet/loud pairs.",
+      "Split and Wide did not behave as interchangeable ranges: Split concentrated measured attenuation at 7 kHz while Wide applied nearly equal attenuation to 500 Hz and 7 kHz in the tested pair.",
+      "Band Stop and Shelving did not produce the same event attenuation at the recorded 7001 Hz state.",
+      "The 6 dB maximum-reduction state bounded measured event attenuation at approximately 6 dB.",
+      "Accepted stereo processing, bypass restoration, and save/reload states were exactly recoverable after bounded transition exclusion."
+    ],
+    "inferredConsequences": [
+      "Typed production knowledge may treat threshold mode, range, filter mode, maximum reduction, source level, and channel format as consequential.",
+      "Candidate comparison should settle or explicitly expose first-transition renders before claiming exact repeatability.",
+      "A low-level static high-frequency component is not automatically a nontrigger in Relative mode."
+    ],
+    "professionalPracticeHeuristics": [
+      "Threshold, detector frequency, filter mode, range, and maximum reduction remain source- and goal-dependent.",
+      "Synthetic exact-tone measurements are guardrails for candidate design, not a substitute for controlled vocal listening."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "No state is declared universally transparent, natural, lisp-free, air-preserving, or musically superior.",
+      "No synthetic 7 kHz event is represented as a phoneme or a prediction of consonant intelligibility.",
+      "No private detector, link, filter, envelope, or smoothing topology is identified.",
+      "No untested threshold, frequency, sample rate, automation path, side chain, source class, or musical result is generalized.",
+      "No TrackSmith authority to inspect, insert, reorder, automate, or control Logic DeEsser 2 is granted."
+    ]
+  },
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "results": [],
+    "statement": "No participant completed a controlled vocal listening test for this run. Objective behavior is not represented as consonant intelligibility, breath or air preservation, lisp avoidance, preference, or musical usefulness."
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient for the milestone's bounded DeEsser 2 production profile because it materially covers Relative/Absolute level behavior, Split/Wide, Band Stop/Shelving at one detector frequency, maximum reduction, short/static events, mono/stereo behavior, repeatability, exact bypass/restoration, and save/reload. It remains partial in the exhaustive campaign and listening-decisive for vocal outcomes.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        1,
+        "tones",
+        1,
+        "gain_db"
+      ],
+      "minimum": -9.217,
+      "maximum": -9.214
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        3,
+        "tones",
+        1,
+        "gain_db"
+      ],
+      "minimum": -9.217,
+      "maximum": -9.214
+    },
+    {
+      "artifactPath": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        1,
+        "tones",
+        1,
+        "gain_db"
+      ],
+      "minimum": -0.001,
+      "maximum": 0.001
+    },
+    {
+      "artifactPath": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        3,
+        "tones",
+        1,
+        "gain_db"
+      ],
+      "minimum": -0.46,
+      "maximum": -0.457
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        1,
+        "tones",
+        0,
+        "gain_db"
+      ],
+      "minimum": -9.215,
+      "maximum": -9.212
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        2,
+        "high_7000hz_gain_db_median"
+      ],
+      "minimum": -2.605,
+      "maximum": -2.602
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        1,
+        "high_7000hz_gain_db_minimum"
+      ],
+      "minimum": -6.001,
+      "maximum": -5.999
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-2-vs-3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-2-vs-3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-2-48k-analysis.json",
+      "jsonPath": [
+        "deesser_transfer",
+        "channels",
+        0,
+        "segments",
+        1,
+        "high_7000hz_gain_db_median"
+      ],
+      "minimum": -4.229,
+      "maximum": -4.225
+    },
+    {
+      "artifactPath": "artifacts/deesser-stereo-bypass-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-stereo-bypass-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-stereo-pre-bypass-vs-restored-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-stereo-pre-vs-post-reload-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-stereo-post-reload-settled-2-vs-3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/deesser-relative-split-stereo-restored-after-bypass-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "last_differing_sample"
+      ],
+      "maximum": 478
+    }
+  ],
+  "artifactFiles": [
+    {
+      "path": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-repeat-analysis.json",
+      "sha256": "4c79a78bf848fe3a9c155067ebc48446f73f790ffcb6bf34a687c377f92ebbff",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "sha256": "9a787798ab9a94f346e82abcfb69b847a1e9463fa39e200fd5df7a0fd45b8c03",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k.wav",
+      "sha256": "24038a6ea8da77992fd91526a372cc8d4c30dab0cbfb833c6013fca46d6ae8cb",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-2-48k-analysis.json",
+      "sha256": "2f9e7d2524d50b20fe9308c6bba67fd13022dab7777044991754131b5763bafa",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-absolute-split-bandstop-threshold-minus9_5-max20-level-probe-settled-2-48k.wav",
+      "sha256": "d665ebd272ef786b2975e1d4519ac8b890c3d285d0c396102f1a48bfd01f9526",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-repeat-analysis.json",
+      "sha256": "f060072023599e17de4f19b5a33a9f0bb88028a0efdde2180805f7169e57a39e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-settled-1-48k-analysis.json",
+      "sha256": "b70f9c79a6af9ff1b336b469da634f57f33107e17e66847fbf1380672985e40f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-settled-1-48k.wav",
+      "sha256": "07aa98a66c1ad679457bc8a4a722f153507820c70b56350a0da81a629addc5c6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-settled-2-48k-analysis.json",
+      "sha256": "2fa9e1090098beef72044bd476079092f738941da164350f7bfc7542e1d77e6c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-event-probe-settled-2-48k.wav",
+      "sha256": "3cb9e013946f0264d2adf061997f63dd29339effce28ca093f8451e37c00b5ff",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-repeat-analysis.json",
+      "sha256": "b4668ccbec1caadb556d21318e14891193284627fe9ff3460c8d0df79207b216",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "sha256": "b694def448ed8544ec184c26399f33a7aab2a52567449b8ec45817e0f860dc0a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k.wav",
+      "sha256": "0fdfb03f3a50f9c4724b6c0d156a67c8a7908526d6f0726479ba99212ad327d6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-settled-2-48k-analysis.json",
+      "sha256": "d8fb2afcbcd26859736b8de87d8761d09cb392f2dae97045f8bf7e778c631204",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-level-probe-settled-2-48k.wav",
+      "sha256": "18045f179fa2b582bd15842c7a7d2348c89186f1955751df56df29cec60a566b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-repeat-analysis.json",
+      "sha256": "e3f6f35f5e2f92719be41c7dd9a429629d52b1e206628891294b5559eb40ea25",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-1-48k-analysis.json",
+      "sha256": "20312c4be2b3701b55bde3ce6a07a5e29ceccda43a6ca568f2a1e7b1b99d91d1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-1-48k.wav",
+      "sha256": "7129e07f39f19725a72c1e173131d3f4a666ad628d650e6ecfa3df75a4f429fc",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-2-48k-analysis.json",
+      "sha256": "cb67f504576dfd80122e8c962fea70035a9efaac489b7ef0c95aacb89fc11629",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-2-48k.wav",
+      "sha256": "51b927d4111355efc66917a52048382fb06d31030d3bd2ed3d1655731d6c39a0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-2-vs-3-analysis.json",
+      "sha256": "ada9c39c191d64c6575bac7efaa7e473ea6b600bd1ab647aa46f7e5795890c00",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-3-48k-analysis.json",
+      "sha256": "dc8b05a111774a918271d4e795317eb44da0e50911638940c82362a91f63db0a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max20-stereo-event-probe-settled-3-48k.wav",
+      "sha256": "ec6f1e684adc9426187c8933863b5cc132775fceaf36468f0aaed7e06f07f853",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-repeat-analysis.json",
+      "sha256": "17faa3fbc337e2dfdf1fbd7b378ffcdecf7cebdc7c00a20b4c4073e5ba59dcb7",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-settled-1-48k-analysis.json",
+      "sha256": "5e4ce6aad3c35c80282c6ca8c5ed2731b9a3bd9c2b93168b599049a37ac946e9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-settled-1-48k.wav",
+      "sha256": "d504daada0e039466dc5f017cf1596c0c58d8807d04aa6f9fe2b80ba531bb17e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-settled-2-48k-analysis.json",
+      "sha256": "1872e1bef8aea7a9352defb0caa19ede54de6acacfbe68505d6e8c58511dff90",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-bandstop-threshold-minus9_5-max6-stereo-event-probe-settled-2-48k.wav",
+      "sha256": "eb028f0b181b5092d41cd725ade33de83060e0897b27346edb572a2fd1fad934",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-repeat-analysis.json",
+      "sha256": "2b3f25066a7351669c2472623872d3487fd23fccd9100cd54498d8179761e2c8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-1-48k-analysis.json",
+      "sha256": "e0ab290f7f9a28cd4f17247b03acf51913480f87f0d649586227d6a6ad5d56ed",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-1-48k.wav",
+      "sha256": "1bec602feb2af0f1fad31fb9fc367476a0eb5d522d0aeecf1cf567195eadb6ab",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-2-48k-analysis.json",
+      "sha256": "76bca06f9c902f55e539880086f3afe1306bf176f7979aad8d50865bdee3bdfa",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-2-48k.wav",
+      "sha256": "698ba2fee6ab3dd3c46d1605b3ab403594203c354758a09a778cb4899b137cb6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-2-vs-3-analysis.json",
+      "sha256": "25175a76411c96d9305a08f3c694cb141424fa7b32a6c8fa11c15367c45b11da",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-3-48k-analysis.json",
+      "sha256": "96caf40782f59f48d91cbed634bead5c253a7a175d2406c862f7e7cd27a25526",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-shelving-frequency7001-threshold-minus9_5-max20-stereo-event-probe-settled-3-48k.wav",
+      "sha256": "025e6d3fe02d583e47062d9b37446f0a45d15b1e0baf6b2d9f0f6b16700f7994",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-repeat-analysis.json",
+      "sha256": "1072668db65c8b2434565f530e491d9d7382d4079a6e1c7d88886cfe8ed0d62a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-1-48k-analysis.json",
+      "sha256": "a053af7ce3a17d3b54d056cfda4e792d3937051e74b53938fcbb96de48801094",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-1-48k.wav",
+      "sha256": "13a57f1ec8054ec0db9f30be92e52e8790d23303245190a531362352b908d97d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-2-48k-analysis.json",
+      "sha256": "d2b9620366152765523adbff402be6ee8ae013f2b2438c8420d6da58842dd622",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-2-48k.wav",
+      "sha256": "81a5319c39e37f1a1f076b745b7cce656a5086327752e3a1a6168f8caf4b103d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-2-vs-3-analysis.json",
+      "sha256": "67ec0306ff3a64f3664868a0dd24ede2ead6668fa94b9d2952537f2c99a99011",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-3-48k-analysis.json",
+      "sha256": "04394ad1a997d2f6a677a07451ac99071a62d1306029a35b16ae4b2697fecdd3",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-post-reload-settled-3-48k.wav",
+      "sha256": "5d60e152a0578758469b09f5d553fc7c90b1dbdb50350f245a83bad2a64c9464",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-pre-bypass-vs-restored-analysis.json",
+      "sha256": "8c744f53b5746f37cb72f05b57177814dfb8a40a38f5c83f310126456300f8d0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-pre-vs-post-reload-analysis.json",
+      "sha256": "56e22175fc7615d9cbe7ffe6d2f738143e18eaf3c33a9a2b504e145b6bda1bfd",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-restored-after-bypass-1-48k-analysis.json",
+      "sha256": "c4873f5f10dcff7062b6484af7af3c5f2c7ff411f2f8788c8eea88b3068cbd81",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-restored-after-bypass-1-48k.wav",
+      "sha256": "9b7b4dccfdf9f2454ac14fbda8f51940b10d3f7ad4e26b6d0a9cae757fa1f5fe",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-restored-after-bypass-2-48k-analysis.json",
+      "sha256": "c822b3ec1fea38b8af3f80e019a9686f83c649d0a82024d7982bd16445a0b0fd",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-restored-after-bypass-2-48k.wav",
+      "sha256": "26446137c6e2fdcb91ccf98a71766dd5d4f9753d42bbbdc42b6dc749c4e99aeb",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-split-stereo-restored-after-bypass-repeat-analysis.json",
+      "sha256": "76a3531ce50e98071331b30ec7b3e47f1677611ffa0b8880c599e9148e8c208f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-repeat-analysis.json",
+      "sha256": "60033c5c1202c4e4b02edb93cca72daed733f5c0a3f28577f3a941134fa24b8a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k-analysis.json",
+      "sha256": "e5b87e5fc57895d7582b8f0537a4ce623482cf2a2698a602b0bcfbb2e1030426",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-settled-1-48k.wav",
+      "sha256": "70f8acaab2529c75988b91a8eb7031ce1f7d22aab2b5c5974c9e302e14e301bf",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-settled-2-48k-analysis.json",
+      "sha256": "e61f35319db84fbc41b261b1a3f8bccde304a751e3e8c4e978a7e07b0e07c047",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-relative-wide-bandstop-threshold-minus9_5-max20-level-probe-settled-2-48k.wav",
+      "sha256": "c247544edae691bf3bd6e4e32d9ddb71aa00fa1263d6f0dc3f0db1bf6cd60e28",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-stereo-bypass-repeat-analysis.json",
+      "sha256": "96e026057ff0066f2a17070215115b1754cf6a2699923caf93bbf6e78b1f1a2e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-stereo-bypass-settled-1-48k-analysis.json",
+      "sha256": "301cb568c7fac59ef368f3b05b770f4fc9a5f8f88ef0e0821ddcd93cd6b1b87c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-stereo-bypass-settled-1-48k.wav",
+      "sha256": "78e07f16ace296b04ca96ab9b442fd29aebbaadc7c32645c5a104f433b124f7b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/deesser-stereo-bypass-settled-2-48k-analysis.json",
+      "sha256": "98567a8aa6dfe793039051d4c6ca3f24be68429f8dc1d73647c32c6ee7935fee",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/deesser-stereo-bypass-settled-2-48k.wav",
+      "sha256": "55bfd89da91ef9049b1812375ed113aa01f69ee5396b39e25576cf0215bcbd1b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-overlap-contaminated-compressor-source-48k-analysis.json",
+      "sha256": "298d72ae79e6033f436987f1c7c2c408d4a8dff93c8651d68b2df15f5053f9a0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/rejected-overlap-contaminated-compressor-source-48k.wav",
+      "sha256": "55b2a4b08d16e42c0b59232cca4d7942051cf900d08769a3507d8a540ed5005b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/source-deesser-event-probe-mono-48k.wav",
+      "sha256": "cd97aed61588ddde4b54e3d8f3de9a32e8a0b093ca4d58470315f2f74997ee74",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-deesser-event-probe-stereo-48k.wav",
+      "sha256": "801526df8e733d7c9d0439352a8efdf5660c3ffa8a08f9950336a10882060f4a",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-deesser-event-suite-manifest.json",
+      "sha256": "3b5863f4c3859527d7ec7ebd3a0447257e0b0e6fa64631223746e7edfe12e440",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-deesser-level-mode-probe-mono-48k.wav",
+      "sha256": "bde0227d60544687f660256229630ac1fc6afb2948328d8bb0483fac29d6bbf3",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 DeEsser 2 Production Profile 48k 2026-07-28.logicx.zip",
+      "sha256": "d24705d0f85c6759108784e5a83e680732d3f20f2679e914ab2400737e8724a0",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "screenshots/deesser-absolute-split-controls-48k.png",
+      "sha256": "12687bcfd475baa57006534b4746df70601759932733ef61aed87804e151cbe4",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-default-relative-split-controls-48k.png",
+      "sha256": "c273d49eff49f6ed62a35c21b2adff1d8dac7705a4ef470a7f57715c8104f1ce",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-relative-split-max6-stereo-controls-48k.png",
+      "sha256": "35460e370322ec53fea55d56ee8395690c44a23a3a7c11f9feb1052970c6f958",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-relative-split-post-reload-controls-48k.png",
+      "sha256": "c70e055be7b675e28a44bd9a56b14efd13d69748cf702c03443b348d89e3ade0",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-relative-split-shelving-stereo-controls-48k.png",
+      "sha256": "f2bfd3ce3921eac02577399fa6c7ff75d66fac01b20b858a1e5ecd19460c88d2",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-relative-split-stereo-controls-48k.png",
+      "sha256": "05d55afb2cc21f7290de02cc61729900c11d39b6d6498ed64c1381ece7715a1e",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-relative-wide-controls-48k.png",
+      "sha256": "6269f58d2c0b400c30abbb9fadbb01a74dc3d20da4c6bd5e74cb820708ad8233",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-stereo-bypassed-48k.png",
+      "sha256": "f0a69ffdb0027eec05f6a382f0317670aeb9bc9d1caaa3425607fdcbd5642b7b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/deesser-stereo-track-selected-48k.png",
+      "sha256": "aa9e6e38d212eab3de712210b17409172ed80eacfc9f1d35a87415de77a6da62",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

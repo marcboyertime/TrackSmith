@@ -77,8 +77,21 @@
   to zero until a fixed-latency lookahead implementation exists. Activation rejects
   a final limiter ceiling above `maxTruePeakDB`, but that structural relationship
   does not guarantee live inter-sample dBTP compliance.
-- Dynamic EQ, expander/gate, transient shaper, M/S EQ, delay and reverb are
-  schema entries but intentionally throw unsupported-node errors in DSP compilation.
+- Dynamic EQ, transient shaping, and M/S EQ remain schema placeholders and
+  intentionally fail validation when enabled. Expander/gate, fixed-time feedback
+  delay, and a bounded algorithmic room are now implemented as TrackSmith-owned
+  algorithm-version-1 modules. They do not clone Logic algorithms. Their graph
+  parameters are immutable within a compiled graph; a revised plan publishes a
+  reset replacement graph at a callback boundary, without a click-free crossfade or
+  sample-accurate general-node automation.
+- Delay is bounded to 1–2000 ms per node and 4000 ms total per plan, feedback to
+  0.95, and at most four instances. Reverb is a compact fixed topology with two
+  unequal feedback-comb paths and one scalar allpass diffusion stage per channel;
+  requested predelay shifts both comb-path offsets. It has a 0.1–8 second nominal
+  decay and at most two instances. Expander/gate is linked stereo and bounded to
+  four instances; its detector is amplitude-based rather than note-, phoneme-, or
+  source-aware. These are safety/resource bounds and declared control semantics,
+  not proof of excellent settings or musical usefulness.
 - The implemented de-esser is a deterministic linked split-band processor: a simple
   one-pole crossover isolates the upper band, a shared envelope controls upper-band
   gain, and the lower band remains at unity. It is not a multi-band dynamic EQ,
@@ -217,9 +230,11 @@
   the current AU instance/runtime, capture, committed graph and conversation match
   exactly. Thus historical context survives restart, but old edits may correctly be
   unavailable for live application after Logic creates a new runtime.
-- Validated plans are coarsely bounded to 32 nodes, 32 goals and 4 KiB per rationale.
-  These limits prevent unbounded model output but are not a module-weighted real-time
-  CPU budget. The checked-in JSON Schema mirrors the two item limits and uses the
+- Validated plans are bounded to 32 nodes, 32 goals and 4 KiB per rationale, with
+  additional temporal-node counts and total-delay-time limits. These limits prevent
+  unbounded model output and cap the newly allocated temporal state, but they are
+  not proof that every legal 32-node combination meets every host's deadline. The
+  checked-in JSON Schema mirrors the item/resource limits and uses the
   extension `x-maxUTF8Bytes: 4096` because standard `maxLength` counts Unicode code
   points rather than encoded bytes; non-Swift consumers must honor that extension.
 - Message IDs are collision-safe and identical repeats are idempotent at the file

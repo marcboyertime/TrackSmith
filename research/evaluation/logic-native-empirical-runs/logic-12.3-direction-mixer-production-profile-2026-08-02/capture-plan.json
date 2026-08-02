@@ -1,0 +1,706 @@
+{
+  "schemaVersion": "1.0",
+  "planVersion": "1.0",
+  "product": "TrackSmith",
+  "processor": "Direction Mixer",
+  "campaignIdentity": "logic-pro-12.3:direction-mixer",
+  "runID": "logic-12.3-direction-mixer-production-profile-48k-2026-08-02",
+  "status": "prepared_not_run",
+  "preparedAt": "2026-08-02",
+  "nativeCapturePresent": false,
+  "runJsonPolicy": "Do not create run.json until native Logic captures, exact environment, state, render, analysis, and reload evidence exist.",
+  "protocol": {
+    "path": "docs/LOGIC_NATIVE_EMPIRICAL_MEASUREMENT_PROTOCOL.md",
+    "requiredClaimClass": "measured_behavior",
+    "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority"
+  },
+  "campaignAuthority": {
+    "path": "research/knowledge/logic-pro-12.3-empirical-campaign.json",
+    "identityIdentifier": "logic-pro-12.3:direction-mixer",
+    "measurementProfile": "core_direction_mixer_lr_ms_split_width_direction_and_mono",
+    "requiredLanes": [
+      "logic_native_documented_state_capture",
+      "linear_response_then_nonlinearity_rejection_lane",
+      "core_effect_priority_lane",
+      "direction_mixer_channel_matrix_and_mono_lane"
+    ],
+    "requiredDimensions": [
+      "documented_default_and_bypass_path",
+      "every_discrete_mode_model_algorithm_and_routing_state",
+      "bounded_continuous_parameter_grid_with_interaction_followup",
+      "reported_and_measured_latency_polarity_gain_peak_tail",
+      "three_identical_renders_for_repeatability",
+      "save_reload_state_and_source_hash_verification",
+      "lr_ms_mode_direction_spread_minimum_unity_above_unity_and_polarity",
+      "split_high_low_crossover_frequency_dependent_mid_side_transfer",
+      "left_right_channel_matrix_gain_peak_correlation_low_band_side_and_mono_sum",
+      "width_direction_localization_low_end_and_source_specific_listening"
+    ]
+  },
+  "exactEnvironmentToRecord": {
+    "recordBeforeImport": true,
+    "operatorAndTime": {
+      "operatorIdentifier": "record_local_operator_id_without_personal_notes",
+      "recordedAtRFC3339": null,
+      "timezone": null
+    },
+    "macOS": {
+      "version": null,
+      "build": null
+    },
+    "hardware": {
+      "model": null,
+      "modelIdentifier": null,
+      "processor": null,
+      "memoryBytes": null
+    },
+    "Logic": {
+      "versionRequired": "12.3",
+      "buildRequired": "6674",
+      "versionObserved": null,
+      "buildObserved": null,
+      "bundleIdentifier": null,
+      "codeDirectoryCDHash": null,
+      "mainExecutableSHA256": null,
+      "signingAuthority": null,
+      "teamIdentifier": null
+    },
+    "directionMixerComponent": {
+      "nameObserved": null,
+      "manufacturerObserved": null,
+      "componentType": null,
+      "subtype": null,
+      "manufacturerCode": null,
+      "version": null,
+      "pluginBinaryOrBundleHash": null,
+      "presetNameAtInsert": null
+    },
+    "audioDevice": {
+      "inputDevice": null,
+      "outputDevice": null,
+      "nominalSampleRateHz": 48000,
+      "clockOrSync": null,
+      "driverOrAggregateDetails": null
+    },
+    "processing": {
+      "audioBufferFrames": null,
+      "processBufferFrames": null,
+      "lowLatencyMode": null,
+      "lowLatencyModeEvidence": "Record the visible Logic setting; null is valid only with an evidence note.",
+      "pluginDelayCompensation": null,
+      "softwareMonitoring": null
+    }
+  },
+  "projectSettings": {
+    "sampleRateHz": 48000,
+    "sampleRateSetBeforeImport": true,
+    "bitDepth": 24,
+    "tempoBPM": 120,
+    "timeSignature": "record exact visible project value",
+    "projectFormat": "disposable Logic project",
+    "trackChannelFormats": [
+      "stereo source through stereo Direction Mixer instance",
+      "mono source through stereo output only for baseline/control; never call this stereo-instance evidence"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPanOrBalance": "center/neutral; record exact visible mode",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "otherInsertsPresent": false,
+    "automationPresent": false,
+    "metronomeEnabled": false,
+    "countInEnabled": false,
+    "normalization": "off",
+    "dither": "off",
+    "spatialOrSurroundMode": "off; stereo only",
+    "projectSettingsScreenshotRequired": true
+  },
+  "fixturePackage": {
+    "generatorCommand": "swift run TestSignalGenerator --logic-measurement-suite research/evaluation/logic-native-empirical-runs/logic-12.3-direction-mixer-production-profile-2026-08-02/fixtures --sample-rate 48000",
+    "manifestPath": "fixtures/manifest.json",
+    "manifestAuthority": "Use each manifest record for file name, frame count, channel count, sample rate, encoding, purpose, and SHA-256; do not hand-edit manifest values.",
+    "encodingRequired": "PCM signed 24-bit WAV",
+    "sampleRateRequiredHz": 48000,
+    "required": [
+      {
+        "fileName": "silence_mono.wav",
+        "role": "self-noise, false-output, and tail check"
+      },
+      {
+        "fileName": "single_impulse_mono.wav",
+        "role": "latency, polarity, gain, impulse response, and tail"
+      },
+      {
+        "fileName": "log_sweep_20hz_20khz_mono.wav",
+        "role": "broadband magnitude/phase and transition response"
+      },
+      {
+        "fileName": "multitone_mono.wav",
+        "role": "simultaneous-band and nonlinearity check"
+      },
+      {
+        "fileName": "amplitude_ladder_1khz_mono.wav",
+        "role": "level dependence and gain/peak behavior"
+      },
+      {
+        "fileName": "stereo_in_phase.wav",
+        "role": "unity-width, center, and mono-sum baseline"
+      },
+      {
+        "fileName": "stereo_left_only.wav",
+        "role": "left-column channel transfer and crossfeed"
+      },
+      {
+        "fileName": "stereo_right_only.wav",
+        "role": "right-column channel transfer and crossfeed"
+      },
+      {
+        "fileName": "stereo_anti_phase.wav",
+        "role": "side-only, polarity, and mono-cancellation behavior"
+      },
+      {
+        "fileName": "stereo_one_sample_offset.wav",
+        "role": "interchannel delay, phase, and mono compatibility"
+      },
+      {
+        "fileName": "stereo_mid_low_side_high.wav",
+        "role": "100 Hz mid/low plus 5 kHz side/high frequency-dependent transfer"
+      }
+    ],
+    "supplemental": [
+      {
+        "fileName": "impulse_level_ladder_mono.wav",
+        "role": "supplemental level-dependent impulse probe"
+      },
+      {
+        "fileName": "dc_offset_probe_mono.wav",
+        "role": "supplemental very-low-frequency/DC behavior probe"
+      },
+      {
+        "fileName": "smpte_imd_60hz_7khz_mono.wav",
+        "role": "supplemental two-tone intermodulation probe"
+      },
+      {
+        "fileName": "ccif_imd_19khz_20khz_mono.wav",
+        "role": "supplemental high-frequency intermodulation/alias probe"
+      },
+      {
+        "fileName": "deterministic_noise_bursts_mono.wav",
+        "role": "supplemental transient and state-transition probe"
+      },
+      {
+        "fileName": "guitar_like_dynamic_plucks_mono.wav",
+        "role": "supplemental synthetic audition probe; not real guitar evidence"
+      },
+      {
+        "fileName": "bass_like_dynamic_plucks_mono.wav",
+        "role": "supplemental synthetic audition probe; not real bass evidence"
+      },
+      {
+        "fileName": "vocal_like_mono.wav",
+        "role": "supplemental synthetic audition probe; not a perceptual-quality reference"
+      }
+    ],
+    "sourceCopyRequirements": {
+      "copyIntoDisposableProject": true,
+      "copyDestination": "project/sources/",
+      "copyBeforeImport": true,
+      "preserveOriginalFixtureDirectory": true,
+      "retainOriginalAndCopyHashes": true,
+      "sourceMustRemainUnchanged": true,
+      "verifyAfterEveryRender": true,
+      "doNotUseUserAudio": true,
+      "doNotCopyRestrictedOrLargeDatasetPayloads": true
+    }
+  },
+  "renderPath": {
+    "primary": {
+      "method": "Logic Pro Project or Section Bounce",
+      "mode": "offline",
+      "fileType": "WAV",
+      "sampleRateHz": 48000,
+      "bitDepth": 24,
+      "interleaved": true,
+      "normalize": false,
+      "dither": false,
+      "cycleRange": "exactly the manifest duration for the selected fixture",
+      "tailHandling": "no extra tail for Direction Mixer; if any extra frames are rendered, retain but reject for the fixed-length evidence artifact",
+      "baselineRequiredSamePath": true
+    },
+    "diagnosticSecondary": {
+      "method": "Logic Pro real-time Project or Section Bounce",
+      "scope": "one header-bypass state and one settled split state per decisive fixture, only if available",
+      "recordSeparately": true,
+      "neverSubstituteForPrimary": true
+    },
+    "alignment": {
+      "cycleStart": "record exact bar/beat and sample position",
+      "preRoll": "off",
+      "postRoll": "off",
+      "countIn": "off",
+      "transportStoppedBeforeStateChange": true
+    }
+  },
+  "artifactNaming": {
+    "renderPattern": "artifacts/{stateId}__{fixtureStem}__r{repeatIndex}__{transition|settled}__{offline|realtime}.wav",
+    "baselinePattern": "artifacts/baseline__{fixtureStem}__r{repeatIndex}__{offline|realtime}.wav",
+    "analysisPattern": "analysis/{stateId}__{fixtureStem}.json",
+    "hashPattern": "analysis/hashes.jsonl",
+    "stateScreenshotPattern": "state-screenshots/{stateId}__{before-render|after-render|after-reload}.png",
+    "projectArchivePattern": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx.zip",
+    "sourceHashPattern": "analysis/source-hashes.json",
+    "notesPattern": "notes/{stateId}.md",
+    "pathRule": "All artifact paths are relative to this run directory; never overwrite a fixture or reuse a path for a different state."
+  },
+  "stateCapture": {
+    "visibleValueSentinel": "operator_record_exact_visible_value",
+    "unknownValuePolicy": "If the current Logic UI does not expose an exact numeric range/value in local documentation, record the exact visible UI label/value and screenshot; never invent a value.",
+    "headerStates": [
+      {
+        "stateId": "header_bypass",
+        "bypass": true,
+        "purpose": "same-path bypass and source identity baseline",
+        "repeatRequired": 3
+      },
+      {
+        "stateId": "default_inserted",
+        "bypass": false,
+        "purpose": "freshly inserted documented default; record every visible control",
+        "repeatRequired": 3
+      }
+    ],
+    "modeStates": [
+      {
+        "stateId": "lr_center_unity",
+        "mode": "LR",
+        "direction": {
+          "label": "center/default marker",
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        "spread": {
+          "semantic": "documented LR unity/neutral",
+          "documentedReferenceValue": 1,
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        "split": false,
+        "repeatRequired": 3
+      },
+      {
+        "stateId": "ms_center_unity",
+        "mode": "MS",
+        "direction": {
+          "label": "center/default marker",
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        "spread": {
+          "semantic": "documented MS unity reference",
+          "documentedReferenceValue": 1,
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        "split": false,
+        "repeatRequired": 3
+      }
+    ],
+    "directionGrid": {
+      "applyInEachMode": true,
+      "applyToSplitBranches": true,
+      "states": [
+        {
+          "stateIdSuffix": "direction_center",
+          "selectionRule": "Select the neutral/center marker; record the exact visible value.",
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        {
+          "stateIdSuffix": "direction_quarter_turn_left",
+          "selectionRule": "Select the visible quarter-turn left position relative to center; record the exact visible value or angle.",
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        {
+          "stateIdSuffix": "direction_quarter_turn_right",
+          "selectionRule": "Select the visible quarter-turn right position relative to center; record the exact visible value or angle.",
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        {
+          "stateIdSuffix": "direction_extreme_left",
+          "selectionRule": "Select the supported left extreme that can swap or isolate channel direction; record the exact visible value.",
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        {
+          "stateIdSuffix": "direction_extreme_right",
+          "selectionRule": "Select the supported right extreme that can swap or isolate channel direction; record the exact visible value.",
+          "visibleValue": "operator_record_exact_visible_value"
+        }
+      ],
+      "interpretationBoundary": "Direction labels are state selectors only; no localization or artistic claim is made until channel, mono, and source listening evidence exist."
+    },
+    "spreadGrid": {
+      "applyInEachMode": true,
+      "applyToSplitBranches": true,
+      "LR": [
+        {
+          "stateIdSuffix": "spread_minimum",
+          "semantic": "documented LR minimum/mono-sum reference",
+          "documentedReferenceValue": 0,
+          "visibleValue": "operator_record_exact_visible_value",
+          "selectionRule": "Select the lower supported bound; verify whether the UI displays 0."
+        },
+        {
+          "stateIdSuffix": "spread_unity",
+          "semantic": "documented LR neutral",
+          "documentedReferenceValue": 1,
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        {
+          "stateIdSuffix": "spread_above_unity",
+          "semantic": "first supported value above unity",
+          "documentedReferenceValue": null,
+          "visibleValue": "operator_record_exact_visible_value",
+          "selectionRule": "Select the first visible supported value strictly above the recorded unity value; do not assume a step size."
+        },
+        {
+          "stateIdSuffix": "spread_maximum",
+          "semantic": "upper supported bound",
+          "documentedReferenceValue": null,
+          "visibleValue": "operator_record_exact_visible_value",
+          "selectionRule": "Select the maximum supported value; record the exact visible value."
+        }
+      ],
+      "MS": [
+        {
+          "stateIdSuffix": "spread_minimum",
+          "semantic": "supported MS minimum",
+          "documentedReferenceValue": 0,
+          "visibleValue": "operator_record_exact_visible_value",
+          "selectionRule": "Select the lower supported bound and record the exact visible value."
+        },
+        {
+          "stateIdSuffix": "spread_unity",
+          "semantic": "documented MS unity reference",
+          "documentedReferenceValue": 1,
+          "visibleValue": "operator_record_exact_visible_value"
+        },
+        {
+          "stateIdSuffix": "spread_above_unity",
+          "semantic": "first supported value above unity",
+          "documentedReferenceValue": null,
+          "visibleValue": "operator_record_exact_visible_value",
+          "selectionRule": "Select the first visible supported value strictly above the recorded unity value; retain 2 as a documented side-only reference when the UI supports it."
+        },
+        {
+          "stateIdSuffix": "spread_maximum",
+          "semantic": "upper supported bound",
+          "documentedReferenceValue": null,
+          "visibleValue": "operator_record_exact_visible_value",
+          "selectionRule": "Select the maximum supported value; record the exact visible value."
+        }
+      ],
+      "documentedSemanticReferences": [
+        "LR Spread 0 is a mono-sum reference and LR Spread 1 is neutral according to local reviewed documentation.",
+        "MS Spread 2 is a side-only reference when supported; record the visible UI value rather than assuming a range."
+      ]
+    },
+    "polarityAndChannelMatrix": [
+      {
+        "fixture": "stereo_in_phase.wav",
+        "inputSemantic": "identical left/right in-phase channels",
+        "requiredFor": ["LR", "MS", "split off", "split on"]
+      },
+      {
+        "fixture": "stereo_left_only.wav",
+        "inputSemantic": "left-only input; right channel silent",
+        "requiredFor": ["channel matrix", "direction", "spread", "mono sum"]
+      },
+      {
+        "fixture": "stereo_right_only.wav",
+        "inputSemantic": "right-only input; left channel silent",
+        "requiredFor": ["channel matrix", "direction", "spread", "mono sum"]
+      },
+      {
+        "fixture": "stereo_anti_phase.wav",
+        "inputSemantic": "identical magnitude with opposite polarity",
+        "requiredFor": ["polarity", "MS side", "correlation", "mono cancellation"]
+      },
+      {
+        "fixture": "stereo_one_sample_offset.wav",
+        "inputSemantic": "right channel delayed by one sample",
+        "requiredFor": ["interchannel latency", "phase", "mono compatibility"]
+      },
+      {
+        "fixture": "stereo_mid_low_side_high.wav",
+        "inputSemantic": "100 Hz mid/low and 5 kHz anti-phase side/high",
+        "requiredFor": ["frequency-dependent split", "low-band side", "mono sum"]
+      }
+    ],
+    "splitDesign": {
+      "splitOffState": {
+        "stateId": "split_off_global_controls",
+        "description": "Split disabled; record one global Direction and Spread state at each LR/MS grid point.",
+        "repeatRequired": 3
+      },
+      "splitOn": true,
+      "crossoverSettings": [
+        {
+          "stateIdSuffix": "crossover_low_boundary",
+          "selectionRule": "Choose the nearest supported visible crossover to 500 Hz, between the fixture's 100 Hz low component and 5 kHz high component; record the exact visible UI value.",
+          "visibleValue": "operator_record_exact_visible_value",
+          "rationale": "Separates the known 100 Hz and 5 kHz components while testing a low-band boundary.",
+          "repeatRequired": 3
+        },
+        {
+          "stateIdSuffix": "crossover_high_boundary",
+          "selectionRule": "Choose the nearest supported visible crossover to 2 kHz, still between the fixture's 100 Hz low component and 5 kHz high component; record the exact visible UI value.",
+          "visibleValue": "operator_record_exact_visible_value",
+          "rationale": "Tests a materially different frequency split without assuming an undocumented range or step size.",
+          "repeatRequired": 3
+        }
+      ],
+      "branchStateMatrix": [
+        {
+          "stateIdSuffix": "branches_neutral",
+          "low": {
+            "direction": "operator_record_exact_visible_value",
+            "spread": "operator_record_exact_visible_value"
+          },
+          "high": {
+            "direction": "operator_record_exact_visible_value",
+            "spread": "operator_record_exact_visible_value"
+          },
+          "selectionRule": "Set each branch independently to center and unity; record both visible values even if they match."
+        },
+        {
+          "stateIdSuffix": "branches_low_narrow_high_wide",
+          "low": {
+            "direction": "operator_record_exact_visible_value",
+            "spread": "operator_record_exact_visible_value"
+          },
+          "high": {
+            "direction": "operator_record_exact_visible_value",
+            "spread": "operator_record_exact_visible_value"
+          },
+          "selectionRule": "Low branch uses the recorded minimum spread; high branch uses the recorded above-unity spread; preserve each branch's direction value."
+        },
+        {
+          "stateIdSuffix": "branches_low_direction_high_direction",
+          "low": {
+            "direction": "operator_record_exact_visible_value",
+            "spread": "operator_record_exact_visible_value"
+          },
+          "high": {
+            "direction": "operator_record_exact_visible_value",
+            "spread": "operator_record_exact_visible_value"
+          },
+          "selectionRule": "Use opposite quarter-turn directions for low and high branches and unity spreads; record both branch states independently."
+        }
+      ],
+      "independentBranchEvidence": "Every split render requires a screenshot and state record showing crossover, low Direction, low Spread, high Direction, and high Spread; do not infer a branch value from the other branch."
+    }
+  },
+  "stateScreenshots": {
+    "required": true,
+    "captureBeforeEachStateRender": true,
+    "captureAfterRender": true,
+    "captureAfterReload": true,
+    "include": [
+      "full Direction Mixer panel with plugin name and every visible control",
+      "bypass/header state and LR/MS selector",
+      "split toggle, crossover, low branch values, and high branch values",
+      "Logic project sample rate, buffer, low-latency, cycle range, and bounce settings",
+      "track/output routing, fader, pan/balance, inserts, sends, and automation visibility",
+      "correlation/level display when used; meters are supplementary and never replace audio analysis"
+    ],
+    "redact": "Do not include personal names, unrelated project paths, credentials, or cloud content."
+  },
+  "settledRepeatRules": {
+    "firstTransitionRetention": "Retain the first render after insertion, bypass/re-enable, LR/MS change, Direction/Spread change, Split toggle, crossover change, branch change, and reload as transition evidence. Name it transition and never silently discard it.",
+    "settledDefinition": "After the transition render, stop transport, verify the visible panel state and routing, then acquire three consecutive renders without changing controls. Each settled render has repeatIndex 1, 2, or 3.",
+    "repeatCount": 3,
+    "decisiveStates": [
+      "header_bypass",
+      "default_inserted",
+      "lr_center_unity",
+      "ms_center_unity",
+      "each LR and MS spread grid point",
+      "each LR and MS direction grid point",
+      "split_off_global_controls",
+      "each split crossover and branch-state combination",
+      "each polarity/channel-matrix fixture in the representative center/unity, minimum, above-unity, and extreme states"
+    ],
+    "divergenceRule": "If settled decoded PCM or frame/channel metadata differs, retain all files, mark the state time-varying_or_unsettled, inspect the transition, and do not call it repeatable."
+  },
+  "saveReloadProcedure": {
+    "beforeSave": [
+      "Save the disposable project normally with the current state and wait for completion.",
+      "Capture the project archive or package checksum and the after-save state screenshot.",
+      "Record the exact state values and source-copy hashes."
+    ],
+    "closeAndReopen": [
+      "Quit or close the project normally; do not force-kill Logic.",
+      "Reopen the same project archive and verify sample rate, channel format, routing, plugin identity, bypass, mode, Direction, Spread, Split, crossover, and both branch states.",
+      "Capture after-reload screenshots before rendering."
+    ],
+    "reloadRenders": [
+      "Render one header-bypass or default control and one complex split state after reload through the same primary path.",
+      "Retain first-after-reload transition output, then acquire three settled repeats where required.",
+      "Compare decoded PCM and container hashes, frame count, sample rate, channel count, and all visible state values to the pre-reload record."
+    ],
+    "acceptance": "A displayed value or project reopen alone is not sufficient; source and render hashes plus state screenshots are required. Any mismatch remains not_yet_evidenced."
+  },
+  "monoPhaseAndSpatialAnalysis": {
+    "requiredPerDecisiveStereoState": true,
+    "renderForms": [
+      "stereo output retaining interleaved L/R",
+      "offline mono fold-down from the same stereo render or an explicitly documented mono bounce",
+      "decoded mid/side analysis"
+    ],
+    "measure": [
+      "L/R RMS and peak, true-peak if available, and loudness with method",
+      "2x2 left-only/right-only transfer matrix and crossfeed",
+      "interchannel latency and polarity from impulse/one-sample-offset probes",
+      "sample correlation with window and normalization recorded",
+      "mono-sum RMS/peak/loudness and cancellation relative to stereo",
+      "Mid and Side energy, including low-band Side energy for the 100 Hz component",
+      "frequency-dependent response around the 100 Hz low and 5 kHz high fixture components",
+      "localization/channel identity notes only after measurement; no universal width score"
+    ],
+    "lowBandDefinition": "Use an explicitly recorded analysis filter that includes the fixture's 100 Hz component; 120 Hz is the prepared target, but record the actual filter and method used.",
+    "correlationBoundary": "Correlation is a diagnostic number, not a mono-sum substitute or quality target."
+  },
+  "requiredAnalysesAndHashes": {
+    "fileAndPcmIdentity": [
+      "SHA-256 of every fixture and copied source file",
+      "SHA-256 of every rendered WAV container",
+      "SHA-256 of decoded interleaved PCM bytes for every render",
+      "manifest SHA-256 comparison, frame count, channel count, sample rate, duration, encoding, and sourceUnchanged boolean"
+    ],
+    "linearLane": [
+      "same-path bypass baseline decoded PCM identity",
+      "latency-aligned impulse polarity, gain, peak, and tail",
+      "sweep magnitude, phase, and group delay with FFT/window/settings recorded",
+      "null residual after measured alignment where an LTI interpretation remains justified"
+    ],
+    "nonlinearityRejectionLane": [
+      "amplitude-ladder gain/peak versus level",
+      "multitone harmonics/intermodulation and any alias products",
+      "repeat-to-repeat response movement"
+    ],
+    "stereoLane": [
+      "left-only/right-only matrix, in-phase/anti-phase polarity behavior, one-sample offset, mid/side energy, correlation, mono sum, and low-band side"
+    ],
+    "methodRecord": [
+      "FFT size, window, hop, averaging, excluded bins, filter cutoffs, RMS/loudness window, alignment method, and software version",
+      "whether each measurement uses offline or real-time render and repeat index"
+    ],
+    "noResultPlaceholder": "Until native renders exist, analysis records remain not_yet_evidenced; generated fixture hashes do not satisfy a native processor result."
+  },
+  "rejectionCriteria": [
+    "Logic version is not 12.3 or its exact build is missing.",
+    "Project was not 48 kHz before import, or the imported source was not removed and re-imported after a rate change.",
+    "Fixture/source copy SHA-256 or decoded PCM differs from the manifest or pre-render record.",
+    "Render frame count, sample rate, bit depth, channel count, duration, alignment, or channel interpretation is wrong.",
+    "Bounce normalization, dither, metronome, count-in, hidden insert, send, automation, monitor effect, or unrecorded routing is present.",
+    "The plugin identity, mode, bypass, Direction, Spread, Split, crossover, or either branch state is not visible and recorded.",
+    "A split state reuses one branch's value without independently recording the other branch.",
+    "A first-transition render was discarded or mislabeled as settled.",
+    "Three settled repeats are missing for a decisive state or differ without a time-variance note.",
+    "Project save/close/reopen does not restore the exact visible state or the required hash comparison is missing.",
+    "Dropouts, clipping, NaN/Inf, unexpected tail, or unexplained extra frames occur.",
+    "Any result requires a guessed UI range/value, artistic interpretation, or unsupported Logic equivalence claim."
+  ],
+  "dimensionCoverage": [
+    {
+      "dimension": "documented_default_and_bypass_path",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["header_bypass", "default_inserted", "same-path unprocessed baseline", "three settled repeats"],
+      "futureEvidence": "Native renders, screenshots, source hash, and decoded baseline comparison."
+    },
+    {
+      "dimension": "every_discrete_mode_model_algorithm_and_routing_state",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["LR", "MS", "Split disabled", "Split enabled", "stereo source instance", "mono baseline path"],
+      "futureEvidence": "Visible selector/state screenshot and matching render for every supported discrete state; unsupported states are recorded as unavailable rather than skipped."
+    },
+    {
+      "dimension": "bounded_continuous_parameter_grid_with_interaction_followup",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["Direction center/quarter-turn/extreme grid", "Spread minimum/unity/above-unity/maximum grid", "two crossover settings", "independent low/high branch interactions"],
+      "futureEvidence": "Exact visible values, screenshots, renders, and interaction analysis; no undocumented numeric values are presumed."
+    },
+    {
+      "dimension": "reported_and_measured_latency_polarity_gain_peak_tail",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["single impulse", "one-sample-offset stereo", "silence", "amplitude ladder", "same-path baseline"],
+      "futureEvidence": "Audio analysis with alignment, polarity, gain, peak, tail, and method settings."
+    },
+    {
+      "dimension": "three_identical_renders_for_repeatability",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["settledRepeatRules.repeatCount=3", "first transition retained separately", "decisive state list"],
+      "futureEvidence": "Three decoded-PCM/hash-checked settled files per decisive state or an explicit time-variance result."
+    },
+    {
+      "dimension": "save_reload_state_and_source_hash_verification",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["normal save", "normal close", "reopen", "after-reload screenshots", "pre/post source and render hash comparison"],
+      "futureEvidence": "Project archive hash, visible state match, reload renders, and unchanged source hashes."
+    },
+    {
+      "dimension": "lr_ms_mode_direction_spread_minimum_unity_above_unity_and_polarity",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["LR and MS state groups", "Direction grid", "Spread grid in both modes", "in-phase/anti-phase/one-sided fixtures"],
+      "futureEvidence": "Native state matrix plus stereo/mid-side/mono/polarity analysis."
+    },
+    {
+      "dimension": "split_high_low_crossover_frequency_dependent_mid_side_transfer",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["split off control", "two evidence-led crossover settings", "independent low/high Direction and Spread branch matrix", "stereo_mid_low_side_high.wav"],
+      "futureEvidence": "Exact crossover/branch values, frequency-dependent M/S transfer, crossover artifact inspection, and repeats."
+    },
+    {
+      "dimension": "left_right_channel_matrix_gain_peak_correlation_low_band_side_and_mono_sum",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["left-only/right-only/in-phase/anti-phase/one-sample-offset fixtures", "stereo and mono forms", "required monoPhaseAndSpatialAnalysis"],
+      "futureEvidence": "Decoded audio measurements and state-linked analysis files."
+    },
+    {
+      "dimension": "width_direction_localization_low_end_and_source_specific_listening",
+      "status": "not_yet_evidenced",
+      "preparedStatesOrActions": ["width/direction/low-end measurement matrix", "future human listening boundary for real source material"],
+      "futureEvidence": "Measurements first; then a separate blinded/level-matched human source-specific listening record. Synthetic fixtures alone cannot close this dimension."
+    }
+  ],
+  "humanListeningBoundary": {
+    "status": "not_yet_evidenced",
+    "separateFromGeneratedFixtures": true,
+    "requiredFutureMaterial": [
+      "legally usable stereo drums or drum bus",
+      "guitar",
+      "keyboard or piano",
+      "synth",
+      "complete mix"
+    ],
+    "method": "level-matched, randomized source-specific A/B or otherwise explicitly justified listening with identity-blind judgment, mono and headphone/speaker checks, and provenance/rights recorded",
+    "questions": [
+      "Does the intended direction/width survive without focal-source loss?",
+      "Does the low end and mono fold-down remain acceptable for this source?",
+      "Are localization, phase, or crossover artifacts audible and material?"
+    ],
+    "claimBoundary": "No artistic superiority, quality, preference, or universal mono-compatibility claim may be made from this prepared package or synthetic fixture renders."
+  },
+  "claimBoundary": {
+    "currentStatus": "prepared_not_run",
+    "establishedNow": [
+      "The required deterministic 48 kHz PCM24 fixture package and hash manifest exist.",
+      "The campaign's required generic and Direction Mixer-specific dimensions are mapped to future states/actions.",
+      "The later operator has exact source-copy, state capture, render, repeat, save/reload, rejection, and analysis instructions."
+    ],
+    "notEstablished": [
+      "Any installed/native Logic behavior, transfer curve, latency, polarity, gain, phase, width, direction, split, crossover, or repeatability result.",
+      "An accepted, partial, or complete native profile.",
+      "Perceptual quality, artistic suitability, source-specific preference, or superiority.",
+      "Behavior outside the recorded Logic build, 48 kHz stereo lane, visible states, fixture conditions, and exact project/render path.",
+      "TrackSmith authority to insert, automate, edit, or control a Logic-native effect."
+    ],
+    "generatedFixtureBoundary": "Generated fixtures are deterministic probes, not real-instrument, real-vocal, or production-quality evidence."
+  }
+}

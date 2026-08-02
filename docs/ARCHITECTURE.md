@@ -61,9 +61,9 @@ proven capability adapter can request host state. A deterministic 18-fixture sui
 and 200-identity campaign ledger define the empirical lane. Direct runs are
 versioned, artifact-hash-audited records; generated provider context exposes only
 their bounded status, run IDs, and claim-limited summary. The current campaign is
-197 `not_run`, three `partial` runs (Bitcrusher Default Preset, Channel EQ
-default/bypass plus one 1 kHz bell state, and Compressor default/bypass plus one
-controlled static curve), and zero `complete`.
+191 `not_run`, nine `partial` runs, and zero `complete`: Bitcrusher,
+Channel EQ, Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo
+Delay, and Tape Delay each have bounded direct evidence.
 Even the partial entry keeps exact implementation internals false and retains the
 advisory-only execution boundary. Undocumented transfer behavior and perceptual
 preference remain measurement/listening questions.

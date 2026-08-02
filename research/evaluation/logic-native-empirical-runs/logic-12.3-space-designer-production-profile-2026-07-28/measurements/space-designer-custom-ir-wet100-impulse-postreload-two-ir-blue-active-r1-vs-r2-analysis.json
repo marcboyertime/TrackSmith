@@ -1,0 +1,171 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 1,
+          "1024": 0,
+          "16": 0,
+          "256": 0
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 14,
+          "correlation": 1.0,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 288000,
+        "differing_sample_count": 1,
+        "first_differing_sample": 52615,
+        "last_differing_sample": 52615,
+        "least_squares_gain": 0.9999999998808563,
+        "least_squares_gain_db": -1.0348689851207757e-09,
+        "max_absolute_error_integer": 1,
+        "mean_error_normalized": -4.1392114427354603e-13,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -193.06772288302366,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9999999999998764
+      },
+      {
+        "absolute_error_threshold_counts": {
+          "1": 22,
+          "1024": 0,
+          "16": 0,
+          "256": 0
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 14,
+          "correlation": 0.9999999999995866,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 288000,
+        "differing_sample_count": 22,
+        "first_differing_sample": 49298,
+        "last_differing_sample": 86979,
+        "least_squares_gain": 1.0000000054292644,
+        "least_squares_gain_db": 4.715799101797166e-08,
+        "max_absolute_error_integer": 1,
+        "mean_error_normalized": 8.278422885470921e-13,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -179.6434960748016,
+        "sample_count_match": true,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.9999999999997722
+      }
+    ],
+    "channel_count_match": true,
+    "channel_mapping": [
+      {
+        "rendered_channel_index": 0,
+        "source_channel_index": 0
+      },
+      {
+        "rendered_channel_index": 1,
+        "source_channel_index": 1
+      }
+    ],
+    "format_match": true,
+    "frame_count_match": true,
+    "pcm_byte_exact": false,
+    "sample_rate_and_bit_depth_match": true,
+    "source_broadcast_pcm_exact": false
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": -1.511143313513862e-08,
+        "first_nonzero_sample": 48128,
+        "last_nonzero_sample": 120137,
+        "nonzero_sample_count": 71973,
+        "peak_dbfs": -18.03201366766052,
+        "peak_integer": 1052178,
+        "rms_dbfs": -66.9979614757308,
+        "sample_count": 288000
+      },
+      {
+        "dc_offset_normalized": -1.930693785349528e-08,
+        "first_nonzero_sample": 48128,
+        "last_nonzero_sample": 140296,
+        "nonzero_sample_count": 91954,
+        "peak_dbfs": -12.18475660879676,
+        "peak_integer": 2062776,
+        "rms_dbfs": -56.22915372707732,
+        "sample_count": 288000
+      }
+    ],
+    "channels": 2,
+    "compression_type": "NONE",
+    "duration_seconds": 6.0,
+    "file_sha256": "cdf587781209e425e4ca3389c60bf7a2ba954d030ab4c7840285d769a0abc7cc",
+    "frame_count": 288000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/artifacts/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r2.wav",
+    "pcm_sha256": "2ec1784de97c99d9f58ff7013914f049d8306ba06934b73e97412df00e7b22cc",
+    "sample_rate_hz": 48000,
+    "stereo_relationships": {
+      "analysis_boundary": "Objective inter-channel identity, polarity, correlation, mono-sum, and side-difference measurements only; no width, compatibility, or perceptual-quality conclusion.",
+      "left_right_inverted_exact": false,
+      "left_right_inverted_within_one_integer_count": false,
+      "left_right_sample_exact": false,
+      "mono_sum_nonzero_sample_count": 91953,
+      "mono_sum_peak_dbfs_per_channel_full_scale": -12.183687137294292,
+      "mono_sum_peak_integer": 2063030,
+      "sample_count": 288000,
+      "side_difference_nonzero_sample_count": 91954,
+      "side_difference_peak_dbfs_per_channel_full_scale": -12.185826211996751,
+      "side_difference_peak_integer": 2062522,
+      "zero_lag_correlation": -0.026062599126414367
+    }
+  },
+  "schema_version": 4,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": -1.5111019213994342e-08,
+        "first_nonzero_sample": 48128,
+        "last_nonzero_sample": 120137,
+        "nonzero_sample_count": 71973,
+        "peak_dbfs": -18.03201366766052,
+        "peak_integer": 1052178,
+        "rms_dbfs": -66.99796147469701,
+        "sample_count": 288000
+      },
+      {
+        "dc_offset_normalized": -1.9307765695783827e-08,
+        "first_nonzero_sample": 48128,
+        "last_nonzero_sample": 140296,
+        "nonzero_sample_count": 91954,
+        "peak_dbfs": -12.18475660879676,
+        "peak_integer": 2062776,
+        "rms_dbfs": -56.2291537742373,
+        "sample_count": 288000
+      }
+    ],
+    "channels": 2,
+    "compression_type": "NONE",
+    "duration_seconds": 6.0,
+    "file_sha256": "024037800524632a0067f3d75f56509bc4ff8719ca1e03046f0023e1ecb706a1",
+    "frame_count": 288000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/artifacts/space-designer-custom-ir-wet100-impulse-postreload-two-ir-blue-active-r1.wav",
+    "pcm_sha256": "b7f8c08b3fc0908394809c716a8a324aac7f777004ba37c894cd83b5df402a65",
+    "sample_rate_hz": 48000,
+    "stereo_relationships": {
+      "analysis_boundary": "Objective inter-channel identity, polarity, correlation, mono-sum, and side-difference measurements only; no width, compatibility, or perceptual-quality conclusion.",
+      "left_right_inverted_exact": false,
+      "left_right_inverted_within_one_integer_count": false,
+      "left_right_sample_exact": false,
+      "mono_sum_nonzero_sample_count": 91953,
+      "mono_sum_peak_dbfs_per_channel_full_scale": -12.183687137294292,
+      "mono_sum_peak_integer": 2063030,
+      "sample_count": 288000,
+      "side_difference_nonzero_sample_count": 91954,
+      "side_difference_peak_dbfs_per_channel_full_scale": -12.185826211996751,
+      "side_difference_peak_integer": 2062522,
+      "zero_lag_correlation": -0.026062600489180462
+    }
+  }
+}

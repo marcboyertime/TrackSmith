@@ -1,0 +1,974 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-bitcrusher-production-profile-48k-2026-07-29",
+  "recordedAt": "2026-07-30T01:21:59-04:00",
+  "status": "partial",
+  "identityType": "effect_or_native_audio_tool",
+  "identityIdentifier": "logic-pro-12.3:bitcrusher",
+  "identityName": "Bitcrusher",
+  "product": "TrackSmith",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-default-2026-07-18/run.json",
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureCompatibility": "The retained source fixtures are deterministic 48 kHz PCM24 files copied into this run and independently hash-ledgered.",
+    "claimClass": "measured_behavior"
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/amplitude_ladder_1khz_mono.wav",
+        "fileSHA256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+        "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 384000,
+        "durationSeconds": 8.0
+      },
+      {
+        "artifactPath": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+        "fileSHA256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+        "pcmSHA256": "62864559b2967d4e24e6c501937ae0bcbddb84098ea1880d016b13a68606b402",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 420000,
+        "durationSeconds": 8.75,
+        "renderedCycleSeconds": 10.0,
+        "identityBoundary": "This is a deterministic synthetic guitar-range fixture, not a human performance or independent listening case."
+      }
+    ],
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "Both run-local fixtures retained their declared hashes. The two project-local Logic media copies were decoded-PCM byte-exact to their corresponding run fixtures after the final project save."
+  },
+  "nativeState": {
+    "presetName": "Default Preset, with separately recorded controlled variants",
+    "channelControlMode": "Mono fixtures through a mono Bitcrusher insert and interleaved Stereo Out",
+    "defaultObservedState": {
+      "mode": "Clip",
+      "driveDB": 3.0,
+      "resolutionBits": 8,
+      "downsamplingFactor": 1,
+      "mixPercent": 100.0,
+      "clipLevelDB": 0.0
+    },
+    "controlledModeState": {
+      "modes": [
+        "Fold",
+        "Clip",
+        "Wrap"
+      ],
+      "driveDB": 3.0,
+      "resolutionBits": 8,
+      "downsamplingFactor": 1,
+      "mixPercent": 100.0,
+      "clipLevelDB": 0.0
+    },
+    "oneFactorParameterGrid": {
+      "driveDB": [
+        0.0,
+        3.0,
+        11.5
+      ],
+      "resolutionBits": [
+        4,
+        8,
+        24
+      ],
+      "downsamplingFactor": [
+        1,
+        4,
+        16
+      ],
+      "mixPercent": [
+        50.4,
+        100.0
+      ],
+      "clipLevelDB": [
+        -6.0,
+        0.0
+      ],
+      "mode": "Clip except for the separately controlled Fold and Wrap mode lane",
+      "gridBoundary": "This is a one-factor-at-a-time bounded grid around the observed default. It is not an exhaustive parameter grid or a higher-order interaction characterization."
+    },
+    "savedReloadState": {
+      "mode": "Wrap",
+      "driveDB": 3.0,
+      "resolutionBits": 8,
+      "downsamplingFactor": 1,
+      "mixPercent": 100.0,
+      "clipLevelDB": 0.0,
+      "active": true
+    },
+    "savedStateEvidence": "After a normal save, project close, and reopen, the Wrap state visibly restored with +3.0 dB Drive, 8-bit Resolution, 1x Downsampling, 100.00 percent Mix, 0.0 dB Clip Level, and active processing. Two post-reload amplitude-ladder renders exactly matched all three pre-save controlled Wrap renders in decoded PCM.",
+    "autosaveBoundary": "Logic also recovered the exact displayed 8-bit, 4x Downsampling state from an overnight auto-save. That recovery is retained as workflow context but is not substituted for the explicit normal save/reload assertion above.",
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They do not establish every drive, resolution, downsampling, mix, clip-level, channel, sample-rate, automation, transition, or interaction state; Apple's private quantizer, fold, clip, wrap, interpolation, or downsampling equations; musical usefulness; or TrackSmith authority to control Logic."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "amplitudeCycle": "bar 1 through bar 5, eight seconds at 120 BPM",
+    "guitarCycle": "bar 1 through bar 6, ten seconds at 120 BPM; the 8.75-second deterministic source ended before the cycle boundary",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Retain every render and require at least three decoded-PCM-identical renders before a repeatability claim.",
+    "baselineGate": "The Bitcrusher header-bypass render had to map the correct 48 kHz mono amplitude ladder sample-exactly to both Stereo Out channels."
+  },
+  "directHostEvidence": true,
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_48khz_mono_to_stereo_header_bypass_and_default_state",
+      "evidence": "Header bypass mapped the correct 48 kHz mono amplitude ladder sample-exactly to both rendered channels. The observed Default Preset state was directly captured and rendered three times with decoded-PCM identity."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "complete_for_fold_clip_and_wrap_at_one_controlled_operating_point",
+      "evidence": "Fold, Clip, and Wrap were each rendered three times at +3.0 dB Drive, 8-bit Resolution, 1x Downsampling, 100 percent Mix, and 0.0 dB Clip Level. The three mode hashes were distinct and each mode repeated exactly. Other channel layouts, presets, and routing states remain unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_bounded_one_factor_grid_around_the_observed_default",
+      "evidence": "The Clip lane directly covers Drive 0.0, 3.0, and 11.5 dB; Resolution 4, 8, and 24 bit; Downsampling 1x, 4x, and 16x; displayed Mix 50.40 and 100.00 percent; and Clip Level -6.0 and 0.0 dB. Fold and Wrap are controlled at the default continuous values. Exhaustive values and higher-order interactions remain unmeasured."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_bounded_file_gain_peak_polarity_and_cross_correlation_for_recorded_states",
+      "evidence": "Every accepted amplitude-ladder output retained the declared 384000-frame no-tail cycle, and every 1x state had a zero-frame bounded cross-correlation estimate with noninverted polarity. The 4x and 16x waveform-dependent cross-correlation shifts are not represented as plug-in latency. No host-reported latency value or impulse-tail lane was captured."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_three_controlled_modes_and_one_musical_fixture",
+      "evidence": "Fold, Clip, and Wrap each produced three decoded-PCM-identical amplitude-ladder renders. The controlled Wrap state also produced three decoded-PCM-identical ten-second guitar-like renders."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_one_controlled_wrap_state_and_both_project_media_copies",
+      "evidence": "The controlled Wrap state visibly restored after a normal save, project close, and reopen. Two post-reload renders exactly matched all three pre-save Wrap renders. The final project-local amplitude-ladder and guitar-like media copies were decoded-PCM byte-exact to their immutable run fixtures."
+    }
+  },
+  "stateTransitionFindings": [
+    "All three controlled Fold, Clip, and Wrap mode renders were decoded-PCM identical from the first retained repeat through the third retained repeat.",
+    "All three controlled Wrap guitar-like renders were decoded-PCM identical.",
+    "The explicit normal save/reload restored the controlled Wrap state visibly, and two post-reload renders exactly matched all three pre-save Wrap renders.",
+    "The controlled Fold, Clip, and Wrap amplitude-ladder PCM hashes are pairwise distinct at otherwise matched values.",
+    "WAVE file hashes can differ while decoded PCM remains identical because retained file-container metadata can differ; repeatability claims use decoded PCM identity.",
+    "One save-panel attempt carried a filename that contradicted the post-render UI state and is retained as rejected evidence rather than relabeled as a valid grid point."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/rejected-mislabeled-ui-state-bitcrusher-clip-drive11p5db-resolution8bit-downsample1x-mix100-cliplevel0.wav",
+        "measurements/rejected-mislabeled-ui-state-bitcrusher-clip-drive11p5db-resolution8bit-downsample1x-mix100-cliplevel0.json",
+        "measurements/rejected-original-mislabeled-drive18db-analysis.json"
+      ],
+      "reason": "The save-panel filename originally claimed a different Drive and Mix state than the post-render UI readback. The render and original analysis are retained but excluded from accepted grid assertions."
+    },
+    {
+      "artifacts": [
+        "artifacts/rejected-duplicate-save-target-bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix50p4-cliplevel0.wav"
+      ],
+      "reason": "The bounce save panel retained the previous run's artifacts directory and produced a second container while the accepted file was being relocated. The duplicate is retained as a rejected save-target artifact and is not used for repeatability or transfer claims."
+    }
+  ],
+  "measurements": {
+    "bypass": {
+      "renderFileSHA256": "33c9956d0afb70d58056872a20ec6cfc58a3817d046e0954fe8918545281a63c",
+      "renderPCMHash": "3597f792d36a8bcb4ab9c4456d0e2499c5c9784d9f629766b971831ff5b0cae4",
+      "sourceMappedSampleExactOnBothRenderedChannels": true,
+      "maximumAbsoluteErrorIntegerCount": 0,
+      "boundedLagFrames": 0
+    },
+    "controlledModes": {
+      "Clip": {
+        "acceptedDecodedPCMRepeatCount": 3,
+        "acceptedPCMHash": "315d7d4bcf3c15cffee2edfd4779cfaed2234868c5f9768dae3c35fc75605a6d",
+        "peakDBFS": -1.0354387945871882e-06,
+        "rmsDBFS": -8.456398843099855,
+        "firstNonzeroFrame": 39083,
+        "boundedLagFrames": 0
+      },
+      "Fold": {
+        "acceptedDecodedPCMRepeatCount": 3,
+        "acceptedPCMHash": "38d7e9690729a0170a3991c33ed560508b4023840dfb1d9b5baddc0334f7ab9d",
+        "peakDBFS": -1.0354387945871882e-06,
+        "rmsDBFS": -8.843977326798775,
+        "firstNonzeroFrame": 39083,
+        "boundedLagFrames": 0
+      },
+      "Wrap": {
+        "acceptedDecodedPCMRepeatCount": 3,
+        "acceptedPCMHash": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5",
+        "peakDBFS": -1.0354387945871882e-06,
+        "rmsDBFS": -9.819946041443439,
+        "firstNonzeroFrame": 39083,
+        "boundedLagFrames": 0
+      },
+      "pairwiseModePCMHashesDistinct": true,
+      "interpretationBoundary": "Mode-distinct decoded output at this exact operating point does not identify Apple's private Fold, Clip, or Wrap equations or establish musical preference."
+    },
+    "controlledClipParameterGrid": {
+      "drive0DB": {
+        "pcmHash": "5b9ae522962818be342218e11380e16c933b4ccc14888d0663a5263e831eb3a9",
+        "peakDBFS": -1.0061023662279154,
+        "rmsDBFS": -11.026787233070428
+      },
+      "drive3DB": {
+        "pcmHash": "315d7d4bcf3c15cffee2edfd4779cfaed2234868c5f9768dae3c35fc75605a6d",
+        "peakDBFS": -1.0354387945871882e-06,
+        "rmsDBFS": -8.456398843099855
+      },
+      "drive11Point5DB": {
+        "pcmHash": "259b073ad962afce87199643fcfc529bfc374d0b59263e9dffbb1bf175e6ad8e",
+        "peakDBFS": -1.0354387945871882e-06,
+        "rmsDBFS": -3.8263501930370216
+      },
+      "resolution4Bit": {
+        "pcmHash": "84dd0d557060adcf62c5e630b3686911d68b6859c865d3eb46256034ac6958e6",
+        "firstNonzeroFrame": 154283
+      },
+      "resolution24Bit": {
+        "pcmHash": "01c4113cb8677149e229629dfee29af353de2ea33fe75fa218ba136790b56588",
+        "firstNonzeroFrame": 1
+      },
+      "downsampling4x": {
+        "pcmHash": "a6b31809d645edddb537218ab051ae6739aee7e72d7e6a6fdfe5da8b751cfe6b",
+        "boundedWaveformCorrelationLagFrames": 3,
+        "latencyBoundary": "The waveform-dependent correlation shift is not a plug-in latency claim."
+      },
+      "downsampling16x": {
+        "pcmHash": "57ce408f7a887b1e963e4fb3a171a9bde087ff336b00dc90f1d56e263bb32347",
+        "boundedWaveformCorrelationLagFrames": -9,
+        "latencyBoundary": "The waveform-dependent correlation shift is not a plug-in latency claim."
+      },
+      "mix50Point4Percent": {
+        "pcmHash": "67ba2c3f59c045cd4f43a39d5890c868c9107cf19ea3949a87b49bf328fe0da5",
+        "peakDBFS": -0.4956113284322652,
+        "rmsDBFS": -9.682737658066229
+      },
+      "clipLevelMinus6DB": {
+        "pcmHash": "b6184b8ca902ee1efdfb8c5f7e6944cf2525591e1708ccac3647dad7625cd7db",
+        "peakDBFS": -6.020599913279624,
+        "rmsDBFS": -11.91903401718883
+      },
+      "interpretationBoundary": "Every value describes one exact one-factor state. Differences do not establish an exhaustive transfer function, a general aliasing law, perceptual quality, or best-use preset."
+    },
+    "controlledWrapReload": {
+      "visibleControlledStateRestored": true,
+      "acceptedPreSaveDecodedPCMRepeatCount": 3,
+      "acceptedPostReloadDecodedPCMRepeatCount": 2,
+      "acceptedPCMHash": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5",
+      "postReloadPairPCMExact": true,
+      "allPreSaveVersusPostReloadPCMExact": true
+    },
+    "controlledWrapGuitarLike": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "2d8eb0e23c9cd3c7685194bc2d4567a59300fc5b87a747cf3df0d3ed27646b68",
+      "leftPeakDBFS": -0.06812497383823005,
+      "rightPeakDBFS": -0.06812497383823005,
+      "leftRMSDBFS": -18.599064316677577,
+      "rightRMSDBFS": -18.599064316677577,
+      "renderedDurationSeconds": 10.0,
+      "sourceDurationSeconds": 8.75,
+      "interpretationBoundary": "This is repeatable behavior on one deterministic synthetic guitar-range fixture. It is not a listening result and does not establish texture, harshness, transient preservation, note separation, preference, or musical usefulness."
+    },
+    "sourcePreservation": {
+      "amplitudeProjectCopyPCMExact": true,
+      "amplitudeProjectCopyPCMHash": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+      "guitarProjectCopyPCMExact": true,
+      "guitarProjectCopyPCMHash": "62864559b2967d4e24e6c501937ae0bcbddb84098ea1880d016b13a68606b402"
+    },
+    "measurementBoundary": "All values describe only the exact recorded states, fixtures, environment, routing, cycle ranges, and analysis rules. They neither identify Apple's private nonlinear implementation nor prove warmth, character, aggression, texture, excitement, preference, or musical usefulness."
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "measurements/bitcrusher-header-bypass-amplitude-ladder.json",
+      "jsonPath": [
+        "comparison",
+        "source_broadcast_pcm_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "315d7d4bcf3c15cffee2edfd4779cfaed2234868c5f9768dae3c35fc75605a6d"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "315d7d4bcf3c15cffee2edfd4779cfaed2234868c5f9768dae3c35fc75605a6d"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "315d7d4bcf3c15cffee2edfd4779cfaed2234868c5f9768dae3c35fc75605a6d"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "38d7e9690729a0170a3991c33ed560508b4023840dfb1d9b5baddc0334f7ab9d"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "38d7e9690729a0170a3991c33ed560508b4023840dfb1d9b5baddc0334f7ab9d"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "38d7e9690729a0170a3991c33ed560508b4023840dfb1d9b5baddc0334f7ab9d"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-postreload-r1.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-postreload-r2.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "97fb7275d032ef27ac2d905c9fed64895c488b007d2a1af7c415407f648eb1f5"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r1.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "2d8eb0e23c9cd3c7685194bc2d4567a59300fc5b87a747cf3df0d3ed27646b68"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r2.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "2d8eb0e23c9cd3c7685194bc2d4567a59300fc5b87a747cf3df0d3ed27646b68"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r3.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "2d8eb0e23c9cd3c7685194bc2d4567a59300fc5b87a747cf3df0d3ed27646b68"
+    },
+    {
+      "artifactPath": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel-minus6db.json",
+      "jsonPath": [
+        "rendered",
+        "channel_metrics",
+        0,
+        "peak_dbfs"
+      ],
+      "equals": -6.020599913279624
+    },
+    {
+      "artifactPath": "measurements/project-copy-amplitude-ladder-source-preservation.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/project-copy-guitar-like-source-preservation.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    }
+  ],
+  "interpretation": {
+    "stronglySupported": [
+      "At 48 kHz mono-to-stereo, the Bitcrusher header-bypass path maps the amplitude-ladder source sample-exactly to both rendered channels.",
+      "At matched +3.0 dB Drive, 8-bit Resolution, 1x Downsampling, 100 percent Mix, and 0.0 dB Clip Level, Fold, Clip, and Wrap produce pairwise-distinct decoded output and each mode repeats exactly across three renders.",
+      "The controlled Clip one-factor grid produces distinct outputs for the directly recorded Drive, Resolution, Downsampling, Mix, and Clip Level states.",
+      "The displayed -6.0 dB Clip Level state peaks at -6.020599913279624 dBFS on this exact amplitude ladder and routing.",
+      "The controlled Wrap state survives normal save/reload exactly in decoded PCM and repeats exactly on one deterministic guitar-range fixture."
+    ],
+    "inferences": [
+      "The later first-nonzero frame at 4-bit than at 24-bit is consistent with coarser quantization suppressing more low-level ladder samples, but this run does not identify the exact rounding law.",
+      "The 4x and 16x outputs are consistent with intentionally altered time-sample behavior, but their waveform-dependent correlation offsets are not latency measurements and no general alias spectrum is inferred."
+    ],
+    "notEstablished": [
+      "Apple's exact private quantizer, fold, clip, wrap, interpolation, or downsampling implementation.",
+      "Exhaustive continuous values, higher-order interactions, automation, or transition smoothing.",
+      "A full harmonic, IMD, alias, DC, noise, impulse, sample-rate, stereo-independence, latency, or tail profile.",
+      "Level-matched subjective texture, warmth, harshness, excitement, preservation, preference, or musical usefulness.",
+      "TrackSmith authority to inspect, insert, reorder, automate, edit, or control Bitcrusher or any other Logic-native processor."
+    ]
+  },
+  "claimBoundary": {
+    "documentaryBehaviorUsed": true,
+    "directSignalEvidenceUsed": true,
+    "historicalEvidenceRewritten": false,
+    "privateImplementationClaimed": false,
+    "allBitcrusherModesOrSettingsCharacterized": false,
+    "artisticSuperiorityClaimed": false,
+    "trackSmithExecutionAuthorityGranted": false,
+    "subjectiveListeningCompleted": false
+  },
+  "listeningBoundary": "No human participant evaluated these renders. Objective measurements establish bounded processor behavior and repeatability only; they do not establish artistic superiority or universal production truth.",
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "exactTransferCharacterized": false,
+  "project": {
+    "name": "TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29",
+    "archivePath": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx.zip",
+    "archiveSHA256": "23510f6308e73a559d59d9faa88b4a695e833234a5c7f8221db5eed6d2687ce6",
+    "archiveIntegrity": "unzip_test_passed",
+    "sampleRateHz": 48000,
+    "tempoBPM": 120,
+    "trackChannelFormat": "mono",
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "savedState": "Bitcrusher active in the controlled Wrap state; amplitude-ladder and guitar-like regions retained on the disposable measurement track"
+  },
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 evidence at 48 kHz mono-to-stereo extends the preserved July 18 Bitcrusher default run without rewriting it. Header bypass was sample-exact to both output channels. Fold, Clip, and Wrap at +3 dB, 8 bit, 1x, 100 percent Mix, and 0 dB Clip Level were each decoded-PCM exact across three renders and pairwise distinct. A one-factor Clip grid directly covered Drive 0, 3, and 11.5 dB; Resolution 4, 8, and 24 bit; Downsampling 1x, 4x, and 16x; Mix 50.40 and 100 percent; and Clip Level -6 and 0 dB. One Wrap state restored exactly after normal save/reload and rendered a deterministic guitar-range fixture identically three times. Harmonic, IMD, alias-spectrum, other-rate, true-stereo, automation, exhaustive-interaction, and human-listening claims remain open. This grants no Logic control authority.",
+  "artifactFiles": [
+    {
+      "path": "artifacts/bitcrusher-clip-drive0db-resolution8bit-downsample1x-mix100-cliplevel0.wav",
+      "sha256": "874f52ceaa98b31281630c010336d6c7d14a1b33306dc7d2b1b211fa36361092",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive11p5db-resolution8bit-downsample1x-mix100-cliplevel0.wav",
+      "sha256": "41544c3cfaddb32f60b737d28bcb1c40a51978c60721c84eb4821307d148164e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution24bit-downsample1x-mix100-cliplevel0.wav",
+      "sha256": "52df99bc7898bae7c775c2ef7e4cdbaea4f59913cd26ad9aba78b17a4fb89e72",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution4bit-downsample1x-mix100-cliplevel0.wav",
+      "sha256": "cb2fbc2d68fc1856c02ae4fe1da2e01deaaaf424086ebdfa7c84973805b5f361",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample16x-mix100-cliplevel0.wav",
+      "sha256": "ec4dcdd9b73a8d2a64790e487593f5666d510238b491b5b989543cf0437b6772",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel-minus6db.wav",
+      "sha256": "594e7b8f508db9498b4fb781dce339554ce5a417b2e159ebaba2ca54fa36cba9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.wav",
+      "sha256": "93af2977fa0642ddbd9009e60f7f712e1ac5aeb1f6fd23e964b9e7abe73ee1c4",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.wav",
+      "sha256": "eccf07961ac90b93bdaa1a796a493ae1151042c22fc402ca7a7aef832cdd13c1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.wav",
+      "sha256": "d394fbadbf3060bd3ddf0de5e5441177aa2e1a3d30b02fe67253da34438024e0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix50p4-cliplevel0.wav",
+      "sha256": "e2c6f99e42c40c6faf7a07896a308a28d153b3965902fac1ae77d1bac8cee850",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-clip-drive3db-resolution8bit-downsample4x-mix100-cliplevel0.wav",
+      "sha256": "9c4beac8e6e844c6cadb6563d027681fe5258a03c5ff4df263dfffdab9b6c0d2",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.wav",
+      "sha256": "8211364ec37e21dc8f57df575cfd65a5822ff0cba5927b95b229518217ce5b9d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.wav",
+      "sha256": "14132f544d4aeab7ca9f265629cde64f7d7df298deb9edc63fbc30a6084a1380",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.wav",
+      "sha256": "fad4f50538542f4e5c648ff95e523ce66d659c39e78945ebea407a956f52080c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-header-bypass-amplitude-ladder.wav",
+      "sha256": "33c9956d0afb70d58056872a20ec6cfc58a3817d046e0954fe8918545281a63c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r1.wav",
+      "sha256": "a1309a0707fe916ca9d053082153308c5f4db0098ccf4f5d763c671d49cce0eb",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r2.wav",
+      "sha256": "d282a795961dc358df2ff2555dfecbbd4e37800fdaf6556185ff7d621b176b25",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r3.wav",
+      "sha256": "6bdf48f678ef2ac4592291aeb57d83779d0da6a1b2c520489bfaa0081b1d1a8b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-postreload-r1.wav",
+      "sha256": "20d8a51927d9f956749c20c8f79a323aa76b7c91ab7e0bbb24ae4940132c73df",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-postreload-r2.wav",
+      "sha256": "9be14f6bcb700ade666a409686ee32743638d325dfa3ac30dc18bf166158235a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.wav",
+      "sha256": "379bd0ccc4c4fecfc59ecb23dfc7157bb71468362a1c8ee79f02bce6076f8bf2",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.wav",
+      "sha256": "1eb509a74f422c1387acac195d2d127424768b432441b691eecb0da5c6002e0c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.wav",
+      "sha256": "8f9dc1afb89d917845d5535a0c5385ff0cd4e41de8e77dcb1fcb2207e7441eed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-duplicate-save-target-bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix50p4-cliplevel0.wav",
+      "sha256": "503ea787b867dfeb0402afca99d5e403f371ee5b58843dee38ce645f341d2b09",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-mislabeled-ui-state-bitcrusher-clip-drive11p5db-resolution8bit-downsample1x-mix100-cliplevel0.wav",
+      "sha256": "38c3f8ccd4da659d1e2de48d1f8d0dafaef4be272285195155ec107c6a96b748",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive0db-resolution8bit-downsample1x-mix100-cliplevel0.json",
+      "sha256": "e192025d4d2a04902d97e6025208741f26d5f6dd0ab51b76ab7c2e5931301407",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive11p5db-resolution8bit-downsample1x-mix100-cliplevel0.json",
+      "sha256": "776acde54a7ca012dee87332ae9bea618dc310f972eee9b821b6cc0222a281ca",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution24bit-downsample1x-mix100-cliplevel0.json",
+      "sha256": "5d507d4aeeda9cfe99ceba6822a2760daa6d2923953c0c500aa06f546212aba1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution4bit-downsample1x-mix100-cliplevel0.json",
+      "sha256": "705fb5037324bf78398dfd9ae5d256409e157ed08b896245e1344c7f09c9f1c0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample16x-mix100-cliplevel0.json",
+      "sha256": "e6f1b67606819d87f0648c9e6748172ee201ee9a5a4dbc2a5b3716c832c24ae1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel-minus6db.json",
+      "sha256": "dce59f1fb7c4ee3f920cff479ba08068539759e3979d84fc71f0b8cb46eea048",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.json",
+      "sha256": "a65049e99d9d1d1541d6bb581b00744a0618fd9ae2894e3c4947bcfd5395583d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.json",
+      "sha256": "d9f5ed14f4a74fad5c2b49174001520c0807d98e86d05146799be452a1137aa8",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.json",
+      "sha256": "ce99a0a9675e7b5e4fac7405dd605a84996e7b828e0773ccf996f2075b8154fb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix50p4-cliplevel0.json",
+      "sha256": "5bb9a635fe1c1583402263bedf506c75fe683642287fbc40c94097915f1d4a8a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-clip-drive3db-resolution8bit-downsample4x-mix100-cliplevel0.json",
+      "sha256": "b1509b090077d300390fdfb9cd853692df5e134dd62af0792f3500d716f7688d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.json",
+      "sha256": "1bd6c07b1b58a880734d3bf90da4ecedff0ae3c47136768095cc39dc90aaf9ac",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.json",
+      "sha256": "50207fa9734928cb84bd0b502ed1ac7d0de0b1735bb94d03a51f4a28593dc5bc",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-fold-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.json",
+      "sha256": "b84f22d23f34c2d7a79c69a17360bc8a376cd30e192d3a8037bb55d103190ec3",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-header-bypass-amplitude-ladder.json",
+      "sha256": "6a8b3ba73c6ed50c4f82f906288c97ef39bdf2e6032442ea68ffb954e0a9f514",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r1.json",
+      "sha256": "f405250b2dd015f0384126d8157232c548f5be0477e0559c227ee2885d3e0760",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r2.json",
+      "sha256": "de4b76fcb0ee92e8a2c44861222867e403d93d93572dd31a33d3fe86ab1b42f2",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r3.json",
+      "sha256": "a806ebc77404e6ce086a4ea4abd67844abd21397d63b9e730c88cf1c14f81d2d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-postreload-r1.json",
+      "sha256": "b4ddb8737934b9cf87478ba4002ef524ecd819746c63dec7e001992fea1f24c1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-postreload-r2.json",
+      "sha256": "134acf16afdede516f17f262af344dca6530bf0969d92b7ba39dea2b90eae2c4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r1.json",
+      "sha256": "7c30d64a0973ebcdcd3fc7bf66d4c299752171f904b33918836747036336227a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r2.json",
+      "sha256": "77d2807444a72553d2b165e22efb13d8fe527225490a105b0f39aa8565c21c0c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-r3.json",
+      "sha256": "b2c24398d7150ea6c4f768f809df10af01cfd081903fc24ba67a39fd2ed6e93f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/project-copy-amplitude-ladder-source-preservation.json",
+      "sha256": "40340dd1b7c8fdc894a944fb58afce8baf22c4ad8f5e4e937d64eb556ff96bcc",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/project-copy-guitar-like-source-preservation.json",
+      "sha256": "baca994d1173cd1e6d2627b8c53d88f659fa315d3b04c499f6afb2e927845a1a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-mislabeled-ui-state-bitcrusher-clip-drive11p5db-resolution8bit-downsample1x-mix100-cliplevel0.json",
+      "sha256": "6b589cbb12be4f6b3e0c9a8cd5853f24dc9ebba40936ab9b6d86623043968590",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-original-mislabeled-drive18db-analysis.json",
+      "sha256": "66462f3fe2c018e1199663ea3bf4d59995317248e2df5f4db55b564de9e59b3c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/DisplayState.plist",
+      "sha256": "8297144d9a5c6cda96f028e1ebd3744f19bacd58e8593dd9ba3dc2325a55a05d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/DisplayStateArchive",
+      "sha256": "d3ec6cd7c30445fc4f3d9008ffb38e190c7aa7d4f365a239f606ecc8d0986ef3",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/MetaData.plist",
+      "sha256": "5b5726f63e4425492656850b11de8b2c2419d2f1109afb6eeaf5d52f732240b1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/00/MetaData.plist",
+      "sha256": "eb41905fe3f453e7e9dd479942765ae061bbdcbabbd70efde07f3aa6c32dab2e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/00/ProjectData",
+      "sha256": "3aced550a3d34040bb6930e20b02624c38dd840b379e82d94f05b8cb19b19a7e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/01/MetaData.plist",
+      "sha256": "e9b5f0e7e1ac16697b7d04604983d724031df08e60e28ec3c4cba132f5b7b50e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/01/ProjectData",
+      "sha256": "b371d713867c54893ce65139cbe6445d69ff223c671a964a3787c9c5319d129d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/02/MetaData.plist",
+      "sha256": "e9b5f0e7e1ac16697b7d04604983d724031df08e60e28ec3c4cba132f5b7b50e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/02/ProjectData",
+      "sha256": "1552e8d08254c2b616e04bc73005b00555d0b35a631bd322389cd1d177092331",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/ProjectData",
+      "sha256": "3e4148d9331e4b9cfdf8fec3717aed2829d1b893b1681ec9caf0ca521852346f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Alternatives/000/WindowImage.jpg",
+      "sha256": "07707a0ce18efa8ccd09c89851b54aaf0913edc52f78446b4dab81dbc6adf027",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Media/Audio Files/amplitude_ladder_1khz_mono.wav",
+      "sha256": "ca7bc6a94d1aa73e6cd7a13a29ccd468ebaf31d385e9c74acaccef751018f37c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Media/Audio Files/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "a8102f7ef434ada32f552a247218f01b3f9ca3f8bbd9b6c54f1a6cdbcb36348e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx/Resources/ProjectInformation.plist",
+      "sha256": "ea59bb466321e53641b66413a1850c097ef5537cf14327c76457209941269cdb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx.zip",
+      "sha256": "23510f6308e73a559d59d9faa88b4a695e833234a5c7f8221db5eed6d2687ce6",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "screenshots/bitcrusher-clip-drive3db-resolution24bit-downsample1x-mix100-cliplevel0.png",
+      "sha256": "0f6cc9ba3606ce152c4d87305e5605b3866faa07c5ae4edd159c68669168f7fe",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/bitcrusher-clip-drive3db-resolution8bit-downsample1x-mix100-cliplevel0.png",
+      "sha256": "4c8d32f1e6355cdff84d795d6e202a198622ef5fb7812a0104228be62bb6aed3",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/bitcrusher-controlled-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-post-reload.png",
+      "sha256": "45a594b90238290ed98a54feaad0fc7a26b9029fe0874d941a672d5e27ef2484",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/bitcrusher-controlled-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-pre-save.png",
+      "sha256": "53a2d46ee871c8bd91839530c19f2bae336d517e38ca0e27cc39844d9949f4be",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/bitcrusher-header-bypass.png",
+      "sha256": "bec3746c1062648a9f5e8b7cc4dd5fddf8cdee3ac3868d534d7376c1ee9ac7e0",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0.png",
+      "sha256": "8cdea02fc8a41f0cd1cf2fdc66e11e7f9e8caf33d9865454eb2675e7b4cc7e6c",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

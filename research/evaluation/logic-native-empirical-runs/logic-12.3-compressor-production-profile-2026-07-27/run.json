@@ -1,0 +1,1108 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-compressor-production-profile-48k-2026-07-27",
+  "product": "TrackSmith",
+  "recordedAt": "2026-07-28T18:44:56-04:00",
+  "identityIdentifier": "logic-pro-12.3:compressor",
+  "identityName": "Compressor",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 Compressor evidence at 48 kHz/PCM24 extends the frozen controlled Platinum curve. Continuous 1 kHz steps separated attack 0/50 ms and release 51/490 ms; matched controls distinguished Platinum and Vintage VCA/FET/Opto. All admitted state pairs were PCM-identical after transition exclusion. Left-only Max versus Sum differed by 4.54587 dB; an asymmetric probe showed the same linked gain on the low-level opposite channel. Vintage Opto displayed state and PCM survived reload exactly. Header bypass matched the source on both output channels, and settled re-enable restored exact pre-bypass PCM. Other circuits, RMS, auto gain/release, side-chain filters/external side chain, distortion, limiter, mix, grids, rates, automation, latency/tail, listening, private topology, and TrackSmith Logic authority remain unproven or prohibited.",
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": "logic-12.3-compressor-default-controlled-48k-2026-07-20",
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 3,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1 plus logic-compressor-ballistics-v2",
+    "fixtureCompatibility": "The v2 mono ballistics WAV is byte-identical to v1. Two independent v2 generations, including the new asymmetric stereo-link WAV and manifest, were byte-identical.",
+    "claimClass": "measured_behavior"
+  },
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 Compressor Production Profile 48k 2026-07-27",
+        "archivePath": "project/TrackSmith Logic 12.3 Compressor Production Profile 48k 2026-07-27.logicx.zip",
+        "archiveSHA256": "e3c39131958c1adbd189d20de5b39ae51288a315db1b8ec696a1b25ff39361e6",
+        "sampleRateHz": 48000
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "The ZIP archive passed unzip -t with no errors.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "amplitudeLadder": "exactly 8.000 seconds",
+      "ballistics": "exactly 7.000 seconds",
+      "stereoOneSided": "exactly 8.000 seconds",
+      "stereoLinkProbe": "exactly 7.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono source through interleaved Stereo Out",
+      "stereo source through interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "nativeState": {
+    "presetName": "Default Preset modified through explicitly recorded states",
+    "commonControlledParameters": {
+      "thresholdDB": -20.0,
+      "ratio": "4.1:1",
+      "knee": 0.0,
+      "makeUpGainDB": 0.0,
+      "inputGainDB": 0.0,
+      "outputGainDB": 0.0,
+      "detector": "Peak",
+      "autoGain": "Off",
+      "autoRelease": "Off",
+      "distortion": "Off",
+      "sideChainFilter": "Off",
+      "sideChainDetection": "Max unless a Sum state is explicitly named",
+      "limiter": "Off",
+      "mixPercent": 100.0,
+      "sideChainSource": "Internal"
+    },
+    "states": {
+      "platinumStaticCurve": {
+        "circuit": "Platinum Digital",
+        "attackMS": 0.0,
+        "releaseMS": 51.0,
+        "fixture": "amplitude ladder from -60 through -1 dBFS"
+      },
+      "platinumFast": {
+        "circuit": "Platinum Digital",
+        "attackMS": 0.0,
+        "releaseMS": 51.0
+      },
+      "platinumSlowAttack": {
+        "circuit": "Platinum Digital",
+        "attackMS": 50.0,
+        "releaseMS": 51.0
+      },
+      "platinumSlowRelease": {
+        "circuit": "Platinum Digital",
+        "attackMS": 0.0,
+        "releaseMS": 490.0,
+        "exposedRawReleaseValue": 79,
+        "note": "The nearest exposed state used here displayed 490 ms; raw 80 displayed 520 ms, so an exact 500 ms state is not claimed."
+      },
+      "vintageVCA": {
+        "circuit": "Vintage VCA",
+        "attackMS": 0.0,
+        "releaseMS": 51.0,
+        "peakRMSControl": "fixed Peak display in this circuit"
+      },
+      "vintageFET": {
+        "circuit": "Vintage FET",
+        "attackMS": 0.0,
+        "releaseMS": 51.0,
+        "peakRMSControl": "fixed Peak display in this circuit"
+      },
+      "vintageOpto": {
+        "circuit": "Vintage Opto",
+        "attackMS": 0.0,
+        "releaseMS": 51.0,
+        "peakRMSControl": "fixed Peak display in this circuit",
+        "savedAndReloaded": true
+      },
+      "stereoMaxAndSum": {
+        "circuit": "Platinum Digital",
+        "attackMS": 0.0,
+        "releaseMS": 51.0,
+        "testedSideChainDetection": [
+          "Max",
+          "Sum"
+        ]
+      }
+    },
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They are not a claim about Apple's private topology, every parameter combination, or TrackSmith authority to control Logic."
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "artifacts/source-amplitude-ladder-1khz-mono-48k.wav",
+        "fileSHA256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+        "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 384000
+      },
+      {
+        "artifactPath": "artifacts/source-compressor-ballistics-1khz-mono-48k.wav",
+        "fileSHA256": "3212e9b25b9c7f02dec9977611aa9ae947bd92689f01a574cefa1b62775ab6a4",
+        "sampleRateHz": 48000,
+        "channels": 1,
+        "frameCount": 336000
+      },
+      {
+        "artifactPath": "artifacts/source-compressor-ballistics-1khz-stereo-link-probe-48k.wav",
+        "fileSHA256": "a47fba9197c470f8be667ab3cad98fae19c42da97bfba65f7997a1397182739a",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 336000
+      },
+      {
+        "artifactPath": "artifacts/source-stereo-left-only-48k.wav",
+        "fileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+        "sampleRateHz": 48000,
+        "channels": 2,
+        "frameCount": 384000
+      }
+    ],
+    "additionalRetainedFixtures": [
+      "artifacts/source-deterministic-noise-bursts-mono-48k.wav",
+      "artifacts/source-stereo-in-phase-48k.wav",
+      "artifacts/source-stereo-anti-phase-48k.wav"
+    ],
+    "bitDepth": 24,
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "Every source copy is hash-ledgered. The mono v2 ballistics fixture preserved the v1 file hash, and two independent v2 generations reproduced every v2 byte."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Preserve first-transition output, then require repeated decoded-PCM identity before making settled-state claims.",
+    "baselineGate": "The header-bypass state had to reproduce the mono source sample-exactly on both interleaved output channels."
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_header_bypass_and_restoration_path",
+      "evidence": "Vintage Opto header bypass produced two PCM-identical renders whose two output channels each matched the mono source sample-exactly. Re-enable preserved one 479-frame first transition, then exactly restored the accepted pre-bypass PCM."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_four_of_seven_circuits_and_two_detector_routes",
+      "evidence": "Platinum Digital plus Vintage VCA, FET, and Opto were rendered at matched displayed controls. Studio VCA/FET and Classic VCA were not rendered. Max and Sum were rendered; external side-chain routing was not."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_high_value_static_and_timing_states_not_full_grid",
+      "evidence": "One ten-level static curve, two displayed attack states, two displayed release states, and four circuits at matched controls were measured. Threshold, ratio, knee, makeup, and cross-parameter grids remain unknown."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_gain_peak_and_channel_polarity_only",
+      "evidence": "Gain, peak, per-channel identity/polarity, frame counts, and zero-lag comparisons are artifact-backed. Dedicated impulse latency and tail tests were not run for this bounded Compressor profile."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "partial_two_identical_settled_renders_per_admitted_state",
+      "evidence": "Every newly admitted state has at least two decoded-PCM-identical settled renders. A three-render requirement was not completed for every state."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_vintage_opto_recorded_state",
+      "evidence": "Threshold, ratio, attack, release, makeup, knee, circuit, detector, gains, mix, filter, limiter, and auto controls were visibly identical after reload. Two post-reload renders were PCM-identical to one another and to the accepted pre-save render."
+    },
+    "threshold_ratio_knee_static_curve_makeup_autogain_and_level_matched_bypass": {
+      "status": "partial_one_controlled_curve_and_exact_bypass",
+      "evidence": "The controlled Platinum curve captured ten input levels at threshold -20 dB, ratio 4.1:1, knee 0, makeup 0, Auto Gain off. Header bypass was sample-exact, but broader threshold/ratio/knee/makeup/Auto Gain and perceptual level-matching grids remain unrun."
+    },
+    "attack_release_auto_release_overshoot_recovery_pumping_and_program_dependence": {
+      "status": "partial_controlled_tone_attack_release_only",
+      "evidence": "The continuous-phase level-step fixture separated displayed 0 and 50 ms attack and displayed 51 and 490 ms release, with 10 ms gain windows and a declared 0.5 dB settling rule. Auto Release, program dependence, pumping, and musical-source behavior remain unknown."
+    },
+    "peak_rms_detector_sidechain_filter_and_external_sidechain_where_safely_available": {
+      "status": "partial_peak_max_sum_only",
+      "evidence": "Peak detection with internal Max and Sum was measured. RMS, side-chain filters, and external side chain were not run."
+    },
+    "seven_circuit_models_distortion_modes_limiter_and_dry_wet_parallel_behavior": {
+      "status": "partial_four_circuits_with_distortion_limiter_off_and_mix_100",
+      "evidence": "Platinum Digital and Vintage VCA/FET/Opto were compared with distortion and limiter off at Mix 100%. The remaining circuits and active distortion, limiter, and parallel-mix states remain unknown."
+    },
+    "stereo_max_sum_link_left_right_asymmetry_and_mono_translation": {
+      "status": "complete_for_bounded_left_only_and_asymmetric_link_probes",
+      "evidence": "Left-only Max and Sum each repeated PCM-exactly; Sum was 4.545870 dB higher in least-squares gain than Max and neither created right-channel crossfeed. With the right held at -30 dBFS, left-driven Max gain reduction matched on both channels to within approximately 0.000003 dB. Other stereo fixtures and mono translation remain outside this bounded result."
+    },
+    "transient_sustain_noise_low_end_and_source_specific_preservation_listening": {
+      "status": "not_run_no_human_listening_result",
+      "evidence": "Generated noise, stereo, and musically structured fixtures are retained for later work, but no participant completed a controlled listening protocol and no preference claim is made."
+    }
+  },
+  "measurements": {
+    "platinumStaticCurveGainDB": [
+      {
+        "inputPeakDBFS": -60.0,
+        "gainDB": 0.0
+      },
+      {
+        "inputPeakDBFS": -48.0,
+        "gainDB": 0.0
+      },
+      {
+        "inputPeakDBFS": -36.0,
+        "gainDB": 0.0
+      },
+      {
+        "inputPeakDBFS": -30.0,
+        "gainDB": 0.0
+      },
+      {
+        "inputPeakDBFS": -24.0,
+        "gainDB": 0.0
+      },
+      {
+        "inputPeakDBFS": -18.0,
+        "gainDB": -1.5120674947436399
+      },
+      {
+        "inputPeakDBFS": -12.0,
+        "gainDB": -6.048709610032415
+      },
+      {
+        "inputPeakDBFS": -6.0,
+        "gainDB": -10.585293007015357
+      },
+      {
+        "inputPeakDBFS": -3.0,
+        "gainDB": -12.853588400731608
+      },
+      {
+        "inputPeakDBFS": -1.0,
+        "gainDB": -14.365784430737236
+      }
+    ],
+    "ballistics": [
+      {
+        "state": "Platinum Digital attack 0 ms release 51 ms",
+        "settledHighGainDB": -10.585293006675446,
+        "attackInitial10MSGainDB": -10.53229003629006,
+        "attackSettlingMS": 0.0,
+        "releaseInitial10MSGainDB": -10.520663782178847,
+        "releaseSettlingMS": 150.0
+      },
+      {
+        "state": "Platinum Digital attack 50 ms release 51 ms",
+        "settledHighGainDB": -10.576764239090803,
+        "attackInitial10MSGainDB": -1.2583432611750265,
+        "attackSettlingMS": 80.0,
+        "releaseInitial10MSGainDB": -10.513853855797127,
+        "releaseSettlingMS": 150.0
+      },
+      {
+        "state": "Platinum Digital attack 0 ms release 490 ms",
+        "settledHighGainDB": -10.58535469572651,
+        "attackInitial10MSGainDB": -10.53234797439968,
+        "attackSettlingMS": 0.0,
+        "releaseInitial10MSGainDB": -10.577926846484772,
+        "releaseSettlingMS": 570.0
+      },
+      {
+        "state": "Vintage VCA attack 0 ms release 51 ms",
+        "settledHighGainDB": -9.7855081116681,
+        "attackInitial10MSGainDB": -9.775559696082187,
+        "attackSettlingMS": 0.0,
+        "releaseInitial10MSGainDB": -7.884687028773959,
+        "releaseSettlingMS": 70.0
+      },
+      {
+        "state": "Vintage FET attack 0 ms release 51 ms",
+        "settledHighGainDB": -9.96696212141974,
+        "attackInitial10MSGainDB": -9.916953765442674,
+        "attackSettlingMS": 0.0,
+        "releaseInitial10MSGainDB": -8.385148892085558,
+        "releaseSettlingMS": 70.0
+      },
+      {
+        "state": "Vintage Opto attack 0 ms release 51 ms",
+        "settledHighGainDB": -8.413190582037148,
+        "attackInitial10MSGainDB": -11.29118832240321,
+        "attackSettlingMS": 20.0,
+        "releaseInitial10MSGainDB": -6.281343686990766,
+        "releaseSettlingMS": 20.0
+      }
+    ],
+    "stereo": {
+      "leftOnlyMaxRenderedRMSDBFS": -26.69758710223927,
+      "leftOnlySumRenderedRMSDBFS": -22.150626042627795,
+      "sumVersusMaxLeastSquaresGainDB": 4.545870434695798,
+      "rightChannelCrossfeedSamples": 0,
+      "linkProbeLeftHighGainDB": -10.585293006675446,
+      "linkProbeRightWhileLeftHighGainDB": -10.585290419364334,
+      "linkProbeLeftLowGainDB": -0.0002790780085646452,
+      "linkProbeRightWhileLeftLowGainDB": -0.0002790780085646452
+    },
+    "reloadAndBypass": {
+      "vintageOptoAcceptedPCM": "d13d3d58dc32a0b8b3920c15dc3e7ee7ee32ef60994239d001571009fd4cbadd",
+      "preSaveVersusPostReloadPCMExact": true,
+      "bypassPerOutputChannelSampleExact": true,
+      "bypassRepeatedPCMExact": true,
+      "firstReEnableTransitionDifferingSamples": 459,
+      "firstReEnableTransitionLastDifferingFrame": 478,
+      "secondReEnableVersusPreBypassPCMExact": true
+    },
+    "measurementBoundary": "All values describe only the exact recorded states, fixtures, environment, and analysis rules. They neither identify Apple's private implementation nor prove musical usefulness."
+  },
+  "stateTransitionFindings": [
+    "Vintage VCA and Vintage FET produced PCM-identical first and second captured renders after selection.",
+    "Vintage Opto's first captured post-selection render differed from the next render only in the first 3782 samples; the next two renders were PCM-identical and form the accepted settled state.",
+    "Vintage Opto save/reload reopened the exact displayed values and produced PCM identical to the accepted pre-save state.",
+    "Header bypass produced source-exact PCM on both output channels.",
+    "The first render after re-enabling Vintage Opto differed in 459 samples ending at frame 478; the next render exactly restored the pre-bypass accepted PCM."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-1-48k.wav",
+        "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-repeat-analysis.json"
+      ],
+      "reason": "Retained as the first post-circuit transition. It is excluded from settled-repeat and reload claims because it differs from the next render in 3398 samples through frame 3781."
+    },
+    {
+      "artifacts": [
+        "artifacts/compressor-vintage-opto-restored-after-bypass-48k.wav",
+        "artifacts/compressor-vintage-opto-restoration-transition-analysis.json"
+      ],
+      "reason": "Retained as the first post-bypass re-enable transition. It is excluded from restored-state claims because it differs from the accepted settled state in 459 samples through frame 478."
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "The recorded Platinum Digital state remained unity through the -24 dBFS amplitude-ladder segment, then produced progressively more gain reduction through -1 dBFS.",
+      "At fixed displayed controls, 50 ms attack delayed measured gain settling relative to 0 ms, and 490 ms release delayed recovery relative to 51 ms.",
+      "The four tested circuit states did not share one static or dynamic result at matched displayed controls.",
+      "Max and Sum produced materially different gain on the left-only probe, while the asymmetric probe directly demonstrated linked gain movement on the opposite channel.",
+      "The accepted Vintage Opto state was exactly recoverable after save/reload and after the bounded bypass transition."
+    ],
+    "inferredConsequences": [
+      "Typed production knowledge may treat circuit, detector routing, timing, and transition state as consequential; it must not assume displayed values are interchangeable between circuit types.",
+      "Preview comparison should settle or explicitly expose a first-transition render before presenting an exact repeatability claim.",
+      "Stereo preservation checks should include both crossfeed and linked-gain behavior rather than relying on a control label."
+    ],
+    "professionalPracticeHeuristics": [
+      "Attack, release, detector, and circuit choices remain source- and goal-dependent.",
+      "Static curves and tone-step settling are guardrails for candidate design, not a ranking of musical quality."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "No tested circuit is declared universally superior, faster-sounding, punchier, warmer, or more musical.",
+      "No private detector, envelope, circuit, or smoothing topology is identified.",
+      "No untested Compressor control, circuit, sample rate, channel format, automation path, or musical source is generalized.",
+      "No TrackSmith authority to inspect, insert, reorder, automate, or control Logic Compressor is granted."
+    ]
+  },
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "results": [],
+    "statement": "No participant completed a controlled listening test for this run. Objective behavior is not represented as preference or musical usefulness."
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient for the milestone's bounded Compressor production profile because it materially covers a controlled static curve, attack/release behavior, four high-value circuits, stereo Max/Sum and linked/asymmetric behavior, repeatability, bypass/restoration, and save/reload. It remains partial in the exhaustive campaign.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "artifacts/compressor-platinum-controlled-reloaded-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "amplitude_ladder_transfer",
+        "channels",
+        0,
+        "segments",
+        7,
+        "least_squares_gain_db"
+      ],
+      "minimum": -10.586,
+      "maximum": -10.584
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "compressor_ballistics_transfer",
+        "channels",
+        0,
+        "segments",
+        1,
+        "settling_time_ms_within_0_5_db_for_remaining_segment"
+      ],
+      "minimum": 80.0,
+      "maximum": 80.0
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "compressor_ballistics_transfer",
+        "channels",
+        0,
+        "segments",
+        2,
+        "settling_time_ms_within_0_5_db_for_remaining_segment"
+      ],
+      "minimum": 570.0,
+      "maximum": 570.0
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-repeat-2-vs-3-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-pre-save-vs-post-reload-settled-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-bypass-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-bypass-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        1,
+        "sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-bypass-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-pre-bypass-vs-restored-settled-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-max-stereo-left-only-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-sum-stereo-left-only-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-stereo-left-only-max-vs-sum-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "least_squares_gain_db"
+      ],
+      "minimum": 4.545,
+      "maximum": 4.547
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-max-stereo-link-probe-settled-1-48k-analysis.json",
+      "jsonPath": [
+        "compressor_stereo_link_transfer",
+        "channels",
+        1,
+        "segments",
+        1,
+        "steady_last_200ms_median_gain_db"
+      ],
+      "minimum": -10.586,
+      "maximum": -10.584
+    },
+    {
+      "artifactPath": "artifacts/compressor-platinum-peak-max-stereo-link-probe-repeat-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "artifacts/compressor-vintage-opto-restoration-transition-analysis.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "last_differing_sample"
+      ],
+      "maximum": 478
+    }
+  ],
+  "artifactFiles": [
+    {
+      "path": "artifacts/compressor-platinum-controlled-reloaded-settled-1-48k-analysis.json",
+      "sha256": "e7b9bed8e0d45fb2c2fb84a94b2c7fee409469b2bcd9e812fb80c14db75e9659",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-controlled-reloaded-settled-1-48k.wav",
+      "sha256": "166ea96124f21cbaec59481d5332c35a922201ce4c923dad4172ba5f81b144f0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-controlled-source-project-state-48k.png",
+      "sha256": "4565fe3feee7a0525558518ce8afafeb4f8080b91d267dfaa24c28fc82a0f14c",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-controls-48k.png",
+      "sha256": "c36938886f18b6a66874952d3a8d29ea8b9f4522836778295cede07d2b46a62e",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-repeat-analysis.json",
+      "sha256": "04f2787d01c57258ff27305b40dcfe2394e7e184554716e47b7ef34f7d7e0a4c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-settled-1-48k-analysis.json",
+      "sha256": "fd7681ba5debefc2a07e999a999e3684b47c1063f47408655130955976f6617d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-settled-1-48k.wav",
+      "sha256": "304e04c4ebadfeb64e27f81a19bca89a8abc9513c7e957d7e66bd20eb7f3bb0a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-settled-2-48k-analysis.json",
+      "sha256": "5bb12991526b247512e259d2114c5dcce4a4f4cb6fbd851517580a6e2bcb1cd9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release490-ballistics-settled-2-48k.wav",
+      "sha256": "2c0b468912638fccae40b7eb0442ea383b62a06698f7cbc696823933958a56ee",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-controls-48k.png",
+      "sha256": "b050c995399369d179ff29fea92bb3e2042fbcb2643b628566e7570d6cf4d629",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "sha256": "988456dc82b27b705ed510bd6f0cd09b9516a558e46463777afbfbb08c59cc74",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-settled-1-48k-analysis.json",
+      "sha256": "ab6aeeb94e62822d065ad90bfd6e582ceb6c93ee97c55c067ba8b5d16e66cf3c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-settled-1-48k.wav",
+      "sha256": "b8bd8da73f045604c07a6ec68f0674c5792eb0af9eb127c1af8032365157144b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-settled-2-48k-analysis.json",
+      "sha256": "44d74b5c6f430d15374556f53618d12947785ac00af766326cf3c7839666654c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack0-release51-ballistics-settled-2-48k.wav",
+      "sha256": "b1fe0929df3579fef91933470cb7e86c30fee229690f646d8999fcb0b6dc82c1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-controls-48k.png",
+      "sha256": "140e64efb43575ecb06bac393ac69b3670cf4327c4913637519b6e32db42b14a",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-repeat-analysis.json",
+      "sha256": "0291b3b6c0ca4247476064486748ca0bc66663c27510e459cc972b13acf134eb",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-settled-1-48k-analysis.json",
+      "sha256": "be1b8b5183dc5e598162719832c59910dd7802692b6e06a5844ba4d4d8f57ea6",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-settled-1-48k.wav",
+      "sha256": "e5e5c70191690398d18ef1bf65f0eaffb8031d668edca54a0877a851392455af",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-settled-2-48k-analysis.json",
+      "sha256": "f070376d259ecce49def3d1f320bbe3905390e953062251f5f3b5f163b589f32",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-attack50-release51-ballistics-settled-2-48k.wav",
+      "sha256": "3f011a9b6129fe9d0fe9f006424ac8746a38ead0e63899b623fdd9e041624790",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-left-only-controls-48k.png",
+      "sha256": "c71b5d5278cebf5a24d1fc2ecad891f517e5d0b4b71a55018e4328402aaa67ee",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-left-only-repeat-analysis.json",
+      "sha256": "8bf682ca8eb638658e05892f090f87bb43d0730c84d3827cc43175795ae2ba1c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-left-only-settled-1-48k-analysis.json",
+      "sha256": "a0752bfe12254f4774a8f66fc6fca3287f284af508a5d3f33026dd7981ade2d9",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-left-only-settled-1-48k.wav",
+      "sha256": "a29f9f7372e6effb84cd20dd0d552ae710bf6313f3dd170edc57c22b52f2b6c1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-left-only-settled-2-48k-analysis.json",
+      "sha256": "986234ac10788733ac8e1c9513c61e65198a6b96ebd0300ae17f00d3e250a450",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-left-only-settled-2-48k.wav",
+      "sha256": "73de592932e10b3b3cb97df7182707d30ced1b106bcc29081c05cba4c01117a1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-link-probe-controls-48k.png",
+      "sha256": "03324c4d9c5a3e9319f1d382c7863795efe696de6f7029d7dce553d3392afab3",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-link-probe-repeat-analysis.json",
+      "sha256": "cd4e13cd47c45a2fba817dba7cdc17f54e57406808f31c3179c10dd51db2910a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-link-probe-settled-1-48k-analysis.json",
+      "sha256": "a870619f27b0f7cdf1f6fd0bed0455cfc10e5c12565a545579b28df81167f17d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-link-probe-settled-1-48k.wav",
+      "sha256": "1266d8f5588e7534cfd6d2f673315c01fa6a52d03a92a6ed274ebc3b13072e02",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-link-probe-settled-2-48k-analysis.json",
+      "sha256": "f1ba17c28088064d765a2299aa2e8715721ba652d6e2ea5a73806d60584c35d0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-max-stereo-link-probe-settled-2-48k.wav",
+      "sha256": "4422d163ad3244dc70ab27c0a10f915e65cf58e11c96d07f5e1b22e78d143ea8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-stereo-left-only-max-vs-sum-analysis.json",
+      "sha256": "1e4466ac826239d3ebf6990c30d9d57c9a3b1af9c70653ff17d8e60e6705cf45",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-sum-stereo-left-only-controls-48k.png",
+      "sha256": "8101dd3d54555be0d6aadbdf1c473a1b6e5f4c1f66aa8f3590fc9bc2c883cbcd",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-sum-stereo-left-only-repeat-analysis.json",
+      "sha256": "ce953e0ebcf70b03fffef55b57d642fcc92f01a00869b19389952f782b629391",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-sum-stereo-left-only-settled-1-48k-analysis.json",
+      "sha256": "27b992e2d812dd597012a9a6fcd15672df839370559eb20f1059b7bb3b43eba3",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-sum-stereo-left-only-settled-1-48k.wav",
+      "sha256": "45b3c92690483e1c2591a1e7588512689625e0d591fbd704d8a17158d99d04bc",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-sum-stereo-left-only-settled-2-48k-analysis.json",
+      "sha256": "f9e5362eac60c4d13cf46aea0f8c4bd3abf285d064a0f1f65f8b259db19f29c1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-platinum-peak-sum-stereo-left-only-settled-2-48k.wav",
+      "sha256": "babaff46945c09839e06e776aa3125d931f2b67581c6f746ec676098e92167ac",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-controls-48k.png",
+      "sha256": "17492a1f78adf791c72b22366526e8c96dbb7dd7feac26d51e60fc21991548b1",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "sha256": "1012ecf100f425e1305017334c38c3047b274d0521c1f929e7e5ca41f16b7452",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-settled-1-48k-analysis.json",
+      "sha256": "0b902a9555fb04ac1ca2b357e066a994f50e88189d274a663b5e5d7cc530586a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-settled-1-48k.wav",
+      "sha256": "80c414ed2ad11a7d489916fc52093e88a09d6bdfc60d105828a51cd9b12d9941",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-settled-2-48k-analysis.json",
+      "sha256": "8da8c8cb454c4a9bed82f6600e3b1ef7e003c3b36dbb8104fb366735a14344f0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-fet-peak-attack0-release51-ballistics-settled-2-48k.wav",
+      "sha256": "79dc6dfefb09355427527e83b72647ca35647211867e3c9c4f875a2cf52ecaf7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-bypass-repeat-analysis.json",
+      "sha256": "7a6020a24374b8ffa0f1d7c18c903d7d467e49c9d7e6a86db9b05c9bb295d2b0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-bypass-settled-1-48k-analysis.json",
+      "sha256": "187941112015b8df9a7303c0b2eaa8aeea367f86fa12335257fbe5af0eeac80b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-bypass-settled-1-48k.wav",
+      "sha256": "00b01315204d6e0ca96df423928383ad33567db449cb43cc0427325d1febf432",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-bypass-settled-2-48k-analysis.json",
+      "sha256": "59ff92db13a8f978a76fa4081dfb9e758cb0067e133400c47c407097b6bf2e3c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-bypass-settled-2-48k.wav",
+      "sha256": "a4e3d2cd83ffa07f5938a017c9e227dbc191e70e4a536e621ce5db5c6e2f8379",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-bypassed-controls-48k.png",
+      "sha256": "aa5d8351e57e7a6c16941cbacb892826a4a74209844169ab54e0d5dbba7a9ea9",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-controls-48k.png",
+      "sha256": "f2d00951bf6454d80428c6a07eb2e7dc4d5cb6920a93c8e10e21901742cea225",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "sha256": "370d9ed8101aa386bb4b7b37bee58f210379154da76da36b723fda0c2d5a7c8d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-1-48k-analysis.json",
+      "sha256": "ad40fedc61d4a31cdfad49e320636fdfe14ce381998019e8ff73b2968d3299c2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-1-48k.wav",
+      "sha256": "5d5086b54e34c486d23fafd8d2e319286dc162156391fb5e30fb59a4d76c3fe3",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-2-48k-analysis.json",
+      "sha256": "dc1088fd3e6c064a08bfe090724471788160710272bbbc54ba98c2a039f84f62",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-2-48k.wav",
+      "sha256": "f168802f00dc5dda85db426c0306f695ef27fbadd5f3b1a9e7e4c256027ff00d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-3-48k-analysis.json",
+      "sha256": "eb0088ffc480e27a1022f788dee35d806cddf82b5fcefcc6cce767e492b763c2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-3-48k.wav",
+      "sha256": "2a22ec5500503b18ad5b0128e8035b2e6c128a7794dbf59ac1a955b28e524704",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-peak-attack0-release51-ballistics-settled-repeat-2-vs-3-analysis.json",
+      "sha256": "29825d7757a814d484e291a79dea81b60ad84bf6f8123b47f96812ce1b38b5aa",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-post-reload-repeat-analysis.json",
+      "sha256": "5c0241eea01863a1ad66826af483b63f0ac5f189a4ce3bd52410908904123681",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-post-reload-settled-1-48k-analysis.json",
+      "sha256": "fcd5a39b392010eb6e10dfab147f24c703944d17934f61f005e3d5577670b819",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-post-reload-settled-1-48k.wav",
+      "sha256": "eb18ed8fb3e2fd3b2036c2e016e1ee90bf16d434054aefb7746541b4ff9c8ee1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-post-reload-settled-2-48k-analysis.json",
+      "sha256": "a239d2eaf9f174c9845a1b49ab6f77899aae67f2ec02285f35ed7fba23834f5e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-post-reload-settled-2-48k.wav",
+      "sha256": "5b927f4baf6ac6319025d718939f696b9e8f771dd2a9c309f0913c72060e0c7a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-post-reload-state-controls-48k.png",
+      "sha256": "da825ff6dd85a61bc2b6005289841a5423a01c4f1ffda6bd1ee3690e1b31b9fd",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-pre-bypass-vs-restored-analysis.json",
+      "sha256": "e346ee869238ff3762b6ca3e1b1ae41c4db8b88f8db9974bc6d2230485efc498",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-pre-bypass-vs-restored-settled-analysis.json",
+      "sha256": "7c03e728163c726e6631c20828de8b17e9846874dfa8780002ceae1ca5e1831b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-pre-save-state-controls-48k.png",
+      "sha256": "e73efca28aea1ed9b2b8ac1c212351374fec6633e01b2a86e42779dc5ed07724",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-pre-save-vs-post-reload-settled-analysis.json",
+      "sha256": "4dc0823fef3e09f80cf441d01acf4fb6b6eef29d6f42d7cb550aa94b064901f8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-restoration-transition-analysis.json",
+      "sha256": "560675dee911e9fde9dc0689aae78ee134379e9d558c0c49da004f70210354b1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-restored-after-bypass-48k-analysis.json",
+      "sha256": "e19e1bb5efc2f8fb82b0d781cb799f5c64c9a651c46cc6a1eb911105881bcf01",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-restored-after-bypass-48k.wav",
+      "sha256": "aaedc48d560aaa76c9edeff1ca011353ff06fa16911a2abbc0d4f12f8e1a4d3d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-restored-after-bypass-controls-48k.png",
+      "sha256": "8d7e0e5813d31acd4ba7526d5483c81a924ac34dc5b7a9d24664949a5c26cfe8",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-restored-after-bypass-settled-2-48k-analysis.json",
+      "sha256": "2b0a040b9b79bd9536f6868ec1a256e68eb0435ee93d5d63be953423caad2b9f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-opto-restored-after-bypass-settled-2-48k.wav",
+      "sha256": "7f48286e868ca9ab2c88ea02f000a853c9f2cb564cd4fbdd140223478d4bc361",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-controls-48k.png",
+      "sha256": "324b373fbf3299ddd71772b665ce952f130600394f7faeac4045a2f70b0ca96c",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-repeat-analysis.json",
+      "sha256": "7d05f372531b8c828afae582507ee8b52f9b8d92bf2737873e03bbdfb3b506e2",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-settled-1-48k-analysis.json",
+      "sha256": "df0ebb49000bccbdf8e6fdf5b616e45f9dec67313f320d0d8ea2c4e2cd2f0493",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-settled-1-48k.wav",
+      "sha256": "3dc743998d25b6b86aa639f332e5fd38a110011c91a61445398dce200a68aace",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-settled-2-48k-analysis.json",
+      "sha256": "9a0d2fff8f75bc979057015791c7893597369c6f34b844b76cbcec78b95e72d0",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "artifacts/compressor-vintage-vca-peak-attack0-release51-ballistics-settled-2-48k.wav",
+      "sha256": "9d1d372edc0867259bbbf0e4ad3cbc1837efbaec3cd3079ac614ad69435ed272",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/source-amplitude-ladder-1khz-mono-48k.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-compressor-ballistics-1khz-mono-48k.wav",
+      "sha256": "3212e9b25b9c7f02dec9977611aa9ae947bd92689f01a574cefa1b62775ab6a4",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-compressor-ballistics-1khz-stereo-link-probe-48k.wav",
+      "sha256": "a47fba9197c470f8be667ab3cad98fae19c42da97bfba65f7997a1397182739a",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-compressor-ballistics-manifest-v1.json",
+      "sha256": "cac54ff489e71fc74282d4d40c461a8ee859257823a5b3009be1103521efba31",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-compressor-ballistics-manifest-v2.json",
+      "sha256": "38721349ac5fcd872b4645d1a18b207355211a3b2accecc504bcafdbd1cdfb78",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-compressor-ballistics-manifest.json",
+      "sha256": "cac54ff489e71fc74282d4d40c461a8ee859257823a5b3009be1103521efba31",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-deterministic-noise-bursts-mono-48k.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-fixture-suite-manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "artifacts/source-stereo-anti-phase-48k.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-in-phase-48k.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "artifacts/source-stereo-left-only-48k.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Compressor Production Profile 48k 2026-07-27.logicx.zip",
+      "sha256": "e3c39131958c1adbd189d20de5b39ae51288a315db1b8ec696a1b25ff39361e6",
+      "role": "closed disposable Logic project archive"
+    }
+  ]
+}

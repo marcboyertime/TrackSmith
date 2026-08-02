@@ -1,6 +1,6 @@
 # TrackSmith Production Intelligence v1
 
-Status date: 2026-07-22  
+Status date: 2026-07-30
 Contract version: `1.0`
 
 The current milestone prioritizes the credential-backed, provider-neutral OpenAI
@@ -19,10 +19,13 @@ Gemini cloud-30 report covers five cases per source class. These reports prove t
 provider-to-typed-contract-to-deterministic-preview path; they do not claim that
 objective metrics establish artistic superiority.
 
-The remaining frontier acceptance gap is the direct Logic Pro 12.3 session: a
-credential-backed free-form request, natural multi-turn revision, successful
-capture-bound commit, save/reload, and provider-offline playback of that exact
-committed graph. Historical Logic evidence remains unchanged.
+The direct Logic Pro 12.3 frontier session is now recorded as passed for its
+exercised workflow: credential-backed free-form request, natural revision,
+capture-bound commit, save/reload, provider-offline playback, lock preservation,
+instance isolation, and source-byte preservation. Historical Logic evidence
+remains unchanged. This closes the declared Production Intelligence v1 scope;
+the separate Production Mastery v1 milestone now owns the open Logic-profile,
+DSP, perceptual, and installed-host gates.
 
 ## Authority architecture
 
@@ -287,9 +290,15 @@ ordinary plan/render/safety gates before commit.
 
 ## Evidence
 
-- `TestRunner`: 67/67 without external vectors; 68/68 in Debug, Release, and
-  Thread Sanitizer with the selected official BS.2217-2 vectors at the 2026-07-27
-  closing checkpoint. The sanitizer emitted no race report.
+- `TestRunner`: the frozen Production Intelligence v1 closure passed 68/68 in
+  Debug, Release, and Thread Sanitizer with the selected official BS.2217-2
+  vectors; that dated closure is historical. The current harness declares 72
+  unconditional checks plus one optional official-vector lane (73 possible when
+  `TRACKSMITH_BS2217_VECTORS` is enabled). Previously verified current
+  2026-08-02 Debug and Release runs each pass 72/72 with that variable omitted.
+  The same-date vector-enabled Debug and Release runs now each pass 73/73 with
+  the variable set to the local directory containing the 14 official BS.2217-2
+  vectors. The current 73-lane Thread Sanitizer run remains open/unproven.
 - Provider tests: OpenAI/Gemini request shape, no tools/audio/file names/credentials,
   strict output, consent, missing/inaccessible/rejected credential, timeout,
   cancellation, network loss, malformed/oversized response, rate limit, bounded

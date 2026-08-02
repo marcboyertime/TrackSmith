@@ -1,5 +1,41 @@
 # Changelog
 
+## 2026-08-02
+
+- Reconciled the current regression snapshot with the `TestRunner` harness: its
+  72 unconditional checks pass 72/72 in the previously verified no-vector Debug
+  and Release runs with `TRACKSMITH_BS2217_VECTORS` omitted. The harness has 73
+  possible checks only when the optional official-vector lane is enabled; the
+  current vector-enabled Debug and Release runs now pass 73/73 using the 14 local
+  official BS.2217-2 vectors. The current 73-lane Thread Sanitizer run remains
+  open/unproven.
+
+## 2026-07-30
+
+- Advanced Production Mastery and Perceptual Evaluation v1: G0, G1, and the
+  annotated natural-audio evidence gate G1.5 are passed; G2 Logic-native
+  profiling is in progress; G3-G7 remain open. The accepted corpus contains
+  19 content-addressed captures, 390 identified PCM assets, 14 TrackSmith
+  annotations, and zero exact leakage across the local evaluation/holdout
+  boundary.
+- Added validator-gated TrackSmith-owned algorithm-version-1 expander/gate,
+  fixed-time feedback delay, and bounded algorithmic-room DSP with deterministic
+  offline/AU processing, bounded temporal resources, reset, serialization,
+  finite-input recovery, bypass, and borrowed-buffer parity coverage. These are
+  implementation candidates, not Logic clones or perceptual proof; release,
+  installed-host, and listening gates remain open.
+- Expanded the Logic Pro 12.3 empirical campaign with partial profiles for
+  DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo Delay, and Tape
+  Delay. The campaign now records 191 `not_run`, 9 `partial`, and 0 `complete`
+  identities.
+- Recorded the 2026-07-30 regression snapshot: the production-mastery candidate
+  was reported as passing 73/73 in Debug and Release; the expanded Thread
+  Sanitizer rerun remained open. This dated claim is historical, not the current
+  2026-08-02 verification.
+  Custom-host Release timing for the expanded graph is 16.9 us mean and 18.2 us
+  p99 for 128 frames at 48 kHz, with zero observed heap operations across 4,000
+  callbacks. These are not Logic-load certification.
+
 ## 2026-07-27
 
 - Completed the direct Logic Pro 12.3 frontier-AI acceptance lane with Gemini

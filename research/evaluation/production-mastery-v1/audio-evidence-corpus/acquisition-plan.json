@@ -1,0 +1,593 @@
+{
+  "schemaVersion": "1.0",
+  "corpusID": "tracksmith-production-mastery-audio-evidence-v1",
+  "localRoot": "research/datasets/production-mastery-v1",
+  "datasetBoundaries": {
+    "mixassist": {
+      "observedProcessedAudioFormat": "16_kHz_mono_PCM",
+      "admissibleUse": [
+        "audio_grounded_dialogue_context",
+        "revision_and_reference_resolution",
+        "coarse_change_and_source_role_context"
+      ],
+      "prohibitedOverclaim": [
+        "high_fidelity_timbre_preference",
+        "stereo_width_or_phase_preference",
+        "mastering_quality_reference"
+      ]
+    }
+  },
+  "requestProfiles": {
+    "audiosetLabels": {
+      "publisherOrAuthors": "Google AudioSet team",
+      "evidenceRole": "Supplemental annotated event, noise, source-presence, and recording-problem evaluation metadata; never production-preference evidence.",
+      "captureMode": "text",
+      "expectedMediaTypes": [
+        "text/csv",
+        "text/plain",
+        "text/tab-separated-values",
+        "application/octet-stream"
+      ],
+      "minimumByteCount": 100,
+      "minimumPageCount": 1,
+      "minimumUsefulTextCharacters": 100,
+      "requiresExtractableText": true,
+      "handlingClass": "internalReference",
+      "rightsBasis": "The official AudioSet download page declares dataset labels CC BY 4.0; underlying YouTube media is separate and is not mirrored.",
+      "licenseStatus": "verified",
+      "licenseSPDX": "CC-BY-4.0",
+      "localUseOnly": true,
+      "replacementPolicy": "rejectDifferentPayload",
+      "supersedesSHA256": null,
+      "replacementReason": null
+    },
+    "medleyDBSample": {
+      "publisherOrAuthors": "Rachel Bittner, Justin Salamon, Mike Tierney, Matthias Mauch, Chris Cannam, and Juan Pablo Bello",
+      "evidenceRole": "Official natural multitrack sample with aligned raw recordings, processed stems, mixes, metadata, and annotations for deterministic and perceptual evaluation.",
+      "captureMode": "binary",
+      "expectedMediaTypes": [
+        "application/octet-stream",
+        "application/gzip",
+        "application/x-gzip"
+      ],
+      "minimumByteCount": 400000000,
+      "minimumPageCount": 1,
+      "minimumUsefulTextCharacters": 0,
+      "requiresExtractableText": false,
+      "handlingClass": "internalReference",
+      "rightsBasis": "The official MedleyDB download page states CC BY-NC-SA 4.0 and requests no republication without consent. Zenodo record 1438309 says CC BY-SA 4.0; TrackSmith applies the stricter official-page noncommercial boundary.",
+      "licenseStatus": "verified",
+      "licenseSPDX": "CC-BY-NC-SA-4.0",
+      "localUseOnly": true,
+      "replacementPolicy": "rejectDifferentPayload",
+      "supersedesSHA256": null,
+      "replacementReason": null
+    },
+    "mixAssistAudio": {
+      "publisherOrAuthors": "Michael Clemens and Ana Marasovic",
+      "evidenceRole": "Official music-only audio segments temporally aligned to real multi-turn production dialogue for language, revision, and listening evaluation.",
+      "captureMode": "binary",
+      "expectedMediaTypes": [
+        "application/octet-stream",
+        "application/zip",
+        "application/x-zip-compressed"
+      ],
+      "minimumByteCount": 10000000,
+      "minimumPageCount": 1,
+      "minimumUsefulTextCharacters": 0,
+      "requiresExtractableText": false,
+      "handlingClass": "internalReference",
+      "rightsBasis": "Zenodo record 15848443 declares the released MixAssist audio CC BY 4.0 and open access.",
+      "licenseStatus": "verified",
+      "licenseSPDX": "CC-BY-4.0",
+      "localUseOnly": true,
+      "replacementPolicy": "rejectDifferentPayload",
+      "supersedesSHA256": null,
+      "replacementReason": null
+    },
+    "mixAssistText": {
+      "publisherOrAuthors": "Michael Clemens and Ana Marasovic",
+      "evidenceRole": "Pinned processed multi-turn production dialogue and split metadata aligned by audio_file identifiers to the official audio release.",
+      "captureMode": "binary",
+      "expectedMediaTypes": [
+        "application/octet-stream"
+      ],
+      "minimumByteCount": 1000,
+      "minimumPageCount": 1,
+      "minimumUsefulTextCharacters": 0,
+      "requiresExtractableText": false,
+      "handlingClass": "licenseReviewRequired",
+      "rightsBasis": "The pinned Hugging Face dataset revision has no declared dataset license tag. The GitHub code repository is MIT, but that code license is not inferred to cover these data files. Local evaluation only pending explicit data-rights confirmation.",
+      "licenseStatus": "reviewRequired",
+      "licenseSPDX": null,
+      "localUseOnly": true,
+      "replacementPolicy": "rejectDifferentPayload",
+      "supersedesSHA256": null,
+      "replacementReason": null
+    }
+  },
+  "artifacts": [
+    {
+      "captureID": "medleydb-sample-zenodo-1438309",
+      "datasetID": "medleydb",
+      "lane": "natural_multitrack_or_known_stem_audio",
+      "enabled": true,
+      "requestProfile": "medleyDBSample",
+      "validation": {
+        "containerFormat": "tar_gzip",
+        "expectedPublisherMD5": "dbb5b4ff5122233915d04cab4486ead1"
+      },
+      "evaluationRoles": [
+        "raw_stem_mix_alignment",
+        "source_preservation",
+        "processor_stress_fixture",
+        "level_matched_listening",
+        "long_form_and_multitrack_workflow"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-medleydb-sample-zenodo-1438309",
+        "title": "MedleyDB Sample",
+        "canonicalURL": "https://zenodo.org/records/1438309",
+        "retrievalURL": "https://zenodo.org/api/records/1438309/files/MedleyDB_Sample.tar.gz/content",
+        "sourceVersion": "Zenodo record 1438309 revision 53; MedleyDB Sample 1.0",
+        "notes": "Official 415,502,011-byte sample. Acquisition is local-only; do not upload, train on, ship, or redistribute through this milestone."
+      }
+    },
+    {
+      "captureID": "mixassist-hf-train-bf375752",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistText",
+      "validation": {
+        "containerFormat": "parquet",
+        "expectedSplit": "train",
+        "expectedRowsFromPinnedCard": 340
+      },
+      "evaluationRoles": [
+        "human_production_language",
+        "multi_turn_revision",
+        "audio_reference_resolution",
+        "clarification_policy"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-hf-train-bf375752",
+        "title": "MixAssist processed dialogue train split",
+        "canonicalURL": "https://huggingface.co/datasets/mclemcrew/MixAssist",
+        "retrievalURL": "https://huggingface.co/datasets/mclemcrew/MixAssist/resolve/bf37575232cff9490085433fe1434e23f5426b52/data/train-00000-of-00001.parquet",
+        "sourceVersion": "Hugging Face commit bf37575232cff9490085433fe1434e23f5426b52",
+        "notes": "Pinned 340-row split. Audio paths are identifiers only; raw audio is acquired from the separately licensed Zenodo record."
+      }
+    },
+    {
+      "captureID": "mixassist-hf-validation-bf375752",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistText",
+      "validation": {
+        "containerFormat": "parquet",
+        "expectedSplit": "validation",
+        "expectedRowsFromPinnedCard": 50
+      },
+      "evaluationRoles": [
+        "human_production_language",
+        "multi_turn_revision",
+        "audio_reference_resolution",
+        "validation_holdout"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-hf-validation-bf375752",
+        "title": "MixAssist processed dialogue validation split",
+        "canonicalURL": "https://huggingface.co/datasets/mclemcrew/MixAssist",
+        "retrievalURL": "https://huggingface.co/datasets/mclemcrew/MixAssist/resolve/bf37575232cff9490085433fe1434e23f5426b52/data/validation-00000-of-00001.parquet",
+        "sourceVersion": "Hugging Face commit bf37575232cff9490085433fe1434e23f5426b52",
+        "notes": "Pinned 50-row split retained as a separate identity."
+      }
+    },
+    {
+      "captureID": "mixassist-hf-test-bf375752",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistText",
+      "validation": {
+        "containerFormat": "parquet",
+        "expectedSplit": "test",
+        "expectedRowsFromPinnedCard": 250
+      },
+      "evaluationRoles": [
+        "human_production_language",
+        "multi_turn_revision",
+        "audio_reference_resolution",
+        "test_holdout"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-hf-test-bf375752",
+        "title": "MixAssist processed dialogue test split",
+        "canonicalURL": "https://huggingface.co/datasets/mclemcrew/MixAssist",
+        "retrievalURL": "https://huggingface.co/datasets/mclemcrew/MixAssist/resolve/bf37575232cff9490085433fe1434e23f5426b52/data/test-00000-of-00001.parquet",
+        "sourceVersion": "Hugging Face commit bf37575232cff9490085433fe1434e23f5426b52",
+        "notes": "Pinned 250-row split retained as a separate identity."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group1-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "69cb7a4b24cdead7654571bbbd6e5527"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_vocal_drums_and_mix_reference_only"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group1-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 1",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group1.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 1 conversational turns."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group2-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "d689adfd666300ad65111a34824733f4"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_source_and_role_coverage"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group2-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 2",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group2.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 2 conversational turns."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group3-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "c0830d20a32b96b52a99bfb509fb5a24"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_drum_bleed_and_bus_language"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group3-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 3",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group3.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 3 conversational turns."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group4-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "e5edee56bce071a9d58476ab7378c799"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_bass_saturation_and_overall_mix_language"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group4-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 4",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group4.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 4 conversational turns."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group5-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "41d3383c1877f0d469927525538c9ad8"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_source_and_role_coverage"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group5-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 5",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group5.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 5 conversational turns."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group6-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "5be66ec852474857a84e8e7d5eb6220e"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_master_bus_space_and_glue_language"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group6-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 6",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group6.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 6 conversational turns."
+      }
+    },
+    {
+      "captureID": "mixassist-audio-group7-zenodo-15848443",
+      "datasetID": "mixassist",
+      "lane": "audio_grounded_production_or_music_language",
+      "enabled": true,
+      "requestProfile": "mixAssistAudio",
+      "validation": {
+        "containerFormat": "zip",
+        "expectedPublisherMD5": "8dd24062cd5059b7a4dbfe08ca66f61e"
+      },
+      "evaluationRoles": [
+        "audio_grounded_dialogue",
+        "revision_ancestry",
+        "contextual_overall_mix_and_frequency_masking_language"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-mixassist-audio-group7-zenodo-15848443",
+        "title": "MixAssist processed audio segments group 7",
+        "canonicalURL": "https://zenodo.org/records/15848443",
+        "retrievalURL": "https://zenodo.org/api/records/15848443/files/audio_cuts_group7.zip/content",
+        "sourceVersion": "Zenodo record 15848443 revision 3",
+        "notes": "Music-only segments aligned to Group 7 conversational turns."
+      }
+    },
+    {
+      "captureID": "audioset-v1-eval-segments",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "csv",
+        "headerRowCount": 3,
+        "expectedDataRowCount": 20371,
+        "fileHeaderNumSegments": 20371,
+        "officialPageClaimedSegmentCount": 20383,
+        "countContradiction": "The official download page says 20,383 segments while the exact v1 CSV header and data contain 20,371. Both claims are retained; TrackSmith uses the artifact-backed count for indexed scope."
+      },
+      "evaluationRoles": [
+        "event_and_noise_coverage",
+        "recording_problem_adversarial_cases",
+        "analysis_stress_fixture_selection"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-v1-eval-segments",
+        "title": "AudioSet v1 evaluation segment labels",
+        "canonicalURL": "https://research.google.com/audioset/download.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/v1/csv/eval_segments.csv",
+        "sourceVersion": "AudioSet v1 evaluation metadata",
+        "notes": "Human-verified weak event labels at ten-second segment scope; not raw audio and not production-preference evidence."
+      }
+    },
+    {
+      "captureID": "audioset-v1-balanced-train-segments",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "csv",
+        "headerRowCount": 3,
+        "expectedDataRowCount": 22160,
+        "fileHeaderNumSegments": 22160,
+        "officialPageClaimedSegmentCount": 22176,
+        "countContradiction": "The official download page says 22,176 segments while the exact v1 CSV header and data contain 22,160. Both claims are retained; TrackSmith uses the artifact-backed count for indexed scope."
+      },
+      "evaluationRoles": [
+        "event_and_noise_coverage",
+        "balanced_class_sampling",
+        "analysis_stress_fixture_selection"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-v1-balanced-train-segments",
+        "title": "AudioSet v1 balanced training segment labels",
+        "canonicalURL": "https://research.google.com/audioset/download.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/v1/csv/balanced_train_segments.csv",
+        "sourceVersion": "AudioSet v1 balanced training metadata",
+        "notes": "Balanced weak event-label metadata only; underlying YouTube audio remains external."
+      }
+    },
+    {
+      "captureID": "audioset-v1-class-labels",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "csv",
+        "headerRowCount": 1,
+        "expectedDataRowCount": 527
+      },
+      "evaluationRoles": [
+        "ontology_mapping",
+        "non_music_problem_taxonomy",
+        "instrument_and_source_presence_mapping"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-v1-class-labels",
+        "title": "AudioSet v1 class label index",
+        "canonicalURL": "https://research.google.com/audioset/download.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/v1/csv/class_labels_indices.csv",
+        "sourceVersion": "AudioSet v1 class label mapping",
+        "notes": "Maps integer label indices to AudioSet machine IDs and display names."
+      }
+    },
+    {
+      "captureID": "audioset-v1-quality-counts",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "csv",
+        "headerRowCount": 1,
+        "expectedDataRowCount": 527
+      },
+      "evaluationRoles": [
+        "label_uncertainty_guardrail",
+        "adversarial_class_selection",
+        "prohibited_overclaim_enforcement"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-v1-quality-counts",
+        "title": "AudioSet v1 quality assessment true counts",
+        "canonicalURL": "https://research.google.com/audioset/download.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/v1/qa/qa_true_counts.csv",
+        "sourceVersion": "AudioSet v1 quality assessment",
+        "notes": "Per-class sample true counts used only to retain label uncertainty."
+      }
+    },
+    {
+      "captureID": "audioset-v1-rerated-video-ids",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "text",
+        "expectedDataRowCount": 132766
+      },
+      "evaluationRoles": [
+        "label_provenance",
+        "rerating_scope",
+        "uncertainty_guardrail"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-v1-rerated-video-ids",
+        "title": "AudioSet v1 rerated video identifiers",
+        "canonicalURL": "https://research.google.com/audioset/download.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/v1/qa/rerated_video_ids.txt",
+        "sourceVersion": "AudioSet v1 rerating scope",
+        "notes": "Identifiers only; no YouTube media is downloaded or mirrored."
+      }
+    },
+    {
+      "captureID": "audioset-strong-eval-2021",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "tsv",
+        "headerRowCount": 1,
+        "expectedDataRowCount": 139538,
+        "expectedEventCount": 139538,
+        "expectedExcerptCount": 16996
+      },
+      "evaluationRoles": [
+        "time_localized_event_coverage",
+        "transient_noise_and_interference_cases",
+        "analysis_temporal_scope"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-strong-eval-2021",
+        "title": "AudioSet May 2021 strongly labeled evaluation events",
+        "canonicalURL": "https://research.google.com/audioset/download_strong.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/strong/audioset_eval_strong.tsv",
+        "sourceVersion": "AudioSet temporally strong labels May 2021",
+        "notes": "Complete temporal event annotations for the released evaluation subset; music is not internally detailed."
+      }
+    },
+    {
+      "captureID": "audioset-strong-eval-posneg-2021",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "tsv",
+        "headerRowCount": 1,
+        "expectedDataRowCount": 958528,
+        "expectedPositiveLabelCount": 300307,
+        "expectedNegativeLabelCount": 658221,
+        "expectedExcerptCount": 14203
+      },
+      "evaluationRoles": [
+        "confirmed_absence_cases",
+        "confusable_event_adversarial_cases",
+        "false_positive_analysis_guardrail"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-strong-eval-posneg-2021",
+        "title": "AudioSet May 2021 framed positive and negative evaluation labels",
+        "canonicalURL": "https://research.google.com/audioset/download_strong.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/strong/audioset_eval_strong_framed_posneg.tsv",
+        "sourceVersion": "AudioSet temporally strong framed positive-negative labels May 2021",
+        "notes": "Includes confirmed present and not-present labels; retained as an analysis guardrail, not artistic evidence."
+      }
+    },
+    {
+      "captureID": "audioset-strong-mid-display-names-2021",
+      "datasetID": "audioset",
+      "lane": "supplemental_event_noise_source_presence",
+      "enabled": true,
+      "requestProfile": "audiosetLabels",
+      "validation": {
+        "containerFormat": "tsv",
+        "headerRowCount": 0,
+        "expectedDataRowCount": 456
+      },
+      "evaluationRoles": [
+        "strong_label_mapping",
+        "event_taxonomy",
+        "human_readable_evidence"
+      ],
+      "request": {
+        "resourceID": "audio-evidence-audioset-strong-mid-display-names-2021",
+        "title": "AudioSet May 2021 strong-label display-name mapping",
+        "canonicalURL": "https://research.google.com/audioset/download_strong.html",
+        "retrievalURL": "https://storage.googleapis.com/us_audioset/youtube_corpus/strong/mid_to_display_name.tsv",
+        "sourceVersion": "AudioSet temporally strong label mapping May 2021",
+        "notes": "Maps the 456 released strong-label machine IDs to display names."
+      }
+    }
+  ]
+}

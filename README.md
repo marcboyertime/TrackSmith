@@ -25,8 +25,11 @@ AU/companion session slice are implemented. The portable core builds and runs:
   set, node-specific parameter allowlists, numeric ranges and both 32-item limits;
   it also records the normative 4,096-byte UTF-8 rationale limit.
 - In-place mono/stereo DSP for trim, polarity, high/low-pass and peaking EQ,
-  linked compression, linked split-band de-essing, saturation, width, limiting,
-  bypass, and finite-value safety.
+  linked compression, linked split-band de-essing, linked expander/gate,
+  saturation, width, fixed-time feedback delay, bounded algorithmic room,
+  limiting, bypass, and finite-value safety. The three new modules are
+  validator-gated TrackSmith-owned algorithm-version-1 candidates; they do not
+  claim Logic equivalence or perceptual superiority.
 - Bounded single-producer capture ring with C11 atomic publication and no render-
   side allocation; capture payloads are atomic and the ring reserves an overwrite
   guard so analysis can safely copy while playback continues, or fail closed if a
@@ -107,10 +110,16 @@ AU/companion session slice are implemented. The portable core builds and runs:
   Git cleanliness/origin/commit identity, rights metadata, quarantine, append-only
   history, and explicit version/supersession policy before publication.
 
-On the development Mac, the current source passes 68/68 `TestRunner` checks in
-Debug, Release, and Thread Sanitizer when the 14 selected official BS.2217-2
-vectors are supplied; 67/67 pass without the external vectors. The sanitizer lanes
-exit without a race report. The added checks cover mailbox
+On the development Mac, the frozen Production Intelligence v1 baseline passed
+68/68 `TestRunner` checks in Debug, Release, and Thread Sanitizer; that dated
+baseline is historical. The current `TestRunner` harness declares 72
+unconditional checks plus one optional official-vector lane (73 possible when
+`TRACKSMITH_BS2217_VECTORS` is enabled). Previously verified current 2026-08-02
+Debug and Release runs each pass 72/72 with that variable omitted. The same-date
+vector-enabled Debug and Release runs now each pass 73/73 with the variable set
+to the local directory containing the 14 official BS.2217-2 vectors. The current
+73-lane `TestRunner` Thread Sanitizer run remains open/unproven. The added checks
+cover mailbox
 retention, fail-closed quota behavior, command ordering, runtime-bound terminal
 replies, hard command-file expiry, Short-term/LRA behavior, six source classes,
 the 28 requested descriptors plus four explicit preservation concepts, eight
@@ -125,12 +134,13 @@ and reload it, bypass without discarding it, and revert to bit-exact dry audio. 
 probe also covers two isolated AU instances, lost-acknowledgement reconciliation,
 invalid-state recovery, nonfinite-input sanitation, publication reset behavior,
 capture teardown/reallocation, atomic commit guards, and AU/offline sample parity.
-The current probe also covers native `shouldBypassEffect`, conservative
+The current `AudioUnitHostProbe` also covers native `shouldBypassEffect`, conservative
 60-second tail reporting, null-output/upstream-pointer host layouts, scheduled
 output-gain events, cross-block ramps, distinct reset-versus-bypass automation
 semantics, and conservative output-silence-flag handling. Current
-Debug/Release/Thread Sanitizer runs succeeded; the latest Release verification
-measured 9.2 us mean, 10.0 us p99, and 30.0 us maximum at 48 kHz/128 frames against a 2,666.7 us
+`AudioUnitHostProbe` Debug/Release/Thread Sanitizer runs succeeded; the latest
+Release verification measured 9.2 us mean, 10.0 us p99, and 30.0 us maximum at
+48 kHz/128 frames against a 2,666.7 us
 deadline. A thread-local DYLD heap interposer additionally observed zero malloc,
 calloc, realloc, free, aligned, or macOS zone heap operations across 4,000 complete
 callbacks of the representative graph; that lane measured 9.2 us mean, 9.9 us p99,
@@ -306,12 +316,11 @@ audio formats, snapshot identity, and saved plans before playback.
   Logic-native tools, MIDI, automation, Accessibility, or project state. The
   [native measurement protocol](docs/LOGIC_NATIVE_EMPIRICAL_MEASUREMENT_PROTOCOL.md)
   and deterministic 18-fixture generator enumerate a 200-identity empirical
-  campaign separately; every native identity remains marked `not_run` until a
-  versioned Logic render actually exists. The current ledger is 197 `not_run`,
-  three `partial`, and zero `complete`: bounded direct Logic 12.3 evidence exists
-  for [Bitcrusher Default](docs/evidence/LOGIC_NATIVE_BITCRUSHER_EMPIRICAL_2026-07-18.md)
-  [Channel EQ default/bypass plus one 1 kHz bell state](docs/evidence/LOGIC_NATIVE_CHANNEL_EQ_EMPIRICAL_2026-07-18.md),
-  and [Compressor default/bypass plus one controlled static curve](docs/evidence/LOGIC_NATIVE_COMPRESSOR_EMPIRICAL_2026-07-20.md).
+  campaign separately; every native identity remains `not_run`, `partial`, or
+  `complete` only when a versioned Logic render actually exists. The current
+  campaign is 191 `not_run`, nine `partial`, and zero `complete`, including
+  partial profiles for DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo
+  Delay, and Tape Delay in addition to Bitcrusher, Channel EQ, and Compressor.
 - `research/evaluation/`: the versioned 420-case semantic/adversarial
   production-intent corpus.
 

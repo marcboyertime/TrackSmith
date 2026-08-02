@@ -5,6 +5,7 @@ public enum DSPError: Error, Equatable, CustomStringConvertible {
     case unsupportedNode(NodeType)
     case channelFormatChanged(expected: Int, actual: Int)
     case sampleRateChanged(expected: Double, actual: Double)
+    case unsupportedSampleRate(Double)
     case parameterInvalidForSampleRate(ParameterID, value: Double, sampleRate: Double)
 
     public var description: String {
@@ -12,6 +13,7 @@ public enum DSPError: Error, Equatable, CustomStringConvertible {
         case let .unsupportedNode(type): "DSP module \(type.rawValue) is not implemented in this milestone."
         case let .channelFormatChanged(expected, actual): "Graph was prepared for \(expected) channels, received \(actual)."
         case let .sampleRateChanged(expected, actual): "Graph was prepared at \(expected) Hz, received \(actual) Hz."
+        case let .unsupportedSampleRate(sampleRate): "Sample rate \(sampleRate) Hz is outside the supported 8 kHz...192 kHz allocation bound."
         case let .parameterInvalidForSampleRate(parameter, value, sampleRate): "\(parameter.rawValue)=\(value) is invalid at \(sampleRate) Hz."
         }
     }
@@ -33,6 +35,9 @@ public struct CompiledGraph: Sendable {
 
     public init(plan: ProcessingPlan, sampleRate: Double, channelCount: Int) throws {
         try PlanValidator().validate(plan)
+        guard sampleRate.isFinite, (8_000...192_000).contains(sampleRate) else {
+            throw DSPError.unsupportedSampleRate(sampleRate)
+        }
         precondition(channelCount == 1 || channelCount == 2)
         let expectedFormat: ChannelFormat = channelCount == 1 ? .mono : .stereo
         guard plan.scope.channelFormat == expectedFormat else {
@@ -59,6 +64,8 @@ public struct CompiledGraph: Sendable {
                 return .biquad(try BiquadNode(kind: .peaking, frequency: node.parameters[.frequencyHz, default: 1_000], q: node.parameters[.q, default: 1], gainDB: node.parameters[.gainDB, default: 0], sampleRate: sampleRate, channelCount: channelCount))
             case .compressor:
                 return .compressor(CompressorNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
+            case .expander:
+                return .expander(ExpanderNode(parameters: node.parameters, sampleRate: sampleRate))
             case .deEsser:
                 return .deEsser(try DeEsserNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
             case .softClipper:
@@ -71,6 +78,10 @@ public struct CompiledGraph: Sendable {
                 return .saturator(SaturatorNode(driveDB: node.parameters[.driveDB, default: 0], mix: node.parameters[.mix, default: 1]))
             case .stereoWidth:
                 return .width(WidthNode(width: node.parameters[.width, default: 1], mix: node.parameters[.mix, default: 1]))
+            case .delay:
+                return .delay(DelayNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
+            case .reverb:
+                return .reverb(ReverbNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
             case .limiter:
                 return .limiter(LimiterNode(
                     ceilingDB: node.parameters[.ceilingDB, default: -1],
@@ -151,10 +162,13 @@ private enum CompiledNode: Sendable {
     case polarity
     case biquad(BiquadNode)
     case compressor(CompressorNode)
+    case expander(ExpanderNode)
     case deEsser(DeEsserNode)
     case softClipper(SoftClipperNode)
     case saturator(SaturatorNode)
     case width(WidthNode)
+    case delay(DelayNode)
+    case reverb(ReverbNode)
     case limiter(LimiterNode)
 
     mutating func process(_ buffer: inout AudioBuffer) {
@@ -164,10 +178,13 @@ private enum CompiledNode: Sendable {
             for channel in buffer.channels.indices { for frame in buffer.channels[channel].indices { buffer.channels[channel][frame] = -buffer.channels[channel][frame] } }
         case var .biquad(node): node.process(&buffer); self = .biquad(node)
         case var .compressor(node): node.process(&buffer); self = .compressor(node)
+        case var .expander(node): node.process(&buffer); self = .expander(node)
         case var .deEsser(node): node.process(&buffer); self = .deEsser(node)
         case let .softClipper(node): node.process(&buffer)
         case let .saturator(node): node.process(&buffer)
         case let .width(node): node.process(&buffer)
+        case let .delay(node): node.process(&buffer)
+        case let .reverb(node): node.process(&buffer)
         case var .limiter(node): node.process(&buffer); self = .limiter(node)
         }
     }
@@ -187,10 +204,13 @@ private enum CompiledNode: Sendable {
             }
         case var .biquad(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .biquad(node)
         case var .compressor(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .compressor(node)
+        case var .expander(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .expander(node)
         case var .deEsser(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .deEsser(node)
         case let .softClipper(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .saturator(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .width(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
+        case let .delay(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
+        case let .reverb(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case var .limiter(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .limiter(node)
         }
     }
@@ -200,10 +220,396 @@ private enum CompiledNode: Sendable {
         case var .gain(node): node.reset(); self = .gain(node)
         case var .biquad(node): node.reset(); self = .biquad(node)
         case var .compressor(node): node.reset(); self = .compressor(node)
+        case var .expander(node): node.reset(); self = .expander(node)
         case var .deEsser(node): node.reset(); self = .deEsser(node)
+        case let .delay(node): node.reset()
+        case let .reverb(node): node.reset()
         case var .limiter(node): node.reset(); self = .limiter(node)
         default: break
         }
+    }
+}
+
+/// A preallocated delay line whose reset is constant-time. Generation tags
+/// prevent stale samples from being observed after reset without clearing a
+/// potentially large buffer on the render callback.
+private final class GenerationDelayLine: @unchecked Sendable {
+    private let samples: UnsafeMutablePointer<Float>
+    private let capacity: Int
+    private let delaySamples: Int
+    private var writeIndex = 0
+    private var validSampleCount = 0
+
+    init(delaySamples: Int) {
+        self.delaySamples = max(1, delaySamples)
+        capacity = self.delaySamples + 1
+        samples = .allocate(capacity: capacity)
+        samples.initialize(repeating: 0, count: capacity)
+    }
+
+    deinit {
+        samples.deinitialize(count: capacity)
+        samples.deallocate()
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    func read() -> Float {
+        guard validSampleCount == delaySamples else { return 0 }
+        let readIndex = writeIndex >= delaySamples
+            ? writeIndex - delaySamples
+            : writeIndex + capacity - delaySamples
+        return samples[readIndex]
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    func write(_ sample: Float) {
+        samples[writeIndex] = sample
+        writeIndex += 1
+        if writeIndex == capacity { writeIndex = 0 }
+        if validSampleCount < delaySamples { validSampleCount += 1 }
+    }
+
+    func reset() {
+        writeIndex = 0
+        // No old sample can be read until every reachable delayed position has
+        // been overwritten after reset, so reset remains constant-time without
+        // a per-cell generation sidecar in the render callback.
+        validSampleCount = 0
+    }
+}
+
+/// Version-1 linked downward expander/gate. Hysteresis and hold protect musical
+/// tails from threshold chatter; range bounds the maximum attenuation.
+private struct ExpanderNode: Sendable {
+    private let thresholdDB: Double
+    private let thresholdLinear: Double
+    private let closeThresholdLinear: Double
+    private let ratio: Double
+    private let rangeDB: Double
+    private let detectorAttackCoefficient: Double
+    private let detectorReleaseCoefficient: Double
+    private let gainOpenCoefficient: Double
+    private let gainCloseCoefficient: Double
+    private let holdSamples: Int
+    private let mix: Double
+    private var detectorEnvelope = 0.0
+    private var gainReductionDB: Double
+    private var holdRemaining = 0
+    private var isOpen = false
+
+    init(parameters: [ParameterID: Double], sampleRate: Double) {
+        thresholdDB = parameters[.thresholdDB, default: -42]
+        thresholdLinear = pow(10, thresholdDB / 20)
+        closeThresholdLinear = pow(
+            10,
+            (thresholdDB - parameters[.hysteresisDB, default: 6]) / 20
+        )
+        ratio = parameters[.ratio, default: 4]
+        rangeDB = parameters[.rangeDB, default: 30]
+        let attackSeconds = parameters[.attackMS, default: 5] / 1_000
+        let releaseSeconds = parameters[.releaseMS, default: 180] / 1_000
+        detectorAttackCoefficient = exp(-1 / max(attackSeconds * sampleRate, 1))
+        detectorReleaseCoefficient = exp(-1 / max(releaseSeconds * sampleRate, 1))
+        gainOpenCoefficient = detectorAttackCoefficient
+        gainCloseCoefficient = detectorReleaseCoefficient
+        holdSamples = Int((parameters[.holdMS, default: 80] * sampleRate / 1_000).rounded())
+        mix = parameters[.mix, default: 1]
+        gainReductionDB = parameters[.rangeDB, default: 30]
+    }
+
+    mutating func process(_ buffer: inout AudioBuffer) {
+        for frame in 0..<buffer.frameCount {
+            var linkedLevel = abs(Double(buffer.channels[0][frame]))
+            if buffer.channelCount == 2 {
+                linkedLevel = max(linkedLevel, abs(Double(buffer.channels[1][frame])))
+            }
+            let gain = Float(updateGain(linkedLevel: linkedLevel))
+            buffer.channels[0][frame] *= gain
+            if buffer.channelCount == 2 { buffer.channels[1][frame] *= gain }
+        }
+    }
+
+    mutating func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            var linkedLevel = abs(Double(left[frame]))
+            if let right { linkedLevel = max(linkedLevel, abs(Double(right[frame]))) }
+            let gain = Float(updateGain(linkedLevel: linkedLevel))
+            left[frame] *= gain
+            if let right { right[frame] *= gain }
+        }
+    }
+
+    @inline(__always)
+    private mutating func updateGain(linkedLevel: Double) -> Double {
+        let detectorCoefficient = linkedLevel > detectorEnvelope
+            ? detectorAttackCoefficient
+            : detectorReleaseCoefficient
+        detectorEnvelope = linkedLevel + detectorCoefficient * (detectorEnvelope - linkedLevel)
+        if abs(detectorEnvelope) < 1e-30 { detectorEnvelope = 0 }
+
+        if detectorEnvelope >= thresholdLinear {
+            isOpen = true
+            holdRemaining = holdSamples
+        } else if isOpen {
+            if detectorEnvelope >= closeThresholdLinear {
+                holdRemaining = holdSamples
+            } else if holdRemaining > 0 {
+                holdRemaining -= 1
+            } else {
+                isOpen = false
+            }
+        }
+
+        let targetReductionDB: Double
+        if ratio <= 1 || isOpen {
+            targetReductionDB = 0
+        } else {
+            let levelDB = 20 * log10(max(detectorEnvelope, 1e-12))
+            targetReductionDB = min(rangeDB, max(0, (thresholdDB - levelDB) * (ratio - 1)))
+        }
+        let coefficient = targetReductionDB < gainReductionDB
+            ? gainOpenCoefficient
+            : gainCloseCoefficient
+        gainReductionDB = targetReductionDB + coefficient * (gainReductionDB - targetReductionDB)
+        if abs(gainReductionDB) < 1e-12 { gainReductionDB = 0 }
+        if gainReductionDB == 0 { return 1 }
+        let wetGain = pow(10, -gainReductionDB / 20)
+        return (1 - mix) + mix * wetGain
+    }
+
+    mutating func reset() {
+        detectorEnvelope = 0
+        gainReductionDB = rangeDB
+        holdRemaining = 0
+        isOpen = false
+    }
+}
+
+/// Version-1 fixed-time feedback delay. All storage is allocated while the
+/// graph is compiled. Damping and cross-feedback are bounded and deterministic.
+private final class DelayNode: @unchecked Sendable {
+    private let leftLine: GenerationDelayLine
+    private let rightLine: GenerationDelayLine?
+    private let feedback: Float
+    private let dampingPole: Float
+    private let stereoCrossfeed: Float
+    private let mix: Float
+    private var filteredLeft: Float = 0
+    private var filteredRight: Float = 0
+
+    init(parameters: [ParameterID: Double], sampleRate: Double, channelCount: Int) {
+        let delaySamples = max(
+            1,
+            Int((parameters[.delayTimeMS, default: 250] * sampleRate / 1_000).rounded())
+        )
+        leftLine = GenerationDelayLine(delaySamples: delaySamples)
+        rightLine = channelCount == 2 ? GenerationDelayLine(delaySamples: delaySamples) : nil
+        feedback = Float(parameters[.feedback, default: 0.25])
+        dampingPole = Float(parameters[.damping, default: 0.35] * 0.995)
+        stereoCrossfeed = Float(parameters[.stereoCrossfeed, default: 0])
+        mix = Float(parameters[.mix, default: 0.2])
+    }
+
+    func process(_ buffer: inout AudioBuffer) {
+        for frame in 0..<buffer.frameCount {
+            let right = buffer.channelCount == 2 ? buffer.channels[1][frame] : nil
+            let output = processSample(left: buffer.channels[0][frame], right: right)
+            buffer.channels[0][frame] = output.0
+            if let processedRight = output.1 { buffer.channels[1][frame] = processedRight }
+        }
+    }
+
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            let output = processSample(left: left[frame], right: right?[frame])
+            left[frame] = output.0
+            if let right, let processedRight = output.1 { right[frame] = processedRight }
+        }
+    }
+
+    @inline(__always)
+    private func processSample(left dryLeft: Float, right dryRight: Float?) -> (Float, Float?) {
+        let delayedLeft = leftLine.read()
+        let delayedRight = rightLine?.read() ?? 0
+        filteredLeft = delayedLeft + dampingPole * (filteredLeft - delayedLeft)
+        filteredRight = delayedRight + dampingPole * (filteredRight - delayedRight)
+        if abs(filteredLeft) < 1e-30 { filteredLeft = 0 }
+        if abs(filteredRight) < 1e-30 { filteredRight = 0 }
+
+        if let dryRight, let rightLine {
+            let feedbackLeft = filteredLeft * (1 - stereoCrossfeed) + filteredRight * stereoCrossfeed
+            let feedbackRight = filteredRight * (1 - stereoCrossfeed) + filteredLeft * stereoCrossfeed
+            leftLine.write(dryLeft + feedback * feedbackLeft)
+            rightLine.write(dryRight + feedback * feedbackRight)
+            return (
+                dryLeft * (1 - mix) + delayedLeft * mix,
+                dryRight * (1 - mix) + delayedRight * mix
+            )
+        }
+
+        leftLine.write(dryLeft + feedback * filteredLeft)
+        return (dryLeft * (1 - mix) + delayedLeft * mix, nil)
+    }
+
+    func reset() {
+        leftLine.reset()
+        rightLine?.reset()
+        filteredLeft = 0
+        filteredRight = 0
+    }
+}
+
+private final class FeedbackComb: @unchecked Sendable {
+    private let line: GenerationDelayLine
+    private let feedback: Float
+    private let dampingPole: Float
+    private var dampingMemory: Float = 0
+
+    init(delaySamples: Int, delaySeconds: Double, decaySeconds: Double, damping: Double) {
+        line = GenerationDelayLine(delaySamples: delaySamples)
+        feedback = Float(min(0.98, pow(10, -3 * delaySeconds / decaySeconds)))
+        dampingPole = Float(damping * 0.995)
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    func process(_ input: Float) -> Float {
+        let delayed = line.read()
+        dampingMemory = delayed + dampingPole * (dampingMemory - delayed)
+        if abs(dampingMemory) < 1e-30 { dampingMemory = 0 }
+        line.write(input + feedback * dampingMemory)
+        return delayed
+    }
+
+    func reset() {
+        line.reset()
+        dampingMemory = 0
+    }
+}
+
+private struct ScalarDiffusionAllpass: Sendable {
+    private let feedback: Float
+    private var memory: Float = 0
+
+    init(feedback: Double) {
+        self.feedback = Float(feedback)
+    }
+
+    @inline(__always)
+    mutating func process(_ input: Float) -> Float {
+        let output = memory - feedback * input
+        memory = input + feedback * output
+        if abs(memory) < 1e-30 { memory = 0 }
+        return output
+    }
+
+    mutating func reset() { memory = 0 }
+}
+
+/// Version-1 TrackSmith algorithmic room. This is a documented, bounded
+/// compact Schroeder-style topology, not a clone or measurement model of a
+/// Logic reverb. Two unequal feedback combs per channel establish the tail;
+/// one allocation-free one-sample allpass per channel provides bounded phase
+/// diffusion.
+private final class ReverbNode: @unchecked Sendable {
+    private let leftCombs: [FeedbackComb]
+    private let rightCombs: [FeedbackComb]
+    private var leftDiffusionA: ScalarDiffusionAllpass
+    private var rightDiffusionA: ScalarDiffusionAllpass
+    private let mix: Float
+
+    init(parameters: [ParameterID: Double], sampleRate: Double, channelCount: Int) {
+        let preDelaySeconds = parameters[.preDelayMS, default: 18] / 1_000
+        let roomScale = 0.75 + 0.5 * parameters[.roomSize, default: 0.5]
+        let decaySeconds = parameters[.decayTimeSeconds, default: 1.2]
+        let damping = parameters[.damping, default: 0.45]
+        let diffusionFeedback = 0.3 + 0.4 * parameters[.diffusion, default: 0.65]
+        let leftCombMS = [29.7, 41.1]
+        let rightCombMS = [30.8, 43.4]
+
+        leftCombs = leftCombMS.map { milliseconds in
+            let seconds = milliseconds * roomScale / 1_000 + preDelaySeconds
+            return FeedbackComb(
+                delaySamples: max(1, Int((seconds * sampleRate).rounded())),
+                delaySeconds: seconds,
+                decaySeconds: decaySeconds,
+                damping: damping
+            )
+        }
+        rightCombs = channelCount == 2
+            ? rightCombMS.map { milliseconds in
+                let seconds = milliseconds * roomScale / 1_000 + preDelaySeconds
+                return FeedbackComb(
+                    delaySamples: max(1, Int((seconds * sampleRate).rounded())),
+                    delaySeconds: seconds,
+                    decaySeconds: decaySeconds,
+                    damping: damping
+                )
+            }
+            : []
+        leftDiffusionA = ScalarDiffusionAllpass(feedback: diffusionFeedback)
+        rightDiffusionA = ScalarDiffusionAllpass(feedback: diffusionFeedback * 0.91)
+        mix = Float(parameters[.mix, default: 0.15])
+    }
+
+    func process(_ buffer: inout AudioBuffer) {
+        for frame in 0..<buffer.frameCount {
+            let right = buffer.channelCount == 2 ? buffer.channels[1][frame] : nil
+            let output = processSample(left: buffer.channels[0][frame], right: right)
+            buffer.channels[0][frame] = output.0
+            if let processedRight = output.1 { buffer.channels[1][frame] = processedRight }
+        }
+    }
+
+    @_optimize(speed)
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            let output = processSample(left: left[frame], right: right?[frame])
+            left[frame] = output.0
+            if let right, let processedRight = output.1 { right[frame] = processedRight }
+        }
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    private func processSample(left dryLeft: Float, right dryRight: Float?) -> (Float, Float?) {
+        var wetLeft: Float = 0
+        for comb in leftCombs { wetLeft += comb.process(dryLeft * 0.22) }
+        wetLeft *= 0.5
+        wetLeft = leftDiffusionA.process(wetLeft)
+
+        guard let dryRight else {
+            return (dryLeft * (1 - mix) + wetLeft * mix, nil)
+        }
+        var wetRight: Float = 0
+        for comb in rightCombs { wetRight += comb.process(dryRight * 0.22) }
+        wetRight *= 0.5
+        wetRight = rightDiffusionA.process(wetRight)
+        return (
+            dryLeft * (1 - mix) + wetLeft * mix,
+            dryRight * (1 - mix) + wetRight * mix
+        )
+    }
+
+    func reset() {
+        for comb in leftCombs { comb.reset() }
+        for comb in rightCombs { comb.reset() }
+        leftDiffusionA.reset()
+        rightDiffusionA.reset()
     }
 }
 

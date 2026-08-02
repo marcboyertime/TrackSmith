@@ -437,9 +437,20 @@ public struct ResearchPayloadValidator: Sendable {
     }
 
     private static func normalizedMediaType(_ value: String?) -> String {
-        value?.split(separator: ";", maxSplits: 1).first?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .lowercased() ?? ""
+        guard let value else { return "" }
+        let values = value.split(separator: ",", omittingEmptySubsequences: false).map {
+            $0.split(separator: ";", maxSplits: 1).first?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .lowercased() ?? ""
+        }
+        guard let first = values.first, !first.isEmpty else { return "" }
+        if values.allSatisfy({ $0 == first }) {
+            return first
+        }
+        // Content-Type is not a list-valued header. Preserve conflicting
+        // repeated values as a non-allowlisted identity so validation fails
+        // closed, while tolerating identical values combined by URLSession.
+        return values.joined(separator: ",")
     }
 
     private static func visibleHTMLText(_ html: String) -> String {

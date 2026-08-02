@@ -1,0 +1,214 @@
+{
+  "epistemicBoundary" : [
+    "These fixtures make transfer measurements reproducible; they do not by themselves establish musical suitability.",
+    "A rendered result is attributable only when the exact Logic version/build, channel format, plug-in identity, preset, every parameter, routing, gain stage, sample rate, buffer mode, latency mode, render path, input hash, and output hash are recorded.",
+    "Time-varying, stochastic, adaptive, look-ahead, oversampled, analog-modeled, and signal-dependent processors require repeated trials and cannot be reduced to one static response.",
+    "Real legally usable vocals, drums, bass, guitar, keys/synth, and mixes plus controlled listening tests remain required for production conclusions."
+  ],
+  "fixtureDate" : "2026-07-16",
+  "fixtures" : [
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 4,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "silence_mono.wav",
+      "frameCount" : 384000,
+      "purpose" : "Noise-floor, self-noise, modulation-tail, denormal, and false-output check.",
+      "sampleRate" : 96000,
+      "sha256" : "344c2ada244b3b02044ea007dcf00e38edf56ccf6e7f702b52f4d2d5da57e285"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 6,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "single_impulse_mono.wav",
+      "frameCount" : 576000,
+      "purpose" : "Linear impulse response, latency, polarity, delay, early-reflection, and tail inspection at a conservative level.",
+      "sampleRate" : 96000,
+      "sha256" : "d4860ad1d6f13d8900f6d4fb3f445473536ea4ba57ee6f65f28797e4939696bc"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 10,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "impulse_level_ladder_mono.wav",
+      "frameCount" : 960000,
+      "purpose" : "Level-dependent impulse response and nonlinear state comparison without assuming one transfer function.",
+      "sampleRate" : 96000,
+      "sha256" : "6f6cd47cf0628b0577e54ca3e26cf9c4e73055c6e2b3ef6ce050b7e4a496dcf1"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 12,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "log_sweep_20hz_20khz_mono.wav",
+      "frameCount" : 1152000,
+      "purpose" : "Broadband frequency-response, time variance, resonance, distortion-product, and tail characterization.",
+      "sampleRate" : 96000,
+      "sha256" : "71941fca91ab02ac3a03fac52680d52ad34557a36f9e4ee8f0e50458325ba782"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "amplitude_ladder_1khz_mono.wav",
+      "frameCount" : 768000,
+      "purpose" : "Input/output curve, threshold, knee, gain staging, clipping, gating, and level-dependent tone characterization.",
+      "sampleRate" : 96000,
+      "sha256" : "dc10f231c5cdaf6e87a563af2398a60d6244c10530d32c69f6477f76a0b92bee"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "multitone_mono.wav",
+      "frameCount" : 768000,
+      "purpose" : "Steady broadband response and intermodulation inspection under simultaneous partials.",
+      "sampleRate" : 96000,
+      "sha256" : "ab09ee45db362079d97bf533f523e77112ad929a6309e293492c7f05f7bf6a37"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "smpte_imd_60hz_7khz_mono.wav",
+      "frameCount" : 768000,
+      "purpose" : "SMPTE-style intermodulation probe using a 4:1 low/high-frequency amplitude relationship.",
+      "sampleRate" : 96000,
+      "sha256" : "f35b5efae6f9a85b3194f70e770ee0e99f7de29921be9f6a83c566cfe59264db"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "ccif_imd_19khz_20khz_mono.wav",
+      "frameCount" : 768000,
+      "purpose" : "High-frequency two-tone difference-product and alias/nonlinearity probe.",
+      "sampleRate" : 96000,
+      "sha256" : "fb735a09d34730b32ad427aa507f8672ee1e0f792b026b8f6e5c5f643330a4a5"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 10,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "deterministic_noise_bursts_mono.wav",
+      "frameCount" : 960000,
+      "purpose" : "Attack/release, envelope, gate, transient, diffusion, and tail behavior over repeated dynamic bursts.",
+      "sampleRate" : 96000,
+      "sha256" : "3063fffe78dbb0a72a19eae9d4f5872ad79ef88618acc2433df6c135900c3eeb"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8.75,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "guitar_like_dynamic_plucks_mono.wav",
+      "frameCount" : 840000,
+      "purpose" : "Musically structured guitar-range audition probe with multiple pitches and input levels; not a substitute for real guitar fixtures.",
+      "sampleRate" : 96000,
+      "sha256" : "0015fdaea2808818b5407010f91e16da511dcd479383a9762fbe874ee2985429"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8.75,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "bass_like_dynamic_plucks_mono.wav",
+      "frameCount" : 840000,
+      "purpose" : "Musically structured bass-range audition probe with multiple pitches and input levels; not a substitute for real bass fixtures.",
+      "sampleRate" : 96000,
+      "sha256" : "55312ca423601eca01d55c061105a87c667099237e90ba876fc7cca9e7be42ed"
+    },
+    {
+      "channelCount" : 1,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "vocal_like_mono.wav",
+      "frameCount" : 768000,
+      "purpose" : "Deterministic speech-like harmonic/noise envelope for production-chain regression; not a perceptual-quality reference.",
+      "sampleRate" : 96000,
+      "sha256" : "abaf4f467a55e19ff2e141154d9549742e06a18e91cd8706ee7e18c7782167c2"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "stereo_in_phase.wav",
+      "frameCount" : 768000,
+      "purpose" : "Unity-width, balance, channel equality, and mono-sum baseline.",
+      "sampleRate" : 96000,
+      "sha256" : "61d9c2878dc755c589fce49819a3c61b37d796becfeffbf2e16c0c5b192ed882"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "stereo_left_only.wav",
+      "frameCount" : 768000,
+      "purpose" : "Left-input transfer, crossfeed, channel mapping, and stereo-matrix identification.",
+      "sampleRate" : 96000,
+      "sha256" : "e2813ffa5a3bf9abfa6a8fd2ccdc2e35bf8d0e9f7af31e459e8c196a00241db3"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "stereo_right_only.wav",
+      "frameCount" : 768000,
+      "purpose" : "Right-input transfer, crossfeed, channel mapping, and stereo-matrix identification.",
+      "sampleRate" : 96000,
+      "sha256" : "0f08d8ea27dd3e5864c296c4eb973770af00ab90a1241ee9a02553d5387d642e"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "stereo_anti_phase.wav",
+      "frameCount" : 768000,
+      "purpose" : "Side-only/mono-cancellation and phase-sensitive processor behavior check.",
+      "sampleRate" : 96000,
+      "sha256" : "f7c27667e0627fb1750194589532d1e8a0f26262932130b00498a68d30806ad8"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "stereo_one_sample_offset.wav",
+      "frameCount" : 768000,
+      "purpose" : "Interchannel latency, phase rotation, width, and mono-compatibility sensitivity check.",
+      "sampleRate" : 96000,
+      "sha256" : "6d3d271a271f99e41353c121070bc3d97624dd6700bbe5cbf7dbb5c21bacb491"
+    },
+    {
+      "channelCount" : 2,
+      "deterministic" : true,
+      "durationSeconds" : 8,
+      "encoding" : "PCM signed 24-bit WAV",
+      "fileName" : "stereo_mid_low_side_high.wav",
+      "frameCount" : 768000,
+      "purpose" : "Frequency-dependent stereo processing check with mono low frequencies and anti-phase high frequencies.",
+      "sampleRate" : 96000,
+      "sha256" : "0e1df64f89f0392af01bc0b022967e0a2a68b0ff7fa637f764d9e582bd86c775"
+    }
+  ],
+  "generatedBy" : "TestSignalGenerator",
+  "product" : "TrackSmith",
+  "sampleRate" : 96000,
+  "schemaVersion" : "1.0",
+  "suiteVersion" : "logic-native-measurement-suite-v1"
+}

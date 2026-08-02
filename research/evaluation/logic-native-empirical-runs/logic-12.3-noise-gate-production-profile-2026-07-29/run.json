@@ -1,0 +1,1060 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-noise-gate-production-profile-48k-2026-07-29",
+  "recordedAt": "2026-07-29T18:34:43-04:00",
+  "status": "partial",
+  "identityType": "effect_or_native_audio_tool",
+  "identityIdentifier": "logic-pro-12.3:noise-gate",
+  "identityName": "Noise Gate",
+  "product": "TrackSmith",
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "not captured by the Project or Section bounce lane",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "not captured; no low-latency-mode claim is made"
+  },
+  "sourceContext": {
+    "frozenBaselineRevision": "a19c0b7e9dbee7909552feb3547fa607a312f2db",
+    "historicalRunExtendedWithoutRewrite": null,
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureGenerator": "tools/TestSignalGenerator/Sources/TestSignalGenerator/main.swift",
+    "fixtureSuite": "logic-native-measurement-suite-v1",
+    "fixtureCompatibility": "The retained source fixtures are deterministic 48 kHz PCM24 files copied into this run and independently hash-ledgered.",
+    "claimClass": "measured_behavior"
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/amplitude_ladder_1khz_mono.wav",
+        "fileSHA256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+        "pcmSHA256": "bcb8df1858ceedca288cd9a207de9adc21fd370ff03891a970a051ee38949370",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 384000,
+        "durationSeconds": 8.0
+      },
+      {
+        "artifactPath": "fixtures/deterministic_noise_bursts_mono.wav",
+        "fileSHA256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+        "pcmSHA256": "a4fc7c7db76b5b67f1471b1573c593a0135560b5e9410a652d734ce14cf47fcb",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 480000,
+        "durationSeconds": 10.0
+      },
+      {
+        "artifactPath": "fixtures/vocal_like_mono.wav",
+        "fileSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+        "pcmSHA256": "ed37a34810d99ad6d16466165dd3c7112413254441421e000271e235cf201581",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 384000,
+        "durationSeconds": 8.0,
+        "identityBoundary": "This deterministic synthetic fixture is representative test material, not a human performance or independent listening case."
+      }
+    ],
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The deterministic fixture files remain immutable copies in the run directory and their hashes match the recorded inputs."
+  },
+  "nativeState": {
+    "presetName": "Default Preset, with separately recorded controlled variants",
+    "channelControlMode": "Mono source through one stereo Noise Gate insert and interleaved Stereo Out",
+    "inheritedInsertBoundary": "An inherited Compressor insert remained explicitly bypassed. Noise Gate was added as a separate insert after replacement of the inherited slot caused the retained Logic crash.",
+    "defaultGateState": {
+      "mode": "Gate",
+      "thresholdDB": -50.0,
+      "reductionDB": -100.0,
+      "attackMS": 3.0,
+      "holdMS": 40.0,
+      "releaseMS": 10.0,
+      "hysteresisDB": -3.0,
+      "lookaheadMS": 0.0,
+      "detectorFilterEnabled": false,
+      "detectorFilterMode": "Bandpass",
+      "detectorLowHz": 20.0,
+      "detectorHighHz": 20000.0,
+      "monitor": false,
+      "sidechain": "None"
+    },
+    "controlledGateState": {
+      "mode": "Gate",
+      "thresholdDB": -30.0,
+      "reductionDB": -60.0,
+      "attackMS": 1.0,
+      "holdMS": 100.0,
+      "releaseMS": 253.1,
+      "hysteresisDB": -12.0,
+      "lookaheadMS": 0.0,
+      "detectorFilterEnabled": false,
+      "monitor": false,
+      "sidechain": "None"
+    },
+    "controlledDuckerState": {
+      "mode": "Ducker",
+      "thresholdDB": -30.0,
+      "duckingDB": -20.0,
+      "attackMS": 1.0,
+      "holdMS": 100.0,
+      "releaseMS": 253.1,
+      "hysteresisDB": -12.0,
+      "lookaheadMS": 0.0,
+      "detectorFilterEnabled": false,
+      "monitor": false,
+      "sidechain": "None"
+    },
+    "controlledFilteredGateState": {
+      "mode": "Gate",
+      "thresholdDB": -30.0,
+      "reductionDB": -60.0,
+      "attackMS": 1.0,
+      "holdMS": 100.0,
+      "releaseMS": 253.1,
+      "hysteresisDB": -12.0,
+      "lookaheadMS": 0.0,
+      "detectorFilterEnabled": true,
+      "detectorFilterMode": "Bandpass",
+      "detectorLowHz": 240.0,
+      "detectorHighHz": 6900.0,
+      "monitor": false,
+      "sidechain": "None"
+    },
+    "savedStateEvidence": "After a normal save, normal Logic quit, and project reopen, the controlled Gate state visibly restored with threshold -30 dB, reduction -60 dB, attack 1 ms, hold 100 ms, release 253.1 ms, hysteresis -12 dB, lookahead 0 ms, filter disabled, and no external sidechain. Two post-reload renders exactly matched the settled pre-save decoded PCM.",
+    "importantInterpretation": "These are bounded directly observed Logic 12.3 states. They do not establish every parameter interaction, external-sidechain behavior, private detector topology, musical usefulness, or TrackSmith authority to control Logic."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section using the active cycle range",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRatesHz": [
+      48000
+    ],
+    "outputMode": "Interleaved",
+    "normalize": "Off",
+    "includeAudioTail": false,
+    "includeTempoInformation": false,
+    "dither": "None",
+    "mode": "Automatic",
+    "renderSchedulingBoundary": "Logic exposed Automatic in the bounce dialog; no realtime/offline scheduling claim is made.",
+    "settlingRule": "Retain first-transition output separately and require repeated decoded-PCM identity before a settled-state repeatability claim.",
+    "baselineGate": "The Noise Gate header-bypass render had to map the correct 48 kHz mono amplitude ladder sample-exactly to both Stereo Out channels."
+  },
+  "directHostEvidence": true,
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_recorded_stereo_header_bypass_and_default_gate_state",
+      "evidence": "Header bypass mapped the correct 48 kHz mono amplitude ladder sample-exactly to both rendered channels. The default Gate state and the controlled post-reload state are directly captured."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_gate_and_ducker_internal_detector_route_only",
+      "evidence": "Gate and Ducker were rendered through one internal-detector stereo insert route. External sidechains, Monitor routing, alternate channel layouts, and other host routes remain unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_default_and_one_controlled_timing_threshold_hysteresis_state",
+      "evidence": "Default and one controlled threshold, depth, attack, hold, release, and hysteresis combination were rendered, plus one detector-bandpass variant. No continuous grid or exhaustive interaction sweep is claimed."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_zero_lag_gain_peak_and_bounded_event_recovery_for_recorded_fixtures",
+      "evidence": "Analysis records bounded lag estimates, polarity, least-squares gain, peak, first and last nonzero frames, and event recovery for the exact amplitude, burst, and vocal-like fixtures. A dedicated impulse latency and tail profile remains unrun."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_settled_default_bursts_and_vocal_like_states_partial_for_transition_sensitive_variants",
+      "evidence": "All three default-burst renders and all three controlled vocal-like renders were decoded-PCM identical. For controlled Gate, Ducker, detector-filter, and default amplitude-ladder states, the first render differed while renders two and three were decoded-PCM identical and are explicitly treated as settled state."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_one_controlled_gate_state",
+      "evidence": "The controlled Gate values visibly restored after normal save/quit/reopen. Two post-reload renders were decoded-PCM identical to each other and exactly matched the settled pre-save PCM hash 30a58459678562e74032c9cdce738a6e55445ef3cf7b2af66204f1f007aa067a."
+    },
+    "gate_ducker_threshold_hysteresis_reduction_and_input_level_states": {
+      "status": "partial_bounded_gate_ducker_and_input_ladder_states",
+      "evidence": "One default Gate, one controlled Gate, and one controlled Ducker state were rendered. The amplitude ladder bounds the default Gate response at the declared levels, but no exhaustive threshold, depth, or hysteresis grid is claimed."
+    },
+    "attack_hold_release_lookahead_chatter_retrigger_and_recovery": {
+      "status": "partial_two_timing_states_zero_lookahead_and_burst_recovery",
+      "evidence": "Default 3/40/10 ms and controlled 1/100/253.1 ms attack/hold/release states were rendered at zero lookahead with deterministic burst retriggers. Lookahead above zero, a parameter grid, and dedicated chatter limits remain unrun."
+    },
+    "sidechain_filter_frequency_dependence_and_false_open_close_behavior": {
+      "status": "partial_one_internal_detector_bandpass_state",
+      "evidence": "One 240 Hz to 6900 Hz internal-detector bandpass state produced a stable but different output from the unfiltered controlled state. External sidechain input, cutoff grids, detector monitoring, and dedicated false-open/false-close probes remain unrun."
+    },
+    "breath_room_decay_cymbal_tail_note_end_and_noise_floor_preservation": {
+      "status": "partial_one_synthetic_vocal_like_fixture_only",
+      "evidence": "One deterministic vocal-like fixture was rendered three times in the controlled Gate state. Real breaths, room decay, cymbal tails, instrumental note ends, noise-floor preservation, and participant listening remain unrun."
+    }
+  },
+  "measurements": {
+    "bypass": {
+      "renderFileSHA256": "6fc8c581b58ee6412bf830442dcf869111ebd38a947875e460d841e2f5443d85",
+      "renderPCMHash": "3597f792d36a8bcb4ab9c4456d0e2499c5c9784d9f629766b971831ff5b0cae4",
+      "sourceMappedSampleExactOnBothRenderedChannels": true,
+      "boundedLagFrames": 0,
+      "leastSquaresGainDB": 0.0,
+      "maximumAbsoluteErrorIntegerCount": 0
+    },
+    "defaultGateAmplitudeLadder": {
+      "firstTransitionPCMHash": "926af887c3d0f1f3ba64040e3c51f883498b99c779bdd42f002c70abce0c05d1",
+      "settledDecodedPCMRepeatCount": 2,
+      "settledPCMHash": "be2bf37ae9747294e950d793b34780d94edaf30c64230d2f8921ed9ec9f52f9a",
+      "firstTransitionFirstNonzeroFrame": 2,
+      "settledFirstNonzeroFrame": 77,
+      "steadySegments": [
+        {
+          "declaredInputPeakDBFS": -60.0,
+          "renderedPeakDBFS": -138.47379800543135,
+          "leastSquaresGainDB": -82.4087941016804
+        },
+        {
+          "declaredInputPeakDBFS": -48.0,
+          "renderedPeakDBFS": -47.99990895779799,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -36.0,
+          "renderedPeakDBFS": -36.00003117207963,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -30.0,
+          "renderedPeakDBFS": -30.000002514143702,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -24.0,
+          "renderedPeakDBFS": -24.000006281265822,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -18.0,
+          "renderedPeakDBFS": -18.00000146465276,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -12.0,
+          "renderedPeakDBFS": -12.000000253286988,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -6.0,
+          "renderedPeakDBFS": -6.000000490675784,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -3.0,
+          "renderedPeakDBFS": -2.9999995180030155,
+          "leastSquaresGainDB": 0.0
+        },
+        {
+          "declaredInputPeakDBFS": -1.0,
+          "renderedPeakDBFS": -0.9999997091320568,
+          "leastSquaresGainDB": 0.0
+        }
+      ],
+      "interpretationBoundary": "The default -50 dB threshold state strongly suppressed the steady -60 dB segment while the analyzed -48 dB and higher steady segments passed at unity. This does not establish the exact switching threshold, knee, detector topology, or behavior for other frequencies and envelopes."
+    },
+    "defaultGateNoiseBursts": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "755434c5bf1695b0cf59788b7902ef08bf5ad19898bbbdbe719f2227eeb3f665",
+      "firstNonzeroFrame": 48004,
+      "lastNonzeroFrame": 400799,
+      "nonzeroSampleCount": 134382,
+      "peakDBFS": -2.9999995180030155,
+      "rmsDBFS": -29.07541831221144,
+      "leastSquaresGainDB": -0.10383791666232009,
+      "zeroLagCorrelation": 0.9972098665212308
+    },
+    "controlledGateNoiseBursts": {
+      "firstTransitionPCMHash": "5943d93d973bfee1bfd12ae9f1aff4b8fb3eec21e1f21ab40b1ca55027ea5d6b",
+      "settledDecodedPCMRepeatCount": 2,
+      "settledPCMHash": "30a58459678562e74032c9cdce738a6e55445ef3cf7b2af66204f1f007aa067a",
+      "firstNonzeroFrame": 48001,
+      "lastNonzeroFrame": 400799,
+      "nonzeroSampleCount": 134392,
+      "peakDBFS": -2.9999995180030155,
+      "rmsDBFS": -29.006431110940106,
+      "leastSquaresGainDB": -0.014157932868445747,
+      "zeroLagCorrelation": 0.9995883962039217
+    },
+    "controlledGateReload": {
+      "visibleControlledStateRestored": true,
+      "acceptedPostReloadDecodedPCMRepeatCount": 2,
+      "acceptedPostReloadPCMHash": "30a58459678562e74032c9cdce738a6e55445ef3cf7b2af66204f1f007aa067a",
+      "postReloadPairPCMExact": true,
+      "settledPreSaveVersusPostReloadPCMExact": true
+    },
+    "controlledDuckerNoiseBursts": {
+      "firstTransitionPCMHash": "9b018c72fb501be2064ed8657d9dd491460fbedf546f3e294aacdabba1668f7d",
+      "settledDecodedPCMRepeatCount": 2,
+      "settledPCMHash": "9e73ca9c56471008d95b531f92950f2a8bdb8725b94b849eb43ace35ce0576d9",
+      "firstNonzeroFrame": 48001,
+      "lastNonzeroFrame": 400799,
+      "nonzeroSampleCount": 134386,
+      "peakDBFS": -16.965355417246325,
+      "rmsDBFS": -48.59696277612531,
+      "leastSquaresGainDB": -19.873481794570395,
+      "zeroLagCorrelation": 0.9691290147774618,
+      "interpretationBoundary": "The least-squares gain over the full fixture was about -19.87 dB for the exact Ducker state. This does not make every sample a fixed -20 dB gain or characterize private detector timing."
+    },
+    "controlledFilteredGateNoiseBursts": {
+      "firstTransitionPCMHash": "44184b17133a5e8004e0c4535691b70fd795957cb88c572fa76bb6c5d2a67cb5",
+      "settledDecodedPCMRepeatCount": 2,
+      "settledPCMHash": "40e895d7b7e2a53ae65d8a57d0049c6efa48bdecfaf168f1ff336f8b8fdc6a91",
+      "firstNonzeroFrame": 48001,
+      "lastNonzeroFrame": 400799,
+      "nonzeroSampleCount": 134392,
+      "peakDBFS": -2.9999995180030155,
+      "rmsDBFS": -29.012115964377124,
+      "leastSquaresGainDB": -0.02389596861277296,
+      "zeroLagCorrelation": 0.9991220572312969,
+      "interpretationBoundary": "The one internal-detector bandpass state changed detector decisions relative to the unfiltered state. It is not a measured audio-path transfer function or an exhaustive frequency-dependence profile."
+    },
+    "controlledGateVocalLike": {
+      "acceptedDecodedPCMRepeatCount": 3,
+      "acceptedPCMHash": "31ddace48cc6b6ec345b71ac0a97f81e0618f972f8a59bc5bd29a602f118240d",
+      "firstNonzeroFrame": 6,
+      "lastNonzeroFrame": 362399,
+      "nonzeroSampleCount": 297584,
+      "peakDBFS": -8.102061153634278,
+      "rmsDBFS": -18.655759229464458,
+      "leastSquaresGainDB": -0.0005837734882397095,
+      "zeroLagCorrelation": 0.9999702280400871,
+      "interpretationBoundary": "This is repeatable behavior on one deterministic vocal-like fixture. It is not a listening result and does not establish breath preservation, vocal quality, preference, or musical usefulness."
+    },
+    "measurementBoundary": "All values describe only the exact recorded states, fixtures, environment, routing, cycle ranges, and analysis rules. They neither identify Apple's private gate implementation nor prove transparency, cleanup quality, decay preservation, preference, or musical usefulness."
+  },
+  "stateTransitionFindings": [
+    "The default noise-burst state produced three decoded-PCM-identical renders, while the default amplitude-ladder state produced a distinct first-transition render followed by an exact settled pair.",
+    "The controlled Gate, controlled Ducker, and detector-bandpass states each produced a distinct first-transition render followed by an exact decoded-PCM pair.",
+    "The controlled Gate state restored visibly after normal save/quit/reopen, and its two post-reload renders exactly matched the settled pre-save decoded PCM.",
+    "The controlled vocal-like state produced three decoded-PCM-identical renders.",
+    "First-transition output is retained as state-transition evidence and is not silently merged into settled-repeat claims."
+  ],
+  "excludedAttempts": [
+    {
+      "artifacts": [
+        "artifacts/rejected-normalize-on-noise-gate-bypass-amplitude-ladder.wav",
+        "measurements/rejected-normalize-on-noise-gate-bypass-amplitude-ladder.analysis.json"
+      ],
+      "reason": "Retained and rejected because Logic bounce Normalize was On. The output cannot establish bypass identity or the recorded processor response."
+    },
+    {
+      "artifacts": [
+        "artifacts/rejected-wrong-44100-source-noise-gate-bypass-amplitude-ladder.wav",
+        "measurements/rejected-wrong-44100-source-noise-gate-bypass-amplitude-ladder.analysis.json"
+      ],
+      "reason": "Retained and rejected because the source region was an inherited 44.1 kHz amplitude ladder rather than the accepted 48 kHz fixture. The later Track 2 bypass uses the correct PCM-identical 48 kHz source."
+    },
+    {
+      "artifacts": [
+        "artifacts/rejected-logic-crash-during-inherited-compressor-slot-replacement.ips",
+        "screenshots/rejected-logic-crash-after-inherited-compressor-slot-replacement.png"
+      ],
+      "reason": "Retained and rejected because Logic crashed while replacing an inherited Compressor slot. The accepted path reopened Logic, preserved the inherited insert in bypass, and added Noise Gate as a separate insert."
+    }
+  ],
+  "measurementAssertions": [
+    {
+      "artifactPath": "measurements/noise-gate-bypass-amplitude-ladder.analysis.json",
+      "jsonPath": [
+        "comparison",
+        "source_broadcast_pcm_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "be2bf37ae9747294e950d793b34780d94edaf30c64230d2f8921ed9ec9f52f9a"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "be2bf37ae9747294e950d793b34780d94edaf30c64230d2f8921ed9ec9f52f9a"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-default-noise-bursts-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "755434c5bf1695b0cf59788b7902ef08bf5ad19898bbbdbe719f2227eeb3f665"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "30a58459678562e74032c9cdce738a6e55445ef3cf7b2af66204f1f007aa067a"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-controlled-gate-reload-noise-bursts-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "30a58459678562e74032c9cdce738a6e55445ef3cf7b2af66204f1f007aa067a"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "9e73ca9c56471008d95b531f92950f2a8bdb8725b94b849eb43ace35ce0576d9"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r2.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "40e895d7b7e2a53ae65d8a57d0049c6efa48bdecfaf168f1ff336f8b8fdc6a91"
+    },
+    {
+      "artifactPath": "measurements/noise-gate-controlled-gate-vocal-like-r3.analysis.json",
+      "jsonPath": [
+        "rendered",
+        "pcm_sha256"
+      ],
+      "equals": "31ddace48cc6b6ec345b71ac0a97f81e0618f972f8a59bc5bd29a602f118240d"
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "The header-bypass render mapped the correct 48 kHz mono amplitude ladder sample-exactly to both rendered channels.",
+      "In the exact default Gate state, the steady -60 dBFS ladder segment was strongly suppressed while the analyzed -48 dBFS and higher segments passed at unity.",
+      "Default and controlled Gate, Ducker, and one internal-detector bandpass state produced artifact-backed, repeatable bounded responses to the deterministic burst fixture.",
+      "Transition-sensitive states produced a distinct first render followed by exact settled repeats; the transition output is retained separately.",
+      "The controlled Gate state recovered visibly and decoded-PCM exactly across normal save, quit, and reload.",
+      "The controlled Gate state repeated exactly on one deterministic vocal-like fixture."
+    ],
+    "inferredConsequences": [
+      "Typed production knowledge must preserve mode, threshold, depth, attack, hold, release, hysteresis, lookahead, detector filter, sidechain route, source identity, and first-transition versus settled-state provenance.",
+      "A filename or preset label is insufficient to establish a stable render; decoded-PCM repeatability and explicit transition handling are required.",
+      "Detector-filter evidence must not be represented as an audio-path transfer function."
+    ],
+    "professionalPracticeHeuristics": [
+      "Threshold, hysteresis, depth, attack, hold, release, detector filtering, source decay, and room/noise behavior remain source- and role-dependent production decisions.",
+      "A gate or ducker can meet objective repeatability bounds while still requiring listening to judge chatter, breath loss, cymbal or note-tail damage, and perceived naturalness."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "Noise Gate is not declared transparent, natural, clean, superior, or musically useful.",
+      "No general behavior is claimed for external sidechains, Monitor mode, lookahead above zero, alternate sample rates, mono instances, stereo detector linking, automation, parameter smoothing, exhaustive filter cutoffs, or untested parameter interactions.",
+      "No private detector, envelope, hysteresis, filter, timing, or smoothing implementation is identified.",
+      "No deterministic synthetic fixture is represented as independent human musical evidence.",
+      "No TrackSmith authority to inspect, insert, reorder, automate, or control Logic Noise Gate is granted."
+    ]
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient for a bounded milestone Noise Gate profile because it directly captures exact bypass; default and controlled Gate states; one controlled Ducker state; threshold, depth, hysteresis, and two timing states; one internal-detector bandpass state; first-transition versus settled behavior; exact settled repeatability; exact save/reload recovery; and one deterministic vocal-like fixture. It remains partial in the exhaustive campaign and listening-decisive for musical outcomes.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "results": [],
+    "statement": "No participant completed a controlled Noise Gate listening protocol for this run. Objective bypass, threshold, timing, detector-filter, Ducker, repeatability, and reload evidence is not represented as breath or decay preservation, transparency, preference, or musical usefulness."
+  },
+  "executionBoundary": "manual_disposable_logic_project_no_tracksmith_native_host_authority",
+  "exactTransferCharacterized": false,
+  "project": {
+    "archives": [
+      {
+        "name": "TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29",
+        "archivePath": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx.zip",
+        "archiveSHA256": "a042881b89a9b55f99df6418d4befc744aeb23359baf7f445b63721e9c8a9bf0",
+        "sampleRateHz": 48000,
+        "includedAssets": [
+          "Audio files"
+        ]
+      }
+    ],
+    "archivesClosedBeforePackaging": true,
+    "archiveIntegrity": "The ZIP archive passed unzip -t with no errors after Logic closed the project.",
+    "tempoBPM": 120,
+    "cycleRanges": {
+      "amplitudeLadder": "exactly 8.000 seconds",
+      "noiseBursts": "exactly 10.000 seconds",
+      "vocalLike": "exactly 8.000 seconds"
+    },
+    "trackChannelFormats": [
+      "mono fixtures through a stereo Noise Gate instance and interleaved Stereo Out"
+    ],
+    "trackOutput": "Stereo Out",
+    "trackVolumeDB": 0.0,
+    "trackPan": "center",
+    "outputVolumeDB": 0.0,
+    "sendsPresent": false,
+    "volumeAutomationPresent": false,
+    "panAutomationPresent": false,
+    "metronomeEnabled": false,
+    "sourceFilesAreGeneratedCopies": true
+  },
+  "modelContextSummary": "Bounded direct Logic 12.3 build-6674 Noise Gate evidence at 48 kHz/PCM24 covers sample-exact header bypass; one default and one controlled Gate state; one controlled Ducker state; threshold, depth, hysteresis, and two attack/hold/release states at zero lookahead; one 240 Hz to 6900 Hz internal-detector bandpass state; first-transition versus settled behavior; decoded-PCM repeatability; exact controlled-state save/reload recovery; and one deterministic vocal-like fixture. The default -50 dB Gate strongly suppressed the analyzed -60 dBFS steady segment while -48 dBFS and higher segments passed at unity. Transition-sensitive variants produced a distinct first render followed by exact settled repeats. No participant listening, real-source decay-preservation result, external sidechain, lookahead above zero, mono/stereo detector matrix, sample-rate grid, automation, private topology, musical-superiority claim, or TrackSmith Logic-control authority is established.",
+  "artifactFiles": [
+    {
+      "path": "artifacts/noise-gate-bypass-amplitude-ladder.wav",
+      "sha256": "6fc8c581b58ee6412bf830442dcf869111ebd38a947875e460d841e2f5443d85",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r1.wav",
+      "sha256": "edde01161ef16491580d429c5b250e298388c2953ce2d204c47fb0aeb278f913",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r2.wav",
+      "sha256": "80b5b9ee653a6dee0295c9a5543872dacc900fcfb012e9479a8fdaf2e671e9cd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r3.wav",
+      "sha256": "149792198ae70b6e6bd633cfead107a07e6fd964813775be06980aabd8d509c8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-reload-noise-bursts-r1.wav",
+      "sha256": "dc487fc28cffb66c36865a8d45be9adeb0fe8e3922dd4d658d634a8d135acc7b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-reload-noise-bursts-r2.wav",
+      "sha256": "84becbbafebaa22b7a12efb6f05ff1b8aa96abde660dac8fb2c2b910fce8b02e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r1.wav",
+      "sha256": "55c64cadf087094998f0377c167f76dbfd70652ad63ecbf836d09940a7a04c97",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r2.wav",
+      "sha256": "fb1a58d8ebf724e218935e6c13bd915c55df377993b77c2de297720192003938",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r3.wav",
+      "sha256": "7f657786090ae8908882ab91eb556c09ecd893077fbfb9203e58021fe9da3864",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-vocal-like-r1.wav",
+      "sha256": "360c0c8dccca9afddd7e17d3f266b735fc7e1a0be0bb9cbbf004499586b028ca",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-vocal-like-r2.wav",
+      "sha256": "5e4fc1b33f06ab7879660780a7961eb42eefe7c7829dcb7de318a13a15fce801",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-controlled-gate-vocal-like-r3.wav",
+      "sha256": "6ba3cb131511cc3bc3356aa9af980c1c215e9c5457bf9c4b2cc11c8ebeb43929",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r1.wav",
+      "sha256": "5c06ce8835d5090531a87cd4831aca64cc0d105d942edeae1ea13492bede7553",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r2.wav",
+      "sha256": "ed06ea3c523e3ac0cbc50c5ece1dbfd329aed78e43b7813fa26b683b5db13968",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r3.wav",
+      "sha256": "246e1f9f5251e180f5f9312a588ffefa3f4db842b3207f00fb89a5d3e3ae1287",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-default-noise-bursts-r1.wav",
+      "sha256": "6f3e56ba9e1b4e1a019ab8f7363cf10e68672a4eab0ba4713ce1fffc2450d9ee",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-default-noise-bursts-r2.wav",
+      "sha256": "698ce4ef7b7a6c456965e83c5e98d877f121b0cf6acb15e86613d48dce1d587e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-default-noise-bursts-r3.wav",
+      "sha256": "190d7afba4ae874335552fa034463122622402431d123b1b32646e6c5dc198e5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r1.wav",
+      "sha256": "7360ef927d0cc431ced9aeacd73bc2c83e123a9e31fa9a0ea79fe72438a9529f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r2.wav",
+      "sha256": "4327d10181e8c8c290fd50f5e07645a3bd90fb54f72a0ec1dc28f5ad2e9f5190",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r3.wav",
+      "sha256": "f45394ee9bf7bc6fa287b9d33d2944e6a4c669c068c458c44b67c4dfc63e0cc3",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-logic-crash-during-inherited-compressor-slot-replacement.ips",
+      "sha256": "74e6b7d4114381685523ab04d9aa63ba197e5df0a0fa48516a8f5d3b4ff3bcbf",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "artifacts/rejected-normalize-on-noise-gate-bypass-amplitude-ladder.wav",
+      "sha256": "0f0d986949f1836886a6e0792812f7d87565e8c5d94787c930cb55aea0067a4d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-wrong-44100-source-noise-gate-bypass-amplitude-ladder.wav",
+      "sha256": "41eb86a3407ee44987b01ac94899a360ec28b4cd490d60323573c585c44a4b6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "ea78a075a9fdc5c5dd2703d90f409a9ed87523ab59207ba5a5f434f4980df4f1",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "measurements/noise-gate-bypass-amplitude-ladder.analysis.json",
+      "sha256": "24fb264ee9a9d3b46879a1832157f4617d080ec7cf08f3bb6ef0128b8576bb99",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r1.analysis.json",
+      "sha256": "6662a4f30a711e25b631b56f7ca4c71c18959d89ecb3e4cf0ce47226619fa00b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r2.analysis.json",
+      "sha256": "7327960aa17cb631822be2414026936f9579bba0f43815b7726de5efd9def3b3",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-bandpass-240hz-6900hz-noise-bursts-r3.analysis.json",
+      "sha256": "2c6855ead13e997c82a24630ecd714bbc34808ecce0fcd0864d340a850667c6f",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-reload-noise-bursts-r1.analysis.json",
+      "sha256": "4ef41195a8a79026375eedc5aabae6872c30c4a5447875c66376e062336f1245",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-reload-noise-bursts-r2.analysis.json",
+      "sha256": "b7315a18f708c64173ec8c0a1565ef10f08136e65e862638568cfc72f8bb22ea",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r1.analysis.json",
+      "sha256": "4de1a39cf9d991100f7273fb1ccea64e0f6a75b0351e6112ffee2d93bb2b74ec",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r2.analysis.json",
+      "sha256": "b0ea75ce45baa310c56b36749205c935d9d9c57a01c5b112e7074ea49bf5bd87",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12-noise-bursts-r3.analysis.json",
+      "sha256": "f9c5c59c9371ac64cb773c26a153098f47c6c0ab7c639cc37432d619e54380d1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-vocal-like-r1.analysis.json",
+      "sha256": "770b39960a82f3add8a6acd214a18d2e1062bc99950513f2a5847aa5aebc5823",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-vocal-like-r2.analysis.json",
+      "sha256": "bbfe72642739b3b24dc2232a5b0cdd7c1140355efa9c3c44db7d873379ad799b",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-controlled-gate-vocal-like-r3.analysis.json",
+      "sha256": "d25c0268080851c878a7eb7ba78f6bb9b1f07e060596e238f8d223e4367de2bc",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r1.analysis.json",
+      "sha256": "fdfab1af12e521437088de9a6bcb6b2d3264407da71314c457099935d321a1c1",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r2.analysis.json",
+      "sha256": "d3191a3e70cd29b62f20ad44cda1f70e6b7d19fea40cddc586f514d744ad63ab",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-default-gate-threshold-50-reduction-100-amplitude-ladder-r3.analysis.json",
+      "sha256": "3ec5b9eb11393f62d3ddb4287e8294a1e8ba26ac10bc2ddd3153e08cc003ea63",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-default-noise-bursts-r1.analysis.json",
+      "sha256": "5f0eeeaec661adfc943a62fa37846cb34c8d6743b9b92faf76fb9b7029ec717a",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-default-noise-bursts-r2.analysis.json",
+      "sha256": "dc95ba8d22cde0511c2fccb1f95e8f605de4f444c4bbe24d7179537b1efcaa00",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-default-noise-bursts-r3.analysis.json",
+      "sha256": "3d76c4971d8fc0f706b378deddae506f10e191542c1ce3cd576d525baf841a66",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r1.analysis.json",
+      "sha256": "b86792994f363f2cc0f6752ed1ad13c2e2ba0e5eb36cbc25677aef55b9a5448c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r2.analysis.json",
+      "sha256": "4128768bda601ec5a879e1ee90a671867f0df7639e760942f485a504b432b23d",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/noise-gate-ducker-threshold-30-ducking-20-attack1-hold100-release253-hysteresis-12-noise-bursts-r3.analysis.json",
+      "sha256": "8e99a3a67b230cf745d776fbf2645bc546e2e0dc758a192a90bfdbdd979e4b59",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/rejected-normalize-on-noise-gate-bypass-amplitude-ladder.analysis.json",
+      "sha256": "b3727d87187551bfb535b2dd56b7bb5589c8c5a055aa327c5db13031ca3fea82",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/rejected-wrong-44100-source-noise-gate-bypass-amplitude-ladder.analysis.json",
+      "sha256": "d005796c2e25eb6147d8554f85eca58351eb59fe94dcd2e2c957f07af88a2b87",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/DisplayState.plist",
+      "sha256": "f72dc4de0c6a4dfd8a1b316d570e7899720954129922b1c7ae7be73b6fa1278a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/DisplayStateArchive",
+      "sha256": "f5049034967914b07798072c563fdbb59ee8ed69ce6182429fc0cd2738a0b1fc",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/MetaData.plist",
+      "sha256": "defe1ca627e75c422d7cd4079636a75ac33dcfc5ac1694f8eab349e594800982",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/00/MetaData.plist",
+      "sha256": "004e57b883a533ca3daa916a3a28548b501173e2bb5f776ab0fd111050a9d1d6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/00/ProjectData",
+      "sha256": "5476b78dc105253a858b200c4935c8bab10a2adc2862b490d9aef788a08400df",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/01/MetaData.plist",
+      "sha256": "004e57b883a533ca3daa916a3a28548b501173e2bb5f776ab0fd111050a9d1d6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/01/ProjectData",
+      "sha256": "dca335925c5757b2f76baa0914870de732e999fbc437b710b2b821cbc53fb622",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/02/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/02/ProjectData",
+      "sha256": "5aa0c552e11051a2eafd6404a6482ddee342fca05f447a1c68c8c6411dcc4e1f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/03/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/03/ProjectData",
+      "sha256": "28dc7d4fc21f440207d709165c643fa9a64c0beeb8f85f40a340bdda4f8e9bf0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/04/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/04/ProjectData",
+      "sha256": "994df05755c13784b7d92c99113030414286bcc411df6a73981fd1f672f429cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/05/MetaData.plist",
+      "sha256": "2bdd7fa16cbd405dd99764ae0ba53815723061bce8aa4ed4cc99df7a6a3257cb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/Project File Backups/05/ProjectData",
+      "sha256": "04cf4dbe0bef57c05d5a81339f8c2d6cbbabb9a0c7c21d166df03177b6e57593",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/ProjectData",
+      "sha256": "5daa4f09ff08630d1fcb9c961de4dd7c910c9bb48f4e1a2befeb0ef5c363b23c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Alternatives/000/WindowImage.jpg",
+      "sha256": "765a4b3fc2046fce3d5c0af93d7afecbf1ae7584f3e5b9b7ce633d5d46f336d5",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/amplitude_ladder_1khz_mono.wav",
+      "sha256": "b8e3a47ffb444ea8f25df2f37b64df90229afb8befe3e7654c39d2250b2667cf",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/amplitude_ladder_1khz_mono_1.wav",
+      "sha256": "ca7bc6a94d1aa73e6cd7a13a29ccd468ebaf31d385e9c74acaccef751018f37c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/deterministic_noise_bursts_mono.wav",
+      "sha256": "2242bc3b831eccf3309573b3b4f4ba7f5e04952447bf155994fb1f85b9e2ac93",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/single_impulse_mono.wav",
+      "sha256": "422ae1316bc4a489ea85b845a3b832d94d5d881e11e0cc6acf8993383010e89f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/single_impulse_mono_1.wav",
+      "sha256": "5dd83968ff2a6f8beb2c7e030d3558f5ab758767cc88441a964c8e1e83c22216",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-compressor-ballistics-1khz-mono-48k.wav",
+      "sha256": "dc23388172f1af22724364974dfdd0538d6e113237c04e0aee328ee06f1c7c6b",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-compressor-ballistics-1khz-stereo-link-probe-48k.wav",
+      "sha256": "062d0af041f6a88eb2317eefa14db3614c426d09b8a20594ec0a62b7aad1996e",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-deesser-event-probe-mono-48k.wav",
+      "sha256": "a8a2be4a7c064b1f31d4af7b8b8855e962091ab7843e000fe6acf938b1853bca",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-deesser-event-probe-stereo-48k.wav",
+      "sha256": "77decb90760c92709a7444e2b9988fb437cce5859118d3bd7ae175544ae947b0",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-deesser-level-mode-probe-mono-48k.wav",
+      "sha256": "f12b5f6bf3de3968a48075117754907b8367cbf3ceec43badf21f3248a35dbc6",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/source-stereo-left-only-48k.wav",
+      "sha256": "5ba6c5082c7d84edbe6c3c092a71ca62bcffa854ae73de884f2e1d15a4a8cdec",
+      "role": "immutable deterministic source fixture"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/stereo_left_only.wav",
+      "sha256": "bd042a18044c53a0651037be4873e3383245f61752d14bbb218e25bf5e826391",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/stereo_right_only.wav",
+      "sha256": "b25746f4ce0e641c436a3caa79c5266cb0d3c2ac185678f39e2d0c5ebf69a348",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Media/Audio Files/vocal_like_mono.wav",
+      "sha256": "5a05f71fdde26acf902f22051fe00d61c96f8fed8cecbce5fe6cbbfaac2adb58",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx/Resources/ProjectInformation.plist",
+      "sha256": "cd2823d6b027b5413eac7d620bdf59d95fa06e7fea1756c87a9812243355c20e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Noise Gate Production Profile 48k 2026-07-29.logicx.zip",
+      "sha256": "a042881b89a9b55f99df6418d4befc744aeb23359baf7f445b63721e9c8a9bf0",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "screenshots/controlled-ducker-state.png",
+      "sha256": "453fde274675aab66ba8b41c946c24426686f184e3f9475ecbcfec3acb24f09d",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/controlled-gate-bandpass-filter-240hz-6900hz.png",
+      "sha256": "b1df59aaa4e4eceb9a85e30392d5f8fb314d8a588fc4fe299a41d3e23da9e7ce",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/controlled-gate-threshold-30-reduction-60-attack1-hold100-release253-hysteresis-12.png",
+      "sha256": "5722da92806d50f30581ec5799d43810eecade6a6d7ff15121d53e5b5838dbea",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/default-gate-state-track1-compressor-bypassed.png",
+      "sha256": "052cdff7cc16e8014996c1651cdd83fe8d8981ac4a46f880db675b8e87c4d7b0",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/default-gate-state-track2-48k-control.png",
+      "sha256": "04c4e56b6668fdc45ea2b73cb831c9db0b3af1ba0dbcad318a5233988093983d",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/rejected-logic-crash-after-inherited-compressor-slot-replacement.png",
+      "sha256": "a2a3eb9c34a5f952d04a5a337054006e15a57ebaa442b427a710f84ff658718c",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/reloaded-controlled-gate-state.png",
+      "sha256": "c1a56fabc504d1b5de40d2507f0cbb6d4fd0dbebeb5e051ba7ec8e9aff70d093",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

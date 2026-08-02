@@ -1,0 +1,147 @@
+{
+  "claim_boundary": "Objective file/signal comparison only; no perceptual superiority or private-implementation claim.",
+  "comparison": {
+    "channel_comparisons": [
+      {
+        "absolute_error_threshold_counts": {
+          "1": 287972,
+          "1024": 285009,
+          "16": 287932,
+          "256": 287195
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 21,
+          "correlation": 0.999891299799087,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 420000,
+        "differing_sample_count": 287972,
+        "first_differing_sample": 1,
+        "last_differing_sample": 347999,
+        "least_squares_gain": 1.4123896047144415,
+        "least_squares_gain_db": 2.9990902493056177,
+        "max_absolute_error_integer": 5938680,
+        "mean_error_normalized": 2.166204679579962e-05,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -28.694933304447098,
+        "sample_count_match": false,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.999815629268674
+      },
+      {
+        "absolute_error_threshold_counts": {
+          "1": 287972,
+          "1024": 285009,
+          "16": 287932,
+          "256": 287195
+        },
+        "bounded_lag_estimate": {
+          "analysis_stride": 21,
+          "correlation": 0.999891299799087,
+          "lag_frames": 0
+        },
+        "compared_sample_count": 420000,
+        "differing_sample_count": 287972,
+        "first_differing_sample": 1,
+        "last_differing_sample": 347999,
+        "least_squares_gain": 1.4123896047144415,
+        "least_squares_gain_db": 2.9990902493056177,
+        "max_absolute_error_integer": 5938680,
+        "mean_error_normalized": 2.166204679579962e-05,
+        "polarity": "noninverted",
+        "rms_error_dbfs": -28.694933304447098,
+        "sample_count_match": false,
+        "sample_exact": false,
+        "zero_lag_correlation": 0.999815629268674
+      }
+    ],
+    "channel_count_match": false,
+    "channel_mapping": [
+      {
+        "rendered_channel_index": 0,
+        "source_channel_index": 0
+      },
+      {
+        "rendered_channel_index": 1,
+        "source_channel_index": 0
+      }
+    ],
+    "format_match": false,
+    "frame_count_match": false,
+    "pcm_byte_exact": false,
+    "sample_rate_and_bit_depth_match": true,
+    "source_broadcast_pcm_exact": false
+  },
+  "rendered": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 6.6162109375e-05,
+        "first_nonzero_sample": 2,
+        "last_nonzero_sample": 347999,
+        "nonzero_sample_count": 268365,
+        "peak_dbfs": -0.06812497383823005,
+        "peak_integer": 8323072,
+        "rms_dbfs": -18.599064316677577,
+        "sample_count": 480000
+      },
+      {
+        "dc_offset_normalized": 6.6162109375e-05,
+        "first_nonzero_sample": 2,
+        "last_nonzero_sample": 347999,
+        "nonzero_sample_count": 268365,
+        "peak_dbfs": -0.06812497383823005,
+        "peak_integer": 8323072,
+        "rms_dbfs": -18.599064316677577,
+        "sample_count": 480000
+      }
+    ],
+    "channels": 2,
+    "compression_type": "NONE",
+    "duration_seconds": 10.0,
+    "file_sha256": "6bdf48f678ef2ac4592291aeb57d83779d0da6a1b2c520489bfaa0081b1d1a8b",
+    "frame_count": 480000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/artifacts/bitcrusher-wrap-drive3db-resolution8bit-downsample1x-mix100-cliplevel0-guitar-like-r3.wav",
+    "pcm_sha256": "2d8eb0e23c9cd3c7685194bc2d4567a59300fc5b87a747cf3df0d3ed27646b68",
+    "sample_rate_hz": 48000,
+    "stereo_relationships": {
+      "analysis_boundary": "Objective inter-channel identity, polarity, correlation, mono-sum, and side-difference measurements only; no width, compatibility, or perceptual-quality conclusion.",
+      "left_right_inverted_exact": false,
+      "left_right_inverted_within_one_integer_count": false,
+      "left_right_sample_exact": true,
+      "mono_sum_nonzero_sample_count": 268365,
+      "mono_sum_peak_dbfs_per_channel_full_scale": 5.952474939441394,
+      "mono_sum_peak_integer": 16646144,
+      "sample_count": 480000,
+      "side_difference_nonzero_sample_count": 0,
+      "side_difference_peak_dbfs_per_channel_full_scale": null,
+      "side_difference_peak_integer": 0,
+      "zero_lag_correlation": 1.0
+    }
+  },
+  "schema_version": 4,
+  "scope": "logic_native_empirical_render_comparison",
+  "source": {
+    "bit_depth": 24,
+    "channel_metrics": [
+      {
+        "dc_offset_normalized": 5.395179248991467e-05,
+        "first_nonzero_sample": 1,
+        "last_nonzero_sample": 347999,
+        "nonzero_sample_count": 287973,
+        "peak_dbfs": -2.9999995180030155,
+        "peak_integer": 5938680,
+        "rms_dbfs": -21.0198366676771,
+        "sample_count": 420000
+      }
+    ],
+    "channels": 1,
+    "compression_type": "NONE",
+    "duration_seconds": 8.75,
+    "file_sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+    "frame_count": 420000,
+    "path": "/Users/marcboyer/LogicAudioAssistant/research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/fixtures/guitar_like_dynamic_plucks_mono.wav",
+    "pcm_sha256": "62864559b2967d4e24e6c501937ae0bcbddb84098ea1880d016b13a68606b402",
+    "sample_rate_hz": 48000
+  }
+}
