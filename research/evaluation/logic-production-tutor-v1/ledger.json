@@ -63,7 +63,7 @@
     {
       "id": "T4",
       "name": "companion_guide_mode_and_adaptive_feedback",
-      "status": "in_progress",
+      "status": "passed",
       "evidence": [
         "apps/CompanionMacApp/CompanionMacApp.swift",
         "apps/CompanionMacApp/TutorSessionModel.swift",
@@ -72,7 +72,7 @@
         "project.yml",
         "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
       ],
-      "note": "Guide Me / Create For Me modes, a separate tutor coordinator with no AU command path, one-step cards, the eight feedback controls, evidence-grounding banner, and bounded tutor persistence are implemented, and the unsigned Xcode native build succeeds. Interactive UI verification requires a running app and is folded into the T7 manual checklist; it has not been executed."
+      "note": "Guide Me / Create For Me modes, tutor coordinator with no AU command path, one-step cards, eight feedback controls, evidence-grounding banner, and bounded persistence are implemented and were exercised interactively in Logic Pro 12.3 on 2026-08-05: lesson start, hypotheses, step cards, Done/Undo branching, restart restore, and stale-authority demotion all observed. See docs/evidence/LOGIC_12_3_TUTOR_V1_VALIDATION_2026-08-05.md."
     },
     {
       "id": "T5",
@@ -93,16 +93,17 @@
         "research/evaluation/logic-production-tutor-v1/offline-evaluation-report-2026-08-05.json",
         "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
       ],
-      "note": "TestRunner 82/82 in Debug and Release, 77/77 tutor corpus, make verify (xcodegen, production-language and tutor-procedure knowledge checks, release build, release TestRunner, host probe), realtime heap probe with zero observed heap operations across 4,000 callbacks, and the unsigned native companion build. Thread Sanitizer was not run in this pass. In-host Create For Me regression is part of T7."
+      "note": "TestRunner 82/82 in Debug and Release, 77/77 tutor corpus, make verify (xcodegen, production-language and tutor-procedure knowledge checks, release build, release TestRunner, host probe), realtime heap probe with zero observed heap operations across 4,000 callbacks, and the unsigned native companion build. Thread Sanitizer was not run in this pass. In-host Create For Me regression is part of T7. A direct-Logic run on 2026-08-05 additionally surfaced a pre-existing nonfinite-series encode defect; TestRunner is now 83 unconditional checks and passes 83/83 in Debug and Release."
     },
     {
       "id": "T7",
       "name": "direct_logic_12_3_user_mediated_validation",
-      "status": "pending",
+      "status": "in_progress",
       "evidence": [
-        "docs/MANUAL_LOGIC_TUTOR_TESTS.md"
+        "docs/MANUAL_LOGIC_TUTOR_TESTS.md",
+        "docs/evidence/LOGIC_12_3_TUTOR_V1_VALIDATION_2026-08-05.md"
       ],
-      "note": "Exact manual checklist prepared. Requires a human operating Logic Pro 12.3; TrackSmith has no host automation and none was added. Not executed, so no Logic-hosted tutor claim is made."
+      "note": "Partially satisfied. Executed in Logic Pro 12.3 on 2026-08-05 with the signed build: insert, in-host playback capture (Audio arriving -12.1 dBFS; 14.9 s / 44100 Hz / 1 ch), Guide Me nasal lesson with four competing causes, exact reversible step cards, deterministic Done/Undo branching across two experiments, AU graph provably unchanged, offline provider throughout, checksummed 0600 persistence with a clean privacy scan, unchanged source SHA-256, restart restore, stale-authority demotion to historical, and Create For Me previews. Still open: owner self-evaluation on a real vocal (acceptance criterion 23), in-host revision/commit/bypass, and project save/reload. A pre-existing Create For Me defect was found and fixed during this run."
     },
     {
       "id": "T8",
@@ -145,14 +146,14 @@
       "T1",
       "T2",
       "T3",
+      "T4",
       "T6"
     ],
     "inProgress": [
-      "T4",
-      "T5"
+      "T5",
+      "T7"
     ],
     "pending": [
-      "T7",
       "T8"
     ],
     "closed": false,

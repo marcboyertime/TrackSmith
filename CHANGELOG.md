@@ -35,9 +35,26 @@
   BS.2217-2 vector lane); current Debug and Release runs pass 82/82.
   Reconciled current-facing empirical-campaign counts to the ledger's
   189 `not_run` / 11 `partial` / 0 `complete`.
-- Direct Logic 12.3 user-mediated tutor validation (gate T7) is documented in
-  `docs/MANUAL_LOGIC_TUTOR_TESTS.md` and remains pending; Tutor v1 is not
-  closed and Vocal Module v1 work has not begun.
+- Ran the direct Logic Pro 12.3 tutor validation with the signed build:
+  insert, in-host capture, the Guide Me nasal lesson with four competing
+  causes, exact reversible step cards, deterministic Done/Undo branching
+  across two experiments, an AU graph provably unchanged throughout, offline
+  operation with no network, checksummed 0600 tutor persistence with a clean
+  privacy scan, unchanged source SHA-256, restart restore, and stale-authority
+  demotion to historical evidence. Gate T7 is now `in_progress`, not passed:
+  the owner self-evaluation on a real vocal, in-host revision/commit/bypass,
+  and project save/reload remain unexecuted. Recorded in
+  `docs/evidence/LOGIC_12_3_TUTOR_V1_VALIDATION_2026-08-05.md`.
+- Fixed a pre-existing defect that direct Logic testing surfaced:
+  `MetricSeries` stored timeline values verbatim, so a capture containing
+  digital silence made short-term LUFS `-infinity` and broke JSON encoding of
+  the whole Create For Me preview manifest. Series values are now sanitized
+  and clamped into their declared valid range, so digital silence lands on the
+  documented floor instead of a fabricated zero. Added the
+  `silent-window analysis series stay JSON-encodable` regression; TestRunner is
+  now 83 unconditional checks passing 83/83. Verified in host: the same
+  operation that failed now renders three previews.
+- Tutor v1 is not closed and Vocal Module v1 work has not begun.
 
 ## 2026-08-02
 

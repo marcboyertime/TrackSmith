@@ -4368,7 +4368,60 @@ enum TestRunner {
         await tests.run("tutor explanations and summaries stay honest") {
             try testTutorExplanationHonesty(tests)
         }
+        await tests.run("silent-window analysis series stay JSON-encodable") {
+            try testSilentWindowSeriesEncodable(tests)
+        }
         tests.finish()
+    }
+
+    /// Regression for a defect found during direct Logic 12.3 tutor validation:
+    /// a capture whose tail is digital silence makes short-term LUFS -infinity,
+    /// and `JSONEncoder` refuses to encode a nonfinite `Double`, so the whole
+    /// Create For Me preview manifest failed to encode.
+    @MainActor private static func testSilentWindowSeriesEncodable(_ tests: Harness) throws {
+        let sampleRate = 48_000.0
+        // Four seconds of tone followed by four seconds of exact digital
+        // silence, matching the shape of a Logic capture that outlives its
+        // region.
+        var samples = [Float](repeating: 0, count: Int(sampleRate * 8))
+        for index in 0..<Int(sampleRate * 4) {
+            samples[index] = Float(0.25 * sin(2 * .pi * 220 * Double(index) / sampleRate))
+        }
+        let buffer = DSPCore.AudioBuffer(channels: [samples], sampleRate: sampleRate)
+        let report = AudioAnalyzer().analyze(buffer)
+
+        let allSeries = try XCTUnwrapLocal(
+            report.series,
+            "analysis report carried no series for a partially silent buffer"
+        )
+        let series = try XCTUnwrapLocal(
+            allSeries["short_term_loudness_lufs_timeline"],
+            "short-term loudness timeline missing for a partially silent buffer"
+        )
+        try tests.expect(
+            series.values.allSatisfy { $0.isFinite },
+            "short-term loudness timeline retained a nonfinite value"
+        )
+        try tests.expect(
+            series.values.contains { $0 <= -200 },
+            "digital silence should reach the declared loudness floor rather than a fabricated zero"
+        )
+        for (identifier, entry) in allSeries {
+            try tests.expect(
+                entry.values.allSatisfy { $0.isFinite },
+                "series \(identifier) retained a nonfinite value"
+            )
+        }
+        // The encode path that actually failed in Logic.
+        _ = try JSONEncoder().encode(report)
+
+        let sourceAware = SourceAwareAudioAnalyzer().analyze(buffer, as: .vocal)
+        _ = try JSONEncoder().encode(sourceAware)
+    }
+
+    private static func XCTUnwrapLocal<T>(_ value: T?, _ message: String) throws -> T {
+        guard let value else { throw CheckFailure(message: message) }
+        return value
     }
 
     // MARK: - Tutor v1 checks

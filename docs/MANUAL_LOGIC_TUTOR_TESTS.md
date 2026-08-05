@@ -9,6 +9,10 @@ Logic; TrackSmith has no host automation, and none may be added for this test.
 
 ## Preconditions
 
+0. **Quit Logic Pro before installing.** Replacing the `.appex` while Logic
+   has it loaded can wedge Logic on an undismissable document-close dialog
+   (observed 2026-08-05). Install first, launch the companion once, then open
+   Logic.
 1. Install the current build via `make native-install` (Apple Development
    signing per README) and record:
    - app bundle ID, AU component (`aufx LgAA ExAI`), both CDHashes,
