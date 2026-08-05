@@ -12,8 +12,29 @@ struct CompanionMacApp: App {
     }
 }
 
+enum CompanionMode: String, CaseIterable, Identifiable {
+    case guideMe
+    case createForMe
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .guideMe: "Guide Me"
+        case .createForMe: "Create For Me"
+        }
+    }
+    var subtitle: String {
+        switch self {
+        case .guideMe: "TrackSmith tells you exactly what to try in Logic, step by step. You perform every action."
+        case .createForMe: "TrackSmith renders bounded processing alternatives you audition, revise, and commit explicitly."
+        }
+    }
+}
+
 struct CompanionContentView: View {
     @StateObject private var model = CompanionSessionModel()
+    @StateObject private var tutor = TutorSessionModel()
+    @State private var mode: CompanionMode = .guideMe
     @State private var confirmingCacheDeletion = false
 
     var body: some View {
@@ -44,13 +65,19 @@ struct CompanionContentView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     statusHeader
+                    modeSelector
                     capturePanel
                     providerPanel
-                    promptPanel
-                    previewPanel
-                    revisionPanel
-                    changeStack
-                    actionBar
+                    switch mode {
+                    case .guideMe:
+                        TutorGuideView(session: model, tutor: tutor)
+                    case .createForMe:
+                        promptPanel
+                        previewPanel
+                        revisionPanel
+                        changeStack
+                        actionBar
+                    }
                 }
                 .padding(22)
             }
@@ -77,6 +104,22 @@ struct CompanionContentView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This removes local captured WAVs and rendered previews. It does not alter Logic projects, source audio, plug-in state, or protocol diagnostics.")
+        }
+    }
+
+    private var modeSelector: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Picker("Mode", selection: $mode) {
+                ForEach(CompanionMode.allCases) { candidate in
+                    Text(candidate.title).tag(candidate)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .accessibilityLabel("TrackSmith mode")
+            Text(mode.subtitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 

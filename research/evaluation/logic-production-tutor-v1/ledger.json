@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0",
+  "milestone": "TrackSmith Logic Production Tutor v1",
+  "status": "active",
+  "plan": "docs/LOGIC_PRODUCTION_TUTOR_V1.md",
+  "openedAt": "2026-08-05",
+  "productFocusRecord": "docs/CURRENT_PRODUCT_FOCUS.md",
+  "relationshipToOtherMilestones": {
+    "productionIntelligenceV1": "frozen_predecessor_unchanged",
+    "productionMasteryV1": "remains_open_with_ledger_intact_engineering_priority_moved_to_tutor_v1"
+  },
+  "centralRule": "The model may help understand and rank. Local validated knowledge must materialize the exact instructions.",
+  "gates": [
+    {
+      "id": "T0",
+      "name": "frozen_baseline_and_current_focus_record",
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BASELINE_2026-08-05.md",
+        "docs/CURRENT_PRODUCT_FOCUS.md",
+        "docs/LOGIC_PRODUCTION_TUTOR_V1.md",
+        "docs/ARCHITECTURE_DECISION_RECORDS/0005-user-mediated-production-tutor.md"
+      ]
+    },
+    {
+      "id": "T1",
+      "name": "typed_tutor_contracts_and_validation",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T2",
+      "name": "versioned_procedural_knowledge_and_provenance",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T3",
+      "name": "deterministic_offline_nasal_vocal_vertical_slice",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T4",
+      "name": "companion_guide_mode_and_adaptive_feedback",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T5",
+      "name": "provider_enhanced_interpretation_without_provider_authored_instructions",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T6",
+      "name": "persistence_privacy_adversarial_and_regression_testing",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T7",
+      "name": "direct_logic_12_3_user_mediated_validation",
+      "status": "pending",
+      "evidence": []
+    },
+    {
+      "id": "T8",
+      "name": "tutor_v1_closure_and_vocal_module_v1_handoff",
+      "status": "pending",
+      "evidence": []
+    }
+  ],
+  "baseline": {
+    "head": "c87cea59fc15b4876d7c00176de15ee32d1a2fc6",
+    "branch": "codex/logic-production-tutor-v1",
+    "worktreeCleanBeforeFeatureWork": true,
+    "record": "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BASELINE_2026-08-05.md",
+    "testRunner": {
+      "debug": "72_of_72_passed",
+      "release": "72_of_72_passed",
+      "threadSanitizer": "not_run_for_this_baseline"
+    },
+    "audioUnitHostProbe": {
+      "release": "passed_mean_13_9us_p99_38_8us_max_291_6us_deadline_2666_7us",
+      "realtimeHeap": "4000_callbacks_zero_observed_heap_operations"
+    },
+    "nativeBuild": "xcode_debug_unsigned_build_succeeded",
+    "logicHosted": "not_run"
+  },
+  "boundaries": [
+    "tutor_is_user_mediated_only_no_logic_host_automation",
+    "no_provider_authored_instructions_values_paths_or_key_commands",
+    "no_tutor_work_in_audio_unit_render_callback",
+    "no_raw_audio_to_providers",
+    "no_destructive_logic_workflow_in_happy_path",
+    "create_for_me_must_not_regress",
+    "no_identity_renames",
+    "analyzer_is_not_phoneme_aware_and_cannot_prove_nasality"
+  ]
+}

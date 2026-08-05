@@ -4,6 +4,7 @@ import DSPCore
 import Foundation
 import PlanSchema
 import ProductionIntelligence
+import ProductionTutor
 import PreviewAudition
 import PreviewWorkflow
 import SessionCore
@@ -981,6 +982,55 @@ final class CompanionSessionModel: ObservableObject {
             }
             catch { fail(error) }
         }
+    }
+
+    // MARK: - Tutor (Guide Me) support
+
+    /// Prepares the shared capture analysis and safe authority references for
+    /// an audio-grounded tutor lesson. Reuses the exact immutable capture and
+    /// existing local analyzer; no provider or AU command is involved, and the
+    /// tutor receives identities only — never paths or audio.
+    func tutorCaptureContext() async throws -> TutorCaptureContext? {
+        guard let client,
+              let artifact = captureArtifact,
+              let capturedInstanceID,
+              let capturedRuntimeEpoch else { return nil }
+        let analysis: SourceAwareAnalysisReport
+        if let existing = sourceAwareAnalysis {
+            analysis = existing
+        } else {
+            analysis = try await client.analyzeCapture(
+                artifact: artifact,
+                sourceType: sourceType
+            )
+            guard captureArtifact?.id == artifact.id,
+                  self.capturedInstanceID == capturedInstanceID,
+                  self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return nil }
+            sourceAwareAnalysis = analysis
+        }
+        return TutorCaptureContext(
+            analysis: analysis,
+            authority: TutorAuthorityReference(
+                instanceID: capturedInstanceID,
+                runtimeEpoch: capturedRuntimeEpoch,
+                captureSnapshotID: artifact.id,
+                sourceType: sourceType
+            )
+        )
+    }
+
+    /// True while the lesson's originating AU instance, runtime epoch, and
+    /// capture all still match the live session; otherwise audio-grounded
+    /// tutor claims must become historical.
+    func tutorAuthorityIsLive(_ reference: TutorAuthorityReference?) -> Bool {
+        guard let reference else { return false }
+        guard let capturedInstanceID, let capturedRuntimeEpoch,
+              let artifact = captureArtifact else { return false }
+        return reference.instanceID == capturedInstanceID
+            && reference.runtimeEpoch == capturedRuntimeEpoch
+            && reference.captureSnapshotID == artifact.id
+            && reference.sourceType == sourceType
+            && capturedInstanceIsAvailable
     }
 
     private func refresh() async {

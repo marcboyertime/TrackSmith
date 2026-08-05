@@ -10,10 +10,13 @@
 		03E937A7CB2674758D3B150A /* PreviewWorkflow in Frameworks */ = {isa = PBXBuildFile; productRef = 30F1D3BFC08CCD38F082B161 /* PreviewWorkflow */; };
 		04A007FEABFBCF18DC80CC8D /* CompanionMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */; };
 		0FCD7A3B857A94ED6854690F /* AudioUnitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E25320E58C365F05026A3D /* AudioUnitViewController.swift */; };
+		110989677F33D2E91F293B66 /* TutorSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99370239B3D081255BFA6B4 /* TutorSessionModel.swift */; };
 		120D8EC37A11D6CB92412DD1 /* AudioAnalysis in Frameworks */ = {isa = PBXBuildFile; productRef = A2837E719FB3C5A3511C0FBE /* AudioAnalysis */; };
+		3AA349A80BADCDCA51D7E41C /* ProductionTutor in Frameworks */ = {isa = PBXBuildFile; productRef = E389495FC88A2644C221322D /* ProductionTutor */; };
 		46A321874ADE854E12F8CD92 /* AudioAnalysis in Frameworks */ = {isa = PBXBuildFile; productRef = 7B65EFE6777BBFAD348BF418 /* AudioAnalysis */; };
 		48CDF740811D8D9C7CBAC849 /* CompanionSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A683712EF09E0C959B644643 /* CompanionSessionModel.swift */; };
 		51C417982A47AA0F8600CF6C /* DSPCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7D04B596ECCA738661E8385F /* DSPCore */; };
+		6A6DF3F9760135175B196794 /* TutorGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEDD91ECFCB4F8ED531E2F7 /* TutorGuideView.swift */; };
 		76D4EE46BC8136A38B585DCB /* RealtimeRenderKernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC110EC7B6EB965720D654D9 /* RealtimeRenderKernel.swift */; };
 		7BA5F524C81C0B1463BA6706 /* SessionCore in Frameworks */ = {isa = PBXBuildFile; productRef = 271AD269B36F5F64446BD4FD /* SessionCore */; };
 		88F782723DF550BE35EFB612 /* DSPCore in Frameworks */ = {isa = PBXBuildFile; productRef = F0935F6D720AF46DCFF05023 /* DSPCore */; };
@@ -67,7 +70,9 @@
 		C38C1856B0AD4A7508F32109 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C451AA04E4837DEDF4F2D4A8 /* CompanionMacApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CompanionMacApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanionMacApp.swift; sourceTree = "<group>"; };
+		D99370239B3D081255BFA6B4 /* TutorSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorSessionModel.swift; sourceTree = "<group>"; };
 		EC110EC7B6EB965720D654D9 /* RealtimeRenderKernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeRenderKernel.swift; sourceTree = "<group>"; };
+		FCEDD91ECFCB4F8ED531E2F7 /* TutorGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorGuideView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +89,7 @@
 				BF1C5606E415038C804396ED /* AgentCore in Frameworks */,
 				46A321874ADE854E12F8CD92 /* AudioAnalysis in Frameworks */,
 				B362C7C135B466C690521B50 /* ProductionIntelligence in Frameworks */,
+				3AA349A80BADCDCA51D7E41C /* ProductionTutor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +129,8 @@
 				D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */,
 				A683712EF09E0C959B644643 /* CompanionSessionModel.swift */,
 				09A956A5E9C8DD1847457121 /* Info.plist */,
+				FCEDD91ECFCB4F8ED531E2F7 /* TutorGuideView.swift */,
+				D99370239B3D081255BFA6B4 /* TutorSessionModel.swift */,
 			);
 			name = CompanionMacApp;
 			path = apps/CompanionMacApp;
@@ -205,6 +213,7 @@
 				705A83FB43FDCA9C65D3AE9D /* AgentCore */,
 				7B65EFE6777BBFAD348BF418 /* AudioAnalysis */,
 				C310DEDD8DDC7D62C485F6FB /* ProductionIntelligence */,
+				E389495FC88A2644C221322D /* ProductionTutor */,
 			);
 			productName = CompanionMacApp;
 			productReference = C451AA04E4837DEDF4F2D4A8 /* CompanionMacApp.app */;
@@ -262,6 +271,8 @@
 			files = (
 				04A007FEABFBCF18DC80CC8D /* CompanionMacApp.swift in Sources */,
 				48CDF740811D8D9C7CBAC849 /* CompanionSessionModel.swift in Sources */,
+				6A6DF3F9760135175B196794 /* TutorGuideView.swift in Sources */,
+				110989677F33D2E91F293B66 /* TutorSessionModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +571,10 @@
 		D22DCE71AA0744C01925754F /* PlanSchema */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlanSchema;
+		};
+		E389495FC88A2644C221322D /* ProductionTutor */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ProductionTutor;
 		};
 		F0935F6D720AF46DCFF05023 /* DSPCore */ = {
 			isa = XCSwiftPackageProductDependency;
