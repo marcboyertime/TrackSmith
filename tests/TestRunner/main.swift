@@ -5,6 +5,7 @@ import DSPCore
 import Foundation
 import PlanSchema
 import ProductionIntelligence
+import ProductionTutor
 import PreviewRenderer
 import PreviewWorkflow
 import ResearchIngestion
@@ -4337,7 +4338,562 @@ enum TestRunner {
         await tests.run("companion rejects captured WAV metadata mismatches") {
             try await testCapturedWAVMetadataValidation(tests)
         }
+        await tests.run("tutor issue vocabulary recognizes, negates, and refuses") {
+            try testTutorIssueVocabulary(tests)
+        }
+        await tests.run("tutor procedure catalog validates and rejects violations") {
+            try testTutorProcedureCatalog(tests)
+        }
+        await tests.run("tutor nasal lesson generates deterministically") {
+            try testTutorNasalLessonDeterminism(tests)
+        }
+        await tests.run("tutor feedback reducer covers every transition") {
+            try testTutorFeedbackTransitions(tests)
+        }
+        await tests.run("tutor evaluation corpus passes offline") {
+            try testTutorEvaluationCorpus(tests)
+        }
+        await tests.run("tutor session store bounds, redacts, and quarantines") {
+            try testTutorSessionStore(tests)
+        }
+        await tests.run("tutor provider proposals fail closed on invented authority") {
+            try testTutorProposalValidator(tests)
+        }
+        await tests.run("tutor lesson validator rejects forbidden claims and values") {
+            try testTutorLessonValidator(tests)
+        }
+        await tests.run("tutor evidence modes demote stale audio grounding") {
+            try testTutorEvidenceModes(tests)
+        }
+        await tests.run("tutor explanations and summaries stay honest") {
+            try testTutorExplanationHonesty(tests)
+        }
         tests.finish()
+    }
+
+    // MARK: - Tutor v1 checks
+
+    @MainActor private static func tutorPlanner() throws -> TutorPlanner {
+        try TutorPlanner()
+    }
+
+    @MainActor private static func tutorNasalRequest(
+        chain: TutorUserReportedChain = .unknown,
+        text: String = "I sound nasal. Tell me exactly what to try, step by step, and explain why.",
+        withCapture: Bool = true
+    ) -> ProductionTutor.TutorRequest {
+        let capture: TutorCaptureContext? = withCapture
+            ? TutorCaptureContext(
+                analysis: TutorEvaluationHarness.syntheticVocalAnalysis(),
+                authority: TutorAuthorityReference(
+                    instanceID: UUID(),
+                    runtimeEpoch: UUID(),
+                    captureSnapshotID: UUID(),
+                    sourceType: .vocal
+                )
+            )
+            : nil
+        return ProductionTutor.TutorRequest(
+            text: text,
+            sourceType: .vocal,
+            capture: capture,
+            userReportedChain: chain
+        )
+    }
+
+    @MainActor private static func testTutorIssueVocabulary(_ tests: Harness) throws {
+        let vocabulary = TutorIssueVocabulary()
+        try vocabulary.validate()
+        for phrase in [
+            "I sound nasal", "I sound honky", "the vocal is pinched",
+            "it sounds like I am singing through my nose", "reduce the nasality",
+        ] {
+            let parsed = vocabulary.parse(phrase, sourceType: .vocal)
+            try tests.expect(
+                parsed.recognizedIssues.contains { $0.kind == .nasalOrHonky },
+                "nasal variant not recognized: \(phrase)"
+            )
+        }
+        let congested = vocabulary.parse("it sounds congested", sourceType: .vocal)
+        try tests.expect(
+            congested.recognizedIssues.contains { $0.kind == .congested },
+            "congested not recognized"
+        )
+        try tests.expect(
+            !congested.recognizedIssues.contains { $0.kind == .nasalOrHonky },
+            "congested must not be blindly mapped to nasal"
+        )
+        let negated = vocabulary.parse(
+            "make it more open and full without making it dull",
+            sourceType: .vocal
+        )
+        try tests.expect(
+            negated.recognizedIssues.isEmpty,
+            "negated dull must not become a reported issue"
+        )
+        try tests.expect(negated.qualifiers.wantsOpenNotDull, "openness qualifier missed")
+        let vowel = vocabulary.parse("it is nasal on certain vowels", sourceType: .vocal)
+        try tests.expect(vowel.qualifiers.vowelSpecific, "vowel-specific qualifier missed")
+        let automation = vocabulary.parse("just control logic for me and fix it", sourceType: .vocal)
+        try tests.expect(
+            automation.unsupported.contains(.hostAutomationRequested),
+            "host-automation request not refused"
+        )
+        let destructive = vocabulary.parse("bounce in place to fix it", sourceType: .vocal)
+        try tests.expect(
+            destructive.unsupported.contains(.destructiveActionRequested),
+            "destructive request not refused"
+        )
+        let wrongSource = vocabulary.parse("I sound nasal", sourceType: .drums)
+        try tests.expect(
+            wrongSource.recognizedIssues.isEmpty,
+            "vocal-only issue leaked into drums source"
+        )
+        let explain = vocabulary.parse("What is Q?", sourceType: .vocal)
+        try tests.expect(explain.requestKind == .explainConcept, "explain request misclassified")
+    }
+
+    @MainActor private static func testTutorProcedureCatalog(_ tests: Harness) throws {
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        try tests.expect(catalog.procedures.count == 8, "expected 8 reviewed procedures")
+        let stepCount = catalog.procedures.reduce(0) { $0 + $1.steps.count }
+        try tests.expect(stepCount == 18, "expected 18 reviewed steps, found \(stepCount)")
+        try tests.expect(
+            catalog.procedures.allSatisfy { !$0.grantsExecutionAuthority },
+            "no procedure may grant execution authority"
+        )
+        try tests.expect(
+            catalog.procedures.allSatisfy { procedure in
+                procedure.steps.allSatisfy { $0.actor == .userManual }
+            },
+            "tutor v1 steps must all be user-performed"
+        )
+        let validator = TutorKnowledgeValidator()
+
+        var noUndo = catalog
+        noUndo.procedures[0].steps[1].undoInstruction = " "
+        try tests.expectThrows("missing undo must fail validation") {
+            try validator.validate(noUndo)
+        }
+
+        var coordinates = catalog
+        coordinates.procedures[0].steps[1].instruction += " Click at 640, 480 on screen."
+        try tests.expectThrows("coordinate content must fail validation") {
+            try validator.validate(coordinates)
+        }
+
+        var keyCommand = catalog
+        keyCommand.procedures[0].steps[1].instruction += " Press command+B to bypass."
+        try tests.expectThrows("key-command content must fail validation") {
+            try validator.validate(keyCommand)
+        }
+
+        var authority = catalog
+        authority.procedures[0].grantsExecutionAuthority = true
+        try tests.expectThrows("false execution authority must fail validation") {
+            try validator.validate(authority)
+        }
+
+        var unknownProcessor = catalog
+        unknownProcessor.procedures[0].processorIdentities = ["logic-pro-12.3:invented-plugin"]
+        try tests.expectThrows("unregistered processor identity must fail validation") {
+            try validator.validate(unknownProcessor)
+        }
+
+        var badRange = catalog
+        for (procedureIndex, procedure) in badRange.procedures.enumerated() {
+            for (stepIndex, step) in procedure.steps.enumerated() {
+                if let parameterIndex = step.parameters.firstIndex(where: {
+                    $0.minimumValue != nil && $0.maximumValue != nil
+                }) {
+                    badRange.procedures[procedureIndex].steps[stepIndex]
+                        .parameters[parameterIndex].safeStartingValue =
+                        (step.parameters[parameterIndex].maximumValue ?? 0) + 100
+                    try tests.expectThrows("out-of-range starting value must fail validation") {
+                        try validator.validate(badRange)
+                    }
+                    return
+                }
+            }
+        }
+        throw CheckFailure(message: "catalog unexpectedly has no bounded numeric parameter")
+    }
+
+    @MainActor private static func testTutorNasalLessonDeterminism(_ tests: Harness) throws {
+        let planner = try tutorPlanner()
+        let request = tutorNasalRequest()
+        let first = try planner.makeLesson(for: request)
+        let second = try planner.makeLesson(for: request)
+
+        try tests.expect(first.reportedIssues.contains(.nasalOrHonky), "nasal issue missing")
+        try tests.expect(first.evidenceMode == .audioGrounded, "capture-backed lesson must be audio grounded")
+        try tests.expect(first.status == .activeStep, "lesson must present one active step")
+        try tests.expect(
+            first.selectedProcedureID == "tutor.vocal.compression-emphasis-check.v1",
+            "unknown chain must test compression emphasis first"
+        )
+        try tests.expect(
+            first.hypotheses.count >= 3,
+            "competing causes must stay visible, found \(first.hypotheses.count)"
+        )
+        try tests.expect(
+            first.hypotheses.contains { $0.causeCategory == .unknown },
+            "the natural-character possibility must remain visible"
+        )
+        try tests.expect(
+            first.activeStep?.undoInstruction.isEmpty == false,
+            "active step must carry an exact undo"
+        )
+        try tests.expect(
+            first.reportedIssues == second.reportedIssues
+                && first.selectedProcedureID == second.selectedProcedureID
+                && first.activeStepID == second.activeStepID
+                && first.steps == second.steps
+                && first.hypotheses == second.hypotheses,
+            "identical requests must produce identical lessons"
+        )
+        try planner.validate(first)
+
+        let vowel = try planner.makeLesson(for: tutorNasalRequest(
+            chain: .none,
+            text: "It sounds nasal, mostly on certain vowels."
+        ))
+        try tests.expect(
+            vowel.selectedProcedureID == "tutor.vocal.performance-openness-experiment.v1",
+            "vowel-specific reports must branch away from static EQ"
+        )
+        try tests.expect(
+            vowel.unresolvedLimitations.contains { $0.contains("Vocal Module v1") },
+            "vowel-specific limitation must be recorded for the handoff"
+        )
+    }
+
+    @MainActor private static func testTutorFeedbackTransitions(_ tests: Harness) throws {
+        let planner = try tutorPlanner()
+        let reducer = TutorFeedbackReducer(planner: planner)
+        let comp = "tutor.vocal.compression-emphasis-check.v1"
+        let lesson = try planner.makeLesson(for: tutorNasalRequest())
+
+        let afterDone = reducer.reduce(lesson, feedback: .done)
+        try tests.expect(afterDone.activeStepID == comp + ".bypass", "done must advance to bypass")
+
+        let afterBetter = reducer.reduce(afterDone, feedback: .better)
+        try tests.expect(afterBetter.activeStepID == comp + ".gentler", "better must offer a gentler setting")
+
+        let completed = reducer.reduce(afterBetter, feedback: .better)
+        try tests.expect(completed.status == .completed, "confirmed improvement must complete")
+        try tests.expect(
+            completed.hypotheses.contains { $0.status == .strengthened },
+            "better must strengthen the tested cause"
+        )
+        try tests.expect(completed.finalSummary != nil, "completion must include a summary")
+
+        let afterWorse = reducer.reduce(afterDone, feedback: .worse)
+        try tests.expect(afterWorse.activeStepID == comp + ".restore", "worse must route to rollback")
+        try tests.expect(
+            afterWorse.statusNote.lowercased().contains("undo") || afterWorse.activeStep?.actionKind == .restorePreviousState,
+            "worse must surface the rollback immediately"
+        )
+        let afterWorseDone = reducer.reduce(afterWorse, feedback: .done)
+        try tests.expect(
+            afterWorseDone.selectedProcedureID == "tutor.vocal.channel-eq-resonance-search.v1",
+            "after rollback the tutor must test the next competing cause"
+        )
+
+        let afterNotSure = reducer.reduce(afterDone, feedback: .notSure)
+        try tests.expect(
+            afterNotSure.activeStepID == comp + ".match",
+            "not sure must simplify into a level-matched comparison"
+        )
+
+        let afterCannotFind = reducer.reduce(lesson, feedback: .cannotFindControl)
+        try tests.expect(
+            afterCannotFind.activeStepID == lesson.activeStepID,
+            "cannot-find must keep the step active"
+        )
+        try tests.expect(
+            afterCannotFind.statusNote.contains("Navigation"),
+            "cannot-find must show the versioned navigation card"
+        )
+        try tests.expect(
+            afterCannotFind.statusNote.lowercased().contains("not applicable"),
+            "cannot-find must never claim the control is present"
+        )
+
+        let afterNotApplicable = reducer.reduce(lesson, feedback: .notApplicable)
+        try tests.expect(
+            afterNotApplicable.selectedProcedureID == "tutor.vocal.channel-eq-resonance-search.v1",
+            "not-applicable must skip without treating it as evidence"
+        )
+        try tests.expect(
+            afterNotApplicable.hypotheses.allSatisfy { $0.status == .open },
+            "not-applicable must not move any hypothesis"
+        )
+
+        let afterUndo = reducer.reduce(afterDone, feedback: .undo)
+        try tests.expect(
+            afterUndo.activeStepID == comp + ".restore",
+            "undo must route to the exact restore step"
+        )
+
+        // Exhaustion ends honestly; keep-as-is preserves.
+        var exhausted = try planner.makeLesson(for: tutorNasalRequest(
+            chain: .none, text: "I sound nasal even with nothing on the channel."
+        ))
+        for _ in 0..<3 { exhausted = reducer.reduce(exhausted, feedback: .notApplicable) }
+        try tests.expect(
+            exhausted.selectedProcedureID == "tutor.vocal.no-processing-decision.v1",
+            "the keep-as-is decision must be the final validated option"
+        )
+        let preserved = reducer.reduce(exhausted, feedback: .done)
+        try tests.expect(preserved.status == .stoppedPreserved, "keeping the sound must preserve everything")
+        let unresolved = reducer.reduce(exhausted, feedback: .worse)
+        try tests.expect(
+            unresolved.status == .limitedNoSafeProcedure,
+            "exhausted experiments must end with an honest limitation"
+        )
+        try tests.expect(
+            lesson.feedbackEvents.isEmpty && completed.feedbackEvents.count == 3,
+            "feedback must accumulate as immutable events"
+        )
+    }
+
+    @MainActor private static func testTutorEvaluationCorpus(_ tests: Harness) throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let corpusURL = repositoryRoot.appendingPathComponent(
+            "research/evaluation/TRACKSMITH_TUTOR_INTENT_CORPUS_V1.json"
+        )
+        let corpus = try JSONDecoder().decode(
+            TutorCorpus.self,
+            from: Data(contentsOf: corpusURL)
+        )
+        try tests.expect(corpus.cases.count >= 77, "tutor corpus shrank to \(corpus.cases.count) cases")
+        let nasal = corpus.cases.filter { $0.caseID.hasPrefix("nasal-") }
+        let adversarial = corpus.cases.filter { $0.caseID.hasPrefix("adv-") }
+        let multiTurn = corpus.cases.filter { $0.feedbackSequence.count >= 2 }
+        try tests.expect(nasal.count >= 15, "nasal variants shrank")
+        try tests.expect(adversarial.count >= 15, "adversarial cases shrank")
+        try tests.expect(multiTurn.count >= 10, "multi-turn sequences shrank")
+        let planner = try tutorPlanner()
+        let report = TutorEvaluationHarness(planner: planner).run(corpus)
+        let failures = report.results.filter { !$0.passed }
+        try tests.expect(
+            failures.isEmpty,
+            "tutor corpus failures: " + failures.map {
+                "\($0.caseID): \($0.failures.joined(separator: "; "))"
+            }.joined(separator: " | ")
+        )
+    }
+
+    @MainActor private static func testTutorSessionStore(_ tests: Harness) throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tracksmith-tutor-store-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = TutorSessionStore(rootURL: root)
+        let planner = try tutorPlanner()
+        var lesson = try planner.makeLesson(for: tutorNasalRequest())
+        lesson.requestText = "I sound nasal. api key sk-SECRETSECRETSECRET123 should never persist."
+        for _ in 0..<(TutorSessionStore.maximumFeedbackEvents + 40) {
+            lesson.feedbackEvents.append(.init(stepID: lesson.activeStepID, feedback: .notSure))
+        }
+        let record = TutorSessionRecord(lesson: lesson)
+        let url = try store.save(record)
+        let raw = try String(contentsOf: url, encoding: .utf8)
+        try tests.expect(!raw.contains("sk-SECRETSECRETSECRET123"), "credential persisted unredacted")
+        try tests.expect(raw.contains("[REDACTED CREDENTIAL]"), "redaction marker missing")
+
+        let loaded = try store.load(sessionID: record.sessionID)
+        try tests.expect(
+            loaded.record.lesson.feedbackEvents.count == TutorSessionStore.maximumFeedbackEvents,
+            "feedback events must be bounded"
+        )
+        try tests.expect(
+            loaded.record.lesson.selectedProcedureID == lesson.selectedProcedureID,
+            "round trip lost the lesson procedure"
+        )
+
+        // Corruption quarantines rather than restoring garbage.
+        try Data("not json at all".utf8).write(to: url)
+        try tests.expectThrows("corrupt tutor state must fail closed") {
+            _ = try store.load(sessionID: record.sessionID)
+        }
+        let quarantined = try FileManager.default.contentsOfDirectory(atPath: root.path)
+            .filter { $0.hasPrefix("quarantine-") }
+        try tests.expect(!quarantined.isEmpty, "corrupt state was not quarantined")
+
+        // Unsupported versions fail explicitly instead of silently migrating.
+        var futureRecord = TutorSessionRecord(lesson: try planner.makeLesson(for: tutorNasalRequest()))
+        _ = try store.save(futureRecord)
+        let futureURL = store.sessionURL(futureRecord.sessionID)
+        var text = try String(contentsOf: futureURL, encoding: .utf8)
+        text = text.replacingOccurrences(of: "\"version\" : \"1.0\"", with: "\"version\" : \"9.9\"")
+        try Data(text.utf8).write(to: futureURL)
+        try tests.expectThrows("future tutor state version must be rejected") {
+            _ = try store.load(sessionID: futureRecord.sessionID)
+        }
+        futureRecord.lesson.requestText = ""
+    }
+
+    @MainActor private static func testTutorProposalValidator(_ tests: Harness) throws {
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        let validator = TutorProposalValidator(catalog: catalog)
+
+        let valid = """
+        {"version":"1.0","requestKind":"troubleshootProblem","issueIDs":["nasalOrHonky"],
+         "causeIDs":["dynamicsInteraction","staticSpectralResonance"],
+         "desiredProductionTermIDs":["clear"],"preservationProductionTermIDs":["airy"],
+         "requiresClarification":false,"procedureIDs":["tutor.vocal.compression-emphasis-check.v1"],
+         "uncertainty":["The cause may be a combination."],"confidence":0.6}
+        """
+        let (proposal, audit) = try validator.validate(payload: Data(valid.utf8))
+        try tests.expect(proposal.issueIDs == ["nasalOrHonky"], "valid proposal mangled")
+        try tests.expect(
+            audit.completedStages == TutorProposalValidationStage.allCases,
+            "all seven stages must complete for a valid proposal"
+        )
+
+        func rejects(_ payload: String, _ label: String) throws {
+            try tests.expectThrows(label) {
+                _ = try validator.validate(payload: Data(payload.utf8))
+            }
+        }
+        try rejects(
+            #"{"version":"1.0","requestKind":"troubleshootProblem","issueIDs":[],"causeIDs":[],"menuPath":"Mixer > Audio FX","confidence":0.5,"requiresClarification":false,"desiredProductionTermIDs":[],"preservationProductionTermIDs":[],"procedureIDs":[],"uncertainty":[]}"#,
+            "provider menu paths must be rejected"
+        )
+        try rejects(
+            #"{"version":"1.0","requestKind":"troubleshootProblem","issueIDs":["totallyInventedIssue"],"causeIDs":[],"confidence":0.5,"requiresClarification":false,"desiredProductionTermIDs":[],"preservationProductionTermIDs":[],"procedureIDs":[],"uncertainty":[]}"#,
+            "invented issue IDs must be rejected"
+        )
+        try rejects(
+            #"{"version":"1.0","requestKind":"troubleshootProblem","issueIDs":["nasalOrHonky"],"causeIDs":[],"confidence":0.5,"requiresClarification":false,"desiredProductionTermIDs":[],"preservationProductionTermIDs":[],"procedureIDs":["tutor.vocal.invented-procedure.v1"],"uncertainty":[]}"#,
+            "invented procedure IDs must be rejected"
+        )
+        try rejects(
+            #"{"version":"1.0","requestKind":"troubleshootProblem","issueIDs":["nasalOrHonky"],"causeIDs":[],"confidence":0.5,"requiresClarification":false,"desiredProductionTermIDs":[],"preservationProductionTermIDs":[],"procedureIDs":[],"uncertainty":["I changed your compressor already."]}"#,
+            "claimed actions must be rejected"
+        )
+        try rejects(
+            #"{"version":"1.0","requestKind":"troubleshootProblem","issueIDs":["nasalOrHonky"],"causeIDs":[],"confidence":7.5,"requiresClarification":false,"desiredProductionTermIDs":[],"preservationProductionTermIDs":[],"procedureIDs":[],"uncertainty":[]}"#,
+            "out-of-range confidence must be rejected"
+        )
+        try rejects(
+            #"{"version":"1.0","requestKind":"troubleshootProblem","issueIDs":["nasalOrHonky"],"causeIDs":[],"confidence":0.5,"requiresClarification":false,"desiredProductionTermIDs":["madeUpTerm"],"preservationProductionTermIDs":[],"procedureIDs":[],"uncertainty":[]}"#,
+            "unknown production terms must be rejected"
+        )
+    }
+
+    @MainActor private static func testTutorLessonValidator(_ tests: Harness) throws {
+        let planner = try tutorPlanner()
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        let validator = TutorLessonValidator(catalog: catalog)
+        let lesson = try planner.makeLesson(for: tutorNasalRequest())
+        try validator.validate(lesson)
+
+        var falseProof = lesson
+        falseProof.statusNote = "The analyzer proved you are nasal."
+        try tests.expectThrows("false proof claims must be rejected") {
+            try validator.validate(falseProof)
+        }
+
+        var falseAction = lesson
+        falseAction.statusNote = "I changed the plug-in for you."
+        try tests.expectThrows("false action claims must be rejected") {
+            try validator.validate(falseAction)
+        }
+
+        var outOfBounds = lesson
+        for (stepIndex, step) in outOfBounds.steps.enumerated() {
+            if let parameterIndex = step.parameters.firstIndex(where: { $0.maximumValue != nil }) {
+                outOfBounds.steps[stepIndex].parameters[parameterIndex].safeStartingValue =
+                    (step.parameters[parameterIndex].maximumValue ?? 0) + 50
+                break
+            }
+        }
+        if outOfBounds != lesson {
+            try tests.expectThrows("out-of-catalog-bounds values must be rejected") {
+                try validator.validate(outOfBounds)
+            }
+        }
+
+        var groundless = lesson
+        groundless.authority = nil
+        try tests.expectThrows("audio-grounded lessons need an authority reference") {
+            try validator.validate(groundless)
+        }
+    }
+
+    @MainActor private static func testTutorEvidenceModes(_ tests: Harness) throws {
+        let planner = try tutorPlanner()
+        let grounded = try planner.makeLesson(for: tutorNasalRequest(withCapture: true))
+        try tests.expect(grounded.evidenceMode == .audioGrounded, "capture must ground the lesson")
+
+        let general = try planner.makeLesson(for: tutorNasalRequest(withCapture: false))
+        try tests.expect(general.evidenceMode == .userReportedOnly, "no capture means user-reported only")
+        try tests.expect(
+            general.contextEvidence.contains {
+                $0.statement.contains("not grounded in your current audio")
+            },
+            "general guidance must disclose the missing grounding"
+        )
+
+        var historical = grounded
+        historical.audioEvidenceIsHistorical = true
+        let intro = TutorExplanationFormatter().hypothesisIntro(for: historical)
+        try tests.expect(
+            intro.lowercased().contains("historical"),
+            "stale capture claims must present as historical"
+        )
+        try tests.expect(
+            grounded.contextEvidence.contains {
+                $0.statement.contains("not phoneme-aware")
+            },
+            "the analyzer's phoneme limitation must stay visible"
+        )
+    }
+
+    @MainActor private static func testTutorExplanationHonesty(_ tests: Harness) throws {
+        let planner = try tutorPlanner()
+        let reducer = TutorFeedbackReducer(planner: planner)
+        let formatter = TutorExplanationFormatter()
+
+        let explain = try planner.makeLesson(for: ProductionTutor.TutorRequest(
+            text: "What is Q?", sourceType: .vocal
+        ))
+        try tests.expect(explain.status == .completed, "supported concept must be explained")
+        try tests.expect(explain.conceptsPracticed == [.qBandwidth], "wrong concept selected")
+
+        var lesson = try planner.makeLesson(for: tutorNasalRequest())
+        for feedback in [ProductionTutor.TutorFeedback.done, .better, .better] {
+            lesson = reducer.reduce(lesson, feedback: feedback)
+        }
+        guard let summary = lesson.finalSummary else {
+            throw CheckFailure(message: "completed lesson must summarize")
+        }
+        let corpus = ([
+            summary.whatChanged, summary.likelyCause, summary.principleToRemember,
+        ] + summary.whatDidNotHelp + summary.remainingUncertainty)
+            .joined(separator: " ").lowercased()
+        for phrase in ["proved", "guaranteed", "professionals always", "will sound professional"] {
+            try tests.expect(!corpus.contains(phrase), "summary contains forbidden phrase \(phrase)")
+        }
+        try tests.expect(
+            summary.principleToRemember.lowercased().contains("principle"),
+            "completion must teach the production principle"
+        )
+        try tests.expect(
+            corpus.contains("listening remains decisive"),
+            "listening must remain decisive in the summary"
+        )
+        for concept in TutorConceptID.allCases {
+            try tests.expect(
+                formatter.conceptLabel(concept).contains("—"),
+                "concept \(concept.rawValue) lacks a plain-language explanation"
+            )
+        }
     }
 
     private static func makePlan(
