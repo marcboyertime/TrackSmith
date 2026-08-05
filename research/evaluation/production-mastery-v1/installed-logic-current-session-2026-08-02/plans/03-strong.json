@@ -1,0 +1,108 @@
+{
+  "goals" : [
+    {
+      "attribute" : "clarity",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    },
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.72,
+      "enabled" : true,
+      "id" : "A5B21EC0-C2F8-472A-8A03-6CD5D389A727",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 280,
+        "gainDB" : -4.4799999999999995,
+        "q" : 1.1
+      },
+      "rationale" : "Reduce a restrained amount of boxy low-mid energy.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "corrective",
+      "confidence" : 0.7,
+      "enabled" : true,
+      "id" : "971A3A14-F96D-412A-85A6-403A56DE3DA6",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 3200,
+        "gainDB" : 3.5,
+        "q" : 0.85
+      },
+      "rationale" : "Add presence for intelligibility without relying on output level.",
+      "type" : "parametricEQ"
+    },
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "169B7F35-6A1A-408E-9C0B-63278115362F",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 13.553144436088834,
+        "kneeDB" : 12.399999999999999,
+        "makeupGainDB" : 0,
+        "mix" : 1,
+        "ratio" : 4.654,
+        "releaseMS" : 155.86116101502157,
+        "thresholdDB" : -22.5049183060241
+      },
+      "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "9546F76F-45B7-5FC9-9C89-3A826CF89F93",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 6.533265659570883
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "31E7D041-27E6-47A5-BA54-2B49176BBBF5",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -1,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 12,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "D907B622-45B7-4FC9-9C89-3A826CF89F93",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "unknown",
+    "timeRangeSeconds" : {
+      "end" : 6.199727891156463,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "ED8E0F5E-BE7B-4DE8-8501-32D410CCC81D"
+}

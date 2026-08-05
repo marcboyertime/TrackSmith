@@ -1,0 +1,589 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-direction-mixer-production-profile-48k-2026-08-02",
+  "product": "TrackSmith",
+  "recordedAt": "2026-08-02",
+  "identityIdentifier": "logic-pro-12.3:direction-mixer",
+  "identityName": "Direction Mixer",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual Logic Pro project and native Project or Section bounces; no TrackSmith authority established",
+  "modelContextSummary": "Bounded direct Logic Pro 12.3 build-6674 evidence records one fresh Direction Mixer LR, direction 0 degrees, spread 1, split OFF state behind a host-bypass control, a stereo left-only source, one recovery transition, and three settled repeats with source-exact PCM. The profile remains partial: it does not characterize Direction Mixer LR/MS/Split transfer behavior, right-only routing, crossover states, mono translation, or perceptual quality, and grants no TrackSmith control authority.",
+  "scope": {
+    "acceptedState": "fresh header-bypass, stereo left-only source, Direction Mixer host bypass",
+    "acceptedRenders": [
+      "recovery-first-transition",
+      "settled-r1",
+      "settled-r2",
+      "settled-r3"
+    ],
+    "repeatability": "all three settled renders decode to the exact copied source PCM",
+    "excluded": [
+      "interrupted pre-recovery transition",
+      "wrong-save-destination render",
+      "right-only and all other Direction/Mixer/Split states"
+    ],
+    "limitations": "This bounded profile does not characterize Direction Mixer transfer behavior or prove the campaign's full LR/MS/Split grid."
+  },
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10"
+    },
+    "audioDevice": {
+      "nominalSampleRateHz": 48000
+    },
+    "processing": {
+      "lowLatencyMode": null,
+      "pluginDelayCompensation": null
+    }
+  },
+  "project": {
+    "activeProject": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx",
+    "activeProjectSavedBeforeArchive": true,
+    "acceptanceArchive": {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx.zip",
+      "fileSHA256": "6075c526d7dce8da4d99ed752b75a584603435122691d19c75d2852a2f72a5f7",
+      "unzipTestPassed": true
+    },
+    "tempoBPM": 120,
+    "cycle": "Start 1 1 1 1; End 5 1 1 1; 8.000 seconds",
+    "routing": "Audio 1 and Audio 2 muted; Audio 3 stereo, unmuted, neutral fader/pan, Stereo Out; Mastering Assistant bypassed"
+  },
+  "nativeState": {
+    "plugin": "Direction Mixer on Audio 3",
+    "mode": "LR",
+    "directionDegrees": 0.0,
+    "spread": 1.0,
+    "split": "OFF",
+    "hostBypass": true,
+    "stateEvidence": [
+      "state-screenshots/fresh-default-lr-direction0-spread1-split-off.png",
+      "state-screenshots/header-bypass-host-off-direction-mixer-dimmed.png"
+    ]
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRateHz": 48000,
+    "outputMode": "Interleaved",
+    "dither": "None",
+    "includeAudioTail": false
+  },
+  "source": {
+    "fixture": "fixtures/stereo_left_only.wav",
+    "projectCopy": "project/sources/stereo_left_only.wav",
+    "decodedPCM_SHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06"
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/stereo_left_only.wav",
+        "fileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+        "pcmSHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 2,
+        "frameCount": 384000,
+        "durationSeconds": 8.0
+      }
+    ],
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "The run-local source fixture and project-media copy decode to the declared PCM hash; the accepted settled renders retain exact source-mapped PCM."
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_one_recorded_lr_neutral_host_bypass_state",
+      "evidence": "The native editor records LR mode, direction 0 degrees, spread 1, split OFF, and host bypass for one stereo left-only source; no broader state grid is claimed."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_three_settled_header_bypass_repeats",
+      "evidence": "Settled r1, r2, and r3 decode to exact copied-source PCM; the recovery first transition remains separate provenance."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "partial_saved_project_and_source_hash_only",
+      "evidence": "The project archive is saved and source/project media hashes are retained; no active Direction Mixer save/reload transfer characterization is claimed."
+    }
+  },
+  "measurements": {
+    "headerBypass": {
+      "sourceMappedPCMByteExact": true,
+      "settledRepeatCount": 3,
+      "settledPCMByteExact": true,
+      "recoveryFirstTransitionRetained": true
+    },
+    "sourcePreservation": {
+      "projectMediaPCMByteExact": true,
+      "sourcePCM_SHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06"
+    },
+    "measurementBoundary": "Objective decoded-file and signal comparisons only; no transfer law, spatial-quality, mono-compatibility, perceptual, or control-authority claim."
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "measurements/header-bypass__stereo-left-only__settled-r1.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/header-bypass__stereo-left-only__settled-r1-vs-settled-r2.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/source-preservation__stereo-left-only__project-media.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    }
+  ],
+  "interpretation": {
+    "measuredBehavior": [
+      "One documented LR neutral Direction Mixer state behind host bypass preserved a stereo left-only source exactly across three settled renders.",
+      "A recovery first transition was retained separately and not substituted for settled-state evidence."
+    ],
+    "inferredConsequences": [
+      "Any typed advisory record must preserve the single-state scope, source/provenance roles, first-transition versus settled distinction, and the open LR/MS/Split campaign."
+    ],
+    "professionalPracticeHeuristics": [
+      "Direction, spread, split, channel routing, and mono translation remain source- and arrangement-dependent decisions requiring level-matched listening."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "No full Direction Mixer transfer function, LR/MS/Split coverage, localization, width, mono compatibility, perceptual quality, private topology, or TrackSmith authority is claimed."
+    ]
+  },
+  "evidenceBoundary": "Measured native Logic evidence only; no perceptual, population, private-topology, or TrackSmith-control claim.",
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "boundedProfileAcceptance": "This run is sufficient only for a bounded single-state Direction Mixer host-bypass profile with three settled repeats and source-preservation evidence; full LR/MS/Split characterization remains open.",
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "artifactFiles": [
+    {
+      "path": "README.md",
+      "sha256": "117d541113b0c34cdc658c413d3ec4fa4e3dc53a5a611c9e47af1c6c2f1077cf",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "artifacts/header-bypass__stereo-left-only__first-transition__offline.wav",
+      "sha256": "ab46f9843a211f3eb1afa03c612fc5a833d5db0bf01a83cdc450e60f3d30bb73",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/header-bypass__stereo-left-only__recovery-first-transition__offline.wav",
+      "sha256": "eb5e9e032198870420b3b86145f21697c7002ee4ff278b03360780942a70a54d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/header-bypass__stereo-left-only__settled-r1__offline.wav",
+      "sha256": "bcfe020a399b886639572712180b4eac9dfca8abf4e6e8ec2352068db163698e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/header-bypass__stereo-left-only__settled-r2__offline.wav",
+      "sha256": "5137d9f60f9154b06a80ed9e10420ac116f9de7629fdfecbb9a4b17e5b4d1be1",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/header-bypass__stereo-left-only__settled-r3__offline.wav",
+      "sha256": "d1a7a4710f361a4b5b3759806c7053adc8bf987195c998f458d76db4ae3a0601",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-wrong-save-destination__header-bypass__stereo-left-only__first-transition__offline.wav",
+      "sha256": "b578d859dff17ce840e6b34f8969018620f56278d89463c4c38e6e7fecc1b88a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "capture-plan.json",
+      "sha256": "48c610d34373461f4befbb2e8a90654d92561e47e686a75363eca0aabbb0ceb2",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/dc_offset_probe_mono.wav",
+      "sha256": "a2656c4fd818d66920276eadd7bbb8719ace67cfdff60533baa9708696e23a81",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "f2b6c89fe47a423b67740f01b7cd3b6bc8b14a93b67492c49c12588a3eb74b29",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__recovery-first-transition-vs-settled-r1.json",
+      "sha256": "25642e1f5eace61b5ee43492a5bfb8ab46425a21f0905f0b5be327d6e7c1bd99",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__recovery-first-transition.json",
+      "sha256": "53dccc459611c8fbd290e99a6ab3b313adf35d2a64f81148b65585c4d045e28e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__recovery-first-transition__offline.analysis.json",
+      "sha256": "53dccc459611c8fbd290e99a6ab3b313adf35d2a64f81148b65585c4d045e28e",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r1-vs-settled-r2.json",
+      "sha256": "4d6473b125172d4ee9472cbc0d67ff5157d2aa0b2a0caa5815410ef72a1169e9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r1-vs-settled-r3.json",
+      "sha256": "abe032f0983f034a7f4a54fe8db4e558f1d3811753dfe7fc538bf7cc20792f64",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r1.json",
+      "sha256": "d99e1ef2225a98194c43fa11508ac0a0362cf541d59328a847f62c4937f3310c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r1__offline.analysis.json",
+      "sha256": "d99e1ef2225a98194c43fa11508ac0a0362cf541d59328a847f62c4937f3310c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r2-vs-settled-r3.json",
+      "sha256": "d6aed7c7ab9a5511649a7d39a778704177dac2437ed7d74239568b1ab20a087d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r2.json",
+      "sha256": "1f804e0eba57f852ff7e1498f671d120643190631c3696b25bc501822f73258c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r2__offline.analysis.json",
+      "sha256": "1f804e0eba57f852ff7e1498f671d120643190631c3696b25bc501822f73258c",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r3.json",
+      "sha256": "46653c69f9efa5dd35b03163671d789f13b0369476482644d228b19de3204ae8",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/header-bypass__stereo-left-only__settled-r3__offline.analysis.json",
+      "sha256": "46653c69f9efa5dd35b03163671d789f13b0369476482644d228b19de3204ae8",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/source-preservation__stereo-left-only__project-media.json",
+      "sha256": "f8f79b8fb4ee5792f6bf88d5e93deb8e764c744db9d0db6258f758c127ae1465",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Autosave/.dummy",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Autosave/2026-08-02 11:51:30Z.displayData",
+      "sha256": "4b226db43abed30f2cf638284648fffde8cba05f2b55cfd973f6550deabdc318",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Autosave/2026-08-02 11:51:30Z.songData",
+      "sha256": "ccb346c52c30c4bdabed304cf66e133ccffdd1eee053691708978c0bf1bce938",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/DisplayState.plist",
+      "sha256": "d96ace971d8b5143328cfb30b96e06f3f663e8326b91dffbb7787e819ea96a63",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/DisplayStateArchive",
+      "sha256": "5932d605d167e9700f89d23f04e752806d065d4fd35727295e342e0ee1f85db3",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/MetaData.plist",
+      "sha256": "355197ea401a7a0ca744a94341f4e5c00e3e30cb5815e5b5eb0c4ea04fd36a92",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/00/MetaData.plist",
+      "sha256": "a4f8a8bf86cd20d7dfc6efdbb4b18a5729d2ed1f654e723c683866a6f2292ee4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/00/ProjectData",
+      "sha256": "5d3dc87505574e0f5fcaa61ebabca8cb4d6338badf048989364e37de8134e90f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/01/MetaData.plist",
+      "sha256": "a4f8a8bf86cd20d7dfc6efdbb4b18a5729d2ed1f654e723c683866a6f2292ee4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/01/ProjectData",
+      "sha256": "7e5f5322936241d2827df51f30bb3c9b1b4e04e40a029fa7964025317ee2e8c1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/02/MetaData.plist",
+      "sha256": "83a9fa7ebe66978df66791654ad27d969d510a88bc399aa58e52b1dad2564b2a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/02/ProjectData",
+      "sha256": "b5c290698fa1bdb0171b7b7cfa1f8e908817c5ef100c55ebd85f1eba233787ac",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/03/MetaData.plist",
+      "sha256": "355197ea401a7a0ca744a94341f4e5c00e3e30cb5815e5b5eb0c4ea04fd36a92",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/03/ProjectData",
+      "sha256": "9272e9b19bc60d5f29dc875f89b8366b2d382e6d62fb2c5015c638fb47b8b369",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/ProjectData",
+      "sha256": "12fc70900d59d33c936f4e41806710e7677035f2cece893d0e5618993ecf6ed1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Alternatives/000/WindowImage.jpg",
+      "sha256": "b6a69a97fa8fd80deb034ee2df94d8f3d90f8ba1b2efc1832e3437e556fd8735",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/amplitude_ladder_1khz_mono.wav",
+      "sha256": "be0bd3b87e3aebad9f75578b4c1ab121d00eaa4d9c8f9c24c73eef4456574380",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "9f2a847a231b2227b4ae6e60abc8744a90738281846b8550c68dcf7a0dc71f8b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/dc_offset_probe_mono.wav",
+      "sha256": "ee22baec8c477fd39c2b915839f34982b1606ebd8c671686428918a4538a0b2d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "47f7c6a8535b6ab6e2daa84249b635056fa01629b6dd771356de84b07468f90e",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/stereo_left_only.wav",
+      "sha256": "0a01682fe6a6b68ac3dc7aae90821ef73f7b288dc8022b047815dad23f2b5b83",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/stereo_left_only_1.wav",
+      "sha256": "0a01682fe6a6b68ac3dc7aae90821ef73f7b288dc8022b047815dad23f2b5b83",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/stereo_left_only_2.wav",
+      "sha256": "ad6f88d2aa029d87cb594e5e5c239753d570b7dcbec538e0f71394a12a4c4af6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/stereo_right_only.wav",
+      "sha256": "295a4350efdf0dc32590ce1b9ff133bbabf8b99484877584dbdfa5e0a89090c6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Media/Audio Files/vocal_like_mono.wav",
+      "sha256": "f99b745a8514386c0e39c84031b5caed979baeb463c52ca812c47cfa7434cd2a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx/Resources/ProjectInformation.plist",
+      "sha256": "08a7f634f0a4327b24ea281e2b36c6149c088ae637d68ee297f8e109f9e2ff6f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Direction Mixer Production Profile 48k 2026-08-02.logicx.zip",
+      "sha256": "6075c526d7dce8da4d99ed752b75a584603435122691d19c75d2852a2f72a5f7",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "project/sources/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/sources/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/sources/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/sources/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/sources/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "project/sources/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "state-screenshots/fresh-default-lr-direction0-spread1-split-off.png",
+      "sha256": "786d50e0ddbd9fa8400aab1a5ab1a7003310820b7e9bbea25d59494e2edb8476",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "state-screenshots/header-bypass-host-off-direction-mixer-dimmed.png",
+      "sha256": "cb842f2de8fbf82fcf18e4210470b5f65616877336d346e1e05fd37484265603",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "state-screenshots/header-bypass-left-bounce-settings-1-to-5.png",
+      "sha256": "cf67167e954fa857e0e4538948785d1924821969ec5b08e1e997f5821a78cc53",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "state-screenshots/header-bypass-left-recovery-bounce-settings-1-to-5.png",
+      "sha256": "1f83e77cc3d17942b37a9168359af6e5b27c3b62616e87961ffbce18c32803ad",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "state-screenshots/pre-insert-audio3-routing-stereo-clean.png",
+      "sha256": "e08d2cf760ba6eef2ac2e1a6d61331efd0952c5fc71b1c4693195cf24f0ab123",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "state-screenshots/pre-insert-clean-path-mastering-bypassed.png",
+      "sha256": "c335b40208a335344d8cb339a8dd8f81e4b9f5372f0008477c6cf6c5d364be6d",
+      "role": "direct Logic UI state evidence"
+    }
+  ]
+}

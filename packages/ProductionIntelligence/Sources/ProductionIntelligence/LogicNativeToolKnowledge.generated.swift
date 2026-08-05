@@ -215,9 +215,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.controlled, .dynamic, .punchy, .smooth, .aggressive, .soft],
                 documentedMechanism: "Look-ahead peak limiting with input gain, output ceiling, an Optimal mode, DC removal, and true-peak detection.",
                 productionConsequence: "Useful for bounded peak control, not proof of mastering quality. Gain into the limiter changes density and distortion; ceiling alone does not set loudness.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-adaptive-limiter-acceptance-48k-2026-08-02"],
+                empiricalEvidenceSummary: "Bounded direct Logic Pro 12.3 build-6674 evidence at 48 kHz records corrected Audio 2 clean-path Adaptive Limiter header-bypass source mapping in both stereo one-sided directions, one active +6 dB/-1 dB/20 ms/DC-off/true-peak-off state, exact settled repeats, right-only save/reload recovery, and deterministic vocal-, guitar-, and bass-like fixtures. The run remains partial: it does not characterize the full gain/ceiling/lookahead/DC/true-peak grid, private topology, sample-rate or routing behavior, perceptual quality, or TrackSmith control authority."
             ),
             .init(
                 identifier: "logic-pro-12.3:compressor",
@@ -523,9 +523,9 @@ extension LogicNativeToolKnowledgeCatalog {
                 semanticTags: [.wide, .narrow, .monoCompatibility, .forward],
                 documentedMechanism: "LR or MS direction/width manipulation, with split high/low controls.",
                 productionConsequence: "Changes center/lateral balance and apparent direction, not a scalar “quality.” Low-band side energy and mono-sum behavior are preservation constraints.",
-                empiricalStatus: .notRun,
-                measuredRunIDs: [],
-                empiricalEvidenceSummary: nil
+                empiricalStatus: .partial,
+                measuredRunIDs: ["logic-12.3-direction-mixer-production-profile-48k-2026-08-02"],
+                empiricalEvidenceSummary: "Bounded direct Logic Pro 12.3 build-6674 evidence records one fresh Direction Mixer LR, direction 0 degrees, spread 1, split OFF state behind a host-bypass control, a stereo left-only source, one recovery transition, and three settled repeats with source-exact PCM. The profile remains partial: it does not characterize Direction Mixer LR/MS/Split transfer behavior, right-only routing, crossover states, mono translation, or perceptual quality, and grants no TrackSmith control authority."
             ),
             .init(
                 identifier: "logic-pro-12.3:spatial-audio-monitoring",

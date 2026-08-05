@@ -1,0 +1,74 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "70838874-8FF7-4005-92B5-AF710EE0891E",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 5,
+        "kneeDB" : 12.399999999999999,
+        "makeupGainDB" : 0,
+        "mix" : 1,
+        "ratio" : 4.654,
+        "releaseMS" : 60,
+        "thresholdDB" : -48
+      },
+      "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "1491B61C-7D0C-5532-B8DE-9AF8DFD093E5",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 8.442952770883224
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "56AE112D-345C-42BF-A9DC-B2A59257BBE3",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -1,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 12,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "58D0F751-7D0C-4532-B8DE-9AF8DFD093E5",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "keyboard",
+    "timeRangeSeconds" : {
+      "end" : 8,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "624FEA07-53A4-49B3-AB60-52617D3F20BE"
+}

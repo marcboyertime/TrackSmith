@@ -1,0 +1,94 @@
+{
+  "answerKey": "real-audio-pilot-answer-key.json",
+  "evidenceClass": "SINGLE_LISTENER_FORMATIVE_EVIDENCE",
+  "instructions": "Keep this ledger empty until the user explicitly conducts a listening session. Do not infer, backfill, or fabricate responses.",
+  "monitoringContextFields": [
+    "listenerCode",
+    "roomOrHeadphonePath",
+    "interface",
+    "sampleRate",
+    "bitDepth",
+    "playbackLevel",
+    "date"
+  ],
+  "operatorOnly": true,
+  "participantManifest": "real-audio-pilot-participant-manifest.json",
+  "pilotID": "tracksmith-g5-real-audio-six-fixture-pilot",
+  "questions": [
+    {
+      "id": "target_success",
+      "prompt": "Did the change do what it was meant to do?",
+      "scale": "0_not_at_all_to_6_completely"
+    },
+    {
+      "id": "preservation",
+      "prompt": "Did the important parts stay intact?",
+      "scale": "0_not_at_all_to_6_completely"
+    },
+    {
+      "id": "naturalness",
+      "prompt": "Does it sound natural rather than processed?",
+      "scale": "0_not_natural_to_6_very_natural"
+    },
+    {
+      "id": "clarity",
+      "prompt": "How clear is the sound?",
+      "scale": "0_not_clear_to_6_very_clear"
+    },
+    {
+      "id": "production_value",
+      "prompt": "Does it make the production more useful or polished?",
+      "scale": "0_not_at_all_to_6_a_lot"
+    },
+    {
+      "id": "excitement",
+      "prompt": "How engaging or exciting is it?",
+      "scale": "0_not_at_all_to_6_very_much"
+    },
+    {
+      "id": "preference",
+      "prompt": "Which condition would you choose for this task?",
+      "scale": "choose_one_presented_condition"
+    },
+    {
+      "id": "confidence",
+      "prompt": "How sure are you about your answers?",
+      "scale": "0_not_sure_to_6_very_sure"
+    }
+  ],
+  "responses": [],
+  "schemaVersion": "1.0",
+  "templateType": "operator_response_template",
+  "trials": [
+    {
+      "responses": [],
+      "trialLabel": "Trial 005",
+      "trialRef": "trial-005"
+    },
+    {
+      "responses": [],
+      "trialLabel": "Trial 003",
+      "trialRef": "trial-003"
+    },
+    {
+      "responses": [],
+      "trialLabel": "Trial 006",
+      "trialRef": "trial-006"
+    },
+    {
+      "responses": [],
+      "trialLabel": "Trial 004",
+      "trialRef": "trial-004"
+    },
+    {
+      "responses": [],
+      "trialLabel": "Trial 002",
+      "trialRef": "trial-002"
+    },
+    {
+      "responses": [],
+      "trialLabel": "Trial 001",
+      "trialRef": "trial-001"
+    }
+  ]
+}

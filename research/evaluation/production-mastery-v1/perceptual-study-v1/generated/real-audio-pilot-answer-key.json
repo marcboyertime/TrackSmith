@@ -1,0 +1,645 @@
+{
+  "analysisReport": "real-audio-pilot-analysis.json",
+  "candidateIdentitiesAreHiddenUntilJudgment": true,
+  "evidenceClass": "SINGLE_LISTENER_FORMATIVE_EVIDENCE",
+  "operatorOnly": true,
+  "participantManifest": "real-audio-pilot-participant-manifest.json",
+  "pilotID": "tracksmith-g5-real-audio-six-fixture-pilot",
+  "pilotScope": "six_checked_in_dsp_fixture_pairs",
+  "randomizationAlgorithm": "Python random.Random(seed) role-label shuffle then trial shuffle",
+  "randomizationSeed": 20260802,
+  "responses": [],
+  "schemaVersion": "1.0",
+  "trials": [
+    {
+      "conditions": [
+        {
+          "artifactRef": "stimulus-001-A",
+          "audioFile": "audio/stimulus-001-A.wav",
+          "byteCount": 2640044,
+          "conditionLabel": "A",
+          "derivation": "byte-identical duplicate of the checked-in source reference",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a",
+            "kind": "source",
+            "path": "delay-rhythmic-guitar-source.wav",
+            "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+          },
+          "role": "anchor",
+          "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2640044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2640000,
+            "durationSeconds": 13.75,
+            "format": "IEEE_FLOAT",
+            "frameCount": 660000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+          }
+        },
+        {
+          "artifactRef": "stimulus-001-B",
+          "audioFile": "audio/stimulus-001-B.wav",
+          "byteCount": 2640044,
+          "conditionLabel": "B",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a",
+            "kind": "source",
+            "path": "delay-rhythmic-guitar-source.wav",
+            "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+          },
+          "role": "reference",
+          "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2640044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2640000,
+            "durationSeconds": 13.75,
+            "format": "IEEE_FLOAT",
+            "frameCount": 660000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+          }
+        },
+        {
+          "artifactRef": "stimulus-001-C",
+          "audioFile": "audio/stimulus-001-C.wav",
+          "byteCount": 2640044,
+          "conditionLabel": "C",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2",
+            "kind": "candidate",
+            "path": "delay-rhythmic-guitar-candidate.wav",
+            "sha256": "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2"
+          },
+          "role": "target",
+          "sha256": "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2640044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2640000,
+            "durationSeconds": 13.75,
+            "format": "IEEE_FLOAT",
+            "frameCount": 660000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2"
+          }
+        }
+      ],
+      "fixtureIdentifier": "delay-rhythmic-guitar",
+      "intendedComparison": "Are the repeats musically supportive rather than masking the next pluck?",
+      "preservationBoundary": "Tempo intent is external context; this free-time fixture proves no sync claim.",
+      "processor": "delay",
+      "responses": [],
+      "sourceFixture": "guitar_like_dynamic_plucks_mono.wav",
+      "sourceInputSHA256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "sourceInputUnchanged": true,
+      "trialLabel": "Trial 001",
+      "trialRef": "trial-001"
+    },
+    {
+      "conditions": [
+        {
+          "artifactRef": "stimulus-002-A",
+          "audioFile": "audio/stimulus-002-A.wav",
+          "byteCount": 2256044,
+          "conditionLabel": "A",
+          "derivation": "byte-identical duplicate of the checked-in source reference",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5",
+            "kind": "source",
+            "path": "delay-slap-guitar-source.wav",
+            "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+          },
+          "role": "anchor",
+          "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2256044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2256000,
+            "durationSeconds": 11.75,
+            "format": "IEEE_FLOAT",
+            "frameCount": 564000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+          }
+        },
+        {
+          "artifactRef": "stimulus-002-B",
+          "audioFile": "audio/stimulus-002-B.wav",
+          "byteCount": 2256044,
+          "conditionLabel": "B",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5",
+            "kind": "source",
+            "path": "delay-slap-guitar-source.wav",
+            "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+          },
+          "role": "reference",
+          "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2256044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2256000,
+            "durationSeconds": 11.75,
+            "format": "IEEE_FLOAT",
+            "frameCount": 564000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+          }
+        },
+        {
+          "artifactRef": "stimulus-002-C",
+          "audioFile": "audio/stimulus-002-C.wav",
+          "byteCount": 2256044,
+          "conditionLabel": "C",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5",
+            "kind": "candidate",
+            "path": "delay-slap-guitar-candidate.wav",
+            "sha256": "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5"
+          },
+          "role": "target",
+          "sha256": "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2256044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2256000,
+            "durationSeconds": 11.75,
+            "format": "IEEE_FLOAT",
+            "frameCount": 564000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5"
+          }
+        }
+      ],
+      "fixtureIdentifier": "delay-slap-guitar",
+      "intendedComparison": "Does the short echo add dimension while preserving pick articulation?",
+      "preservationBoundary": "Pick attack, rhythmic precision, and unchanged dry source are protected.",
+      "processor": "delay",
+      "responses": [],
+      "sourceFixture": "guitar_like_dynamic_plucks_mono.wav",
+      "sourceInputSHA256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "sourceInputUnchanged": true,
+      "trialLabel": "Trial 002",
+      "trialRef": "trial-002"
+    },
+    {
+      "conditions": [
+        {
+          "artifactRef": "stimulus-003-A",
+          "audioFile": "audio/stimulus-003-A.wav",
+          "byteCount": 1728044,
+          "conditionLabel": "A",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+            "kind": "source",
+            "path": "expander-firm-vocal-source.wav",
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          },
+          "role": "reference",
+          "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 1728044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 1728000,
+            "durationSeconds": 9.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 432000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          }
+        },
+        {
+          "artifactRef": "stimulus-003-B",
+          "audioFile": "audio/stimulus-003-B.wav",
+          "byteCount": 1728044,
+          "conditionLabel": "B",
+          "derivation": "byte-identical duplicate of the checked-in source reference",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+            "kind": "source",
+            "path": "expander-firm-vocal-source.wav",
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          },
+          "role": "anchor",
+          "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 1728044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 1728000,
+            "durationSeconds": 9.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 432000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          }
+        },
+        {
+          "artifactRef": "stimulus-003-C",
+          "audioFile": "audio/stimulus-003-C.wav",
+          "byteCount": 1728044,
+          "conditionLabel": "C",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763",
+            "kind": "candidate",
+            "path": "expander-firm-vocal-candidate.wav",
+            "sha256": "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763"
+          },
+          "role": "target",
+          "sha256": "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 1728044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 1728000,
+            "durationSeconds": 9.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 432000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763"
+          }
+        }
+      ],
+      "fixtureIdentifier": "expander-firm-vocal",
+      "intendedComparison": "Does stronger gap cleanup remain natural, or does it audibly truncate phrase detail?",
+      "preservationBoundary": "A cleaner metric cannot override audible tail loss or chatter.",
+      "processor": "expander",
+      "responses": [],
+      "sourceFixture": "vocal_like_mono.wav",
+      "sourceInputSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged": true,
+      "trialLabel": "Trial 003",
+      "trialRef": "trial-003"
+    },
+    {
+      "conditions": [
+        {
+          "artifactRef": "stimulus-004-A",
+          "audioFile": "audio/stimulus-004-A.wav",
+          "byteCount": 1728044,
+          "conditionLabel": "A",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+            "kind": "source",
+            "path": "expander-gentle-vocal-source.wav",
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          },
+          "role": "reference",
+          "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 1728044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 1728000,
+            "durationSeconds": 9.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 432000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          }
+        },
+        {
+          "artifactRef": "stimulus-004-B",
+          "audioFile": "audio/stimulus-004-B.wav",
+          "byteCount": 1728044,
+          "conditionLabel": "B",
+          "derivation": "byte-identical duplicate of the checked-in source reference",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+            "kind": "source",
+            "path": "expander-gentle-vocal-source.wav",
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          },
+          "role": "anchor",
+          "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 1728044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 1728000,
+            "durationSeconds": 9.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 432000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+          }
+        },
+        {
+          "artifactRef": "stimulus-004-C",
+          "audioFile": "audio/stimulus-004-C.wav",
+          "byteCount": 1728044,
+          "conditionLabel": "C",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42",
+            "kind": "candidate",
+            "path": "expander-gentle-vocal-candidate.wav",
+            "sha256": "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42"
+          },
+          "role": "target",
+          "sha256": "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 1728044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 1728000,
+            "durationSeconds": 9.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 432000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42"
+          }
+        }
+      ],
+      "fixtureIdentifier": "expander-gentle-vocal",
+      "intendedComparison": "Does gentle expansion lower gaps without shortening phrase endings or breath timing?",
+      "preservationBoundary": "Word tails, breaths, and direct-vocal tone remain listening-decisive.",
+      "processor": "expander",
+      "responses": [],
+      "sourceFixture": "vocal_like_mono.wav",
+      "sourceInputSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged": true,
+      "trialLabel": "Trial 004",
+      "trialRef": "trial-004"
+    },
+    {
+      "conditions": [
+        {
+          "artifactRef": "stimulus-005-A",
+          "audioFile": "audio/stimulus-005-A.wav",
+          "byteCount": 2496044,
+          "conditionLabel": "A",
+          "derivation": "byte-identical duplicate of the checked-in source reference",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820",
+            "kind": "source",
+            "path": "reverb-short-drum-room-source.wav",
+            "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+          },
+          "role": "anchor",
+          "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2496044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2496000,
+            "durationSeconds": 13.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 624000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+          }
+        },
+        {
+          "artifactRef": "stimulus-005-B",
+          "audioFile": "audio/stimulus-005-B.wav",
+          "byteCount": 2496044,
+          "conditionLabel": "B",
+          "input": {
+            "gainCorrectionDB": 0.9,
+            "inputSHA256": "e782e1e2a1bfe998610307b407398e5859fff8fbcfa48c83f009d9aefde3cb35",
+            "kind": "candidate",
+            "path": "reverb-short-drum-room-candidate.wav",
+            "sha256": "d14170e4fe4c662f0c1f0297d3d5b8ffe36acf2f454da7e7ff74c337e284d545"
+          },
+          "role": "target",
+          "sha256": "d14170e4fe4c662f0c1f0297d3d5b8ffe36acf2f454da7e7ff74c337e284d545",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2496044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2496000,
+            "durationSeconds": 13.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 624000,
+            "gainCorrectionDB": 0.9,
+            "sampleRate": 48000,
+            "sha256": "d14170e4fe4c662f0c1f0297d3d5b8ffe36acf2f454da7e7ff74c337e284d545"
+          }
+        },
+        {
+          "artifactRef": "stimulus-005-C",
+          "audioFile": "audio/stimulus-005-C.wav",
+          "byteCount": 2496044,
+          "conditionLabel": "C",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820",
+            "kind": "source",
+            "path": "reverb-short-drum-room-source.wav",
+            "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+          },
+          "role": "reference",
+          "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2496044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2496000,
+            "durationSeconds": 13.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 624000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+          }
+        }
+      ],
+      "fixtureIdentifier": "reverb-short-drum-room",
+      "intendedComparison": "Does the short room add space without pushing burst attacks backward?",
+      "preservationBoundary": "Attack focus and gap clarity are listening-decisive; bursts are not real drums.",
+      "processor": "reverb",
+      "responses": [],
+      "sourceFixture": "deterministic_noise_bursts_mono.wav",
+      "sourceInputSHA256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "sourceInputUnchanged": true,
+      "trialLabel": "Trial 005",
+      "trialRef": "trial-005"
+    },
+    {
+      "conditions": [
+        {
+          "artifactRef": "stimulus-006-A",
+          "audioFile": "audio/stimulus-006-A.wav",
+          "byteCount": 2496044,
+          "conditionLabel": "A",
+          "derivation": "byte-identical duplicate of the checked-in source reference",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7",
+            "kind": "source",
+            "path": "reverb-supporting-vocal-source.wav",
+            "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+          },
+          "role": "anchor",
+          "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2496044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2496000,
+            "durationSeconds": 13.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 624000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+          }
+        },
+        {
+          "artifactRef": "stimulus-006-B",
+          "audioFile": "audio/stimulus-006-B.wav",
+          "byteCount": 2496044,
+          "conditionLabel": "B",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281",
+            "kind": "candidate",
+            "path": "reverb-supporting-vocal-candidate.wav",
+            "sha256": "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281"
+          },
+          "role": "target",
+          "sha256": "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2496044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2496000,
+            "durationSeconds": 13.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 624000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281"
+          }
+        },
+        {
+          "artifactRef": "stimulus-006-C",
+          "audioFile": "audio/stimulus-006-C.wav",
+          "byteCount": 2496044,
+          "conditionLabel": "C",
+          "input": {
+            "gainCorrectionDB": 0.0,
+            "inputSHA256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7",
+            "kind": "source",
+            "path": "reverb-supporting-vocal-source.wav",
+            "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+          },
+          "role": "reference",
+          "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7",
+          "wav": {
+            "audioFormat": 3,
+            "bitsPerSample": 32,
+            "blockAlign": 4,
+            "byteCount": 2496044,
+            "channels": 1,
+            "container": "RIFF/WAVE",
+            "dataByteCount": 2496000,
+            "durationSeconds": 13.0,
+            "format": "IEEE_FLOAT",
+            "frameCount": 624000,
+            "gainCorrectionDB": 0.0,
+            "sampleRate": 48000,
+            "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+          }
+        }
+      ],
+      "fixtureIdentifier": "reverb-supporting-vocal",
+      "intendedComparison": "Does the ambience support the vocal without obscuring consonants or increasing perceived distance too far?",
+      "preservationBoundary": "Synthetic vocal-like material cannot establish real-vocal production quality.",
+      "processor": "reverb",
+      "responses": [],
+      "sourceFixture": "vocal_like_mono.wav",
+      "sourceInputSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged": true,
+      "trialLabel": "Trial 006",
+      "trialRef": "trial-006"
+    }
+  ]
+}

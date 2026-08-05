@@ -1,0 +1,2156 @@
+{
+  "schemaVersion": "1.0",
+  "runID": "logic-12.3-adaptive-limiter-acceptance-48k-2026-08-02",
+  "product": "TrackSmith",
+  "recordedAt": "2026-08-02",
+  "identityIdentifier": "logic-pro-12.3:adaptive-limiter",
+  "identityName": "Adaptive Limiter",
+  "identityType": "effect_or_native_audio_tool",
+  "status": "partial",
+  "exactTransferCharacterized": false,
+  "directHostEvidence": true,
+  "executionBoundary": "manual Logic Pro project and native Project or Section bounces; no TrackSmith authority to inspect, insert, alter, or automate Logic is established",
+  "modelContextSummary": "Bounded direct Logic Pro 12.3 build-6674 evidence at 48 kHz records corrected Audio 2 clean-path Adaptive Limiter header-bypass source mapping in both stereo one-sided directions, one active +6 dB/-1 dB/20 ms/DC-off/true-peak-off state, exact settled repeats, right-only save/reload recovery, and deterministic vocal-, guitar-, and bass-like fixtures. The run remains partial: it does not characterize the full gain/ceiling/lookahead/DC/true-peak grid, private topology, sample-rate or routing behavior, perceptual quality, or TrackSmith control authority.",
+  "sourceContext": {
+    "measurementTool": "research/scripts/analyze-logic-native-render.py",
+    "measurementToolOutputSchema": 4,
+    "fixtureManifest": "fixtures/manifest.json",
+    "claimClass": "measured_behavior",
+    "sourcePreservationRule": "Fixture-to-project-media PCM byte identity is required for every admitted source fixture."
+  },
+  "input": {
+    "fixtures": [
+      {
+        "artifactPath": "fixtures/stereo_left_only.wav",
+        "fileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+        "pcmSHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 2,
+        "frameCount": 384000,
+        "durationSeconds": 8.0
+      },
+      {
+        "artifactPath": "fixtures/stereo_right_only.wav",
+        "fileSHA256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+        "pcmSHA256": "e9ec8a7a48e5f17bb6c65b7542133945c533264281cc3178c3bf36ae96ae3031",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 2,
+        "frameCount": 384000,
+        "durationSeconds": 8.0
+      },
+      {
+        "artifactPath": "fixtures/vocal_like_mono.wav",
+        "pcmSHA256": "ed37a34810d99ad6d16466165dd3c7112413254441421e000271e235cf201581",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 384000,
+        "durationSeconds": 8.0
+      },
+      {
+        "artifactPath": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+        "pcmSHA256": "62864559b2967d4e24e6c501937ae0bcbddb84098ea1880d016b13a68606b402",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 420000,
+        "durationSeconds": 8.75
+      },
+      {
+        "artifactPath": "fixtures/bass_like_dynamic_plucks_mono.wav",
+        "pcmSHA256": "a49cc3859b19b354646f4f213642fd7b296f02e98544a858e1cbb723c996f7a0",
+        "sampleRateHz": 48000,
+        "bitDepth": 24,
+        "channels": 1,
+        "frameCount": 420000,
+        "durationSeconds": 8.75
+      }
+    ],
+    "sourceUnchanged": true,
+    "sourceUnchangedEvidence": "Each admitted project-media copy is decoded-PCM byte exact to its named run-local fixture; fixture and project inventories are retained and hashed."
+  },
+  "environment": {
+    "macOS": {
+      "version": "26.3",
+      "build": "25D125"
+    },
+    "hardware": {
+      "model": "MacBookPro18,2",
+      "processor": "Apple M1 Max",
+      "memoryBytes": 68719476736
+    },
+    "Logic": {
+      "version": "12.3",
+      "build": "6674",
+      "bundleIdentifier": "com.apple.logic10",
+      "codeDirectoryCDHash": "be60f7ec31ed955307f7021641d763c26ce4988e",
+      "mainExecutableSHA256": "ad6420a27e2d71878de8ed85326deafa3456ec11679decbe32b14703ec523bde",
+      "signingAuthority": "Apple Mac OS Application Signing",
+      "teamIdentifier": "F3LWYJ7GM7"
+    },
+    "audioBufferFrames": null,
+    "audioBufferEvidence": "Not captured by this Project or Section bounce lane.",
+    "lowLatencyMode": null,
+    "lowLatencyModeEvidence": "Not captured; no low-latency-mode claim is made."
+  },
+  "project": {
+    "activeProject": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx",
+    "activeProjectSavedBeforeArchive": true,
+    "acceptanceArchive": {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx.zip",
+      "fileSHA256": "3f28cb5bdf575e68de5e9969d8043dbc41df59adbb4cff2631684fcbaf517322",
+      "archiveMethod": "ditto -c -k --sequesterRsrc --keepParent",
+      "unzipTestPassed": true,
+      "extractionTest": {
+        "sourceFileCount": 28,
+        "extractedFileCount": 28,
+        "sourceFileBytes": 57323411,
+        "extractedFileBytes": 57323411
+      }
+    },
+    "tempoBPM": 120,
+    "acceptedCycleRanges": {
+      "oneSidedAndVocal": "Start 1 1 1 1; End 5 1 1 1; 8.000 seconds",
+      "guitarAndBass": "Start 1 1 1 1; End 5 2 3 1; 8.750 seconds"
+    },
+    "routingState": {
+      "Audio 1": "muted",
+      "Audio 2": "unmuted, Stereo channel mode, selected source track",
+      "Audio 2 output": "Stereo Out",
+      "Audio 2 fader": "0.0 dB",
+      "masteringAssistantCleanPathEvidence": "screenshots/acceptance-mastering-assistant-bypassed-clean-path-prerequisite-2026-08-02.png"
+    }
+  },
+  "nativeState": {
+    "plugin": "Adaptive Limiter on Audio 2",
+    "parametersVerifiedInNativeEditor": {
+      "GainDB": 6.0,
+      "OutputCeilingDB": -1.0,
+      "LookaheadMS": 20.0,
+      "RemoveDCOffset": "OFF",
+      "TruePeakDetection": "OFF"
+    },
+    "uniqueHeaderBypass": {
+      "nativeEditorControl": "Plug-in On/Off checkbox",
+      "activeValue": 1,
+      "bypassedValue": 0,
+      "leftBypassedScreenshot": "screenshots/acceptance-corrected-stereo-audio2-header-bypass-left-only-2026-08-02.png",
+      "leftActiveScreenshot": "screenshots/acceptance-corrected-stereo-audio2-reenabled-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "rightBypassedScreenshot": "screenshots/acceptance-corrected-stereo-audio2-header-bypass-right-only-2026-08-02.png",
+      "rightActiveScreenshot": "screenshots/acceptance-corrected-stereo-audio2-reenabled-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png"
+    },
+    "nativeStateBoundary": "The stated controls are direct observations of the recorded Logic state only; they do not identify Apple's private limiter topology or establish behavior for unrecorded settings."
+  },
+  "renderMethod": {
+    "logicCommand": "File > Bounce > Project or Section",
+    "fileType": "WAVE",
+    "bitDepth": 24,
+    "sampleRateHz": 48000,
+    "outputMode": "Interleaved",
+    "dither": "None",
+    "mode": "Automatic",
+    "includeAudioTail": false,
+    "normalize": "Off",
+    "addToProject": false,
+    "settlingRule": "Retain each first-transition render, then require pairwise decoded PCM byte identity across r1, r2, and r3 before describing a settled recorded state.",
+    "analysisRule": "All channel/gain/lag figures are objective file and signal measurements from the named JSON reports; no listener claim is derived from them."
+  },
+  "dimensionCoverage": {
+    "documented_default_and_bypass_path": {
+      "status": "complete_for_corrected_audio2_header_bypass_and_one_active_state",
+      "evidence": "Corrected Audio 2 true-stereo header-bypass renders map left-only and right-only source channels exactly, while the native editor records one active +6 dB, -1 dB ceiling, 20 ms lookahead, DC-off, true-peak-off state."
+    },
+    "every_discrete_mode_model_algorithm_and_routing_state": {
+      "status": "partial_one_recorded_active_routing_state",
+      "evidence": "The admitted run records one corrected Audio 2 stereo routing and one visible Adaptive Limiter state; other modes, channel formats, and routing states are unmeasured."
+    },
+    "bounded_continuous_parameter_grid_with_interaction_followup": {
+      "status": "partial_single_parameter_state_not_a_grid",
+      "evidence": "Gain, Output Ceiling, Lookahead, Remove DC Offset, and True Peak Detection are verified only at the named active state; retained older and rejected states are not admitted as a parameter grid."
+    },
+    "reported_and_measured_latency_polarity_gain_peak_tail": {
+      "status": "partial_bounded_gain_peak_and_zero_lag_measurements",
+      "evidence": "Accepted one-sided settled renders report measured gain, zero-frame lag, exact silent opposite channels, and a -1 dBFS peak on named fixtures. Host latency, tails, and other scheduling regimes were not captured."
+    },
+    "three_identical_renders_for_repeatability": {
+      "status": "complete_for_admitted_header_bypass_active_and_fixture_states",
+      "evidence": "Each admitted settled state retains three renders with pairwise decoded-PCM identity; first transitions remain separate provenance artifacts."
+    },
+    "save_reload_state_and_source_hash_verification": {
+      "status": "complete_for_right_only_active_reload_and_named_source_copies",
+      "evidence": "The right-only active state visibly recovered after reload, post-reload repeats are PCM exact, and every named project-media source copy is PCM exact to its run-local fixture."
+    },
+    "input_gain_output_ceiling_peak_behavior_and_level_matched_bypass": {
+      "status": "partial_one_active_gain_and_ceiling_state",
+      "evidence": "The admitted active state measured approximately +5 dB source-to-output gain with a -1 dBFS peak and is compared against corrected header bypass; broader gain/ceiling behavior remains open."
+    },
+    "lookahead_latency_release_recovery_optimal_mode_and_program_dependence": {
+      "status": "partial_one_20ms_displayed_lookahead_state",
+      "evidence": "One 20 ms Lookahead state produced bounded zero-lag file measurements and settled repeats; release, optimal mode, program dependence, and other lookahead values remain unmeasured."
+    },
+    "dc_removal_true_peak_mode_and_external_oversampled_peak_comparison": {
+      "status": "partial_controls_observed_off_only",
+      "evidence": "Remove DC Offset and True Peak Detection were directly observed OFF for the admitted state; no ON comparison or external oversampled peak characterization is claimed."
+    },
+    "density_distortion_pumping_stereo_link_mono_translation_and_sample_rate": {
+      "status": "partial_named_deterministic_fixture_observations",
+      "evidence": "Vocal-, guitar-, and bass-like deterministic fixtures retain objective gain, correlation, peak, channel, and repeatability measurements; density, pumping, stereo-link laws, mono translation, and other rates remain open."
+    }
+  },
+  "measurements": {
+    "headerBypassTrueStereoOneSided": "Both corrected left-only and right-only settled header-bypass lanes are PCM byte exact to their source-mapped output channels and silent opposite channels.",
+    "activeTrueStereoOneSided": "The admitted active state records measured one-sided gain near +5 dB, zero-frame lag, exact silent opposite channels, and repeatable settled PCM.",
+    "rightOnlyReload": "Post-reload right-only settled renders are pairwise PCM exact and match pre-reload settled output according to the retained comparison reports.",
+    "musicalFixtureSeries": "The named deterministic vocal-, guitar-, and bass-like fixture series retains repeatable objective file measurements; no listener result is represented.",
+    "measurementBoundary": "Objective decoded-file and signal comparisons describe only the exact recorded states, fixtures, routing, and bounce settings."
+  },
+  "interpretation": {
+    "measuredBehavior": [
+      "Corrected Audio 2 header bypass preserves left-only and right-only stereo source mapping in settled renders.",
+      "The admitted active state produces repeatable one-sided output with approximately +5 dB measured gain, zero-frame lag, exact opposite-channel silence, and a -1 dBFS peak on the named dynamic fixtures.",
+      "A right-only active state visibly recovered after save/reload with exact post-reload settled PCM comparisons."
+    ],
+    "inferredConsequences": [
+      "Typed knowledge must retain the exact Adaptive Limiter control values, source/routing provenance, first-transition versus settled distinction, and decoded-PCM evidence paths.",
+      "The corrected clean-path evidence is suitable only for a bounded partial profile and cannot be generalized to the full Adaptive Limiter transfer law."
+    ],
+    "professionalPracticeHeuristics": [
+      "Gain, ceiling, lookahead, true-peak mode, release behavior, source density, and delivery targets remain source- and role-dependent decisions requiring level-matched listening."
+    ],
+    "subjectiveListeningResults": [],
+    "prohibitedOverclaims": [
+      "No exact transfer, private topology, universal parameter law, perceptual quality, loudness preference, mono compatibility, or TrackSmith Logic-control authority is claimed."
+    ]
+  },
+  "tolerancesAndClaimBoundaries": {
+    "sourcePreservation": "PCM byte exact",
+    "headerBypassSourceMapping": "PCM byte exact per source-mapped output channel",
+    "settledRepeatability": "PCM byte exact for r1 versus r2, r1 versus r3, and r2 versus r3",
+    "activeOneSidedLatency": "bounded-lag estimate reported exactly; admitted left and right one-sided settled renders measured lag 0 frames",
+    "activeOneSidedGain": "report the measured least-squares gain; no idealized gain tolerance is substituted for the stored value",
+    "firstTransition": "retained as provenance but not substituted for a settled-state claim",
+    "interpretationBoundary": "No perceptual, artistic-quality, private-implementation, universal parameter-law, or Logic-control-authority claim is made."
+  },
+  "sourcePreservation": {
+    "stereoLeftOnly": {
+      "fixture": "fixtures/stereo_left_only.wav",
+      "fixtureFileSHA256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "pcmSHA256": "e361215c959e071f63196da723f68ad425d8d7251337d61e76b8bdb43dafba06",
+      "projectMedia": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/stereo_left_only_1.wav",
+      "projectMediaPCMByteExact": true,
+      "evidence": "measurements/acceptance-clean-project-media-stereo-left-only-audio2-import-source-preservation.json"
+    },
+    "stereoRightOnly": {
+      "fixture": "fixtures/stereo_right_only.wav",
+      "fixtureFileSHA256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "pcmSHA256": "e9ec8a7a48e5f17bb6c65b7542133945c533264281cc3178c3bf36ae96ae3031",
+      "projectMediaPCMByteExact": true,
+      "evidence": "measurements/acceptance-clean-project-media-stereo-right-only-source-preservation.json"
+    },
+    "vocalLikeMono": {
+      "fixture": "fixtures/vocal_like_mono.wav",
+      "pcmSHA256": "ed37a34810d99ad6d16466165dd3c7112413254441421e000271e235cf201581",
+      "projectMediaPCMByteExact": true,
+      "evidence": "measurements/acceptance-clean-project-media-vocal-like-mono-source-preservation.json"
+    },
+    "guitarLikeDynamicPlucksMono": {
+      "fixture": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "pcmSHA256": "62864559b2967d4e24e6c501937ae0bcbddb84098ea1880d016b13a68606b402",
+      "projectMediaPCMByteExact": true,
+      "evidence": "measurements/acceptance-clean-project-media-guitar-like-dynamic-plucks-mono-source-preservation.json"
+    },
+    "bassLikeDynamicPlucksMono": {
+      "fixture": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "pcmSHA256": "a49cc3859b19b354646f4f213642fd7b296f02e98544a858e1cbb723c996f7a0",
+      "projectMediaPCMByteExact": true,
+      "evidence": "measurements/acceptance-clean-project-media-bass-like-dynamic-plucks-mono-source-preservation.json"
+    }
+  },
+  "acceptedEvidence": {
+    "headerBypassTrueStereoOneSided": {
+      "rightOnly": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-right-only-",
+        "sourceFixture": "fixtures/stereo_right_only.wav",
+        "firstTransition": "first-transition.wav",
+        "settled": [
+          "settled-r1.wav",
+          "settled-r2.wav",
+          "settled-r3.wav"
+        ],
+        "sourceMapping": "Source-mapped right channel sample exact; left remains silent and sample exact.",
+        "settledRepeatability": "All required r1/r2/r3 pair reports are PCM byte exact."
+      },
+      "leftOnly": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-left-only-",
+        "sourceFixture": "fixtures/stereo_left_only.wav",
+        "firstTransition": "first-transition.wav",
+        "settled": [
+          "settled-r1.wav",
+          "settled-r2.wav",
+          "settled-r3.wav"
+        ],
+        "sourceMapping": "Source-mapped left channel sample exact; right remains silent and sample exact.",
+        "settledRepeatability": "All required r1/r2/r3 pair reports are PCM byte exact."
+      }
+    },
+    "activeTrueStereoOneSided": {
+      "rightOnly": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-",
+        "sourceFixture": "fixtures/stereo_right_only.wav",
+        "settledRightGainDB": 5.000000026560554,
+        "settledLagFrames": 0,
+        "silentLeftSampleExact": true,
+        "settledRepeatability": "r1/r2/r3 are PCM byte exact."
+      },
+      "leftOnly": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-",
+        "sourceFixture": "fixtures/stereo_left_only.wav",
+        "firstTransitionLeftGainDB": 4.99999650107058,
+        "settledLeftGainDB": 5.000000026560554,
+        "settledLagFrames": 0,
+        "settledZeroLagCorrelation": 0.9999999999999487,
+        "silentRightSampleExact": true,
+        "firstTransitionVersusR1PCMByteExact": false,
+        "settledRepeatability": "r1/r2/r3 are PCM byte exact."
+      }
+    },
+    "rightOnlyReload": {
+      "postReloadArtifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-",
+      "verifiedVisibleStateScreenshot": "screenshots/acceptance-corrected-stereo-audio2-postreload-active-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "postReloadSettledRepeatability": "postreload r1/r2/r3 are PCM byte exact",
+      "preReloadSettledR1VersusPostReloadSettled": "PCM byte exact for postreload r1, r2, and r3 comparison reports"
+    },
+    "musicalFixtureSeries": {
+      "vocalLikeMono": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-",
+        "renderedChannels": 2,
+        "durationSeconds": 8.0,
+        "sourceToEachOutputGainDB": 4.9999999863,
+        "lagFrames": 0,
+        "settledRepeatability": "r1/r2/r3 PCM byte exact"
+      },
+      "guitarLikeDynamicPlucksMono": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-",
+        "renderedChannels": 2,
+        "durationSeconds": 8.75,
+        "sourceToEachOutputGainDB": 4.7086296484,
+        "zeroLagCorrelation": 0.9976502369,
+        "peakDBFS": -0.999999709,
+        "settledRepeatability": "r1/r2/r3 PCM byte exact"
+      },
+      "bassLikeDynamicPlucksMono": {
+        "artifactPrefix": "artifacts/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-",
+        "renderedChannels": 2,
+        "durationSeconds": 8.75,
+        "sourceToEachOutputGainDB": 4.7117360933,
+        "zeroLagCorrelation": 0.9977225132,
+        "peakDBFS": -0.999999709,
+        "settledRepeatability": "r1/r2/r3 PCM byte exact"
+      }
+    }
+  },
+  "measurementAssertions": [
+    {
+      "artifactPath": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r1.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r1.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        0,
+        "least_squares_gain_db"
+      ],
+      "minimum": 4.9999,
+      "maximum": 5.0001
+    },
+    {
+      "artifactPath": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "jsonPath": [
+        "comparison",
+        "channel_comparisons",
+        1,
+        "sample_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    },
+    {
+      "artifactPath": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-prereload-settled-r1-vs-postreload-settled-r1.json",
+      "jsonPath": [
+        "comparison",
+        "pcm_byte_exact"
+      ],
+      "equals": true
+    }
+  ],
+  "excludedAttempts": [
+    {
+      "paths": [
+        "artifacts/acceptance-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r3.wav"
+      ],
+      "reason": "Retained historical render; no corrected Audio 2 clean-path and Mastering Assistant routing proof is admitted for it."
+    },
+    {
+      "paths": [
+        "artifacts/6.wav",
+        "measurements/6.json"
+      ],
+      "reason": "Retained legacy unnamed capture and its historic analysis. Channel-count comparison does not match and routing/provenance are insufficient for the corrected clean-path acceptance scope. Binary paths are intentionally preserved."
+    },
+    {
+      "pathPatterns": [
+        "artifacts/acceptance-clean-*.wav",
+        "measurements/acceptance-clean-*.json",
+        "artifacts/adaptive-limiter-*.wav",
+        "measurements/adaptive-limiter-*.json",
+        "measurements/repeat-adaptive-limiter-*.json"
+      ],
+      "reason": "Original-project and pre-corrected renders are retained but lack the corrected Audio 2 clean-path provenance and/or explicit Mastering Assistant routing proof required by this acceptance profile."
+    },
+    {
+      "paths": [
+        "artifacts/rejected-mono-path-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+        "measurements/rejected-mono-path-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json"
+      ],
+      "reason": "Explicitly rejected mono-path right-only take; not a true-stereo Audio 2 proof."
+    },
+    {
+      "paths": [
+        "artifacts/rejected-hidden-mastering-assistant-header-bypass-amplitude-ladder.wav",
+        "measurements/rejected-hidden-mastering-assistant-header-bypass-amplitude-ladder-current-artifact.json"
+      ],
+      "reason": "Explicitly rejected confounded Mastering Assistant path."
+    },
+    {
+      "pathPatterns": [
+        "artifacts/rejected-unverified-gain-state-*.wav",
+        "measurements/rejected-unverified-gain-state-*.json"
+      ],
+      "reason": "Explicitly rejected legacy captures with unverified gain state."
+    }
+  ],
+  "unknowns": [
+    "All unrecorded Gain, Output Ceiling, Lookahead, Remove DC Offset, and True Peak Detection settings and their interactions.",
+    "Other sample rates, bit depths, channel formats, automation, offline/realtime scheduling, latency compensation, tails, overload regimes, and routing states.",
+    "Any private Adaptive Limiter algorithm, true-peak implementation, detector/topology, or full transfer law.",
+    "Perceptual quality, loudness preference, musical usefulness, clarity, transparency, mono compatibility, or listener preference; no listening protocol was run.",
+    "Any TrackSmith control authority over Logic Pro."
+  ],
+  "listeningBoundary": {
+    "participants": 0,
+    "protocolCompleted": false,
+    "statement": "No participant completed a controlled listening protocol. Objective measurements are not represented as a listener, preference, or musical-quality result."
+  },
+  "claimBoundary": {
+    "provenanceClass": "measured_behavior",
+    "acceptedScope": "Corrected Audio 2 true-stereo clean-path evidence only: header-bypass one-sided source mapping in both directions; active +6 dB, -1 dB ceiling, 20 ms lookahead, DC off, true-peak off one-sided mapping; recorded right-only save/reload restoration; and the named deterministic vocal, guitar, and bass fixture series.",
+    "logicManualClaimsRemainDocumentary": true,
+    "objectiveMeasurementsAreNotArtisticProof": true,
+    "logicControlAuthorityGranted": false,
+    "rawAudioUploaded": false,
+    "sourceFilesModified": false,
+    "exactTransferCharacterized": false
+  },
+  "inventories": {
+    "artifacts": {
+      "path": "artifacts/inventory.json",
+      "fileCount": 78,
+      "fileSHA256": "379b501fb193c4de06fcd239417e72f2f967e268527accae2f4bf15ae57a3143"
+    },
+    "screenshots": {
+      "path": "screenshots/inventory.json",
+      "fileCount": 29,
+      "fileSHA256": "67f168f15fb82ebf028f6ac40a6dea37de6943da342a5b85a4c60e6b9db82c59"
+    },
+    "measurements": {
+      "path": "measurements/inventory.json",
+      "fileCount": 153,
+      "fileSHA256": "c37a37e244186d5f7f8c5eabdd50444ff200751c44452517f711ac9f26ec0c43"
+    },
+    "sources": {
+      "path": "source-inventory.json",
+      "fileCount": 35,
+      "fileSHA256": "ad2ee6bc8e957f1e90505b5789a139981b79a26711b883c25008664957f2edf9"
+    },
+    "projects": {
+      "path": "project/inventory.json",
+      "fileCount": 45,
+      "fileSHA256": "a2aa4d5020480f439a3f2e2d99f080e7ed2d291bf67af69fcdf8042d44b5f04c"
+    }
+  },
+  "artifactFiles": [
+    {
+      "path": "artifacts/6.wav",
+      "sha256": "8cf4e244ede690763a24fd540d6147a5f7cfb9f4918618622fae261e63fccb19",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-header-bypass-stereo-left-only-first-transition.wav",
+      "sha256": "701fe8ac0a5dea1ca44a440d3cad5f632ff39462b91d6f5bb4cdb6b2b37ea0de",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-header-bypass-stereo-left-only-settled-r1.wav",
+      "sha256": "16225635ba706c47703c7006575578fb0825019c6183acd00f85e87d021a2a32",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-header-bypass-stereo-left-only-settled-r2.wav",
+      "sha256": "d43e1c565d49275d70c61cd1aa28bd065ca2a46c4563df3a6c3683a778d487d5",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-header-bypass-stereo-left-only-settled-r3.wav",
+      "sha256": "d4fd54063219ed2dd89ad6eeef6f9bb2c3c9676613191128774e212f3919b746",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "47ccdfccabc57882a76fb1bc3964346952a9c0176a44a3b40ccd09603b3e1271",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.wav",
+      "sha256": "4106f6d786b8ebbf695a9898f17078476ca9f27c01615794d9adf7dd2c991866",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.wav",
+      "sha256": "3cd27c45cc5a663c472550a391712e2bf583bec135a5b38908b5298cf28e0009",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.wav",
+      "sha256": "eccf725e3418806af5936a965970fdbb0c7c0f0a85af848ce1f8814656508fe3",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-left-only-first-transition.wav",
+      "sha256": "e1b884f33448dabb7fe100f1e9c69b238349d34a023bf8f9ffd05f12be20e93f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r1.wav",
+      "sha256": "52a6b0469f21c65b0f2d986b1aeb76253205487a485cd0a546f25264cd258c85",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r2.wav",
+      "sha256": "130a6171194bcff6bec6404bc0f80d6c0f28cea154b810abbb1cade2439d6a3d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r3.wav",
+      "sha256": "3e8354c98241b931e78ff6bfc96f143857b44b55b0a8220df9d59a69019ded52",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-right-only-first-transition.wav",
+      "sha256": "8ad3244aff8fa3cf21ac4a77f60d85701e8600fdff0478e75f900529c430eb80",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r1.wav",
+      "sha256": "c319a275e0cb0f74c89450b9c9905fb4f6aade4075b2d6d5a79dc64e3059bbfd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r2.wav",
+      "sha256": "c0554d7914440f3ff7ee3b479f646b9002f4070ccfe063349512874bcee7e9d6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r3.wav",
+      "sha256": "ce689fe24e0b794b86b0e77ec00bac0c2e4621516edd1c69fa6213d5d142754d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "f44d64eafe516b1630e49ccb56ce9057213126eb53f1a5ade8970c7a6a32b926",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.wav",
+      "sha256": "c657f80523552b8a03deb3a7741ea3fa1ff2edcb07bd1e435e4962ca5796f782",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.wav",
+      "sha256": "756d7dccacfa933058dd7b1becd1761a1754f79b05c4e3723890aa0788d7ce98",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.wav",
+      "sha256": "72f9b2d24c9535d6c05696d92cfe1e7f8f11526df9bc0e8a3011b784928c0a95",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "a351bd4460c670a0ab4687c690d9f20c4396d4663dc500d573d586771ae94d3b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.wav",
+      "sha256": "de9b83acfe6c74cec8119151fadeef94b462575228f52116d05011eafc8f37e8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.wav",
+      "sha256": "b6d665ae8d7d56a148cc4861391ecfb87916371b46c144b5db22da7b20fffee9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.wav",
+      "sha256": "03893326c3ba1058b8f0d09cb981863107ad9ea6f1648f3d478f762bee6aa6f7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "5c18f67bebaebc405fd00ac49da068ddb8dd85f45493bcdbf7af8b1dafac4401",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.wav",
+      "sha256": "c30d43cc92985867cfe50a10a74e59857862a498c1d43349f5433dece15fbaef",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.wav",
+      "sha256": "7267e975db8d7eeae65decdf950482e2f9d0206598b688ae2e4d67d428225f9f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.wav",
+      "sha256": "37f7e5f3192819bb0ba60864acc69ddd0442ff8866dc65a20931bde4637661f9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "1af69cb93ea0ca1c8e4c5be7f1a2145d228403245fc1b37c49430b310cbe6aa0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-first-transition.wav",
+      "sha256": "d043122d7b325bb35bacd1d1d2400a5196d8920cf5fbada38f27c387a2e4351f",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r1.wav",
+      "sha256": "8a3005a82642db4c58be005d985a3dc955cd6cacb0a8dcb8e55a611be3bed2fc",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r2.wav",
+      "sha256": "cd5c61f23bdbb97c284e270dc6113f2214357248341dd690f57675a4893e37e9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r3.wav",
+      "sha256": "bf848588bb3793761f48aab091b1854f66bb7c018de984486d823e8d6d836556",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.wav",
+      "sha256": "1eda6df94f5e5355a9e0bf6147c29a9ed5d18384b1e522063ca04e75684bff99",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.wav",
+      "sha256": "40c8dc33abc2f9a2b223f695003c4b11b32a76eaf8d6ab805ef0003e73e0d91c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.wav",
+      "sha256": "34b51d2925c0f2f69daa4b980c778b3c6d650e22c4c476ff1cb07b1dd4cbd965",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "9c81ec718a4161f3dba25a48929ba2ab1da8bc185f02fccdeef6e27e8d6d1187",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.wav",
+      "sha256": "c9052f8e8fdb1f307cc29be3057cd00334c530a7c9f3d3b702084e7fe37be7fa",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.wav",
+      "sha256": "ec55b152bfd520520ecb58d261847340afc4d4a6127097b814c5df19a86bc272",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.wav",
+      "sha256": "c61a693ade5b0b0cd4d102c4868e7beab93708b884d3694fb8bf4640825ed13c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/acceptance-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r3.wav",
+      "sha256": "2ff36fb2c3efacd711f8ce9b3c92fe20f54d10c52fe5f91909fb7fa126c867d4",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "eb785bbbd339af0e2011c4874281754e845f0cf344b2c1ba3ddb21ea58c707d9",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r1.wav",
+      "sha256": "30438f5e1b7936ca9a66dd1518a30af2cbee8110e791d7a1ec5c29a7020051dd",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r2.wav",
+      "sha256": "876b754ac9af6c7dcd9e0ec38d0955692c2af3839386a55d0c343286009d50c6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r3.wav",
+      "sha256": "f524926f25d3a361eeb402e6e35f9d772cf79e9695561e4b2d2afb63f9e00656",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-first-transition.wav",
+      "sha256": "f27543fbdd2f7d776d94a71d259894c7462d036c1249c7bdf0fa06e3eb21dbc0",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r1.wav",
+      "sha256": "c3592e4366935b270881751f3a3b2f54c6e4dc0487a31c32074a50afe3aa03b8",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r2.wav",
+      "sha256": "da041103e7c7d25092028f91e01dd482fc13916e7c0dd3761583bdde3d05f762",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r3.wav",
+      "sha256": "cdf6416362ae198c9456124ddecf2fe538d2849e89df92cf230ccb200ed508f6",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-first-transition.wav",
+      "sha256": "e34ecf09c34d7b52ae8ee570ea0bcbfdf072ca5c45f1dc313a02c1c534de7645",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r1.wav",
+      "sha256": "2418d029f428303955161b2f5ecbd359b0d3d9a8135faab386b7709d85325825",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r2.wav",
+      "sha256": "96b9affd420333707c8a0b93a14541d6a0db99128f3bf9228803a75d2f598614",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r3.wav",
+      "sha256": "5763ba6240e3f6641482a2f5d5ab8d4491243e18d877b549342c32f4832e1550",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "dba53fe69c5f334f9811fec4dfae0770ffa6a90ce4e57800c00a283de93a4efb",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1.wav",
+      "sha256": "7ee26d265aba5835bd36407273812f692657c89db58c4c83e7726b2e5a6bf262",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r2.wav",
+      "sha256": "690a5ef145e0275adb5d791f70c44e6b3aacffb9a92dd0d9f4591261c04dda22",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r3.wav",
+      "sha256": "92afbb444830e31c88be1913691b60dd59823f3b9dcfc57d34cc962f1c08a9fa",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead200ms-dcoff-tpoff.wav",
+      "sha256": "9bb89537c88f4deeef36733c9cd5a4369182a0efc8dfee89cdb58ee3e690c963",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "81ed31cf9677c283f18fa634f5cdda7162007cfa7b9ecc04c047c9cc7ad9cfd7",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1.wav",
+      "sha256": "7ce73fcc72664dd101192193ec9718b690a187336ee1d83b7cebd20a2bd0df68",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r2.wav",
+      "sha256": "2c58e78cbfffd5f6815f7355819c4e6eb971e8683873edee1e1762dc8a57ef22",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r3.wav",
+      "sha256": "8d5f2bd5cfd072cb2abe8527cc21e4a06f3ab8f2ba6f3959cf87294d9043857c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-first-transition.wav",
+      "sha256": "6c1ca6135b15cf3ff9ae0395ac6cec9a543356560031332e029ada275c49a931",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r1.wav",
+      "sha256": "f3330ee0ee6402ff5be71e4dc6764b246f4bda4190ebe1113d0bb8a77e781cfb",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r2.wav",
+      "sha256": "ea48eb40e42bd2ad02095f06ef156be51031520eb191aa63f570cce0a545be32",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r3.wav",
+      "sha256": "1342e5fabc9fef7e9bb4ecdd371460ce6916e2c15b122faf03ba6800a111ed3c",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus1db-lookahead50ms-dcoff-tpoff.wav",
+      "sha256": "3972ed7c5b916b74c29c041606f60503a80585d9b45e195e2579353320ac9d63",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-gain6db-ceiling-minus2db-lookahead20ms-dcoff-tpoff.wav",
+      "sha256": "484759f0c782eaba3c1b453b55e9aadeecb9a9a30ce28d98cee28a6dc226e2d2",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-header-bypass-amplitude-ladder.wav",
+      "sha256": "70a4a17f3d81d41f6e6f30804249b047f77313e82ec1593525a3ca1ac2cf795d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "b41c0bf3140f4addddd031df72226bbb9cae4e6a225a2d4d9fa187f19d11224a",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1.wav",
+      "sha256": "8ff53a6c4a8e3636df3a5242ce6f8b1c2e10c1b826479145ba69446eca81e33d",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r2.wav",
+      "sha256": "b70d94e0c1c4a390b0a1a83fc5c6830a8e44973d1c4ff5f2c80e468d867a4424",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/inventory.json",
+      "sha256": "379b501fb193c4de06fcd239417e72f2f967e268527accae2f4bf15ae57a3143",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "artifacts/rejected-hidden-mastering-assistant-header-bypass-amplitude-ladder.wav",
+      "sha256": "a26af9e84a474aafbb3fe54f550acb0ba683e697e26236b48623efecc02df61b",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-mono-path-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.wav",
+      "sha256": "ac8008adf04cdddb364b92ee23aca44ad4c4a93e234f6af3b297dfd20b877490",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-unverified-gain-state-adaptive-limiter-gain6db-ceiling-minus1db-lookahead200ms-dcoff-tpoff.wav",
+      "sha256": "e25ce58e4429a9f044eef2feb522c44c0450143446bfab7fb6e99d0a8c660a53",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-unverified-gain-state-adaptive-limiter-gain6db-ceiling-minus1db-lookahead50ms-dcoff-tpoff.wav",
+      "sha256": "9087155146de71b03944bb484ea64e194e90026c7aaea2ce6067d233e17df379",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "artifacts/rejected-unverified-gain-state-adaptive-limiter-gain6db-ceiling-minus6db-lookahead20ms-dcoff-tpoff.wav",
+      "sha256": "b4680ebb44276577bbbaae71a8f54b18e0cd5f2f84d9fae93b0398f644211024",
+      "role": "retained direct Logic render, including accepted and rejected attempts"
+    },
+    {
+      "path": "fixtures/amplitude_ladder_1khz_mono.wav",
+      "sha256": "469045245bc4f67389e1c38cf4201308efbd2fbb24ad61767718ab63476f1410",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "c49eb71c0f44b4f7c764ccb335c0d25300b2b52aebd38dc519451306c1c5283a",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/ccif_imd_19khz_20khz_mono.wav",
+      "sha256": "ca20dd0db4463fe238b893ed61a0dc2c807305b448f9f7cb659703e3112f10c0",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/dc_offset_probe_mono.wav",
+      "sha256": "a2656c4fd818d66920276eadd7bbb8719ace67cfdff60533baa9708696e23a81",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/deterministic_noise_bursts_mono.wav",
+      "sha256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/impulse_level_ladder_mono.wav",
+      "sha256": "41cfceffa9fa75a8b6fbb3b562f9cd20dc6861d67f5f8d8dd10a23ae56afc73c",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/log_sweep_20hz_20khz_mono.wav",
+      "sha256": "dc1e1ee4c136633d3d8ae89b81a7709e2cea4d72ff91c00a10ff0faffd23b5a7",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/manifest.json",
+      "sha256": "f2b6c89fe47a423b67740f01b7cd3b6bc8b14a93b67492c49c12588a3eb74b29",
+      "role": "deterministic fixture identity manifest"
+    },
+    {
+      "path": "fixtures/multitone_mono.wav",
+      "sha256": "bc4979b4961ed26694ffe078e6bd1b7a26d05458ef1235ec45e04cd438aa06b8",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/silence_mono.wav",
+      "sha256": "fc4a4ce325dc2245bab45ed42b07471a94315c86e0e29cf4f33309fcaed08e6a",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/single_impulse_mono.wav",
+      "sha256": "e6d51a8293fdc7bed3514fb4686762aa7e15767777acef89e76db5f3bd31a56d",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/smpte_imd_60hz_7khz_mono.wav",
+      "sha256": "dfea4bd2d54fbdc32fe9acb8184e486ea94eb96e032e1daca9c2a57f347888d5",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/stereo_anti_phase.wav",
+      "sha256": "8bae87a7c7593ed8d91ed801e77e1b8d74187d96f77990de70e4d7de67e69244",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/stereo_in_phase.wav",
+      "sha256": "b52a181b971cc75267e69a25e8be291bb53a286f5fda1ac57e41146c8377d200",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/stereo_left_only.wav",
+      "sha256": "7ee0f19c1dcfb3eb674f75ad6c9f7d505ca188d8f73cd86b9ff4231538a6e97a",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/stereo_mid_low_side_high.wav",
+      "sha256": "b528f36b1acc27b0954dba8264bfe0d8958f3971a94d9adea936522ca6bb60ed",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/stereo_one_sample_offset.wav",
+      "sha256": "3160105dcbe8d6578779fc47d662f31e686c74d0a5a5f6d4a5eaf003396299e7",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/stereo_right_only.wav",
+      "sha256": "0fa3baf8e8422f457560551f24b7d91329d92bab3de5663be92dd8b02f4c6696",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "fixtures/vocal_like_mono.wav",
+      "sha256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "role": "generated deterministic fixture"
+    },
+    {
+      "path": "measurements/6.json",
+      "sha256": "efe51e5202760e21c558c99ef093e11f2dc9251cee587d4a7b4e0ad352734138",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-first-transition-vs-settled-r1.json",
+      "sha256": "d60359c03fe9bc71de99c9f7a320933cd1641686863aedcabee7309afd4ebe64",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-first-transition.json",
+      "sha256": "0331f474386eb849689390cd857767c862471fc7a636dc8bdf85d579931a8865",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-settled-r1-vs-settled-r2.json",
+      "sha256": "c313d452b4677b5014d38e95a7a06f89f00a234a4f2229ac931bf8122e1f3b6d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-settled-r1-vs-settled-r3.json",
+      "sha256": "1cfdad2e35e66c98988022738ca59215b38a6bc8fcbfece35f25ab1f10aaa88f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-settled-r1.json",
+      "sha256": "76fc79e0dc4a5b02341209fc7c6ebbe0650623be438b4f324c0dec4b7f39960a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-settled-r2.json",
+      "sha256": "4df12102fdb5f14103f75c9d43d4d4b33c1f34f230b1a2a0b9ef1505f820377e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-header-bypass-stereo-left-only-settled-r3.json",
+      "sha256": "bcf2573b23715c4db8b7f7cad4188b445777427895f30d7a30b8858689bebdc5",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-vs-settled-r1.json",
+      "sha256": "51bdabde6c9de193f966d32d397facb4c59a551ce90e6aa0c78247cb45e7cd03",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "131b22a372b652536c5a1863b31919a62b729824718f170778fda61c76d6ce03",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "sha256": "623923ae8193a311f48dc803c0fd9f0114828029319dfcf2c96d95710b41bc9b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r3.json",
+      "sha256": "966078b61bf969064485663646ea0d7f9e445ce70fab75f1d9334ddf90850573",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "sha256": "46f794bbb48ef10e9e36b1fbbf82ef6f8d96bc8a858dcaf3e0c6eb20c1d28aeb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.json",
+      "sha256": "2606f7d6922f0b8a65fd92b0970f6fff98f54b5db2b566c5ebcf4e1ef7bb7ed1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.json",
+      "sha256": "da4634c33725b79697c9cdc112d7c6ca6288e04beceb440ae12d00c7a88768c5",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-project-media-bass-like-dynamic-plucks-mono-source-preservation.json",
+      "sha256": "0131d37a5250ac9ae7a3045d38b3f3df7603548a6b5e93a2fa6856a0f1e9a834",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-project-media-guitar-like-dynamic-plucks-mono-source-preservation.json",
+      "sha256": "1a349d6166349916ef918073b062251bf69738fff3f60674afe80eadece27fca",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-project-media-stereo-left-only-audio2-import-source-preservation.json",
+      "sha256": "149035ce4a6846c4d7eaf7bcdaae7e4ab1f63caa30b7aec9d424d600ba7394e7",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-project-media-stereo-left-only-source-preservation.json",
+      "sha256": "3c51426b6dae507b339cb156d325941192ecc80f0f2db223beab751eb48ca813",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-project-media-stereo-right-only-source-preservation.json",
+      "sha256": "72d6a32dc5d2e934dea96910793570b312aca75c2027122b1ef064aa3305f1f8",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-clean-project-media-vocal-like-mono-source-preservation.json",
+      "sha256": "2e3e6594f451c9590e393f2b872ac7f5f5b98287b551e683560b4ab6e8474b98",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-first-transition-vs-settled-r1.json",
+      "sha256": "c56a325b609c515565e5144ce025232f305b1748e18eba770ac5d1f63b53ad44",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-first-transition.json",
+      "sha256": "b434c1397db726aa00c436004cefe9326de9aaf215a16205200a427345125f8e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r1-vs-settled-r2.json",
+      "sha256": "9d1eadd425f2864196299c51eaebdcf5a5091a9515ec029acc0a55067e53279f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r1-vs-settled-r3.json",
+      "sha256": "fcdc0fcc09d89caa62734a187e5621fd59b7289b527ebb2216a4c7f2753ad894",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r1.json",
+      "sha256": "5ad15c91fa59457894762328afb33301c8ab3de1fdfad71e50f02dbdce7f318b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r2-vs-settled-r3.json",
+      "sha256": "45a6465d171e4e70b6150b7a59c2bd5b3d9417a11fc3c23c52de997fcf131bb1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r2.json",
+      "sha256": "dbcb3e80b251a5bdea0fb006f447fbc8c61412b88badf3cc31d2746455828a83",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-left-only-settled-r3.json",
+      "sha256": "d0d8c3fd99d312a07cc98176b4490c8c6572d8793ce0352fbbd65df4407db873",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-first-transition-vs-settled-r1.json",
+      "sha256": "6c01ad2d28113258ab4adbc4fc7878623cd3ea97f327384ae381b1a5b9572ed5",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-first-transition.json",
+      "sha256": "1b2866818e34b103e311d39b14d4d773546f475aa267c33ee1ebff03e900f64e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r1-vs-settled-r2.json",
+      "sha256": "628f362d0e526931881db3fdd77ea58ecb70013f2ab22213c240a5e64db47a03",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r1-vs-settled-r3.json",
+      "sha256": "3ed1594d8317ec9db551029aa3bdcb4f28e3ed1988520aa5f165cd0cd44f1992",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r1.json",
+      "sha256": "4ed6c39ed8140f1958830b7e79ff5aa32a9cb83968ce38da02e6194bbff83d24",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r2-vs-settled-r3.json",
+      "sha256": "97caf32595f7a520bcea9b9273720c9ed7fd242394f1ccb2c0c09aaaf22f1a18",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r2.json",
+      "sha256": "bef73b54e30299c081234a24da8446cc3ea18e3f6bef341379708988866acaea",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-header-bypass-right-only-settled-r3.json",
+      "sha256": "01a57013f390f201b440ade3366fa2d6faaea7a5c15cebf8b5d9c3f58f722b9a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-vs-settled-r1.json",
+      "sha256": "d41b4d594a4c5c16ec52b47633a71501f4b5412064f052cd3191e46dca6e4297",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "90bb56438c4671d55866785c666438cb02e759f7bab2d820abaf89796798824a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "sha256": "d1d18065f0d4235425191014f689dd8f383314fb818c9b073d23eb5631922aca",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r3.json",
+      "sha256": "6453aec22500511754e591b8fd3c8acde6687b535223cd809975943ac8f24155",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "sha256": "e145de8040b3a260ef61fdd2e47559ca9bff8034322e26ff457934e67a3006d5",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2-vs-settled-r3.json",
+      "sha256": "109fbbe9311f6a1f4c7cc232fb54af5381ef3c5fedcdb78b6f61a485b43ca8be",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.json",
+      "sha256": "effe96f05bee4b9ee5603b5e78c2bc90ce5ef254eeb91a9a4dcb6314e894db95",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-bass-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.json",
+      "sha256": "d3c241caccd695baea86eba2c5543bb49417ba7ce1afcc2c001e139fd40683f5",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-vs-settled-r1.json",
+      "sha256": "a5b4b0bd2820bc8ea8f2dc610623269fe35b4dc93c28b182422d630a1e365f6c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "99c1f4dbabd56f822cf4c6469d6eaf3980fc9b9a28dec39742bdaffd752540ba",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "sha256": "92232f21c3cc75d288c70e7f38cfb70bfec22ff9942229d376c05025b835319f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r3.json",
+      "sha256": "8e45ff3309a58fca33bc8107b6d17572427ff33e877b6be13cc2d1cc2f15e72c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "sha256": "9d524af34422dcb3b64da27467802e0e609a3ca7ad61f0f85754c3ea6a6f158d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2-vs-settled-r3.json",
+      "sha256": "1334f5be3825cdbc1c451989d9f39051f1623ca0fa4884493d16b0c9170a7380",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.json",
+      "sha256": "361f7d5b7fa9e92a900f87bfae41aee6ec380039ccb10a4d4c766b95b4cd9b7c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-guitar-like-dynamic-plucks-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.json",
+      "sha256": "fea46e41cc18b209ddef355ff14a78b822ecacf7ec926f1fb4ec5d4f2f95d5fb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-vs-settled-r1.json",
+      "sha256": "d06d5f5ef61163263ea9d5c39a49ccb731cb728e5af2901cb47ee586c1243612",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "f363cbd9fbd951eae1c1e25afb5c65b3b0fd675834f1c02965e3840037db58c4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "sha256": "93aa1fea61416d4035cbb0522542bcfd875d4cf099da720464e89bb8db407787",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r3.json",
+      "sha256": "abef09b7844b48500b3f62e4d5c4530242de44336e87bbb33bf1267c185d7ce4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "sha256": "3beee6c34b8278b32d7eacef67a33900b6663e4831f275848679ef46d73070f9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2-vs-settled-r3.json",
+      "sha256": "060f8fc56cc680761d77234184de27b3ac4a0edc2bb998fa14dc74a0dcb46fe4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.json",
+      "sha256": "f90a24267ab84283faac933c79e9d90574c43be9a1a34c30eef11cb4dc5e7645",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.json",
+      "sha256": "301b943f4549ef040a02e5e04439520a607f5a18b366b504ef04b3ea9879c107",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-vs-settled-r1.json",
+      "sha256": "a2ff79d58c4e12a1f3d2aea1a3192bdd665ff3a2efeedf5846eecaed98ee865e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "e0b6376fa6d2eab75ee17c6ea473d00bd5305001b9decb42ce2b2f08c47e0145",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-first-transition.json",
+      "sha256": "caf804e829d87130522b6db4d317f3e3f6c7476c04173f81a75bd46526a2eacc",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r1-vs-settled-r2.json",
+      "sha256": "911360a40e9a9f3d253b4343cb6d0f5ed72330db0aea81c71eeca72ef7c388c6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r1-vs-settled-r3.json",
+      "sha256": "af2990e4ac4ab783152906933960b6fdb52ce4ab72038802b4c33f5b661d9d68",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r1.json",
+      "sha256": "e0c2b0dde7387e0f52863e14750ee6736a6ff11063a53048edd9bffba9c05a1a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r2-vs-settled-r3.json",
+      "sha256": "4a69d9149c65fb218932bbe78e56e60903261749e92f0d0e4790cb9ce556b95a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r2.json",
+      "sha256": "456873b65cb6e9064a656d1d38f0af6773f6d621d44887f010dd3a1e822fb86e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-postreload-settled-r3.json",
+      "sha256": "e3c2dd92302f45091e7a6b8e242cbba5ab7d026c3432a96b3d1d480bc98b87d6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-prereload-settled-r1-vs-postreload-settled-r1.json",
+      "sha256": "7f026897084e8436316da56efd2dc8d3927f81720728ac229eab14a03bbddbed",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-prereload-settled-r1-vs-postreload-settled-r2.json",
+      "sha256": "3410e25ae075d0969172f8442b47f6dbc85e2915604176af8dcca36cb3a357ac",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-prereload-settled-r1-vs-postreload-settled-r3.json",
+      "sha256": "2c9274362c6a46ec8cf4acd0859f6a156b0df1ea17b93caecf5c9c531b251f07",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "sha256": "15f09e9dfe1dc3571ba5f83d7cf43b635df8f753b9ccbb5e5c8dd9541b05033b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r3.json",
+      "sha256": "0fac7a41dc3be42100123a22874d12aef09623c5123faa587ca84883d74963ca",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "sha256": "813bffe4152bac78d8c15283e123be25baaa93df075a0b2d69c61e32e6c78f1c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2-vs-settled-r3.json",
+      "sha256": "2c2b21430b15ae39aaf32e74973e558320db5abc451c893e5f9d989a66cb8775",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.json",
+      "sha256": "1a297dd292c59b73069049ebc854d3a9bee0a1f617fcee647b280c3d03880d97",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.json",
+      "sha256": "b2c62fd6ca9ab384e21e6161ab72b8ecee0bad9c3e3929ffad7a7a4c9001ca1b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-vs-settled-r1.json",
+      "sha256": "f437ed8c8dc2b99d40b36bb4167b3974a05f87022a2850443ff72127886fe6b0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "3415b1946ef4087a10a1a903d239f63085396a743b8f66bb8507af43846c4b3b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r2.json",
+      "sha256": "431b344d16fc66d7654327d3ec638244edeba334800d3982deaa4677f89dd3aa",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1-vs-settled-r3.json",
+      "sha256": "bc02b0e3f5782c3acd58a99d5e4de94a17050c7c6799e1ad70bd51266fc75462",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r1.json",
+      "sha256": "cd85a592b4e62f6dc83225cf8766f86bc01f91e25cff8d71df11d21f95894c27",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2-vs-settled-r3.json",
+      "sha256": "715c5b4d8d19450ebf5146cbd6e74369ad8fe408233805738a5106bb3102b279",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r2.json",
+      "sha256": "15efc4515185e111646c770573e8ecfd3b6499cb599df2d49eff2c6c6c6b1f9b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/acceptance-corrected-stereo-audio2-limiter-vocal-like-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-settled-r3.json",
+      "sha256": "796b94b070199188a75585b591b3124cbc468791eed2a8aa24c22acd8ea9c957",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "4fddde5b4c803ac7f8f8c03655a46a58132f8d99d310e5c552456d58e368c7c6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r1.json",
+      "sha256": "6c6644793559e681f5c0cc16c4410969eca9a0531efa2eb3f7353429a7d5c555",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r2.json",
+      "sha256": "1029811734da4bfb967cb50c81efa5c01dc517f2c854a4682982362a01754ad7",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r3.json",
+      "sha256": "042a6d00ebc5da201d8f3af317d62b3f572c89e06885cc45032c9f6cba173a9f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-first-transition.json",
+      "sha256": "eeb21238b07143e6a722c0b35775878e1770cdd17978bd92b5205cf18036deb4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r1.json",
+      "sha256": "709ad1879cfb3e42c66c912cdfe48de3048e8de73071704ba698429a8dd47060",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r2.json",
+      "sha256": "347134f6b226fb7155d1c6d1a99dc5d429b0dcc5f72883ab07d333d2ef954d21",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r3.json",
+      "sha256": "3706d02281001c10872d3de40d512cfa0e3b256442de35608b5e8242d26fb120",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-first-transition.json",
+      "sha256": "174dd0807067af308cc40bd8df4a1b261866ec93d39534d70af03938f929c4de",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r1.json",
+      "sha256": "00e4eb4a771c2a198f3deac790a40f4f701985368097b84147d8fe0491592692",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r2.json",
+      "sha256": "9e7a09bf85de0fed97389127858ec9ec669242304765faf70e08b0e7936f8d82",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r3.json",
+      "sha256": "c9d9f42ea291cee3e2706931faca07438babc828024d59f2c3f6ad705d5c7f6e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "d89cc56ed4db8286e1a4a257b6c6efaec36346d8178cba73407da692bd357922",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1.json",
+      "sha256": "af649e1ec047ce8fce36daebbb10047c23ee2b58f7443a9065b4a4d484517a1b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r2.json",
+      "sha256": "2a1d72b9ede7a95f70acb7c0ae40c7951c7aeaba04947537ff9cbd2fd684f3d3",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r3.json",
+      "sha256": "41a8d4ec5ddf595a27259ff802460831e0e6daee49b2e8c7530a66aeb0f15d74",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead200ms-dcoff-tpoff.json",
+      "sha256": "7daabf32c1ea9548c60ee120799e8e8b0aa34513d02f621a718d797e6f73d8e6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "435f1ede58262c0acf34a614b5a43f3b48f8ccb2366c56b15843e7d9d86721c3",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1.json",
+      "sha256": "25403944904d75f6ca984455b9a44571bc0ff60b5a6467a0f26714bb13f236d1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r2.json",
+      "sha256": "be0b63b48391ea3f68ded6dfc94311b0154bb6d3ef3d9f4e81ad3b807376fc2d",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r3.json",
+      "sha256": "78385331b17fb471b0325cc20674ecbd81d65565fadfa4a4362271d9d6d362f0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-first-transition.json",
+      "sha256": "488c05920a5477eaf00bcd2ffdd7065eb22f27929bd1268d361ff9fdcbf93005",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r1.json",
+      "sha256": "9355ab4ddc6e9749b457621eb03f6383c5613339def753247d2009cf2bf8d497",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r2.json",
+      "sha256": "0681b1738ac3dba14598e0f3c6e44b516a7bfa78c0cbd9073688dec3db633c74",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r3.json",
+      "sha256": "39eda4a9d79f11600609e44635c6c2eeccf7fa03d5bca62ad7e417a83cdc3762",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus1db-lookahead50ms-dcoff-tpoff.json",
+      "sha256": "4064dcf9744361c7c08dc100148459ec393294956fb560aecac19156f43980f0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-gain6db-ceiling-minus2db-lookahead20ms-dcoff-tpoff.json",
+      "sha256": "d548f3076b4ab50dcf569058dabc41a8a9a18f64f6fbb7e05295d90fc954c131",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-header-bypass-amplitude-ladder.json",
+      "sha256": "9d9d722bb9bf2441c60553e259c32b2b6dcd99c4b5db7cf9e2f554edf60581f0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "271421893cfb5364e2d8a3a52b567b96c2d56759ae0467bbc424b1f2ee82a14b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1.json",
+      "sha256": "5dda4469ed3b3b77713fef8bfc2c4a1278116de2a4a55f6627c1258ea890488a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r2.json",
+      "sha256": "eba5cc279d4b688ba4816f57bb61731f6f6f311c68fbe7d87bea275375fafdd1",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/inventory.json",
+      "sha256": "c37a37e244186d5f7f8c5eabdd50444ff200751c44452517f711ac9f26ec0c43",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/project-copy-amplitude_ladder_1khz_mono-source-preservation.json",
+      "sha256": "b4689881d9bf5e481dee83dafbac9ab14f6002ebf5f525fcc635f3c148924b57",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/project-copy-dc_offset_probe_mono-source-preservation.json",
+      "sha256": "a0c9c52b71be2234e63bdc69a9776dd8604a13478fd2f9c620ee2f3c76f5d303",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/project-copy-stereo_left_only-source-preservation.json",
+      "sha256": "338d117823016f93d0fcf14fe99db0c04aa5a87f7d01317144ff630fbf0a3cc4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-hidden-mastering-assistant-header-bypass-amplitude-ladder-current-artifact.json",
+      "sha256": "bb3bc41e98343de4e076321dcf076a7205e586203f14d53b7defca3d56d0bccc",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-hidden-mastering-assistant-header-bypass-amplitude-ladder.json",
+      "sha256": "ece8bd2bf037e74a219bf55243f5631a45e133c13094fb982a5938b4b4394400",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-mono-path-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-pre-rename-analysis.json",
+      "sha256": "231fc3224a1bcc44be9b23451f7c51e739013becf37ddeb23a66cc630c7ddc26",
+      "role": "objective signal-analysis artifact"
+    },
+    {
+      "path": "measurements/rejected-mono-path-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition.json",
+      "sha256": "a0c20116b6de745f85cb6cb1078c1df72e6d4e6d17330d228c9a120ce1f909f9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-unverified-gain-state-adaptive-limiter-gain6db-ceiling-minus1db-lookahead200ms-dcoff-tpoff.json",
+      "sha256": "ca5010d130bc6e04b20eefaeccf02254b7fb7a7a48a68726930ad56cc0bffc95",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-unverified-gain-state-adaptive-limiter-gain6db-ceiling-minus1db-lookahead50ms-dcoff-tpoff.json",
+      "sha256": "33072a3d1b1ceb1e5318b9acdcdaaf8ac6f6fd9f37f81f1b7a7235d5bd5fa9c9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/rejected-unverified-gain-state-adaptive-limiter-gain6db-ceiling-minus6db-lookahead20ms-dcoff-tpoff.json",
+      "sha256": "fbfefa6f32ca2221aae46e485f0e67de62f0efe2ef1e15b60d18c88f936cfdfe",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-first-transition-versus-r1.json",
+      "sha256": "e65e4687c3d762c2c20049df01a7f22d58dc199654a6dba452038604b6624f03",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r1-versus-r2.json",
+      "sha256": "035e0a7b199b9784fb3a67a180bc150ca351f7a930a90421ae6019e222e2476f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff-r1-versus-r3.json",
+      "sha256": "ebcbc274cd13a46aa019ad9f518fddeb3cc2ed66004335738fe4789508213540",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-first-transition-versus-r1.json",
+      "sha256": "3dc4c00f9c2f638321c46a4910d9ccdc1b961a096f96872b2f3dd003cb37d4b4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r1-versus-r2.json",
+      "sha256": "1444d513226db3c3e7ac84c6f3b1fbf422f3bddbd691f375282f18994d3d427a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff-r1-versus-r3.json",
+      "sha256": "eae85512bd22a484f14225808ed378a528b0ef8756c7a936e536bc2a1b9cbd0c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-first-transition-versus-r1.json",
+      "sha256": "98a3174243162e302b061159062d37e02d0ae092b5d04f8e34b15f63c73ce359",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r1-versus-r2.json",
+      "sha256": "d060aa95e4ead52beb2040d18b9604a1b67ffde9c0095eaa9a46bcdd8d6d440a",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-default-gain3db-ceiling0-lookahead50ms-dcon-tpoff-r1-versus-r3.json",
+      "sha256": "caff27b848b0840bd251e12a6c486138abecc067483ae9e28bc3064bc187fa3e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-versus-r1.json",
+      "sha256": "e22eac0ca229ec6c285ebc22f07698b9091b5b7ebe2768dfe397430e20e55010",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1-versus-r2.json",
+      "sha256": "4b74872f39704f3a3347271e3fd55431b26b8371cf318c296f1c238a646c0542",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1-versus-r3.json",
+      "sha256": "65ce781a1c262c773f675d85482945e89fc435f66f47b40e068047c59b24a160",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-versus-r1.json",
+      "sha256": "e51443868ee728a11f971f40742501d06bfe8c355e1c5e8e36077098e4e67e76",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1-versus-r2.json",
+      "sha256": "e043f9820f5e1e8631dbaec01324eaff2772479f169dcce283d5bd8a88083913",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1-versus-r3.json",
+      "sha256": "8e952eb7b5d41dd01bba95dbcd47a9fbecb8f8417f1579a42b89672dfdd448af",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-first-transition-versus-r1.json",
+      "sha256": "31cca93be7c79c52261d35e580a7244a5c9f8b646651964a501a782e803666c4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r1-versus-r2.json",
+      "sha256": "b21b2d4b083e48a2166d09edb3140570277411d731f2eda495343ffa1cba6944",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon-r1-versus-r3.json",
+      "sha256": "11c0cca7237ff57afb3e8d17b1e0e7a42a1351859388732dee7a3177017d153c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-first-transition-versus-r1.json",
+      "sha256": "803ec2b93a0f631569befb20a998aad05dfb2665b306eb830d0a3e423250300c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/repeat-adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-r1-versus-r2.json",
+      "sha256": "667dbfab683bfd22efc6b5c480ff8af3b3ac11f3ebf823ed0e4792c7c9f63623",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/state-comparison-ceiling-minus1db-versus-minus2db.json",
+      "sha256": "44bf7183ccb75b04265a75f4167e0f35f93f8b3528b3b3ada1149a4a3da20715",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/state-comparison-dc-off-versus-on.json",
+      "sha256": "581abfe6c257f3af75a3273f6de13eeb4f15b5ec8186227a349c3b0081c80ffa",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/state-comparison-lookahead-20ms-versus-200ms.json",
+      "sha256": "c3456ab7134527cb25ac717dcb268f19d60ec34df6cc7a28b453e3d60c9ed7c0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/state-comparison-lookahead-20ms-versus-50ms.json",
+      "sha256": "97c8221cf8f2d78cc32c56e0f58ca9fdfdcd6eb9249a315b7f9f2a501e3278f6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "measurements/state-comparison-true-peak-off-versus-on.json",
+      "sha256": "0398ad98bb7b89f411d3d45a5cb9d88555b32664dd63ca706e5647ae92fa7641",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/DisplayState.plist",
+      "sha256": "71e66ce0f1efcc6ea1556a58c936da8436da6a2bfb105350999d98286fef6889",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/DisplayStateArchive",
+      "sha256": "028f100785a5035b1d222d52be12fdd920e7252d954a8d061af0b6b3911eddd0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/MetaData.plist",
+      "sha256": "a4f8a8bf86cd20d7dfc6efdbb4b18a5729d2ed1f654e723c683866a6f2292ee4",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/00/MetaData.plist",
+      "sha256": "eb41905fe3f453e7e9dd479942765ae061bbdcbabbd70efde07f3aa6c32dab2e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/00/ProjectData",
+      "sha256": "204d19bf2f2d3c51758a8bffc3593116b756879cdb0d9326cfeb064a9d93f2fb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/01/MetaData.plist",
+      "sha256": "e9b5f0e7e1ac16697b7d04604983d724031df08e60e28ec3c4cba132f5b7b50e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/01/ProjectData",
+      "sha256": "6eb2fff197c256ecd5425b134084a2cf528b51561e20f10af98eef06f3038cec",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/02/MetaData.plist",
+      "sha256": "d509d2ef16c5e8486bcca13e62a7364cad59e932e608decd67279dc4ab823132",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/02/ProjectData",
+      "sha256": "47281a69a02ebcf0c0fd42788342696ae3de62678a50c2300234f4623eb5c4d2",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/03/MetaData.plist",
+      "sha256": "5eb6f41ca8c3696c3b2b008addeb2eb00eae7affcf0ce1ccc7b27528e8780d9b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/03/ProjectData",
+      "sha256": "103d774eb0713edc61e24bfe7a5b8a0fe4a163d5130de6714fd17fb5184dd44e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/04/MetaData.plist",
+      "sha256": "b4805d3f65bffcb301c103d0945ef50f4b1263dce4e65fa6843863a7283947b9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/04/ProjectData",
+      "sha256": "2706ab5a6cf50c192b3e0d01644fbfbef0316e865f702083b25a3d4c1ffea914",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/05/MetaData.plist",
+      "sha256": "b4805d3f65bffcb301c103d0945ef50f4b1263dce4e65fa6843863a7283947b9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/Project File Backups/05/ProjectData",
+      "sha256": "0bdbe261a5ae9c0c9887d7d48e89aed2ad84c83451aef7ae7bfb03fdd16e6ce0",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/ProjectData",
+      "sha256": "5d0200d3b8ce42e1f439c9698b02a65f7ce38a65ee6318bb279259e9478d05ca",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Alternatives/000/WindowImage.jpg",
+      "sha256": "fd5dc5d978cb2650a2d11c139f305a35c80ddd7389205032f795b89c64a125bf",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30_1 #01.aif",
+      "sha256": "8fa5016f568096e3bf97f7eb06655b518ea7964fc7bae2265b84e3d8d9b1293f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30_1 #02.aif",
+      "sha256": "436c1b32858b5c04a8486aa8fc73a2c8f3414b38e1dad85772e68fa76fcf7c8b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/amplitude_ladder_1khz_mono.wav",
+      "sha256": "be0bd3b87e3aebad9f75578b4c1ab121d00eaa4d9c8f9c24c73eef4456574380",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/bass_like_dynamic_plucks_mono.wav",
+      "sha256": "9f2a847a231b2227b4ae6e60abc8744a90738281846b8550c68dcf7a0dc71f8b",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/dc_offset_probe_mono.wav",
+      "sha256": "ee22baec8c477fd39c2b915839f34982b1606ebd8c671686428918a4538a0b2d",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/guitar_like_dynamic_plucks_mono.wav",
+      "sha256": "47f7c6a8535b6ab6e2daa84249b635056fa01629b6dd771356de84b07468f90e",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/stereo_left_only.wav",
+      "sha256": "0a01682fe6a6b68ac3dc7aae90821ef73f7b288dc8022b047815dad23f2b5b83",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/stereo_left_only_1.wav",
+      "sha256": "0a01682fe6a6b68ac3dc7aae90821ef73f7b288dc8022b047815dad23f2b5b83",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/stereo_right_only.wav",
+      "sha256": "295a4350efdf0dc32590ce1b9ff133bbabf8b99484877584dbdfa5e0a89090c6",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Media/Audio Files/vocal_like_mono.wav",
+      "sha256": "f99b745a8514386c0e39c84031b5caed979baeb463c52ca812c47cfa7434cd2a",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx/Resources/ProjectInformation.plist",
+      "sha256": "b59a514eff345bd7cd75befe1bf89339aaa3e98d480d72723f5b759c738230bd",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Acceptance 48k 2026-08-02.logicx.zip",
+      "sha256": "3f28cb5bdf575e68de5e9969d8043dbc41df59adbb4cff2631684fcbaf517322",
+      "role": "closed disposable Logic project archive"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/Autosave/.dummy",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/Autosave/2026-07-30 07:07:34Z.displayData",
+      "sha256": "50fd9926f13ad9a6d5d30a51b49a89e351c2b5f4017decbfce4cd0d422da2f9f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/Autosave/2026-07-30 07:07:34Z.songData",
+      "sha256": "adfebc40630920a747110b0628d890a5f0d9139db7709b4e9dde138c9a1292f2",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/DisplayState.plist",
+      "sha256": "170d982b9f912a50602a7a567a600ea687d89c5e884d61136c88e2067fe56ba7",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/DisplayStateArchive",
+      "sha256": "74e2be50860b8000f2e73e2b4f99e7ec4208e5fc6f5889f2be8610f92c468120",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/MetaData.plist",
+      "sha256": "e9b5f0e7e1ac16697b7d04604983d724031df08e60e28ec3c4cba132f5b7b50e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/Project File Backups/00/MetaData.plist",
+      "sha256": "eb41905fe3f453e7e9dd479942765ae061bbdcbabbd70efde07f3aa6c32dab2e",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/Project File Backups/00/ProjectData",
+      "sha256": "204d19bf2f2d3c51758a8bffc3593116b756879cdb0d9326cfeb064a9d93f2fb",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/ProjectData",
+      "sha256": "6eb2fff197c256ecd5425b134084a2cf528b51561e20f10af98eef06f3038cec",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Alternatives/000/WindowImage.jpg",
+      "sha256": "3f1e8d9e31dee0958ebb567f65b3ac32bf0cf6af65bd159083cf11906fa85df9",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Media/Audio Files/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30_1 #01.aif",
+      "sha256": "8fa5016f568096e3bf97f7eb06655b518ea7964fc7bae2265b84e3d8d9b1293f",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Media/Audio Files/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30_1 #02.aif",
+      "sha256": "436c1b32858b5c04a8486aa8fc73a2c8f3414b38e1dad85772e68fa76fcf7c8b",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Media/Audio Files/amplitude_ladder_1khz_mono.wav",
+      "sha256": "be0bd3b87e3aebad9f75578b4c1ab121d00eaa4d9c8f9c24c73eef4456574380",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Media/Audio Files/dc_offset_probe_mono.wav",
+      "sha256": "ee22baec8c477fd39c2b915839f34982b1606ebd8c671686428918a4538a0b2d",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Media/Audio Files/stereo_left_only.wav",
+      "sha256": "0a01682fe6a6b68ac3dc7aae90821ef73f7b288dc8022b047815dad23f2b5b83",
+      "role": "Logic project embedded source media"
+    },
+    {
+      "path": "project/TrackSmith Logic 12.3 Adaptive Limiter Production Profile 48k 2026-07-30.logicx/Resources/ProjectInformation.plist",
+      "sha256": "1e3ae7f6fc25c6ab378c71d74d2bc64bfa507790332d8cd6e18504e45eaad9e6",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "project/inventory.json",
+      "sha256": "a2aa4d5020480f439a3f2e2d99f080e7ed2d291bf67af69fcdf8042d44b5f04c",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "screenshots/acceptance-clean-path-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "sha256": "9b1bf522338fb96012733cd99ab6a4f9b087fae45cf0133089fa29e10f28a903",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-clean-path-adaptive-limiter-header-bypass-stereo-left-only-2026-08-02.png",
+      "sha256": "89c16f75eee6e2fa271f432836e3096cabf4fbbd425b0ee44c010c1297f4047b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-clean-path-adaptive-limiter-reenabled-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "sha256": "e8ec5719ecb4d5f9009f57a9d29cfdf9409cb63385719805d799ea4bfe934d3a",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "sha256": "b4d34702abbb127485e47afbb477b980e2c08d4307114412edc66c3239aa2a6f",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-channel-strip-before-import-2026-08-02.png",
+      "sha256": "2846eb087ecc39e2e68190ca02fbd2d77878ee825d105aa4133eab53dd140298",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-guitar-like-dynamic-plucks-mono-bounce-settings-full-length-2026-08-02.png",
+      "sha256": "c69a983b88d13b99f2540b1cb98afcebb95349998d62c835568f35c6ac0545a8",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-header-bypass-left-only-2026-08-02.png",
+      "sha256": "21471fe15607dbd98374105ea0dbb51d17cd292e487e9db3ef1779f1f5df810b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-header-bypass-right-only-2026-08-02.png",
+      "sha256": "ddc6a80a36da9626cfc195da136c967ba797a07ea1ebff2a3c457b236ead8009",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-postreload-active-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "sha256": "dfdfd7a7e4dabf06c713cb59a0081e713c6735c76c69d7c43cd005c833f8f63c",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-reenabled-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "sha256": "a1fce01e0c0b357242c4643db6ad41ba7389ab198571175840d4f48ce0030a51",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-reenabled-right-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff-2026-08-02.png",
+      "sha256": "68ebca286b633352dd510c446733b8a7a596e18b4468fe593e674beeb8f57e0e",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-vocal-like-mono-bounce-settings-2026-08-02.png",
+      "sha256": "412db875a1e1c36048d77cdd269b3b766f505705e9201b6acf2d8e89d048f39b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-audio2-vocal-like-mono-selected-unmuted-2026-08-02.png",
+      "sha256": "30661ab9bd5a587a809a14c185723d01beb854a2b48270a4a4205ef93d437e61",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-bounce-settings-right-only-header-bypass-2026-08-02.png",
+      "sha256": "d1e1bb966b08c5dcbb778e20652b59e91e4d3dd9f3dab4981f65925406518923",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-routing-audio1-muted-audio2-unmuted-before-right-only-import-2026-08-02.png",
+      "sha256": "09c92c216fc1f26448164bea0c92ce75a2c8d47e1ad5d9c0c8599f9cc07abe6a",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-corrected-stereo-routing-audio1-muted-audio2-unmuted-left-only-2026-08-02.png",
+      "sha256": "0064755daef596caf6ab35fc1b07f5d77c9044ff13e4bf965e28f7d2110ddae5",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/acceptance-mastering-assistant-bypassed-clean-path-prerequisite-2026-08-02.png",
+      "sha256": "068012a9293c4e14a35b47f282ed7abf86c43500b1a2d9667099c942877751df",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-controlled-gain0db-ceiling-minus1db-lookahead20ms-dcoff-tpoff.png",
+      "sha256": "c8f2d976c0ec40a0f37481b025579153fe66e242e41ab1498e62c7a2ef076518",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-controlled-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff.png",
+      "sha256": "15d338479a4a1aa5f902dc69d78ee77453bec67254df79ddfb4f683fcff1b57d",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcoff-tpoff.png",
+      "sha256": "1d1da48c6145ce589ebf13516fdee78f8df1763ef9f7e226dc0774da37dcddb3",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-dc-probe-gain0db-ceiling0db-lookahead20ms-dcon-tpoff.png",
+      "sha256": "e862b70c2ef52fbe3f83ba5bed7991e18ef2318ed9c0127220320a4a97341ca4",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-default-state.png",
+      "sha256": "97f313c6f3d639d9c66885ddc59541f11cc25a7c1fc2bd99556714e291a0e256",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-gain6db-ceiling-minus1db-lookahead200ms-dcoff-tpoff.png",
+      "sha256": "e7143a4347f9deb43f68afca037b60e0fc5c61e65e30a9126931dbd59b8c0f9b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpon.png",
+      "sha256": "f9412b57541a01faf0d419ff181a29032f5530d62a744abc5023ddf00d6244e7",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-gain6db-ceiling-minus1db-lookahead50ms-dcoff-tpoff.png",
+      "sha256": "69746ce60e619fa726419ad9a4072ff17aa911d86983b21aa3db6d5bf6cb7b6b",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-gain6db-ceiling-minus2db-lookahead20ms-dcoff-tpoff.png",
+      "sha256": "ef8e88fe06cf3dfdce91aa43e2be401b220e7a0f29d44825edf340b2cac1f129",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-optimal-apply-post-lookahead20ms.png",
+      "sha256": "4a27ec9e418b2b8290f80353a4af8e8ba62c9b764b26c0a0ffd772fb4e2c48a0",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-optimal-apply-pre-lookahead50ms-optimal20ms.png",
+      "sha256": "5206b510558021312bfb1ce10c968836243bb35659b8b18ffaf98744da6f962a",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/adaptive-limiter-stereo-left-only-gain6db-ceiling-minus1db-lookahead20ms-dcoff-tpoff.png",
+      "sha256": "17466b056b190d24248a602c5f19240192e3cbb51b5d09913035267e57aabb13",
+      "role": "direct Logic UI state evidence"
+    },
+    {
+      "path": "screenshots/inventory.json",
+      "sha256": "67f168f15fb82ebf028f6ac40a6dea37de6943da342a5b85a4c60e6b9db82c59",
+      "role": "retained empirical-run artifact"
+    },
+    {
+      "path": "source-inventory.json",
+      "sha256": "ad2ee6bc8e957f1e90505b5789a139981b79a26711b883c25008664957f2edf9",
+      "role": "retained empirical-run artifact"
+    }
+  ]
+}

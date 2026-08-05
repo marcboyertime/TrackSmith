@@ -45,8 +45,8 @@
       "entryCount": 142,
       "status": "all_entry_identities_found_in_declared_primary_source_page_ranges",
       "providerContextEmpiricalStatusCounts": {
-        "notRun": 133,
-        "partial": 9,
+        "notRun": 131,
+        "partial": 11,
         "complete": 0
       },
       "providerContextStatus": "direct-run identities are exposed as bounded evidence while unmeasured identities remain explicitly notRun",
@@ -1313,15 +1313,25 @@
   },
   "empiricalCampaign": {
     "path": "research/knowledge/logic-pro-12.3-empirical-campaign.json",
-    "sha256": "5ba71f14df31a5bc57530b4490e47c834f85a6a405abe71f51df627b35b0cd64",
+    "sha256": "6e79adbcff2428eb0075f8a3595820c6f32365baf4f682f3e0a3e3ce05f5fafa",
     "identityCount": 200,
     "statusCounts": {
-      "not_run": 191,
-      "partial": 9,
+      "not_run": 189,
+      "partial": 11,
       "complete": 0
     },
-    "status": "enumerated_with_9_partial_and_0_complete_evidence_identities",
+    "status": "enumerated_with_11_partial_and_0_complete_evidence_identities",
     "evidenceRuns": [
+      {
+        "runID": "logic-12.3-adaptive-limiter-acceptance-48k-2026-08-02",
+        "identityIdentifier": "logic-pro-12.3:adaptive-limiter",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 330,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-adaptive-limiter-production-profile-2026-07-30/run.json",
+        "runRecordSHA256": "b1e7d6fa0ebcea761b770f3d21cab072d9f82e0724bcb19d1f9dc479822b8244",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
       {
         "runID": "logic-12.3-bitcrusher-default-48k-2026-07-18",
         "identityIdentifier": "logic-pro-12.3:bitcrusher",
@@ -1403,6 +1413,16 @@
         "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
       },
       {
+        "runID": "logic-12.3-direction-mixer-production-profile-48k-2026-08-02",
+        "identityIdentifier": "logic-pro-12.3:direction-mixer",
+        "status": "partial",
+        "exactTransferCharacterized": false,
+        "artifactCount": 80,
+        "path": "research/evaluation/logic-native-empirical-runs/logic-12.3-direction-mixer-production-profile-2026-08-02/run.json",
+        "runRecordSHA256": "6d6856e8e3d99bd1f4790f3d35d2f87dd9b05dfdfc30b44261029533b2485f6d",
+        "statusSummary": "direct_host_evidence_artifacts_present_and_hash_validated"
+      },
+      {
         "runID": "logic-12.3-noise-gate-production-profile-48k-2026-07-29",
         "identityIdentifier": "logic-pro-12.3:noise-gate",
         "status": "partial",
@@ -1447,7 +1467,7 @@
   },
   "coreEffectPriority": {
     "path": "research/knowledge/logic-pro-12.3-core-effect-priority.json",
-    "sha256": "8466501dd76d46bb0823570d631ffb290cde58f28c71ac1e33505611d46da6d1",
+    "sha256": "7097322c49bce4674167c8eed66754dd172300723915958b2e0ebcaa61be365f",
     "professionalCaseCount": 58,
     "firstQueueIdentityCount": 20,
     "firstProcessingIdentity": "Channel EQ",

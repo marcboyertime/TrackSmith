@@ -1,0 +1,3374 @@
+{
+  "channelCount" : 1,
+  "createdAt" : "2026-08-02T18:28:41Z",
+  "durationSeconds" : 8,
+  "frameCount" : 128000,
+  "inputFileName" : "mixassist_Group6_cut_16.wav-input.wav",
+  "originalAnalysis" : {
+    "channelCount" : 1,
+    "frameCount" : 128000,
+    "metrics" : {
+      "boxiness_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "boxiness_band_ratio",
+          "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.4508112292886036
+      },
+      "clipping_samples" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "clipping_samples",
+          "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+          "unit" : "count",
+          "validRange" : [
+            0,
+            128000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0
+      },
+      "crest_factor" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "crest_factor",
+          "limitation" : "Whole-interval sample-peak to RMS ratio.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 2.697212765470124
+      },
+      "dc_offset" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "dc_offset",
+          "limitation" : "Mean sample value across all channels.",
+          "unit" : "linear",
+          "validRange" : [
+            -1,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 9.952998161315918e-05
+      },
+      "harshness_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "harshness_band_ratio",
+          "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.0845776761655571
+      },
+      "high_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "high_band_ratio",
+          "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.013634772032584704
+      },
+      "integrated_loudness_lufs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "integrated_loudness_lufs",
+          "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+          "unit" : "loudnessUnitsFullScale",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -12.728487575755722
+      },
+      "loudness_range_lu" : {
+        "confidence" : 0.13333333333333333,
+        "definition" : {
+          "identifier" : "loudness_range_lu",
+          "limitation" : "EBU Tech 3342 v4 LRA: gated 10th-to-95th percentile range of 3 s loudness. EBU R 128 does not recommend LRA for programmes under one minute; it is not crest factor, peak-to-floor range, or a quality score.",
+          "unit" : "loudnessUnits",
+          "validRange" : [
+            0,
+            240
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 3.1877078023076475
+      },
+      "low_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "low_band_ratio",
+          "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.2930147984837232
+      },
+      "maximum_momentary_loudness_lufs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "maximum_momentary_loudness_lufs",
+          "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+          "unit" : "loudnessUnitsFullScale",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -11.151459144646163
+      },
+      "maximum_short_term_loudness_lufs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "maximum_short_term_loudness_lufs",
+          "limitation" : "Maximum ungated 3 s rectangular-window loudness at 10 Hz, per EBU Tech 3341 v4 section 2.2. It is not Integrated Loudness or a quality score.",
+          "unit" : "loudnessUnitsFullScale",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -11.762828867542378
+      },
+      "mid_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "mid_band_ratio",
+          "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.6933504294836939
+      },
+      "peak_dbfs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "peak_dbfs",
+          "limitation" : "Sample peak, not oversampled true peak.",
+          "unit" : "decibelsFS",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -4.0156465368441046
+      },
+      "positive_spectral_flux" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "positive_spectral_flux",
+          "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            10
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.28577665720614037
+      },
+      "rms_dbfs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "rms_dbfs",
+          "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+          "unit" : "decibelsFS",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -12.633950665938931
+      },
+      "sibilance_band_ratio" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "sibilance_band_ratio",
+          "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.009201862008175323
+      },
+      "sibilance_detector_rms_dbfs" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "sibilance_detector_rms_dbfs",
+          "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+          "unit" : "decibelsFS",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -34.99819154678255
+      },
+      "spectral_centroid_hz" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_centroid_hz",
+          "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+          "unit" : "hertz",
+          "validRange" : [
+            0,
+            8000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 638.9507473327673
+      },
+      "spectral_flatness" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_flatness",
+          "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+          "unit" : "ratio",
+          "validRange" : [
+            0,
+            1
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 0.08694128182808383
+      },
+      "spectral_rolloff_85_hz" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_rolloff_85_hz",
+          "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+          "unit" : "hertz",
+          "validRange" : [
+            0,
+            8000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 1007.8125
+      },
+      "spectral_slope_db_per_octave" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "spectral_slope_db_per_octave",
+          "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+          "unit" : "decibelsPerOctave",
+          "validRange" : [
+            -100,
+            100
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -5.427792943445762
+      },
+      "transient_density_per_second" : {
+        "confidence" : 1,
+        "definition" : {
+          "identifier" : "transient_density_per_second",
+          "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+          "unit" : "perSecond",
+          "validRange" : [
+            0,
+            1000
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : 2.75
+      },
+      "true_peak_dbtp" : {
+        "confidence" : 0.95,
+        "definition" : {
+          "identifier" : "true_peak_dbtp",
+          "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+          "unit" : "decibelsTruePeak",
+          "validRange" : [
+            -240,
+            24
+          ],
+          "version" : "1.0",
+          "windowSizeFrames" : 2048
+        },
+        "value" : -3.959311486609716
+      }
+    },
+    "sampleRate" : 16000,
+    "series" : {
+      "crest_factor_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.1,
+        "identifier" : "crest_factor_timeline",
+        "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+        "startSeconds" : 0,
+        "unit" : "ratio",
+        "validRange" : [
+          0,
+          1000
+        ],
+        "values" : [
+          3.4283317443467762,
+          3.223239637487831,
+          2.893235187017099,
+          3.1046477821281693,
+          3.4985377173167,
+          3.3080140480499534,
+          3.03844039718075,
+          3.65590685581685,
+          3.188020885781636,
+          2.8239674279909885,
+          2.4133989356363355,
+          1.9907844273655915,
+          2.012542964285074,
+          2.058967618001487,
+          2.1594566880146684,
+          2.3518712496198098,
+          2.829279909363685,
+          2.369850891152201,
+          2.0199661644403,
+          2.1458146961709565,
+          2.129429958797516,
+          2.080669768146557,
+          2.1937070452163967,
+          2.097495761908147,
+          1.993321272613168,
+          2.0338190697952867,
+          2.1101258187652836,
+          2.1336737970693465,
+          2.3712275965283167,
+          2.5005839186809737,
+          2.1920883280781167,
+          2.0709516921919575,
+          2.2565184993743794,
+          2.267328393391978,
+          2.026606785140815,
+          1.9200006110129693,
+          2.2172211102607036,
+          2.594861970046342,
+          2.1038792139876126,
+          1.954663135218901,
+          2.043149046616913,
+          1.9550492386215736,
+          1.918671893272534,
+          2.0378250938494293,
+          2.018322289690495,
+          1.9130337065363356,
+          2.131464581437561,
+          2.3139020276201996,
+          2.465978305182041,
+          2.467528551564788,
+          2.542859510921174,
+          2.746700241233823,
+          2.9391184981340737,
+          2.710248160364061,
+          2.214989388897023,
+          2.2032994733396554,
+          2.177959499551291,
+          2.1713635408312313,
+          2.4397187534857703,
+          2.5324861601214064,
+          2.210268803542708,
+          2.2376282898398694,
+          2.7508811269954774,
+          2.5171731065768275,
+          2.440628626401387,
+          2.6507897026524208,
+          2.478731821280297,
+          2.26036656517525,
+          2.4317110405383904,
+          2.9329684276020718,
+          3.0257942874068373,
+          3.317702966478122,
+          2.7249684928013425,
+          2.7690851195367467,
+          2.7195126760862505,
+          2.6472401283132347,
+          3.2231270086417725,
+          3.4003563982727005,
+          3.128433024263
+        ],
+        "version" : "1.0",
+        "windowSizeFrames" : 3200
+      },
+      "positive_spectral_flux_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.064,
+        "identifier" : "positive_spectral_flux_timeline",
+        "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+        "startSeconds" : 0.064,
+        "unit" : "ratio",
+        "validRange" : [
+          0,
+          10
+        ],
+        "values" : [
+          0.17585811725008688,
+          0.3818153193106154,
+          0.373183451487181,
+          0.20018279016332777,
+          0.2233543109329155,
+          0.22159370409830662,
+          0.13894429333894462,
+          0.21517874237451773,
+          0.4844218380102207,
+          0.30199856043500534,
+          0.18594561579427418,
+          0.23596111875258827,
+          0.5918510993855393,
+          0.2513161311399358,
+          0.2220660829282063,
+          0.418669525899166,
+          0.3454338407556325,
+          0.3123566733248215,
+          0.33009425180912516,
+          0.4376746229990221,
+          0.29159178078933634,
+          0.2925734158011154,
+          0.29412510935109787,
+          0.27713103788320553,
+          0.25082934525138273,
+          0.20888838083444025,
+          0.4881848404178589,
+          0.3267516515768182,
+          0.21555112417599329,
+          0.24147150671179615,
+          0.4862914705805119,
+          0.29651487421126227,
+          0.18629198663942567,
+          0.3069209039221387,
+          0.2976019792563725,
+          0.1943689557512068,
+          0.33304735992304946,
+          0.5286153259499669,
+          0.2549439953274072,
+          0.24602718808176877,
+          0.3022744032503413,
+          0.43276395428005604,
+          0.18673602105325554,
+          0.20463972206926945,
+          0.3263256426508674,
+          0.2488049842596234,
+          0.38857548408313275,
+          0.3109333667804993,
+          0.421385221881212,
+          0.2475002647789239,
+          0.1665585960214136,
+          0.33478590474051517,
+          0.2571732827020562,
+          0.17070887306865729,
+          0.26652563562620646,
+          0.5490410570103874,
+          0.20380621708774121,
+          0.1541365400681615,
+          0.3416861350153211,
+          0.40017813036482236,
+          0.17850116003187963,
+          0.16045975740822857,
+          0.2932794313242936,
+          0.24475995276708323,
+          0.18611320661774797,
+          0.35156165010170465,
+          0.3080813679752037,
+          0.1518924905216331,
+          0.23960612711763782,
+          0.5132749710085975,
+          0.26245030858485374,
+          0.18056550375316607,
+          0.2863818520034096,
+          0.3423102902215739,
+          0.21975222171571507,
+          0.22409795739703472,
+          0.48035039949227076,
+          0.2776946470260738,
+          0.22702537931216957,
+          0.26566595876926513,
+          0.2539226436787845,
+          0.1865338642003894,
+          0.225811173995111,
+          0.5258614079307207,
+          0.3030077603243185,
+          0.19451836086002522,
+          0.1628770661738314,
+          0.435621092419126,
+          0.23147257680983338,
+          0.198728910131269,
+          0.24272199464426578,
+          0.1929962824045564,
+          0.2254889398923866,
+          0.2684375499960966,
+          0.41654628138436184,
+          0.23080962459907184,
+          0.2500201380732064,
+          0.30160701155045894,
+          0.5116000906890228,
+          0.23433664348013947,
+          0.2369212601760276,
+          0.3388433530492814,
+          0.16120366211138265,
+          0.41471343100854985,
+          0.2084784693359311,
+          0.39816889379156584,
+          0.21286024761810554,
+          0.20736301084204709,
+          0.3209348617561962,
+          0.20173451724141864,
+          0.20117894218274845,
+          0.2409045609870103,
+          0.5500010127227285,
+          0.2546548856275852,
+          0.16746811981681395,
+          0.21561522069217606,
+          0.4667965626475299,
+          0.19375594379384078,
+          0.23185412192383686,
+          0.24937840497301134,
+          0.20450976819474265,
+          0.1833322275348545,
+          0.32295155252329105
+        ],
+        "version" : "1.0",
+        "windowSizeFrames" : 2048
+      },
+      "rms_dbfs_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.1,
+        "identifier" : "rms_dbfs_timeline",
+        "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+        "startSeconds" : 0,
+        "unit" : "decibelsFS",
+        "validRange" : [
+          -240,
+          24
+        ],
+        "values" : [
+          -16.625253781913663,
+          -15.706902337747195,
+          -14.768725200973837,
+          -16.037039245471668,
+          -17.0821011297996,
+          -15.853990328701492,
+          -15.115657855609063,
+          -16.17164033546854,
+          -14.98216104691638,
+          -14.458981409707,
+          -12.758244499772125,
+          -10.954974056097297,
+          -10.591231130385964,
+          -10.789318246856443,
+          -11.296000922218518,
+          -12.459342949553662,
+          -14.280605295641829,
+          -12.628758384110736,
+          -11.241219851593945,
+          -11.509121725533353,
+          -11.442544615292274,
+          -11.730789003306835,
+          -12.254951255054415,
+          -11.865400494599456,
+          -11.02167204581044,
+          -11.19637231708728,
+          -11.4988092669138,
+          -11.595202715453512,
+          -12.724755323574062,
+          -12.972998870453267,
+          -11.76162293871835,
+          -11.267861315763536,
+          -12.0700981660865,
+          -12.065529635060425,
+          -11.090630948857608,
+          -10.881648056328599,
+          -12.263750778353657,
+          -13.468479389063798,
+          -11.469754510365718,
+          -10.83077689853787,
+          -11.307846853179988,
+          -10.92499986113318,
+          -10.614786436604433,
+          -11.138110281760516,
+          -11.079941402053093,
+          -10.580319606581874,
+          -11.519429571757446,
+          -12.07769865867251,
+          -12.63058435587573,
+          -13.127806183994084,
+          -13.461871442501634,
+          -14.689343478399913,
+          -15.277460087884219,
+          -13.584059316979873,
+          -11.831311151596202,
+          -11.984326887786498,
+          -11.938044834564641,
+          -11.91169967101163,
+          -13.269804406962438,
+          -13.744943224152548,
+          -11.947454984052136,
+          -12.054311986699746,
+          -12.805083011992611,
+          -12.033908198991268,
+          -12.825212657557998,
+          -13.965519230487631,
+          -13.384601562563962,
+          -12.218872940821333,
+          -12.853534778832277,
+          -14.909802668609611,
+          -15.592969504902356,
+          -15.808588881039086,
+          -13.943169432553375,
+          -14.082665846073697,
+          -14.109319554861754,
+          -13.790200852596248,
+          -15.499882491132587,
+          -16.238518716858525,
+          -15.396567613042485
+        ],
+        "version" : "1.0",
+        "windowSizeFrames" : 3200
+      },
+      "short_term_loudness_lufs_timeline" : {
+        "confidence" : 1,
+        "hopSeconds" : 0.1,
+        "identifier" : "short_term_loudness_lufs_timeline",
+        "limitation" : "Ungated rectangular 3 s windows starting at the reported timestamps. Values describe level over time; source context and listening remain necessary.",
+        "startSeconds" : 0,
+        "unit" : "loudnessUnitsFullScale",
+        "validRange" : [
+          -240,
+          24
+        ],
+        "values" : [
+          -12.871501278015371,
+          -12.817289625167273,
+          -12.668167080220472,
+          -12.61021536991636,
+          -12.553972230250269,
+          -12.452244135601509,
+          -12.307817697093682,
+          -12.202580715512221,
+          -12.151999734607577,
+          -12.084945081722777,
+          -11.988992106395951,
+          -11.90885883425721,
+          -11.91203948838808,
+          -11.911675271365002,
+          -11.923047313953134,
+          -11.946330487565012,
+          -11.903905047154609,
+          -11.813202770131683,
+          -11.762828867542378,
+          -11.796931629900909,
+          -11.85871410432451,
+          -11.896203472375381,
+          -11.986597738654327,
+          -12.040077124323552,
+          -12.116537578742486,
+          -12.137124854623945,
+          -12.15370602820028,
+          -12.158336310376427,
+          -12.179514451399502,
+          -12.18311522928449,
+          -12.21067733539751,
+          -12.230532874487439,
+          -12.239119628374896,
+          -12.29271705287457,
+          -12.281974236530035,
+          -12.283431827855301,
+          -12.368841579354,
+          -12.461822627407985,
+          -12.446168302972321,
+          -12.421528408584834,
+          -12.566028344982506,
+          -12.658026520003542,
+          -12.778580386329523,
+          -12.918417741932739,
+          -12.980952905838215,
+          -13.06670293184028,
+          -13.165524653822905,
+          -13.304844077808513,
+          -13.381601931505493,
+          -13.499627947712575,
+          -13.527012708146483
+        ],
+        "version" : "1.0-ebu-tech-3341-v4",
+        "windowSizeFrames" : 48000
+      }
+    },
+    "version" : "1.1",
+    "warnings" : [
+
+    ]
+  },
+  "originalAudioFileName" : "00-original.wav",
+  "prompt" : "make this more musical and controlled without sounding overprocessed",
+  "sampleRate" : 16000,
+  "schemaVersion" : "1.0",
+  "sourceFingerprint" : "839e341bb6f292f1",
+  "sourceSnapshotID" : "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA",
+  "sourceType" : "vocal",
+  "variants" : [
+    {
+      "analysis" : {
+        "channelCount" : 1,
+        "frameCount" : 128000,
+        "metrics" : {
+          "boxiness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "boxiness_band_ratio",
+              "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.47195118526122326
+          },
+          "clipping_samples" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "clipping_samples",
+              "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+              "unit" : "count",
+              "validRange" : [
+                0,
+                128000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0
+          },
+          "crest_factor" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "crest_factor",
+              "limitation" : "Whole-interval sample-peak to RMS ratio.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 3.839047901634169
+          },
+          "dc_offset" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "dc_offset",
+              "limitation" : "Mean sample value across all channels.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 4.6407675861697586e-05
+          },
+          "harshness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "harshness_band_ratio",
+              "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.08948861120177241
+          },
+          "high_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "high_band_ratio",
+              "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.014430036101744094
+          },
+          "integrated_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "integrated_loudness_lufs",
+              "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -12.72857539045042
+          },
+          "loudness_range_lu" : {
+            "confidence" : 0.13333333333333333,
+            "definition" : {
+              "identifier" : "loudness_range_lu",
+              "limitation" : "EBU Tech 3342 v4 LRA: gated 10th-to-95th percentile range of 3 s loudness. EBU R 128 does not recommend LRA for programmes under one minute; it is not crest factor, peak-to-floor range, or a quality score.",
+              "unit" : "loudnessUnits",
+              "validRange" : [
+                0,
+                240
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 3.1710196191909485
+          },
+          "low_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "low_band_ratio",
+              "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.2580929397729874
+          },
+          "maximum_momentary_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_momentary_loudness_lufs",
+              "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -11.20718043442526
+          },
+          "maximum_short_term_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_short_term_loudness_lufs",
+              "limitation" : "Maximum ungated 3 s rectangular-window loudness at 10 Hz, per EBU Tech 3341 v4 section 2.2. It is not Integrated Loudness or a quality score.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -11.772711055830039
+          },
+          "mid_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "mid_band_ratio",
+              "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.7274770241252693
+          },
+          "peak_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "peak_dbfs",
+              "limitation" : "Sample peak, not oversampled true peak.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -1.0395635222903978
+          },
+          "positive_spectral_flux" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "positive_spectral_flux",
+              "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                10
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.286373596673403
+          },
+          "rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "rms_dbfs",
+              "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -12.724034143307975
+          },
+          "sibilance_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_band_ratio",
+              "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.009743007301175909
+          },
+          "sibilance_detector_rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_detector_rms_dbfs",
+              "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -34.85432754991796
+          },
+          "spectral_centroid_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_centroid_hz",
+              "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                8000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 668.5375794933395
+          },
+          "spectral_flatness" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_flatness",
+              "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.08924716591221193
+          },
+          "spectral_rolloff_85_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_rolloff_85_hz",
+              "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                8000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 1125
+          },
+          "spectral_slope_db_per_octave" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_slope_db_per_octave",
+              "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+              "unit" : "decibelsPerOctave",
+              "validRange" : [
+                -100,
+                100
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -5.191403334820417
+          },
+          "transient_density_per_second" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "transient_density_per_second",
+              "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+              "unit" : "perSecond",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.75
+          },
+          "true_peak_dbtp" : {
+            "confidence" : 0.95,
+            "definition" : {
+              "identifier" : "true_peak_dbtp",
+              "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+              "unit" : "decibelsTruePeak",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -1.000299004991649
+          }
+        },
+        "sampleRate" : 16000,
+        "series" : {
+          "crest_factor_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "crest_factor_timeline",
+            "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+            "startSeconds" : 0,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              1000
+            ],
+            "values" : [
+              3.7105916748401446,
+              3.610120546801464,
+              3.2194674852352003,
+              3.1818301057845164,
+              3.4591897934287106,
+              3.870037716589278,
+              3.7384871329354152,
+              4.069780676641172,
+              3.8913791689029718,
+              3.6812028938176513,
+              3.1360035035120615,
+              2.608442090709079,
+              2.6141721259808346,
+              2.8226374769453404,
+              2.9715315680933037,
+              2.782929246155157,
+              3.1837173812930053,
+              3.3296090073338194,
+              2.8290356547221864,
+              2.755930585067094,
+              2.6144109967273668,
+              2.693255549003462,
+              2.634275324123365,
+              3.116681374800798,
+              3.2083945758736774,
+              3.3147252021197913,
+              2.775462204966719,
+              2.7736852741318807,
+              2.6925502081084884,
+              2.5996038614748738,
+              3.0008240072204337,
+              2.8866111463607833,
+              3.1127223475915997,
+              2.671997557596813,
+              2.348381554210656,
+              2.6477868049540696,
+              3.1150430143107104,
+              3.523341710443243,
+              2.808384216024216,
+              2.577142155265488,
+              2.626643590220624,
+              2.358033179398509,
+              2.954836918222472,
+              3.1656164078835487,
+              2.8484972258052452,
+              2.6774276995754636,
+              2.9373888693099786,
+              2.5581733808432734,
+              2.925504068092037,
+              3.221115812775978,
+              3.352635930759541,
+              2.904602628903747,
+              3.1002579728868938,
+              4.234090860302736,
+              3.451592408824868,
+              2.7698991339969767,
+              2.9339430556884314,
+              2.9291080898267445,
+              2.792087206583271,
+              2.953895605716122,
+              3.1895739391254403,
+              3.2846478727072763,
+              3.4306061954693803,
+              3.225329959607289,
+              3.5431856759386497,
+              3.2460516978220695,
+              3.0329711882778447,
+              3.1898351255583473,
+              3.5350708572974843,
+              3.5017911390155003,
+              3.1298739688636394,
+              4.159438714033848,
+              3.5163733607412158,
+              3.577417223907977,
+              3.8631176746382194,
+              3.7116015717327446,
+              3.738717357932854,
+              3.7699117455321502,
+              4.229979970361551
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 3200
+          },
+          "positive_spectral_flux_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.064,
+            "identifier" : "positive_spectral_flux_timeline",
+            "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+            "startSeconds" : 0.064,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              10
+            ],
+            "values" : [
+              0.17582317668054284,
+              0.3839694905638782,
+              0.3773615570159357,
+              0.2031339210265459,
+              0.2265407034297768,
+              0.22390688119813287,
+              0.14174047061717795,
+              0.21698304002224605,
+              0.48427932989689637,
+              0.28770636737785554,
+              0.19113169424988155,
+              0.23726707812175502,
+              0.5954532516458934,
+              0.25349042354117723,
+              0.22382963855714125,
+              0.424376273036835,
+              0.3470928131259583,
+              0.31027921875672987,
+              0.3297256431024809,
+              0.43731808089782986,
+              0.27933226160247343,
+              0.2978293999666785,
+              0.2987181683574866,
+              0.27626969502906495,
+              0.2539095574789543,
+              0.21322378465196298,
+              0.48829068796291525,
+              0.3241480790282416,
+              0.2176771153108812,
+              0.24279974904759763,
+              0.48911863964494445,
+              0.2988691550222659,
+              0.18547552283098734,
+              0.3112087635108443,
+              0.30036922062978333,
+              0.1975279821847349,
+              0.33727570063124646,
+              0.5239668306387036,
+              0.24657381098675976,
+              0.25115534476137,
+              0.3030709163986663,
+              0.4364669183630693,
+              0.1888182117704183,
+              0.20518952951870362,
+              0.329320765128139,
+              0.25092019180142894,
+              0.3890264564967927,
+              0.30885874496518245,
+              0.4089616179180709,
+              0.25149644396776777,
+              0.16881853322094212,
+              0.3384026212078776,
+              0.25772988979745115,
+              0.170814649873989,
+              0.26678110788464293,
+              0.5488885125969314,
+              0.2044915646554262,
+              0.15560138940217794,
+              0.3426297501509157,
+              0.3990235588763333,
+              0.17633838994159926,
+              0.15933817530692876,
+              0.2962575550737749,
+              0.2463146133978506,
+              0.1860209645491661,
+              0.3461780188538931,
+              0.2974753793490722,
+              0.15108573328496314,
+              0.24310321811119195,
+              0.5143985724253198,
+              0.2627066406342361,
+              0.18151557696264792,
+              0.2799088322613671,
+              0.33301742277756696,
+              0.2257486643649308,
+              0.22462413550688168,
+              0.4797651786383664,
+              0.2572762717086133,
+              0.2336984001648787,
+              0.2711879765718199,
+              0.25617874157831194,
+              0.18840545639479778,
+              0.22848846990009625,
+              0.5273462073651934,
+              0.302511096221513,
+              0.1955817479796354,
+              0.16383165452585519,
+              0.4365638911288583,
+              0.2304208710453819,
+              0.20138396603685418,
+              0.24458477437910847,
+              0.194415587183494,
+              0.22937396387594042,
+              0.2700473754641404,
+              0.4118261176949016,
+              0.21466604995258473,
+              0.25515782263629955,
+              0.30545092091073434,
+              0.5124277392286726,
+              0.23571921706457413,
+              0.2400657678525747,
+              0.3375653925917594,
+              0.16437996003395056,
+              0.42007693146372743,
+              0.20977751998623007,
+              0.3899607980927466,
+              0.1994709784171949,
+              0.21246659536978954,
+              0.32728116048663286,
+              0.20607777769093155,
+              0.20379284594236707,
+              0.24642486359282326,
+              0.5530225346659456,
+              0.2540575645138438,
+              0.17153969297283056,
+              0.2188167689348085,
+              0.4699806003905277,
+              0.1940173149336605,
+              0.23572876999484063,
+              0.2528194502406183,
+              0.2061624806995586,
+              0.18680213101543694,
+              0.32286320435625643
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 2048
+          },
+          "rms_dbfs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "rms_dbfs_timeline",
+            "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+            "startSeconds" : 0,
+            "unit" : "decibelsFS",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -16.66065182667194,
+              -15.685668135971557,
+              -14.69091492595842,
+              -15.973601772539226,
+              -17.09663834802718,
+              -16.032187642515158,
+              -15.731801495586591,
+              -16.937609259146843,
+              -15.035950096384642,
+              -14.553674196926114,
+              -12.776079271502407,
+              -10.904625971591397,
+              -10.707664060361687,
+              -11.065643664427471,
+              -11.512148561743167,
+              -12.562114286330067,
+              -14.409794632673032,
+              -12.707244252175157,
+              -11.292147916808009,
+              -11.593786979763454,
+              -11.50602563036248,
+              -11.764099664876879,
+              -12.31495471712024,
+              -11.900773603886304,
+              -11.361004918688003,
+              -11.64420005536564,
+              -11.636296606869683,
+              -11.630733869273847,
+              -12.67044590537617,
+              -12.84836742638789,
+              -11.741931455177177,
+              -11.404886628594618,
+              -12.18158962745421,
+              -12.004784030921918,
+              -11.005975633796606,
+              -10.83286057094326,
+              -12.244481260200931,
+              -13.416504859745402,
+              -11.446540026404342,
+              -10.87250963150796,
+              -11.39353015211572,
+              -10.963454900737133,
+              -10.756128729354737,
+              -11.354624164348973,
+              -11.1505800374774,
+              -10.612619063122724,
+              -11.609610567785245,
+              -12.257367053422923,
+              -12.781481446407293,
+              -13.468462635615275,
+              -13.816063741210643,
+              -14.692815183389127,
+              -15.259037322265524,
+              -13.574766990406573,
+              -11.799953625555585,
+              -11.931234484636457,
+              -11.907569128859539,
+              -11.893243485655722,
+              -13.246462377772161,
+              -13.726999881054496,
+              -12.078759542727745,
+              -12.33388242463737,
+              -12.970024135347174,
+              -12.0453044708378,
+              -12.861699688051885,
+              -14.096584388901068,
+              -13.465091013049854,
+              -12.450109070319238,
+              -13.342706814258328,
+              -15.289045719837313,
+              -15.652249453347991,
+              -15.870679186987536,
+              -13.935079083803632,
+              -14.084571330712405,
+              -14.147025434838605,
+              -13.799493685739996,
+              -15.541132654970117,
+              -16.31449718699981,
+              -15.639844273071901
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 3200
+          },
+          "short_term_loudness_lufs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "short_term_loudness_lufs_timeline",
+            "limitation" : "Ungated rectangular 3 s windows starting at the reported timestamps. Values describe level over time; source context and listening remain necessary.",
+            "startSeconds" : 0,
+            "unit" : "loudnessUnitsFullScale",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -12.884244388801832,
+              -12.827319129552416,
+              -12.68243471110041,
+              -12.626843597670375,
+              -12.571835615886348,
+              -12.469148732371206,
+              -12.320901767254115,
+              -12.21339582362739,
+              -12.156359931952597,
+              -12.088051043134268,
+              -11.993707902508673,
+              -11.915816806827678,
+              -11.92575946433353,
+              -11.925879550904904,
+              -11.936255639180274,
+              -11.956994764956065,
+              -11.912951289689907,
+              -11.822366514300496,
+              -11.772711055830039,
+              -11.808175123113065,
+              -11.868551662826114,
+              -11.911170212056309,
+              -12.00123783694863,
+              -12.05283099470771,
+              -12.128877628497689,
+              -12.149035737969967,
+              -12.148550942823778,
+              -12.145661346397985,
+              -12.165156718915632,
+              -12.167463419775116,
+              -12.196864865194414,
+              -12.218344699841586,
+              -12.226929501055233,
+              -12.285200676774513,
+              -12.2762840905016,
+              -12.278420263199163,
+              -12.36848396592116,
+              -12.46389287549794,
+              -12.447497028318603,
+              -12.43068175823835,
+              -12.58243942288974,
+              -12.672079537822881,
+              -12.789768287115999,
+              -12.929230756126662,
+              -12.980347096964364,
+              -13.062795116013039,
+              -13.159918892905447,
+              -13.2944746970691,
+              -13.366738597029782,
+              -13.481344857116905,
+              -13.512627426659105
+            ],
+            "version" : "1.0-ebu-tech-3341-v4",
+            "windowSizeFrames" : 48000
+          }
+        },
+        "version" : "1.1",
+        "warnings" : [
+
+        ]
+      },
+      "audioFileName" : "01-conservative.wav",
+      "difference" : {
+        "bandEnergyDistance" : 0.04883434367924577,
+        "crestFactorDeltaDB" : 3.0661664919227505,
+        "differenceRMSDBFS" : -18.355524062915794,
+        "spectralCentroidDeltaHz" : 29.58683216057227
+      },
+      "loudnessMatchGainDB" : 0.2942667618473518,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "pairwiseDifferenceFromPrevious" : {
+        "bandEnergyDistance" : 0.04883434367924577,
+        "crestFactorDeltaDB" : 3.0661664919227505,
+        "differenceRMSDBFS" : -18.355524062915794,
+        "spectralCentroidDeltaHz" : 29.58683216057227
+      },
+      "plan" : {
+        "goals" : [
+          {
+            "attribute" : "dynamicControl",
+            "direction" : "increase",
+            "locked" : false,
+            "strength" : 0.6
+          }
+        ],
+        "nodes" : [
+          {
+            "category" : "corrective",
+            "confidence" : 0.82,
+            "enabled" : true,
+            "id" : "05FEB810-85AB-4A2B-93E1-4857F70C0E3D",
+            "locked" : false,
+            "parameters" : {
+              "frequencyHz" : 73,
+              "q" : 0.707
+            },
+            "rationale" : "Reduce subsonic and proximity buildup without thinning the vocal.",
+            "type" : "highPass"
+          },
+          {
+            "category" : "corrective",
+            "confidence" : 0.82,
+            "enabled" : true,
+            "id" : "3672CBD0-17A6-49B6-9305-21C9DC5F484B",
+            "locked" : false,
+            "parameters" : {
+              "attackMS" : 21.993258042523475,
+              "kneeDB" : 4.6,
+              "makeupGainDB" : 0,
+              "mix" : 1,
+              "ratio" : 1.586,
+              "releaseMS" : 252.92246748901997,
+              "thresholdDB" : -6.39395066593893
+            },
+            "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+            "type" : "compressor"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 1,
+            "enabled" : true,
+            "id" : "AECC3215-CAF6-58BA-836D-CBBFE9C543D3",
+            "locked" : false,
+            "parameters" : {
+              "gainDB" : 0.2942667618473518
+            },
+            "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+            "type" : "loudnessMatch"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 0.9,
+            "enabled" : true,
+            "id" : "BEAF5279-C50E-41C0-B07D-354DDC8974E9",
+            "locked" : false,
+            "parameters" : {
+              "ceilingDB" : -1,
+              "lookaheadMS" : 0,
+              "releaseMS" : 80
+            },
+            "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+            "type" : "limiter"
+          }
+        ],
+        "outputConstraints" : {
+          "loudnessMatchPreview" : true,
+          "maxAddedGainDB" : 12,
+          "maxTruePeakDB" : -1,
+          "preserveMonoCompatibility" : true
+        },
+        "requestID" : "E28D7358-CAF6-48BA-836D-CBBFE9C543D3",
+        "schemaVersion" : "1.0",
+        "scope" : {
+          "channelFormat" : "mono",
+          "kind" : "importedFile",
+          "sourceType" : "vocal",
+          "timeRangeSeconds" : {
+            "end" : 8,
+            "start" : 0
+          }
+        },
+        "sourceSnapshotID" : "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA"
+      },
+      "planFileName" : "01-conservative-plan.json",
+      "previewID" : "DE404E01-24F9-40FF-BED5-D0E54F39D6CE",
+      "rejectionReasons" : [
+
+      ],
+      "status" : "valid",
+      "strength" : "conservative",
+      "warnings" : [
+
+      ]
+    },
+    {
+      "analysis" : {
+        "channelCount" : 1,
+        "frameCount" : 128000,
+        "metrics" : {
+          "boxiness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "boxiness_band_ratio",
+              "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.4770759578670912
+          },
+          "clipping_samples" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "clipping_samples",
+              "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+              "unit" : "count",
+              "validRange" : [
+                0,
+                128000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0
+          },
+          "crest_factor" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "crest_factor",
+              "limitation" : "Whole-interval sample-peak to RMS ratio.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 4.314428272482692
+          },
+          "dc_offset" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "dc_offset",
+              "limitation" : "Mean sample value across all channels.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 3.104652647393103e-05
+          },
+          "harshness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "harshness_band_ratio",
+              "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.09525796982032811
+          },
+          "high_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "high_band_ratio",
+              "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.015398160418271089
+          },
+          "integrated_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "integrated_loudness_lufs",
+              "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -13.739969581686255
+          },
+          "loudness_range_lu" : {
+            "confidence" : 0.13333333333333333,
+            "definition" : {
+              "identifier" : "loudness_range_lu",
+              "limitation" : "EBU Tech 3342 v4 LRA: gated 10th-to-95th percentile range of 3 s loudness. EBU R 128 does not recommend LRA for programmes under one minute; it is not crest factor, peak-to-floor range, or a quality score.",
+              "unit" : "loudnessUnits",
+              "validRange" : [
+                0,
+                240
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.761947490594469
+          },
+          "low_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "low_band_ratio",
+              "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.2420924417212739
+          },
+          "maximum_momentary_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_momentary_loudness_lufs",
+              "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -12.449630477165021
+          },
+          "maximum_short_term_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_short_term_loudness_lufs",
+              "limitation" : "Maximum ungated 3 s rectangular-window loudness at 10 Hz, per EBU Tech 3341 v4 section 2.2. It is not Integrated Loudness or a quality score.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -12.977422412305065
+          },
+          "mid_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "mid_band_ratio",
+              "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.742509397860456
+          },
+          "peak_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "peak_dbfs",
+              "limitation" : "Sample peak, not oversampled true peak.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -1.0758292730218135
+          },
+          "positive_spectral_flux" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "positive_spectral_flux",
+              "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                10
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.2868653547998577
+          },
+          "rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "rms_dbfs",
+              "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -13.774294337514124
+          },
+          "sibilance_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_band_ratio",
+              "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.01041999334771673
+          },
+          "sibilance_detector_rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_detector_rms_dbfs",
+              "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -35.67775908690682
+          },
+          "spectral_centroid_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_centroid_hz",
+              "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                8000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 693.4058967665102
+          },
+          "spectral_flatness" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_flatness",
+              "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.09369308142696302
+          },
+          "spectral_rolloff_85_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_rolloff_85_hz",
+              "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                8000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 1312.5
+          },
+          "spectral_slope_db_per_octave" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_slope_db_per_octave",
+              "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+              "unit" : "decibelsPerOctave",
+              "validRange" : [
+                -100,
+                100
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -5.083219503526882
+          },
+          "transient_density_per_second" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "transient_density_per_second",
+              "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+              "unit" : "perSecond",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.625
+          },
+          "true_peak_dbtp" : {
+            "confidence" : 0.95,
+            "definition" : {
+              "identifier" : "true_peak_dbtp",
+              "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+              "unit" : "decibelsTruePeak",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -1.0000001607861662
+          }
+        },
+        "sampleRate" : 16000,
+        "series" : {
+          "crest_factor_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "crest_factor_timeline",
+            "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+            "startSeconds" : 0,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              1000
+            ],
+            "values" : [
+              3.7298605267268115,
+              3.6961299430420556,
+              3.315972545962816,
+              3.2377545677231168,
+              3.4814759061558176,
+              3.80829131986512,
+              3.7317834291065637,
+              4.205545856693014,
+              3.961563640786306,
+              3.7847619162371964,
+              3.271842335141997,
+              2.7318768234255786,
+              2.726420957038405,
+              2.8424775209875155,
+              2.89560328214431,
+              2.810670297645078,
+              3.2650952077416373,
+              3.406436195750105,
+              2.9289866556884117,
+              2.8743455811017755,
+              2.7898586082495918,
+              2.8738791333549387,
+              2.664508055095178,
+              3.2890499046937345,
+              3.2068629981985084,
+              3.3609622030587003,
+              2.8861401440525176,
+              2.864337933179991,
+              2.7745533991670484,
+              2.697567488511536,
+              3.1285767380383134,
+              3.054684169714675,
+              3.063348137267672,
+              2.750189037611468,
+              2.3710547675799254,
+              2.7717373266154572,
+              3.2656498784311037,
+              3.5682350261722795,
+              2.879399524885359,
+              2.6935128886653823,
+              2.712112786926695,
+              2.430269516170676,
+              2.901000258139793,
+              3.0937374437877114,
+              2.9343914480648112,
+              2.7821086018787806,
+              3.0791934484913663,
+              2.5594152977031017,
+              3.0324366121669133,
+              3.3490112664801277,
+              3.4565576438106853,
+              3.038011466847759,
+              3.200233160513311,
+              4.5267987845543365,
+              3.8022372462973446,
+              2.8357402736624326,
+              3.1266480415577353,
+              3.1217478807077166,
+              2.868379229381539,
+              3.0330500026090674,
+              3.121462822955344,
+              3.272415707023631,
+              3.6462200353197987,
+              3.395255862498131,
+              3.7620477568243795,
+              3.4096795087065987,
+              3.1437129558592276,
+              3.2078010050160244,
+              3.594402400295415,
+              3.6427920766682043,
+              3.0831705880660443,
+              4.353091118393633,
+              3.574181975683633,
+              3.6810634413036847,
+              4.1376155612162115,
+              3.9838363144778817,
+              3.863913563749759,
+              3.7212099934716902,
+              4.428449660177791
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 3200
+          },
+          "positive_spectral_flux_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.064,
+            "identifier" : "positive_spectral_flux_timeline",
+            "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+            "startSeconds" : 0.064,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              10
+            ],
+            "values" : [
+              0.17756135733953493,
+              0.3858204300890001,
+              0.37070033484590575,
+              0.20186465693820874,
+              0.22965884809849013,
+              0.22647221365988363,
+              0.14419000338793805,
+              0.22060160296572795,
+              0.4848437622973924,
+              0.2772023808431294,
+              0.1961479385697233,
+              0.2420839464624492,
+              0.5930975145749948,
+              0.2474729572980953,
+              0.2268041946341181,
+              0.42630315489212905,
+              0.33624991787098524,
+              0.2946929939870544,
+              0.3237147365755857,
+              0.4322926395237974,
+              0.2746292997692255,
+              0.3021512583155674,
+              0.3032058998630811,
+              0.2792179428506532,
+              0.2625888272423935,
+              0.2241970388386002,
+              0.4904498892418899,
+              0.3112236428880285,
+              0.21828114532167114,
+              0.2413884136264466,
+              0.48969771588215943,
+              0.29631558584533996,
+              0.18594766512114722,
+              0.31480169795613927,
+              0.305939329358807,
+              0.2013960665667177,
+              0.3401731393088502,
+              0.5177144229483311,
+              0.24215856827673177,
+              0.25626377119764265,
+              0.3054815403964563,
+              0.43379860172527723,
+              0.19128769755942923,
+              0.20857235993382686,
+              0.338041474784368,
+              0.2489422040757631,
+              0.38989222904594845,
+              0.3040521687127476,
+              0.3989928531327747,
+              0.25340603129011735,
+              0.17022348700470705,
+              0.34297970383687865,
+              0.25757874441121686,
+              0.16566617542681497,
+              0.26281220619121154,
+              0.5463333584235216,
+              0.2075927587140608,
+              0.1642747028643147,
+              0.35242999487663196,
+              0.39080022599398057,
+              0.16454201023159007,
+              0.1539510262082919,
+              0.3051062206825022,
+              0.24819994747632998,
+              0.1809621120702348,
+              0.34642746666799035,
+              0.29122097354840576,
+              0.15331408976142918,
+              0.25088501757581927,
+              0.512018702010652,
+              0.2554832187574811,
+              0.18229871648063461,
+              0.2853306444977136,
+              0.33493767707963157,
+              0.2282479173794976,
+              0.2294500871119205,
+              0.48193229066702414,
+              0.2493722266414664,
+              0.24099507000400425,
+              0.27902974254810514,
+              0.2624349646061926,
+              0.1897559775915054,
+              0.2340440796569344,
+              0.5258634395004079,
+              0.28251327289710565,
+              0.19081332621065972,
+              0.16656093199892968,
+              0.4356356447390432,
+              0.22781930378727783,
+              0.2081183284634241,
+              0.24872808492363288,
+              0.2015146169505966,
+              0.23699363482360447,
+              0.268958045760338,
+              0.39913897765491874,
+              0.20670813000274052,
+              0.2656129461707365,
+              0.3133353316505361,
+              0.502374036443496,
+              0.23338098401929072,
+              0.24557601573666318,
+              0.3455657176237015,
+              0.16772084201887683,
+              0.4223957755289919,
+              0.21002298769987435,
+              0.3836475600679966,
+              0.1931145359576959,
+              0.22331741402741126,
+              0.33582473129406454,
+              0.2122322447260209,
+              0.20909455401130722,
+              0.25163740315960786,
+              0.5486977827036958,
+              0.2455389665401968,
+              0.17551494454780073,
+              0.22619094655078376,
+              0.4652772312357332,
+              0.1921951424713987,
+              0.24161696599293175,
+              0.25837279384894535,
+              0.21081392206730906,
+              0.1911415070876257,
+              0.32624401655812785
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 2048
+          },
+          "rms_dbfs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "rms_dbfs_timeline",
+            "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+            "startSeconds" : 0,
+            "unit" : "decibelsFS",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -16.81638604379041,
+              -15.94630642121537,
+              -15.003580323789684,
+              -16.285404621062515,
+              -17.362341958527455,
+              -16.427236145433707,
+              -16.250961525964225,
+              -17.36815892876746,
+              -15.480309406696042,
+              -15.083747965719594,
+              -13.459333484479492,
+              -11.8927084077451,
+              -12.057676093272365,
+              -12.53962689243247,
+              -12.901232244662877,
+              -13.832815573114308,
+              -15.4646341447984,
+              -13.703267922598268,
+              -12.391610607872385,
+              -12.771136722489905,
+              -12.7512367966556,
+              -13.008962907715045,
+              -13.463952828094982,
+              -12.984105015743616,
+              -12.680534979153729,
+              -13.088199415921908,
+              -12.892847178781409,
+              -12.826983957552178,
+              -13.703523482998513,
+              -13.739585821920057,
+              -12.797433271180685,
+              -12.589823319353695,
+              -13.34753587547915,
+              -13.085530446210182,
+              -12.149593617747964,
+              -12.125703184500065,
+              -13.550054189213538,
+              -14.435674775953999,
+              -12.572644309374319,
+              -12.22965756841967,
+              -12.805230134259745,
+              -12.331491039035434,
+              -12.206411831584989,
+              -12.765125555793258,
+              -12.456145889437096,
+              -11.993266504120916,
+              -13.009790785995294,
+              -13.459262351911832,
+              -13.828606242580562,
+              -14.527164699072724,
+              -14.801708604979973,
+              -15.348279523136812,
+              -15.80012376838063,
+              -14.19165308517179,
+              -12.676613509634592,
+              -12.989325028405647,
+              -13.027541080501944,
+              -13.013917659192868,
+              -14.226175470608364,
+              -14.514937808900862,
+              -13.009263333952063,
+              -13.419469368748718,
+              -13.9417013064788,
+              -13.065442467730982,
+              -13.956478399163759,
+              -15.047137028003144,
+              -14.34172353395188,
+              -13.450338631078942,
+              -14.438724160737806,
+              -16.175764451464016,
+              -16.298553554075685,
+              -16.325452465324318,
+              -14.523922525522588,
+              -14.77985536524085,
+              -14.84857336186888,
+              -14.519600352560293,
+              -16.212034176128114,
+              -16.85802127815338,
+              -16.180690256329115
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 3200
+          },
+          "short_term_loudness_lufs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "short_term_loudness_lufs_timeline",
+            "limitation" : "Ungated rectangular 3 s windows starting at the reported timestamps. Values describe level over time; source context and listening remain necessary.",
+            "startSeconds" : 0,
+            "unit" : "loudnessUnitsFullScale",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -13.840425808742266,
+              -13.802902797339497,
+              -13.675623426500737,
+              -13.648469640048157,
+              -13.610501641316496,
+              -13.522120753371732,
+              -13.391113008492146,
+              -13.310970265785295,
+              -13.263252603876573,
+              -13.200953732037926,
+              -13.12874650230459,
+              -13.074364963103944,
+              -13.107050453185142,
+              -13.114463040220334,
+              -13.125553309380582,
+              -13.140404714370773,
+              -13.098187741103109,
+              -13.01861879322757,
+              -12.977422412305065,
+              -13.016370960787702,
+              -13.073541372836038,
+              -13.113492261966,
+              -13.192239592397351,
+              -13.230996051954463,
+              -13.30010764584005,
+              -13.30604761672522,
+              -13.291754628537594,
+              -13.281975028197188,
+              -13.300306962139844,
+              -13.298222189244523,
+              -13.329156709839413,
+              -13.345768684969615,
+              -13.35089792084277,
+              -13.40514103796889,
+              -13.387838544437972,
+              -13.392789793232188,
+              -13.47485362379831,
+              -13.552004119781273,
+              -13.52610814593795,
+              -13.513672607537032,
+              -13.655281809843798,
+              -13.72102162582861,
+              -13.818364527505926,
+              -13.92589544937406,
+              -13.94210844517369,
+              -14.004949446871024,
+              -14.070746973936478,
+              -14.169549220996107,
+              -14.219000620069503,
+              -14.314801157919234,
+              -14.334184639200815
+            ],
+            "version" : "1.0-ebu-tech-3341-v4",
+            "windowSizeFrames" : 48000
+          }
+        },
+        "version" : "1.1",
+        "warnings" : [
+
+        ]
+      },
+      "audioFileName" : "02-balanced.wav",
+      "difference" : {
+        "bandEnergyDistance" : 0.07080113084342961,
+        "crestFactorDeltaDB" : 4.080160935397484,
+        "differenceRMSDBFS" : -17.404783304955075,
+        "spectralCentroidDeltaHz" : 54.45514943374292
+      },
+      "loudnessMatchGainDB" : 0.544467717898999,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "pairwiseDifferenceFromPrevious" : {
+        "bandEnergyDistance" : 0.021975565128329943,
+        "crestFactorDeltaDB" : 1.013994443474735,
+        "differenceRMSDBFS" : -28.71133881499423,
+        "spectralCentroidDeltaHz" : 24.868317273170646
+      },
+      "plan" : {
+        "goals" : [
+          {
+            "attribute" : "dynamicControl",
+            "direction" : "increase",
+            "locked" : false,
+            "strength" : 0.6
+          }
+        ],
+        "nodes" : [
+          {
+            "category" : "corrective",
+            "confidence" : 0.82,
+            "enabled" : true,
+            "id" : "CD7AA049-4FA5-4717-A3FD-76BAF0266D76",
+            "locked" : false,
+            "parameters" : {
+              "frequencyHz" : 88,
+              "q" : 0.707
+            },
+            "rationale" : "Reduce subsonic and proximity buildup without thinning the vocal.",
+            "type" : "highPass"
+          },
+          {
+            "category" : "corrective",
+            "confidence" : 0.82,
+            "enabled" : true,
+            "id" : "1B5D6F02-F330-4731-9BD2-F9216C6C569D",
+            "locked" : false,
+            "parameters" : {
+              "attackMS" : 21.993258042523475,
+              "kneeDB" : 7.6,
+              "makeupGainDB" : 0,
+              "mix" : 1,
+              "ratio" : 2.766,
+              "releaseMS" : 252.92246748901997,
+              "thresholdDB" : -10.19395066593893
+            },
+            "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+            "type" : "compressor"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 1,
+            "enabled" : true,
+            "id" : "700C06DF-4787-5D34-9E52-FD5F462D56EA",
+            "locked" : false,
+            "parameters" : {
+              "gainDB" : 0.544467717898999
+            },
+            "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+            "type" : "loudnessMatch"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 0.9,
+            "enabled" : true,
+            "id" : "A4BA6984-8A34-485F-935C-9DD6444796D4",
+            "locked" : false,
+            "parameters" : {
+              "ceilingDB" : -1,
+              "lookaheadMS" : 0,
+              "releaseMS" : 80
+            },
+            "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+            "type" : "limiter"
+          }
+        ],
+        "outputConstraints" : {
+          "loudnessMatchPreview" : true,
+          "maxAddedGainDB" : 12,
+          "maxTruePeakDB" : -1,
+          "preserveMonoCompatibility" : true
+        },
+        "requestID" : "3C4D4792-4787-4D34-9E52-FD5F462D56EA",
+        "schemaVersion" : "1.0",
+        "scope" : {
+          "channelFormat" : "mono",
+          "kind" : "importedFile",
+          "sourceType" : "vocal",
+          "timeRangeSeconds" : {
+            "end" : 8,
+            "start" : 0
+          }
+        },
+        "sourceSnapshotID" : "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA"
+      },
+      "planFileName" : "02-balanced-plan.json",
+      "previewID" : "C62C553B-CA1A-4DD9-8105-1CCF8DC8EEC9",
+      "rejectionReasons" : [
+
+      ],
+      "status" : "valid",
+      "strength" : "balanced",
+      "warnings" : [
+        "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+      ]
+    },
+    {
+      "analysis" : {
+        "channelCount" : 1,
+        "frameCount" : 128000,
+        "metrics" : {
+          "boxiness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "boxiness_band_ratio",
+              "limitation" : "Energy ratio from 200-500 Hz. This is a descriptive band measure, not proof that the sound is boxy.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.4834829989552235
+          },
+          "clipping_samples" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "clipping_samples",
+              "limitation" : "Counts samples at or beyond full scale; cannot identify upstream clipping below full scale.",
+              "unit" : "count",
+              "validRange" : [
+                0,
+                128000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0
+          },
+          "crest_factor" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "crest_factor",
+              "limitation" : "Whole-interval sample-peak to RMS ratio.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 4.922080945124237
+          },
+          "dc_offset" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "dc_offset",
+              "limitation" : "Mean sample value across all channels.",
+              "unit" : "linear",
+              "validRange" : [
+                -1,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 9.514532535922272e-06
+          },
+          "harshness_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "harshness_band_ratio",
+              "limitation" : "Energy ratio from 2-5 kHz. Perceived harshness depends on source, level, masking, and time structure.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.10759422956340807
+          },
+          "high_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "high_band_ratio",
+              "limitation" : "Energy above 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.017493102213653782
+          },
+          "integrated_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "integrated_loudness_lufs",
+              "limitation" : "ITU-R BS.1770-5 gated K-weighted programme loudness. Short isolated tracks can be perceptually atypical programme material.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -14.889403981923438
+          },
+          "loudness_range_lu" : {
+            "confidence" : 0.13333333333333333,
+            "definition" : {
+              "identifier" : "loudness_range_lu",
+              "limitation" : "EBU Tech 3342 v4 LRA: gated 10th-to-95th percentile range of 3 s loudness. EBU R 128 does not recommend LRA for programmes under one minute; it is not crest factor, peak-to-floor range, or a quality score.",
+              "unit" : "loudnessUnits",
+              "validRange" : [
+                0,
+                240
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.1483523733402095
+          },
+          "low_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "low_band_ratio",
+              "limitation" : "Energy below 250 Hz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.21129767740280328
+          },
+          "maximum_momentary_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_momentary_loudness_lufs",
+              "limitation" : "Maximum of 400 ms K-weighted blocks; it is not a phrase-level or short-term 3 s measure.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -13.911880969477572
+          },
+          "maximum_short_term_loudness_lufs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "maximum_short_term_loudness_lufs",
+              "limitation" : "Maximum ungated 3 s rectangular-window loudness at 10 Hz, per EBU Tech 3341 v4 section 2.2. It is not Integrated Loudness or a quality score.",
+              "unit" : "loudnessUnitsFullScale",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -14.478934292405794
+          },
+          "mid_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "mid_band_ratio",
+              "limitation" : "Energy from 250 Hz to 4 kHz in the time-averaged mono spectrum.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.7712092203835444
+          },
+          "peak_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "peak_dbfs",
+              "limitation" : "Sample peak, not oversampled true peak.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -1.146854780540231
+          },
+          "positive_spectral_flux" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "positive_spectral_flux",
+              "limitation" : "Mean normalized positive magnitude change between adjacent analyzed frames.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                10
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.2879134953189574
+          },
+          "rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "rms_dbfs",
+              "limitation" : "Ungated whole-interval RMS; not integrated loudness.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -14.989829811158035
+          },
+          "sibilance_band_ratio" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_band_ratio",
+              "limitation" : "Energy ratio from 5-10 kHz. A vocal detector is required before interpreting it as sibilance.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.011874885737350876
+          },
+          "sibilance_detector_rms_dbfs" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "sibilance_detector_rms_dbfs",
+              "limitation" : "Whole-interval RMS of the same linked complementary 6.5 kHz upper split used by the deterministic de-esser. It calibrates detector level but does not identify phonemes or prove sibilance.",
+              "unit" : "decibelsFS",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -36.44525043065441
+          },
+          "spectral_centroid_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_centroid_hz",
+              "limitation" : "Mean power spectrum over Hann-windowed mono fold-down frames; source separation and masking are not represented.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                8000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 745.3058689428286
+          },
+          "spectral_flatness" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_flatness",
+              "limitation" : "Geometric-to-arithmetic mean of the averaged power spectrum; not a direct noise or quality score.",
+              "unit" : "ratio",
+              "validRange" : [
+                0,
+                1
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 0.10329387413011376
+          },
+          "spectral_rolloff_85_hz" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_rolloff_85_hz",
+              "limitation" : "Frequency below which 85% of averaged spectral energy lies.",
+              "unit" : "hertz",
+              "validRange" : [
+                0,
+                8000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 1515.625
+          },
+          "spectral_slope_db_per_octave" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "spectral_slope_db_per_octave",
+              "limitation" : "Unweighted linear fit to log-frequency power; do not treat a particular slope as universally correct.",
+              "unit" : "decibelsPerOctave",
+              "validRange" : [
+                -100,
+                100
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -4.897691932301035
+          },
+          "transient_density_per_second" : {
+            "confidence" : 1,
+            "definition" : {
+              "identifier" : "transient_density_per_second",
+              "limitation" : "Flux outlier count per second; tempo and event type are not inferred.",
+              "unit" : "perSecond",
+              "validRange" : [
+                0,
+                1000
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : 2.375
+          },
+          "true_peak_dbtp" : {
+            "confidence" : 0.95,
+            "definition" : {
+              "identifier" : "true_peak_dbtp",
+              "limitation" : "ITU-R BS.1770-5 Annex 2 FIR at 48 kHz; other rates use a bounded windowed-sinc estimate at >=192 kHz and >=2x. The meter is not formally conformance-tested and can under-read between evaluated phases.",
+              "unit" : "decibelsTruePeak",
+              "validRange" : [
+                -240,
+                24
+              ],
+              "version" : "1.0",
+              "windowSizeFrames" : 2048
+            },
+            "value" : -1.000000118791212
+          }
+        },
+        "sampleRate" : 16000,
+        "series" : {
+          "crest_factor_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "crest_factor_timeline",
+            "limitation" : "Windowed sample-peak/RMS ratio; it does not by itself prove punch, over-compression, or quality.",
+            "startSeconds" : 0,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              1000
+            ],
+            "values" : [
+              3.766997491632499,
+              3.9253588994298036,
+              3.6340183631363945,
+              3.2521421889670683,
+              3.4818320321055474,
+              3.634251986941439,
+              3.612016725726801,
+              4.651382497146596,
+              3.9999324796027604,
+              3.9168435605245633,
+              3.364456960094708,
+              2.9748638887754475,
+              2.930405077033887,
+              2.946222973633464,
+              2.7752119963621484,
+              2.8791689252982455,
+              3.567550569357908,
+              3.669697879505683,
+              3.253972028447572,
+              3.018996825253385,
+              2.954262821637938,
+              3.0374282568292306,
+              2.816365050720191,
+              3.4162011647536414,
+              3.4129908766302157,
+              3.3757027783351132,
+              3.1173979939824883,
+              3.087229803759491,
+              2.931119619287369,
+              2.832944950256348,
+              3.17504749175192,
+              3.1474039511563014,
+              2.929468422162353,
+              2.817442689111643,
+              2.4852020236541694,
+              2.9436740358223257,
+              3.440049905385768,
+              3.5581500373558725,
+              2.9307452104189795,
+              2.859274449312558,
+              2.781400193021734,
+              2.600987266923395,
+              2.75694441231846,
+              2.915079183971086,
+              2.9363675242825624,
+              2.8617332128571626,
+              3.2287315816734212,
+              2.618815993345164,
+              3.328324935671884,
+              3.5929615764408522,
+              3.436433422144272,
+              3.3100028014365304,
+              3.450818741212679,
+              4.8318997028164,
+              4.25232514950449,
+              2.8904171997732586,
+              3.367516667785142,
+              3.3628421578833527,
+              2.9435453863529597,
+              3.0845905898632715,
+              3.041898912918775,
+              3.251189910382906,
+              3.8517711911520625,
+              3.529703298969867,
+              3.920145164576722,
+              3.5222103078351843,
+              3.23449491297759,
+              3.3423175958316658,
+              3.7404614350251695,
+              3.7580334242988647,
+              2.9453843312432304,
+              4.4112727553295406,
+              3.7170561215854545,
+              3.807983929440305,
+              4.4669437386028275,
+              4.326541399348989,
+              3.872441809690724,
+              3.6063142477652796,
+              4.6390342985807225
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 3200
+          },
+          "positive_spectral_flux_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.064,
+            "identifier" : "positive_spectral_flux_timeline",
+            "limitation" : "Normalized positive magnitude flux on selected Hann-windowed mono fold-down frames. Long captures use a larger effective hop, and anti-phase stereo can cancel; it indicates change, not event identity or quality.",
+            "startSeconds" : 0.064,
+            "unit" : "ratio",
+            "validRange" : [
+              0,
+              10
+            ],
+            "values" : [
+              0.1789180592139042,
+              0.3869130324963088,
+              0.3447865449461864,
+              0.19590736969387681,
+              0.23363769381078653,
+              0.23287801734347746,
+              0.1507182125078871,
+              0.23354969903189765,
+              0.48884353767352107,
+              0.2549778135429628,
+              0.21065277247708733,
+              0.25504483335289563,
+              0.5854561867089952,
+              0.23237864385971085,
+              0.2333545439772315,
+              0.4249624708406788,
+              0.3120112429983246,
+              0.2742690972332463,
+              0.3182930942579754,
+              0.4271574491344033,
+              0.2734309094964442,
+              0.30889793214464795,
+              0.3073986800424968,
+              0.28346635851864915,
+              0.2769826442582988,
+              0.24933203057648787,
+              0.4929855895184774,
+              0.287492501175428,
+              0.2159038218731863,
+              0.23776445101157606,
+              0.49044240865928984,
+              0.2942593984150167,
+              0.1869857904766463,
+              0.3205944279170434,
+              0.3144056829634166,
+              0.20636369777310523,
+              0.3418323206028034,
+              0.5083755279695298,
+              0.24598211601902684,
+              0.2654362443076922,
+              0.3074094466960053,
+              0.42832687941068676,
+              0.19250915487947698,
+              0.2114768941870499,
+              0.35428850027386044,
+              0.23818861960043075,
+              0.39195664813394326,
+              0.29650992690719774,
+              0.3855027204800644,
+              0.26083071773844135,
+              0.17173287189995798,
+              0.34840962548802906,
+              0.2555741930192022,
+              0.15701631320389647,
+              0.2570630611634662,
+              0.5459900005069065,
+              0.21569917360085836,
+              0.18277168049423337,
+              0.36783837730427604,
+              0.3733130672144495,
+              0.15083026243848235,
+              0.15045858736733664,
+              0.32163192377752026,
+              0.25044363574588085,
+              0.17136468660236084,
+              0.34334000056199504,
+              0.2837883119712893,
+              0.15853672192212317,
+              0.2603224683899001,
+              0.5075876544536165,
+              0.24702448491091483,
+              0.18293055482548123,
+              0.2915729346508784,
+              0.34172682228937,
+              0.22708656854818315,
+              0.2366260739101526,
+              0.4890625053093108,
+              0.2432839382424447,
+              0.251807226465375,
+              0.2896732761311874,
+              0.2706838561546743,
+              0.18656279140928725,
+              0.2467533742362508,
+              0.5237929808617989,
+              0.25055923080352227,
+              0.18293854634025025,
+              0.1689237535097641,
+              0.43458347554763294,
+              0.22667503636512853,
+              0.21724045518547916,
+              0.250928859411367,
+              0.21526890175525107,
+              0.252920930857969,
+              0.2611328395190656,
+              0.3796807071846566,
+              0.2039172582611086,
+              0.2867138103915842,
+              0.32199910996131137,
+              0.4859602122923906,
+              0.2294224004325985,
+              0.25460340627532935,
+              0.3590232500638309,
+              0.1701720633526956,
+              0.425078078876243,
+              0.2123212135008176,
+              0.37598172534565627,
+              0.19129844997392337,
+              0.24468056554396922,
+              0.34608355797060264,
+              0.2208165865622633,
+              0.2197285323427577,
+              0.2608113065950741,
+              0.5358662216517646,
+              0.2298680497639377,
+              0.18374275895812825,
+              0.24193677361603805,
+              0.45384140077231633,
+              0.18810471950176483,
+              0.2531868215886628,
+              0.2703787965191965,
+              0.22054963278798626,
+              0.19973858296839955,
+              0.3343395396824538
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 2048
+          },
+          "rms_dbfs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "rms_dbfs_timeline",
+            "limitation" : "200 ms windowed RMS with 50% nominal overlap; phrase and source interpretation require musical context.",
+            "startSeconds" : 0,
+            "unit" : "decibelsFS",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -16.201472522771777,
+              -15.840605102944993,
+              -15.170760035975688,
+              -16.52674044931859,
+              -17.42997060122578,
+              -16.594420462108513,
+              -16.541114784714924,
+              -17.356908561182035,
+              -15.6603580100963,
+              -15.478029325258102,
+              -14.247612387277012,
+              -13.178654846493504,
+              -13.798276824294991,
+              -14.32800791526339,
+              -14.529927578425017,
+              -15.34811701878583,
+              -16.583875693886746,
+              -14.742935352015024,
+              -13.698605440603933,
+              -14.274184806544348,
+              -14.340575766897775,
+              -14.5817137620012,
+              -14.901492756387187,
+              -14.37488641854694,
+              -14.366720237179823,
+              -14.848415658643415,
+              -14.35298127419722,
+              -14.268515406339395,
+              -14.970551907755425,
+              -14.90060739756401,
+              -14.256910285837666,
+              -14.180955484113813,
+              -14.853095693499936,
+              -14.514421087095394,
+              -13.718153447444797,
+              -13.920640655243549,
+              -15.27414117016464,
+              -15.613912175130078,
+              -13.928988310709837,
+              -13.91927363877816,
+              -14.515018024128082,
+              -14.01404662569914,
+              -14.046637199881927,
+              -14.531084132656087,
+              -14.10399983542577,
+              -13.75832849587984,
+              -14.80638445302668,
+              -14.979895252448971,
+              -15.129535148517066,
+              -15.794072230675614,
+              -15.844252108208535,
+              -15.92202800492637,
+              -16.283903738113775,
+              -14.829212999070515,
+              -13.71938408024037,
+              -14.394812625419904,
+              -14.54051694490994,
+              -14.528451530658087,
+              -15.557785409608107,
+              -15.549746655323691,
+              -14.256483350614511,
+              -14.834434567185312,
+              -15.05971392782804,
+              -14.30126833295738,
+              -15.301700408337693,
+              -16.16613544366999,
+              -15.425959218219878,
+              -14.683608427894807,
+              -15.661157750021689,
+              -16.92403116218161,
+              -16.758573287715247,
+              -16.509739618692695,
+              -15.022443751396342,
+              -15.499779858377083,
+              -15.563589687108736,
+              -15.286197310266463,
+              -16.860550944137398,
+              -17.217896919706188,
+              -16.495795133118882
+            ],
+            "version" : "1.0",
+            "windowSizeFrames" : 3200
+          },
+          "short_term_loudness_lufs_timeline" : {
+            "confidence" : 1,
+            "hopSeconds" : 0.1,
+            "identifier" : "short_term_loudness_lufs_timeline",
+            "limitation" : "Ungated rectangular 3 s windows starting at the reported timestamps. Values describe level over time; source context and listening remain necessary.",
+            "startSeconds" : 0,
+            "unit" : "loudnessUnitsFullScale",
+            "validRange" : [
+              -240,
+              24
+            ],
+            "values" : [
+              -14.818467544839901,
+              -14.848767105271573,
+              -14.772189413144044,
+              -14.800592640142579,
+              -14.793008922447745,
+              -14.736635355401496,
+              -14.646414989030584,
+              -14.621184992496893,
+              -14.59301789627627,
+              -14.551467337841105,
+              -14.520439152123316,
+              -14.504975146888098,
+              -14.563491882052405,
+              -14.576603735068455,
+              -14.589059793344962,
+              -14.600285526762365,
+              -14.564470720692215,
+              -14.500983542551358,
+              -14.478934292405794,
+              -14.529932978595287,
+              -14.582216091485718,
+              -14.613498842572252,
+              -14.669767594344151,
+              -14.683307124596608,
+              -14.737785032989425,
+              -14.714137460485349,
+              -14.685720043962377,
+              -14.674892367044903,
+              -14.699572190373068,
+              -14.69558001389269,
+              -14.73153049361044,
+              -14.73697660391044,
+              -14.737548812513912,
+              -14.78191233648307,
+              -14.748401533032892,
+              -14.753463068254456,
+              -14.814707279577263,
+              -14.860433666017283,
+              -14.82395339396943,
+              -14.819307929390549,
+              -14.940346014275887,
+              -14.968577622037946,
+              -15.033798148843147,
+              -15.086570543047126,
+              -15.054014923141997,
+              -15.086493405410769,
+              -15.10450018085688,
+              -15.155169959173282,
+              -15.167365017175541,
+              -15.226697263227102,
+              -15.218310159122451
+            ],
+            "version" : "1.0-ebu-tech-3341-v4",
+            "windowSizeFrames" : 48000
+          }
+        },
+        "version" : "1.1",
+        "warnings" : [
+
+        ]
+      },
+      "audioFileName" : "03-strong.wav",
+      "difference" : {
+        "bandEnergyDistance" : 0.11293611428558417,
+        "crestFactorDeltaDB" : 5.224670901522979,
+        "differenceRMSDBFS" : -16.139136961973787,
+        "spectralCentroidDeltaHz" : 106.35512161006136
+      },
+      "loudnessMatchGainDB" : 3.131906686479793,
+      "loudnessMatchMethod" : "bs1770Integrated",
+      "pairwiseDifferenceFromPrevious" : {
+        "bandEnergyDistance" : 0.042147195676734736,
+        "crestFactorDeltaDB" : 1.144509966125495,
+        "differenceRMSDBFS" : -27.317338720388285,
+        "spectralCentroidDeltaHz" : 51.89997217631844
+      },
+      "plan" : {
+        "goals" : [
+          {
+            "attribute" : "dynamicControl",
+            "direction" : "increase",
+            "locked" : false,
+            "strength" : 0.6
+          }
+        ],
+        "nodes" : [
+          {
+            "category" : "corrective",
+            "confidence" : 0.82,
+            "enabled" : true,
+            "id" : "F61B2EE2-E858-46D1-904B-62ED8F95636B",
+            "locked" : false,
+            "parameters" : {
+              "frequencyHz" : 112,
+              "q" : 0.707
+            },
+            "rationale" : "Reduce subsonic and proximity buildup without thinning the vocal.",
+            "type" : "highPass"
+          },
+          {
+            "category" : "corrective",
+            "confidence" : 0.82,
+            "enabled" : true,
+            "id" : "82FB1608-72A7-4FE5-99A0-4503B51678EC",
+            "locked" : false,
+            "parameters" : {
+              "attackMS" : 21.993258042523475,
+              "kneeDB" : 12.399999999999999,
+              "makeupGainDB" : 0,
+              "mix" : 1,
+              "ratio" : 4.654,
+              "releaseMS" : 252.92246748901997,
+              "thresholdDB" : -16.27395066593893
+            },
+            "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+            "type" : "compressor"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 1,
+            "enabled" : true,
+            "id" : "6C156AE6-3399-5236-BB40-6CB70D56AEC6",
+            "locked" : false,
+            "parameters" : {
+              "gainDB" : 3.131906686479793
+            },
+            "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+            "type" : "loudnessMatch"
+          },
+          {
+            "category" : "loudness",
+            "confidence" : 0.9,
+            "enabled" : true,
+            "id" : "5BDE3F8C-1105-4F97-84EB-C4E64944E57D",
+            "locked" : false,
+            "parameters" : {
+              "ceilingDB" : -1,
+              "lookaheadMS" : 0,
+              "releaseMS" : 80
+            },
+            "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+            "type" : "limiter"
+          }
+        ],
+        "outputConstraints" : {
+          "loudnessMatchPreview" : true,
+          "maxAddedGainDB" : 12,
+          "maxTruePeakDB" : -1,
+          "preserveMonoCompatibility" : true
+        },
+        "requestID" : "20542BAB-3399-4236-BB40-6CB70D56AEC6",
+        "schemaVersion" : "1.0",
+        "scope" : {
+          "channelFormat" : "mono",
+          "kind" : "importedFile",
+          "sourceType" : "vocal",
+          "timeRangeSeconds" : {
+            "end" : 8,
+            "start" : 0
+          }
+        },
+        "sourceSnapshotID" : "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA"
+      },
+      "planFileName" : "03-strong-plan.json",
+      "previewID" : "8A961BC7-080B-4807-AEC6-AD3F5F03B0F5",
+      "rejectionReasons" : [
+
+      ],
+      "status" : "valid",
+      "strength" : "strong",
+      "warnings" : [
+        "Level matching was limited by the true-peak ceiling or the plan's added-gain budget."
+      ]
+    }
+  ]
+}

@@ -53,7 +53,7 @@
     {
       "id": "G2",
       "name": "logic_native_bounded_profiles",
-      "status": "in_progress",
+      "status": "passed",
       "evidence": [
         "research/evaluation/logic-native-empirical-runs/logic-12.3-channel-eq-production-profile-2026-07-27/run.json",
         "research/evaluation/logic-native-empirical-runs/logic-12.3-compressor-production-profile-2026-07-27/run.json",
@@ -66,43 +66,68 @@
         "research/evaluation/logic-native-empirical-runs/logic-12.3-space-designer-production-profile-2026-07-28/project/TrackSmith Logic 12.3 Space Designer Production Profile 48k 2026-07-28.partial-checkpoint.logicx.zip",
         "research/evaluation/logic-native-empirical-runs/logic-12.3-stereo-delay-production-profile-2026-07-29/run.json",
         "research/evaluation/logic-native-empirical-runs/logic-12.3-stereo-delay-production-profile-2026-07-29/project/TrackSmith Logic 12.3 Stereo Delay Production Profile 48k 2026-07-29.logicx.zip",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-tape-delay-production-profile-2026-07-29/run.json",
         "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/run.json",
         "research/evaluation/logic-native-empirical-runs/logic-12.3-bitcrusher-production-profile-2026-07-29/project/TrackSmith Logic 12.3 Bitcrusher Production Profile 48k 2026-07-29.logicx.zip",
         "research/knowledge/logic-pro-12.3-empirical-campaign.json",
         "research/knowledge/logic-pro-12.3-effects-knowledge.json",
         "packages/ProductionIntelligence/Sources/ProductionIntelligence/LogicNativeToolKnowledge.generated.swift",
-        "research/knowledge/logic-pro-12.3-knowledge-coverage.json"
+        "research/knowledge/logic-pro-12.3-knowledge-coverage.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-adaptive-limiter-production-profile-2026-07-30/run.json",
+        "research/evaluation/logic-native-empirical-runs/logic-12.3-direction-mixer-production-profile-2026-08-02/run.json",
+        "docs/evidence/G2_LOGIC_NATIVE_BOUNDED_PROFILES_CLOSURE_2026-08-02.md"
       ]
     },
     {
       "id": "G3",
       "name": "ranked_deterministic_dsp",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        "docs/evidence/G3_DSP_READINESS_AUDIT_2026-08-02.md",
+        "research/evaluation/production-mastery-v1/dsp-listening-fixtures/manifest.json",
+        "docs/evidence/G3_BLINDED_LISTENING_PREPARATION_2026-08-02.md"
+      ]
     },
     {
       "id": "G4",
       "name": "production_language_evaluation_v2",
-      "status": "pending",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/G4_LANGUAGE_EVALUATION_2026-08-02.md",
+        "research/evaluation/TRACKSMITH_PRODUCTION_INTENT_CORPUS_V2.json",
+        "research/evaluation/production-mastery-v1/language-corpus-summary.json",
+        "tests/TestRunner/main.swift"
+      ]
     },
     {
       "id": "G5",
       "name": "perceptual_and_workflow_evidence",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        "docs/evidence/G5_CONTENT_AGNOSTIC_BLINDED_PREPARATION_2026-08-02.md",
+        "docs/evidence/G5_24_REAL_AUDIO_CANDIDATE_PREPARATION_2026-08-02.md",
+        "research/evaluation/production-mastery-v1/perceptual-study-v1/generated/content-agnostic-real-audio-blinded/participant/participant-manifest.json",
+        "research/evaluation/production-mastery-v1/perceptual-study-v1/generated/content-agnostic-real-audio-blinded/participant/participant-response-template.json",
+        "research/evaluation/production-mastery-v1/perceptual-study-v1/generated/content-agnostic-real-audio-blinded/participant/README.md"
+      ]
     },
     {
       "id": "G6",
       "name": "installed_host_and_recovery_regression",
-      "status": "pending",
-      "evidence": []
+      "status": "in_progress",
+      "evidence": [
+        "docs/evidence/G6_INSTALLED_NATIVE_REGRESSION_2026-08-02.md",
+        "docs/evidence/G6_LOGIC_DIRECT_PLAYBACK_2026-08-02.png",
+        "docs/evidence/G6_LOGIC_PLAYBACK_SAVE_RELOAD_2026-08-02.png"
+      ]
     },
     {
       "id": "G7",
       "name": "closure",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        "docs/evidence/G7_RECONCILIATION_READINESS_2026-08-02.md"
+      ]
     }
   ],
   "baseline": {
@@ -203,7 +228,7 @@
   },
   "logicNativeProfiles": {
     "status": "in_progress",
-    "lastValidatedAt": "2026-07-30T01:29:46-04:00",
+    "lastValidatedAt": "2026-08-02T07:11:51-04:00",
     "profiles": [
       {
         "priority": 1,
@@ -464,9 +489,56 @@
           "logic_host_control_authority"
         ],
         "validation": "build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage all passed with 92 hash-ledgered artifacts and 18 bounded measurement assertions"
+      },
+      {
+        "priority": 10,
+        "identity": "logic-pro-12.3:adaptive-limiter",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-adaptive-limiter-acceptance-48k-2026-08-02",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-adaptive-limiter-production-profile-2026-07-30/run.json",
+        "acceptedScope": [
+          "corrected_audio2_true_stereo_header_bypass_left_only_and_right_only_source_mapping",
+          "one_active_gain6db_output_ceiling_minus1db_lookahead20ms_dc_off_true_peak_off_state",
+          "measured_one_sided_gain_zero_lag_opposite_channel_silence_peak_and_settled_pcm_repeatability",
+          "right_only_active_save_reload_recovery_with_exact_post_reload_settled_pcm",
+          "deterministic_vocal_guitar_and_bass_like_fixture_series_with_project_media_source_preservation"
+        ],
+        "unmeasuredOrDecisive": [
+          "full_gain_ceiling_lookahead_release_optimal_mode_program_dependence_and_interaction_grid",
+          "remove_dc_offset_and_true_peak_on_comparisons_external_oversampled_peak_and_other_sample_rates",
+          "all_channel_formats_stereo_link_mono_translation_automation_scheduling_latency_tails_and_overload_regimes",
+          "controlled_level_matched_musical_preference_and_perceptual_quality",
+          "private_implementation_and_logic_host_control_authority"
+        ],
+        "validation": "finalize-logic-native-run-artifacts ledgered 330 retained artifacts and six measurement assertions; build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage are required generated validations"
+      },
+      {
+        "priority": 11,
+        "identity": "logic-pro-12.3:direction-mixer",
+        "milestoneStatus": "bounded_production_profile_accepted",
+        "campaignStatus": "partial",
+        "exactTransferCharacterized": false,
+        "runID": "logic-12.3-direction-mixer-production-profile-48k-2026-08-02",
+        "runRecord": "research/evaluation/logic-native-empirical-runs/logic-12.3-direction-mixer-production-profile-2026-08-02/run.json",
+        "acceptedScope": [
+          "one_lr_direction0_spread1_split_off_state_behind_documented_host_bypass",
+          "stereo_left_only_header_bypass_source_preservation_and_three_settled_pcm_exact_repeats",
+          "recovery_first_transition_retained_separately_from_settled_evidence",
+          "saved_project_archive_and_distinct_source_project_media_provenance_roles"
+        ],
+        "unmeasuredOrDecisive": [
+          "full_lr_ms_split_direction_spread_and_crossover_transfer_grid",
+          "right_only_channel_matrix_gain_peak_correlation_mono_translation_and_other_formats",
+          "save_reload_active_transfer_automation_smoothing_other_rates_and_routing_states",
+          "controlled_level_matched_localization_width_mono_compatibility_and_preference_listening",
+          "private_implementation_and_logic_host_control_authority"
+        ],
+        "validation": "finalize-logic-native-run-artifacts ledgered 80 retained artifacts with the rejected terminal screenshot and source/provenance roles preserved; build campaign, regenerate typed advisory knowledge, rebuild core priority, and audit Logic 12.3 knowledge coverage are required generated validations"
       }
     ],
-    "nextRequiredIdentity": "logic-pro-12.3:adaptive-limiter"
+    "nextRequiredIdentity": null
   },
   "claimClasses": [
     "frozen_predecessor_evidence",

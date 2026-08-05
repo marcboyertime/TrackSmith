@@ -1,9 +1,12 @@
 # Logic Pro 12.3 Direction Mixer capture package
 
-Status: **prepared_not_run**. This directory prepares a reproducible manual Logic
-12.3 capture for campaign identity `logic-pro-12.3:direction-mixer`; it contains
-no native Logic renders and intentionally has no `run.json`. The machine-readable
-authority is [capture-plan.json](capture-plan.json).
+Status: **partial_bounded_profile_pending_review**. This directory contains a
+bounded manual Logic 12.3 capture for campaign identity
+`logic-pro-12.3:direction-mixer`. Only the fresh header-bypass stereo-left-only
+transition plus three settled repeats are retained as accepted evidence; the full
+LR/MS/Split campaign remains open. The machine-readable authority is
+[run.json](run.json), with the original preparation authority preserved in
+[capture-plan.json](capture-plan.json).
 
 ## Prepare and verify the fixtures
 
@@ -65,15 +68,17 @@ listed separately in `capture-plan.json`; none is real source or perceptual proo
    state again. A displayed value without matching hashes is not reload evidence.
 10. Store files using the patterns in `capture-plan.json`: state/fixture/repeat/
     transition-or-settled renders, state screenshots, analysis JSON, source and
-    render hashes, and the closed project archive. Do not create `run.json` until
-    native evidence is complete and audited.
+    render hashes, and the closed project archive. For a full campaign run, do not
+    create `run.json` until native evidence is complete and audited; this bounded
+    partial profile is an explicit exception and records its incomplete scope.
 
 ## Acceptance boundary
 
-This package proves only that deterministic probes and a capture plan are ready.
-It does not establish installed/native Logic behavior, an accepted profile,
-exact transfer characterization, repeatability, mono compatibility, artistic
-quality, or superiority. Source-specific listening is a separate future human
-boundary requiring legally usable real drums, guitar, keyboard/piano, synth, and
-mix material with level matching, identity-blind judgment, and provenance. TrackSmith
+This package records a bounded native Logic profile: one documented host-bypass
+state, one stereo left-only fixture, and three settled repeats with exact decoded
+PCM. It does not establish the full Direction Mixer transfer function, LR/MS/Split
+coverage, installed/native TrackSmith control authority, mono compatibility, artistic
+quality, or superiority. Source-specific listening remains a separate future human
+boundary requiring legally usable real drums, guitar, keyboard/piano, synth, and mix
+material with level matching, identity-blind judgment, and provenance. TrackSmith
 remains advisory-only for the Logic-native effect.

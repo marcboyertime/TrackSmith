@@ -1,0 +1,87 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "F61B2EE2-E858-46D1-904B-62ED8F95636B",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 112,
+        "q" : 0.707
+      },
+      "rationale" : "Reduce subsonic and proximity buildup without thinning the vocal.",
+      "type" : "highPass"
+    },
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "82FB1608-72A7-4FE5-99A0-4503B51678EC",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 21.993258042523475,
+        "kneeDB" : 12.399999999999999,
+        "makeupGainDB" : 0,
+        "mix" : 1,
+        "ratio" : 4.654,
+        "releaseMS" : 252.92246748901997,
+        "thresholdDB" : -16.27395066593893
+      },
+      "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "6C156AE6-3399-5236-BB40-6CB70D56AEC6",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 3.131906686479793
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "5BDE3F8C-1105-4F97-84EB-C4E64944E57D",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -1,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 12,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "20542BAB-3399-4236-BB40-6CB70D56AEC6",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 8,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA"
+}

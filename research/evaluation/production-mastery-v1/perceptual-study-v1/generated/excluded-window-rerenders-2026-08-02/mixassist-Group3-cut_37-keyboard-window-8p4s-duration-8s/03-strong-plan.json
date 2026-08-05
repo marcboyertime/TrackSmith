@@ -1,0 +1,74 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "DB8BF185-7000-423B-ACD5-083562CF7B80",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 5,
+        "kneeDB" : 12.399999999999999,
+        "makeupGainDB" : 0,
+        "mix" : 1,
+        "ratio" : 4.654,
+        "releaseMS" : 60,
+        "thresholdDB" : -39.45647780273438
+      },
+      "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "A9CD9095-2F8C-50CD-BC0A-38DA8AE07916",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 7.077772588826747
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "69B095BB-FB99-4653-B7CC-8D4E23E8B516",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -1,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 12,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "E58CD1D8-2F8C-40CD-BC0A-38DA8AE07916",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "keyboard",
+    "timeRangeSeconds" : {
+      "end" : 8,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "226D7612-7D69-427E-9A33-7354D45D16F6"
+}

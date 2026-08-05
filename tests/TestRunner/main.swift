@@ -58,6 +58,98 @@ enum TestRunner {
                 migratedNode == node,
                 "legacy alternating-array parameter state did not migrate"
             )
+
+            let promotedLegacyFixtures: [
+                (json: String, type: NodeType, parameters: [ParameterID: Double])
+            ] = [
+                (
+                    """
+                    {
+                      "id": "11111111-1111-1111-1111-111111111111",
+                      "type": "reverb",
+                      "enabled": true,
+                      "parameters": ["algorithmVersion", 1, "preDelayMS", 17, "decayTimeSeconds", 1.3, "roomSize", 0.62, "damping", 0.28, "diffusion", 0.74, "mix", 0.43],
+                      "rationale": "legacy reverb fixture",
+                      "confidence": 0.9,
+                      "category": "creative",
+                      "locked": false
+                    }
+                    """,
+                    .reverb,
+                    [
+                        .algorithmVersion: 1,
+                        .preDelayMS: 17,
+                        .decayTimeSeconds: 1.3,
+                        .roomSize: 0.62,
+                        .damping: 0.28,
+                        .diffusion: 0.74,
+                        .mix: 0.43,
+                    ]
+                ),
+                (
+                    """
+                    {
+                      "id": "22222222-2222-2222-2222-222222222222",
+                      "type": "delay",
+                      "enabled": true,
+                      "parameters": ["algorithmVersion", 1, "delayTimeMS", 47, "feedback", 0.36, "damping", 0.22, "stereoCrossfeed", 0.18, "mix", 0.31],
+                      "rationale": "legacy delay fixture",
+                      "confidence": 0.9,
+                      "category": "creative",
+                      "locked": false
+                    }
+                    """,
+                    .delay,
+                    [
+                        .algorithmVersion: 1,
+                        .delayTimeMS: 47,
+                        .feedback: 0.36,
+                        .damping: 0.22,
+                        .stereoCrossfeed: 0.18,
+                        .mix: 0.31,
+                    ]
+                ),
+                (
+                    """
+                    {
+                      "id": "33333333-3333-3333-3333-333333333333",
+                      "type": "expander",
+                      "enabled": true,
+                      "parameters": ["algorithmVersion", 1, "thresholdDB", -51, "ratio", 2.75, "attackMS", 6, "releaseMS", 140, "holdMS", 24, "hysteresisDB", 3.5, "rangeDB", 17, "mix", 0.58],
+                      "rationale": "legacy expander gate fixture",
+                      "confidence": 0.9,
+                      "category": "corrective",
+                      "locked": false
+                    }
+                    """,
+                    .expander,
+                    [
+                        .algorithmVersion: 1,
+                        .thresholdDB: -51,
+                        .ratio: 2.75,
+                        .attackMS: 6,
+                        .releaseMS: 140,
+                        .holdMS: 24,
+                        .hysteresisDB: 3.5,
+                        .rangeDB: 17,
+                        .mix: 0.58,
+                    ]
+                ),
+            ]
+            for fixture in promotedLegacyFixtures {
+                let migrated = try JSONDecoder().decode(
+                    ProcessingNode.self,
+                    from: Data(fixture.json.utf8)
+                )
+                try tests.expect(
+                    migrated.type == fixture.type,
+                    "legacy alternating-array fixture decoded the wrong node type"
+                )
+                try tests.expect(
+                    migrated.parameters == fixture.parameters,
+                    "legacy alternating-array fixture lost canonical parameter keys or values"
+                )
+            }
         }
         await tests.run("plan bounds fail closed") {
             let plan = makePlan(nodes: [.init(type: .compressor, parameters: [.ratio: 100], rationale: "bad", confidence: 1, category: .corrective)])

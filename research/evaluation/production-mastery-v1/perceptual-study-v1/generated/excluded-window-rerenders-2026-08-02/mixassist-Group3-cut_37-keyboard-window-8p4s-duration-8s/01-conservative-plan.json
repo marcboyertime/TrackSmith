@@ -1,0 +1,74 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "A8862FF4-16CA-4246-B2F1-63DF64613F2C",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 5,
+        "kneeDB" : 4.6,
+        "makeupGainDB" : 0,
+        "mix" : 1,
+        "ratio" : 1.586,
+        "releaseMS" : 60,
+        "thresholdDB" : -29.576477802734388
+      },
+      "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "9973DBBB-65AB-5897-B39A-C0B6077B5C7D",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.9421363604996671
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "BDFF1BEC-4D78-4629-8D30-4A582908755D",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -1,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 12,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "D5329AF6-65AB-4897-B39A-C0B6077B5C7D",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "keyboard",
+    "timeRangeSeconds" : {
+      "end" : 8,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "226D7612-7D69-427E-9A33-7354D45D16F6"
+}

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "1.0",
+  "evidenceClass": "SINGLE_LISTENER_FORMATIVE_EVIDENCE",
+  "claimBoundary": "Preparation only. No perceptual-success claim is made.",
+  "scope": "Six blinded trials for G3 only.",
+  "participantManifest": "participant-manifest.json",
+  "randomization": {
+    "seed": 20260802,
+    "method": "A/B role assignment is recorded here; seed is metadata only. No replayable shuffle algorithm or tool identity is claimed."
+  },
+  "sourceFixtureManifest": {
+    "path": "../../manifest.json",
+    "sha256": "86208ea4f945936fe373783ef06d8b94ea0b14da8d2d38b1cca025e16e57e588"
+  },
+  "trials": [
+    {
+      "trialRef": "trial-001",
+      "fixtureID": "delay-rhythmic-guitar",
+      "processor": "delay",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "role": "candidate",
+          "sourcePath": "../../delay-rhythmic-guitar-candidate.wav",
+          "participantPath": "audio/trial-001-A.wav",
+          "sha256": "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2"
+        },
+        {
+          "conditionLabel": "B",
+          "role": "source",
+          "sourcePath": "../../delay-rhythmic-guitar-source.wav",
+          "participantPath": "audio/trial-001-B.wav",
+          "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-002",
+      "fixtureID": "delay-slap-guitar",
+      "processor": "delay",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "role": "candidate",
+          "sourcePath": "../../delay-slap-guitar-candidate.wav",
+          "participantPath": "audio/trial-002-A.wav",
+          "sha256": "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5"
+        },
+        {
+          "conditionLabel": "B",
+          "role": "source",
+          "sourcePath": "../../delay-slap-guitar-source.wav",
+          "participantPath": "audio/trial-002-B.wav",
+          "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-003",
+      "fixtureID": "expander-firm-vocal",
+      "processor": "expander",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "role": "candidate",
+          "sourcePath": "../../expander-firm-vocal-candidate.wav",
+          "participantPath": "audio/trial-003-A.wav",
+          "sha256": "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763"
+        },
+        {
+          "conditionLabel": "B",
+          "role": "source",
+          "sourcePath": "../../expander-firm-vocal-source.wav",
+          "participantPath": "audio/trial-003-B.wav",
+          "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-004",
+      "fixtureID": "expander-gentle-vocal",
+      "processor": "expander",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "role": "candidate",
+          "sourcePath": "../../expander-gentle-vocal-candidate.wav",
+          "participantPath": "audio/trial-004-A.wav",
+          "sha256": "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42"
+        },
+        {
+          "conditionLabel": "B",
+          "role": "source",
+          "sourcePath": "../../expander-gentle-vocal-source.wav",
+          "participantPath": "audio/trial-004-B.wav",
+          "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-005",
+      "fixtureID": "reverb-short-drum-room",
+      "processor": "reverb",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "role": "source",
+          "sourcePath": "../../reverb-short-drum-room-source.wav",
+          "participantPath": "audio/trial-005-A.wav",
+          "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+        },
+        {
+          "conditionLabel": "B",
+          "role": "candidate",
+          "sourcePath": "../../reverb-short-drum-room-candidate.wav",
+          "participantPath": "audio/trial-005-B.wav",
+          "sha256": "e782e1e2a1bfe998610307b407398e5859fff8fbcfa48c83f009d9aefde3cb35"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-006",
+      "fixtureID": "reverb-supporting-vocal",
+      "processor": "reverb",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "role": "source",
+          "sourcePath": "../../reverb-supporting-vocal-source.wav",
+          "participantPath": "audio/trial-006-A.wav",
+          "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+        },
+        {
+          "conditionLabel": "B",
+          "role": "candidate",
+          "sourcePath": "../../reverb-supporting-vocal-candidate.wav",
+          "participantPath": "audio/trial-006-B.wav",
+          "sha256": "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281"
+        }
+      ]
+    }
+  ]
+}

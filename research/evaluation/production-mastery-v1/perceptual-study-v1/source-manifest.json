@@ -1,0 +1,1127 @@
+{
+  "claimBoundary": {
+    "candidateIdentitiesAreParticipantHidden": true,
+    "datasetLabelsArePreference": false,
+    "dspFixturesAreHumanEvidence": false,
+    "mushraClaim": false,
+    "naturalAudioHasNoInventedResponses": true
+  },
+  "dspFixtures": [
+    {
+      "analysisArtifact": {
+        "path": "delay-rhythmic-guitar-analysis.json",
+        "role": "objective guardrail measurements",
+        "sha256": "e4d6a29dd5d21bb7fc4dd7a78401fa5eace79516d0dddb1d0d4497cb788fb6d6"
+      },
+      "candidateArtifact": {
+        "path": "delay-rhythmic-guitar-candidate.wav",
+        "role": "exact validator-gated level-matched candidate",
+        "sha256": "249ce8cd16d024a05c8256bee9da6a71fa4bd069ad5c716d027c5461229488d2"
+      },
+      "identifier": "delay-rhythmic-guitar",
+      "intendedComparison": "Are the repeats musically supportive rather than masking the next pluck?",
+      "loudnessMatch": {
+        "difference": {
+          "bandEnergyDistance": 0.048705558805035826,
+          "crestFactorDeltaDB": -0.051849514805369604,
+          "differenceRMSDBFS": -34.85112981719739,
+          "spectralCentroidDeltaHz": 10.655782016555179
+        },
+        "gainDB": 1.9685723605154477,
+        "method": "bs1770Integrated"
+      },
+      "planArtifact": {
+        "path": "delay-rhythmic-guitar-plan.json",
+        "role": "exact committed processing graph",
+        "sha256": "bbaf3d3e9d1f61755d13688d788724242c698bc4c1f3367260d273270fb5dd1a"
+      },
+      "preservationBoundary": "Tempo intent is external context; this free-time fixture proves no sync claim.",
+      "processor": "delay",
+      "sourceArtifact": {
+        "path": "delay-rhythmic-guitar-source.wav",
+        "role": "level-match reference with rendered-tail allowance",
+        "sha256": "bb2f99e3d35f8936b91d4130f7f97c1142021238db010245f89e38d42e3adf7a"
+      },
+      "sourceFixture": "guitar_like_dynamic_plucks_mono.wav",
+      "sourceInputSHA256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "sourceInputUnchanged": true,
+      "status": "valid",
+      "subjectivePreferenceRecorded": false
+    },
+    {
+      "analysisArtifact": {
+        "path": "delay-slap-guitar-analysis.json",
+        "role": "objective guardrail measurements",
+        "sha256": "9ef872fd2ac7f813a26917777dd1aca6818851b5029fc641d178da87db14b53b"
+      },
+      "candidateArtifact": {
+        "path": "delay-slap-guitar-candidate.wav",
+        "role": "exact validator-gated level-matched candidate",
+        "sha256": "3a1268c63259afc73ad085968dfa01e70c812114c261496d5ccb1cf4a3e03bf5"
+      },
+      "identifier": "delay-slap-guitar",
+      "intendedComparison": "Does the short echo add dimension while preserving pick articulation?",
+      "loudnessMatch": {
+        "difference": {
+          "bandEnergyDistance": 0.03614835091410647,
+          "crestFactorDeltaDB": 0.09051106635963202,
+          "differenceRMSDBFS": -36.78252028914784,
+          "spectralCentroidDeltaHz": 5.372985223961621
+        },
+        "gainDB": 1.5107686226092962,
+        "method": "bs1770Integrated"
+      },
+      "planArtifact": {
+        "path": "delay-slap-guitar-plan.json",
+        "role": "exact committed processing graph",
+        "sha256": "bb3ff30f4ea599cad63337cfc702555dee0b200459afde7451be49256757d1d2"
+      },
+      "preservationBoundary": "Pick attack, rhythmic precision, and unchanged dry source are protected.",
+      "processor": "delay",
+      "sourceArtifact": {
+        "path": "delay-slap-guitar-source.wav",
+        "role": "level-match reference with rendered-tail allowance",
+        "sha256": "476567432ea0a2f62e86e2f2c36ed48ec1447ee1dcf162aaa7cfaff7fbef81c5"
+      },
+      "sourceFixture": "guitar_like_dynamic_plucks_mono.wav",
+      "sourceInputSHA256": "69c3b3b114e9f74c59297e6e00ae6c0579a7854ce6a795ccb67bcc3bd423677f",
+      "sourceInputUnchanged": true,
+      "status": "valid",
+      "subjectivePreferenceRecorded": false
+    },
+    {
+      "analysisArtifact": {
+        "path": "expander-firm-vocal-analysis.json",
+        "role": "objective guardrail measurements",
+        "sha256": "4226cfe74c35afa578209630e087d2ddb490dad42f4023d4e2877ec44d6e0168"
+      },
+      "candidateArtifact": {
+        "path": "expander-firm-vocal-candidate.wav",
+        "role": "exact validator-gated level-matched candidate",
+        "sha256": "acdad2d33fe11b99227d2b0f0f3bbce647049a7fe695f9cc56ab7c7a7275f763"
+      },
+      "identifier": "expander-firm-vocal",
+      "intendedComparison": "Does stronger gap cleanup remain natural, or does it audibly truncate phrase detail?",
+      "loudnessMatch": {
+        "difference": {
+          "bandEnergyDistance": 5.356204809328377e-07,
+          "crestFactorDeltaDB": 0.00017945769214166625,
+          "differenceRMSDBFS": -67.43985908224019,
+          "spectralCentroidDeltaHz": 0.0030330200372645777
+        },
+        "gainDB": 0.00010802613341098777,
+        "method": "bs1770Integrated"
+      },
+      "planArtifact": {
+        "path": "expander-firm-vocal-plan.json",
+        "role": "exact committed processing graph",
+        "sha256": "e118fca8ac73bc8c22171b80feacfb6d513b63ea6022e5c2c673a53c6733f6fd"
+      },
+      "preservationBoundary": "A cleaner metric cannot override audible tail loss or chatter.",
+      "processor": "expander",
+      "sourceArtifact": {
+        "path": "expander-firm-vocal-source.wav",
+        "role": "level-match reference with rendered-tail allowance",
+        "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+      },
+      "sourceFixture": "vocal_like_mono.wav",
+      "sourceInputSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged": true,
+      "status": "valid",
+      "subjectivePreferenceRecorded": false
+    },
+    {
+      "analysisArtifact": {
+        "path": "expander-gentle-vocal-analysis.json",
+        "role": "objective guardrail measurements",
+        "sha256": "cfc5ca380e94589e7dff9b708f6ae19b22cbbfa866dd359d4f71c3a0021aa3c7"
+      },
+      "candidateArtifact": {
+        "path": "expander-gentle-vocal-candidate.wav",
+        "role": "exact validator-gated level-matched candidate",
+        "sha256": "124ed60598bb5c3de8a2750f48ab785d9fed7dc01fe134e4bc6e6e7083132c42"
+      },
+      "identifier": "expander-gentle-vocal",
+      "intendedComparison": "Does gentle expansion lower gaps without shortening phrase endings or breath timing?",
+      "loudnessMatch": {
+        "difference": {
+          "bandEnergyDistance": 1.3261399439001055e-05,
+          "crestFactorDeltaDB": 0.0001423814440557323,
+          "differenceRMSDBFS": -71.20725736953075,
+          "spectralCentroidDeltaHz": 0.006011222764868762
+        },
+        "gainDB": 3.379320640206629e-05,
+        "method": "bs1770Integrated"
+      },
+      "planArtifact": {
+        "path": "expander-gentle-vocal-plan.json",
+        "role": "exact committed processing graph",
+        "sha256": "dee82206f876af5b65ff38365b43de5cd553acddbd8eb2b65b0fe5045803b48d"
+      },
+      "preservationBoundary": "Word tails, breaths, and direct-vocal tone remain listening-decisive.",
+      "processor": "expander",
+      "sourceArtifact": {
+        "path": "expander-gentle-vocal-source.wav",
+        "role": "level-match reference with rendered-tail allowance",
+        "sha256": "c36b64ecebfb24f3b8454fae2422575052c04af5ab37b54d1af82a47f5dff67b"
+      },
+      "sourceFixture": "vocal_like_mono.wav",
+      "sourceInputSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged": true,
+      "status": "valid",
+      "subjectivePreferenceRecorded": false
+    },
+    {
+      "analysisArtifact": {
+        "path": "reverb-short-drum-room-analysis.json",
+        "role": "objective guardrail measurements",
+        "sha256": "3282e3644656b13c03c53e098adfba49862cc3a264670fc535099d96a4fdc34f"
+      },
+      "candidateArtifact": {
+        "path": "reverb-short-drum-room-candidate.wav",
+        "role": "exact validator-gated level-matched candidate",
+        "sha256": "e782e1e2a1bfe998610307b407398e5859fff8fbcfa48c83f009d9aefde3cb35"
+      },
+      "identifier": "reverb-short-drum-room",
+      "intendedComparison": "Does the short room add space without pushing burst attacks backward?",
+      "loudnessMatch": {
+        "difference": {
+          "bandEnergyDistance": 0.003070389651341903,
+          "crestFactorDeltaDB": 0.014237983502254081,
+          "differenceRMSDBFS": -49.42400914788323,
+          "spectralCentroidDeltaHz": 28.93550281089847
+        },
+        "gainDB": 0.3590003208086876,
+        "method": "bs1770Integrated"
+      },
+      "planArtifact": {
+        "path": "reverb-short-drum-room-plan.json",
+        "role": "exact committed processing graph",
+        "sha256": "acc919597a05983e8e6043dce5297b3215d240c61978a9d4d481731fc905e974"
+      },
+      "preservationBoundary": "Attack focus and gap clarity are listening-decisive; bursts are not real drums.",
+      "processor": "reverb",
+      "sourceArtifact": {
+        "path": "reverb-short-drum-room-source.wav",
+        "role": "level-match reference with rendered-tail allowance",
+        "sha256": "e246ae59674c0d2c299b40994b80e9a43c1f44cd9c2de0e1253aebc10e7bb820"
+      },
+      "sourceFixture": "deterministic_noise_bursts_mono.wav",
+      "sourceInputSHA256": "1a1d8d0f16774018b977b8f3df8bc6aea8369303488bd2d8b4897e3985b367fd",
+      "sourceInputUnchanged": true,
+      "status": "valid",
+      "subjectivePreferenceRecorded": false
+    },
+    {
+      "analysisArtifact": {
+        "path": "reverb-supporting-vocal-analysis.json",
+        "role": "objective guardrail measurements",
+        "sha256": "f6a9b1e6b62c11ea2b7e887d261226bab82593ab934fbf8c0399938e32313f3f"
+      },
+      "candidateArtifact": {
+        "path": "reverb-supporting-vocal-candidate.wav",
+        "role": "exact validator-gated level-matched candidate",
+        "sha256": "cbd66aaf216101e895c2d5365ac5e18236303baecec23c4688face5a4f85c281"
+      },
+      "identifier": "reverb-supporting-vocal",
+      "intendedComparison": "Does the ambience support the vocal without obscuring consonants or increasing perceived distance too far?",
+      "loudnessMatch": {
+        "difference": {
+          "bandEnergyDistance": 0.0016922871781985924,
+          "crestFactorDeltaDB": -0.07915603678778292,
+          "differenceRMSDBFS": -50.959388529582846,
+          "spectralCentroidDeltaHz": 1.3013064742060578
+        },
+        "gainDB": 1.216865861726646,
+        "method": "bs1770Integrated"
+      },
+      "planArtifact": {
+        "path": "reverb-supporting-vocal-plan.json",
+        "role": "exact committed processing graph",
+        "sha256": "d41947758c1c8bf9c096664de0414d9bedd73ef95ad9c68bb33c18383f0db42b"
+      },
+      "preservationBoundary": "Synthetic vocal-like material cannot establish real-vocal production quality.",
+      "processor": "reverb",
+      "sourceArtifact": {
+        "path": "reverb-supporting-vocal-source.wav",
+        "role": "level-match reference with rendered-tail allowance",
+        "sha256": "fb540a693a06de241554a4f09879d49010fb7dca1c329bc150976038919ceae7"
+      },
+      "sourceFixture": "vocal_like_mono.wav",
+      "sourceInputSHA256": "ad289bb28f37fd2bef753b176e7a371bf08fbb7b4c5c76adb5e83db2a694e2c0",
+      "sourceInputUnchanged": true,
+      "status": "valid",
+      "subjectivePreferenceRecorded": false
+    }
+  ],
+  "evidenceClass": "SINGLE_LISTENER_FORMATIVE_EVIDENCE",
+  "inputs": {
+    "dspFixtureManifest": {
+      "path": "research/evaluation/production-mastery-v1/dsp-listening-fixtures/manifest.json",
+      "sha256": "86208ea4f945936fe373783ef06d8b94ea0b14da8d2d38b1cca025e16e57e588"
+    },
+    "naturalAudioIndex": {
+      "path": "research/evaluation/production-mastery-v1/audio-evidence-corpus/natural-audio-index.json",
+      "sha256": "ee288d304ca88f5b1c86c9c038af9908396dd6d6352c6c1cf5b95bab2bf5acdc"
+    }
+  },
+  "naturalExcerpts": [
+    {
+      "artifactSHA256": "56cec114fc3886f07fe94b044ff72f9bcf9f93af3c3b5e3271c7900e9df4edc9",
+      "assetID": "mixassist:Group1:cut_47.wav",
+      "byteCount": 96044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 3.0,
+        "endSeconds": 3.0,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_47.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 3.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 48000,
+        "normalizedDCOffset": -1.1926015218098958e-05,
+        "normalizedPeak": 0.268218994140625,
+        "sampleCount": 48000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 26
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "vocals",
+      "sourceOrdinal": 1,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "2951fac49f86c36bf8e820fe9c6834670777be380b2cc63b0d8e132467372677",
+      "assetID": "mixassist:Group1:cut_48.wav",
+      "byteCount": 262444,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 7.86,
+        "endSeconds": 8.2,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.34
+      },
+      "memberPath": "cut_48.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 8.2,
+        "encoding": "signed_pcm_16",
+        "frameCount": 131200,
+        "normalizedDCOffset": -9.448516659620332e-05,
+        "normalizedPeak": 0.291229248046875,
+        "sampleCount": 131200,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 362
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "vocals",
+      "sourceOrdinal": 2,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "7d6026d29fc856efe51101abed04f8d369a4a20721029790415bbb05c09586d2",
+      "assetID": "mixassist:Group6:cut_16.wav",
+      "byteCount": 864044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 12.11,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 4.11
+      },
+      "memberPath": "cut_16.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 27.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 432000,
+        "normalizedDCOffset": -7.232524730541088e-06,
+        "normalizedPeak": 0.62982177734375,
+        "sampleCount": 432000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 104
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "vocals",
+      "sourceOrdinal": 3,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "b044352382a7595879134ea9b9c9e76037666b7e623dc4d075699c5f4900a682",
+      "assetID": "mixassist:Group6:cut_17.wav",
+      "byteCount": 352044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 9.48,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 1.48
+      },
+      "memberPath": "cut_17.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 11.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 176000,
+        "normalizedDCOffset": -4.360719160600142e-05,
+        "normalizedPeak": 0.461883544921875,
+        "sampleCount": 176000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 135
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "vocals",
+      "sourceOrdinal": 4,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "535d6690216ff25766c5e8f5067319c86796f92f884d50e4cc54c986a107ac43",
+      "assetID": "mixassist:Group1:cut_10.wav",
+      "byteCount": 304044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 7.65,
+        "endSeconds": 9.5,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 1.85
+      },
+      "memberPath": "cut_10.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 9.5,
+        "encoding": "signed_pcm_16",
+        "frameCount": 152000,
+        "normalizedDCOffset": -5.5217140599300984e-05,
+        "normalizedPeak": 0.555023193359375,
+        "sampleCount": 152000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 30
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "drums",
+      "sourceOrdinal": 5,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "c645429d89965cacdc4ab4e3a0880c9ef8887cb59de369272c77c5c3f818a347",
+      "assetID": "mixassist:Group1:cut_11.wav",
+      "byteCount": 233644,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 7.3,
+        "endSeconds": 7.3,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_11.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 7.3,
+        "encoding": "signed_pcm_16",
+        "frameCount": 116800,
+        "normalizedDCOffset": -2.0939291340031036e-05,
+        "normalizedPeak": 0.555023193359375,
+        "sampleCount": 116800,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 25
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "drums",
+      "sourceOrdinal": 6,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "9d070a08779cfbbca5946a6e93746d63e68a3a6490ee8100121d1e83f17b0409",
+      "assetID": "mixassist:Group6:cut_22.wav",
+      "byteCount": 598444,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 17.59,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 9.59
+      },
+      "memberPath": "cut_22.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 18.7,
+        "encoding": "signed_pcm_16",
+        "frameCount": 299200,
+        "normalizedDCOffset": -0.00018378538243910846,
+        "normalizedPeak": 0.550079345703125,
+        "sampleCount": 299200,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 787
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "drums",
+      "sourceOrdinal": 7,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "0d21e2af78c14b58a1fddfff5c09309c5ed48df19369f2d6e7a953e5ed16266e",
+      "assetID": "mixassist:Group6:cut_23.wav",
+      "byteCount": 832044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 18.96,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 10.96
+      },
+      "memberPath": "cut_23.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 26.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 416000,
+        "normalizedDCOffset": -4.293661851149339e-05,
+        "normalizedPeak": 0.6024169921875,
+        "sampleCount": 416000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 44
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "drums",
+      "sourceOrdinal": 8,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "e40965fb9da80f9a492184be8e7751c92297b920b569d51b502378aa69c3a362",
+      "assetID": "mixassist:Group1:cut_80.wav",
+      "byteCount": 448044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 13.33,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 5.33
+      },
+      "memberPath": "cut_80.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 14.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 224000,
+        "normalizedDCOffset": -6.219141823904855e-05,
+        "normalizedPeak": 0.122528076171875,
+        "sampleCount": 224000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 177
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "bass",
+      "sourceOrdinal": 9,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "3352d0fde3566d0c2412166a57640686a772ca5bd84903b9c1f9ec64533d8855",
+      "assetID": "mixassist:Group1:cut_81.wav",
+      "byteCount": 441644,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 8.1,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.1
+      },
+      "memberPath": "cut_81.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 13.8,
+        "encoding": "signed_pcm_16",
+        "frameCount": 220800,
+        "normalizedDCOffset": -5.926270415817482e-05,
+        "normalizedPeak": 0.042327880859375,
+        "sampleCount": 220800,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 1366
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "bass",
+      "sourceOrdinal": 10,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "7cceab641477aa39db9a1e597bdf589214c5d3b84adf457e97e6c10cfa197e2b",
+      "assetID": "mixassist:Group7:cut_26.wav",
+      "byteCount": 192044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 6.0,
+        "endSeconds": 6.0,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_26.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 6.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 96000,
+        "normalizedDCOffset": -8.77679189046224e-05,
+        "normalizedPeak": 0.46185302734375,
+        "sampleCount": 96000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 70
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group7-zenodo-15848443",
+      "sourceCaptureSHA256": "f88365cace5fd1428e76fa722130c7a7db8d24593b78324d784590aac70b4a05",
+      "sourceClass": "bass",
+      "sourceOrdinal": 11,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "df3a9737962cd28b313ccd3cbce039a7f21ca807d9d9a8e581b607b28bdeca8e",
+      "assetID": "mixassist:Group7:cut_27.wav",
+      "byteCount": 140844,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 4.4,
+        "endSeconds": 4.4,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_27.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 4.4,
+        "encoding": "signed_pcm_16",
+        "frameCount": 70400,
+        "normalizedDCOffset": -8.166833357377486e-05,
+        "normalizedPeak": 0.487640380859375,
+        "sampleCount": 70400,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 33
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group7-zenodo-15848443",
+      "sourceCaptureSHA256": "f88365cace5fd1428e76fa722130c7a7db8d24593b78324d784590aac70b4a05",
+      "sourceClass": "bass",
+      "sourceOrdinal": 12,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "524eeb86ebad1af1d415f2f1b43acc333c9d49f0afed821fce68925b786d489e",
+      "assetID": "mixassist:Group1:cut_26.wav",
+      "byteCount": 656044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 12.31,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 4.31
+      },
+      "memberPath": "cut_26.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 20.5,
+        "encoding": "signed_pcm_16",
+        "frameCount": 328000,
+        "normalizedDCOffset": -5.1090984809689405e-05,
+        "normalizedPeak": 0.279388427734375,
+        "sampleCount": 328000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 1599
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "guitars",
+      "sourceOrdinal": 13,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "37aaafcf0e56a9a8ebf23f0af54662707673f503e159f68f85ae7626a030118e",
+      "assetID": "mixassist:Group1:cut_27.wav",
+      "byteCount": 179244,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 5.6,
+        "endSeconds": 5.6,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_27.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 5.6,
+        "encoding": "signed_pcm_16",
+        "frameCount": 89600,
+        "normalizedDCOffset": -6.158590316772461e-05,
+        "normalizedPeak": 0.28570556640625,
+        "sampleCount": 89600,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 77
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "guitars",
+      "sourceOrdinal": 14,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "baedfeea37cd51f36e89c2570d5b79adbb16226ffa6a6dccd24619d5f86d2c5a",
+      "assetID": "mixassist:Group6:cut_10.wav",
+      "byteCount": 252844,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 7.9,
+        "endSeconds": 7.9,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_10.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 7.9,
+        "encoding": "signed_pcm_16",
+        "frameCount": 126400,
+        "normalizedDCOffset": -4.041309598125989e-05,
+        "normalizedPeak": 0.4285888671875,
+        "sampleCount": 126400,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 132
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "guitars",
+      "sourceOrdinal": 15,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "04c708f32d2a82d7e8d372c43fa1e51bd23730b0d4d50e25b9621fc17bbd5c17",
+      "assetID": "mixassist:Group6:cut_11.wav",
+      "byteCount": 256044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 8.0,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_11.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 8.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 128000,
+        "normalizedDCOffset": 2.520298957824707e-05,
+        "normalizedPeak": 0.426025390625,
+        "sampleCount": 128000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 27
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "guitars",
+      "sourceOrdinal": 16,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "1c6d93c23be9c80680b4c736bba5b5ca3a7c0ec116f85b466d0fbb71e7511fb6",
+      "assetID": "mixassist:Group1:cut_63.wav",
+      "byteCount": 80044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 2.5,
+        "endSeconds": 2.5,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_63.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 2.5,
+        "encoding": "signed_pcm_16",
+        "frameCount": 40000,
+        "normalizedDCOffset": -6.7266845703125e-05,
+        "normalizedPeak": 0.016571044921875,
+        "sampleCount": 40000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 4245
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "keys",
+      "sourceOrdinal": 17,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "de5b66857c4d84e6445a22fcee4c401179893f7533f2bd05188a53ffa38481d8",
+      "assetID": "mixassist:Group1:cut_64.wav",
+      "byteCount": 1184044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 32.66,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 24.66
+      },
+      "memberPath": "cut_64.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 37.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 592000,
+        "normalizedDCOffset": -5.3856308395798144e-05,
+        "normalizedPeak": 0.315399169921875,
+        "sampleCount": 592000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 29758
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "keys",
+      "sourceOrdinal": 18,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "176050ddfc82888f4c197f3076183ddc18b3ad0f9d2568523fd50baee7f6f089",
+      "assetID": "mixassist:Group3:cut_36.wav",
+      "byteCount": 128044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 4.0,
+        "endSeconds": 4.0,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_36.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 4.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 64000,
+        "normalizedDCOffset": -4.255533218383789e-05,
+        "normalizedPeak": 0.05889892578125,
+        "sampleCount": 64000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 691
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group3-zenodo-15848443",
+      "sourceCaptureSHA256": "e8c6587e37a42b59cbe6f5030a69af68754cf4b782bb426004e32f9e887b31ae",
+      "sourceClass": "keys",
+      "sourceOrdinal": 19,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "cbd663f07a03ed83270d01cd547e72765be5a1e4517babcfbdf760c478be730b",
+      "assetID": "mixassist:Group3:cut_37.wav",
+      "byteCount": 528044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 16.4,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 8.4
+      },
+      "memberPath": "cut_37.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 16.5,
+        "encoding": "signed_pcm_16",
+        "frameCount": 264000,
+        "normalizedDCOffset": -2.1790706750118373e-05,
+        "normalizedPeak": 0.1746826171875,
+        "sampleCount": 264000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 17569
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group3-zenodo-15848443",
+      "sourceCaptureSHA256": "e8c6587e37a42b59cbe6f5030a69af68754cf4b782bb426004e32f9e887b31ae",
+      "sourceClass": "keys",
+      "sourceOrdinal": 20,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "62729289ccadf57802e63e3e7e0ce0cde221c2b4ff4a11b5d35bf91194727d9c",
+      "assetID": "mixassist:Group1:cut_14.wav",
+      "byteCount": 864044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 16.77,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 8.77
+      },
+      "memberPath": "cut_14.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 27.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 432000,
+        "normalizedDCOffset": -5.707973904079861e-05,
+        "normalizedPeak": 0.279754638671875,
+        "sampleCount": 432000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 25874
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "overall_mix",
+      "sourceOrdinal": 21,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "d7b5e8037175da9aa8fead1dafbf577fb210cdc85b00a166fad4a36dd1f5bac7",
+      "assetID": "mixassist:Group1:cut_15.wav",
+      "byteCount": 92844,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 2.9,
+        "endSeconds": 2.9,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_15.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 2.9,
+        "encoding": "signed_pcm_16",
+        "frameCount": 46400,
+        "normalizedDCOffset": -5.844642376077586e-05,
+        "normalizedPeak": 0.2586669921875,
+        "sampleCount": 46400,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 2141
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group1-zenodo-15848443",
+      "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+      "sourceClass": "overall_mix",
+      "sourceOrdinal": 22,
+      "split": "evaluation"
+    },
+    {
+      "artifactSHA256": "a5ef50f592b6e14ecffe77e5c9c28ba3976b7d294fd70fe5feee23d8c6128316",
+      "assetID": "mixassist:Group6:cut_1.wav",
+      "byteCount": 9472044,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 8.0,
+        "endSeconds": 39.51,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 31.51
+      },
+      "memberPath": "cut_1.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 296.0,
+        "encoding": "signed_pcm_16",
+        "frameCount": 4736000,
+        "normalizedDCOffset": -3.368560687915699e-05,
+        "normalizedPeak": 0.753875732421875,
+        "sampleCount": 4736000,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 1695
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "overall_mix",
+      "sourceOrdinal": 23,
+      "split": "tracksmith_holdout"
+    },
+    {
+      "artifactSHA256": "1145da415f39c2b55b4e4277d74e232ce71d23efcb28da549f995931d9a85aa1",
+      "assetID": "mixassist:Group6:cut_14.wav",
+      "byteCount": 134444,
+      "datasetID": "mixassist",
+      "excerpt": {
+        "durationSeconds": 4.2,
+        "endSeconds": 4.2,
+        "selectionMethod": "deterministic_window_no_audio_rewrite",
+        "startSeconds": 0.0
+      },
+      "memberPath": "cut_14.wav",
+      "pcm": {
+        "channels": 1,
+        "clippedSampleCount": 0,
+        "container": "RIFF_WAVE",
+        "durationSeconds": 4.2,
+        "encoding": "signed_pcm_16",
+        "frameCount": 67200,
+        "normalizedDCOffset": -2.471651349748884e-05,
+        "normalizedPeak": 0.455108642578125,
+        "sampleCount": 67200,
+        "sampleRate": 16000,
+        "sampleWidthBytes": 2,
+        "silenceStatus": "audible",
+        "zeroSampleCount": 19
+      },
+      "rightsBoundary": "local_evaluation_only; no redistribution or provider upload",
+      "role": "conversation_aligned_music_excerpt",
+      "sourceCaptureID": "mixassist-audio-group6-zenodo-15848443",
+      "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+      "sourceClass": "overall_mix",
+      "sourceOrdinal": 24,
+      "split": "tracksmith_holdout"
+    }
+  ],
+  "purpose": "operator provenance for a prepared, not-yet-run formative study",
+  "schemaVersion": "1.0",
+  "selection": {
+    "excerptsPerClass": 4,
+    "requiredSourceClasses": [
+      "vocals",
+      "drums",
+      "bass",
+      "guitars",
+      "keys",
+      "overall_mix"
+    ],
+    "selectionSeed": 20260802,
+    "selectionSource": "accepted natural-audio-index.json; no download or audio rewrite",
+    "uniqueNaturalExcerpts": 24
+  },
+  "studyID": "tracksmith-g5-perceptual-study-v1"
+}

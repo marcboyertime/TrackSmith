@@ -1,0 +1,87 @@
+{
+  "goals" : [
+    {
+      "attribute" : "dynamicControl",
+      "direction" : "increase",
+      "locked" : false,
+      "strength" : 0.6
+    }
+  ],
+  "nodes" : [
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "05FEB810-85AB-4A2B-93E1-4857F70C0E3D",
+      "locked" : false,
+      "parameters" : {
+        "frequencyHz" : 73,
+        "q" : 0.707
+      },
+      "rationale" : "Reduce subsonic and proximity buildup without thinning the vocal.",
+      "type" : "highPass"
+    },
+    {
+      "category" : "corrective",
+      "confidence" : 0.82,
+      "enabled" : true,
+      "id" : "3672CBD0-17A6-49B6-9305-21C9DC5F484B",
+      "locked" : false,
+      "parameters" : {
+        "attackMS" : 21.993258042523475,
+        "kneeDB" : 4.6,
+        "makeupGainDB" : 0,
+        "mix" : 1,
+        "ratio" : 1.586,
+        "releaseMS" : 252.92246748901997,
+        "thresholdDB" : -6.39395066593893
+      },
+      "rationale" : "Reference threshold and timing to the captured signal instead of applying a fixed compressor preset.",
+      "type" : "compressor"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 1,
+      "enabled" : true,
+      "id" : "AECC3215-CAF6-58BA-836D-CBBFE9C543D3",
+      "locked" : false,
+      "parameters" : {
+        "gainDB" : 0.2942667618473518
+      },
+      "rationale" : "Persist the measured preview compensation so the audition and committed processing are identical.",
+      "type" : "loudnessMatch"
+    },
+    {
+      "category" : "loudness",
+      "confidence" : 0.9,
+      "enabled" : true,
+      "id" : "BEAF5279-C50E-41C0-B07D-354DDC8974E9",
+      "locked" : false,
+      "parameters" : {
+        "ceilingDB" : -1,
+        "lookaheadMS" : 0,
+        "releaseMS" : 80
+      },
+      "rationale" : "Catch unsafe sample peaks; this is not used as a loudness maximizer.",
+      "type" : "limiter"
+    }
+  ],
+  "outputConstraints" : {
+    "loudnessMatchPreview" : true,
+    "maxAddedGainDB" : 12,
+    "maxTruePeakDB" : -1,
+    "preserveMonoCompatibility" : true
+  },
+  "requestID" : "E28D7358-CAF6-48BA-836D-CBBFE9C543D3",
+  "schemaVersion" : "1.0",
+  "scope" : {
+    "channelFormat" : "mono",
+    "kind" : "importedFile",
+    "sourceType" : "vocal",
+    "timeRangeSeconds" : {
+      "end" : 8,
+      "start" : 0
+    }
+  },
+  "sourceSnapshotID" : "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA"
+}

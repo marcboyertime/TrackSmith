@@ -1,0 +1,119 @@
+{
+  "evidenceClass": "SINGLE_LISTENER_FORMATIVE_EVIDENCE",
+  "claimBoundary": "Preparation only. No perceptual-success claim is made.",
+  "scope": "Six blinded trials for G3 only.",
+  "identityDisclosure": "none",
+  "monitoringInstructions": [
+    "Use the same headphones or speakers, listening level, and playback path for every trial.",
+    "Start both conditions at the same point and switch between A and B as often as useful.",
+    "Judge only what you hear from the opaque A and B labels; do not infer identities from file names or outside information.",
+    "Record the monitoring setup separately and do not enter participant identity in this package."
+  ],
+  "questions": [
+    {
+      "id": "target_success",
+      "prompt": "Did the change do what it seemed meant to do?",
+      "scale": "0_not_at_all_to_6_completely"
+    },
+    {
+      "id": "preservation",
+      "prompt": "Did the important parts of the sound stay intact?",
+      "scale": "0_not_at_all_to_6_completely"
+    },
+    {
+      "id": "naturalness",
+      "prompt": "Does it sound natural rather than processed?",
+      "scale": "0_not_natural_to_6_very_natural"
+    },
+    {
+      "id": "clarity",
+      "prompt": "How clear is the sound?",
+      "scale": "0_not_clear_to_6_very_clear"
+    },
+    {
+      "id": "preference",
+      "prompt": "Which would you choose for this task: A or B?",
+      "scale": "choose_one_presented_condition"
+    }
+  ],
+  "trials": [
+    {
+      "trialRef": "trial-001",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "audioPath": "audio/trial-001-A.wav"
+        },
+        {
+          "conditionLabel": "B",
+          "audioPath": "audio/trial-001-B.wav"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-002",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "audioPath": "audio/trial-002-A.wav"
+        },
+        {
+          "conditionLabel": "B",
+          "audioPath": "audio/trial-002-B.wav"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-003",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "audioPath": "audio/trial-003-A.wav"
+        },
+        {
+          "conditionLabel": "B",
+          "audioPath": "audio/trial-003-B.wav"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-004",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "audioPath": "audio/trial-004-A.wav"
+        },
+        {
+          "conditionLabel": "B",
+          "audioPath": "audio/trial-004-B.wav"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-005",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "audioPath": "audio/trial-005-A.wav"
+        },
+        {
+          "conditionLabel": "B",
+          "audioPath": "audio/trial-005-B.wav"
+        }
+      ]
+    },
+    {
+      "trialRef": "trial-006",
+      "conditions": [
+        {
+          "conditionLabel": "A",
+          "audioPath": "audio/trial-006-A.wav"
+        },
+        {
+          "conditionLabel": "B",
+          "audioPath": "audio/trial-006-B.wav"
+        }
+      ]
+    }
+  ]
+}

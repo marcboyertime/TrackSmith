@@ -1,0 +1,273 @@
+{
+  "schemaVersion": "1.0",
+  "inventoryKind": "g5_excluded_window_rerender_evidence",
+  "claimBoundary": "Append-only operator evidence for three previously excluded source windows. These renders are not an opaque participant package and do not establish participant coverage, listening evidence, perceptual success, or G5 promotion.",
+  "generatedAt": "2026-08-02T18:28:45Z",
+  "hashAlgorithm": "SHA-256",
+  "previewCLI": {
+    "command": "swift run -c release PreviewCLI",
+    "commandLineTemplate": "swift run -c release PreviewCLI <cropped-input.wav> --source <source> --prompt \"make this more musical and controlled without sounding overprocessed\" --output <new-output-directory>",
+    "version": "release/arm64-apple-macosx binary built 2026-08-02 (no semantic version embedded)",
+    "executable": ".build/arm64-apple-macosx/release/PreviewCLI",
+    "executableSHA256": "fa545ad1af96388e4c2f09c985d6b7f3cd1f0bfcdf9de1edbed1e1bdde7b9395",
+    "binaryModifiedAt": "2026-08-02T08:57:41Z"
+  },
+  "entries": [
+    {
+      "ordinal": 3,
+      "sourceAssetID": "mixassist:Group6:cut_16.wav",
+      "sourceClass": "vocals",
+      "previewSourceType": "vocal",
+      "sourceSnapshotID": "50BB14D1-32FD-4774-9E72-FD4F4BFE64BA",
+      "sourceWindow": {
+        "startSeconds": 4.11,
+        "durationSeconds": 8.0,
+        "endSeconds": 12.11,
+        "selectionMethod": "deterministic_window_no_audio_rewrite"
+      },
+      "sourceHashes": {
+        "croppedInputSHA256": "eca94b6996e4a3b4da41e8b6e1f7ba35e7fffccf2d30a5fa15d9b5b4bd99eb00",
+        "fullSourceArtifactSHA256": "7d6026d29fc856efe51101abed04f8d369a4a20721029790415bbb05c09586d2",
+        "sourceCaptureSHA256": "ec3f69c17bec2bb301d91396e8f49da28f9da72d76fabc4b757979f320fa79c6",
+        "previewSourceFingerprint": "839e341bb6f292f1"
+      },
+      "artifactDirectory": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s",
+      "inputFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/mixassist_Group6_cut_16.wav-input.wav",
+      "originalFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/00-original.wav",
+      "manifestFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/manifest.json",
+      "planFiles": {
+        "conservative": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/01-conservative-plan.json",
+        "balanced": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/02-balanced-plan.json",
+        "strong": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/03-strong-plan.json"
+      },
+      "planHashes": {
+        "conservative": "ef68271643c72683e3dde48627674c5f096b72789b61421bd31a0abde2723f24",
+        "balanced": "c6182ff1899005ecf2ee6837799d14a1e1760e80dd85fc75bc79e9cde77fb116",
+        "strong": "e4e82ab807dd4433f1e695eaf7511410f958923487129a568a0a975df4d1f753"
+      },
+      "outputs": [
+        {
+          "strength": "conservative",
+          "status": "valid",
+          "audioFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/01-conservative.wav",
+          "sha256": "5c8d8ef252838bc9c7127ac0c0946a372fbea1caae323e9c3fcce8f862ad0202",
+          "planFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/01-conservative-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -12.72857539045042,
+            "truePeakDBTP": -1.000299004991649,
+            "loudnessMatchGainDB": 0.2942667618473518,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        },
+        {
+          "strength": "balanced",
+          "status": "valid",
+          "audioFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/02-balanced.wav",
+          "sha256": "f4425c61df639f38c3f01f24d06284eab0dc05ef407474305d0b421155458b2d",
+          "planFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/02-balanced-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -13.739969581686255,
+            "truePeakDBTP": -1.0000001607861662,
+            "loudnessMatchGainDB": 0.544467717898999,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": ["Level matching was limited by the true-peak ceiling or the plan's added-gain budget."]
+          }
+        },
+        {
+          "strength": "strong",
+          "status": "valid",
+          "audioFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/03-strong.wav",
+          "sha256": "5d2894f6256fc6d89cb43dc24ef02531453e37c93ef10c3989ca16357aef5d32",
+          "planFile": "mixassist-Group6-cut_16-vocal-window-4p11s-duration-8s/03-strong-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -14.889403981923438,
+            "truePeakDBTP": -1.000000118791212,
+            "loudnessMatchGainDB": 3.131906686479793,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": ["Level matching was limited by the true-peak ceiling or the plan's added-gain budget."]
+          }
+        }
+      ],
+      "metrics": {
+        "validOutputCount": 3,
+        "invalidOutputCount": 0,
+        "allVariantsValid": true,
+        "allVariantsAtOrBelowMinus1DBTP": true
+      }
+    },
+    {
+      "ordinal": 18,
+      "sourceAssetID": "mixassist:Group1:cut_64.wav",
+      "sourceClass": "keys",
+      "previewSourceType": "keyboard",
+      "sourceSnapshotID": "624FEA07-53A4-49B3-AB60-52617D3F20BE",
+      "sourceWindow": {
+        "startSeconds": 24.66,
+        "durationSeconds": 8.0,
+        "endSeconds": 32.66,
+        "selectionMethod": "deterministic_window_no_audio_rewrite"
+      },
+      "sourceHashes": {
+        "croppedInputSHA256": "e24baad3ef1168eb2efc807e0baa757dbd21cf2a3ed0ce95b74e8bc1447649b5",
+        "fullSourceArtifactSHA256": "de5b66857c4d84e6445a22fcee4c401179893f7533f2bd05188a53ffa38481d8",
+        "sourceCaptureSHA256": "9a54c3442f48c399f9e4339d4fd044ab57085ee087ed41b148fab5f0efc5979e",
+        "previewSourceFingerprint": "c84b2b73054c6054"
+      },
+      "artifactDirectory": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s",
+      "inputFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/mixassist_Group1_cut_64.wav-input.wav",
+      "originalFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/00-original.wav",
+      "manifestFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/manifest.json",
+      "planFiles": {
+        "conservative": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/01-conservative-plan.json",
+        "balanced": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/02-balanced-plan.json",
+        "strong": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/03-strong-plan.json"
+      },
+      "planHashes": {
+        "conservative": "7d772ee26328d3c20c2c731d3c4235920cac0808177b02fc422db88afc2936fd",
+        "balanced": "4659eeda41b3eaab887b8ae76e891bf2d947772b7d40b6832d80da70ed901d45",
+        "strong": "f57d5ff39bca8598cd6be29a7137a928650ca5b8f95219874beded8d2bee68e2"
+      },
+      "outputs": [
+        {
+          "strength": "conservative",
+          "status": "valid",
+          "audioFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/01-conservative.wav",
+          "sha256": "ca200be033ea76dbbfb41ef59ada7e86efc1a06ba2511a2e02a41590631d0da1",
+          "planFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/01-conservative-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -42.132425437657574,
+            "truePeakDBTP": -25.785495735517937,
+            "loudnessMatchGainDB": 1.2630037817623432,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        },
+        {
+          "strength": "balanced",
+          "status": "valid",
+          "audioFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/02-balanced.wav",
+          "sha256": "b3ec39910e41c6b37f995b2f6c540c59510e599f03aa668d854c434a250350ca",
+          "planFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/02-balanced-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -42.1324255008666,
+            "truePeakDBTP": -26.891076310325847,
+            "loudnessMatchGainDB": 3.9445515599259195,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        },
+        {
+          "strength": "strong",
+          "status": "valid",
+          "audioFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/03-strong.wav",
+          "sha256": "15a1d68e7c2aa5c9c082ce0b2c96e21dd4211ea75ec959e9ded6fa3e9f8bf7ba",
+          "planFile": "mixassist-Group1-cut_64-keyboard-window-24p66s-duration-8s/03-strong-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -42.13242554992053,
+            "truePeakDBTP": -26.29559393383022,
+            "loudnessMatchGainDB": 8.442952770883224,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        }
+      ],
+      "metrics": {
+        "validOutputCount": 3,
+        "invalidOutputCount": 0,
+        "allVariantsValid": true,
+        "allVariantsAtOrBelowMinus1DBTP": true
+      }
+    },
+    {
+      "ordinal": 20,
+      "sourceAssetID": "mixassist:Group3:cut_37.wav",
+      "sourceClass": "keys",
+      "previewSourceType": "keyboard",
+      "sourceSnapshotID": "226D7612-7D69-427E-9A33-7354D45D16F6",
+      "sourceWindow": {
+        "startSeconds": 8.4,
+        "durationSeconds": 8.0,
+        "endSeconds": 16.4,
+        "selectionMethod": "deterministic_window_no_audio_rewrite"
+      },
+      "sourceHashes": {
+        "croppedInputSHA256": "8044591f07ffcdb591f596afae852b89da327273a8616414b941b7785f24c021",
+        "fullSourceArtifactSHA256": "cbd663f07a03ed83270d01cd547e72765be5a1e4517babcfbdf760c478be730b",
+        "sourceCaptureSHA256": "e8c6587e37a42b59cbe6f5030a69af68754cf4b782bb426004e32f9e887b31ae",
+        "previewSourceFingerprint": "0fc0f6f99bf9a60c"
+      },
+      "artifactDirectory": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s",
+      "inputFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/mixassist_Group3_cut_37.wav-input.wav",
+      "originalFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/00-original.wav",
+      "manifestFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/manifest.json",
+      "planFiles": {
+        "conservative": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/01-conservative-plan.json",
+        "balanced": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/02-balanced-plan.json",
+        "strong": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/03-strong-plan.json"
+      },
+      "planHashes": {
+        "conservative": "d4b5d1e28be153f0f501286f473f2ac9f2650d013cd493aa48e44da3e551e002",
+        "balanced": "947dc19e57a3df82e93f9b41e62ff184b9ea1b51d79763ef394d75602bc9bb57",
+        "strong": "590953dc7107370d54ecc395b2f2b4b99b05f7cb5fa385268c7d0677c1dd1cec"
+      },
+      "outputs": [
+        {
+          "strength": "conservative",
+          "status": "valid",
+          "audioFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/01-conservative.wav",
+          "sha256": "83137df20553f4fd4cabf9d6b54920e6d66c71036624ece0c8091179f28d4efe",
+          "planFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/01-conservative-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -34.62765309966149,
+            "truePeakDBTP": -17.099282985995345,
+            "loudnessMatchGainDB": 0.9421363604996671,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        },
+        {
+          "strength": "balanced",
+          "status": "valid",
+          "audioFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/02-balanced.wav",
+          "sha256": "97b0664709c6709779b7514ccda61e62d07108ca2e5368eecf6095ab72a7fac5",
+          "planFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/02-balanced-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -34.62965358902091,
+            "truePeakDBTP": -18.693230827966936,
+            "loudnessMatchGainDB": 2.9981417874444887,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        },
+        {
+          "strength": "strong",
+          "status": "valid",
+          "audioFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/03-strong.wav",
+          "sha256": "f38a73d628f11c13d10e64336e50f1a583bdddea387c2c1519b9e190fc9cc977",
+          "planFile": "mixassist-Group3-cut_37-keyboard-window-8p4s-duration-8s/03-strong-plan.json",
+          "metrics": {
+            "integratedLoudnessLUFS": -34.633959746321146,
+            "truePeakDBTP": -19.676679110461393,
+            "loudnessMatchGainDB": 7.077772588826747,
+            "loudnessMatchMethod": "bs1770Integrated",
+            "warnings": []
+          }
+        }
+      ],
+      "metrics": {
+        "validOutputCount": 3,
+        "invalidOutputCount": 0,
+        "allVariantsValid": true,
+        "allVariantsAtOrBelowMinus1DBTP": true
+      }
+    }
+  ],
+  "counts": {
+    "sourceWindows": 3,
+    "validOutputs": 9,
+    "invalidOutputs": 0,
+    "copiedPlans": 9,
+    "copiedManifests": 3
+  }
+}
