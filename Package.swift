@@ -20,6 +20,8 @@ let package = Package(
         .library(name: "PreviewAudition", targets: ["PreviewAudition"]),
         .library(name: "AudioUnitExtensionCore", targets: ["AudioUnitExtensionCore"]),
         .library(name: "ResearchIngestion", targets: ["ResearchIngestion"]),
+        .library(name: "ProductionTutor", targets: ["ProductionTutor"]),
+        .executable(name: "ProductionTutorEvaluation", targets: ["ProductionTutorEvaluation"]),
         .executable(name: "CompanionApp", targets: ["CompanionApp"]),
         .executable(name: "OfflineRenderer", targets: ["OfflineRenderer"]),
         .executable(name: "AnalysisCLI", targets: ["AnalysisCLI"]),
@@ -72,6 +74,11 @@ let package = Package(
             ]
         ),
         .target(name: "ResearchIngestion", path: "packages/ResearchIngestion/Sources/ResearchIngestion"),
+        .target(
+            name: "ProductionTutor",
+            dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "PlanSchema"],
+            path: "packages/ProductionTutor/Sources/ProductionTutor"
+        ),
         .executableTarget(name: "CompanionApp", dependencies: ["AgentCore", "ProductionIntelligence", "PreviewRenderer", "SharedIPC", "DSPCore", "AudioAnalysis", "PlanSchema"], path: "apps/CompanionApp/Sources/CompanionApp"),
         .executableTarget(name: "OfflineRenderer", dependencies: ["DSPCore", "PlanSchema", "AudioAnalysis"], path: "tools/OfflineRenderer/Sources/OfflineRenderer"),
         .executableTarget(name: "AnalysisCLI", dependencies: ["AudioAnalysis", "DSPCore"], path: "tools/AnalysisCLI/Sources/AnalysisCLI"),
@@ -101,6 +108,11 @@ let package = Package(
             dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema", "PreviewRenderer"],
             path: "tools/ProductionMasteryDSPFixtures/Sources/ProductionMasteryDSPFixtures"
         ),
-        .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "ProductionIntelligence", "PreviewRenderer", "PreviewWorkflow", "SharedIPC", "SessionCore", "ResearchIngestion"], path: "tests/TestRunner"),
+        .executableTarget(
+            name: "ProductionTutorEvaluation",
+            dependencies: ["ProductionTutor", "AudioAnalysis", "DSPCore", "PlanSchema"],
+            path: "tools/ProductionTutorEvaluation/Sources/ProductionTutorEvaluation"
+        ),
+        .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "ProductionIntelligence", "ProductionTutor", "PreviewRenderer", "PreviewWorkflow", "SharedIPC", "SessionCore", "ResearchIngestion"], path: "tests/TestRunner"),
     ]
 )
