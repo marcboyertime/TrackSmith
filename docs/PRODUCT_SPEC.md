@@ -5,6 +5,43 @@
 - A musician who can describe a sonic goal but not compressor/EQ parameters.
 - A producer who wants fast alternatives without surrendering detailed control.
 - A mix engineer who wants explainable, repeatable analysis and reversible graphs.
+- A learning producer who wants to become genuinely skilled: told exactly what
+  to try in Logic, why it works, what to listen for, and what principle to
+  reuse — not just handed a finished result.
+
+## Product modes
+
+TrackSmith has two permanent top-level modes:
+
+1. **Guide Me** (tutor): the user describes a problem or desired result.
+   TrackSmith presents a short diagnostic summary with competing possible
+   causes and visible uncertainty, then one reversible manual experiment at a
+   time in extremely simple language: what to do, where in Logic Pro, a
+   validated bounded starting value when applicable, what to listen for, why,
+   when to stop, what could go wrong, and exactly how to undo it. It adapts
+   deterministically to Better / Worse / No change / Not sure / Not
+   applicable / Cannot find it / Done / Undo. Exactness comes only from
+   locally validated versioned procedural knowledge; uncertainty and evidence
+   grounding (audio-grounded versus user-reported-only) stay visible; the
+   tutor never operates Logic and never mutates the AU graph.
+2. **Create For Me**: the existing capture → analyze → three level-matched
+   previews → audition → revise → explicit commit workflow.
+
+The long-term relationship is: guide me through doing it myself; create it
+for me; explain what you created and teach me to reproduce it. The tutor is
+the permanent explanation/learning layer for later automated modules.
+
+## Tutor core user story
+
+Given a vocal passing through the inserted effect, the user types "I sound
+nasal." TrackSmith recognizes the report without collapsing it to a different
+term, distinguishes user report from measured evidence, presents two or three
+competing causes (performance, capture, compression interaction, static or
+vowel-dependent resonance) plus the possibility that the quality is character
+worth keeping, and runs one experiment at a time until the user reports an
+improvement, chooses to keep the sound, or the validated experiments are
+honestly exhausted. Completion teaches the production principle practiced,
+not only the setting chosen.
 
 ## Core user story
 

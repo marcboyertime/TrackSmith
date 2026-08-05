@@ -25,50 +25,91 @@
     {
       "id": "T1",
       "name": "typed_tutor_contracts_and_validation",
-      "status": "pending",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorContracts.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorIssueVocabulary.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorCauseModel.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorLessonValidator.swift",
+        "tests/TestRunner/main.swift",
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
+      ]
     },
     {
       "id": "T2",
       "name": "versioned_procedural_knowledge_and_provenance",
-      "status": "pending",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        "research/knowledge/logic-pro-12.3-tutor-procedures.json",
+        "research/scripts/build-logic-tutor-procedure-knowledge.py",
+        "research/scripts/audit-logic-tutor-procedure-knowledge.py",
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorProcedureKnowledge.generated.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorKnowledgeValidator.swift",
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
+      ]
     },
     {
       "id": "T3",
       "name": "deterministic_offline_nasal_vocal_vertical_slice",
-      "status": "pending",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        "research/evaluation/TRACKSMITH_TUTOR_INTENT_CORPUS_V1.json",
+        "research/scripts/build-tutor-intent-corpus.py",
+        "tools/ProductionTutorEvaluation/Sources/ProductionTutorEvaluation/main.swift",
+        "research/evaluation/logic-production-tutor-v1/offline-evaluation-report-2026-08-05.json",
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
+      ]
     },
     {
       "id": "T4",
       "name": "companion_guide_mode_and_adaptive_feedback",
-      "status": "pending",
-      "evidence": []
+      "status": "in_progress",
+      "evidence": [
+        "apps/CompanionMacApp/CompanionMacApp.swift",
+        "apps/CompanionMacApp/TutorSessionModel.swift",
+        "apps/CompanionMacApp/TutorGuideView.swift",
+        "apps/CompanionMacApp/CompanionSessionModel.swift",
+        "project.yml",
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
+      ],
+      "note": "Guide Me / Create For Me modes, a separate tutor coordinator with no AU command path, one-step cards, the eight feedback controls, evidence-grounding banner, and bounded tutor persistence are implemented, and the unsigned Xcode native build succeeds. Interactive UI verification requires a running app and is folded into the T7 manual checklist; it has not been executed."
     },
     {
       "id": "T5",
       "name": "provider_enhanced_interpretation_without_provider_authored_instructions",
-      "status": "pending",
-      "evidence": []
+      "status": "in_progress",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/TutorInterpretationContract.swift",
+        "tests/TestRunner/main.swift"
+      ],
+      "note": "The bounded symbolic TutorInterpretationProposal contract and its seven-stage fail-closed validator are implemented and adversarially tested with mocked payloads (invented issue/cause/procedure IDs, menu paths, key commands, claimed actions, and out-of-range values are all rejected). No live provider is wired into the tutor request path yet; the deterministic offline path is complete without one, so provider enhancement remains optional follow-on work."
     },
     {
       "id": "T6",
       "name": "persistence_privacy_adversarial_and_regression_testing",
-      "status": "pending",
-      "evidence": []
+      "status": "passed",
+      "evidence": [
+        "tests/TestRunner/main.swift",
+        "research/evaluation/logic-production-tutor-v1/offline-evaluation-report-2026-08-05.json",
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_IMPLEMENTATION_2026-08-05.md"
+      ],
+      "note": "TestRunner 82/82 in Debug and Release, 77/77 tutor corpus, make verify (xcodegen, production-language and tutor-procedure knowledge checks, release build, release TestRunner, host probe), realtime heap probe with zero observed heap operations across 4,000 callbacks, and the unsigned native companion build. Thread Sanitizer was not run in this pass. In-host Create For Me regression is part of T7."
     },
     {
       "id": "T7",
       "name": "direct_logic_12_3_user_mediated_validation",
       "status": "pending",
-      "evidence": []
+      "evidence": [
+        "docs/MANUAL_LOGIC_TUTOR_TESTS.md"
+      ],
+      "note": "Exact manual checklist prepared. Requires a human operating Logic Pro 12.3; TrackSmith has no host automation and none was added. Not executed, so no Logic-hosted tutor claim is made."
     },
     {
       "id": "T8",
       "name": "tutor_v1_closure_and_vocal_module_v1_handoff",
       "status": "pending",
-      "evidence": []
+      "evidence": [],
+      "note": "Blocked by T7. The Vocal Module v1 handoff must be grounded in real tutor lessons; no owner lesson has been run, so writing it now would fabricate findings."
     }
   ],
   "baseline": {
@@ -97,5 +138,24 @@
     "create_for_me_must_not_regress",
     "no_identity_renames",
     "analyzer_is_not_phoneme_aware_and_cannot_prove_nasality"
-  ]
+  ],
+  "currentStatusSummary": {
+    "passed": [
+      "T0",
+      "T1",
+      "T2",
+      "T3",
+      "T6"
+    ],
+    "inProgress": [
+      "T4",
+      "T5"
+    ],
+    "pending": [
+      "T7",
+      "T8"
+    ],
+    "closed": false,
+    "vocalModuleV1HandoffReady": false
+  }
 }

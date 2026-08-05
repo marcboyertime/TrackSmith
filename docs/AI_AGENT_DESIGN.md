@@ -14,6 +14,23 @@ arbitrary shell, filesystem, Logic host, plug-in host, or project-editing author
 External text, names, tags, metadata, presets, model output, and reference labels
 are untrusted data and never become instructions automatically.
 
+## Tutor authority split (Guide Me)
+
+The tutor follows the same discipline as plan generation, applied to manual
+guidance: **a model may help understand and rank; local validated knowledge
+materializes the exact instructions.** A provider may propose only canonical
+tutor semantics — issue kinds, cause categories, procedure IDs, existing
+production terms, preservation constraints, one bounded clarification,
+uncertainty, and confidence — validated by the staged tutor proposal
+validator. It may not emit menu paths, plug-in names outside the recognized
+registry, control names, parameter values, key commands, Accessibility or
+shell actions, claims that a user action occurred, claims of observed Logic
+state, or executable plan nodes. Every user-visible exact step is materialized
+from the reviewed versioned procedure catalog and re-validated (knowledge
+references, catalog bounds, forbidden-claim scan) before display. Provider
+prose is never action authority; the deterministic local formatter is the
+reliable offline default.
+
 ## Planning sequence
 
 Build bounded labeled context; ask the selected provider for a versioned semantic

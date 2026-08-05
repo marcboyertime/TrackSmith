@@ -420,7 +420,7 @@ struct TutorGuideView: View {
             HStack(spacing: 8) {
                 ForEach(step.supportedFeedback, id: \.self) { feedback in
                     Button(feedbackLabel(feedback)) { tutor.send(feedback) }
-                        .buttonStyle(feedback == .better ? .borderedProminent : .borderedProminent)
+                        .buttonStyle(.borderedProminent)
                         .tint(feedbackTint(feedback))
                         .controlSize(.regular)
                         .accessibilityLabel(feedbackAccessibilityLabel(feedback))

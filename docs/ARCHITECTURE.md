@@ -60,10 +60,11 @@ implemented `ProcessingNode` can enter a TrackSmith graph, and only a separately
 proven capability adapter can request host state. A deterministic 18-fixture suite
 and 200-identity campaign ledger define the empirical lane. Direct runs are
 versioned, artifact-hash-audited records; generated provider context exposes only
-their bounded status, run IDs, and claim-limited summary. The current campaign is
-191 `not_run`, nine `partial` runs, and zero `complete`: Bitcrusher,
-Channel EQ, Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo
-Delay, and Tape Delay each have bounded direct evidence.
+their bounded status, run IDs, and claim-limited summary. The current campaign ledger records
+189 `not_run`, 11 `partial` runs, and zero `complete`: Bitcrusher, Channel EQ,
+Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo Delay,
+Tape Delay, Adaptive Limiter, and Direction Mixer each have bounded direct
+evidence.
 Even the partial entry keeps exact implementation internals false and retains the
 advisory-only execution boundary. Undocumented transfer behavior and perceptual
 preference remain measurement/listening questions.
@@ -81,6 +82,45 @@ model is connected directly to raw DSP parameters, and no individual descriptor
 is promoted to a perceptual adjective. The detailed provider, context, validation,
 credential and persistent-conversation architecture is authoritative in
 [`PRODUCTION_INTELLIGENCE.md`](PRODUCTION_INTELLIGENCE.md).
+
+## ProductionTutor companion layer (Guide Me)
+
+The user-mediated tutor is a separate companion-process package,
+`ProductionTutor` (ADR 0005). `ProductionIntelligence` does not depend on it,
+and nothing tutor-related runs in the AU render path — the AU contributes only
+its existing bounded capture and connection.
+
+```text
+user request
+  → local TutorIssueVocabulary (recognition + negation; aliases are never
+    proof of cause)
+  → TutorCauseModel: competing cause hypotheses, never prematurely collapsed
+  → TutorContextBuilder: bounded evidence from the local SourceAwareAnalyzer
+    (descriptive, explicitly not phoneme-aware) plus the user-reported chain
+  → local procedure retrieval from the generated reviewed catalog
+    (research/knowledge/logic-pro-12.3-tutor-procedures.json → SHA-256-checked
+    typed Swift; fail-closed TutorKnowledgeValidator)
+  → deterministic TutorPlanner → TutorLessonValidator → visible lesson
+  → immutable feedback events → deterministic TutorFeedbackReducer
+  → next validated step … → completion summary + concepts practiced
+```
+
+Authority boundaries: steps are performed by the user (`userManual`); there is
+no TrackSmith-controls-Logic actor. Locations are versioned semantic
+references (work area, processor identity from the recognized registry,
+navigation labels); coordinates and key commands are rejected by validation,
+as are destructive workflows, missing rollback/stop/listening cues,
+out-of-range values, and false execution authority. An optional provider may
+propose only bounded canonical IDs through the staged
+`TutorProposalValidator` (decoding → schema → semantic → capability →
+knowledgeReference → stateReference → instructionConstraint); provider prose
+never materializes an instruction, and the offline path is complete without
+any provider. Tutor persistence is a separate bounded checksummed store under
+`Application Support/com.marcboyer.tracksmith/ProductionTutor/`; the frozen
+Production Intelligence conversation schema is unchanged. Audio-grounded
+lessons carry safe authority references (instance, runtime epoch, capture
+snapshot) and demote to historical when the live session no longer matches.
+Tutor mode has no AU command path and cannot mutate the processing graph.
 
 ## Process and trust boundaries
 

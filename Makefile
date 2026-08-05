@@ -1,4 +1,4 @@
-.PHONY: build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check native-build native-verify native-install verify
+.PHONY: build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -36,6 +36,13 @@ realtime-heap-probe:
 production-language-knowledge-check:
 	python3 research/scripts/build-production-language-knowledge.py --check
 
+tutor-procedure-knowledge-check:
+	python3 research/scripts/audit-logic-tutor-procedure-knowledge.py
+	python3 research/scripts/build-logic-tutor-procedure-knowledge.py --check
+
+tutor-evaluation:
+	swift run -c release ProductionTutorEvaluation research/evaluation/TRACKSMITH_TUTOR_INTENT_CORPUS_V1.json
+
 native-build: project
 	xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath .build/xcode-derived CODE_SIGNING_ALLOWED=NO build
 
@@ -44,4 +51,4 @@ native-verify: native-build au-host-probe realtime-heap-probe
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project production-language-knowledge-check build test au-host-probe
+verify: project production-language-knowledge-check tutor-procedure-knowledge-check build test au-host-probe

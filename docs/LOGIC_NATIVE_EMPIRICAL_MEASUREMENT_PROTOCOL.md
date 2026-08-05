@@ -1,11 +1,12 @@
 # Logic Pro 12.3 Native Effect Empirical Measurement Protocol
 
 Status: protocol and deterministic fixture generator implemented 2026-07-16;
-revised 2026-07-30. The current 200-identity ledger contains 191 `not_run`, 9
+revised 2026-08-05. The current 200-identity ledger contains 189 `not_run`, 11
 `partial`, and 0 `complete` records. Partial direct-host evidence covers
 Bitcrusher, Channel EQ, Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space
-Designer, Stereo Delay, and Tape Delay; partial runs do not establish complete
-models, Logic equivalence, or perceptual claims. The full campaign remains open.
+Designer, Stereo Delay, Tape Delay, Adaptive Limiter, and Direction Mixer;
+partial runs do not establish complete models, Logic equivalence, or
+perceptual claims. The full campaign remains open.
 This distinction is deliberate. Apple documents controls and intended behavior,
 but documentation does not expose every coefficient, transfer curve,
 oversampling choice, nonlinear state, tolerance, or signal-dependent interaction.

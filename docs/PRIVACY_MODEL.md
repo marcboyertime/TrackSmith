@@ -43,6 +43,18 @@ targets.
   remain separate. Both adapters request `store=false`; this is not a guarantee that a
   provider retains no safety/abuse data. Provider contractual retention remains an
   external policy boundary.
+- Tutor lesson state (Guide Me): bounded checksummed local store under
+  `Application Support/com.marcboyer.tracksmith/ProductionTutor/` with atomic
+  0600 files, credential-pattern redaction, size/count bounds, corruption
+  quarantine, and explicit version rejection. It can contain the user's
+  request text, recognized issues, cause hypotheses, materialized lesson
+  steps, immutable feedback events, user-reported chain context, safe
+  authority identities (UUIDs only), and concepts practiced. It never
+  contains raw audio, source paths or file names, credentials, raw provider
+  responses, or hidden model reasoning. Tutor provider input, when a provider
+  is used at all, is the same bounded labeled text/measurement context class
+  as Production Intelligence — never audio — and provider output is reduced
+  to validated canonical IDs plus a bounded audit summary before persistence.
 - Credentials: macOS Keychain service
   `com.marcboyer.tracksmith.provider-credentials`, provider-specific accounts,
   when-unlocked device-only accessibility; never logs, prompts, requests, App Group,

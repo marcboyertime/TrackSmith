@@ -1,5 +1,44 @@
 # Changelog
 
+## 2026-08-05
+
+- Opened the Logic Production Tutor v1 milestone with a verified frozen
+  baseline (HEAD `c87cea5`; builds, 72/72 TestRunner Debug and Release, host
+  probe, unsigned native build, realtime heap probe) and an additive
+  current-product-focus record. Production Intelligence v1 and all Production
+  Mastery gate statuses remain untouched.
+- Added the `ProductionTutor` package: typed tutor contracts (18 issue kinds
+  with negation-aware recognition, 12 cause categories, user-mediated actors,
+  16 action kinds, 8 feedback kinds, bounded steps with stop/undo/listening
+  requirements), a deterministic planner and feedback reducer, staged lesson
+  and provider-proposal validators, a deterministic explanation formatter,
+  and a bounded checksummed redacting `TutorSessionStore`.
+- Added the reviewed versioned procedure artifact
+  `research/knowledge/logic-pro-12.3-tutor-procedures.json` (8 vocal-focused
+  procedures, 18 steps) with generator/audit scripts and a SHA-256-verified
+  generated Swift catalog; validation rejects coordinates, key commands,
+  destructive actions, missing rollback/stop/listening/preservation content,
+  out-of-range values, unregistered processor identities, and any execution
+  authority.
+- Added the 77-case `TRACKSMITH_TUTOR_INTENT_CORPUS_V1` (15 nasal variants,
+  42 vocal troubleshooting, 10 desired-result, 10 non-vocal generalization,
+  15 adversarial/unsafe, 10 multi-turn sequences) and the deterministic
+  `ProductionTutorEvaluation` executable; the offline path passes 77/77 with
+  no network or credential.
+- Added Guide Me / Create For Me modes to the native companion with a
+  separate tutor coordinator, evidence-grounding banner (live, historical, or
+  user-reported-only), user-reported chain context, one-step cards with
+  expandable explanations and versioned navigation, eight feedback controls,
+  and completion summaries; tutor mode has no AU command path. Create For Me
+  is unchanged.
+- TestRunner grew from 72 to 82 unconditional checks (83 with the optional
+  BS.2217-2 vector lane); current Debug and Release runs pass 82/82.
+  Reconciled current-facing empirical-campaign counts to the ledger's
+  189 `not_run` / 11 `partial` / 0 `complete`.
+- Direct Logic 12.3 user-mediated tutor validation (gate T7) is documented in
+  `docs/MANUAL_LOGIC_TUTOR_TESTS.md` and remains pending; Tutor v1 is not
+  closed and Vocal Module v1 work has not begun.
+
 ## 2026-08-02
 
 - Reconciled the current regression snapshot with the `TestRunner` harness: its
