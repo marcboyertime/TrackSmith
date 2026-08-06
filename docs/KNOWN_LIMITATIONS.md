@@ -249,6 +249,31 @@
   real-lesson evidence are pending; no claim of host-validated tutoring is
   made. Restored tutor sessions demote audio-grounded claims to historical.
 
+## General Production Tutor v2
+
+- Domain coverage is uneven. 458 claims and 68 strategies come from reviewed
+  in-repo artifacts, so vocal, mix, and effects domains are far better covered
+  than arrangement, MIDI expression, and mastering delivery.
+- **No external source has ever been ingested.** No web fetch, no YouTube, no
+  course material. The source registry, rights and transcript fields, and the
+  audiovisual-review gate exist and are enforced, but nothing has flowed
+  through them. Research This is specified, not built.
+- The native Guide Me surface still presents only the Tutor v1 lesson flow.
+  Open-ended questions are reachable through the CLI and tests, not the app.
+- Personalization is types-only: `PersonalOutcomeRecord` exists and cannot be
+  generalized, but there is no store, no profile, no UI, and no ranking effect.
+- Retrieval is lexical. It has no synonym expansion beyond the curated cue
+  lists, so unusual phrasing can retrieve weakly; coverage is reported rather
+  than hidden, but a weak-coverage answer is still less useful.
+- Strategy cards are decision patterns, not measured results. Most carry
+  professional-practice evidence class and none has been validated against the
+  owner's own material.
+- The evaluation corpus is 332 cases against the brief's 500, has no
+  multi-turn general sequences, and no retrieval precision/recall cases with
+  expected and forbidden card IDs.
+- **No owner session and no in-host validation of the broad tutor exist.** The
+  decisive question — whether this beats opening a browser — is unanswered.
+
 ## State and operations
 
 - Companion conversation, snapshot ancestry, previews, revisions, lock history and

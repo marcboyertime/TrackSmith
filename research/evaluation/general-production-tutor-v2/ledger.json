@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0",
+  "milestone": "TrackSmith General Production Tutor v2",
+  "status": "active",
+  "plan": "docs/GENERAL_PRODUCTION_TUTOR_V2.md",
+  "openedAt": "2026-08-06",
+  "productFocusRecord": "docs/CURRENT_PRODUCT_FOCUS.md",
+  "frozenPredecessor": {
+    "name": "Logic Production Tutor v1",
+    "closureKind": "bounded_scope",
+    "closureRecord": "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md",
+    "ledger": "research/evaluation/logic-production-tutor-v1/ledger.json",
+    "historicalEvidenceMutable": false
+  },
+  "centralRule": "The model may help understand, retrieve, compare, and explain. Locally validated knowledge owns exact instructions.",
+  "gates": [
+    {
+      "id": "GP0",
+      "name": "frozen_tutor_v1_baseline_and_broad_product_gap_map",
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/GENERAL_PRODUCTION_TUTOR_V2_BASELINE_2026-08-06.md",
+        "docs/GENERAL_PRODUCTION_TUTOR_V2.md",
+        "docs/ARCHITECTURE_DECISION_RECORDS/0006-general-production-tutor-and-research.md",
+        "research/evaluation/general-production-tutor-v2/question-library.json",
+        "research/evaluation/general-production-tutor-v2/gap-map.json",
+        "research/scripts/build-general-tutor-corpus.py"
+      ],
+      "note": "332-question library (274 directly curated or source-grounded, 58 labeled paraphrase augmentation) and a gap map that drove knowledge work: it identified 8 high-priority uncovered domains, which curated strategy cards then closed to 0."
+    },
+    {
+      "id": "GP1",
+      "name": "open_ended_question_contract_and_router",
+      "status": "passed",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorQuestion.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorDomains.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorRouter.swift",
+        "tests/TestRunner/main.swift"
+      ],
+      "note": "9 question kinds and 100+ domains across 14 groups. TestRunner proves open questions with no Tutor v1 enum match still route and answer, while the nasal fast path still matches."
+    },
+    {
+      "id": "GP2",
+      "name": "lawful_source_acquisition_and_review_pipeline",
+      "status": "in_progress",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.swift",
+        "research/scripts/build-general-tutor-knowledge.py"
+      ],
+      "note": "PARTIAL. The typed source registry, nine review states, rights/handling classes, transcript-provenance fields, and the audiovisual-review gate are implemented and enforced: a source requiring audiovisual review cannot ground a trusted claim, and TestRunner proves that. NOT DONE: no network acquisition was performed, no YouTube or external source was ingested, and the ingest/extraction/review CLIs are not written. All current knowledge derives from reviewed artifacts already in the repository."
+    },
+    {
+      "id": "GP3",
+      "name": "general_production_knowledge_graph_and_retrieval",
+      "status": "passed",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorRetriever.swift",
+        "research/scripts/build-general-tutor-knowledge.py",
+        "tests/TestRunner/main.swift"
+      ],
+      "note": "15 sources, 458 claims, 68 strategies, 12 concepts, 2 preserved contradictions, all provenance-linked to reviewed in-repo artifacts and SHA-256 verified at load. Retrieval is deterministic lexical ranking with typed domain/kind/source filters, per-source diversity caps, and contradiction-aware inclusion. Chosen over embeddings for determinism, locality, inspectability, and zero added dependency."
+    },
+    {
+      "id": "GP4",
+      "name": "grounded_answer_synthesis_and_exact_instruction_validation",
+      "status": "passed",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorAnswer.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorCoordinator.swift",
+        "tests/TestRunner/main.swift"
+      ],
+      "note": "Versioned answer contract with strategy options, assumptions, tradeoffs, preservation, stop conditions, sources, and limitations. The validator rejects invented claim/source/concept/procedure IDs, uncited numeric recommendations, forbidden action or hearing claims, undisclosed material contradictions, personal results presented as universal, and overstated audio influence. All proven by adversarial TestRunner checks."
+    },
+    {
+      "id": "GP5",
+      "name": "adaptive_general_tutor_workflow_and_native_ui",
+      "status": "pending",
+      "evidence": [],
+      "note": "Not started. The engine is complete and exercised by CLI and TestRunner, but the native Guide Me surface still presents only the Tutor v1 lesson flow. No open-question input box, strategy-option cards, or source panel exists in the companion yet."
+    },
+    {
+      "id": "GP6",
+      "name": "personalization_and_confirmed_outcome_memory",
+      "status": "in_progress",
+      "evidence": [
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.swift"
+      ],
+      "note": "PARTIAL. PersonalOutcomeRecord is defined with explicit user-confirmation, and the answer validator rejects a personal result presented as universal. NOT DONE: no persistence, no profile store, no view/edit/forget/delete UI, and no ranking influence."
+    },
+    {
+      "id": "GP7",
+      "name": "broad_evaluation_adversarial_and_regression_evidence",
+      "status": "in_progress",
+      "evidence": [
+        "research/evaluation/TRACKSMITH_GENERAL_TUTOR_CORPUS_V1.json",
+        "research/evaluation/general-production-tutor-v2/offline-evaluation-report-2026-08-06.json",
+        "tools/GeneralTutorEvaluation/Sources/GeneralTutorEvaluation/main.swift",
+        "tests/TestRunner/main.swift"
+      ],
+      "note": "PARTIAL. 332/332 corpus cases pass across 89 domains and all 9 question kinds, with 20 adversarial cases and five general-tutor TestRunner checks; Tutor v1 (77/77) and all prior lanes remain green. NOT MET: the brief's 500-case and 100-multi-turn thresholds. Multi-turn general sequences are not implemented, and retrieval precision/recall cases with expected and forbidden card IDs are not written."
+    },
+    {
+      "id": "GP8",
+      "name": "real_project_and_direct_logic_validation",
+      "status": "pending",
+      "evidence": [],
+      "note": "Not started, and not startable without the owner. Requires 20 real production-question sessions on the owner's own work plus in-host validation of representative procedures. No owner session has been run in any milestone to date."
+    },
+    {
+      "id": "GP9",
+      "name": "closure_and_vocal_module_v1_handoff",
+      "status": "pending",
+      "evidence": [],
+      "note": "Blocked by GP5, GP7, and GP8."
+    }
+  ],
+  "baseline": {
+    "head": "b2fb62e02cfe08fa88791b0385c08d410b637340",
+    "branch": "codex/logic-production-tutor-v1",
+    "record": "docs/evidence/GENERAL_PRODUCTION_TUTOR_V2_BASELINE_2026-08-06.md"
+  },
+  "knowledgeCounts": {
+    "sources": 15,
+    "claims": 458,
+    "strategies": 68,
+    "concepts": 12,
+    "contradictions": 2,
+    "exactProcedures": 8,
+    "sourceTiers": {
+      "tierAPrimaryOrDirect": 1,
+      "tierBReviewedProfessionalPractice": 14,
+      "tierCDiscoveryOrAnecdotal": 0
+    },
+    "externallyIngestedSources": 0,
+    "youTubeSources": 0
+  },
+  "questionLibrary": {
+    "total": 332,
+    "directlyCuratedOrSourceGrounded": 274,
+    "curatedFromPrompt": 56,
+    "curatedByEngineer": 79,
+    "curatedFromSource": 139,
+    "generatedParaphrase": 58,
+    "briefThreshold": 500,
+    "meetsBriefThreshold": false
+  },
+  "boundaries": [
+    "no_provider_authored_instructions_values_paths_or_key_commands",
+    "exact_instructions_resolve_only_to_reviewed_procedure_catalog",
+    "numeric_recommendations_must_be_quoted_from_cited_reviewed_sources",
+    "research_results_remain_provisional_until_reviewed",
+    "no_full_public_transcript_or_video_payload_committed",
+    "no_audiovisual_review_claimed_from_captions_alone",
+    "personal_outcomes_never_generalized",
+    "audio_influence_never_overstated",
+    "tutor_never_mutates_the_au_graph",
+    "create_for_me_and_tutor_v1_must_not_regress"
+  ]
+}

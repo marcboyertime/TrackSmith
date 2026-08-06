@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "milestone": "TrackSmith Logic Production Tutor v1",
-  "status": "active",
+  "status": "closed_at_bounded_scope",
   "plan": "docs/LOGIC_PRODUCTION_TUTOR_V1.md",
   "openedAt": "2026-08-05",
   "productFocusRecord": "docs/CURRENT_PRODUCT_FOCUS.md",
@@ -77,12 +77,12 @@
     {
       "id": "T5",
       "name": "provider_enhanced_interpretation_without_provider_authored_instructions",
-      "status": "in_progress",
+      "status": "closed_bounded",
       "evidence": [
         "packages/ProductionTutor/Sources/ProductionTutor/TutorInterpretationContract.swift",
         "tests/TestRunner/main.swift"
       ],
-      "note": "The bounded symbolic TutorInterpretationProposal contract and its seven-stage fail-closed validator are implemented and adversarially tested with mocked payloads (invented issue/cause/procedure IDs, menu paths, key commands, claimed actions, and out-of-range values are all rejected). No live provider is wired into the tutor request path yet; the deterministic offline path is complete without one, so provider enhancement remains optional follow-on work."
+      "note": "CLOSED BOUNDED, NOT PASSED. The bounded symbolic proposal contract and its seven-stage fail-closed validator are implemented and adversarially tested with mocked payloads. No live provider was ever wired into the tutor request path; the deterministic offline path is the complete default. Provider integration is deferred to General Production Tutor v2."
     },
     {
       "id": "T6",
@@ -98,19 +98,22 @@
     {
       "id": "T7",
       "name": "direct_logic_12_3_user_mediated_validation",
-      "status": "in_progress",
+      "status": "closed_bounded",
       "evidence": [
         "docs/MANUAL_LOGIC_TUTOR_TESTS.md",
         "docs/evidence/LOGIC_12_3_TUTOR_V1_VALIDATION_2026-08-05.md"
       ],
-      "note": "Partially satisfied. Executed in Logic Pro 12.3 on 2026-08-05 with the signed build: insert, in-host playback capture (Audio arriving -12.1 dBFS; 14.9 s / 44100 Hz / 1 ch), Guide Me nasal lesson with four competing causes, exact reversible step cards, deterministic Done/Undo branching across two experiments, AU graph provably unchanged, offline provider throughout, checksummed 0600 persistence with a clean privacy scan, unchanged source SHA-256, restart restore, stale-authority demotion to historical, and Create For Me previews. Still open: owner self-evaluation on a real vocal (acceptance criterion 23), in-host revision/commit/bypass, and project save/reload. A pre-existing Create For Me defect was found and fixed during this run."
+      "note": "CLOSED BOUNDED, NOT PASSED. Executed in Logic Pro 12.3 on 2026-08-05 with the signed build: insert, live capture, Guide Me nasal lesson with four competing causes, exact reversible step cards, deterministic Done/Undo branching across two experiments, AU graph provably unchanged, offline operation, checksummed 0600 persistence with a clean privacy scan, unchanged source SHA-256, restart restore, stale-authority demotion, and Create For Me previews. NOT proven: owner self-evaluation on a real vocal (no perceptual evidence of any kind), in-host revision/commit/bypass, project save/reload, Thread Sanitizer. Carried forward to General Tutor v2 gate GP8."
     },
     {
       "id": "T8",
       "name": "tutor_v1_closure_and_vocal_module_v1_handoff",
-      "status": "pending",
-      "evidence": [],
-      "note": "Blocked by T7. The Vocal Module v1 handoff must be grounded in real tutor lessons; no owner lesson has been run, so writing it now would fabricate findings."
+      "status": "closed_bounded",
+      "evidence": [
+        "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md",
+        "docs/VOCAL_MODULE_V1_HANDOFF.md"
+      ],
+      "note": "Milestone closed at an explicitly documented bounded scope rather than as all-gates-passed. The Vocal Module v1 handoff is written but deliberately records UNRESOLVED for every field that would require owner sessions, because none were run. Vocal Module v1 must not begin on this evidence alone."
     }
   ],
   "baseline": {
@@ -149,14 +152,18 @@
       "T4",
       "T6"
     ],
-    "inProgress": [
+    "closedBounded": [
       "T5",
-      "T7"
-    ],
-    "pending": [
+      "T7",
       "T8"
     ],
-    "closed": false,
-    "vocalModuleV1HandoffReady": false
-  }
+    "pending": [],
+    "closed": true,
+    "closureKind": "bounded_scope",
+    "vocalModuleV1HandoffReady": false,
+    "vocalModuleV1HandoffNote": "Handoff written; evidence insufficient to begin implementation."
+  },
+  "closedAt": "2026-08-05",
+  "closureRecord": "docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md",
+  "successorMilestone": "TrackSmith General Production Tutor v2"
 }

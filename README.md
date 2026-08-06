@@ -32,12 +32,36 @@ TrackSmith has two permanent top-level modes in the native companion:
   locally, render three bounded level-matched previews, audition, revise,
   and commit explicitly.
 
-The active engineering focus is the Logic Production Tutor v1 vertical slice;
-see [`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md) and the
-[tutor ledger](research/evaluation/logic-production-tutor-v1/ledger.json).
-Tutor v1's offline nasal-vocal slice, procedure knowledge, corpus, native UI,
-and regression lanes are implemented; direct Logic 12.3 user-mediated
-validation (gate T7) remains pending and is not claimed.
+**Guide Me now accepts open-ended production questions.** You are not limited
+to a fixed list of problems: ask "Why does my chorus feel smaller than the
+verse?", "How do I tighten my MIDI piano without making it robotic?", or "What
+is pre-delay actually doing?" and TrackSmith routes the question across 9
+question kinds and 100+ production domains, retrieves reviewed knowledge
+cards, and returns a grounded answer with assumptions, one recommended first
+move, strategy options and their tradeoffs, what to listen for, what to
+preserve, when to stop, sources, and explicit limitations. Answers distinguish
+documented behavior, measured behavior, inference, professional-practice
+heuristic, subjective preference, personal result, and provisional research —
+they are never flattened into one confidence score. Where credible sources
+disagree, the disagreement is disclosed rather than resolved silently.
+
+Exact Logic instructions still come only from the reviewed procedure catalog,
+and any numeric recommendation must be quoted from a cited reviewed source or
+carried by a validated procedure — the answer validator rejects the
+alternative. TrackSmith will also tell you plainly when its reviewed knowledge
+does not cover your question.
+
+The active engineering focus is General Production Tutor v2;
+see [`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md), the
+[General Tutor v2 plan](docs/GENERAL_PRODUCTION_TUTOR_V2.md) and its
+[ledger](research/evaluation/general-production-tutor-v2/ledger.json). Logic
+Production Tutor v1 is closed at an explicitly
+[bounded scope](docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md).
+The open-domain engine passes 332/332 corpus cases offline across 89 domains.
+The native Guide Me surface still presents only the Tutor v1 lesson flow, so
+open questions are currently reachable through the CLI and tests rather than
+the app; no external source has been ingested; and no owner session or in-host
+validation of the broad tutor has been run. None of that is claimed.
 
 ## Current status
 

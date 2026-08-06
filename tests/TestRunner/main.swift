@@ -4371,7 +4371,231 @@ enum TestRunner {
         await tests.run("silent-window analysis series stay JSON-encodable") {
             try testSilentWindowSeriesEncodable(tests)
         }
+        await tests.run("general tutor routes open-ended questions without an enum match") {
+            try testGeneralTutorOpenRouting(tests)
+        }
+        await tests.run("general tutor knowledge base validates and resolves provenance") {
+            try testGeneralTutorKnowledgeIntegrity(tests)
+        }
+        await tests.run("general tutor answers stay grounded and honest") {
+            try testGeneralTutorAnswerGrounding(tests)
+        }
+        await tests.run("general tutor refuses unsupported capabilities") {
+            try testGeneralTutorCapabilityBoundaries(tests)
+        }
+        await tests.run("general tutor never overstates audio influence") {
+            try testGeneralTutorAudioInfluenceHonesty(tests)
+        }
         tests.finish()
+    }
+
+    /// The defining property of General Tutor v2: an ordinary production
+    /// question is routed and answered even though it matches no Tutor v1
+    /// issue enum case.
+    @MainActor private static func testGeneralTutorOpenRouting(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+        let router = GeneralTutorRouter()
+
+        // None of these are Tutor v1 issue-vocabulary cases.
+        let openQuestions: [(String, SourceType)] = [
+            ("Why does my chorus feel smaller than the verse?", .fullMix),
+            ("How do I tighten my MIDI piano without making it robotic?", .keyboard),
+            ("Should I move the notes to the tempo or make the tempo follow my performance?", .keyboard),
+            ("How do I make this synth feel wider without ruining mono compatibility?", .synth),
+            ("What should I do first when a mix feels crowded?", .fullMix),
+        ]
+        for (question, source) in openQuestions {
+            let intent = router.route(question: question, sourceType: source)
+            try tests.expect(
+                intent.recognizedTutorIssues.isEmpty,
+                "expected no Tutor v1 enum match for open question: \(question)"
+            )
+            try tests.expect(
+                !intent.primaryDomains.isEmpty,
+                "open question routed to no domain: \(question)"
+            )
+            let outcome = try coordinator.answer(
+                GeneralTutorRequest(question: question, sourceType: source)
+            )
+            try tests.expect(
+                outcome.answer.answerMode == .groundedAnswer,
+                "open question did not produce a grounded answer: \(question)"
+            )
+            try tests.expect(
+                !outcome.answer.directAnswer.isEmpty,
+                "empty answer for: \(question)"
+            )
+        }
+
+        // The Tutor v1 fast path must still be recognized when it applies.
+        let nasal = router.route(question: "I sound nasal.", sourceType: .vocal)
+        try tests.expect(
+            nasal.recognizedTutorIssues.contains(.nasalOrHonky),
+            "Tutor v1 fast path regressed for the nasal case"
+        )
+    }
+
+    @MainActor private static func testGeneralTutorKnowledgeIntegrity(_ tests: Harness) throws {
+        let base = try GeneralTutorKnowledgeBase.loadValidated()
+        try tests.expect(!base.claims.isEmpty, "knowledge base has no claims")
+        try tests.expect(!base.strategies.isEmpty, "knowledge base has no strategies")
+
+        // Every trusted card must resolve to a usable registered source.
+        for claim in base.claims where claim.reviewState.isTrusted {
+            guard let source = base.source(claim.sourceID) else {
+                throw CheckFailure(message: "claim \(claim.id) references unknown source")
+            }
+            try tests.expect(
+                source.isUsableForMaterialClaims,
+                "trusted claim \(claim.id) rests on an unusable source"
+            )
+        }
+        // A source needing audiovisual review may not ground a trusted claim.
+        var probe = base
+        probe.sources = probe.sources.map { source in
+            var source = source
+            if source.id == probe.claims.first?.sourceID {
+                source.requiresAudiovisualReview = true
+                source.audiovisualReviewCompleted = false
+            }
+            return source
+        }
+        try tests.expectThrows("transcript-only source was accepted for a trusted claim") {
+            try GeneralTutorKnowledgeValidator().validate(probe)
+        }
+    }
+
+    @MainActor private static func testGeneralTutorAnswerGrounding(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+        let base = try GeneralTutorKnowledgeBase.loadValidated()
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        let validator = GeneralTutorAnswerValidator(
+            base: base, procedureIDs: Set(catalog.procedures.map(\.id))
+        )
+
+        let outcome = try coordinator.answer(
+            GeneralTutorRequest(question: "Why does adding reverb make the vocal disappear?", sourceType: .vocal)
+        )
+        let answer = outcome.answer
+        try tests.expect(
+            !answer.knowledgeClaimIDs.isEmpty || !answer.relevantConceptIDs.isEmpty,
+            "grounded answer carried no citations"
+        )
+        try tests.expect(!answer.assumptions.isEmpty, "answer disclosed no assumptions")
+        try tests.expect(
+            !answer.currentContextLimitations.isEmpty,
+            "answer disclosed no context limitations"
+        )
+        for id in answer.knowledgeClaimIDs {
+            try tests.expect(base.claim(id) != nil, "answer cited unknown claim \(id)")
+        }
+        for id in answer.exactProcedureIDs {
+            try tests.expect(catalog.procedure(id) != nil, "answer cited unknown procedure \(id)")
+        }
+
+        // An invented source ID must fail validation.
+        var forged = answer
+        forged.knowledgeClaimIDs = ["claim.this.does.not.exist"]
+        try tests.expectThrows("invented claim ID was accepted") {
+            try validator.validate(forged)
+        }
+        // An invented procedure ID must fail validation.
+        var forgedProcedure = answer
+        forgedProcedure.exactProcedureIDs = ["tutor.invented.procedure.v1"]
+        try tests.expectThrows("invented procedure ID was accepted") {
+            try validator.validate(forgedProcedure)
+        }
+        // An uncited numeric recommendation must fail validation.
+        var forgedNumber = answer
+        forgedNumber.exactProcedureIDs = []
+        forgedNumber.strategyOptions = []
+        forgedNumber.knowledgeClaimIDs = []
+        forgedNumber.relevantConceptIDs = []
+        forgedNumber.directAnswer = "Set the shelf to 4200 Hz and cut 7 dB."
+        try tests.expectThrows("uncited numeric recommendation was accepted") {
+            try validator.validate(forgedNumber)
+        }
+        // A false action claim must fail validation.
+        var forgedClaim = answer
+        forgedClaim.directAnswer = "I changed the compressor for you and I listened to the result."
+        try tests.expectThrows("false action claim was accepted") {
+            try validator.validate(forgedClaim)
+        }
+    }
+
+    @MainActor private static func testGeneralTutorCapabilityBoundaries(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+        let refusals: [(String, SourceType)] = [
+            ("Click the compressor bypass for me.", .vocal),
+            ("Just fix my mix automatically.", .fullMix),
+            ("Bounce in place and replace the file.", .vocal),
+            ("Make me sound exactly like Billie Eilish.", .vocal),
+        ]
+        for (question, source) in refusals {
+            let outcome = try coordinator.answer(
+                GeneralTutorRequest(question: question, sourceType: source)
+            )
+            try tests.expect(
+                outcome.answer.answerMode == .capabilityLimitation,
+                "expected a capability limitation for: \(question)"
+            )
+            try tests.expect(
+                !outcome.answer.unsupportedCapabilities.isEmpty,
+                "capability limitation named no unsupported capability: \(question)"
+            )
+            try tests.expect(
+                outcome.answer.exactProcedureIDs.isEmpty,
+                "a refused request still produced exact procedures: \(question)"
+            )
+        }
+    }
+
+    /// The Tutor v1 conceptual gap this milestone fixes: a capture must not be
+    /// described as informing an answer it did not influence.
+    @MainActor private static func testGeneralTutorAudioInfluenceHonesty(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+
+        // No capture supplied: nothing may claim influence.
+        let dry = try coordinator.answer(
+            GeneralTutorRequest(question: "How do I build energy into the final chorus?", sourceType: .fullMix)
+        )
+        try tests.expect(
+            !dry.answer.audioInfluence.captureAvailable,
+            "claimed a capture where none was supplied"
+        )
+        try tests.expect(
+            dry.answer.audioInfluence.influencingMetricIdentifiers.isEmpty,
+            "claimed measurement influence without a capture"
+        )
+
+        // A capture whose measurements cannot resolve the question must be
+        // reported as available but non-resolving.
+        let sampleRate = 48_000.0
+        var samples = [Float](repeating: 0, count: Int(sampleRate))
+        for index in samples.indices {
+            samples[index] = Float(0.2 * sin(2 * Double.pi * 220 * Double(index) / sampleRate))
+        }
+        let analysis = SourceAwareAudioAnalyzer().analyze(
+            DSPCore.AudioBuffer(channels: [samples], sampleRate: sampleRate), as: .vocal
+        )
+        let grounded = try coordinator.answer(
+            GeneralTutorRequest(
+                question: "Why does my chorus feel smaller than the verse?",
+                sourceType: .fullMix,
+                analysis: analysis
+            )
+        )
+        try tests.expect(
+            grounded.answer.audioInfluence.captureAvailable,
+            "capture availability was not recorded"
+        )
+        let statement = grounded.answer.audioInfluence.statement.lowercased()
+        if grounded.answer.audioInfluence.influencingMetricIdentifiers.isEmpty {
+            try tests.expect(
+                !statement.contains("informed"),
+                "answer said the audio informed it while no metric influenced anything"
+            )
+        }
     }
 
     /// Regression for a defect found during direct Logic 12.3 tutor validation:

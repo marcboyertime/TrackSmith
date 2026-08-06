@@ -55,6 +55,18 @@ targets.
   is used at all, is the same bounded labeled text/measurement context class
   as Production Intelligence — never audio — and provider output is reduced
   to validated canonical IDs plus a bounded audit summary before persistence.
+- General tutor knowledge and sources: the generated knowledge base contains
+  paraphrased claims and TrackSmith-authored strategy/concept cards derived
+  from reviewed artifacts already in this repository, each with a source ID,
+  rights basis, and handling class. No full public transcript, video payload,
+  or copyrighted source text is committed. Source entries record whether a
+  transcript was creator-provided or automatic and whether audiovisual review
+  is required; a source needing that review cannot ground a trusted claim.
+  Any future user-owned course material stays local and ignored, with only
+  hashes, rights basis, and paraphrased notes retained.
+- Personal production outcomes: `PersonalOutcomeRecord` is local-only, created
+  only on explicit user confirmation, never cloud-synced, and never presented
+  as general knowledge. Persistence and deletion UI are not yet implemented.
 - Credentials: macOS Keychain service
   `com.marcboyer.tracksmith.provider-credentials`, provider-specific accounts,
   when-unlocked device-only accessibility; never logs, prompts, requests, App Group,

@@ -331,6 +331,8 @@ public struct TutorIssueVocabulary: Sendable {
             "click the", "click on logic", "press the button for me", "change it for me in logic",
             "control logic for me", "move the fader for me", "open logic and change",
             "do it in logic for me", "adjust logic yourself", "click logic",
+            "fix my mix automatically", "fix it automatically", "just fix my mix",
+            "fix my mix for me", "do it automatically", "automatically fix",
         ]) {
             unsupported.append(.hostAutomationRequested)
         }

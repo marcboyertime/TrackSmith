@@ -1,5 +1,51 @@
 # Changelog
 
+## 2026-08-06
+
+- Closed Logic Production Tutor v1 at an explicitly documented **bounded
+  scope** rather than as all-gates-passed. T0-T4 and T6 passed; T5 (contract
+  proven, no live provider ever wired), T7 (partial direct Logic run; no
+  perceptual evidence, no owner session), and T8 are recorded as closed
+  bounded. Added the closure record and `docs/VOCAL_MODULE_V1_HANDOFF.md`,
+  which deliberately records UNRESOLVED for every field that would require
+  owner sessions.
+- Opened **General Production Tutor v2**: plan, ADR 0006, gate ledger
+  (GP0-GP9), and baseline evidence at `b2fb62e`.
+- Removed the closed-vocabulary bottleneck. `GeneralTutorQuestionIntent`,
+  a 100+ domain taxonomy in 14 groups, 9 question kinds, and a deterministic
+  router that answers open-ended questions with no issue-enum match. The
+  Tutor v1 vocabulary is retained as a fast path that unlocks exact
+  procedures when it matches.
+- Added a typed knowledge model — claims, strategy cards, concept cards,
+  contradiction records, source registry, and personal-outcome records — with
+  nine review states, rights/handling classes, and an audiovisual-review gate
+  that blocks transcript-only grounding of claims depending on hearing or
+  seeing. Generated 15 sources, 458 claims, 68 strategies, 12 concepts, and
+  2 preserved contradictions from reviewed artifacts already in the
+  repository; SHA-256 verified and structurally validated at load.
+- Added deterministic lexical retrieval with typed filters, per-source
+  diversity caps, contradiction-aware inclusion, and explicit coverage
+  reporting; and a grounded answer contract whose validator rejects invented
+  IDs, uncited numeric recommendations, false action or hearing claims,
+  undisclosed contradictions, universalized personal results, and overstated
+  audio influence.
+- Fixed the Tutor v1 conceptual gap where a capture could be displayed as
+  evidence without influencing the lesson: `MeasurementRelevanceMap` records
+  which measurements actually informed an answer, and "a capture exists but
+  cannot resolve this question" is now a first-class outcome.
+- Added a 332-question library (274 directly curated or source-grounded, 58
+  labeled paraphrase augmentation), a gap map that drove knowledge work
+  (8 high-priority uncovered domains identified, then closed to 0 by curated
+  strategy cards), a 332-case evaluation corpus, and the
+  `GeneralTutorEvaluation` executable. 332/332 pass offline across 89 domains
+  and all 9 question kinds.
+- TestRunner grew from 83 to 88 checks; Tutor v1 remains 77/77 and all prior
+  lanes remain green.
+- Not done and not claimed: no external or YouTube source has been ingested,
+  the native Guide Me surface still presents only the Tutor v1 lesson flow,
+  personalization is types-only, and no owner session or in-host validation of
+  the broad tutor exists.
+
 ## 2026-08-05
 
 - Opened the Logic Production Tutor v1 milestone with a verified frozen

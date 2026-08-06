@@ -122,6 +122,46 @@ lessons carry safe authority references (instance, runtime epoch, capture
 snapshot) and demote to historical when the live session no longer matches.
 Tutor mode has no AU command path and cannot mutate the processing graph.
 
+## General Production Tutor v2 (open-domain answering)
+
+Layered on top of the Tutor v1 lesson engine, in the same companion-process
+`ProductionTutor` package (ADR 0006). Nothing here runs in the AU render path.
+
+```text
+open-ended question
+  → GeneralTutorRouter        9 question kinds; 100+ domains in 14 groups.
+                              No enum match required — unrecognized wording
+                              yields visible uncertainty, not a refusal. The
+                              Tutor v1 vocabulary is a fast path that, when it
+                              matches, unlocks exact validated procedures.
+  → GeneralTutorRetriever     Deterministic lexical ranking over reviewed
+                              knowledge cards with typed domain/kind/source
+                              filters, per-source diversity caps, and
+                              contradiction-aware inclusion. Coverage is
+                              reported (strong/partial/weak/none) and weak
+                              coverage is surfaced rather than papered over.
+  → GeneralTutorCoordinator   Synthesis plus MeasurementRelevanceMap, which
+                              decides whether any measurement can actually
+                              resolve the question.
+  → GeneralTutorAnswerValidator  Citation coverage; uncited-number rejection;
+                              forbidden action/hearing claims; undisclosed
+                              contradiction; personal-result generalization;
+                              overstated audio influence.
+  → GeneralTutorAnswerContract
+```
+
+Knowledge is five typed card kinds — claims, strategy cards, concept cards,
+contradiction records, and a source registry — plus `PersonalOutcomeRecord`
+for user-confirmed results. The generated base is SHA-256 verified at load and
+structurally validated before any card is used: a trusted claim cannot rest on
+a superseded source or one still requiring audiovisual review, and a reviewed
+strategy cannot be supported by unreviewed claims.
+
+Strategy cards are what make breadth honest. A domain with no exact procedure
+can still have a reviewed decision pattern — first experiment, why, tradeoffs,
+preservation, stopping rule, signs it is wrong, non-DSP alternatives. Exact
+Logic instructions remain catalog-only.
+
 ## Process and trust boundaries
 
 - The AU extension receives only its buses and host-supplied callbacks. It does not
