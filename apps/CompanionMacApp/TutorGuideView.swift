@@ -18,6 +18,15 @@ struct TutorGuideView: View {
             } else {
                 evidenceBanner
                 requestPanel
+                if let outcome = tutor.generalOutcome {
+                    GeneralAnswerView(
+                        outcome: outcome,
+                        depth: tutor.explanationDepth,
+                        startExperiment: { procedureID in
+                            beginExperiment(procedureID)
+                        }
+                    )
+                }
                 if let lesson = tutor.lesson {
                     lessonContent(lesson)
                 }
@@ -114,7 +123,11 @@ struct TutorGuideView: View {
                 .lineLimit(2...4)
                 HStack {
                     ForEach(
-                        ["I sound nasal", "It became nasal after I compressed it", "The s sounds are too sharp"],
+                        ["I sound nasal",
+                         "Why does my chorus feel smaller than the verse?",
+                         "How do I tighten my MIDI piano without making it robotic?",
+                         "What is pre-delay actually doing?",
+                         "I am stuck. What should I try next?"],
                         id: \.self
                     ) { chip in
                         Button(chip) { tutor.requestText = chip }
@@ -136,14 +149,23 @@ struct TutorGuideView: View {
                     .pickerStyle(.segmented)
                     .frame(width: 280)
                     Spacer()
-                    Button(tutor.lesson == nil ? "Start Lesson" : "Start New Lesson") {
-                        startLesson()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(
-                        isStartingLesson
-                            || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                    )
+                    // Ask is the default: any production question is accepted.
+                    // Start Lesson remains for the bounded vocal fast path.
+                    Button("Start Lesson") { startLesson() }
+                        .buttonStyle(.bordered)
+                        .disabled(
+                            isStartingLesson
+                                || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        )
+                        .help("Runs the bounded step-by-step vocal troubleshooting flow.")
+                    Button("Ask") { askQuestion() }
+                        .buttonStyle(.borderedProminent)
+                        .keyboardShortcut(.return, modifiers: [.command])
+                        .disabled(
+                            tutor.isAnswering
+                                || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        )
+                        .help("Answers any production question from reviewed knowledge.")
                 }
                 if !tutor.restoredNote.isEmpty {
                     Text(tutor.restoredNote).font(.caption).foregroundStyle(.secondary)
@@ -213,6 +235,31 @@ struct TutorGuideView: View {
                 capture = nil
             }
             tutor.startLesson(sourceType: sourceType, capture: capture)
+        }
+    }
+
+    /// Answers any open-ended production question. A capture is used only when
+    /// one already exists; asking never forces an analysis.
+    private func askQuestion() {
+        let sourceType = session.sourceType
+        Task {
+            // Ensure the analysis is current when a capture is present, so the
+            // measurement-relevance map has something real to work with.
+            _ = try? await session.tutorCaptureContext()
+            tutor.ask(sourceType: sourceType, analysis: session.sourceAwareAnalysis)
+        }
+    }
+
+    private func beginExperiment(_ procedureID: String) {
+        let sourceType = session.sourceType
+        Task {
+            var capture: TutorCaptureContext?
+            do { capture = try await session.tutorCaptureContext() } catch { capture = nil }
+            tutor.startGuidedExperiment(
+                procedureID: procedureID,
+                sourceType: sourceType,
+                capture: capture
+            )
         }
     }
 

@@ -77,9 +77,14 @@
     {
       "id": "GP5",
       "name": "adaptive_general_tutor_workflow_and_native_ui",
-      "status": "pending",
-      "evidence": [],
-      "note": "Not started. The engine is complete and exercised by CLI and TestRunner, but the native Guide Me surface still presents only the Tutor v1 lesson flow. No open-question input box, strategy-option cards, or source panel exists in the companion yet."
+      "status": "in_progress",
+      "evidence": [
+        "apps/CompanionMacApp/GeneralAnswerView.swift",
+        "apps/CompanionMacApp/TutorSessionModel.swift",
+        "apps/CompanionMacApp/TutorGuideView.swift",
+        "docs/evidence/GENERAL_TUTOR_V2_NATIVE_UI_2026-08-06.md"
+      ],
+      "note": "PARTIAL. Guide Me now takes any production question through an Ask action and renders the validated answer natively: interpreted kind and domains, confidence class, direct answer, disclosed assumptions, one recommended first move with listen-for and stop rule, ranked strategy cards with tradeoffs/preservation/stop rules, contradiction disclosures, collapsible preserve/risk/non-DSP/cannot-see detail, source list with evidence class, the audio-influence statement, and the teaching principle. A strategy option backed by a reviewed procedure offers \"Start guided experiment\", which hands off into the existing validated Tutor v1 step flow. Verified live in the signed build against the MIDI-timing acceptance question. NOT DONE: no Research This control, no memory controls, and no structured user-context entry beyond the existing chain reporter."
     },
     {
       "id": "GP6",

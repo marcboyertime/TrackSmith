@@ -41,10 +41,20 @@
   and all 9 question kinds.
 - TestRunner grew from 83 to 88 checks; Tutor v1 remains 77/77 and all prior
   lanes remain green.
+- Wired the open-domain engine into the native Guide Me surface: an **Ask**
+  action accepts any production question and renders the validated answer —
+  interpreted kind and domains, confidence class, direct answer, disclosed
+  assumptions, one recommended first move with listen-for and stop rule,
+  ranked strategy cards with tradeoffs and preservation concerns,
+  contradiction disclosures, collapsible detail, sources with evidence class,
+  the audio-influence statement, and the teaching principle. A strategy option
+  backed by a reviewed procedure offers "Start guided experiment", handing off
+  into the existing validated step flow. Verified live in the signed build
+  against the MIDI-timing question, which has no Tutor v1 enum match.
 - Not done and not claimed: no external or YouTube source has been ingested,
-  the native Guide Me surface still presents only the Tutor v1 lesson flow,
-  personalization is types-only, and no owner session or in-host validation of
-  the broad tutor exists.
+  there is no Research This control or memory UI, personalization remains
+  types-only, and no owner session or in-host validation of the broad tutor
+  exists.
 
 ## 2026-08-05
 
