@@ -7,7 +7,7 @@ struct FeedbackBarView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.legacy6) {
-            Text("What happened?").font(.caption.weight(.semibold))
+            Text("What happened?").font(Theme.Font.section)
             HStack(spacing: Theme.Spacing.eight) {
                 ForEach(step.supportedFeedback, id: \.self) { feedback in
                     Button(feedbackLabel(feedback)) { tutor.send(feedback) }

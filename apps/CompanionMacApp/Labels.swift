@@ -11,22 +11,112 @@ func instanceSummary(_ instance: PluginInstanceRecord) -> String {
     return "\(Int(sampleRate)) Hz · \(channels == 1 ? "mono" : "stereo")"
 }
 
+func instanceSummaryIsMeasured(_ instance: PluginInstanceRecord) -> Bool {
+    instance.sampleRate != nil && instance.channelCount != nil
+}
+
 func intentList(_ goals: [InterpretedProductionGoal]) -> String {
     goals.isEmpty
         ? "none"
         : goals.map { "\($0.direction.rawValue) \($0.term.rawValue)" }.joined(separator: ", ")
 }
 
-func evidenceText(_ observation: ProductionEvidenceObservation) -> String {
+struct EvidenceDisplay {
+    let name: String
+    let measuredValue: String
+    let isMeasuredValue: Bool
+    let inspectionText: String
+}
+
+func evidenceDisplay(for observation: ProductionEvidenceObservation) -> EvidenceDisplay {
     let identifier = observation.metricIdentifier ?? "no measured metric"
-    let measured: String
+    let confidence = Int((observation.confidence * 100).rounded())
+    let measuredValue: String
     if let value = observation.value {
-        measured = String(format: "%.4g %@", value, observation.unit ?? "")
+        measuredValue = String(format: "%.4g %@", value, observation.unit ?? "")
             .trimmingCharacters(in: .whitespaces)
     } else {
-        measured = "unavailable"
+        measuredValue = "unavailable"
     }
-    return "\(identifier): \(measured) · confidence \(Int((observation.confidence * 100).rounded()))% · \(observation.relationship.rawValue)"
+    return EvidenceDisplay(
+        name: observation.metricIdentifier.flatMap(metricDisplayName) ?? identifier,
+        measuredValue: measuredValue,
+        isMeasuredValue: observation.value != nil,
+        inspectionText: "\(identifier) · confidence \(confidence)%"
+    )
+}
+
+/// These names expand only tokens that are present in the identifier; unknown
+/// identifiers stay raw so the display cannot imply an interpretation.
+func metricDisplayName(_ identifier: String) -> String? {
+    switch identifier {
+    case "vocal_120_350_hz_energy_ratio", "bass_120_350_hz_energy_ratio":
+        "Low-mid energy ratio (120–350 Hz)"
+    case "vocal_200_500_hz_energy_ratio":
+        "200–500 Hz energy ratio"
+    case "vocal_5_10_khz_energy_ratio":
+        "5–10 kHz energy ratio"
+    case "vocal_10_20_khz_energy_ratio":
+        "10–20 kHz energy ratio"
+    case "vocal_high_frequency_burst_density_per_second", "vocal_low_frequency_burst_density_per_second":
+        identifier.contains("high_frequency")
+            ? "High-frequency burst density (per second)"
+            : "Low-frequency burst density (per second)"
+    case "level_variability_p90_p10_db":
+        "Level variability (P90–P10)"
+    case "drums_positive_spectral_flux_p90", "bass_positive_spectral_flux_p90", "source_positive_spectral_flux_p90":
+        "Positive spectral flux (P90)"
+    case "drums_onset_candidate_density_per_second":
+        "Onset candidate density (per second)"
+    case "drums_crest_factor_p90", "bass_crest_factor_p90", "mix_crest_factor_p90":
+        "Crest factor (P90)"
+    case "drums_post_onset_sustain_ratio":
+        "Post-onset sustain ratio"
+    case "drums_transient_20_200_hz_energy_ratio":
+        "Transient energy ratio (20–200 Hz)"
+    case "drums_transient_5_10_khz_energy_ratio":
+        "Transient energy ratio (5–10 kHz)"
+    case "drums_2_5_khz_energy_ratio", "source_2_5_khz_energy_ratio":
+        "2–5 kHz energy ratio"
+    case "bass_sub_share_20_120_hz":
+        "Sub share (20–120 Hz)"
+    case "spectral_occupied_bin_fraction":
+        "Spectral occupied-bin fraction"
+    case "maximum_third_octave_concentration_ratio":
+        "Maximum third-octave concentration ratio"
+    case "side_energy_share":
+        "Side energy share"
+    case "mono_sum_energy_ratio":
+        "Mono-sum energy ratio"
+    case "low_band_side_energy_share":
+        "Low-band side energy share"
+    case "mix_below_250_hz_energy_ratio":
+        "Below 250 Hz energy ratio"
+    case "mix_250_hz_4_khz_energy_ratio":
+        "250 Hz–4 kHz energy ratio"
+    case "mix_above_4_khz_energy_ratio":
+        "Above 4 kHz energy ratio"
+    case "mix_spectral_slope_db_per_octave":
+        "Spectral slope (dB per octave)"
+    case "maximum_short_term_loudness_lufs":
+        "Maximum short-term loudness (LUFS)"
+    case "loudness_range_lu":
+        "Loudness range (LU)"
+    default:
+        nil
+    }
+}
+
+let hypothesisDisclaimer = "This is one hypothesis, not a measured fact."
+
+func hypothesisProse(_ fragment: String) -> String {
+    let withoutDisclaimer = fragment.replacingOccurrences(of: hypothesisDisclaimer, with: "")
+    guard withoutDisclaimer != fragment else { return fragment }
+    var prose = withoutDisclaimer
+    var joiners = CharacterSet.whitespacesAndNewlines
+    joiners.insert(charactersIn: "|·—–:;")
+    prose = prose.trimmingCharacters(in: joiners)
+    return prose
 }
 
 func sourceLabel(_ type: SourceType) -> String {

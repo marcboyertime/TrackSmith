@@ -12,7 +12,7 @@ struct LessonContentView: View {
                 VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
                     Text(question)
                     Text("Answer by editing your request above and starting the lesson again.")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
                 .padding(Theme.Spacing.eight)
@@ -28,7 +28,7 @@ struct LessonContentView: View {
                 VStack(alignment: .leading, spacing: Theme.Spacing.legacy6) {
                     ForEach(lesson.unresolvedLimitations, id: \.self) { limitation in
                         Label(limitation, systemImage: "hand.raised")
-                            .font(Theme.Font.caption)
+                            .font(Theme.Font.meta)
                     }
                 }
                 .padding(Theme.Spacing.eight)
@@ -41,7 +41,7 @@ struct LessonContentView: View {
 
         if !tutor.statusMessage.isEmpty {
             Text(tutor.statusMessage)
-                .font(Theme.Font.caption)
+                .font(Theme.Font.meta)
                 .foregroundStyle(.secondary)
         }
 

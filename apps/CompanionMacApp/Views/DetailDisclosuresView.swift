@@ -10,25 +10,25 @@ struct DetailDisclosuresView: View {
             DisclosureGroup("What to preserve") {
                 SortedUniqueBulletsView(items: answer.preservationChecks)
             }
-            .font(Theme.Font.caption)
+            .font(Theme.Font.meta)
         }
         if !answer.risksAndSideEffects.isEmpty {
             DisclosureGroup("What could go wrong") {
                 SortedUniqueBulletsView(items: answer.risksAndSideEffects)
             }
-            .font(Theme.Font.caption)
+            .font(Theme.Font.meta)
         }
         if !answer.nonDSPPossibilities.isEmpty {
             DisclosureGroup("Non-processing options") {
                 SortedUniqueBulletsView(items: answer.nonDSPPossibilities)
             }
-            .font(Theme.Font.caption)
+            .font(Theme.Font.meta)
         }
         if !answer.currentContextLimitations.isEmpty {
             DisclosureGroup("What TrackSmith cannot see") {
                 SortedUniqueBulletsView(items: answer.currentContextLimitations)
             }
-            .font(Theme.Font.caption)
+            .font(Theme.Font.meta)
         }
     }
 }

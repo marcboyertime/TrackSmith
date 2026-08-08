@@ -6,6 +6,7 @@ enum CardStyle {
     case unsupported
     case firstMove
     case strategy
+    case hypothesis
     case contradiction
 }
 
@@ -42,6 +43,11 @@ struct Card<Content: View>: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
         case .strategy:
+            content()
+                .padding(Theme.Spacing.legacy10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+        case .hypothesis:
             content()
                 .padding(Theme.Spacing.legacy10)
                 .frame(maxWidth: .infinity, alignment: .leading)

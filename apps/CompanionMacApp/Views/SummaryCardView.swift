@@ -18,21 +18,21 @@ struct SummaryCardView: View {
                     Label(item, systemImage: "lock.shield").foregroundStyle(.secondary)
                 }
                 Text(summary.principleToRemember)
-                    .font(.callout.weight(.semibold))
+                    .font(Theme.Font.body.weight(.semibold))
                     .padding(.top, Theme.Spacing.four)
                 ForEach(summary.remainingUncertainty, id: \.self) { item in
-                    Text(item).font(Theme.Font.caption).foregroundStyle(.secondary)
+                    Text(item).font(Theme.Font.meta).foregroundStyle(.secondary)
                 }
                 if !lesson.conceptsPracticed.isEmpty {
                     Divider()
-                    Text("Concepts practiced").font(.caption.weight(.semibold))
+                    Text("Concepts practiced").font(Theme.Font.section)
                     ForEach(lesson.conceptsPracticed, id: \.self) { concept in
                         Label(tutor.formatter.conceptLabel(concept), systemImage: "graduationcap")
-                            .font(Theme.Font.caption)
+                            .font(Theme.Font.meta)
                     }
                 }
             }
-            .font(Theme.Font.callout)
+            .font(Theme.Font.body)
             .padding(Theme.Spacing.eight)
         }
     }

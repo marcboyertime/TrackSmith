@@ -9,7 +9,7 @@ struct UnsupportedCardView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.four) {
                 ForEach(answer.unsupportedCapabilities, id: \.self) { capability in
                     Label("Not something TrackSmith does: \(capability)", systemImage: "hand.raised")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                 }
             }
         }

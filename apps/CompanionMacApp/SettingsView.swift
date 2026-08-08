@@ -14,7 +14,7 @@ struct SettingsView: View {
                     }
                     .frame(width: 300)
                     Text(model.activeProviderDescription)
-                        .font(Theme.Font.caption.monospaced())
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                     Spacer()
                 }
@@ -27,7 +27,7 @@ struct SettingsView: View {
                         isOn: $model.cloudReasoningConsent
                     )
                     Text("Captured audio is never uploaded. Provider output is untrusted, schema-validated, capability-checked, state-resolved, and converted to local deterministic DSP only after every gate passes.")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
 
@@ -40,19 +40,19 @@ struct SettingsView: View {
                         Button("Remove", role: .destructive) { model.deleteProviderCredential() }
                     }
                     Text(model.credentialStatus)
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
             } else if model.providerSelection == .appleOnDevice {
                 Section("Provider Availability") {
                     Text("Apple's system language model interprets bounded labeled context entirely on this Mac. It uses no API key, receives no raw audio, and has no authority over DSP or Logic state. \(model.credentialStatus)")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
             } else {
                 Section("Provider Availability") {
                     Text("The deterministic offline provider remains available when credentials, consent, networking, or a cloud provider are unavailable.")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
             }

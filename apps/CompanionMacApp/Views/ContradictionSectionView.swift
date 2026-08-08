@@ -8,9 +8,9 @@ struct ContradictionSectionView: View {
         Card(style: .contradiction) {
             VStack(alignment: .leading, spacing: Theme.Spacing.legacy6) {
                 Label("Credible sources disagree", systemImage: "exclamationmark.bubble")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.Font.section)
                 ForEach(answer.contradictionDisclosures, id: \.self) { disclosure in
-                    Text(disclosure).font(Theme.Font.caption).foregroundStyle(.secondary)
+                    Text(disclosure).font(Theme.Font.meta).foregroundStyle(.secondary)
                 }
             }
         }

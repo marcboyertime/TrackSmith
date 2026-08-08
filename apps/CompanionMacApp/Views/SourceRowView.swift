@@ -9,10 +9,10 @@ struct SourceRowView: View {
     var body: some View {
         if let source = outcome.retrieved.claims.first(where: { $0.sourceID == id }) {
             Text("• \(id) — \(evidenceLabel(source.evidenceClass))")
-                .font(.caption2)
+                .font(Theme.Font.meta)
                 .foregroundStyle(.secondary)
         } else {
-            Text("• \(id)").font(.caption2).foregroundStyle(.secondary)
+            Text("• \(id)").font(Theme.Font.meta).foregroundStyle(.secondary)
         }
     }
 }

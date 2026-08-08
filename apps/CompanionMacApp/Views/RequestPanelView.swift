@@ -28,7 +28,7 @@ struct RequestPanelView: View {
                     ) { chip in
                         Button(chip) { tutor.requestText = chip }
                             .buttonStyle(.borderless)
-                            .font(Theme.Font.caption)
+                            .font(Theme.Font.meta)
                             .padding(.horizontal, Theme.Spacing.eight)
                             .padding(.vertical, Theme.Spacing.four)
                             .background(.quaternary, in: Capsule())
@@ -65,7 +65,7 @@ struct RequestPanelView: View {
                         .help("Answers any production question from reviewed knowledge.")
                 }
                 if !tutor.restoredNote.isEmpty {
-                    Text(tutor.restoredNote).font(Theme.Font.caption).foregroundStyle(.secondary)
+                    Text(tutor.restoredNote).font(Theme.Font.meta).foregroundStyle(.secondary)
                 }
             }
             .padding(Theme.Spacing.eight)

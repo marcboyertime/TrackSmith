@@ -9,7 +9,7 @@ struct StrategySectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
             Text("Ways to approach it")
-                .font(.subheadline.weight(.semibold))
+                .font(Theme.Font.section)
             ForEach(Array(answer.strategyOptions.enumerated()), id: \.offset) { index, option in
                 StrategyCardView(
                     option: option,

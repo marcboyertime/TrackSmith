@@ -9,7 +9,7 @@ struct HypothesesPanelView: View {
         GroupBox("Possible causes — deliberately more than one") {
             VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
                 Text(tutor.formatter.hypothesisIntro(for: lesson))
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
                 ForEach(Array(lesson.hypotheses.enumerated()), id: \.offset) { index, hypothesis in
                     HStack(alignment: .top, spacing: Theme.Spacing.eight) {
@@ -17,10 +17,10 @@ struct HypothesesPanelView: View {
                             .foregroundStyle(Theme.Colors.hypothesisColor(for: hypothesis.status))
                         VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
                             Text("\(index + 1). \(hypothesis.summary)")
-                                .font(Theme.Font.caption)
+                                .font(Theme.Font.meta)
                             if hypothesis.status != .open {
                                 Text(hypothesisStatusLabel(hypothesis.status))
-                                    .font(.caption2)
+                                    .font(Theme.Font.meta)
                                     .foregroundStyle(Theme.Colors.hypothesisColor(for: hypothesis.status))
                             }
                         }

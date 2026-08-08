@@ -20,6 +20,7 @@ struct PreviewPanelView: View {
                             subtitle: variant.status == .valid
                                 ? String(format: "%+.2f dB match", variant.loudnessMatchGainDB)
                                 : "Rejected",
+                            subtitleIsMeasured: variant.status == .valid,
                             selected: model.selectedAuditionIndex == index + 1,
                             warning: variant.warnings.first ?? variant.rejectionReasons.first,
                             working: model.workingPlanIsVariant(variant),
@@ -31,6 +32,7 @@ struct PreviewPanelView: View {
                         PreviewCard(
                             title: "Working Revision",
                             subtitle: String(format: "%+.2f dB match", revision.loudnessMatchGainDB),
+                            subtitleIsMeasured: true,
                             selected: model.selectedAuditionIndex == workingIndex,
                             warning: revision.warnings.first,
                             working: true

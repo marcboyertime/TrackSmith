@@ -71,7 +71,7 @@ struct CompanionContentView: View {
                 Divider()
 
                 Text("Sessions")
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, Theme.Spacing.twelve)
 
@@ -88,7 +88,7 @@ struct CompanionContentView: View {
                             VStack(alignment: .leading, spacing: Theme.Spacing.legacy3) {
                                 Text(instance.contextName ?? "TrackSmith")
                                 Text(instanceSummary(instance))
-                                    .font(Theme.Font.caption.monospacedDigit())
+                                    .font(instanceSummaryIsMeasured(instance) ? Theme.Font.data : Theme.Font.meta)
                                     .foregroundStyle(.secondary)
                             }
                             .tag(instance.id)
@@ -103,7 +103,7 @@ struct CompanionContentView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
                     Text(mode.subtitle)
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                     StatusHeaderView(model: model)
                     CapturePanelView(model: model)

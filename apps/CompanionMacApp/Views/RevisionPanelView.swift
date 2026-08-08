@@ -13,7 +13,7 @@ struct RevisionPanelView: View {
                     ForEach(["Use less compression", "Undo only the compression", "Lock the EQ", "Remove the compression"], id: \.self) { chip in
                         Button(chip) { model.revisionPrompt = chip }
                             .buttonStyle(.borderless)
-                            .font(Theme.Font.caption)
+                            .font(Theme.Font.meta)
                             .padding(.horizontal, Theme.Spacing.eight)
                             .padding(.vertical, Theme.Spacing.four)
                             .background(.quaternary, in: Capsule())
@@ -28,7 +28,7 @@ struct RevisionPanelView: View {
                         )
                 }
                 Text("Edits derive from structured working state. Unmentioned production nodes and every locked node remain intact; measured preview gain is recalibrated after audio changes.")
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
             }
             .padding(Theme.Spacing.eight)

@@ -9,17 +9,17 @@ struct FirstMoveCardView: View {
         Card(style: .firstMove) {
             VStack(alignment: .leading, spacing: Theme.Spacing.legacy6) {
                 Text("TRY THIS FIRST")
-                    .font(.caption.weight(.semibold))
+                    .font(Theme.Font.section)
                     .foregroundStyle(.tint)
-                Text(move).font(Theme.Font.callout)
+                Text(move).font(Theme.Font.body)
                 if !answer.whatToListenFor.isEmpty {
                     Label(answer.whatToListenFor.prefix(2).joined(separator: " "), systemImage: "ear")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
                 if let stop = answer.stopConditions.first {
                     Label("Stop when: \(stop)", systemImage: "hand.raised.circle")
-                        .font(Theme.Font.caption)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
             }

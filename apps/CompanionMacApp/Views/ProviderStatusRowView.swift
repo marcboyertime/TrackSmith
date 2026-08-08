@@ -9,17 +9,17 @@ struct ProviderStatusRowView: View {
                 .foregroundStyle(model.providerSelection.usesCloud ? .blue : .secondary)
             VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
                 Text(model.activeProviderDescription)
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                 if model.providerSelection.usesCloud {
                     Text(model.cloudReasoningConsent ? "Cloud consent: granted" : "Cloud consent: not granted")
-                        .font(Theme.Font.caption2)
+                        .font(Theme.Font.meta)
                         .foregroundStyle(.secondary)
                 }
             }
             Spacer()
             SettingsLink {
                 Label("Settings", systemImage: "gear")
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
             }
         }
         .padding(.horizontal, Theme.Spacing.eight)

@@ -10,7 +10,7 @@ struct EvidenceFooterView: View {
             // The audio-honesty statement: says exactly what the capture did
             // or did not contribute.
             Label(answer.audioInfluence.statement, systemImage: "waveform.badge.magnifyingglass")
-                .font(.caption2)
+                .font(Theme.Font.meta)
                 .foregroundStyle(.secondary)
             if !answer.sourceIDs.isEmpty {
                 DisclosureGroup("Sources (\(answer.sourceIDs.count))") {
@@ -21,16 +21,16 @@ struct EvidenceFooterView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .font(Theme.Font.caption)
+                .font(Theme.Font.meta)
             }
             if let principle = answer.teachingPrinciple {
                 Label(principle, systemImage: "graduationcap")
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
             }
             if answer.listeningRemainsDecisive {
                 Text("Listening remains decisive. None of this proves a cause.")
-                    .font(.caption2)
+                    .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
             }
         }

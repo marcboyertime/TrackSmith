@@ -3,6 +3,7 @@ import SwiftUI
 struct PreviewCard: View {
     var title: String
     var subtitle: String
+    var subtitleIsMeasured = false
     var selected: Bool
     var warning: String?
     var working = false
@@ -14,17 +15,19 @@ struct PreviewCard: View {
             Button(action: action) {
                 VStack(alignment: .leading, spacing: Theme.Spacing.legacy6) {
                     HStack {
-                        Text(title).font(.headline)
+                        Text(title).font(Theme.Font.section)
                         if working {
                             Image(systemName: "pencil.circle.fill")
                                 .foregroundStyle(.tint)
                                 .accessibilityLabel("Working plan")
                         }
                     }
-                    Text(subtitle).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                    Text(subtitle)
+                        .font(subtitleIsMeasured ? Theme.Font.data : Theme.Font.meta)
+                        .foregroundStyle(.secondary)
                     if let warning {
                         Label(warning, systemImage: "exclamationmark.triangle")
-                            .font(.caption2)
+                            .font(Theme.Font.meta)
                             .foregroundStyle(.orange)
                             .lineLimit(2)
                     }
@@ -37,7 +40,7 @@ struct PreviewCard: View {
             .buttonStyle(.plain)
             if let useAction {
                 Button(working ? "Working Plan" : "Use as Working") { useAction() }
-                    .font(.caption)
+                    .font(Theme.Font.meta)
                     .buttonStyle(.borderless)
                     .disabled(working)
             }

@@ -7,10 +7,10 @@ struct ResearchControlView: View {
     var body: some View {
         if tutor.researchAvailable {
             Toggle("Research current sources", isOn: .constant(false))
-                .font(Theme.Font.caption)
+                .font(Theme.Font.meta)
         } else {
             Label("Research This: not built yet", systemImage: "globe.badge.chevron.backward")
-                .font(.caption2)
+                .font(Theme.Font.meta)
                 .foregroundStyle(.secondary)
                 .help("Answers come only from reviewed local knowledge. Live source research is specified but not implemented, so TrackSmith will tell you when its knowledge does not cover a question rather than searching.")
         }

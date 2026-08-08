@@ -62,12 +62,10 @@ enum Theme {
     }
 
     enum Font {
-        static let body: SwiftUI.Font = .body
-        static let headline: SwiftUI.Font = .headline
-        static let subheadline: SwiftUI.Font = .subheadline
-        static let callout: SwiftUI.Font = .callout
-        static let caption: SwiftUI.Font = .caption
-        static let caption2: SwiftUI.Font = .caption2
-        static let title3: SwiftUI.Font = .title3
+        static let display: SwiftUI.Font = .system(size: 20, weight: .semibold)
+        static let section: SwiftUI.Font = .system(size: 13, weight: .semibold)
+        static let body: SwiftUI.Font = .system(size: 16, weight: .regular)
+        static let meta: SwiftUI.Font = .system(size: 11, weight: .regular)
+        static let data: SwiftUI.Font = .system(size: 11, weight: .regular, design: .monospaced)
     }
 }

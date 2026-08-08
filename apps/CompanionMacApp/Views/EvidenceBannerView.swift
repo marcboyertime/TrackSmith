@@ -10,8 +10,8 @@ struct EvidenceBannerView: View {
                 Image(systemName: evidenceSymbol)
                     .foregroundStyle(evidenceColor)
                 VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
-                    Text(evidenceTitle).font(.subheadline.weight(.semibold))
-                    Text(evidenceDetail).font(Theme.Font.caption).foregroundStyle(.secondary)
+                    Text(evidenceTitle).font(Theme.Font.section)
+                    Text(evidenceDetail).font(Theme.Font.meta).foregroundStyle(.secondary)
                 }
                 Spacer()
             }

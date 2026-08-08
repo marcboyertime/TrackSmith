@@ -7,16 +7,16 @@ struct InterpretationHeaderView: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
             Text(kindLabel(answer.questionKind).uppercased())
-                .font(.caption.weight(.semibold))
+                .font(Theme.Font.section)
                 .foregroundStyle(.tint)
             if !answer.domains.isEmpty {
                 Text(answer.domains.prefix(3).map(domainLabel).joined(separator: " · "))
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
             }
             Spacer()
             Text(confidenceLabel(answer.confidenceClass))
-                .font(Theme.Font.caption)
+                .font(Theme.Font.meta)
                 .foregroundStyle(.secondary)
         }
     }

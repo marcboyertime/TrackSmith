@@ -10,7 +10,7 @@ struct ActionBarView: View {
             Button("Rewind") { model.rewind() }
                 .disabled(model.previewManifest == nil)
             Text("A/B switching stays sample-synchronized")
-                .font(Theme.Font.caption)
+                .font(Theme.Font.meta)
                 .foregroundStyle(.secondary)
             Button("Undo Edit") { model.undoWorkingChange() }
                 .disabled(!model.canUndoWorking || model.isBusy)

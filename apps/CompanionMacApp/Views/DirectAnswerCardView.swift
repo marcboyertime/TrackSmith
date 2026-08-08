@@ -15,13 +15,13 @@ struct DirectAnswerCardView: View {
                         VStack(alignment: .leading, spacing: Theme.Spacing.four) {
                             ForEach(answer.assumptions, id: \.self) { assumption in
                                 Text("• " + assumption)
-                                    .font(Theme.Font.caption)
+                                    .font(Theme.Font.meta)
                                     .foregroundStyle(.secondary)
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .font(Theme.Font.caption)
+                    .font(Theme.Font.meta)
                 }
             }
         }
