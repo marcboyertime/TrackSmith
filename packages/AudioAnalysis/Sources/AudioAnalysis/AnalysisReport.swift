@@ -56,7 +56,21 @@ public struct MetricSeries: Codable, Equatable, Sendable {
     ) {
         self.identifier = identifier
         self.unit = unit
-        self.values = values
+        // Series values must remain JSON-encodable. A legitimately silent
+        // window makes a logarithmic metric -infinity (short-term LUFS over
+        // digital silence is the observed case), and `JSONEncoder` refuses to
+        // encode a nonfinite `Double`. Scalar metrics already sanitize; this
+        // is the same guarantee for timelines. Nonfinite values are clamped to
+        // the declared valid range when one exists so the floor stays
+        // meaningful rather than becoming a fabricated zero.
+        self.values = values.map { value in
+            if value.isFinite {
+                guard let validRange else { return value }
+                return min(max(value, validRange.lowerBound), validRange.upperBound)
+            }
+            guard let validRange else { return 0 }
+            return value == .infinity ? validRange.upperBound : validRange.lowerBound
+        }
         self.startSeconds = startSeconds
         self.hopSeconds = hopSeconds
         self.windowSizeFrames = windowSizeFrames

@@ -60,10 +60,11 @@ implemented `ProcessingNode` can enter a TrackSmith graph, and only a separately
 proven capability adapter can request host state. A deterministic 18-fixture suite
 and 200-identity campaign ledger define the empirical lane. Direct runs are
 versioned, artifact-hash-audited records; generated provider context exposes only
-their bounded status, run IDs, and claim-limited summary. The current campaign is
-191 `not_run`, nine `partial` runs, and zero `complete`: Bitcrusher,
-Channel EQ, Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo
-Delay, and Tape Delay each have bounded direct evidence.
+their bounded status, run IDs, and claim-limited summary. The current campaign ledger records
+189 `not_run`, 11 `partial` runs, and zero `complete`: Bitcrusher, Channel EQ,
+Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo Delay,
+Tape Delay, Adaptive Limiter, and Direction Mixer each have bounded direct
+evidence.
 Even the partial entry keeps exact implementation internals false and retains the
 advisory-only execution boundary. Undocumented transfer behavior and perceptual
 preference remain measurement/listening questions.
@@ -81,6 +82,97 @@ model is connected directly to raw DSP parameters, and no individual descriptor
 is promoted to a perceptual adjective. The detailed provider, context, validation,
 credential and persistent-conversation architecture is authoritative in
 [`PRODUCTION_INTELLIGENCE.md`](PRODUCTION_INTELLIGENCE.md).
+
+## ProductionTutor companion layer (Guide Me)
+
+The user-mediated tutor is a separate companion-process package,
+`ProductionTutor` (ADR 0005). `ProductionIntelligence` does not depend on it,
+and nothing tutor-related runs in the AU render path — the AU contributes only
+its existing bounded capture and connection.
+
+```text
+user request
+  → local TutorIssueVocabulary (recognition + negation; aliases are never
+    proof of cause)
+  → TutorCauseModel: competing cause hypotheses, never prematurely collapsed
+  → TutorContextBuilder: bounded evidence from the local SourceAwareAnalyzer
+    (descriptive, explicitly not phoneme-aware) plus the user-reported chain
+  → local procedure retrieval from the generated reviewed catalog
+    (research/knowledge/logic-pro-12.3-tutor-procedures.json → SHA-256-checked
+    typed Swift; fail-closed TutorKnowledgeValidator)
+  → deterministic TutorPlanner → TutorLessonValidator → visible lesson
+  → immutable feedback events → deterministic TutorFeedbackReducer
+  → next validated step … → completion summary + concepts practiced
+```
+
+Authority boundaries: steps are performed by the user (`userManual`); there is
+no TrackSmith-controls-Logic actor. Locations are versioned semantic
+references (work area, processor identity from the recognized registry,
+navigation labels); coordinates and key commands are rejected by validation,
+as are destructive workflows, missing rollback/stop/listening cues,
+out-of-range values, and false execution authority. An optional provider may
+propose only bounded canonical IDs through the staged
+`TutorProposalValidator` (decoding → schema → semantic → capability →
+knowledgeReference → stateReference → instructionConstraint); provider prose
+never materializes an instruction, and the offline path is complete without
+any provider. Tutor persistence is a separate bounded checksummed store under
+`Application Support/com.marcboyer.tracksmith/ProductionTutor/`; the frozen
+Production Intelligence conversation schema is unchanged. Audio-grounded
+lessons carry safe authority references (instance, runtime epoch, capture
+snapshot) and demote to historical when the live session no longer matches.
+Tutor mode has no AU command path and cannot mutate the processing graph.
+
+## General Production Tutor v2 (open-domain answering)
+
+Layered on top of the Tutor v1 lesson engine, in the same companion-process
+`ProductionTutor` package (ADR 0006). Nothing here runs in the AU render path.
+
+```text
+open-ended question
+  → GeneralTutorRouter        9 question kinds; 100+ domains in 14 groups.
+                              No enum match required — unrecognized wording
+                              yields visible uncertainty, not a refusal. The
+                              Tutor v1 vocabulary is a fast path that, when it
+                              matches, unlocks exact validated procedures.
+  → GeneralTutorRetriever     Deterministic lexical ranking over reviewed
+                              knowledge cards with typed domain/kind/source
+                              filters, per-source diversity caps, and
+                              contradiction-aware inclusion. Coverage is
+                              reported (strong/partial/weak/none) and weak
+                              coverage is surfaced rather than papered over.
+  → GeneralTutorCoordinator   Synthesis plus MeasurementRelevanceMap, which
+                              decides whether any measurement can actually
+                              resolve the question.
+  → GeneralTutorAnswerValidator  Citation coverage; uncited-number rejection;
+                              forbidden action/hearing claims; undisclosed
+                              contradiction; personal-result generalization;
+                              overstated audio influence.
+  → GeneralTutorAnswerContract
+```
+
+Knowledge is five typed card kinds — claims, strategy cards, concept cards,
+contradiction records, and a source registry — plus `PersonalOutcomeRecord`
+for user-confirmed results. The generated base is SHA-256 verified at load and
+structurally validated before any card is used: a trusted claim cannot rest on
+a superseded source or one still requiring audiovisual review, and a reviewed
+strategy cannot be supported by unreviewed claims.
+
+Personalization is a separate bounded store (`PersonalProfileStore`) holding
+only explicitly entered setup and explicitly confirmed outcomes. A confirmed
+result raises or lowers a strategy for that user, bounded so preference
+reorders results rather than manufacturing relevance, and the answer validator
+rejects any personal result phrased as universal.
+
+Sources enter through `general-tutor-knowledge-pipeline.py`: registration with
+rights/tier/handling and transcript provenance, extraction into a review queue
+as `machineExtracted`, promotion requiring a named reviewer, an
+audiovisual-review gate for claims that depend on hearing or seeing, and a
+fail-closed audit in `make verify`. Tier C material can never be promoted.
+
+Strategy cards are what make breadth honest. A domain with no exact procedure
+can still have a reviewed decision pattern — first experiment, why, tradeoffs,
+preservation, stopping rule, signs it is wrong, non-DSP alternatives. Exact
+Logic instructions remain catalog-only.
 
 ## Process and trust boundaries
 

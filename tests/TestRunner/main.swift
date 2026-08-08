@@ -918,6 +918,77 @@ enum TestRunner {
                 try tests.expect(decoded == report, "\(sourceClass.rawValue) source-aware report changed during serialization")
             }
         }
+        await tests.run("level variability ignores silent gaps and stays physically plausible") {
+            // Regression: silent gaps are clamped to -240 dBFS rather than -inf, so an isFinite-only
+            // filter left P10 sitting in silence and the metric reported a level range wider than
+            // the format itself (224 dB on the 8 s demo vocal fixture).
+            let rate = 48_000.0
+            let frames = Int(rate * 8)
+            let phrased: [Float] = (0..<frames).map { index in
+                let time = Double(index) / rate
+                let phrasePosition = time.truncatingRemainder(dividingBy: 2)
+                guard phrasePosition < 1.4 else { return 0 }
+                // Two phrase levels 6 dB apart so the true active range is known and non-zero.
+                let level = time < 4 ? 0.30 : 0.15
+                return Float(level * sin(2 * .pi * 220 * time))
+            }
+            let buffer = AudioBuffer(channels: [phrased], sampleRate: rate)
+            let silentShare = Double(phrased.count { $0 == 0 }) / Double(frames)
+            try tests.expect(silentShare > 0.25, "gapped fixture did not actually contain silence")
+
+            for sourceClass in SourceAnalysisClass.allCases {
+                let report = SourceAwareAudioAnalyzer().analyze(buffer, as: sourceClass)
+                guard let variability = report.metrics["level_variability_p90_p10_db"] else { continue }
+                try tests.expect(
+                    variability.value < 24,
+                    "\(sourceClass.rawValue) level variability measured silence instead of the performance: \(variability.value) dB"
+                )
+                try tests.expect(
+                    variability.definition.validRange.contains(variability.value),
+                    "\(sourceClass.rawValue) level variability escaped its declared range: \(variability.value)"
+                )
+                try tests.expect(
+                    variability.value > 3,
+                    "\(sourceClass.rawValue) level variability lost the 6 dB phrase step: \(variability.value) dB"
+                )
+                try tests.expect(
+                    variability.confidence < 1,
+                    "\(sourceClass.rawValue) reported full confidence despite discarding silent windows"
+                )
+            }
+
+            // A capture that is silent apart from one short burst has no measurable range and must
+            // not claim one, nor report confidence off the handful of surviving windows.
+            var mostlySilent = Array(repeating: Float.zero, count: frames)
+            for index in 0..<Int(rate / 4) {
+                mostlySilent[index] = Float(0.30 * sin(2 * .pi * 220 * Double(index) / rate))
+            }
+            let sparse = SourceAwareAudioAnalyzer().analyze(
+                AudioBuffer(channels: [mostlySilent], sampleRate: rate),
+                as: .vocal
+            )
+            let sparseVariability = sparse.metrics["level_variability_p90_p10_db"]!
+            try tests.expect(sparseVariability.value < 24, "near-silent capture reported an implausible level range")
+            try tests.expect(sparseVariability.confidence < 0.2, "near-silent capture reported confident level variability")
+
+            // Crest uses the exact same RMS-selected window indices. Without that alignment, the
+            // silent windows' zero crest values push a short burst's P90 crest to zero.
+            let sparseBass = SourceAwareAudioAnalyzer().analyze(
+                AudioBuffer(channels: [mostlySilent], sampleRate: rate),
+                as: .bass
+            )
+            let sparseCrest = sparseBass.metrics["bass_crest_factor_p90"]!
+            try tests.expect(sparseCrest.value > 1.3, "sparse capture's crest percentile included silent windows")
+            try tests.expect(sparseCrest.confidence < 0.2, "sparse capture reported confident crest evidence")
+
+            // Digital silence throughout has no active window at all.
+            let silent = SourceAwareAudioAnalyzer().analyze(
+                AudioBuffer(channels: [Array(repeating: Float.zero, count: frames)], sampleRate: rate),
+                as: .vocal
+            )
+            try tests.expect(silent.metrics["level_variability_p90_p10_db"]!.value == 0, "silence reported level variability")
+            try tests.expect(silent.metrics["level_variability_p90_p10_db"]!.confidence == 0, "silence reported confident level variability")
+        }
         await tests.run("source-aware stereo evidence follows mid-side and mono-sum direction") {
             let rate = 48_000.0
             let mono = (0..<Int(rate)).map { Float(0.2 * sin(2 * .pi * 100 * Double($0) / rate)) }
@@ -4368,7 +4439,400 @@ enum TestRunner {
         await tests.run("tutor explanations and summaries stay honest") {
             try testTutorExplanationHonesty(tests)
         }
+        await tests.run("silent-window analysis series stay JSON-encodable") {
+            try testSilentWindowSeriesEncodable(tests)
+        }
+        await tests.run("general tutor routes open-ended questions without an enum match") {
+            try testGeneralTutorOpenRouting(tests)
+        }
+        await tests.run("general tutor knowledge base validates and resolves provenance") {
+            try testGeneralTutorKnowledgeIntegrity(tests)
+        }
+        await tests.run("general tutor answers stay grounded and honest") {
+            try testGeneralTutorAnswerGrounding(tests)
+        }
+        await tests.run("general tutor refuses unsupported capabilities") {
+            try testGeneralTutorCapabilityBoundaries(tests)
+        }
+        await tests.run("general tutor never overstates audio influence") {
+            try testGeneralTutorAudioInfluenceHonesty(tests)
+        }
+        await tests.run("personal profile persists, bounds, and deletes safely") {
+            try testPersonalProfileStore(tests)
+        }
+        await tests.run("personal results rank locally but never generalize") {
+            try testPersonalResultsNeverGeneralize(tests)
+        }
         tests.finish()
+    }
+
+    /// The defining property of General Tutor v2: an ordinary production
+    /// question is routed and answered even though it matches no Tutor v1
+    /// issue enum case.
+    /// The profile is the only thing TrackSmith remembers about the user, so
+    /// it must round-trip exactly, stay bounded, redact secrets, and delete
+    /// completely on request.
+    @MainActor private static func testPersonalProfileStore(_ tests: Harness) throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tracksmith-profile-\(UUID().uuidString)")
+        let store = PersonalProfileStore(rootURL: root)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let freshIsEmpty = try store.load().isEmpty
+        try tests.expect(freshIsEmpty, "a fresh store was not empty")
+
+        var profile = TutorPersonalProfile(
+            logicVersion: "12.3",
+            microphones: ["SM7B"],
+            roomNotes: "Untreated bedroom, my api_key=SUPERSECRETVALUE noted here",
+            genres: ["indie"],
+            preferredExplanationDepth: .standard
+        )
+        profile.outcomes.append(PersonalOutcomeRecord(
+            question: "My vocal sounds nasal.",
+            sourceType: .vocal,
+            strategyID: "strategy.curated.midi-timing-preserve-feel",
+            feedback: .better,
+            userEnteredSettings: ["Channel EQ band 3: -2 dB"],
+            userAskedToRemember: true
+        ))
+        try store.save(profile)
+
+        let loaded = try store.load()
+        try tests.expect(loaded.logicVersion == "12.3", "logic version did not round-trip")
+        try tests.expect(loaded.microphones == ["SM7B"], "microphones did not round-trip")
+        try tests.expect(loaded.outcomes.count == 1, "outcome did not round-trip")
+        try tests.expect(
+            loaded.preferredStrategyIDs.contains("strategy.curated.midi-timing-preserve-feel"),
+            "a confirmed-helpful outcome did not surface as a preferred strategy"
+        )
+        // Credential-shaped text must not survive into the profile.
+        try tests.expect(
+            !(loaded.roomNotes ?? "").contains("SUPERSECRETVALUE"),
+            "a credential-shaped string was persisted verbatim"
+        )
+
+        // Bounding: far more outcomes than the cap must be trimmed, not rejected.
+        var flooded = loaded
+        for index in 0..<(PersonalProfileStore.maximumOutcomes + 50) {
+            flooded.outcomes.append(PersonalOutcomeRecord(
+                question: "flood \(index)", sourceType: .vocal,
+                feedback: .noChange, userAskedToRemember: true
+            ))
+        }
+        try store.save(flooded)
+        let bounded = try store.load()
+        try tests.expect(
+            bounded.outcomes.count <= PersonalProfileStore.maximumOutcomes,
+            "outcome count exceeded its bound after save"
+        )
+
+        // A corrupt file must be quarantined rather than silently trusted.
+        try Data("not json".utf8).write(to: store.profileURL)
+        try tests.expectThrows("a corrupt profile was accepted") { _ = try store.load() }
+
+        try store.save(profile)
+        try store.deleteAll()
+        let emptyAfterDelete = try store.load().isEmpty
+        try tests.expect(emptyAfterDelete, "deleteAll left data behind")
+    }
+
+    /// A personal result may reorder this user's results. It may never be
+    /// stated as general production truth.
+    @MainActor private static func testPersonalResultsNeverGeneralize(_ tests: Harness) throws {
+        let base = try GeneralTutorKnowledgeBase.loadValidated()
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        let validator = GeneralTutorAnswerValidator(
+            base: base, procedureIDs: Set(catalog.procedures.map(\.id))
+        )
+
+        // An answer classed as a personal result cannot be phrased universally.
+        let coordinator = try GeneralTutorCoordinator()
+        let outcome = try coordinator.answer(GeneralTutorRequest(
+            question: "How do I tighten my MIDI piano without making it robotic?",
+            sourceType: .keyboard
+        ))
+        var universal = outcome.answer
+        universal.confidenceClass = .userConfirmedPersonalResult
+        universal.directAnswer = "This always works and is universally the right move."
+        try tests.expectThrows("a personal result was allowed to claim universality") {
+            try validator.validate(universal)
+        }
+
+        // Ranking preference must reorder without inventing relevance: a
+        // strategy the profile prefers but that does not match the question
+        // must still not be retrieved.
+        var profile = TutorPersonalProfile()
+        profile.outcomes.append(PersonalOutcomeRecord(
+            question: "unrelated", sourceType: .vocal,
+            strategyID: "strategy.curated.delay-throw",
+            feedback: .better, userAskedToRemember: true
+        ))
+        let personalized = GeneralTutorRetriever(base: base, profile: profile)
+        let intent = GeneralTutorRouter().route(
+            question: "What is phase cancellation?", sourceType: .fullMix
+        )
+        let retrieved = personalized.retrieve(for: intent)
+        try tests.expect(
+            !retrieved.strategies.contains { $0.id == "strategy.curated.delay-throw" },
+            "a preferred strategy was injected into an unrelated question"
+        )
+    }
+
+    @MainActor private static func testGeneralTutorOpenRouting(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+        let router = GeneralTutorRouter()
+
+        // None of these are Tutor v1 issue-vocabulary cases.
+        let openQuestions: [(String, SourceType)] = [
+            ("Why does my chorus feel smaller than the verse?", .fullMix),
+            ("How do I tighten my MIDI piano without making it robotic?", .keyboard),
+            ("Should I move the notes to the tempo or make the tempo follow my performance?", .keyboard),
+            ("How do I make this synth feel wider without ruining mono compatibility?", .synth),
+            ("What should I do first when a mix feels crowded?", .fullMix),
+        ]
+        for (question, source) in openQuestions {
+            let intent = router.route(question: question, sourceType: source)
+            try tests.expect(
+                intent.recognizedTutorIssues.isEmpty,
+                "expected no Tutor v1 enum match for open question: \(question)"
+            )
+            try tests.expect(
+                !intent.primaryDomains.isEmpty,
+                "open question routed to no domain: \(question)"
+            )
+            let outcome = try coordinator.answer(
+                GeneralTutorRequest(question: question, sourceType: source)
+            )
+            try tests.expect(
+                outcome.answer.answerMode == .groundedAnswer,
+                "open question did not produce a grounded answer: \(question)"
+            )
+            try tests.expect(
+                !outcome.answer.directAnswer.isEmpty,
+                "empty answer for: \(question)"
+            )
+        }
+
+        // The Tutor v1 fast path must still be recognized when it applies.
+        let nasal = router.route(question: "I sound nasal.", sourceType: .vocal)
+        try tests.expect(
+            nasal.recognizedTutorIssues.contains(.nasalOrHonky),
+            "Tutor v1 fast path regressed for the nasal case"
+        )
+    }
+
+    @MainActor private static func testGeneralTutorKnowledgeIntegrity(_ tests: Harness) throws {
+        let base = try GeneralTutorKnowledgeBase.loadValidated()
+        try tests.expect(!base.claims.isEmpty, "knowledge base has no claims")
+        try tests.expect(!base.strategies.isEmpty, "knowledge base has no strategies")
+
+        // Every trusted card must resolve to a usable registered source.
+        for claim in base.claims where claim.reviewState.isTrusted {
+            guard let source = base.source(claim.sourceID) else {
+                throw CheckFailure(message: "claim \(claim.id) references unknown source")
+            }
+            try tests.expect(
+                source.isUsableForMaterialClaims,
+                "trusted claim \(claim.id) rests on an unusable source"
+            )
+        }
+        // A source needing audiovisual review may not ground a trusted claim.
+        var probe = base
+        probe.sources = probe.sources.map { source in
+            var source = source
+            if source.id == probe.claims.first?.sourceID {
+                source.requiresAudiovisualReview = true
+                source.audiovisualReviewCompleted = false
+            }
+            return source
+        }
+        try tests.expectThrows("transcript-only source was accepted for a trusted claim") {
+            try GeneralTutorKnowledgeValidator().validate(probe)
+        }
+    }
+
+    @MainActor private static func testGeneralTutorAnswerGrounding(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+        let base = try GeneralTutorKnowledgeBase.loadValidated()
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        let validator = GeneralTutorAnswerValidator(
+            base: base, procedureIDs: Set(catalog.procedures.map(\.id))
+        )
+
+        let outcome = try coordinator.answer(
+            GeneralTutorRequest(question: "Why does adding reverb make the vocal disappear?", sourceType: .vocal)
+        )
+        let answer = outcome.answer
+        try tests.expect(
+            !answer.knowledgeClaimIDs.isEmpty || !answer.relevantConceptIDs.isEmpty,
+            "grounded answer carried no citations"
+        )
+        try tests.expect(!answer.assumptions.isEmpty, "answer disclosed no assumptions")
+        try tests.expect(
+            !answer.currentContextLimitations.isEmpty,
+            "answer disclosed no context limitations"
+        )
+        for id in answer.knowledgeClaimIDs {
+            try tests.expect(base.claim(id) != nil, "answer cited unknown claim \(id)")
+        }
+        for id in answer.exactProcedureIDs {
+            try tests.expect(catalog.procedure(id) != nil, "answer cited unknown procedure \(id)")
+        }
+
+        // An invented source ID must fail validation.
+        var forged = answer
+        forged.knowledgeClaimIDs = ["claim.this.does.not.exist"]
+        try tests.expectThrows("invented claim ID was accepted") {
+            try validator.validate(forged)
+        }
+        // An invented procedure ID must fail validation.
+        var forgedProcedure = answer
+        forgedProcedure.exactProcedureIDs = ["tutor.invented.procedure.v1"]
+        try tests.expectThrows("invented procedure ID was accepted") {
+            try validator.validate(forgedProcedure)
+        }
+        // An uncited numeric recommendation must fail validation.
+        var forgedNumber = answer
+        forgedNumber.exactProcedureIDs = []
+        forgedNumber.strategyOptions = []
+        forgedNumber.knowledgeClaimIDs = []
+        forgedNumber.relevantConceptIDs = []
+        forgedNumber.directAnswer = "Set the shelf to 4200 Hz and cut 7 dB."
+        try tests.expectThrows("uncited numeric recommendation was accepted") {
+            try validator.validate(forgedNumber)
+        }
+        // A false action claim must fail validation.
+        var forgedClaim = answer
+        forgedClaim.directAnswer = "I changed the compressor for you and I listened to the result."
+        try tests.expectThrows("false action claim was accepted") {
+            try validator.validate(forgedClaim)
+        }
+    }
+
+    @MainActor private static func testGeneralTutorCapabilityBoundaries(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+        let refusals: [(String, SourceType)] = [
+            ("Click the compressor bypass for me.", .vocal),
+            ("Just fix my mix automatically.", .fullMix),
+            ("Bounce in place and replace the file.", .vocal),
+            ("Make me sound exactly like Billie Eilish.", .vocal),
+        ]
+        for (question, source) in refusals {
+            let outcome = try coordinator.answer(
+                GeneralTutorRequest(question: question, sourceType: source)
+            )
+            try tests.expect(
+                outcome.answer.answerMode == .capabilityLimitation,
+                "expected a capability limitation for: \(question)"
+            )
+            try tests.expect(
+                !outcome.answer.unsupportedCapabilities.isEmpty,
+                "capability limitation named no unsupported capability: \(question)"
+            )
+            try tests.expect(
+                outcome.answer.exactProcedureIDs.isEmpty,
+                "a refused request still produced exact procedures: \(question)"
+            )
+        }
+    }
+
+    /// The Tutor v1 conceptual gap this milestone fixes: a capture must not be
+    /// described as informing an answer it did not influence.
+    @MainActor private static func testGeneralTutorAudioInfluenceHonesty(_ tests: Harness) throws {
+        let coordinator = try GeneralTutorCoordinator()
+
+        // No capture supplied: nothing may claim influence.
+        let dry = try coordinator.answer(
+            GeneralTutorRequest(question: "How do I build energy into the final chorus?", sourceType: .fullMix)
+        )
+        try tests.expect(
+            !dry.answer.audioInfluence.captureAvailable,
+            "claimed a capture where none was supplied"
+        )
+        try tests.expect(
+            dry.answer.audioInfluence.influencingMetricIdentifiers.isEmpty,
+            "claimed measurement influence without a capture"
+        )
+
+        // A capture whose measurements cannot resolve the question must be
+        // reported as available but non-resolving.
+        let sampleRate = 48_000.0
+        var samples = [Float](repeating: 0, count: Int(sampleRate))
+        for index in samples.indices {
+            samples[index] = Float(0.2 * sin(2 * Double.pi * 220 * Double(index) / sampleRate))
+        }
+        let analysis = SourceAwareAudioAnalyzer().analyze(
+            DSPCore.AudioBuffer(channels: [samples], sampleRate: sampleRate), as: .vocal
+        )
+        let grounded = try coordinator.answer(
+            GeneralTutorRequest(
+                question: "Why does my chorus feel smaller than the verse?",
+                sourceType: .fullMix,
+                analysis: analysis
+            )
+        )
+        try tests.expect(
+            grounded.answer.audioInfluence.captureAvailable,
+            "capture availability was not recorded"
+        )
+        let statement = grounded.answer.audioInfluence.statement.lowercased()
+        if grounded.answer.audioInfluence.influencingMetricIdentifiers.isEmpty {
+            try tests.expect(
+                !statement.contains("informed"),
+                "answer said the audio informed it while no metric influenced anything"
+            )
+        }
+    }
+
+    /// Regression for a defect found during direct Logic 12.3 tutor validation:
+    /// a capture whose tail is digital silence makes short-term LUFS -infinity,
+    /// and `JSONEncoder` refuses to encode a nonfinite `Double`, so the whole
+    /// Create For Me preview manifest failed to encode.
+    @MainActor private static func testSilentWindowSeriesEncodable(_ tests: Harness) throws {
+        let sampleRate = 48_000.0
+        // Four seconds of tone followed by four seconds of exact digital
+        // silence, matching the shape of a Logic capture that outlives its
+        // region.
+        var samples = [Float](repeating: 0, count: Int(sampleRate * 8))
+        for index in 0..<Int(sampleRate * 4) {
+            samples[index] = Float(0.25 * sin(2 * .pi * 220 * Double(index) / sampleRate))
+        }
+        let buffer = DSPCore.AudioBuffer(channels: [samples], sampleRate: sampleRate)
+        let report = AudioAnalyzer().analyze(buffer)
+
+        let allSeries = try XCTUnwrapLocal(
+            report.series,
+            "analysis report carried no series for a partially silent buffer"
+        )
+        let series = try XCTUnwrapLocal(
+            allSeries["short_term_loudness_lufs_timeline"],
+            "short-term loudness timeline missing for a partially silent buffer"
+        )
+        try tests.expect(
+            series.values.allSatisfy { $0.isFinite },
+            "short-term loudness timeline retained a nonfinite value"
+        )
+        try tests.expect(
+            series.values.contains { $0 <= -200 },
+            "digital silence should reach the declared loudness floor rather than a fabricated zero"
+        )
+        for (identifier, entry) in allSeries {
+            try tests.expect(
+                entry.values.allSatisfy { $0.isFinite },
+                "series \(identifier) retained a nonfinite value"
+            )
+        }
+        // The encode path that actually failed in Logic.
+        _ = try JSONEncoder().encode(report)
+
+        let sourceAware = SourceAwareAudioAnalyzer().analyze(buffer, as: .vocal)
+        _ = try JSONEncoder().encode(sourceAware)
+    }
+
+    private static func XCTUnwrapLocal<T>(_ value: T?, _ message: String) throws -> T {
+        guard let value else { throw CheckFailure(message: message) }
+        return value
     }
 
     // MARK: - Tutor v1 checks

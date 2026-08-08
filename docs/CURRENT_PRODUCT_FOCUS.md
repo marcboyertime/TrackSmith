@@ -1,10 +1,42 @@
 # Current product focus
 
-Status date: 2026-08-05. This record is additive. It changes engineering priority
+Status date: 2026-08-06. This record is additive. It changes engineering priority
 only; it does not alter, close, weaken, or reinterpret any existing milestone,
 gate status, or dated evidence record.
 
-## Active implementation priority: Logic Production Tutor v1
+## Active implementation priority: General Production Tutor v2
+
+TrackSmith's active milestone is now
+[General Production Tutor v2](GENERAL_PRODUCTION_TUTOR_V2.md): turning the
+narrow Tutor v1 vertical slice into a broadly capable production tutor that
+accepts an ordinary open-ended question and returns a useful, grounded,
+traceable answer — or an honest limitation.
+
+Guide Me and Create For Me remain the two permanent top-level modes. What
+changes is what Guide Me can be asked. The tutor no longer requires a question
+to match one of 18 issue enum cases; it routes across 9 question kinds and
+100+ production domains, retrieves reviewed knowledge cards, and synthesizes a
+validated answer. Exact Logic instructions still come only from the reviewed
+procedure catalog.
+
+Current engine status (2026-08-06): the open-domain path is implemented and
+passes 332/332 corpus cases offline. The native Guide Me surface has **not**
+yet been extended to open questions (gate GP5), no external source has been
+ingested (GP2 partial), personalization is types-only (GP6 partial), and no
+owner session or in-host validation has been run (GP8). See the
+[ledger](../research/evaluation/general-production-tutor-v2/ledger.json) for
+exact gate status.
+
+### Predecessor: Logic Production Tutor v1 (closed at bounded scope)
+
+Tutor v1 was closed on 2026-08-05 at an explicitly documented bounded scope —
+not as all-gates-passed. T0–T4 and T6 passed; T5, T7, and T8 are closed
+bounded. It carries **no perceptual evidence of any kind**, and its
+[Vocal Module v1 handoff](VOCAL_MODULE_V1_HANDOFF.md) deliberately records
+UNRESOLVED wherever owner sessions would be required. See the
+[closure record](evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md).
+
+## Previous priority (historical): Logic Production Tutor v1
 
 TrackSmith now targets two permanent top-level product modes:
 

@@ -14,6 +14,49 @@ arbitrary shell, filesystem, Logic host, plug-in host, or project-editing author
 External text, names, tags, metadata, presets, model output, and reference labels
 are untrusted data and never become instructions automatically.
 
+## Tutor authority split (Guide Me)
+
+The tutor follows the same discipline as plan generation, applied to manual
+guidance: **a model may help understand and rank; local validated knowledge
+materializes the exact instructions.** A provider may propose only canonical
+tutor semantics — issue kinds, cause categories, procedure IDs, existing
+production terms, preservation constraints, one bounded clarification,
+uncertainty, and confidence — validated by the staged tutor proposal
+validator. It may not emit menu paths, plug-in names outside the recognized
+registry, control names, parameter values, key commands, Accessibility or
+shell actions, claims that a user action occurred, claims of observed Logic
+state, or executable plan nodes. Every user-visible exact step is materialized
+from the reviewed versioned procedure catalog and re-validated (knowledge
+references, catalog bounds, forbidden-claim scan) before display. Provider
+prose is never action authority; the deterministic local formatter is the
+reliable offline default.
+
+## Open-domain answer grounding (General Tutor v2)
+
+Breadth is obtained from reviewed knowledge, not model latitude. A model may
+classify, summarize, compare, rank strategies, propose one clarification, cite
+retrieved IDs, and request current research. It may not author an exact
+procedure, a Logic path, a control name, a number, a source, a claim to have
+heard or changed anything, or a claim about project state.
+
+Enforced by the answer validator rather than by convention:
+
+- every cited claim, source, concept, contradiction, and procedure ID must
+  resolve locally, or the answer is rejected;
+- a numeric recommendation in prose is rejected unless the figure appears
+  verbatim in a cited reviewed card or the answer carries a validated
+  procedure;
+- forbidden action and perception claims are scanned across every
+  user-visible field;
+- a contradiction touching both sides of the cited set must be disclosed;
+- a personal result phrased as universal is rejected;
+- an answer may not say the audio informed it when no measurement influenced
+  it.
+
+Provisional research results, when that path is enabled, remain labeled
+provisional, cannot create an exact procedure, and are not promoted into
+trusted knowledge without review.
+
 ## Planning sequence
 
 Build bounded labeled context; ask the selected provider for a versioned semantic

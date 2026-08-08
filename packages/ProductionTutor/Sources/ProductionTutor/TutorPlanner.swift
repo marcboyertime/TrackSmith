@@ -96,8 +96,11 @@ public struct TutorPlanner: Sendable {
             chain: request.userReportedChain
         )
         // Keep the presentation short: at most three competing causes plus
-        // the explicit "may be natural character" possibility.
-        if hypotheses.count > 4 { hypotheses = Array(hypotheses.prefix(4)) }
+        // the explicit "may be natural character" possibility, which must
+        // always remain visible.
+        let naturalCharacter = hypotheses.filter { $0.causeCategory == .unknown }
+        let competing = hypotheses.filter { $0.causeCategory != .unknown }
+        hypotheses = Array(competing.prefix(3)) + naturalCharacter
 
         var lesson = TutorLessonState(
             requestKind: parsed.requestKind,

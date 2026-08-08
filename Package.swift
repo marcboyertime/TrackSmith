@@ -22,6 +22,8 @@ let package = Package(
         .library(name: "ResearchIngestion", targets: ["ResearchIngestion"]),
         .library(name: "ProductionTutor", targets: ["ProductionTutor"]),
         .executable(name: "ProductionTutorEvaluation", targets: ["ProductionTutorEvaluation"]),
+        .executable(name: "GeneralTutorEvaluation", targets: ["GeneralTutorEvaluation"]),
+        .executable(name: "GeneralTutorSpotCheck", targets: ["GeneralTutorSpotCheck"]),
         .executable(name: "CompanionApp", targets: ["CompanionApp"]),
         .executable(name: "OfflineRenderer", targets: ["OfflineRenderer"]),
         .executable(name: "AnalysisCLI", targets: ["AnalysisCLI"]),
@@ -107,6 +109,16 @@ let package = Package(
             name: "ProductionMasteryDSPFixtures",
             dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema", "PreviewRenderer"],
             path: "tools/ProductionMasteryDSPFixtures/Sources/ProductionMasteryDSPFixtures"
+        ),
+        .executableTarget(
+            name: "GeneralTutorSpotCheck",
+            dependencies: ["ProductionTutor", "PlanSchema"],
+            path: "tools/GeneralTutorSpotCheck/Sources/GeneralTutorSpotCheck"
+        ),
+        .executableTarget(
+            name: "GeneralTutorEvaluation",
+            dependencies: ["ProductionTutor", "AudioAnalysis", "DSPCore", "PlanSchema"],
+            path: "tools/GeneralTutorEvaluation/Sources/GeneralTutorEvaluation"
         ),
         .executableTarget(
             name: "ProductionTutorEvaluation",

@@ -179,7 +179,7 @@
   phase/latency behavior, current hardware/firmware state, universal meanings for
   production adjectives, or artistic correctness. The deterministic 18-fixture
   measurement suite and 200-identity campaign define how to acquire that evidence.
-  The campaign is currently 197 `not_run`, three `partial`, and zero `complete`.
+  The campaign ledger currently records 189 `not_run`, 11 `partial`, and zero `complete`.
   Bitcrusher's partial direct Logic 12.3 run covers only its observed Default Preset
   on one 48 kHz mono amplitude fixture. Channel EQ's partial run covers its settled
   unmodified default, header bypass, and one 1000 Hz/+6 dB/Q1 bell state on that
@@ -219,6 +219,60 @@
   rationale. Per-card reset, removal, effect solo and advanced parameter editors are
   still target UX; a few removals are possible only through the narrow revision
   engine.
+
+## Guide Me tutor (Tutor v1)
+
+- TrackSmith cannot verify the user's Logic channel strip. Existing inserts,
+  their settings, selection, automation, and project state are invisible; the
+  tutor relies on user-reported chain context and labels it as such. It cannot
+  confirm a user actually performed, or correctly performed, a step.
+- The analyzer is descriptive and not phoneme-aware. It cannot detect vowels,
+  consonants, or nasality; measured statements are worded as consistent-with
+  evidence and never as proof of a perceived quality's cause.
+- Manual UI navigation is Logic-version-scoped (12.3) and documentary unless
+  marked directly verified; an Apple UI change can invalidate a navigation
+  card. The tutor invites "Can't find it" and never asserts a control exists.
+- The procedure catalog is deliberately narrow (8 vocal-focused procedures,
+  18 steps). Many recognized issues (for example too wet, too distant,
+  clipping, noise between phrases) currently end in an honest
+  no-safe-procedure limitation rather than guidance, and non-vocal sources
+  mostly generalize to that limitation.
+- Vowel-specific or otherwise time-varying resonances have no safe exact
+  manual procedure in the current validated knowledge; the tutor says so and
+  records the requirement for Vocal Module v1 instead of improvising.
+- Tutor advice remains source- and listening-dependent; feedback is the
+  user's subjective judgment under their monitoring conditions. Level matching
+  is by ear, not measured through the monitoring path.
+- The tutor never performs automatic Logic-native edits, and there is no
+  handoff from a tutor lesson to Create For Me commit in v1.
+- Direct Logic 12.3 user-mediated validation (tutor gate T7) and the owner's
+  real-lesson evidence are pending; no claim of host-validated tutoring is
+  made. Restored tutor sessions demote audio-grounded claims to historical.
+
+## General Production Tutor v2
+
+- Domain coverage is uneven. 458 claims and 68 strategies come from reviewed
+  in-repo artifacts, so vocal, mix, and effects domains are far better covered
+  than arrangement, MIDI expression, and mastering delivery.
+- **No external source has ever been ingested.** No web fetch, no YouTube, no
+  course material. The review pipeline is built and its refusal paths are
+  proven, but nothing has flowed through it: every shipped claim derives from
+  artifacts already in this repository. Research This exists in the UI only as
+  an explicitly labeled not-built control.
+- Personalization stores and ranks, but has never been used: no real confirmed
+  outcome exists, so the ranking preference has never affected a real session.
+- Retrieval is lexical. It has no synonym expansion beyond the curated cue
+  lists, so unusual phrasing can retrieve weakly; coverage is reported rather
+  than hidden, but a weak-coverage answer is still less useful.
+- Strategy cards are decision patterns, not measured results. Most carry
+  professional-practice evidence class and none has been validated against the
+  owner's own material.
+- The evaluation corpus (518 cases, 10 multi-turn conversations, 10 retrieval
+  precision cases) is authored by the same process that built the knowledge,
+  so it demonstrates internal consistency and honesty invariants — not that
+  the answers are useful to a producer.
+- **No owner session and no in-host validation of the broad tutor exist.** The
+  decisive question — whether this beats opening a browser — is unanswered.
 
 ## State and operations
 
@@ -296,9 +350,10 @@
 ## Logic-native knowledge priority
 
 TrackSmith has complete documentary identity coverage for Logic Pro 12.3's
-reviewed effects/tools, but only three bounded partial direct-host transfer records:
-Bitcrusher Default, Channel EQ default/bypass plus one 1 kHz bell state, and
-Compressor default/bypass plus one controlled static curve, all at 48 kHz mono.
+reviewed effects/tools, but only 11 bounded partial direct-host transfer records
+(Bitcrusher, Channel EQ, Compressor, DeEsser 2, Noise Gate, ChromaVerb, Space
+Designer, Stereo Delay, Tape Delay, Adaptive Limiter, and Direction Mixer),
+each limited to the exact accepted scope in its run record.
 The next measurement lane remains explicitly focused on common core production
 roles—gain/metering, expanded Channel EQ/Compressor, DeEsser 2,
 Noise Gate, reverb, delay, saturation, limiting,

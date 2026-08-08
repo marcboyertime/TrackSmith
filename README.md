@@ -12,6 +12,62 @@ The product name is TrackSmith. The development app/AU still use the earlier
 `Logic Audio Assistant` display name and bundle identifiers for compatibility;
 that identity is not silently changed by this research milestone.
 
+## Product modes
+
+TrackSmith has two permanent top-level modes in the native companion:
+
+- **Guide Me** — a user-mediated Logic production tutor. You describe a problem
+  ("I sound nasal") or a goal; TrackSmith presents competing possible causes
+  with visible uncertainty, then exactly one reversible manual experiment at a
+  time: what to do, where in Logic Pro 12.3, a validated bounded starting
+  value when one applies, what to listen for, why, when to stop, what could go
+  wrong, and exactly how to undo it. You report Better / Worse / No change /
+  Not sure / Not applicable / Can't find it / Done / Undo and a deterministic
+  reducer picks the next validated step. Every exact instruction comes from a
+  reviewed, versioned local procedure catalog — never from model prose — and
+  TrackSmith never operates Logic itself: no Accessibility, coordinates,
+  AppleScript, key-command injection, or host control of any kind. Tutor mode
+  cannot mutate the AU processing graph.
+- **Create For Me** — the existing workflow: capture recent playback, analyze
+  locally, render three bounded level-matched previews, audition, revise,
+  and commit explicitly.
+
+**Guide Me now accepts open-ended production questions.** You are not limited
+to a fixed list of problems: ask "Why does my chorus feel smaller than the
+verse?", "How do I tighten my MIDI piano without making it robotic?", or "What
+is pre-delay actually doing?" and TrackSmith routes the question across 9
+question kinds and 100+ production domains, retrieves reviewed knowledge
+cards, and returns a grounded answer with assumptions, one recommended first
+move, strategy options and their tradeoffs, what to listen for, what to
+preserve, when to stop, sources, and explicit limitations. Answers distinguish
+documented behavior, measured behavior, inference, professional-practice
+heuristic, subjective preference, personal result, and provisional research —
+they are never flattened into one confidence score. Where credible sources
+disagree, the disagreement is disclosed rather than resolved silently.
+
+Exact Logic instructions still come only from the reviewed procedure catalog,
+and any numeric recommendation must be quoted from a cited reviewed source or
+carried by a validated procedure — the answer validator rejects the
+alternative. TrackSmith will also tell you plainly when its reviewed knowledge
+does not cover your question.
+
+The active engineering focus is General Production Tutor v2;
+see [`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md), the
+[General Tutor v2 plan](docs/GENERAL_PRODUCTION_TUTOR_V2.md) and its
+[ledger](research/evaluation/general-production-tutor-v2/ledger.json). Logic
+Production Tutor v1 is closed at an explicitly
+[bounded scope](docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md).
+The open-domain engine passes 518/518 corpus cases offline across 99 domains,
+including 10 multi-turn conversations and 10 retrieval precision cases, and is
+reachable from the app's Ask action. What TrackSmith remembers about you is
+local, explicit, and deletable. Gates GP0-GP7 pass; GP8 and GP9 remain open
+and are blocked on the owner. **No external or YouTube source has been
+ingested** — the review pipeline is built and its refusal paths proven, but
+every shipped claim derives from artifacts already in this repository, and
+Research This is present only as an explicitly labeled not-built control. No
+real production-question session and no in-host validation of the broad tutor
+has been run, so whether these answers are useful is not established.
+
 ## Current status
 
 The capability spike, deterministic DSP/analysis foundation, and first functional
@@ -112,13 +168,18 @@ AU/companion session slice are implemented. The portable core builds and runs:
 
 On the development Mac, the frozen Production Intelligence v1 baseline passed
 68/68 `TestRunner` checks in Debug, Release, and Thread Sanitizer; that dated
-baseline is historical. The current `TestRunner` harness declares 72
-unconditional checks plus one optional official-vector lane (73 possible when
-`TRACKSMITH_BS2217_VECTORS` is enabled). Previously verified current 2026-08-02
-Debug and Release runs each pass 72/72 with that variable omitted. The same-date
-vector-enabled Debug and Release runs now each pass 73/73 with the variable set
-to the local directory containing the 14 official BS.2217-2 vectors. The current
-73-lane `TestRunner` Thread Sanitizer run remains open/unproven. The added checks
+baseline is historical. The current `TestRunner` harness declares 82
+unconditional checks plus one optional official-vector lane (83 possible when
+`TRACKSMITH_BS2217_VECTORS` is enabled): the previous 72 checks plus ten
+Tutor v1 checks covering issue vocabulary/negation, fail-closed procedure
+catalog validation, deterministic nasal lesson generation, every feedback
+transition, the 77-case tutor corpus, bounded/redacted/quarantining tutor
+persistence, provider-proposal fail-closed validation, lesson forbidden-claim
+and bounds validation, evidence-mode demotion, and explanation honesty.
+Current 2026-08-05 Debug and Release runs each pass 82/82 with the vector
+variable omitted. The dated 2026-08-02 vector-enabled 73/73 runs are
+historical evidence for the earlier 73-check harness. The current-harness
+Thread Sanitizer run remains open/unproven. The added checks
 cover mailbox
 retention, fail-closed quota behavior, command ordering, runtime-bound terminal
 replies, hard command-file expiry, Short-term/LRA behavior, six source classes,
@@ -288,7 +349,15 @@ audio formats, snapshot identity, and saved plans before playback.
 
 - `packages/`: host-independent schema, DSP, source-aware analysis, production
   intent/hypotheses, state, preview, IPC, research ingestion, and Logic adapter
-  boundaries.
+  boundaries. `packages/ProductionTutor/` is the user-mediated Guide Me tutor:
+  typed issue/cause/step/feedback contracts, the generated reviewed procedure
+  catalog with fail-closed validation, a deterministic planner and feedback
+  reducer, staged lesson/proposal validators, and a bounded checksummed
+  tutor session store. Its reviewed source artifact is
+  `research/knowledge/logic-pro-12.3-tutor-procedures.json` with generator and
+  audit scripts under `research/scripts/`, and its 77-case corpus is
+  `research/evaluation/TRACKSMITH_TUTOR_INTENT_CORPUS_V1.json` (run via
+  `swift run ProductionTutorEvaluation`).
 - `plugins/AudioUnit/`: compiled AUv3 extension and reusable host-probe core.
 - `apps/CompanionMacApp/`: native SwiftUI application scaffold.
 - `apps/CompanionApp/`: buildable command-line product slice.
@@ -318,9 +387,10 @@ audio formats, snapshot identity, and saved plans before playback.
   and deterministic 18-fixture generator enumerate a 200-identity empirical
   campaign separately; every native identity remains `not_run`, `partial`, or
   `complete` only when a versioned Logic render actually exists. The current
-  campaign is 191 `not_run`, nine `partial`, and zero `complete`, including
-  partial profiles for DeEsser 2, Noise Gate, ChromaVerb, Space Designer, Stereo
-  Delay, and Tape Delay in addition to Bitcrusher, Channel EQ, and Compressor.
+  campaign ledger records 189 `not_run`, 11 `partial`, and zero `complete`,
+  including partial profiles for DeEsser 2, Noise Gate, ChromaVerb, Space
+  Designer, Stereo Delay, Tape Delay, Adaptive Limiter, and Direction Mixer in
+  addition to Bitcrusher, Channel EQ, and Compressor.
 - `research/evaluation/`: the versioned 420-case semantic/adversarial
   production-intent corpus.
 

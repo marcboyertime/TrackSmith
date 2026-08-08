@@ -1,5 +1,136 @@
 # Changelog
 
+## 2026-08-06
+
+- Closed Logic Production Tutor v1 at an explicitly documented **bounded
+  scope** rather than as all-gates-passed. T0-T4 and T6 passed; T5 (contract
+  proven, no live provider ever wired), T7 (partial direct Logic run; no
+  perceptual evidence, no owner session), and T8 are recorded as closed
+  bounded. Added the closure record and `docs/VOCAL_MODULE_V1_HANDOFF.md`,
+  which deliberately records UNRESOLVED for every field that would require
+  owner sessions.
+- Opened **General Production Tutor v2**: plan, ADR 0006, gate ledger
+  (GP0-GP9), and baseline evidence at `b2fb62e`.
+- Removed the closed-vocabulary bottleneck. `GeneralTutorQuestionIntent`,
+  a 100+ domain taxonomy in 14 groups, 9 question kinds, and a deterministic
+  router that answers open-ended questions with no issue-enum match. The
+  Tutor v1 vocabulary is retained as a fast path that unlocks exact
+  procedures when it matches.
+- Added a typed knowledge model — claims, strategy cards, concept cards,
+  contradiction records, source registry, and personal-outcome records — with
+  nine review states, rights/handling classes, and an audiovisual-review gate
+  that blocks transcript-only grounding of claims depending on hearing or
+  seeing. Generated 15 sources, 458 claims, 68 strategies, 12 concepts, and
+  2 preserved contradictions from reviewed artifacts already in the
+  repository; SHA-256 verified and structurally validated at load.
+- Added deterministic lexical retrieval with typed filters, per-source
+  diversity caps, contradiction-aware inclusion, and explicit coverage
+  reporting; and a grounded answer contract whose validator rejects invented
+  IDs, uncited numeric recommendations, false action or hearing claims,
+  undisclosed contradictions, universalized personal results, and overstated
+  audio influence.
+- Fixed the Tutor v1 conceptual gap where a capture could be displayed as
+  evidence without influencing the lesson: `MeasurementRelevanceMap` records
+  which measurements actually informed an answer, and "a capture exists but
+  cannot resolve this question" is now a first-class outcome.
+- Added a 332-question library (274 directly curated or source-grounded, 58
+  labeled paraphrase augmentation), a gap map that drove knowledge work
+  (8 high-priority uncovered domains identified, then closed to 0 by curated
+  strategy cards), a 332-case evaluation corpus, and the
+  `GeneralTutorEvaluation` executable. 332/332 pass offline across 89 domains
+  and all 9 question kinds.
+- TestRunner grew from 83 to 88 checks; Tutor v1 remains 77/77 and all prior
+  lanes remain green.
+- Wired the open-domain engine into the native Guide Me surface: an **Ask**
+  action accepts any production question and renders the validated answer —
+  interpreted kind and domains, confidence class, direct answer, disclosed
+  assumptions, one recommended first move with listen-for and stop rule,
+  ranked strategy cards with tradeoffs and preservation concerns,
+  contradiction disclosures, collapsible detail, sources with evidence class,
+  the audio-influence statement, and the teaching principle. A strategy option
+  backed by a reviewed procedure offers "Start guided experiment", handing off
+  into the existing validated step flow. Verified live in the signed build
+  against the MIDI-timing question, which has no Tutor v1 enum match.
+- Built the source review pipeline (`general-tutor-knowledge-pipeline.py`):
+  register-source with rights/tier/handling/transcript provenance, extraction
+  into a review queue as `machineExtracted`, promotion requiring a named
+  reviewer, an audiovisual-review gate, and a fail-closed audit wired into
+  `make verify`. Enforcement was verified by exercising the refusal paths —
+  Tier C cannot produce anything but discovery notes, an audiovisual-dependent
+  claim cannot be promoted from captions alone, and promotion without a
+  reviewer is refused.
+- Added the personal profile store: bounded, checksummed, atomic 0600, with
+  credential redaction, corruption quarantine, per-item forget, delete-all,
+  and a human-readable export. Confirmed outcomes reorder results for this
+  user only, bounded so preference cannot manufacture relevance.
+- Added memory controls and an explicitly labeled not-built Research This
+  control to Guide Me.
+- Expanded the corpus to 518 cases (396 directly curated or source-grounded)
+  including 10 multi-turn conversations evaluated in order and 10 retrieval
+  precision cases with expected and forbidden card IDs. All pass, across 99
+  domains. A second gap-driven strategy wave closed 12 newly surfaced
+  high-priority domains to zero.
+- General Tutor v2 gates GP0-GP7 pass. GP8 and GP9 remain pending and are
+  blocked on the owner: no real production-question session and no in-host
+  validation of the broad tutor exists, so whether these answers are useful is
+  still unestablished.
+
+## 2026-08-05
+
+- Opened the Logic Production Tutor v1 milestone with a verified frozen
+  baseline (HEAD `c87cea5`; builds, 72/72 TestRunner Debug and Release, host
+  probe, unsigned native build, realtime heap probe) and an additive
+  current-product-focus record. Production Intelligence v1 and all Production
+  Mastery gate statuses remain untouched.
+- Added the `ProductionTutor` package: typed tutor contracts (18 issue kinds
+  with negation-aware recognition, 12 cause categories, user-mediated actors,
+  16 action kinds, 8 feedback kinds, bounded steps with stop/undo/listening
+  requirements), a deterministic planner and feedback reducer, staged lesson
+  and provider-proposal validators, a deterministic explanation formatter,
+  and a bounded checksummed redacting `TutorSessionStore`.
+- Added the reviewed versioned procedure artifact
+  `research/knowledge/logic-pro-12.3-tutor-procedures.json` (8 vocal-focused
+  procedures, 18 steps) with generator/audit scripts and a SHA-256-verified
+  generated Swift catalog; validation rejects coordinates, key commands,
+  destructive actions, missing rollback/stop/listening/preservation content,
+  out-of-range values, unregistered processor identities, and any execution
+  authority.
+- Added the 77-case `TRACKSMITH_TUTOR_INTENT_CORPUS_V1` (15 nasal variants,
+  42 vocal troubleshooting, 10 desired-result, 10 non-vocal generalization,
+  15 adversarial/unsafe, 10 multi-turn sequences) and the deterministic
+  `ProductionTutorEvaluation` executable; the offline path passes 77/77 with
+  no network or credential.
+- Added Guide Me / Create For Me modes to the native companion with a
+  separate tutor coordinator, evidence-grounding banner (live, historical, or
+  user-reported-only), user-reported chain context, one-step cards with
+  expandable explanations and versioned navigation, eight feedback controls,
+  and completion summaries; tutor mode has no AU command path. Create For Me
+  is unchanged.
+- TestRunner grew from 72 to 82 unconditional checks (83 with the optional
+  BS.2217-2 vector lane); current Debug and Release runs pass 82/82.
+  Reconciled current-facing empirical-campaign counts to the ledger's
+  189 `not_run` / 11 `partial` / 0 `complete`.
+- Ran the direct Logic Pro 12.3 tutor validation with the signed build:
+  insert, in-host capture, the Guide Me nasal lesson with four competing
+  causes, exact reversible step cards, deterministic Done/Undo branching
+  across two experiments, an AU graph provably unchanged throughout, offline
+  operation with no network, checksummed 0600 tutor persistence with a clean
+  privacy scan, unchanged source SHA-256, restart restore, and stale-authority
+  demotion to historical evidence. Gate T7 is now `in_progress`, not passed:
+  the owner self-evaluation on a real vocal, in-host revision/commit/bypass,
+  and project save/reload remain unexecuted. Recorded in
+  `docs/evidence/LOGIC_12_3_TUTOR_V1_VALIDATION_2026-08-05.md`.
+- Fixed a pre-existing defect that direct Logic testing surfaced:
+  `MetricSeries` stored timeline values verbatim, so a capture containing
+  digital silence made short-term LUFS `-infinity` and broke JSON encoding of
+  the whole Create For Me preview manifest. Series values are now sanitized
+  and clamped into their declared valid range, so digital silence lands on the
+  documented floor instead of a fabricated zero. Added the
+  `silent-window analysis series stay JSON-encodable` regression; TestRunner is
+  now 83 unconditional checks passing 83/83. Verified in host: the same
+  operation that failed now renders three previews.
+- Tutor v1 is not closed and Vocal Module v1 work has not begun.
+
 ## 2026-08-02
 
 - Reconciled the current regression snapshot with the `TestRunner` harness: its
