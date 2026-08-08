@@ -918,6 +918,77 @@ enum TestRunner {
                 try tests.expect(decoded == report, "\(sourceClass.rawValue) source-aware report changed during serialization")
             }
         }
+        await tests.run("level variability ignores silent gaps and stays physically plausible") {
+            // Regression: silent gaps are clamped to -240 dBFS rather than -inf, so an isFinite-only
+            // filter left P10 sitting in silence and the metric reported a level range wider than
+            // the format itself (224 dB on the 8 s demo vocal fixture).
+            let rate = 48_000.0
+            let frames = Int(rate * 8)
+            let phrased: [Float] = (0..<frames).map { index in
+                let time = Double(index) / rate
+                let phrasePosition = time.truncatingRemainder(dividingBy: 2)
+                guard phrasePosition < 1.4 else { return 0 }
+                // Two phrase levels 6 dB apart so the true active range is known and non-zero.
+                let level = time < 4 ? 0.30 : 0.15
+                return Float(level * sin(2 * .pi * 220 * time))
+            }
+            let buffer = AudioBuffer(channels: [phrased], sampleRate: rate)
+            let silentShare = Double(phrased.count { $0 == 0 }) / Double(frames)
+            try tests.expect(silentShare > 0.25, "gapped fixture did not actually contain silence")
+
+            for sourceClass in SourceAnalysisClass.allCases {
+                let report = SourceAwareAudioAnalyzer().analyze(buffer, as: sourceClass)
+                guard let variability = report.metrics["level_variability_p90_p10_db"] else { continue }
+                try tests.expect(
+                    variability.value < 24,
+                    "\(sourceClass.rawValue) level variability measured silence instead of the performance: \(variability.value) dB"
+                )
+                try tests.expect(
+                    variability.definition.validRange.contains(variability.value),
+                    "\(sourceClass.rawValue) level variability escaped its declared range: \(variability.value)"
+                )
+                try tests.expect(
+                    variability.value > 3,
+                    "\(sourceClass.rawValue) level variability lost the 6 dB phrase step: \(variability.value) dB"
+                )
+                try tests.expect(
+                    variability.confidence < 1,
+                    "\(sourceClass.rawValue) reported full confidence despite discarding silent windows"
+                )
+            }
+
+            // A capture that is silent apart from one short burst has no measurable range and must
+            // not claim one, nor report confidence off the handful of surviving windows.
+            var mostlySilent = Array(repeating: Float.zero, count: frames)
+            for index in 0..<Int(rate / 4) {
+                mostlySilent[index] = Float(0.30 * sin(2 * .pi * 220 * Double(index) / rate))
+            }
+            let sparse = SourceAwareAudioAnalyzer().analyze(
+                AudioBuffer(channels: [mostlySilent], sampleRate: rate),
+                as: .vocal
+            )
+            let sparseVariability = sparse.metrics["level_variability_p90_p10_db"]!
+            try tests.expect(sparseVariability.value < 24, "near-silent capture reported an implausible level range")
+            try tests.expect(sparseVariability.confidence < 0.2, "near-silent capture reported confident level variability")
+
+            // Crest uses the exact same RMS-selected window indices. Without that alignment, the
+            // silent windows' zero crest values push a short burst's P90 crest to zero.
+            let sparseBass = SourceAwareAudioAnalyzer().analyze(
+                AudioBuffer(channels: [mostlySilent], sampleRate: rate),
+                as: .bass
+            )
+            let sparseCrest = sparseBass.metrics["bass_crest_factor_p90"]!
+            try tests.expect(sparseCrest.value > 1.3, "sparse capture's crest percentile included silent windows")
+            try tests.expect(sparseCrest.confidence < 0.2, "sparse capture reported confident crest evidence")
+
+            // Digital silence throughout has no active window at all.
+            let silent = SourceAwareAudioAnalyzer().analyze(
+                AudioBuffer(channels: [Array(repeating: Float.zero, count: frames)], sampleRate: rate),
+                as: .vocal
+            )
+            try tests.expect(silent.metrics["level_variability_p90_p10_db"]!.value == 0, "silence reported level variability")
+            try tests.expect(silent.metrics["level_variability_p90_p10_db"]!.confidence == 0, "silence reported confident level variability")
+        }
         await tests.run("source-aware stereo evidence follows mid-side and mono-sum direction") {
             let rate = 48_000.0
             let mono = (0..<Int(rate)).map { Float(0.2 * sin(2 * .pi * 100 * Double($0) / rate)) }

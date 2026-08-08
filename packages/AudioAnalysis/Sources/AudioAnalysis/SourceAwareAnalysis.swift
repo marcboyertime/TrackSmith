@@ -215,8 +215,8 @@ public struct SourceAwareAudioAnalyzer: Sendable {
                 value: dynamics.crestP90, confidence: dynamicConfidence,
                 applicability: [.bass], valid: activeSignal,
                 windowing: "200 ms windows with 50% nominal overlap, bounded to at most 2048 windows",
-                aggregation: "90th percentile sample-peak/RMS ratio",
-                failures: ["Click noise, clipping, silence, and sparse notes can dominate", "Does not by itself measure tightness or transient definition"],
+                aggregation: "90th percentile sample-peak/RMS ratio over active windows only",
+                failures: ["Click noise, clipping, and sparse notes can dominate", "Windows more than 40 dB below the loudest window are excluded, so this is the performance's crest, not the capture's", "Does not by itself measure tightness or transient definition"],
                 provenance: [Self.compressorAutomationProvenance]
             )
 
@@ -256,8 +256,8 @@ public struct SourceAwareAudioAnalyzer: Sendable {
                 value: dynamics.crestP90, confidence: dynamicConfidence,
                 applicability: [.fullStereoMix], valid: activeSignal,
                 windowing: "200 ms windows with 50% nominal overlap, bounded to at most 2048 windows",
-                aggregation: "90th percentile sample-peak/RMS ratio",
-                failures: ["Sparse peaks, fades, and silence can dominate", "Does not prove punch, dynamics, or quality"],
+                aggregation: "90th percentile sample-peak/RMS ratio over active windows only",
+                failures: ["Sparse peaks and fades can dominate", "Windows more than 40 dB below the loudest window are excluded, so this is the programme's crest, not the capture's", "Does not prove punch, dynamics, or quality"],
                 provenance: [Self.compressorAutomationProvenance, Self.productionQualityCaution]
             )
             copyStandardsMetric("maximum_short_term_loudness_lufs", from: base, sourceClass: sourceClass, into: &metrics)
@@ -276,6 +276,23 @@ public struct SourceAwareAudioAnalyzer: Sendable {
         var confidence: Double
     }
 
+    /// Windows quieter than this many dB below the loudest window are treated as non-signal.
+    ///
+    /// This mirrors how the rest of the analysis treats silence: `TimeAveragedSpectrumAnalyzer`
+    /// gates onsets and bin occupancy at `maximum * 0.0001`, which is the same -40 dB
+    /// relative-to-capture-maximum floor expressed in power. A relative floor is used rather than
+    /// an absolute dBFS threshold because captures arrive at arbitrary gain, so any fixed dBFS
+    /// number would either pass a quiet capture's silence or discard a quiet capture's signal.
+    /// `isFinite` alone is not enough: `amplitudeToDB` clamps digital silence to -240 dBFS rather
+    /// than -inf, so silent gaps survive the filter and drag P10 down to the clamp, which is how
+    /// this metric could report level variability wider than the format's own dynamic range.
+    private static let activeWindowFloorDB = 40.0
+
+    /// Absolute numerical-silence floor, below the least significant bit of 24-bit PCM (-144 dBFS)
+    /// and above the -240 dBFS clamp. The relative floor alone cannot reject a capture that is
+    /// silent throughout, because there is no loud window for it to be relative to.
+    private static let numericalSilenceDBFS = -160.0
+
     private struct StereoStatistics {
         var sideEnergyShare: Double
         var monoSumEnergyRatio: Double
@@ -284,18 +301,38 @@ public struct SourceAwareAudioAnalyzer: Sendable {
     }
 
     private func dynamicStatistics(_ report: AnalysisReport) -> DynamicStatistics {
-        let rms = report.series?["rms_dbfs_timeline"]?.values.filter { $0.isFinite } ?? []
-        let crest = report.series?["crest_factor_timeline"]?.values.filter { $0.isFinite } ?? []
-        let p10 = percentile(rms, 0.10)
-        let p90 = percentile(rms, 0.90)
-        let confidence = min(
+        let rms = report.series?["rms_dbfs_timeline"]?.values ?? []
+        let crest = report.series?["crest_factor_timeline"]?.values ?? []
+        let seriesConfidence = min(
             report.series?["rms_dbfs_timeline"]?.confidence ?? 0,
             report.series?["crest_factor_timeline"]?.confidence ?? 0
         )
+        let finiteRMS = rms.filter { $0.isFinite }
+        guard let loudest = finiteRMS.max() else {
+            return DynamicStatistics(levelP90P10DB: 0, crestP90: 0, confidence: 0)
+        }
+        // Both timelines come from the same window starts, so gate by index and keep them aligned.
+        // Crest has the same exposure: `dynamicsSeries` reports 0 for windows whose RMS is below
+        // 1e-12, so silent gaps inject a run of zeroes that shifts every percentile rank.
+        let activeFloor = max(loudest - Self.activeWindowFloorDB, Self.numericalSilenceDBFS)
+        let activeIndices = rms.indices.filter { rms[$0].isFinite && rms[$0] > activeFloor }
+        let activeRMS = activeIndices.map { rms[$0] }
+        let activeCrest = activeIndices.compactMap { index in
+            index < crest.count && crest[index].isFinite ? crest[index] : nil
+        }
+        // The metric needs at least two active windows to describe a range at all, and confidence
+        // is scaled by the share of windows that survived gating so a value derived from a handful
+        // of active windows in a mostly silent capture is not reported as strongly evidenced.
+        guard activeRMS.count >= 2 else {
+            return DynamicStatistics(levelP90P10DB: 0, crestP90: percentile(activeCrest, 0.90), confidence: 0)
+        }
+        let activeShare = Double(activeIndices.count) / Double(max(rms.count, 1))
+        let p10 = percentile(activeRMS, 0.10)
+        let p90 = percentile(activeRMS, 0.90)
         return DynamicStatistics(
             levelP90P10DB: max(0, p90 - p10),
-            crestP90: percentile(crest, 0.90),
-            confidence: confidence
+            crestP90: percentile(activeCrest, 0.90),
+            confidence: seriesConfidence * activeShare
         )
     }
 
@@ -358,10 +395,10 @@ public struct SourceAwareAudioAnalyzer: Sendable {
             validRange: 0...240,
             sourceApplicability: SourceAnalysisClass.allCases,
             validConditions: ["Finite PCM audio", "At least two active 200 ms windows"],
-            windowing: "200 ms RMS windows with 50% nominal overlap, bounded to at most 2048 windows",
-            aggregation: "Difference between 90th and 10th percentile RMS levels in dB",
-            knownFailureModes: ["Silence, fades, sparse notes, edits, and arrangement changes inflate the result", "It is level variability, not proof of inconsistent performance or a compression requirement"],
-            version: "1.0",
+            windowing: "200 ms RMS windows with 50% nominal overlap, bounded to at most 2048 windows, restricted to windows within 40 dB of the loudest window",
+            aggregation: "Difference between 90th and 10th percentile RMS levels in dB over active windows only; confidence is scaled by the share of windows that survived gating",
+            knownFailureModes: ["Fades, sparse notes, edits, and arrangement changes inflate the result", "Quiet performed material within 40 dB of the loudest window is measured, but anything below that floor is discarded with the room tone and silence", "It is level variability, not proof of inconsistent performance or a compression requirement"],
+            version: "1.1",
             provenance: [Self.compressorAutomationProvenance, Self.multitrackCompressionProvenance]
         )
         metrics[definition.identifier] = SourceMetricValue(definition: definition, value: dynamics.levelP90P10DB, confidence: dynamics.confidence)
@@ -388,7 +425,7 @@ public struct SourceAwareAudioAnalyzer: Sendable {
         }
         store("drums_positive_spectral_flux_p90", .ratio, 0...10, spectrum.p90PositiveFlux, dynamicConfidence * spectralConfidence, "90th percentile normalized positive magnitude flux", spectrumFailures + ["Flux indicates change, not drum identity or preferred punch"])
         store("drums_onset_candidate_density_per_second", .perSecond, 0...1_000, spectrum.transientDensityPerSecond, dynamicConfidence * spectralConfidence, "Positive-flux outliers above an adaptive within-capture threshold per second", spectrumFailures + ["Rolls, ambience, bleed, and edits can merge or create candidates"])
-        store("drums_crest_factor_p90", .ratio, 0...1_000, dynamics.crestP90, dynamicConfidence, "90th percentile 200 ms sample-peak/RMS ratio", ["Clipping, isolated clicks, and silence can dominate", "Does not prove punch"])
+        store("drums_crest_factor_p90", .ratio, 0...1_000, dynamics.crestP90, dynamicConfidence, "90th percentile 200 ms sample-peak/RMS ratio over active windows only", ["Clipping and isolated clicks can dominate", "Windows more than 40 dB below the loudest window are excluded, so this is the performance's crest, not the capture's", "Does not prove punch"])
         store("drums_post_onset_sustain_ratio", .ratio, 0...10, spectrum.postOnsetSustainRatio, dynamicConfidence * spectralConfidence, "Median RMS-energy ratio roughly 40-190 ms after detected change relative to the event frame", spectrumFailures + ["Tempo, rolls, room decay, overlapping hits, and compression confound sustain"])
     }
 
