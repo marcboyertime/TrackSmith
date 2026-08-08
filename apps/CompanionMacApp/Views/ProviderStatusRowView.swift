@@ -6,7 +6,7 @@ struct ProviderStatusRowView: View {
     var body: some View {
         HStack(spacing: Theme.Spacing.eight) {
             Image(systemName: model.providerSelection.usesCloud ? "cloud" : "checkmark.shield")
-                .foregroundStyle(model.providerSelection.usesCloud ? .blue : .secondary)
+                .foregroundStyle(model.providerSelection.usesCloud ? Theme.Colors.accent : .secondary)
             VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
                 Text(model.activeProviderDescription)
                     .font(Theme.Font.meta)
@@ -24,6 +24,6 @@ struct ProviderStatusRowView: View {
         }
         .padding(.horizontal, Theme.Spacing.eight)
         .padding(.vertical, Theme.Spacing.four)
-        .background(.quaternary.opacity(0.55), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+        .instrumentSurface(.raised)
     }
 }

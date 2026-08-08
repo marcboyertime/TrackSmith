@@ -27,6 +27,18 @@ enum Theme {
     }
 
     enum Colors {
+        static let canvas = SwiftUI.Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
+        static let card = SwiftUI.Color(red: 26 / 255, green: 26 / 255, blue: 28 / 255)
+        static let raised = SwiftUI.Color(red: 34 / 255, green: 34 / 255, blue: 36 / 255)
+        static let control = SwiftUI.Color(red: 42 / 255, green: 42 / 255, blue: 45 / 255)
+        static let hairline = SwiftUI.Color.white.opacity(0.13)
+        static let accent = SwiftUI.Color(red: 46 / 255, green: 215 / 255, blue: 208 / 255)
+        static let accentSelection = accent.opacity(0.16)
+        static let accentSubtle = accent.opacity(0.10)
+        static let warningSurface = SwiftUI.Color.orange.opacity(0.12)
+        static let clarificationSurface = SwiftUI.Color.yellow.opacity(0.12)
+        static let contradictionSurface = SwiftUI.Color.purple.opacity(0.10)
+
         static let evidenceAudioCurrent = SwiftUI.Color.green
         static let evidenceAudioHistorical = SwiftUI.Color.orange
         static let evidenceAvailable = SwiftUI.Color.green
@@ -40,7 +52,7 @@ enum Theme {
         static let feedbackBetter = SwiftUI.Color.green
         static let feedbackWorse = SwiftUI.Color.red
         static let feedbackUndo = SwiftUI.Color.orange
-        static let feedbackDefault = SwiftUI.Color.accentColor
+        static let feedbackDefault = accent
 
         static func hypothesisColor(for status: TutorHypothesisStatus) -> SwiftUI.Color {
             switch status {

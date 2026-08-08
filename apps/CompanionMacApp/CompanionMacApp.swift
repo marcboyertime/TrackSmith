@@ -9,9 +9,19 @@ struct CompanionMacApp: App {
     @StateObject private var model = CompanionSessionModel()
 
     var body: some Scene {
-        WindowGroup { CompanionContentView(model: model) }
+        WindowGroup {
+            CompanionContentView(model: model)
+                .environment(\.colorScheme, .dark)
+                .tint(Theme.Colors.accent)
+                .groupBoxStyle(InstrumentGroupBoxStyle())
+        }
             .defaultSize(width: 1_120, height: 760)
-        Settings { SettingsView(model: model) }
+        Settings {
+            SettingsView(model: model)
+                .environment(\.colorScheme, .dark)
+                .tint(Theme.Colors.accent)
+                .groupBoxStyle(InstrumentGroupBoxStyle())
+        }
     }
 }
 
@@ -55,7 +65,7 @@ struct CompanionContentView: View {
                                     .padding(.horizontal, Theme.Spacing.eight)
                                     .background(
                                         mode == candidate
-                                            ? Color.accentColor.opacity(0.16)
+                                            ? Theme.Colors.accentSelection
                                             : Color.clear,
                                         in: RoundedRectangle(cornerRadius: Theme.Radius.small)
                                     )
@@ -123,6 +133,7 @@ struct CompanionContentView: View {
             }
             .navigationTitle(mode.title)
         }
+        .background(Theme.Colors.canvas)
         .task { model.start() }
         .onChange(of: model.providerSelection) { _, _ in
             model.refreshCredentialStatus()

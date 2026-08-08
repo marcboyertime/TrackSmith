@@ -15,7 +15,7 @@ struct ChangeCard: View {
                 Text(node.category.rawValue.capitalized)
                     .font(Theme.Font.meta)
                     .padding(.horizontal, Theme.Spacing.legacy7).padding(.vertical, Theme.Spacing.legacy3)
-                    .background(.quaternary, in: Capsule())
+                    .background(Theme.Colors.raised, in: Capsule())
                 Spacer()
                 Toggle("Enabled", isOn: Binding(
                     get: { node.enabled },
@@ -40,6 +40,6 @@ struct ChangeCard: View {
             Text(node.rationale).font(Theme.Font.meta).foregroundStyle(.secondary)
         }
         .padding(Theme.Spacing.legacy10)
-        .background(.quaternary.opacity(0.55), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+        .instrumentSurface(.raised)
     }
 }

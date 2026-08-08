@@ -18,7 +18,7 @@ struct PreviewCard: View {
                         Text(title).font(Theme.Font.section)
                         if working {
                             Image(systemName: "pencil.circle.fill")
-                                .foregroundStyle(.tint)
+                                .foregroundStyle(Theme.Colors.accent)
                                 .accessibilityLabel("Working plan")
                         }
                     }
@@ -34,8 +34,11 @@ struct PreviewCard: View {
                 }
                 .frame(maxWidth: .infinity, minHeight: 75, alignment: .leading)
                 .padding(Theme.Spacing.legacy10)
-                .background(selected ? Color.accentColor.opacity(0.17) : Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
-                .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(selected ? Color.accentColor : .clear, lineWidth: 1.5))
+                .background(selected ? Theme.Colors.accentSelection : Theme.Colors.raised, in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Theme.Radius.small)
+                        .stroke(selected ? Theme.Colors.accent : Theme.Colors.hairline, lineWidth: 1)
+                )
             }
             .buttonStyle(.plain)
             if let useAction {

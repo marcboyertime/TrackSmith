@@ -23,19 +23,19 @@ struct Badge: View {
                 .font(Theme.Font.meta.weight(.bold))
                 .padding(.horizontal, Theme.Spacing.legacy6)
                 .padding(.vertical, Theme.Spacing.legacy2)
-                .background(.tint.opacity(0.2), in: Capsule())
+                .background(Theme.Colors.accentSelection, in: Capsule())
         case .category:
             Text(text)
                 .font(Theme.Font.meta)
                 .padding(.horizontal, Theme.Spacing.legacy7)
                 .padding(.vertical, Theme.Spacing.legacy3)
-                .background(.quaternary, in: Capsule())
+                .background(Theme.Colors.raised, in: Capsule())
         case .hypothesis:
             Text(text)
                 .font(Theme.Font.meta.weight(.semibold))
                 .padding(.horizontal, Theme.Spacing.legacy7)
                 .padding(.vertical, Theme.Spacing.legacy3)
-                .background(.quaternary, in: Capsule())
+                .background(Theme.Colors.raised, in: Capsule())
         }
     }
 }

@@ -26,37 +26,41 @@ struct Card<Content: View>: View {
             content()
                 .padding(Theme.Spacing.twelve)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .instrumentSurface()
         case .clarification:
             content()
                 .padding(Theme.Spacing.legacy10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.yellow.opacity(0.12), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .background(Theme.Colors.clarificationSurface, in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(Theme.Colors.hairline, lineWidth: 1))
         case .unsupported:
             content()
                 .padding(Theme.Spacing.legacy10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .background(Theme.Colors.warningSurface, in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(Theme.Colors.hairline, lineWidth: 1))
         case .firstMove:
             content()
                 .padding(Theme.Spacing.twelve)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .background(Theme.Colors.accentSubtle, in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(Theme.Colors.hairline, lineWidth: 1))
         case .strategy:
             content()
                 .padding(Theme.Spacing.legacy10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .instrumentSurface()
         case .hypothesis:
             content()
                 .padding(Theme.Spacing.legacy10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .instrumentSurface()
         case .contradiction:
             content()
                 .padding(Theme.Spacing.legacy10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.purple.opacity(0.10), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .background(Theme.Colors.contradictionSurface, in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(Theme.Colors.hairline, lineWidth: 1))
         }
     }
 }

@@ -9,7 +9,7 @@ struct WaveformView: View {
             var center = Path()
             center.move(to: CGPoint(x: 0, y: middle))
             center.addLine(to: CGPoint(x: size.width, y: middle))
-            context.stroke(center, with: .color(.secondary.opacity(0.25)), lineWidth: 1)
+            context.stroke(center, with: .color(Theme.Colors.hairline), lineWidth: 1)
             guard samples.count > 1 else { return }
             var path = Path()
             for index in samples.indices {
@@ -19,9 +19,10 @@ struct WaveformView: View {
                 if index == 0 { path.move(to: CGPoint(x: x, y: y)) }
                 else { path.addLine(to: CGPoint(x: x, y: y)) }
             }
-            context.stroke(path, with: .color(.accentColor), lineWidth: 1.2)
+            context.stroke(path, with: .color(Theme.Colors.accent), lineWidth: 1.2)
         }
-        .background(Color.black.opacity(0.12), in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+        .background(Theme.Colors.card, in: RoundedRectangle(cornerRadius: Theme.Radius.small))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(Theme.Colors.hairline, lineWidth: 1))
         .overlay {
             if samples.isEmpty {
                 Text("Waveform appears after captured playback").foregroundStyle(.secondary)

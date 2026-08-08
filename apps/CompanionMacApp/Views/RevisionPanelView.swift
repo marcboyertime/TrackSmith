@@ -16,7 +16,7 @@ struct RevisionPanelView: View {
                             .font(Theme.Font.meta)
                             .padding(.horizontal, Theme.Spacing.eight)
                             .padding(.vertical, Theme.Spacing.four)
-                            .background(.quaternary, in: Capsule())
+                            .background(Theme.Colors.raised, in: Capsule())
                     }
                     Spacer()
                     Button("Render Revision") { model.previewRevision() }

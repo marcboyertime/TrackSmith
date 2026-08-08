@@ -15,7 +15,7 @@ struct PromptPanelView: View {
                             .buttonStyle(.borderless)
                             .padding(.horizontal, Theme.Spacing.legacy9)
                             .padding(.vertical, Theme.Spacing.legacy5)
-                            .background(.quaternary, in: Capsule())
+                            .background(Theme.Colors.raised, in: Capsule())
                     }
                     Spacer()
                     Button("Create 3 Previews") { model.generatePreviews() }

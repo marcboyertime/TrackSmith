@@ -58,6 +58,8 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
+        .scrollContentBackground(.hidden)
+        .background(Theme.Colors.canvas)
         .onChange(of: model.providerSelection) { _, _ in
             model.refreshCredentialStatus()
         }

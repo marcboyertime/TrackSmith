@@ -27,6 +27,6 @@ struct StatusHeaderView: View {
                 .foregroundStyle(.secondary)
         }
         .padding(Theme.Spacing.legacy14)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: Theme.Radius.medium))
+        .instrumentSurface(.raised, radius: Theme.Radius.medium)
     }
 }
