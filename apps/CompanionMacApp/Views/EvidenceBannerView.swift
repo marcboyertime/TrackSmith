@@ -11,7 +11,7 @@ struct EvidenceBannerView: View {
                     .foregroundStyle(evidenceColor)
                 VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
                     Text(evidenceTitle).font(Theme.Font.section)
-                    Text(evidenceDetail).font(Theme.Font.meta).foregroundStyle(.secondary)
+                    Text(evidenceDetail).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
                 }
                 Spacer()
             }

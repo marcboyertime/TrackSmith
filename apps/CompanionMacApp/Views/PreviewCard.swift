@@ -24,7 +24,7 @@ struct PreviewCard: View {
                     }
                     Text(subtitle)
                         .font(subtitleIsMeasured ? Theme.Font.data : Theme.Font.meta)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.Colors.secondaryText)
                     if let warning {
                         Label(warning, systemImage: "exclamationmark.triangle")
                             .font(Theme.Font.meta)

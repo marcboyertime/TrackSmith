@@ -13,7 +13,7 @@ struct LessonContentView: View {
                     Text(question)
                     Text("Answer by editing your request above and starting the lesson again.")
                         .font(Theme.Font.meta)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.Colors.secondaryText)
                 }
                 .padding(Theme.Spacing.eight)
             }
@@ -42,7 +42,7 @@ struct LessonContentView: View {
         if !tutor.statusMessage.isEmpty {
             Text(tutor.statusMessage)
                 .font(Theme.Font.meta)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.Colors.secondaryText)
         }
 
         if let summary = lesson.finalSummary {

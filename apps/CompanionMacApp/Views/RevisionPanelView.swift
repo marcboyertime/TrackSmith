@@ -4,12 +4,17 @@ struct RevisionPanelView: View {
     @ObservedObject var model: CompanionSessionModel
 
     var body: some View {
-        GroupBox("Conversational revision") {
-            VStack(alignment: .leading, spacing: Theme.Spacing.legacy10) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.legacy10) {
+            Text("Conversational revision")
+                .font(Theme.Font.section)
                 TextField("Revise the current working plan", text: $model.revisionPrompt, axis: .vertical)
-                    .textFieldStyle(.roundedBorder)
+                    .textFieldStyle(.plain)
                     .lineLimit(1...3)
-                HStack {
+                    .padding(Theme.Spacing.twelve)
+                    .background(Theme.Colors.control, in: RoundedRectangle(cornerRadius: Theme.Radius.medium))
+                    .overlay(RoundedRectangle(cornerRadius: Theme.Radius.medium).stroke(Theme.Colors.hairline, lineWidth: 1))
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
                     ForEach(["Use less compression", "Undo only the compression", "Lock the EQ", "Remove the compression"], id: \.self) { chip in
                         Button(chip) { model.revisionPrompt = chip }
                             .buttonStyle(.borderless)
@@ -18,6 +23,9 @@ struct RevisionPanelView: View {
                             .padding(.vertical, Theme.Spacing.four)
                             .background(Theme.Colors.raised, in: Capsule())
                     }
+                    }
+                }
+                HStack {
                     Spacer()
                     Button("Render Revision") { model.previewRevision() }
                         .buttonStyle(.borderedProminent)
@@ -29,9 +37,9 @@ struct RevisionPanelView: View {
                 }
                 Text("Edits derive from structured working state. Unmentioned production nodes and every locked node remain intact; measured preview gain is recalibrated after audio changes.")
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(Theme.Spacing.eight)
+                    .foregroundStyle(Theme.Colors.secondaryText)
         }
+        .padding(Theme.Spacing.twelve)
+        .instrumentSurface(.raised, radius: Theme.Radius.medium)
     }
 }

@@ -21,14 +21,14 @@ struct StrategyCardView: View {
                 if depth != .simple {
                     if !option.tradeoffs.isEmpty {
                         Label(option.tradeoffs.joined(separator: " "), systemImage: "arrow.left.arrow.right")
-                            .font(Theme.Font.meta).foregroundStyle(.secondary)
+                            .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
                     }
                     if !option.preservationRisks.isEmpty {
                         Label(option.preservationRisks.joined(separator: " "), systemImage: "shield")
-                            .font(Theme.Font.meta).foregroundStyle(.secondary)
+                            .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
                     }
                     Label("Stop when: \(option.stoppingRule)", systemImage: "hand.raised.circle")
-                        .font(Theme.Font.meta).foregroundStyle(.secondary)
+                        .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
                 }
                 // Only a reviewed procedure can start an exact guided experiment.
                 if let procedureID = option.relatedProcedureIDs.first, let startExperiment {

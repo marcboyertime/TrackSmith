@@ -15,7 +15,7 @@ struct CompanionMacApp: App {
                 .tint(Theme.Colors.accent)
                 .groupBoxStyle(InstrumentGroupBoxStyle())
         }
-            .defaultSize(width: 1_120, height: 760)
+            .defaultSize(width: 980, height: 760)
         Settings {
             SettingsView(model: model)
                 .environment(\.colorScheme, .dark)
@@ -51,98 +51,26 @@ struct CompanionContentView: View {
     @State private var confirmingCacheDeletion = false
 
     var body: some View {
-        NavigationSplitView {
-            VStack(alignment: .leading, spacing: Theme.Spacing.four) {
-                List {
-                    Section("Mode") {
-                        ForEach(CompanionMode.allCases) { candidate in
-                            Button {
-                                mode = candidate
-                            } label: {
-                                Text(candidate.title)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.vertical, Theme.Spacing.four)
-                                    .padding(.horizontal, Theme.Spacing.eight)
-                                    .background(
-                                        mode == candidate
-                                            ? Theme.Colors.accentSelection
-                                            : Color.clear,
-                                        in: RoundedRectangle(cornerRadius: Theme.Radius.small)
-                                    )
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityAddTraits(mode == candidate ? .isSelected : [])
-                        }
+        VStack(spacing: 0) {
+            topChrome
+            Divider().overlay(Theme.Colors.hairline)
+            Group {
+                switch mode {
+                case .guideMe:
+                    TutorGuideView(session: model, tutor: tutor)
+                case .createForMe:
+                    ScrollView {
+                        createWorkspace
                     }
                 }
-                .listStyle(.sidebar)
-                .accessibilityLabel("TrackSmith mode")
-
-                Divider()
-
-                Text("Sessions")
-                    .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, Theme.Spacing.twelve)
-
-                List(selection: $model.selectedInstanceID) {
-                    Section("Logic Audio Units") {
-                        if model.instances.isEmpty {
-                            ContentUnavailableView(
-                                "No active insert",
-                                systemImage: "waveform.slash",
-                                description: Text("Insert TrackSmith on a track and play audio.")
-                            )
-                        }
-                        ForEach(model.instances) { instance in
-                            VStack(alignment: .leading, spacing: Theme.Spacing.legacy3) {
-                                Text(instance.contextName ?? "TrackSmith")
-                                Text(instanceSummary(instance))
-                                    .font(instanceSummaryIsMeasured(instance) ? Theme.Font.data : Theme.Font.meta)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .tag(instance.id)
-                        }
-                    }
-                }
-                .listStyle(.sidebar)
             }
-            .navigationTitle("TrackSmith")
-            .frame(minWidth: 250)
-        } detail: {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
-                    Text(mode.subtitle)
-                        .font(Theme.Font.meta)
-                        .foregroundStyle(.secondary)
-                    StatusHeaderView(model: model)
-                    CapturePanelView(model: model)
-                    ProviderStatusRowView(model: model)
-                    switch mode {
-                    case .guideMe:
-                        TutorGuideView(session: model, tutor: tutor)
-                    case .createForMe:
-                        PromptPanelView(model: model)
-                        PreviewPanelView(model: model)
-                        RevisionPanelView(model: model)
-                        ChangeStackView(model: model)
-                        ActionBarView(model: model)
-                    }
-                }
-                .padding(Theme.Spacing.legacy22)
-            }
-            .navigationTitle(mode.title)
+            .frame(maxWidth: 960)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Theme.Colors.canvas)
         .task { model.start() }
         .onChange(of: model.providerSelection) { _, _ in
             model.refreshCredentialStatus()
-        }
-        .toolbar {
-            Button("Delete Local Audio Cache", systemImage: "trash", role: .destructive) {
-                confirmingCacheDeletion = true
-            }
-            .disabled(model.isBusy)
         }
         .confirmationDialog(
             "Delete all cached audio?",
@@ -156,5 +84,90 @@ struct CompanionContentView: View {
         } message: {
             Text("This removes local captured WAVs and rendered previews. It does not alter Logic projects, source audio, plug-in state, or protocol diagnostics.")
         }
+    }
+
+    private var topChrome: some View {
+        HStack(spacing: Theme.Spacing.twelve) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
+                Text("TrackSmith")
+                    .font(Theme.Font.section)
+                    .foregroundStyle(Theme.Colors.text)
+                Text("Logic companion")
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Colors.mutedText)
+            }
+            Picker("Mode", selection: $mode) {
+                ForEach(CompanionMode.allCases) { candidate in
+                    Text(candidate.title).tag(candidate)
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 245)
+            .accessibilityLabel("TrackSmith mode")
+
+            Spacer(minLength: Theme.Spacing.eight)
+
+            activeInsertPicker
+
+            SettingsLink {
+                Image(systemName: "gearshape")
+                    .accessibilityLabel("Settings")
+            }
+            .buttonStyle(.bordered)
+
+            Menu {
+                Button("Delete Local Audio Cache", systemImage: "trash", role: .destructive) {
+                    confirmingCacheDeletion = true
+                }
+                .disabled(model.isBusy)
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .accessibilityLabel("More actions")
+            }
+            .menuStyle(.borderlessButton)
+            .frame(width: 28)
+        }
+        .padding(.horizontal, Theme.Spacing.twentyFour)
+        .padding(.vertical, Theme.Spacing.twelve)
+        .background(Theme.Colors.card)
+    }
+
+    @ViewBuilder
+    private var activeInsertPicker: some View {
+        if model.instances.isEmpty {
+            Label("No active insert", systemImage: "waveform.slash")
+                .font(Theme.Font.meta)
+                .foregroundStyle(Theme.Colors.secondaryText)
+                .help("Insert TrackSmith on a Logic channel, then play audio.")
+                .accessibilityLabel("No active TrackSmith insert. Insert TrackSmith on a Logic channel, then play audio.")
+        } else {
+            Picker("Active insert", selection: $model.selectedInstanceID) {
+                Text("Choose an insert").tag(Optional<UUID>.none)
+                ForEach(model.instances) { instance in
+                    Text("\(instance.contextName ?? "TrackSmith") — \(instanceSummary(instance))")
+                        .tag(Optional(instance.id))
+                }
+            }
+            .labelsHidden()
+            .frame(maxWidth: 270)
+            .accessibilityLabel("Active TrackSmith insert")
+            .help("Choose the Logic insert that will receive the next capture.")
+        }
+    }
+
+    private var createWorkspace: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
+            Text(mode.subtitle)
+                .font(Theme.Font.meta)
+                .foregroundStyle(Theme.Colors.secondaryText)
+            CapturePanelView(model: model)
+            PromptPanelView(model: model)
+            PreviewPanelView(model: model)
+            RevisionPanelView(model: model)
+            ChangeStackView(model: model)
+            ActionBarView(model: model)
+        }
+        .padding(Theme.Spacing.twentyFour)
     }
 }

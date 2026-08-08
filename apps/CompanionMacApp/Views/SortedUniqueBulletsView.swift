@@ -9,7 +9,7 @@ struct SortedUniqueBulletsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.four) {
             ForEach(Array(Set(items)).sorted(), id: \.self) { item in
-                Text("• " + item).font(Theme.Font.meta).foregroundStyle(.secondary)
+                Text("• " + item).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

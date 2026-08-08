@@ -25,7 +25,7 @@ struct MemoryControlsView: View {
                 }
                 Text("Nothing is remembered unless you press one of these. What you save stays on this Mac, ranks results for you only, and is never shown as general advice.")
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                 if !tutor.memoryNote.isEmpty {
                     Text(tutor.memoryNote).font(Theme.Font.meta).foregroundStyle(Theme.Colors.text)
                 }
@@ -36,7 +36,7 @@ struct MemoryControlsView: View {
                                 HStack(alignment: .top) {
                                     Text("• \(outcome.feedback.rawValue): \(outcome.question)")
                                         .font(Theme.Font.meta)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Theme.Colors.secondaryText)
                                     Spacer()
                                     Button("Forget") { tutor.forgetOutcome(outcome.id) }
                                         .font(Theme.Font.meta)

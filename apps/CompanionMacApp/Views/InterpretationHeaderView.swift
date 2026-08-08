@@ -12,12 +12,12 @@ struct InterpretationHeaderView: View {
             if !answer.domains.isEmpty {
                 Text(answer.domains.prefix(3).map(domainLabel).joined(separator: " · "))
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
             }
             Spacer()
             Text(confidenceLabel(answer.confidenceClass))
                 .font(Theme.Font.meta)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.Colors.secondaryText)
         }
     }
 }

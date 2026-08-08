@@ -16,7 +16,7 @@ struct DirectAnswerCardView: View {
                             ForEach(answer.assumptions, id: \.self) { assumption in
                                 Text("• " + assumption)
                                     .font(Theme.Font.meta)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(Theme.Colors.secondaryText)
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)

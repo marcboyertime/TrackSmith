@@ -6,14 +6,14 @@ struct ProviderStatusRowView: View {
     var body: some View {
         HStack(spacing: Theme.Spacing.eight) {
             Image(systemName: model.providerSelection.usesCloud ? "cloud" : "checkmark.shield")
-                .foregroundStyle(model.providerSelection.usesCloud ? Theme.Colors.accent : .secondary)
+                .foregroundStyle(model.providerSelection.usesCloud ? Theme.Colors.accent : Theme.Colors.secondaryText)
             VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
                 Text(model.activeProviderDescription)
                     .font(Theme.Font.meta)
                 if model.providerSelection.usesCloud {
                     Text(model.cloudReasoningConsent ? "Cloud consent: granted" : "Cloud consent: not granted")
                         .font(Theme.Font.meta)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.Colors.secondaryText)
                 }
             }
             Spacer()

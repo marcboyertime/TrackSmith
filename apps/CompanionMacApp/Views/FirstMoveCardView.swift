@@ -15,12 +15,12 @@ struct FirstMoveCardView: View {
                 if !answer.whatToListenFor.isEmpty {
                     Label(answer.whatToListenFor.prefix(2).joined(separator: " "), systemImage: "ear")
                         .font(Theme.Font.meta)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.Colors.secondaryText)
                 }
                 if let stop = answer.stopConditions.first {
                     Label("Stop when: \(stop)", systemImage: "hand.raised.circle")
                         .font(Theme.Font.meta)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.Colors.secondaryText)
                 }
             }
         }

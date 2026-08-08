@@ -11,7 +11,7 @@ struct EvidenceFooterView: View {
             // or did not contribute.
             Label(answer.audioInfluence.statement, systemImage: "waveform.badge.magnifyingglass")
                 .font(Theme.Font.meta)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.Colors.secondaryText)
             if !answer.sourceIDs.isEmpty {
                 DisclosureGroup("Sources (\(answer.sourceIDs.count))") {
                     VStack(alignment: .leading, spacing: Theme.Spacing.four) {
@@ -26,12 +26,12 @@ struct EvidenceFooterView: View {
             if let principle = answer.teachingPrinciple {
                 Label(principle, systemImage: "graduationcap")
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
             }
             if answer.listeningRemainsDecisive {
                 Text("Listening remains decisive. None of this proves a cause.")
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
             }
         }
     }
