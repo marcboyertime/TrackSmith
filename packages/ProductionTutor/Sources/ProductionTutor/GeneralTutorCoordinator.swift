@@ -125,8 +125,8 @@ public struct GeneralTutorCoordinator: Sendable {
         )
     }
 
-    public init() throws {
-        let retriever = try GeneralTutorRetriever()
+    public init(profile: TutorPersonalProfile = .empty) throws {
+        let retriever = try GeneralTutorRetriever(profile: profile)
         let catalog = try TutorProcedureCatalog.loadValidated()
         self.init(retriever: retriever, procedureCatalog: catalog)
     }

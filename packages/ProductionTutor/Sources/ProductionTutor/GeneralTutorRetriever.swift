@@ -59,13 +59,19 @@ public struct GeneralTutorRetriever: Sendable {
     public static let maximumClaimsPerSource = 4
 
     private let base: GeneralTutorKnowledgeBase
+    /// This user's confirmed outcomes. They may reorder results for this user
+    /// and nothing else — a personal result never becomes a general claim and
+    /// never changes a card's evidence class.
+    private let profile: TutorPersonalProfile
 
-    public init(base: GeneralTutorKnowledgeBase) {
+    public init(base: GeneralTutorKnowledgeBase, profile: TutorPersonalProfile = .empty) {
         self.base = base
+        self.profile = profile
     }
 
-    public init() throws {
+    public init(profile: TutorPersonalProfile = .empty) throws {
         self.base = try GeneralTutorKnowledgeBase.loadValidated()
+        self.profile = profile
     }
 
     public var knowledgeBase: GeneralTutorKnowledgeBase { base }
@@ -102,6 +108,13 @@ public struct GeneralTutorRetriever: Sendable {
             score += domainScore(cardDomains: strategy.domains, domains: domains, groups: groups)
             if strategy.applicableQuestionKinds.contains(intent.questionKind) { score += 1.5 }
             if strategy.applicableSourceTypes.contains(intent.sourceType) { score += 1.25 }
+            // Personal ranking preference, bounded so it reorders rather than
+            // manufactures relevance: a strategy with no lexical or domain
+            // match still scores zero and stays out.
+            if score > 0 {
+                if profile.preferredStrategyIDs.contains(strategy.id) { score += 2.0 }
+                if profile.deprioritizedStrategyIDs.contains(strategy.id) { score -= 2.0 }
+            }
             if score > 0 { scoredStrategies.append((strategy, score)) }
         }
 

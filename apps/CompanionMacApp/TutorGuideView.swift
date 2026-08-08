@@ -26,6 +26,7 @@ struct TutorGuideView: View {
                             beginExperiment(procedureID)
                         }
                     )
+                    memoryControls
                 }
                 if let lesson = tutor.lesson {
                     lessonContent(lesson)
@@ -148,6 +149,7 @@ struct TutorGuideView: View {
                     }
                     .pickerStyle(.segmented)
                     .frame(width: 280)
+                    researchControl
                     Spacer()
                     // Ask is the default: any production question is accepted.
                     // Start Lesson remains for the bounded vocal fast path.
@@ -540,6 +542,80 @@ struct TutorGuideView: View {
                 }
             }
             .font(.callout)
+            .padding(8)
+        }
+    }
+
+    // MARK: - Research and memory controls
+
+    /// Research This is specified but not implemented. The control says so
+    /// plainly rather than being hidden, so the absence is legible.
+    @ViewBuilder private var researchControl: some View {
+        if tutor.researchAvailable {
+            Toggle("Research current sources", isOn: .constant(false))
+                .font(.caption)
+        } else {
+            Label("Research This: not built yet", systemImage: "globe.badge.chevron.backward")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .help("Answers come only from reviewed local knowledge. Live source research is specified but not implemented, so TrackSmith will tell you when its knowledge does not cover a question rather than searching.")
+        }
+    }
+
+    private var memoryControls: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Text("Did this help on your track?")
+                        .font(.caption.weight(.semibold))
+                    Button("Remember this worked") {
+                        tutor.rememberCurrentOutcome(helped: true)
+                    }
+                    .font(.caption)
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    Button("Remember it did not") {
+                        tutor.rememberCurrentOutcome(helped: false)
+                    }
+                    .font(.caption)
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    Spacer()
+                }
+                Text("Nothing is remembered unless you press one of these. What you save stays on this Mac, ranks results for you only, and is never shown as general advice.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                if !tutor.memoryNote.isEmpty {
+                    Text(tutor.memoryNote).font(.caption2).foregroundStyle(.tint)
+                }
+                if !tutor.profile.outcomes.isEmpty {
+                    DisclosureGroup("What TrackSmith remembers (\(tutor.profile.outcomes.count))") {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(tutor.profile.outcomes) { outcome in
+                                HStack(alignment: .top) {
+                                    Text("• \(outcome.feedback.rawValue): \(outcome.question)")
+                                        .font(.caption2)
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                    Button("Forget") { tutor.forgetOutcome(outcome.id) }
+                                        .font(.caption2)
+                                        .buttonStyle(.borderless)
+                                }
+                            }
+                            HStack {
+                                Button("Delete all tutor learning", role: .destructive) {
+                                    tutor.deleteAllLearning()
+                                }
+                                .font(.caption2)
+                                .buttonStyle(.borderless)
+                                Spacer()
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .font(.caption)
+                }
+            }
             .padding(8)
         }
     }

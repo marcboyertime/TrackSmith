@@ -24,11 +24,22 @@ final class TutorSessionModel: ObservableObject {
     @Published var generalOutcome: GeneralTutorOutcome?
     @Published var isAnswering = false
 
+    /// What TrackSmith has been explicitly told or explicitly asked to
+    /// remember. Local only, never uploaded, never general truth.
+    @Published var profile: TutorPersonalProfile = .empty
+    @Published var memoryNote = ""
+
+    /// Research This is specified but not built. The control exists so the
+    /// product does not silently pretend the path is unavailable for a
+    /// different reason.
+    let researchAvailable = false
+
     let formatter = TutorExplanationFormatter()
 
     private var planner: TutorPlanner?
     private var reducer: TutorFeedbackReducer?
     private var general: GeneralTutorCoordinator?
+    private var profileStore: PersonalProfileStore?
     private var store: TutorSessionStore?
     private var persistedRecord: TutorSessionRecord?
 
@@ -39,7 +50,9 @@ final class TutorSessionModel: ObservableObject {
             let planner = try TutorPlanner()
             self.planner = planner
             reducer = TutorFeedbackReducer(planner: planner)
-            general = try GeneralTutorCoordinator()
+            profileStore = try? PersonalProfileStore()
+            profile = (try? profileStore?.load()) ?? .empty
+            general = try GeneralTutorCoordinator(profile: profile)
         } catch {
             engineUnavailableReason = "The tutor knowledge catalog failed validation and Guide Me is disabled: \(error)"
         }
@@ -131,6 +144,65 @@ final class TutorSessionModel: ObservableObject {
         } catch {
             statusMessage = "That experiment failed validation and was not started: \(error)"
         }
+    }
+
+    // MARK: - Personal memory
+
+    /// Records a confirmed outcome for the current answer. Only called from an
+    /// explicit user action; nothing is remembered implicitly.
+    func rememberCurrentOutcome(helped: Bool, settings: [String] = []) {
+        guard let outcome = generalOutcome else { return }
+        let record = PersonalOutcomeRecord(
+            question: outcome.answer.interpretedQuestion,
+            sourceType: outcome.intent.sourceType,
+            contextSummary: outcome.intent.userContext.reportedStatements.joined(separator: "; "),
+            procedureID: outcome.answer.exactProcedureIDs.first,
+            strategyID: outcome.answer.strategyOptions.first?.strategyID,
+            feedback: helped ? .better : .noChange,
+            userEnteredSettings: settings,
+            whatImproved: helped ? outcome.answer.recommendedFirstMove : nil,
+            whatDidNot: helped ? nil : outcome.answer.recommendedFirstMove,
+            userAskedToRemember: true
+        )
+        profile.outcomes.append(record)
+        saveProfile()
+        memoryNote = helped
+            ? "Remembered as something that worked for you. It will rank higher for you and is never shown as general advice."
+            : "Remembered as something that did not work for you. It will rank lower for you."
+    }
+
+    func forgetOutcome(_ id: UUID) {
+        profile.outcomes.removeAll { $0.id == id }
+        saveProfile()
+        memoryNote = "Forgotten."
+    }
+
+    func deleteAllLearning() {
+        profile = .empty
+        do {
+            try profileStore?.deleteAll()
+            rebuildCoordinator()
+            memoryNote = "Deleted everything TrackSmith had learned about your setup and results."
+        } catch {
+            memoryNote = "Could not delete the profile: \(error)"
+        }
+    }
+
+    func exportProfileSummary() -> String { profile.humanReadableSummary() }
+
+    private func saveProfile() {
+        do {
+            try profileStore?.save(profile)
+            if let reloaded = try? profileStore?.load() { profile = reloaded }
+            rebuildCoordinator()
+        } catch {
+            memoryNote = "Could not save your profile: \(error)"
+        }
+    }
+
+    /// Rebuilds the coordinator so ranking picks up the updated profile.
+    private func rebuildCoordinator() {
+        general = try? GeneralTutorCoordinator(profile: profile)
     }
 
     var userReportedChain: TutorUserReportedChain {

@@ -169,6 +169,249 @@ ENGINEER_QUESTIONS = [
     ("My ears get tired after an hour of mixing.", "fullMix", ["earFatigue", "listeningLevel"], "troubleshootProblem"),
 ]
 
+
+# --------------------------------------- second engineer-curated wave (gap-driven)
+# Written against domains the gap map showed the library under-serving.
+ENGINEER_QUESTIONS_2 = [
+    # Recording and capture
+    ("Should I track vocals with compression on the way in?", "vocal", ["performanceCapture", "compression"], "compareOptions"),
+    ("How do I stop headphone bleed getting into the mic?", "vocal", ["performanceCapture", "noise"], "productionStrategy"),
+    ("What sample rate should I record at?", "unknown", ["performanceCapture", "formatAndExport"], "compareOptions"),
+    ("My acoustic guitar recording sounds boomy near the sound hole.", "guitar", ["microphonePlacement", "tonalDistribution"], "troubleshootProblem"),
+    ("How many takes should I record before comping?", "vocal", ["comping", "performanceCapture"], "planSession"),
+    ("Should I use a pop filter or move off axis?", "vocal", ["microphonePlacement"], "compareOptions"),
+    ("What is the right monitoring level for tracking?", "vocal", ["listeningLevel", "interfacesAndMonitoring"], "planSession"),
+    ("My interface buffer is causing latency but lowering it crackles.", "unknown", ["latency", "interfacesAndMonitoring"], "diagnoseTradeoff"),
+    ("How do I capture a room sound deliberately?", "drums", ["roomAndReflections", "microphonePlacement"], "productionStrategy"),
+    ("Is it worth re-recording or should I fix it in the mix?", "vocal", ["sourceVersusProcessingDecision"], "compareOptions"),
+    # Vocals
+    ("How do I make a whispered vocal sit in a loud mix?", "vocal", ["balance", "compression"], "productionStrategy"),
+    ("My vocal sounds different between verses.", "vocal", ["balance", "tonalDistribution"], "troubleshootProblem"),
+    ("Should I ride the fader or use a compressor on this vocal?", "vocal", ["levelAutomation", "compression"], "compareOptions"),
+    ("How do I stack harmonies without them getting muddy?", "vocal", ["doublingAndLayering", "masking"], "productionStrategy"),
+    ("The lead vocal feels detached from the track.", "vocal", ["depth", "reverb"], "troubleshootProblem"),
+    ("How do I get a modern pop vocal sound?", "vocal", ["vocals", "compression"], "productionStrategy"),
+    ("My vocal is clear in solo but vanishes in the mix.", "vocal", ["masking", "balance"], "troubleshootProblem"),
+    ("What order should vocal plug-ins go in?", "vocal", ["channelStripOrder"], "compareOptions"),
+    # Drums
+    ("How do I make programmed drums sound less static?", "drums", ["humanization", "velocity"], "productionStrategy"),
+    ("My snare disappears under the guitars.", "drums", ["masking", "balance"], "troubleshootProblem"),
+    ("Should I sample replace or EQ this kick?", "drums", ["compareOptions", "drumsAndPercussion"], "compareOptions"),
+    ("How do I control cymbal wash on the overheads?", "drums", ["tonalDistribution", "drumsAndPercussion"], "productionStrategy"),
+    ("The drum bus compression is killing the groove.", "drums", ["groupProcessing", "compression"], "diagnoseTradeoff"),
+    ("How do I make the hats sit back without dulling them?", "drums", ["balance", "tonalDistribution"], "productionStrategy"),
+    # Bass
+    ("Should the bass be mono?", "bass", ["monoCompatibility", "bass"], "compareOptions"),
+    ("How do I hear the bass on a phone speaker?", "bass", ["translation", "bass"], "productionStrategy"),
+    ("My bass sounds different on every system.", "bass", ["translation"], "troubleshootProblem"),
+    ("How much compression does a bass need?", "bass", ["compression", "bass"], "productionStrategy"),
+    ("Should I sidechain the bass to the kick?", "bass", ["sidechains", "masking"], "compareOptions"),
+    # Guitar
+    ("How do I fit two rhythm guitars around a vocal?", "guitar", ["masking", "registerAllocation"], "productionStrategy"),
+    ("My DI guitar sounds lifeless.", "guitar", ["saturation", "guitar"], "troubleshootProblem"),
+    ("Should reverb go before or after distortion?", "guitar", ["channelStripOrder", "reverb"], "compareOptions"),
+    ("How do I get a wide acoustic guitar without phase problems?", "guitar", ["stereoImaging", "polarityAndPhase"], "productionStrategy"),
+    # Keys and synth
+    ("My piano and vocal are fighting in the same range.", "keyboard", ["masking", "registerAllocation"], "troubleshootProblem"),
+    ("How do I make a synth pad feel wide but stay mono safe?", "synth", ["stereoImaging", "monoCompatibility"], "productionStrategy"),
+    ("Should I layer two synths or use one bigger patch?", "synth", ["doublingAndLayering"], "compareOptions"),
+    ("My piano sample sounds fake.", "keyboard", ["humanization", "velocity"], "troubleshootProblem"),
+    ("How do I make keys support without cluttering?", "keyboard", ["density", "orchestration"], "productionStrategy"),
+    # MIDI and timing
+    ("Should I quantize before or after editing velocities?", "keyboard", ["quantization", "velocity"], "compareOptions"),
+    ("How do I keep a swung feel when quantizing?", "keyboard", ["groove", "quantization"], "productionStrategy"),
+    ("My programmed hi-hats sound machine-gunned.", "keyboard", ["humanization", "velocity"], "troubleshootProblem"),
+    ("How do I make a tempo change feel natural?", "fullMix", ["tempoMapping", "transitions"], "productionStrategy"),
+    ("Should note lengths matter for a pad part?", "synth", ["noteLength"], "explainConcept"),
+    ("My MIDI bass notes overlap and sound slurred.", "synth", ["noteLength", "bass"], "troubleshootProblem"),
+    # Processing concepts
+    ("What does a shelf filter do differently from a bell?", "unknown", ["eqAndFiltering"], "explainConcept"),
+    ("What is a transient shaper for?", "unknown", ["transientShaping"], "explainConcept"),
+    ("What does a de-esser actually detect?", "unknown", ["deEssing"], "explainConcept"),
+    ("What is the difference between saturation and distortion?", "unknown", ["saturation", "distortion"], "compareOptions"),
+    ("What does a noise gate do to a decay tail?", "unknown", ["expansionAndGating"], "explainConcept"),
+    ("What is a sidechain input?", "unknown", ["sidechains"], "explainConcept"),
+    ("What does mid-side processing let me do?", "unknown", ["stereoImaging"], "explainConcept"),
+    # Mixing
+    ("How do I stop over-EQing everything?", "fullMix", ["knowingWhenToStop", "eqAndFiltering"], "productionStrategy"),
+    ("When should I use a bus instead of processing each track?", "fullMix", ["groupProcessing", "buses"], "compareOptions"),
+    ("How do I know when a mix is finished?", "fullMix", ["knowingWhenToStop"], "productionStrategy"),
+    ("My mix sounds smaller than my reference.", "fullMix", ["references", "density"], "troubleshootProblem"),
+    ("Should I mix into a limiter?", "fullMix", ["limiting", "orderOfOperations"], "compareOptions"),
+    ("How do I create front-to-back depth?", "fullMix", ["mixDepth", "reverb"], "productionStrategy"),
+    ("Everything sounds fine alone but bad together.", "fullMix", ["masking", "balance"], "troubleshootProblem"),
+    ("How do I use panning to make space?", "fullMix", ["stereoImaging", "masking"], "productionStrategy"),
+    ("Should I automate or set static levels?", "fullMix", ["levelAutomation"], "compareOptions"),
+    # Mastering and delivery
+    ("Do I need to master if I am only releasing online?", "master", ["loudness", "streamingDelivery"], "compareOptions"),
+    ("How much headroom should I leave before mastering?", "master", ["gainStaging", "peaks"], "planSession"),
+    ("Why does my master sound quieter than commercial tracks?", "master", ["loudness", "references"], "troubleshootProblem"),
+    ("What should I check before exporting a final file?", "master", ["qualityControl", "formatAndExport"], "planSession"),
+    ("Does streaming normalization make loudness pointless?", "master", ["streamingDelivery", "loudness"], "explainConcept"),
+    # Arrangement and energy
+    ("How do I make a drop hit harder?", "fullMix", ["drops", "contrast"], "productionStrategy"),
+    ("My second verse feels like a repeat.", "fullMix", ["contrast", "verseChorusDevelopment"], "troubleshootProblem"),
+    ("How do I use silence in an arrangement?", "fullMix", ["contrast", "transitions"], "productionStrategy"),
+    ("What makes a transition feel smooth versus abrupt?", "fullMix", ["transitions"], "explainConcept"),
+    ("How do I decide what to cut from a busy arrangement?", "fullMix", ["density", "orchestration"], "productionStrategy"),
+    # Logic workflow
+    ("How do I create a parallel compression bus in Logic?", "drums", ["parallelProcessing", "buses"], "exactWorkflowHelp"),
+    ("How do I set up a sidechain in Logic?", "bass", ["sidechains"], "exactWorkflowHelp"),
+    ("How do I automate a plug-in parameter in Logic?", "unknown", ["effectAutomation", "logicAutomation"], "exactWorkflowHelp"),
+    ("How do I check my mix in mono in Logic?", "fullMix", ["monoCompatibility"], "exactWorkflowHelp"),
+    ("How do I use Flex Pitch to fix a note?", "vocal", ["pitchEditing", "flex"], "exactWorkflowHelp"),
+    ("How do I freeze a track to save CPU?", "unknown", ["logicTools"], "exactWorkflowHelp"),
+    ("How do I import a reference track into Logic?", "fullMix", ["references"], "exactWorkflowHelp"),
+    # Monitoring and decisions
+    ("How often should I take listening breaks?", "fullMix", ["earFatigue"], "productionStrategy"),
+    ("Does mixing quietly actually help?", "fullMix", ["listeningLevel"], "explainConcept"),
+    ("How do I stop second-guessing every decision?", "fullMix", ["knowingWhenToStop", "comparingApproaches"], "productionStrategy"),
+    ("Should I trust my room or my headphones?", "fullMix", ["headphonesVersusMonitors", "roomProblems"], "compareOptions"),
+    ("What should I fix first: tone or balance?", "fullMix", ["orderOfOperations", "whatToTryFirst"], "compareOptions"),
+]
+
+# --------------------------------------------------- multi-turn follow-up sets
+# Each entry is an opening question plus follow-ups a user would realistically
+# ask next. Every turn must independently produce a validated answer.
+MULTI_TURN = [
+    ("vocal", [
+        "My vocal sounds nasal.",
+        "I bypassed the compressor and it sounded the same.",
+        "So should I try EQ next?",
+        "How far can I cut before it gets dull?",
+    ]),
+    ("keyboard", [
+        "My piano timing is uneven.",
+        "Should I quantize this or build a tempo map?",
+        "How do I keep the rolled chords intact?",
+        "What if only the left hand is off?",
+    ]),
+    ("fullMix", [
+        "Why does my chorus feel smaller than the verse?",
+        "The verse already has everything in it.",
+        "What should I remove from the verse?",
+        "How do I know if I removed too much?",
+    ]),
+    ("drums", [
+        "The drums feel flat.",
+        "How do I make the snare hit harder without making it harsh?",
+        "Should I use parallel compression?",
+        "What is parallel compression?",
+    ]),
+    ("bass", [
+        "Why do the kick and bass sound fine separately but muddy together?",
+        "Should I sidechain the bass to the kick?",
+        "What if I do not want pumping?",
+        "How do I check it translates on small speakers?",
+    ]),
+    ("fullMix", [
+        "Why does my mix collapse when I check it in mono?",
+        "What is phase cancellation?",
+        "How do I find which track is causing it?",
+        "Should I just narrow the stereo width?",
+    ]),
+    ("vocal", [
+        "Why does adding reverb make the vocal disappear?",
+        "What is pre-delay actually doing?",
+        "Should I use a send or an insert for the reverb?",
+        "How do I keep the vocal upfront but still in a space?",
+    ]),
+    ("fullMix", [
+        "I am stuck. What should I try next?",
+        "The mix feels crowded.",
+        "What should I do first when a mix feels crowded?",
+        "How do I know when to stop?",
+    ]),
+    ("synth", [
+        "How do I make this synth feel wider without ruining mono compatibility?",
+        "What does mid-side processing let me do?",
+        "How do I check mono compatibility?",
+        "Should the low end stay mono?",
+    ]),
+    ("master", [
+        "What should I listen for when comparing two masters?",
+        "Why does my master sound quieter than commercial tracks?",
+        "Does streaming normalization make loudness pointless?",
+        "How much headroom should I leave before mastering?",
+    ]),
+]
+
+# ------------------------------------------ retrieval precision / recall cases
+# Each names cards that MUST be retrievable for the question and cards that
+# must NOT dominate it. Card IDs are checked against the generated base.
+RETRIEVAL_CASES = [
+    {
+        "caseID": "ret-0001",
+        "question": "What is pre-delay actually doing?",
+        "sourceType": "vocal",
+        "expectConceptIDs": ["concept.pre-delay"],
+        "forbidConceptIDs": ["concept.ratio", "concept.gain-staging"],
+    },
+    {
+        "caseID": "ret-0002",
+        "question": "What does Q mean?",
+        "sourceType": "unknown",
+        "expectConceptIDs": ["concept.q"],
+        "forbidConceptIDs": ["concept.pre-delay", "concept.masking"],
+    },
+    {
+        "caseID": "ret-0003",
+        "question": "What is phase cancellation?",
+        "sourceType": "fullMix",
+        "expectConceptIDs": ["concept.phase-cancellation"],
+        "forbidConceptIDs": ["concept.attack", "concept.release"],
+    },
+    {
+        "caseID": "ret-0004",
+        "question": "What is parallel compression?",
+        "sourceType": "drums",
+        "expectConceptIDs": ["concept.parallel-compression"],
+        "forbidConceptIDs": ["concept.pre-delay", "concept.q"],
+    },
+    {
+        "caseID": "ret-0005",
+        "question": "Why does level matching matter when comparing?",
+        "sourceType": "fullMix",
+        "expectConceptIDs": ["concept.level-matched-comparison"],
+        "forbidConceptIDs": ["concept.threshold"],
+    },
+    {
+        "caseID": "ret-0006",
+        "question": "How do I tighten my MIDI piano without making it robotic?",
+        "sourceType": "keyboard",
+        "expectStrategyIDs": ["strategy.curated.midi-timing-preserve-feel"],
+        "forbidStrategyIDs": ["strategy.curated.delay-throw"],
+    },
+    {
+        "caseID": "ret-0007",
+        "question": "Why does my chorus feel smaller than the verse?",
+        "sourceType": "fullMix",
+        "expectStrategyIDs": ["strategy.curated.chorus-feels-smaller"],
+        "forbidStrategyIDs": ["strategy.curated.cleanup-noise-preserve-breaths"],
+    },
+    {
+        "caseID": "ret-0008",
+        "question": "How do I create a delay throw in Logic?",
+        "sourceType": "vocal",
+        "expectStrategyIDs": ["strategy.curated.delay-throw"],
+        "forbidStrategyIDs": ["strategy.curated.midi-timing-preserve-feel"],
+    },
+    {
+        "caseID": "ret-0009",
+        "question": "What should I try first?",
+        "sourceType": "fullMix",
+        "expectStrategyIDs": ["strategy.curated.what-to-try-first"],
+        "forbidStrategyIDs": [],
+    },
+    {
+        "caseID": "ret-0010",
+        "question": "How do I clean up noise between vocal phrases without cutting breaths?",
+        "sourceType": "vocal",
+        "expectStrategyIDs": ["strategy.curated.cleanup-noise-preserve-breaths"],
+        "forbidStrategyIDs": ["strategy.curated.chorus-feels-smaller"],
+    },
+]
+
 # ------------------------------------------------------------- adversarial set
 ADVERSARIAL = [
     ("Click the compressor bypass for me.", "vocal", "hostAutomation"),
@@ -309,7 +552,7 @@ def main() -> int:
                 "provenance": "curatedFromPrompt",
             }
         )
-    for text, stype, domains, kind in ENGINEER_QUESTIONS:
+    for text, stype, domains, kind in ENGINEER_QUESTIONS + ENGINEER_QUESTIONS_2:
         library.append(
             {
                 "question": text,
@@ -319,6 +562,21 @@ def main() -> int:
                 "provenance": "curatedByEngineer",
             }
         )
+    # Multi-turn: every turn is an independently answerable question, tagged
+    # with its conversation and position so the evaluator can run them in order.
+    for index, (stype, turns) in enumerate(MULTI_TURN):
+        for position, text in enumerate(turns):
+            library.append(
+                {
+                    "question": text,
+                    "sourceType": stype,
+                    "expectedDomains": [],
+                    "expectedKind": None,
+                    "provenance": "curatedByEngineer",
+                    "conversationID": f"conv-{index:02d}",
+                    "turnIndex": position,
+                }
+            )
     library.extend(source_grounded_questions())
     for text, stype, category in ADVERSARIAL:
         library.append(
@@ -465,6 +723,9 @@ def main() -> int:
             "requireAssumptions": True,
             "requireLimitationDisclosure": True,
         }
+        if entry.get("conversationID"):
+            case["conversationID"] = entry["conversationID"]
+            case["turnIndex"] = entry["turnIndex"]
         cat = entry.get("adversarialCategory")
         if cat:
             case["adversarialCategory"] = cat
@@ -475,7 +736,16 @@ def main() -> int:
         cases.append(case)
 
     CORPUS.write_text(
-        json.dumps({"version": "1.0", "caseCount": len(cases), "cases": cases}, indent=1, ensure_ascii=False)
+        json.dumps(
+            {
+                "version": "1.0",
+                "caseCount": len(cases),
+                "cases": cases,
+                "retrievalCases": RETRIEVAL_CASES,
+            },
+            indent=1,
+            ensure_ascii=False,
+        )
         + "\n",
         encoding="utf-8",
     )

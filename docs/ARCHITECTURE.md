@@ -157,6 +157,18 @@ structurally validated before any card is used: a trusted claim cannot rest on
 a superseded source or one still requiring audiovisual review, and a reviewed
 strategy cannot be supported by unreviewed claims.
 
+Personalization is a separate bounded store (`PersonalProfileStore`) holding
+only explicitly entered setup and explicitly confirmed outcomes. A confirmed
+result raises or lowers a strategy for that user, bounded so preference
+reorders results rather than manufacturing relevance, and the answer validator
+rejects any personal result phrased as universal.
+
+Sources enter through `general-tutor-knowledge-pipeline.py`: registration with
+rights/tier/handling and transcript provenance, extraction into a review queue
+as `machineExtracted`, promotion requiring a named reviewer, an
+audiovisual-review gate for claims that depend on hearing or seeing, and a
+fail-closed audit in `make verify`. Tier C material can never be promoted.
+
 Strategy cards are what make breadth honest. A domain with no exact procedure
 can still have a reviewed decision pattern — first experiment, why, tradeoffs,
 preservation, stopping rule, signs it is wrong, non-DSP alternatives. Exact

@@ -1,13 +1,13 @@
 {
  "version": "1.0",
- "totalQuestions": 332,
+ "totalQuestions": 518,
  "provenanceCounts": {
   "curatedFromPrompt": 56,
-  "curatedByEngineer": 79,
+  "curatedByEngineer": 201,
   "curatedFromSource": 139,
-  "generatedParaphrase": 58
+  "generatedParaphrase": 122
  },
- "directlyCuratedOrSourceGrounded": 274,
+ "directlyCuratedOrSourceGrounded": 396,
  "questions": [
   {
    "question": "Why does my chorus feel smaller than the verse?",
@@ -1118,6 +1118,1165 @@
    ],
    "expectedKind": "troubleshootProblem",
    "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I track vocals with compression on the way in?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "performanceCapture",
+    "compression"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I stop headphone bleed getting into the mic?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "performanceCapture",
+    "noise"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What sample rate should I record at?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "performanceCapture",
+    "formatAndExport"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My acoustic guitar recording sounds boomy near the sound hole.",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "microphonePlacement",
+    "tonalDistribution"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How many takes should I record before comping?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "comping",
+    "performanceCapture"
+   ],
+   "expectedKind": "planSession",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I use a pop filter or move off axis?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "microphonePlacement"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What is the right monitoring level for tracking?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "listeningLevel",
+    "interfacesAndMonitoring"
+   ],
+   "expectedKind": "planSession",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My interface buffer is causing latency but lowering it crackles.",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "latency",
+    "interfacesAndMonitoring"
+   ],
+   "expectedKind": "diagnoseTradeoff",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I capture a room sound deliberately?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "roomAndReflections",
+    "microphonePlacement"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Is it worth re-recording or should I fix it in the mix?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "sourceVersusProcessingDecision"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make a whispered vocal sit in a loud mix?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "balance",
+    "compression"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My vocal sounds different between verses.",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "balance",
+    "tonalDistribution"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I ride the fader or use a compressor on this vocal?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "levelAutomation",
+    "compression"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I stack harmonies without them getting muddy?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "doublingAndLayering",
+    "masking"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "The lead vocal feels detached from the track.",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "depth",
+    "reverb"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I get a modern pop vocal sound?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "vocals",
+    "compression"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My vocal is clear in solo but vanishes in the mix.",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "masking",
+    "balance"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What order should vocal plug-ins go in?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "channelStripOrder"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make programmed drums sound less static?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "humanization",
+    "velocity"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My snare disappears under the guitars.",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "masking",
+    "balance"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I sample replace or EQ this kick?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "compareOptions",
+    "drumsAndPercussion"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I control cymbal wash on the overheads?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "tonalDistribution",
+    "drumsAndPercussion"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "The drum bus compression is killing the groove.",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "groupProcessing",
+    "compression"
+   ],
+   "expectedKind": "diagnoseTradeoff",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make the hats sit back without dulling them?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "balance",
+    "tonalDistribution"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should the bass be mono?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "monoCompatibility",
+    "bass"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I hear the bass on a phone speaker?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "translation",
+    "bass"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My bass sounds different on every system.",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "translation"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How much compression does a bass need?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "compression",
+    "bass"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I sidechain the bass to the kick?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "sidechains",
+    "masking"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I fit two rhythm guitars around a vocal?",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "masking",
+    "registerAllocation"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My DI guitar sounds lifeless.",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "saturation",
+    "guitar"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should reverb go before or after distortion?",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "channelStripOrder",
+    "reverb"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I get a wide acoustic guitar without phase problems?",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "stereoImaging",
+    "polarityAndPhase"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My piano and vocal are fighting in the same range.",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "masking",
+    "registerAllocation"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make a synth pad feel wide but stay mono safe?",
+   "sourceType": "synth",
+   "expectedDomains": [
+    "stereoImaging",
+    "monoCompatibility"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I layer two synths or use one bigger patch?",
+   "sourceType": "synth",
+   "expectedDomains": [
+    "doublingAndLayering"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My piano sample sounds fake.",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "humanization",
+    "velocity"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make keys support without cluttering?",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "density",
+    "orchestration"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I quantize before or after editing velocities?",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "quantization",
+    "velocity"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I keep a swung feel when quantizing?",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "groove",
+    "quantization"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My programmed hi-hats sound machine-gunned.",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "humanization",
+    "velocity"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make a tempo change feel natural?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "tempoMapping",
+    "transitions"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should note lengths matter for a pad part?",
+   "sourceType": "synth",
+   "expectedDomains": [
+    "noteLength"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My MIDI bass notes overlap and sound slurred.",
+   "sourceType": "synth",
+   "expectedDomains": [
+    "noteLength",
+    "bass"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What does a shelf filter do differently from a bell?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "eqAndFiltering"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What is a transient shaper for?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "transientShaping"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What does a de-esser actually detect?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "deEssing"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What is the difference between saturation and distortion?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "saturation",
+    "distortion"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What does a noise gate do to a decay tail?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "expansionAndGating"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What is a sidechain input?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "sidechains"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What does mid-side processing let me do?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "stereoImaging"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I stop over-EQing everything?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "knowingWhenToStop",
+    "eqAndFiltering"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "When should I use a bus instead of processing each track?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "groupProcessing",
+    "buses"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I know when a mix is finished?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "knowingWhenToStop"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My mix sounds smaller than my reference.",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "references",
+    "density"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I mix into a limiter?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "limiting",
+    "orderOfOperations"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I create front-to-back depth?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "mixDepth",
+    "reverb"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Everything sounds fine alone but bad together.",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "masking",
+    "balance"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I use panning to make space?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "stereoImaging",
+    "masking"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I automate or set static levels?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "levelAutomation"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Do I need to master if I am only releasing online?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "loudness",
+    "streamingDelivery"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How much headroom should I leave before mastering?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "gainStaging",
+    "peaks"
+   ],
+   "expectedKind": "planSession",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Why does my master sound quieter than commercial tracks?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "loudness",
+    "references"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What should I check before exporting a final file?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "qualityControl",
+    "formatAndExport"
+   ],
+   "expectedKind": "planSession",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Does streaming normalization make loudness pointless?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "streamingDelivery",
+    "loudness"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I make a drop hit harder?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "drops",
+    "contrast"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My second verse feels like a repeat.",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "contrast",
+    "verseChorusDevelopment"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I use silence in an arrangement?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "contrast",
+    "transitions"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What makes a transition feel smooth versus abrupt?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "transitions"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I decide what to cut from a busy arrangement?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "density",
+    "orchestration"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I create a parallel compression bus in Logic?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "parallelProcessing",
+    "buses"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I set up a sidechain in Logic?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "sidechains"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I automate a plug-in parameter in Logic?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "effectAutomation",
+    "logicAutomation"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I check my mix in mono in Logic?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "monoCompatibility"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I use Flex Pitch to fix a note?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "pitchEditing",
+    "flex"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I freeze a track to save CPU?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "logicTools"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I import a reference track into Logic?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "references"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How often should I take listening breaks?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "earFatigue"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Does mixing quietly actually help?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "listeningLevel"
+   ],
+   "expectedKind": "explainConcept",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "How do I stop second-guessing every decision?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "knowingWhenToStop",
+    "comparingApproaches"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "Should I trust my room or my headphones?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "headphonesVersusMonitors",
+    "roomProblems"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "What should I fix first: tone or balance?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "orderOfOperations",
+    "whatToTryFirst"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "curatedByEngineer"
+  },
+  {
+   "question": "My vocal sounds nasal.",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-00",
+   "turnIndex": 0
+  },
+  {
+   "question": "I bypassed the compressor and it sounded the same.",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-00",
+   "turnIndex": 1
+  },
+  {
+   "question": "So should I try EQ next?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-00",
+   "turnIndex": 2
+  },
+  {
+   "question": "How far can I cut before it gets dull?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-00",
+   "turnIndex": 3
+  },
+  {
+   "question": "My piano timing is uneven.",
+   "sourceType": "keyboard",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-01",
+   "turnIndex": 0
+  },
+  {
+   "question": "Should I quantize this or build a tempo map?",
+   "sourceType": "keyboard",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-01",
+   "turnIndex": 1
+  },
+  {
+   "question": "How do I keep the rolled chords intact?",
+   "sourceType": "keyboard",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-01",
+   "turnIndex": 2
+  },
+  {
+   "question": "What if only the left hand is off?",
+   "sourceType": "keyboard",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-01",
+   "turnIndex": 3
+  },
+  {
+   "question": "Why does my chorus feel smaller than the verse?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-02",
+   "turnIndex": 0
+  },
+  {
+   "question": "The verse already has everything in it.",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-02",
+   "turnIndex": 1
+  },
+  {
+   "question": "What should I remove from the verse?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-02",
+   "turnIndex": 2
+  },
+  {
+   "question": "How do I know if I removed too much?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-02",
+   "turnIndex": 3
+  },
+  {
+   "question": "The drums feel flat.",
+   "sourceType": "drums",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-03",
+   "turnIndex": 0
+  },
+  {
+   "question": "How do I make the snare hit harder without making it harsh?",
+   "sourceType": "drums",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-03",
+   "turnIndex": 1
+  },
+  {
+   "question": "Should I use parallel compression?",
+   "sourceType": "drums",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-03",
+   "turnIndex": 2
+  },
+  {
+   "question": "What is parallel compression?",
+   "sourceType": "drums",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-03",
+   "turnIndex": 3
+  },
+  {
+   "question": "Why do the kick and bass sound fine separately but muddy together?",
+   "sourceType": "bass",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-04",
+   "turnIndex": 0
+  },
+  {
+   "question": "Should I sidechain the bass to the kick?",
+   "sourceType": "bass",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-04",
+   "turnIndex": 1
+  },
+  {
+   "question": "What if I do not want pumping?",
+   "sourceType": "bass",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-04",
+   "turnIndex": 2
+  },
+  {
+   "question": "How do I check it translates on small speakers?",
+   "sourceType": "bass",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-04",
+   "turnIndex": 3
+  },
+  {
+   "question": "Why does my mix collapse when I check it in mono?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-05",
+   "turnIndex": 0
+  },
+  {
+   "question": "What is phase cancellation?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-05",
+   "turnIndex": 1
+  },
+  {
+   "question": "How do I find which track is causing it?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-05",
+   "turnIndex": 2
+  },
+  {
+   "question": "Should I just narrow the stereo width?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-05",
+   "turnIndex": 3
+  },
+  {
+   "question": "Why does adding reverb make the vocal disappear?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-06",
+   "turnIndex": 0
+  },
+  {
+   "question": "What is pre-delay actually doing?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-06",
+   "turnIndex": 1
+  },
+  {
+   "question": "Should I use a send or an insert for the reverb?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-06",
+   "turnIndex": 2
+  },
+  {
+   "question": "How do I keep the vocal upfront but still in a space?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-06",
+   "turnIndex": 3
+  },
+  {
+   "question": "I am stuck. What should I try next?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-07",
+   "turnIndex": 0
+  },
+  {
+   "question": "The mix feels crowded.",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-07",
+   "turnIndex": 1
+  },
+  {
+   "question": "What should I do first when a mix feels crowded?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-07",
+   "turnIndex": 2
+  },
+  {
+   "question": "How do I know when to stop?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-07",
+   "turnIndex": 3
+  },
+  {
+   "question": "How do I make this synth feel wider without ruining mono compatibility?",
+   "sourceType": "synth",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-08",
+   "turnIndex": 0
+  },
+  {
+   "question": "What does mid-side processing let me do?",
+   "sourceType": "synth",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-08",
+   "turnIndex": 1
+  },
+  {
+   "question": "How do I check mono compatibility?",
+   "sourceType": "synth",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-08",
+   "turnIndex": 2
+  },
+  {
+   "question": "Should the low end stay mono?",
+   "sourceType": "synth",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-08",
+   "turnIndex": 3
+  },
+  {
+   "question": "What should I listen for when comparing two masters?",
+   "sourceType": "master",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-09",
+   "turnIndex": 0
+  },
+  {
+   "question": "Why does my master sound quieter than commercial tracks?",
+   "sourceType": "master",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-09",
+   "turnIndex": 1
+  },
+  {
+   "question": "Does streaming normalization make loudness pointless?",
+   "sourceType": "master",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-09",
+   "turnIndex": 2
+  },
+  {
+   "question": "How much headroom should I leave before mastering?",
+   "sourceType": "master",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "curatedByEngineer",
+   "conversationID": "conv-09",
+   "turnIndex": 3
   },
   {
    "question": "In my own track I have this problem: Domestic noise, imperfect recording conditions, and sparse arrangements could be treated as defects. What should I do?",
@@ -2876,6 +4035,686 @@
    "expectedKind": "troubleshootProblem",
    "provenance": "generatedParaphrase",
    "paraphraseOf": "My ears get tired after an hour of mixing."
+  },
+  {
+   "question": "What's the best way to stop headphone bleed getting into the mic?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "performanceCapture",
+    "noise"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I stop headphone bleed getting into the mic?"
+  },
+  {
+   "question": "I think my acoustic guitar recording sounds boomy near the sound hole.",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "microphonePlacement",
+    "tonalDistribution"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My acoustic guitar recording sounds boomy near the sound hole."
+  },
+  {
+   "question": "I think my interface buffer is causing latency but lowering it crackles.",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "latency",
+    "interfacesAndMonitoring"
+   ],
+   "expectedKind": "diagnoseTradeoff",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My interface buffer is causing latency but lowering it crackles."
+  },
+  {
+   "question": "What's the best way to capture a room sound deliberately?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "roomAndReflections",
+    "microphonePlacement"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I capture a room sound deliberately?"
+  },
+  {
+   "question": "What's the best way to make a whispered vocal sit in a loud mix?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "balance",
+    "compression"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make a whispered vocal sit in a loud mix?"
+  },
+  {
+   "question": "I think my vocal sounds different between verses.",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "balance",
+    "tonalDistribution"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My vocal sounds different between verses."
+  },
+  {
+   "question": "What's the best way to stack harmonies without them getting muddy?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "doublingAndLayering",
+    "masking"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I stack harmonies without them getting muddy?"
+  },
+  {
+   "question": "What's the best way to get a modern pop vocal sound?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "vocals",
+    "compression"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I get a modern pop vocal sound?"
+  },
+  {
+   "question": "I think my vocal is clear in solo but vanishes in the mix.",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "masking",
+    "balance"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My vocal is clear in solo but vanishes in the mix."
+  },
+  {
+   "question": "What's the best way to make programmed drums sound less static?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "humanization",
+    "velocity"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make programmed drums sound less static?"
+  },
+  {
+   "question": "I think my snare disappears under the guitars.",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "masking",
+    "balance"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My snare disappears under the guitars."
+  },
+  {
+   "question": "What's the best way to control cymbal wash on the overheads?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "tonalDistribution",
+    "drumsAndPercussion"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I control cymbal wash on the overheads?"
+  },
+  {
+   "question": "What's the best way to make the hats sit back without dulling them?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "balance",
+    "tonalDistribution"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make the hats sit back without dulling them?"
+  },
+  {
+   "question": "What's the best way to hear the bass on a phone speaker?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "translation",
+    "bass"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I hear the bass on a phone speaker?"
+  },
+  {
+   "question": "I think my bass sounds different on every system.",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "translation"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My bass sounds different on every system."
+  },
+  {
+   "question": "What's the best way to fit two rhythm guitars around a vocal?",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "masking",
+    "registerAllocation"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I fit two rhythm guitars around a vocal?"
+  },
+  {
+   "question": "I think my DI guitar sounds lifeless.",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "saturation",
+    "guitar"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My DI guitar sounds lifeless."
+  },
+  {
+   "question": "What's the best way to get a wide acoustic guitar without phase problems?",
+   "sourceType": "guitar",
+   "expectedDomains": [
+    "stereoImaging",
+    "polarityAndPhase"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I get a wide acoustic guitar without phase problems?"
+  },
+  {
+   "question": "I think my piano and vocal are fighting in the same range.",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "masking",
+    "registerAllocation"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My piano and vocal are fighting in the same range."
+  },
+  {
+   "question": "What's the best way to make a synth pad feel wide but stay mono safe?",
+   "sourceType": "synth",
+   "expectedDomains": [
+    "stereoImaging",
+    "monoCompatibility"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make a synth pad feel wide but stay mono safe?"
+  },
+  {
+   "question": "I think my piano sample sounds fake.",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "humanization",
+    "velocity"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My piano sample sounds fake."
+  },
+  {
+   "question": "What's the best way to make keys support without cluttering?",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "density",
+    "orchestration"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make keys support without cluttering?"
+  },
+  {
+   "question": "What's the best way to keep a swung feel when quantizing?",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "groove",
+    "quantization"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I keep a swung feel when quantizing?"
+  },
+  {
+   "question": "I think my programmed hi-hats sound machine-gunned.",
+   "sourceType": "keyboard",
+   "expectedDomains": [
+    "humanization",
+    "velocity"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My programmed hi-hats sound machine-gunned."
+  },
+  {
+   "question": "What's the best way to make a tempo change feel natural?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "tempoMapping",
+    "transitions"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make a tempo change feel natural?"
+  },
+  {
+   "question": "I think my MIDI bass notes overlap and sound slurred.",
+   "sourceType": "synth",
+   "expectedDomains": [
+    "noteLength",
+    "bass"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My MIDI bass notes overlap and sound slurred."
+  },
+  {
+   "question": "What's the best way to stop over-EQing everything?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "knowingWhenToStop",
+    "eqAndFiltering"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I stop over-EQing everything?"
+  },
+  {
+   "question": "What's the best way to know when a mix is finished?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "knowingWhenToStop"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I know when a mix is finished?"
+  },
+  {
+   "question": "I think my mix sounds smaller than my reference.",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "references",
+    "density"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My mix sounds smaller than my reference."
+  },
+  {
+   "question": "What's the best way to create front-to-back depth?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "mixDepth",
+    "reverb"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I create front-to-back depth?"
+  },
+  {
+   "question": "What's the best way to use panning to make space?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "stereoImaging",
+    "masking"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I use panning to make space?"
+  },
+  {
+   "question": "Any idea why my master sound quieter than commercial tracks?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "loudness",
+    "references"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "Why does my master sound quieter than commercial tracks?"
+  },
+  {
+   "question": "Got any advice on what I should check before exporting a final file?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "qualityControl",
+    "formatAndExport"
+   ],
+   "expectedKind": "planSession",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "What should I check before exporting a final file?"
+  },
+  {
+   "question": "What's the best way to make a drop hit harder?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "drops",
+    "contrast"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I make a drop hit harder?"
+  },
+  {
+   "question": "I think my second verse feels like a repeat.",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "contrast",
+    "verseChorusDevelopment"
+   ],
+   "expectedKind": "troubleshootProblem",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "My second verse feels like a repeat."
+  },
+  {
+   "question": "What's the best way to use silence in an arrangement?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "contrast",
+    "transitions"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I use silence in an arrangement?"
+  },
+  {
+   "question": "What's the best way to decide what to cut from a busy arrangement?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "density",
+    "orchestration"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I decide what to cut from a busy arrangement?"
+  },
+  {
+   "question": "What's the best way to create a parallel compression bus in Logic?",
+   "sourceType": "drums",
+   "expectedDomains": [
+    "parallelProcessing",
+    "buses"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I create a parallel compression bus in Logic?"
+  },
+  {
+   "question": "What's the best way to set up a sidechain in Logic?",
+   "sourceType": "bass",
+   "expectedDomains": [
+    "sidechains"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I set up a sidechain in Logic?"
+  },
+  {
+   "question": "What's the best way to automate a plug-in parameter in Logic?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "effectAutomation",
+    "logicAutomation"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I automate a plug-in parameter in Logic?"
+  },
+  {
+   "question": "What's the best way to check my mix in mono in Logic?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "monoCompatibility"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I check my mix in mono in Logic?"
+  },
+  {
+   "question": "What's the best way to use Flex Pitch to fix a note?",
+   "sourceType": "vocal",
+   "expectedDomains": [
+    "pitchEditing",
+    "flex"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I use Flex Pitch to fix a note?"
+  },
+  {
+   "question": "What's the best way to freeze a track to save CPU?",
+   "sourceType": "unknown",
+   "expectedDomains": [
+    "logicTools"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I freeze a track to save CPU?"
+  },
+  {
+   "question": "What's the best way to import a reference track into Logic?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "references"
+   ],
+   "expectedKind": "exactWorkflowHelp",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I import a reference track into Logic?"
+  },
+  {
+   "question": "What's the best way to stop second-guessing every decision?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "knowingWhenToStop",
+    "comparingApproaches"
+   ],
+   "expectedKind": "productionStrategy",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "How do I stop second-guessing every decision?"
+  },
+  {
+   "question": "Got any advice on what I should fix first: tone or balance?",
+   "sourceType": "fullMix",
+   "expectedDomains": [
+    "orderOfOperations",
+    "whatToTryFirst"
+   ],
+   "expectedKind": "compareOptions",
+   "provenance": "generatedParaphrase",
+   "paraphraseOf": "What should I fix first: tone or balance?"
+  },
+  {
+   "question": "I think my vocal sounds nasal.",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-00",
+   "turnIndex": 0,
+   "paraphraseOf": "My vocal sounds nasal."
+  },
+  {
+   "question": "I think my piano timing is uneven.",
+   "sourceType": "keyboard",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-01",
+   "turnIndex": 0,
+   "paraphraseOf": "My piano timing is uneven."
+  },
+  {
+   "question": "What's the best way to keep the rolled chords intact?",
+   "sourceType": "keyboard",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-01",
+   "turnIndex": 2,
+   "paraphraseOf": "How do I keep the rolled chords intact?"
+  },
+  {
+   "question": "Any idea why my chorus feel smaller than the verse?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-02",
+   "turnIndex": 0,
+   "paraphraseOf": "Why does my chorus feel smaller than the verse?"
+  },
+  {
+   "question": "Got any advice on what I should remove from the verse?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-02",
+   "turnIndex": 2,
+   "paraphraseOf": "What should I remove from the verse?"
+  },
+  {
+   "question": "What's the best way to know if I removed too much?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-02",
+   "turnIndex": 3,
+   "paraphraseOf": "How do I know if I removed too much?"
+  },
+  {
+   "question": "What's the best way to make the snare hit harder without making it harsh?",
+   "sourceType": "drums",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-03",
+   "turnIndex": 1,
+   "paraphraseOf": "How do I make the snare hit harder without making it harsh?"
+  },
+  {
+   "question": "What's the best way to check it translates on small speakers?",
+   "sourceType": "bass",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-04",
+   "turnIndex": 3,
+   "paraphraseOf": "How do I check it translates on small speakers?"
+  },
+  {
+   "question": "Any idea why my mix collapse when I check it in mono?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-05",
+   "turnIndex": 0,
+   "paraphraseOf": "Why does my mix collapse when I check it in mono?"
+  },
+  {
+   "question": "What's the best way to find which track is causing it?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-05",
+   "turnIndex": 2,
+   "paraphraseOf": "How do I find which track is causing it?"
+  },
+  {
+   "question": "Any idea why adding reverb make the vocal disappear?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-06",
+   "turnIndex": 0,
+   "paraphraseOf": "Why does adding reverb make the vocal disappear?"
+  },
+  {
+   "question": "What's the best way to keep the vocal upfront but still in a space?",
+   "sourceType": "vocal",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-06",
+   "turnIndex": 3,
+   "paraphraseOf": "How do I keep the vocal upfront but still in a space?"
+  },
+  {
+   "question": "Got any advice on what I should do first when a mix feels crowded?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-07",
+   "turnIndex": 2,
+   "paraphraseOf": "What should I do first when a mix feels crowded?"
+  },
+  {
+   "question": "What's the best way to know when to stop?",
+   "sourceType": "fullMix",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-07",
+   "turnIndex": 3,
+   "paraphraseOf": "How do I know when to stop?"
+  },
+  {
+   "question": "What's the best way to make this synth feel wider without ruining mono compatibility?",
+   "sourceType": "synth",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-08",
+   "turnIndex": 0,
+   "paraphraseOf": "How do I make this synth feel wider without ruining mono compatibility?"
+  },
+  {
+   "question": "What's the best way to check mono compatibility?",
+   "sourceType": "synth",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-08",
+   "turnIndex": 2,
+   "paraphraseOf": "How do I check mono compatibility?"
+  },
+  {
+   "question": "Got any advice on what I should listen for when comparing two masters?",
+   "sourceType": "master",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-09",
+   "turnIndex": 0,
+   "paraphraseOf": "What should I listen for when comparing two masters?"
+  },
+  {
+   "question": "Any idea why my master sound quieter than commercial tracks?",
+   "sourceType": "master",
+   "expectedDomains": [],
+   "expectedKind": null,
+   "provenance": "generatedParaphrase",
+   "conversationID": "conv-09",
+   "turnIndex": 1,
+   "paraphraseOf": "Why does my master sound quieter than commercial tracks?"
   }
  ]
 }

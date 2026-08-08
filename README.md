@@ -57,11 +57,16 @@ see [`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md), the
 [ledger](research/evaluation/general-production-tutor-v2/ledger.json). Logic
 Production Tutor v1 is closed at an explicitly
 [bounded scope](docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md).
-The open-domain engine passes 332/332 corpus cases offline across 89 domains.
-The native Guide Me surface still presents only the Tutor v1 lesson flow, so
-open questions are currently reachable through the CLI and tests rather than
-the app; no external source has been ingested; and no owner session or in-host
-validation of the broad tutor has been run. None of that is claimed.
+The open-domain engine passes 518/518 corpus cases offline across 99 domains,
+including 10 multi-turn conversations and 10 retrieval precision cases, and is
+reachable from the app's Ask action. What TrackSmith remembers about you is
+local, explicit, and deletable. Gates GP0-GP7 pass; GP8 and GP9 remain open
+and are blocked on the owner. **No external or YouTube source has been
+ingested** — the review pipeline is built and its refusal paths proven, but
+every shipped claim derives from artifacts already in this repository, and
+Research This is present only as an explicitly labeled not-built control. No
+real production-question session and no in-host validation of the broad tutor
+has been run, so whether these answers are useful is not established.
 
 ## Current status
 

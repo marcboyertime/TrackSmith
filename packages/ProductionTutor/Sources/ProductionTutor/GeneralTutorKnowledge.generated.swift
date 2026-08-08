@@ -7,10 +7,10 @@
 // then runs GeneralTutorKnowledgeValidator before any card is used.
 
 public enum GeneralTutorKnowledgeGenerated {
-    public static let sourceArtifactSHA256 = "6b6bd4e281567c217f931274cde60b0223772ffb19156abb218e9951aa043baf"
+    public static let sourceArtifactSHA256 = "c2166025db0b9d24b44f98b38ae98db986da017cef991a22dde46fb0a6f9d50e"
     public static let sourceCount = 15
     public static let claimCount = 458
-    public static let strategyCount = 68
+    public static let strategyCount = 78
     public static let conceptCount = 12
     public static let contradictionCount = 2
     public static let knowledgeJSON = #"""
@@ -22421,6 +22421,638 @@ public enum GeneralTutorKnowledgeGenerated {
    ],
    "version": "1.0",
    "whyItMayHelp": "Gating and silencing act on level, not on meaning, so they cut breaths and phrase tails along with the noise. In a full arrangement the noise is frequently masked anyway."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "vocal",
+    "drums",
+    "bass",
+    "guitar",
+    "keyboard",
+    "synth",
+    "fullMix"
+   ],
+   "competingInterpretations": [
+    "Fix the input to the detector",
+    "Shape the output after dynamics",
+    "Do both with two stages"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "channelStripOrder",
+    "eqAndFiltering",
+    "compression",
+    "saturation"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "Different dynamic behavior for the same nominal settings"
+   ],
+   "id": "strategy.curated.plugin-order",
+   "label": "Decide where a processor belongs in the chain",
+   "nonDSPAlternatives": [
+    "Fix the source so less processing is needed"
+   ],
+   "notUsefulWhen": [
+    "Neither stage is level- or threshold-dependent"
+   ],
+   "preservationConcerns": [
+    "The intended character of the source; reordering can change it substantially"
+   ],
+   "problemOrOutcome": "Choosing whether EQ, compression, saturation, or ambience comes first",
+   "recommendedFirstExperiment": "Ask what each processor is reacting to: anything that changes level or tone before a threshold-based processor changes how that processor behaves.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "Reordering changes nothing audible, which means the stages were not interacting"
+   ],
+   "stoppingRules": [
+    "Stop once the dynamics behave and the tone is right; further reordering is usually taste"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Corrective-before-dynamics is predictable but can sound clinical; tone-after can sound more natural but is harder to control"
+   ],
+   "usefulWhen": [
+    "A compressor is reacting to a frequency you do not want it to chase",
+    "You want tone shaping that does not alter dynamics"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Order matters most where one stage feeds another's detector. EQ before a compressor changes what the compressor hears and therefore when it acts; EQ after it shapes the already-compressed result without altering the dynamics."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "fullMix"
+   ],
+   "competingInterpretations": [
+    "Room problem",
+    "Headphone response",
+    "Genuine mix problem",
+    "Ear fatigue"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "interfacesAndMonitoring",
+    "headphonesVersusMonitors",
+    "translation",
+    "roomProblems",
+    "earFatigue"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "A clearer sense of which differences are real"
+   ],
+   "id": "strategy.curated.monitoring-and-translation",
+   "label": "Decide what to trust when systems disagree",
+   "nonDSPAlternatives": [
+    "Improve the room",
+    "Learn one system deeply rather than adding more"
+   ],
+   "notUsefulWhen": [
+    "You have only ever heard the mix on one system"
+   ],
+   "preservationConcerns": [
+    "Do not re-mix for one system at the expense of the others"
+   ],
+   "problemOrOutcome": "A mix sounds different on headphones, monitors, a car, or a phone",
+   "recommendedFirstExperiment": "Check the same short section on two systems you know well and note what specifically changes; a difference that appears on every system is in the mix, one that appears on a single system is that system.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "Each system sends you in a different direction and the mix keeps moving"
+   ],
+   "stoppingRules": [
+    "Stop when the same decision holds on both systems"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Time spent checking is time not spent mixing",
+    "Over-correcting for one system breaks the others"
+   ],
+   "usefulWhen": [
+    "A mix works in one place and not another",
+    "You are unsure which system is lying"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "No playback system is neutral. Learning what your own systems exaggerate is what makes a judgment portable; chasing each system in turn produces a mix that works nowhere."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "fullMix"
+   ],
+   "competingInterpretations": [
+    "Level relationship",
+    "Ambience relationship",
+    "Tonal distance cues",
+    "Arrangement density"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "mixDepth",
+    "depth",
+    "reverb",
+    "preDelay",
+    "frontToBackPlacement",
+    "balance"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "A clear foreground and background rather than a flat wall"
+   ],
+   "id": "strategy.curated.depth-in-a-mix",
+   "label": "Create front-to-back depth",
+   "nonDSPAlternatives": [
+    "Re-arrange so fewer elements compete for the front"
+   ],
+   "notUsefulWhen": [
+    "The arrangement has only one element"
+   ],
+   "preservationConcerns": [
+    "The lead element's intelligibility must survive"
+   ],
+   "problemOrOutcome": "A mix feels flat, with everything at the same apparent distance",
+   "recommendedFirstExperiment": "Decide which single element should be closest, then push one supporting element back using level first, before reaching for reverb.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "Everything now sounds distant"
+   ],
+   "stoppingRules": [
+    "Stop when the hierarchy is obvious on a casual listen"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Pushing things back can make a mix feel smaller if overdone"
+   ],
+   "usefulWhen": [
+    "Everything sounds equally present",
+    "Adding reverb made things worse rather than deeper"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Depth is relative. Level, high-frequency content, and direct-to-reverberant balance all encode distance; level is the cheapest and most reversible of the three, so it answers the question before ambience complicates it."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "fullMix"
+   ],
+   "competingInterpretations": [
+    "Technical defect",
+    "Loudness or level issue",
+    "Wrong file version"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "formatAndExport",
+    "streamingDelivery",
+    "qualityControl",
+    "peaks",
+    "loudness"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "Confidence the file is the one you meant to send"
+   ],
+   "id": "strategy.curated.export-and-delivery-check",
+   "label": "Check a mix before exporting or delivering",
+   "nonDSPAlternatives": [
+    "Have someone else listen once"
+   ],
+   "notUsefulWhen": [
+    "Mid-mix, where it interrupts creative work"
+   ],
+   "preservationConcerns": [
+    "Keep the pre-export version so you can go back"
+   ],
+   "problemOrOutcome": "Preparing a final file for release or hand-off",
+   "recommendedFirstExperiment": "Play the whole file start to finish once, without touching anything, listening for edits, clicks, and abrupt starts or ends.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "You are checking numbers instead of listening"
+   ],
+   "stoppingRules": [
+    "Stop when a complete pass reveals nothing new"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "A full listen takes real time, which is why it gets skipped"
+   ],
+   "usefulWhen": [
+    "Before any delivery or hand-off"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Most delivery failures are not loudness problems; they are a truncated tail, a click at an edit, a missing fade, or the wrong file exported. A single uninterrupted listen catches those cheaply."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "vocal",
+    "guitar",
+    "keyboard",
+    "synth"
+   ],
+   "competingInterpretations": [
+    "Buffer size",
+    "Plug-in latency",
+    "Interface driver",
+    "System load"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "latency",
+    "interfacesAndMonitoring",
+    "performanceCapture"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "Responsive playing while tracking, stable playback while mixing"
+   ],
+   "id": "strategy.curated.latency-and-buffer",
+   "label": "Trade monitoring latency against system stability",
+   "nonDSPAlternatives": [
+    "Monitor through the interface rather than the software"
+   ],
+   "notUsefulWhen": [
+    "The delay is coming from a plug-in's own latency rather than the buffer"
+   ],
+   "preservationConcerns": [
+    "Do not commit a performance recorded while fighting latency"
+   ],
+   "problemOrOutcome": "Playing feels delayed, or lowering the buffer causes clicks",
+   "recommendedFirstExperiment": "Use a small buffer while recording and a large one while mixing, and change it deliberately at the point you switch tasks.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "Changing the buffer makes no difference, so the delay is elsewhere"
+   ],
+   "stoppingRules": [
+    "Stop when playing feels natural and playback is stable for the current task"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Small buffers can destabilize a loaded session"
+   ],
+   "usefulWhen": [
+    "Timing feels off while playing",
+    "Audio breaks up under plug-in load"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Buffer size trades responsiveness against processing headroom. Recording needs responsiveness; mixing needs headroom. One setting cannot serve both, which is why a fixed choice always feels wrong at some point."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "drums",
+    "fullMix",
+    "vocal"
+   ],
+   "competingInterpretations": [
+    "Cohesion problem",
+    "Individual element problem",
+    "Balance problem"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "groupProcessing",
+    "buses",
+    "compression",
+    "orderOfOperations"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "Elements that move as one, or a targeted fix that leaves the rest alone"
+   ],
+   "id": "strategy.curated.group-versus-track-processing",
+   "label": "Decide between processing a group and processing each track",
+   "nonDSPAlternatives": [
+    "Rebalance the individual levels first"
+   ],
+   "notUsefulWhen": [
+    "One element has a specific defect the others do not share"
+   ],
+   "preservationConcerns": [
+    "Group processing can flatten the internal balance you already set"
+   ],
+   "problemOrOutcome": "Whether to treat elements together or individually",
+   "recommendedFirstExperiment": "Ask whether the elements should move together. If they should feel like one thing, process the group; if one element has its own problem, fix that element.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "You are fixing one element by processing ten"
+   ],
+   "stoppingRules": [
+    "Stop when the group holds together without any element being dragged"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Group cohesion versus individual control"
+   ],
+   "usefulWhen": [
+    "Elements should feel like a single instrument",
+    "You want them to breathe together"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Group processing makes elements share a dynamic and tonal fate, which is what makes them cohere. Applied to a problem that belongs to one element, it drags everything else along with the fix."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "fullMix"
+   ],
+   "competingInterpretations": [
+    "Loudness target",
+    "Dynamic range preference",
+    "Genre convention"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "streamingDelivery",
+    "loudness",
+    "peaks",
+    "masterDynamics"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "A master that holds up at matched level rather than only when louder"
+   ],
+   "id": "strategy.curated.streaming-loudness",
+   "label": "Decide how loud to deliver for streaming",
+   "nonDSPAlternatives": [
+    "Improve the mix rather than the limiter"
+   ],
+   "notUsefulWhen": [
+    "The delivery target is a specification you have been given"
+   ],
+   "preservationConcerns": [
+    "Dynamics and transients that give the record its life"
+   ],
+   "problemOrOutcome": "Uncertainty about loudness targets and normalization",
+   "recommendedFirstExperiment": "Compare your master against a reference you admire in the same genre, level-matched, and judge dynamics and tone rather than trying to hit a number.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "The master only sounds better when it is louder"
+   ],
+   "stoppingRules": [
+    "Stop when it stands up level-matched against the reference"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Loudness bought with limiting costs punch and depth"
+   ],
+   "usefulWhen": [
+    "Choosing a delivery level",
+    "Worried the master is too quiet"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Platforms normalize playback level, so pushing loudness mostly trades dynamics away for no perceived gain. What survives normalization is how the mix sounds at a matched level."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "keyboard",
+    "synth",
+    "bass"
+   ],
+   "competingInterpretations": [
+    "Note overlap",
+    "Sustain pedal",
+    "Patch release time",
+    "Reverb"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "noteLength",
+    "articulation",
+    "sustainPedal",
+    "humanization"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "Clearer separation, or a more connected line"
+   ],
+   "id": "strategy.curated.note-length-and-overlap",
+   "label": "Fix blurred or disconnected MIDI parts through note length",
+   "nonDSPAlternatives": [
+    "Change the patch's release",
+    "Re-perform the part"
+   ],
+   "notUsefulWhen": [
+    "The blur comes from reverb rather than overlap"
+   ],
+   "preservationConcerns": [
+    "Intentional legato phrasing and pedal use"
+   ],
+   "problemOrOutcome": "Notes overlap into mush, or a part sounds disconnected and stiff",
+   "recommendedFirstExperiment": "Look at whether notes overlap or leave gaps where the part should be connected, and fix the few obvious ones before applying anything globally.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "Shortening notes did not help, so the blur is in the patch or the reverb"
+   ],
+   "stoppingRules": [
+    "Stop when the line reads clearly in the arrangement"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Over-shortening makes a part sound clipped and mechanical"
+   ],
+   "usefulWhen": [
+    "A bass or pad part sounds slurred",
+    "A part sounds stiff and disconnected"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Note length controls whether a part reads as legato or detached, and on sustained sounds overlapping notes stack into a blur that no EQ can separate. It is an editing problem, not a processing problem."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "vocal",
+    "drums",
+    "bass",
+    "guitar",
+    "keyboard",
+    "synth",
+    "fullMix"
+   ],
+   "competingInterpretations": [
+    "Region scope",
+    "Selection scope",
+    "Note scope",
+    "Timing scope"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "logicTools",
+    "logicEditors",
+    "regionEditing",
+    "flex",
+    "timingEditing"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "An edit that changes only what you meant"
+   ],
+   "id": "strategy.curated.logic-tool-choice",
+   "label": "Choose the right Logic tool for an edit",
+   "nonDSPAlternatives": [
+    "Re-record the part rather than editing it heavily"
+   ],
+   "notUsefulWhen": [
+    "The change is a mix decision rather than an edit"
+   ],
+   "preservationConcerns": [
+    "Work on a copy or use project alternatives before broad edits"
+   ],
+   "problemOrOutcome": "Not knowing which tool or editor an edit calls for",
+   "recommendedFirstExperiment": "Name the smallest thing you want to change — a region, a section inside it, a single note, or the timing of one hit — because that scope determines the tool more than the tool list does.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "You are undoing more than you are editing"
+   ],
+   "stoppingRules": [
+    "Stop when the intended change is made and nothing else moved"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Narrow tools take longer; broad tools risk collateral change"
+   ],
+   "usefulWhen": [
+    "Unsure which editor to open",
+    "An edit affected more than intended"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Logic's tools are organized by scope: region-level, selection-level, note-level, and time-level. Choosing by scope avoids reaching for a destructive or over-broad tool when a narrower one exists."
+  },
+  {
+   "applicableQuestionKinds": [
+    "troubleshootProblem",
+    "achieveSoundOrFeeling",
+    "productionStrategy",
+    "compareOptions",
+    "diagnoseTradeoff",
+    "planSession"
+   ],
+   "applicableSourceTypes": [
+    "fullMix",
+    "vocal"
+   ],
+   "competingInterpretations": [
+    "Fatigue",
+    "Genuine mix problem",
+    "Monitoring level too high"
+   ],
+   "contradictingClaimIDs": [],
+   "domains": [
+    "earFatigue",
+    "listeningLevel",
+    "comparisonBias",
+    "knowingWhenToStop"
+   ],
+   "evidenceClass": "professionalPracticeHeuristic",
+   "expectedAudibleConsequences": [
+    "Renewed ability to hear differences you had stopped noticing"
+   ],
+   "id": "strategy.curated.ear-fatigue",
+   "label": "Manage ear fatigue during a long session",
+   "nonDSPAlternatives": [
+    "Lower the monitoring level",
+    "Finish tomorrow"
+   ],
+   "notUsefulWhen": [
+    "You have only been working for a few minutes"
+   ],
+   "preservationConcerns": [
+    "Do not commit fatigue-driven decisions; note them and revisit"
+   ],
+   "problemOrOutcome": "Decisions get harder and everything starts sounding the same",
+   "recommendedFirstExperiment": "Stop and leave the room for ten minutes, then judge the mix in the first thirty seconds after you return.",
+   "relatedProcedureIDs": [],
+   "reviewState": "reviewed",
+   "signsStrategyIsWrong": [
+    "You return from a break and immediately dislike everything you did"
+   ],
+   "stoppingRules": [
+    "Stop the session entirely if a break no longer restores clarity"
+   ],
+   "supportingClaimIDs": [],
+   "tradeoffs": [
+    "Breaks cost session time"
+   ],
+   "usefulWhen": [
+    "Decisions are taking longer than they did an hour ago",
+    "You keep reversing yourself"
+   ],
+   "version": "1.0",
+   "whyItMayHelp": "Sensitivity to high frequencies and to small differences drops measurably over a long loud session, and the loss is gradual enough that you do not notice it happening. The first impression after a break is the most reliable data you will get that day."
   }
  ]
 }

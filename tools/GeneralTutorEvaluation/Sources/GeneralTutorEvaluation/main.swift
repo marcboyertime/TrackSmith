@@ -46,10 +46,17 @@ do {
     }
     if shown > 15 { print("… and \(shown - 15) more failing cases") }
 
+    for result in report.retrievalResults where !result.passed {
+        print("RETRIEVAL FAIL \(result.caseID)")
+        for failure in result.failures { print("  - \(failure)") }
+    }
     print("GENERAL_TUTOR_EVALUATION cases=\(report.caseCount) passed=\(report.passedCount)")
+    print("  retrieval=\(report.retrievalPassedCount)/\(report.retrievalCaseCount) conversations=\(report.conversationCount) multiTurnTurns=\(report.multiTurnTurnCount)")
     print("  domains=\(report.domainsExercised.count) kinds=\(report.questionKindsExercised.count)")
     print("  modes=\(report.answerModeCounts.sorted { $0.key < $1.key }.map { "\($0.key):\($0.value)" }.joined(separator: " "))")
-    exit(report.passedCount == report.caseCount ? 0 : 1)
+    let allPassed = report.passedCount == report.caseCount
+        && report.retrievalPassedCount == report.retrievalCaseCount
+    exit(allPassed ? 0 : 1)
 } catch {
     FileHandle.standardError.write(Data("GeneralTutorEvaluation failed: \(error)\n".utf8))
     exit(2)

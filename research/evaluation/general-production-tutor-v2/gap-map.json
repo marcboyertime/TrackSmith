@@ -3,10 +3,12 @@
  "builtAt": "2026-08-05",
  "method": "Every library question is routed to expected domains; each domain is checked against the generated knowledge base and the reviewed procedure catalog.",
  "domainsWithReviewedKnowledge": [
+  "articulation",
   "balance",
   "bass",
   "builds",
   "buses",
+  "channelStripOrder",
   "cleanup",
   "clipping",
   "comparingApproaches",
@@ -20,37 +22,54 @@
   "depth",
   "doublingAndLayering",
   "drumsAndPercussion",
+  "earFatigue",
   "effectAutomation",
   "eqAndFiltering",
   "expansionAndGating",
+  "flex",
+  "formatAndExport",
+  "frontToBackPlacement",
   "fullMix",
   "gainStaging",
   "groove",
+  "groupProcessing",
   "guitar",
+  "headphonesVersusMonitors",
   "humanization",
+  "interfacesAndMonitoring",
   "knowingWhenToStop",
+  "latency",
   "levelAutomation",
   "limiting",
   "listeningLevel",
+  "logicEditors",
+  "logicTools",
   "loudness",
   "masking",
   "master",
+  "masterDynamics",
   "microphonePlacement",
+  "mixDepth",
   "monoCompatibility",
   "noise",
+  "noteLength",
   "orchestration",
   "orderOfOperations",
   "parallelProcessing",
+  "peaks",
   "performanceCapture",
   "pianoAndKeys",
   "polarityAndPhase",
   "preDelay",
   "preservingIntent",
+  "qualityControl",
   "quantization",
   "references",
+  "regionEditing",
   "registerAllocation",
   "reverb",
   "roomAndReflections",
+  "roomProblems",
   "rubato",
   "saturation",
   "sectionChanges",
@@ -58,6 +77,8 @@
   "sidechains",
   "sourceVersusProcessingDecision",
   "stereoImaging",
+  "streamingDelivery",
+  "sustainPedal",
   "synth",
   "tempoMapping",
   "timingEditing",
@@ -74,49 +95,126 @@
  "procedureCount": 8,
  "gaps": [
   {
-   "domain": "tonalDistribution",
-   "questionsInLibrary": 19,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "depth",
-   "questionsInLibrary": 14,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
    "domain": "masking",
-   "questionsInLibrary": 13,
+   "questionsInLibrary": 27,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "tonalDistribution",
+   "questionsInLibrary": 27,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
    "domain": "compression",
-   "questionsInLibrary": 12,
+   "questionsInLibrary": 20,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": true,
    "priority": "covered"
   },
   {
-   "domain": "quantization",
-   "questionsInLibrary": 11,
+   "domain": "bass",
+   "questionsInLibrary": 16,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "bass",
-   "questionsInLibrary": 10,
+   "domain": "depth",
+   "questionsInLibrary": 15,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "balance",
+   "questionsInLibrary": 15,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "quantization",
+   "questionsInLibrary": 14,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "density",
+   "questionsInLibrary": 13,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
    "domain": "reverb",
+   "questionsInLibrary": 13,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "contrast",
+   "questionsInLibrary": 13,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "stereoImaging",
+   "questionsInLibrary": 11,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "performanceCapture",
+   "questionsInLibrary": 11,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "velocity",
+   "questionsInLibrary": 11,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "humanization",
+   "questionsInLibrary": 10,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "microphonePlacement",
+   "questionsInLibrary": 10,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": true,
+   "priority": "covered"
+  },
+  {
+   "domain": "references",
+   "questionsInLibrary": 10,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "drumsAndPercussion",
+   "questionsInLibrary": 9,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "monoCompatibility",
    "questionsInLibrary": 9,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
@@ -130,45 +228,115 @@
    "priority": "covered"
   },
   {
-   "domain": "density",
+   "domain": "vocals",
+   "questionsInLibrary": 7,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": true,
+   "priority": "covered"
+  },
+  {
+   "domain": "noise",
    "questionsInLibrary": 7,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "contrast",
+   "domain": "whatToTryFirst",
    "questionsInLibrary": 7,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "drumsAndPercussion",
-   "questionsInLibrary": 6,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "performanceCapture",
-   "questionsInLibrary": 6,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
    "domain": "gainStaging",
+   "questionsInLibrary": 7,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "translation",
+   "questionsInLibrary": 7,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "tempoMapping",
    "questionsInLibrary": 6,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "vocals",
-   "questionsInLibrary": 5,
+   "domain": "transientShaping",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "polarityAndPhase",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "listeningLevel",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "eqAndFiltering",
+   "questionsInLibrary": 6,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": true,
+   "priority": "covered"
+  },
+  {
+   "domain": "orderOfOperations",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "roomAndReflections",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "doublingAndLayering",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "sidechains",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "transitions",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "knowingWhenToStop",
+   "questionsInLibrary": 6,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
    "priority": "covered"
   },
   {
@@ -179,56 +347,28 @@
    "priority": "covered"
   },
   {
-   "domain": "transientShaping",
+   "domain": "levelAutomation",
    "questionsInLibrary": 5,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "microphonePlacement",
-   "questionsInLibrary": 5,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": true,
-   "priority": "covered"
-  },
-  {
-   "domain": "noise",
+   "domain": "loudness",
    "questionsInLibrary": 5,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "whatToTryFirst",
+   "domain": "buses",
    "questionsInLibrary": 5,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "humanization",
-   "questionsInLibrary": 4,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "tempoMapping",
-   "questionsInLibrary": 4,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "stereoImaging",
-   "questionsInLibrary": 4,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "monoCompatibility",
+   "domain": "verseChorusDevelopment",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
@@ -242,13 +382,6 @@
    "priority": "covered"
   },
   {
-   "domain": "polarityAndPhase",
-   "questionsInLibrary": 4,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
    "domain": "builds",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
@@ -256,14 +389,21 @@
    "priority": "covered"
   },
   {
-   "domain": "references",
+   "domain": "parallelProcessing",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "listeningLevel",
+   "domain": "channelStripOrder",
+   "questionsInLibrary": 4,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "saturation",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
@@ -277,29 +417,64 @@
    "priority": "covered"
   },
   {
-   "domain": "roomAndReflections",
+   "domain": "effectAutomation",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "balance",
+   "domain": "interfacesAndMonitoring",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "velocity",
+   "domain": "guitar",
    "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "levelAutomation",
-   "questionsInLibrary": 3,
+   "domain": "limiting",
+   "questionsInLibrary": 4,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "mixDepth",
+   "questionsInLibrary": 4,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "formatAndExport",
+   "questionsInLibrary": 4,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "flex",
+   "questionsInLibrary": 4,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "registerAllocation",
+   "questionsInLibrary": 4,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "orchestration",
+   "questionsInLibrary": 4,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
@@ -313,6 +488,13 @@
   },
   {
    "domain": "pianoAndKeys",
+   "questionsInLibrary": 3,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "logicTools",
    "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
@@ -333,56 +515,56 @@
    "priority": "covered"
   },
   {
-   "domain": "eqAndFiltering",
+   "domain": "latency",
+   "questionsInLibrary": 3,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "deEssing",
    "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": true,
    "priority": "covered"
   },
   {
-   "domain": "orderOfOperations",
+   "domain": "groupProcessing",
    "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "doublingAndLayering",
+   "domain": "streamingDelivery",
    "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "translation",
+   "domain": "peaks",
    "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "limiting",
+   "domain": "earFatigue",
    "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "verseChorusDevelopment",
-   "questionsInLibrary": 2,
+   "domain": "noteLength",
+   "questionsInLibrary": 3,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
    "domain": "cleanup",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "parallelProcessing",
    "questionsInLibrary": 2,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
@@ -403,42 +585,7 @@
    "priority": "medium"
   },
   {
-   "domain": "channelStripOrder",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
-   "domain": "effectAutomation",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
    "domain": "clipping",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "deEssing",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": true,
-   "priority": "covered"
-  },
-  {
-   "domain": "sidechains",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "guitar",
    "questionsInLibrary": 2,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
@@ -447,26 +594,12 @@
   {
    "domain": "sustainPedal",
    "questionsInLibrary": 2,
-   "hasReviewedKnowledge": false,
+   "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
-   "priority": "medium"
+   "priority": "covered"
   },
   {
    "domain": "handIndependence",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
-   "domain": "mixDepth",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
-   "domain": "peaks",
    "questionsInLibrary": 2,
    "hasReviewedKnowledge": false,
    "hasExactProcedure": false,
@@ -480,20 +613,6 @@
    "priority": "medium"
   },
   {
-   "domain": "buses",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": true,
-   "hasExactProcedure": false,
-   "priority": "covered"
-  },
-  {
-   "domain": "flex",
-   "questionsInLibrary": 2,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
    "domain": "projectAlternatives",
    "questionsInLibrary": 2,
    "hasReviewedKnowledge": false,
@@ -501,22 +620,50 @@
    "priority": "medium"
   },
   {
-   "domain": "earFatigue",
+   "domain": "headphonesVersusMonitors",
+   "questionsInLibrary": 2,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "groove",
+   "questionsInLibrary": 2,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "qualityControl",
+   "questionsInLibrary": 2,
+   "hasReviewedKnowledge": true,
+   "hasExactProcedure": false,
+   "priority": "covered"
+  },
+  {
+   "domain": "drops",
    "questionsInLibrary": 2,
    "hasReviewedKnowledge": false,
    "hasExactProcedure": false,
    "priority": "medium"
   },
   {
-   "domain": "logicTools",
-   "questionsInLibrary": 1,
+   "domain": "logicAutomation",
+   "questionsInLibrary": 2,
    "hasReviewedKnowledge": false,
    "hasExactProcedure": false,
    "priority": "medium"
   },
   {
-   "domain": "saturation",
-   "questionsInLibrary": 1,
+   "domain": "pitchEditing",
+   "questionsInLibrary": 2,
+   "hasReviewedKnowledge": false,
+   "hasExactProcedure": false,
+   "priority": "medium"
+  },
+  {
+   "domain": "comparingApproaches",
+   "questionsInLibrary": 2,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
@@ -536,27 +683,6 @@
    "priority": "medium"
   },
   {
-   "domain": "latency",
-   "questionsInLibrary": 1,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
-   "domain": "interfacesAndMonitoring",
-   "questionsInLibrary": 1,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
-   "domain": "groupProcessing",
-   "questionsInLibrary": 1,
-   "hasReviewedKnowledge": false,
-   "hasExactProcedure": false,
-   "priority": "medium"
-  },
-  {
    "domain": "wetDryTopology",
    "questionsInLibrary": 1,
    "hasReviewedKnowledge": true,
@@ -564,39 +690,46 @@
    "priority": "covered"
   },
   {
-   "domain": "loudness",
+   "domain": "comping",
+   "questionsInLibrary": 1,
+   "hasReviewedKnowledge": false,
+   "hasExactProcedure": false,
+   "priority": "medium"
+  },
+  {
+   "domain": "sourceVersusProcessingDecision",
    "questionsInLibrary": 1,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "streamingDelivery",
+   "domain": "compareOptions",
    "questionsInLibrary": 1,
    "hasReviewedKnowledge": false,
    "hasExactProcedure": false,
    "priority": "medium"
   },
   {
-   "domain": "formatAndExport",
+   "domain": "distortion",
    "questionsInLibrary": 1,
    "hasReviewedKnowledge": false,
    "hasExactProcedure": false,
    "priority": "medium"
   },
   {
-   "domain": "transitions",
+   "domain": "expansionAndGating",
    "questionsInLibrary": 1,
    "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
    "priority": "covered"
   },
   {
-   "domain": "headphonesVersusMonitors",
+   "domain": "roomProblems",
    "questionsInLibrary": 1,
-   "hasReviewedKnowledge": false,
+   "hasReviewedKnowledge": true,
    "hasExactProcedure": false,
-   "priority": "medium"
+   "priority": "covered"
   }
  ],
  "highPriorityGaps": []

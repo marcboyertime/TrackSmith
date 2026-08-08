@@ -51,10 +51,29 @@
   backed by a reviewed procedure offers "Start guided experiment", handing off
   into the existing validated step flow. Verified live in the signed build
   against the MIDI-timing question, which has no Tutor v1 enum match.
-- Not done and not claimed: no external or YouTube source has been ingested,
-  there is no Research This control or memory UI, personalization remains
-  types-only, and no owner session or in-host validation of the broad tutor
-  exists.
+- Built the source review pipeline (`general-tutor-knowledge-pipeline.py`):
+  register-source with rights/tier/handling/transcript provenance, extraction
+  into a review queue as `machineExtracted`, promotion requiring a named
+  reviewer, an audiovisual-review gate, and a fail-closed audit wired into
+  `make verify`. Enforcement was verified by exercising the refusal paths —
+  Tier C cannot produce anything but discovery notes, an audiovisual-dependent
+  claim cannot be promoted from captions alone, and promotion without a
+  reviewer is refused.
+- Added the personal profile store: bounded, checksummed, atomic 0600, with
+  credential redaction, corruption quarantine, per-item forget, delete-all,
+  and a human-readable export. Confirmed outcomes reorder results for this
+  user only, bounded so preference cannot manufacture relevance.
+- Added memory controls and an explicitly labeled not-built Research This
+  control to Guide Me.
+- Expanded the corpus to 518 cases (396 directly curated or source-grounded)
+  including 10 multi-turn conversations evaluated in order and 10 retrieval
+  precision cases with expected and forbidden card IDs. All pass, across 99
+  domains. A second gap-driven strategy wave closed 12 newly surfaced
+  high-priority domains to zero.
+- General Tutor v2 gates GP0-GP7 pass. GP8 and GP9 remain pending and are
+  blocked on the owner: no real production-question session and no in-host
+  validation of the broad tutor exists, so whether these answers are useful is
+  still unestablished.
 
 ## 2026-08-05
 

@@ -1,4 +1,4 @@
-.PHONY: build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-evaluation native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -43,6 +43,9 @@ tutor-procedure-knowledge-check:
 general-tutor-knowledge-check:
 	python3 research/scripts/build-general-tutor-knowledge.py --check
 
+general-tutor-knowledge-audit:
+	python3 research/scripts/general-tutor-knowledge-pipeline.py audit
+
 general-tutor-evaluation:
 	swift run -c release GeneralTutorEvaluation research/evaluation/TRACKSMITH_GENERAL_TUTOR_CORPUS_V1.json
 
@@ -57,4 +60,4 @@ native-verify: native-build au-host-probe realtime-heap-probe
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check build test au-host-probe
+verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check general-tutor-knowledge-audit build test au-host-probe

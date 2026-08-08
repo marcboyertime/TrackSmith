@@ -14,12 +14,37 @@ public struct GeneralCorpusCase: Codable, Equatable, Sendable {
     public var requireLimitationDisclosure: Bool
     public var adversarialCategory: String?
     public var expectedAnswerMode: String?
+    /// Multi-turn membership. Turns of one conversation share an ID and are
+    /// ordered by index; each must independently produce a validated answer.
+    public var conversationID: String?
+    public var turnIndex: Int?
+}
+
+/// A retrieval precision/recall case: cards that must be retrievable for a
+/// question, and cards that must not dominate it.
+public struct GeneralRetrievalCase: Codable, Equatable, Sendable {
+    public var caseID: String
+    public var question: String
+    public var sourceType: SourceType
+    public var expectConceptIDs: [String]?
+    public var forbidConceptIDs: [String]?
+    public var expectStrategyIDs: [String]?
+    public var forbidStrategyIDs: [String]?
+}
+
+public struct GeneralRetrievalResult: Codable, Equatable, Sendable {
+    public var caseID: String
+    public var passed: Bool
+    public var failures: [String]
+    public var retrievedConceptIDs: [String]
+    public var retrievedStrategyIDs: [String]
 }
 
 public struct GeneralCorpus: Codable, Equatable, Sendable {
     public var version: String
     public var caseCount: Int
     public var cases: [GeneralCorpusCase]
+    public var retrievalCases: [GeneralRetrievalCase]?
 }
 
 public struct GeneralCaseResult: Codable, Equatable, Sendable {
@@ -46,7 +71,12 @@ public struct GeneralEvaluationReport: Codable, Equatable, Sendable {
     public var answerModeCounts: [String: Int]
     public var domainsExercised: [String]
     public var questionKindsExercised: [String]
+    public var conversationCount: Int
+    public var multiTurnTurnCount: Int
+    public var retrievalCaseCount: Int
+    public var retrievalPassedCount: Int
     public var results: [GeneralCaseResult]
+    public var retrievalResults: [GeneralRetrievalResult]
 }
 
 /// Deterministic offline evaluation of the open-domain path.
@@ -70,13 +100,30 @@ public struct GeneralTutorEvaluationHarness: Sendable {
         var domains = Set<String>()
         var kinds = Set<String>()
 
-        for testCase in corpus.cases {
+        var conversations = Set<String>()
+        var multiTurnTurns = 0
+
+        // Multi-turn cases are evaluated in conversation order so a later turn
+        // is exercised only after its predecessors have been answered.
+        let ordered = corpus.cases.sorted { left, right in
+            switch (left.conversationID, right.conversationID) {
+            case let (l?, r?) where l == r: return (left.turnIndex ?? 0) < (right.turnIndex ?? 0)
+            default: return left.caseID < right.caseID
+            }
+        }
+        for testCase in ordered {
             let result = evaluate(testCase)
             modes[result.answerMode, default: 0] += 1
             domains.formUnion(result.routedDomains)
             kinds.insert(result.routedKind)
+            if let conversation = testCase.conversationID {
+                conversations.insert(conversation)
+                multiTurnTurns += 1
+            }
             results.append(result)
         }
+
+        let retrievalResults = (corpus.retrievalCases ?? []).map(evaluateRetrieval)
 
         return GeneralEvaluationReport(
             corpusVersion: corpus.version,
@@ -85,7 +132,49 @@ public struct GeneralTutorEvaluationHarness: Sendable {
             answerModeCounts: modes,
             domainsExercised: domains.sorted(),
             questionKindsExercised: kinds.sorted(),
-            results: results
+            conversationCount: conversations.count,
+            multiTurnTurnCount: multiTurnTurns,
+            retrievalCaseCount: retrievalResults.count,
+            retrievalPassedCount: retrievalResults.filter(\.passed).count,
+            results: results,
+            retrievalResults: retrievalResults
+        )
+    }
+
+    /// Checks that the retriever surfaces the cards a question needs and does
+    /// not let unrelated cards dominate it.
+    public func evaluateRetrieval(_ testCase: GeneralRetrievalCase) -> GeneralRetrievalResult {
+        var failures: [String] = []
+        let outcome = try? coordinator.answer(
+            GeneralTutorRequest(question: testCase.question, sourceType: testCase.sourceType)
+        )
+        guard let outcome else {
+            return GeneralRetrievalResult(
+                caseID: testCase.caseID, passed: false,
+                failures: ["coordinator threw"], retrievedConceptIDs: [], retrievedStrategyIDs: []
+            )
+        }
+        let concepts = outcome.retrieved.concepts.map(\.id)
+        let strategies = outcome.retrieved.strategies.map(\.id)
+
+        for id in testCase.expectConceptIDs ?? [] where !concepts.contains(id) {
+            failures.append("expected concept not retrieved: \(id)")
+        }
+        for id in testCase.forbidConceptIDs ?? [] where concepts.first == id {
+            failures.append("forbidden concept ranked first: \(id)")
+        }
+        for id in testCase.expectStrategyIDs ?? [] where !strategies.contains(id) {
+            failures.append("expected strategy not retrieved: \(id)")
+        }
+        for id in testCase.forbidStrategyIDs ?? [] where strategies.first == id {
+            failures.append("forbidden strategy ranked first: \(id)")
+        }
+        return GeneralRetrievalResult(
+            caseID: testCase.caseID,
+            passed: failures.isEmpty,
+            failures: failures,
+            retrievedConceptIDs: concepts,
+            retrievedStrategyIDs: strategies
         )
     }
 

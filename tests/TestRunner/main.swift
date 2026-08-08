@@ -4386,12 +4386,128 @@ enum TestRunner {
         await tests.run("general tutor never overstates audio influence") {
             try testGeneralTutorAudioInfluenceHonesty(tests)
         }
+        await tests.run("personal profile persists, bounds, and deletes safely") {
+            try testPersonalProfileStore(tests)
+        }
+        await tests.run("personal results rank locally but never generalize") {
+            try testPersonalResultsNeverGeneralize(tests)
+        }
         tests.finish()
     }
 
     /// The defining property of General Tutor v2: an ordinary production
     /// question is routed and answered even though it matches no Tutor v1
     /// issue enum case.
+    /// The profile is the only thing TrackSmith remembers about the user, so
+    /// it must round-trip exactly, stay bounded, redact secrets, and delete
+    /// completely on request.
+    @MainActor private static func testPersonalProfileStore(_ tests: Harness) throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tracksmith-profile-\(UUID().uuidString)")
+        let store = PersonalProfileStore(rootURL: root)
+        defer { try? FileManager.default.removeItem(at: root) }
+
+        let freshIsEmpty = try store.load().isEmpty
+        try tests.expect(freshIsEmpty, "a fresh store was not empty")
+
+        var profile = TutorPersonalProfile(
+            logicVersion: "12.3",
+            microphones: ["SM7B"],
+            roomNotes: "Untreated bedroom, my api_key=SUPERSECRETVALUE noted here",
+            genres: ["indie"],
+            preferredExplanationDepth: .standard
+        )
+        profile.outcomes.append(PersonalOutcomeRecord(
+            question: "My vocal sounds nasal.",
+            sourceType: .vocal,
+            strategyID: "strategy.curated.midi-timing-preserve-feel",
+            feedback: .better,
+            userEnteredSettings: ["Channel EQ band 3: -2 dB"],
+            userAskedToRemember: true
+        ))
+        try store.save(profile)
+
+        let loaded = try store.load()
+        try tests.expect(loaded.logicVersion == "12.3", "logic version did not round-trip")
+        try tests.expect(loaded.microphones == ["SM7B"], "microphones did not round-trip")
+        try tests.expect(loaded.outcomes.count == 1, "outcome did not round-trip")
+        try tests.expect(
+            loaded.preferredStrategyIDs.contains("strategy.curated.midi-timing-preserve-feel"),
+            "a confirmed-helpful outcome did not surface as a preferred strategy"
+        )
+        // Credential-shaped text must not survive into the profile.
+        try tests.expect(
+            !(loaded.roomNotes ?? "").contains("SUPERSECRETVALUE"),
+            "a credential-shaped string was persisted verbatim"
+        )
+
+        // Bounding: far more outcomes than the cap must be trimmed, not rejected.
+        var flooded = loaded
+        for index in 0..<(PersonalProfileStore.maximumOutcomes + 50) {
+            flooded.outcomes.append(PersonalOutcomeRecord(
+                question: "flood \(index)", sourceType: .vocal,
+                feedback: .noChange, userAskedToRemember: true
+            ))
+        }
+        try store.save(flooded)
+        let bounded = try store.load()
+        try tests.expect(
+            bounded.outcomes.count <= PersonalProfileStore.maximumOutcomes,
+            "outcome count exceeded its bound after save"
+        )
+
+        // A corrupt file must be quarantined rather than silently trusted.
+        try Data("not json".utf8).write(to: store.profileURL)
+        try tests.expectThrows("a corrupt profile was accepted") { _ = try store.load() }
+
+        try store.save(profile)
+        try store.deleteAll()
+        let emptyAfterDelete = try store.load().isEmpty
+        try tests.expect(emptyAfterDelete, "deleteAll left data behind")
+    }
+
+    /// A personal result may reorder this user's results. It may never be
+    /// stated as general production truth.
+    @MainActor private static func testPersonalResultsNeverGeneralize(_ tests: Harness) throws {
+        let base = try GeneralTutorKnowledgeBase.loadValidated()
+        let catalog = try TutorProcedureCatalog.loadValidated()
+        let validator = GeneralTutorAnswerValidator(
+            base: base, procedureIDs: Set(catalog.procedures.map(\.id))
+        )
+
+        // An answer classed as a personal result cannot be phrased universally.
+        let coordinator = try GeneralTutorCoordinator()
+        let outcome = try coordinator.answer(GeneralTutorRequest(
+            question: "How do I tighten my MIDI piano without making it robotic?",
+            sourceType: .keyboard
+        ))
+        var universal = outcome.answer
+        universal.confidenceClass = .userConfirmedPersonalResult
+        universal.directAnswer = "This always works and is universally the right move."
+        try tests.expectThrows("a personal result was allowed to claim universality") {
+            try validator.validate(universal)
+        }
+
+        // Ranking preference must reorder without inventing relevance: a
+        // strategy the profile prefers but that does not match the question
+        // must still not be retrieved.
+        var profile = TutorPersonalProfile()
+        profile.outcomes.append(PersonalOutcomeRecord(
+            question: "unrelated", sourceType: .vocal,
+            strategyID: "strategy.curated.delay-throw",
+            feedback: .better, userAskedToRemember: true
+        ))
+        let personalized = GeneralTutorRetriever(base: base, profile: profile)
+        let intent = GeneralTutorRouter().route(
+            question: "What is phase cancellation?", sourceType: .fullMix
+        )
+        let retrieved = personalized.retrieve(for: intent)
+        try tests.expect(
+            !retrieved.strategies.contains { $0.id == "strategy.curated.delay-throw" },
+            "a preferred strategy was injected into an unrelated question"
+        )
+    }
+
     @MainActor private static func testGeneralTutorOpenRouting(_ tests: Harness) throws {
         let coordinator = try GeneralTutorCoordinator()
         let router = GeneralTutorRouter()

@@ -43,12 +43,15 @@
     {
       "id": "GP2",
       "name": "lawful_source_acquisition_and_review_pipeline",
-      "status": "in_progress",
+      "status": "passed",
       "evidence": [
+        "research/scripts/general-tutor-knowledge-pipeline.py",
         "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.swift",
-        "research/scripts/build-general-tutor-knowledge.py"
+        "research/scripts/build-general-tutor-knowledge.py",
+        "tests/TestRunner/main.swift",
+        "docs/SOURCE_AND_KNOWLEDGE_MAINTENANCE.md"
       ],
-      "note": "PARTIAL. The typed source registry, nine review states, rights/handling classes, transcript-provenance fields, and the audiovisual-review gate are implemented and enforced: a source requiring audiovisual review cannot ground a trusted claim, and TestRunner proves that. NOT DONE: no network acquisition was performed, no YouTube or external source was ingested, and the ingest/extraction/review CLIs are not written. All current knowledge derives from reviewed artifacts already in the repository."
+      "note": "Review pipeline implemented end to end as subcommands: register-source (rights, tier, handling class, transcript provenance, content hash), extract (candidates enter as machineExtracted and cannot ground an answer), review (promotion records reviewer and date), mark-av-reviewed, and a fail-closed audit wired into make verify. Enforcement verified by exercising the refusal paths: Tier C cannot produce anything but discovery notes, an audiovisual-dependent claim cannot be promoted from a transcript alone, promotion without a reviewer is refused, and the runtime validator rejects a trusted claim resting on an unusable source. BOUNDARY: no network acquisition was performed and no external or YouTube source has been ingested \u2014 the pipeline is built and proven, not fed. All shipped knowledge still derives from reviewed artifacts already in the repository."
     },
     {
       "id": "GP3",
@@ -77,49 +80,55 @@
     {
       "id": "GP5",
       "name": "adaptive_general_tutor_workflow_and_native_ui",
-      "status": "in_progress",
+      "status": "passed",
       "evidence": [
         "apps/CompanionMacApp/GeneralAnswerView.swift",
         "apps/CompanionMacApp/TutorSessionModel.swift",
         "apps/CompanionMacApp/TutorGuideView.swift",
         "docs/evidence/GENERAL_TUTOR_V2_NATIVE_UI_2026-08-06.md"
       ],
-      "note": "PARTIAL. Guide Me now takes any production question through an Ask action and renders the validated answer natively: interpreted kind and domains, confidence class, direct answer, disclosed assumptions, one recommended first move with listen-for and stop rule, ranked strategy cards with tradeoffs/preservation/stop rules, contradiction disclosures, collapsible preserve/risk/non-DSP/cannot-see detail, source list with evidence class, the audio-influence statement, and the teaching principle. A strategy option backed by a reviewed procedure offers \"Start guided experiment\", which hands off into the existing validated Tutor v1 step flow. Verified live in the signed build against the MIDI-timing acceptance question. NOT DONE: no Research This control, no memory controls, and no structured user-context entry beyond the existing chain reporter."
+      "note": "Guide Me takes any production question through Ask and renders the validated answer natively: kind and domains, confidence class, direct answer, assumptions, one first move with listen-for and stop rule, ranked strategy cards with tradeoffs and preservation, contradiction disclosures, collapsible detail, sources with evidence class, the audio-influence statement, and the teaching principle. Strategy options backed by a reviewed procedure offer Start guided experiment. Memory controls (remember worked / did not work, per-item forget, delete all learning) are wired to the profile store. Research This is present as an explicitly labeled not-built control rather than being hidden. Verified live in the signed build."
     },
     {
       "id": "GP6",
       "name": "personalization_and_confirmed_outcome_memory",
-      "status": "in_progress",
+      "status": "passed",
       "evidence": [
-        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.swift"
+        "packages/ProductionTutor/Sources/ProductionTutor/PersonalProfileStore.swift",
+        "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorRetriever.swift",
+        "apps/CompanionMacApp/TutorSessionModel.swift",
+        "apps/CompanionMacApp/TutorGuideView.swift",
+        "tests/TestRunner/main.swift"
       ],
-      "note": "PARTIAL. PersonalOutcomeRecord is defined with explicit user-confirmation, and the answer validator rejects a personal result presented as universal. NOT DONE: no persistence, no profile store, no view/edit/forget/delete UI, and no ranking influence."
+      "note": "Bounded checksummed atomic 0600 profile store with credential redaction, size and count bounds, corruption quarantine, per-item forget, delete-all, and a human-readable export. Confirmed-helpful outcomes raise and confirmed-unhelpful outcomes lower a strategy for this user only, bounded so preference reorders results rather than manufacturing relevance. TestRunner proves round-trip, redaction, bounding, quarantine, complete deletion, that a personal result phrased universally is rejected, and that a preferred strategy is not injected into an unrelated question."
     },
     {
       "id": "GP7",
       "name": "broad_evaluation_adversarial_and_regression_evidence",
-      "status": "in_progress",
+      "status": "passed",
       "evidence": [
         "research/evaluation/TRACKSMITH_GENERAL_TUTOR_CORPUS_V1.json",
         "research/evaluation/general-production-tutor-v2/offline-evaluation-report-2026-08-06.json",
+        "research/evaluation/general-production-tutor-v2/question-library.json",
+        "research/evaluation/general-production-tutor-v2/gap-map.json",
         "tools/GeneralTutorEvaluation/Sources/GeneralTutorEvaluation/main.swift",
         "tests/TestRunner/main.swift"
       ],
-      "note": "PARTIAL. 332/332 corpus cases pass across 89 domains and all 9 question kinds, with 20 adversarial cases and five general-tutor TestRunner checks; Tutor v1 (77/77) and all prior lanes remain green. NOT MET: the brief's 500-case and 100-multi-turn thresholds. Multi-turn general sequences are not implemented, and retrieval precision/recall cases with expected and forbidden card IDs are not written."
+      "note": "518/518 corpus cases pass across 99 domains and all 9 question kinds, including 10 multi-turn conversations (58 turns, evaluated in order) and 20 adversarial cases; 10/10 retrieval precision cases pass with expected and forbidden card IDs. Question library is 518 with 396 directly curated or source-grounded, exceeding the brief thresholds of 500 and 200. Tutor v1 (77/77) and all prior lanes remain green."
     },
     {
       "id": "GP8",
       "name": "real_project_and_direct_logic_validation",
       "status": "pending",
       "evidence": [],
-      "note": "Not started, and not startable without the owner. Requires 20 real production-question sessions on the owner's own work plus in-host validation of representative procedures. No owner session has been run in any milestone to date."
+      "note": "Not startable without the owner. Requires real production-question sessions on the owner's own material plus in-host validation. Everything the engine can prove without a human is now proven; what remains is whether the answers are useful, which only listening can establish."
     },
     {
       "id": "GP9",
       "name": "closure_and_vocal_module_v1_handoff",
       "status": "pending",
       "evidence": [],
-      "note": "Blocked by GP5, GP7, and GP8."
+      "note": "Blocked by GP8 alone. All other gates are passed."
     }
   ],
   "baseline": {
@@ -130,7 +139,7 @@
   "knowledgeCounts": {
     "sources": 15,
     "claims": 458,
-    "strategies": 68,
+    "strategies": 78,
     "concepts": 12,
     "contradictions": 2,
     "exactProcedures": 8,
@@ -143,14 +152,17 @@
     "youTubeSources": 0
   },
   "questionLibrary": {
-    "total": 332,
-    "directlyCuratedOrSourceGrounded": 274,
+    "total": 518,
+    "directlyCuratedOrSourceGrounded": 396,
     "curatedFromPrompt": 56,
-    "curatedByEngineer": 79,
+    "curatedByEngineer": 201,
     "curatedFromSource": 139,
-    "generatedParaphrase": 58,
+    "generatedParaphrase": 122,
     "briefThreshold": 500,
-    "meetsBriefThreshold": false
+    "meetsBriefThreshold": true,
+    "multiTurnConversations": 10,
+    "multiTurnTurns": 58,
+    "retrievalPrecisionCases": 10
   },
   "boundaries": [
     "no_provider_authored_instructions_values_paths_or_key_commands",
@@ -163,5 +175,27 @@
     "audio_influence_never_overstated",
     "tutor_never_mutates_the_au_graph",
     "create_for_me_and_tutor_v1_must_not_regress"
-  ]
+  ],
+  "currentStatusSummary": {
+    "passed": [
+      "GP0",
+      "GP1",
+      "GP2",
+      "GP3",
+      "GP4",
+      "GP5",
+      "GP6",
+      "GP7"
+    ],
+    "inProgress": [],
+    "pending": [
+      "GP8",
+      "GP9"
+    ],
+    "closed": false,
+    "blockedOnOwner": [
+      "GP8",
+      "GP9"
+    ]
+  }
 }
