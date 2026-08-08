@@ -12,7 +12,7 @@ struct StepCardView: View {
                 HStack {
                     Text(progressLabel(step, lesson: lesson))
                         .font(Theme.Font.section)
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(Theme.Colors.text)
                     Spacer()
                     Text("You perform every action — TrackSmith never touches Logic")
                         .font(Theme.Font.meta)

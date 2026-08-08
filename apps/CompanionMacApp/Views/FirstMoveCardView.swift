@@ -8,9 +8,9 @@ struct FirstMoveCardView: View {
     var body: some View {
         Card(style: .firstMove) {
             VStack(alignment: .leading, spacing: Theme.Spacing.legacy6) {
-                Text("TRY THIS FIRST")
-                    .font(Theme.Font.section)
-                    .foregroundStyle(.tint)
+            Text("TRY THIS FIRST")
+                .font(Theme.Font.section)
+                .foregroundStyle(Theme.Colors.text)
                 Text(move).font(Theme.Font.body)
                 if !answer.whatToListenFor.isEmpty {
                     Label(answer.whatToListenFor.prefix(2).joined(separator: " "), systemImage: "ear")

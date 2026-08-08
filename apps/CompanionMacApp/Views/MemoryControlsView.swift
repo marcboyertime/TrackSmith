@@ -27,7 +27,7 @@ struct MemoryControlsView: View {
                     .font(Theme.Font.meta)
                     .foregroundStyle(.secondary)
                 if !tutor.memoryNote.isEmpty {
-                    Text(tutor.memoryNote).font(Theme.Font.meta).foregroundStyle(.tint)
+                    Text(tutor.memoryNote).font(Theme.Font.meta).foregroundStyle(Theme.Colors.text)
                 }
                 if !tutor.profile.outcomes.isEmpty {
                     DisclosureGroup("What TrackSmith remembers (\(tutor.profile.outcomes.count))") {

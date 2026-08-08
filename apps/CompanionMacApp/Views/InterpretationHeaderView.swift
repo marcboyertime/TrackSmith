@@ -8,7 +8,7 @@ struct InterpretationHeaderView: View {
         HStack(alignment: .firstTextBaseline) {
             Text(kindLabel(answer.questionKind).uppercased())
                 .font(Theme.Font.section)
-                .foregroundStyle(.tint)
+                .foregroundStyle(Theme.Colors.text)
             if !answer.domains.isEmpty {
                 Text(answer.domains.prefix(3).map(domainLabel).joined(separator: " · "))
                     .font(Theme.Font.meta)
