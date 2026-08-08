@@ -4,12 +4,56 @@ import SwiftUI
 
 struct CapturePanelView: View {
     @ObservedObject var model: CompanionSessionModel
+    @State private var isExpanded = false
 
     var body: some View {
-        GroupBox("Captured plug-in input") {
-            VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.18)) { isExpanded.toggle() }
+            } label: {
+                HStack(spacing: Theme.Spacing.legacy10) {
+                    Circle().fill(model.statusColor).frame(width: 9, height: 9)
+                    VStack(alignment: .leading, spacing: Theme.Spacing.legacy2) {
+                        Text("Audio Context")
+                            .font(Theme.Font.section)
+                            .foregroundStyle(Theme.Colors.text)
+                        Text(model.instances.isEmpty ? "No active insert — add TrackSmith in Logic to capture playback." : model.status)
+                            .font(Theme.Font.meta)
+                            .foregroundStyle(Theme.Colors.secondaryText)
+                            .lineLimit(1)
+                    }
+                    Spacer()
+                    if let peak = model.activeSessionInstance?.inputPeakDBFS {
+                        Text(String(format: "%+.1f dBFS", peak))
+                            .font(Theme.Font.data)
+                            .foregroundStyle(Theme.Colors.secondaryText)
+                    }
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(Theme.Font.meta.weight(.semibold))
+                        .foregroundStyle(Theme.Colors.mutedText)
+                        .accessibilityLabel(isExpanded ? "Collapse audio context" : "Expand audio context")
+                }
+                .contentShape(Rectangle())
+                .accessibilityElement(children: .ignore)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isExpanded ? "Collapse audio context" : "Expand audio context")
+            .accessibilityValue(audioContextAccessibilityValue)
+            .accessibilityHint(isExpanded ? "Hides capture, source, waveform, provider, and evidence details." : "Shows capture, source, waveform, provider, and evidence details.")
+
+            if isExpanded {
+                Divider().overlay(Theme.Colors.hairline)
+                VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
+                    Text(model.detailStatus)
+                        .font(Theme.Font.meta)
+                        .foregroundStyle(Theme.Colors.secondaryText)
+                    if !model.restoredConversationStatus.isEmpty {
+                        Text(model.restoredConversationStatus)
+                            .font(Theme.Font.meta)
+                            .foregroundStyle(Theme.Colors.mutedText)
+                    }
                 WaveformView(samples: model.waveform)
-                    .frame(height: 165)
+                    .frame(height: 112)
                 HStack {
                     Picker("Source", selection: $model.sourceType) {
                         ForEach(SourceType.allCases, id: \.self) { type in
@@ -25,7 +69,7 @@ struct CapturePanelView: View {
                                     capture.sampleRate,
                                     capture.channelCount))
                             .font(Theme.Font.data)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Theme.Colors.secondaryText)
                     }
                     Spacer()
                 }
@@ -42,7 +86,7 @@ struct CapturePanelView: View {
                         }
                     }
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                 }
                 if !model.displayedHypotheses.isEmpty {
                     VStack(alignment: .leading, spacing: Theme.Spacing.legacy5) {
@@ -75,7 +119,7 @@ struct CapturePanelView: View {
                             }
                         }
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                 }
                 let displayedEvidence = model.displayedEvidence
                 let relationships = Set(displayedEvidence.map(\.relationship))
@@ -96,7 +140,7 @@ struct CapturePanelView: View {
                             )
                         }
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                 }
                 if let provider = model.providerEvidenceSummary,
                    let audit = model.validationAuditSummary {
@@ -107,11 +151,34 @@ struct CapturePanelView: View {
                         Text(audit)
                     }
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
+                }
+                Divider().overlay(Theme.Colors.hairline)
+                HStack(spacing: Theme.Spacing.eight) {
+                    Image(systemName: model.providerSelection.usesCloud ? "cloud" : "checkmark.shield")
+                        .foregroundStyle(model.providerSelection.usesCloud ? Theme.Colors.accent : Theme.Colors.secondaryText)
+                    Text(model.activeProviderDescription)
+                        .font(Theme.Font.meta)
+                        .foregroundStyle(Theme.Colors.secondaryText)
+                    Spacer()
+                    SettingsLink {
+                        Label("Settings", systemImage: "gearshape")
+                            .font(Theme.Font.meta)
+                    }
+                }
                 }
             }
-            .padding(Theme.Spacing.eight)
         }
+        .padding(Theme.Spacing.twelve)
+        .instrumentSurface(.raised, radius: Theme.Radius.medium)
+    }
+
+    private var audioContextAccessibilityValue: String {
+        let status = model.instances.isEmpty
+            ? "No active insert. Add TrackSmith in Logic to capture playback."
+            : model.status
+        guard let peak = model.activeSessionInstance?.inputPeakDBFS else { return status }
+        return "\(status). Current input peak \(String(format: "%+.1f dBFS", peak))."
     }
 }
 
@@ -132,5 +199,6 @@ private struct EvidenceObservationRow: View {
                 Badge(observation.relationship.rawValue, style: .category)
             }
         }
+        .foregroundStyle(Theme.Colors.secondaryText)
     }
 }

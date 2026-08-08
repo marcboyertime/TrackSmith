@@ -16,7 +16,7 @@ struct StepCardView: View {
                     Spacer()
                     Text("You perform every action — TrackSmith never touches Logic")
                         .font(Theme.Font.meta)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.Colors.secondaryText)
                 }
                 Text(step.title).font(Theme.Font.display)
                 Text(step.instruction)
@@ -39,7 +39,7 @@ struct StepCardView: View {
 
                 Text(tutor.formatter.explanation(for: step, depth: .simple))
                     .font(Theme.Font.body)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
 
                 if tutor.explanationDepth != .simple {
                     DisclosureGroup("Why this works") {
@@ -58,7 +58,7 @@ struct StepCardView: View {
                         if !step.uncertainty.isEmpty {
                             Text("Uncertainty: " + step.uncertainty.joined(separator: " "))
                                 .font(Theme.Font.meta)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.Colors.secondaryText)
                         }
                     }
                     .padding(.top, Theme.Spacing.four)
@@ -89,7 +89,7 @@ struct StepCardView: View {
                     Label("Undo: \(step.undoInstruction)", systemImage: "arrow.uturn.backward")
                 }
                 .font(Theme.Font.meta)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.Colors.secondaryText)
 
                 FeedbackBarView(tutor: tutor, step: step)
             }

@@ -8,16 +8,49 @@ struct RequestPanelView: View {
     let askQuestion: () -> Void
 
     var body: some View {
-        GroupBox("What do you want help with?") {
-            VStack(alignment: .leading, spacing: Theme.Spacing.legacy10) {
+        VStack(alignment: .leading, spacing: Theme.Spacing.legacy10) {
+            HStack {
+                Text("Guide Me")
+                    .font(Theme.Font.section)
+                Spacer()
+                Text("⌘↩ to ask")
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Colors.mutedText)
+            }
                 TextField(
                     "Describe the problem or the sound you want",
                     text: $tutor.requestText,
                     axis: .vertical
                 )
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.plain)
                 .lineLimit(2...4)
+                .padding(Theme.Spacing.twelve)
+                .background(Theme.Colors.control, in: RoundedRectangle(cornerRadius: Theme.Radius.medium))
+                .overlay(RoundedRectangle(cornerRadius: Theme.Radius.medium).stroke(Theme.Colors.hairline, lineWidth: 1))
                 HStack {
+                    Button("Start Lesson") { startLesson() }
+                        .buttonStyle(.bordered)
+                        .disabled(
+                            isStartingLesson
+                                || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        )
+                        .help("Runs the bounded step-by-step vocal troubleshooting flow.")
+                    Spacer()
+                    Button {
+                        askQuestion()
+                    } label: {
+                        Label("Ask", systemImage: "arrow.up")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.return, modifiers: [.command])
+                    .disabled(
+                        tutor.isAnswering
+                            || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    )
+                    .help("Answers any production question from reviewed knowledge.")
+                }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
                     ForEach(
                         ["I sound nasal",
                          "Why does my chorus feel smaller than the verse?",
@@ -33,42 +66,29 @@ struct RequestPanelView: View {
                             .padding(.vertical, Theme.Spacing.four)
                             .background(Theme.Colors.raised, in: Capsule())
                     }
-                    Spacer()
+                    }
                 }
-                ChainPanelView(tutor: tutor)
-                HStack {
-                    Picker("Explanation", selection: $tutor.explanationDepth) {
+                DisclosureGroup("Answer context") {
+                    VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
+                        ChainPanelView(tutor: tutor)
+                        HStack {
+                            Picker("Explanation", selection: $tutor.explanationDepth) {
                         Text("Simple").tag(TutorExplanationDepth.simple)
                         Text("Standard").tag(TutorExplanationDepth.standard)
                         Text("Technical").tag(TutorExplanationDepth.technical)
                     }
                     .pickerStyle(.segmented)
-                    .frame(width: 280)
-                    ResearchControlView(tutor: tutor)
-                    Spacer()
-                    // Ask is the default: any production question is accepted.
-                    // Start Lesson remains for the bounded vocal fast path.
-                    Button("Start Lesson") { startLesson() }
-                        .buttonStyle(.bordered)
-                        .disabled(
-                            isStartingLesson
-                                || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                        )
-                        .help("Runs the bounded step-by-step vocal troubleshooting flow.")
-                    Button("Ask") { askQuestion() }
-                        .buttonStyle(.borderedProminent)
-                        .keyboardShortcut(.return, modifiers: [.command])
-                        .disabled(
-                            tutor.isAnswering
-                                || tutor.requestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                        )
-                        .help("Answers any production question from reviewed knowledge.")
+                            .frame(maxWidth: 310)
+                            ResearchControlView(tutor: tutor)
+                        }
+                    }
+                    .padding(.top, Theme.Spacing.four)
                 }
                 if !tutor.restoredNote.isEmpty {
-                    Text(tutor.restoredNote).font(Theme.Font.meta).foregroundStyle(.secondary)
+                    Text(tutor.restoredNote).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
                 }
-            }
-            .padding(Theme.Spacing.eight)
         }
+        .padding(Theme.Spacing.twelve)
+        .instrumentSurface(.raised, radius: Theme.Radius.medium)
     }
 }

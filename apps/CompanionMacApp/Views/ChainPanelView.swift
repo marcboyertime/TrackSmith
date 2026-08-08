@@ -33,7 +33,7 @@ struct ChainPanelView: View {
                 }
                 Text("This is user-reported context, never observed state.")
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
             }
             .padding(.top, Theme.Spacing.legacy6)
         }

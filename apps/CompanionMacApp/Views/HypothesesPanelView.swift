@@ -10,7 +10,7 @@ struct HypothesesPanelView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
                 Text(tutor.formatter.hypothesisIntro(for: lesson))
                     .font(Theme.Font.meta)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                 ForEach(Array(lesson.hypotheses.enumerated()), id: \.offset) { index, hypothesis in
                     HStack(alignment: .top, spacing: Theme.Spacing.eight) {
                         Image(systemName: hypothesisSymbol(hypothesis.status))

@@ -29,7 +29,7 @@ struct ChangeCard: View {
                     .controlSize(.small)
                     .disabled(isBusy)
                 Text(String(format: "%.0f%% confidence", node.confidence * 100))
-                    .font(Theme.Font.meta).foregroundStyle(.secondary)
+                    .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
             }
             if !node.parameters.isEmpty {
                 Text(node.parameters.sorted { $0.key.rawValue < $1.key.rawValue }
@@ -37,7 +37,7 @@ struct ChangeCard: View {
                     .joined(separator: "   "))
                     .font(Theme.Font.meta)
             }
-            Text(node.rationale).font(Theme.Font.meta).foregroundStyle(.secondary)
+            Text(node.rationale).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
         }
         .padding(Theme.Spacing.legacy10)
         .instrumentSurface(.raised)

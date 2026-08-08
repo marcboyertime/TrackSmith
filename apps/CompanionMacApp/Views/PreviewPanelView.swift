@@ -5,9 +5,11 @@ struct PreviewPanelView: View {
 
     @ViewBuilder
     var body: some View {
-        GroupBox("Level-matched preview variants") {
+        VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
+            Text("Level-matched preview variants")
+                .font(Theme.Font.section)
             if model.previewManifest != nil {
-                HStack(spacing: Theme.Spacing.legacy10) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 180, maximum: 280), spacing: Theme.Spacing.legacy10)], spacing: Theme.Spacing.legacy10) {
                     PreviewCard(
                         title: "Original",
                         subtitle: "Unprocessed capture",
@@ -42,9 +44,11 @@ struct PreviewPanelView: View {
                 .padding(Theme.Spacing.eight)
             } else {
                 Text("Capture recent playback, describe the result, then render three deterministic options.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                     .frame(maxWidth: .infinity, minHeight: 90, alignment: .center)
             }
         }
+        .padding(Theme.Spacing.twelve)
+        .instrumentSurface(.raised, radius: Theme.Radius.medium)
     }
 }

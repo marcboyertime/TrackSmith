@@ -11,32 +11,44 @@ struct TutorGuideView: View {
     @State private var isStartingLesson = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
-            if let reason = tutor.engineUnavailableReason {
-                Label(reason, systemImage: "exclamationmark.octagon")
-                    .foregroundStyle(.red)
-            } else {
-                EvidenceBannerView(session: session, tutor: tutor)
-                RequestPanelView(
-                    tutor: tutor,
-                    isStartingLesson: isStartingLesson,
-                    startLesson: { startLesson() },
-                    askQuestion: { askQuestion() }
-                )
-                if let outcome = tutor.generalOutcome {
-                    GeneralAnswerView(
-                        outcome: outcome,
-                        depth: tutor.explanationDepth,
-                        startExperiment: { procedureID in
-                            beginExperiment(procedureID)
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
+                    Text("TrackSmith tells you exactly what to try in Logic, step by step. You perform every action.")
+                        .font(Theme.Font.meta)
+                        .foregroundStyle(Theme.Colors.secondaryText)
+                    CapturePanelView(model: session)
+                    if let reason = tutor.engineUnavailableReason {
+                        Label(reason, systemImage: "exclamationmark.octagon")
+                            .foregroundStyle(.red)
+                    } else {
+                        EvidenceBannerView(session: session, tutor: tutor)
+                        if let outcome = tutor.generalOutcome {
+                            GeneralAnswerView(
+                                outcome: outcome,
+                                depth: tutor.explanationDepth,
+                                startExperiment: { procedureID in
+                                    beginExperiment(procedureID)
+                                }
+                            )
+                            MemoryControlsView(tutor: tutor)
                         }
-                    )
-                    MemoryControlsView(tutor: tutor)
+                        if let lesson = tutor.lesson {
+                            LessonContentView(tutor: tutor, lesson: lesson)
+                        }
+                    }
                 }
-                if let lesson = tutor.lesson {
-                    LessonContentView(tutor: tutor, lesson: lesson)
-                }
+                .padding(Theme.Spacing.twentyFour)
             }
+            Divider().overlay(Theme.Colors.hairline)
+            RequestPanelView(
+                tutor: tutor,
+                isStartingLesson: isStartingLesson,
+                startLesson: { startLesson() },
+                askQuestion: { askQuestion() }
+            )
+            .padding(Theme.Spacing.twelve)
+            .background(Theme.Colors.card)
         }
         .onChange(of: session.captureArtifact) { _, _ in reconcileAuthority() }
         .onChange(of: session.instances) { _, _ in reconcileAuthority() }

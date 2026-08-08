@@ -25,7 +25,7 @@ struct WaveformView: View {
         .overlay(RoundedRectangle(cornerRadius: Theme.Radius.small).stroke(Theme.Colors.hairline, lineWidth: 1))
         .overlay {
             if samples.isEmpty {
-                Text("Waveform appears after captured playback").foregroundStyle(.secondary)
+                Text("Waveform appears after captured playback").foregroundStyle(Theme.Colors.secondaryText)
             }
         }
     }

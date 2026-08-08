@@ -10,7 +10,7 @@ struct ContradictionSectionView: View {
                 Label("Credible sources disagree", systemImage: "exclamationmark.bubble")
                     .font(Theme.Font.section)
                 ForEach(answer.contradictionDisclosures, id: \.self) { disclosure in
-                    Text(disclosure).font(Theme.Font.meta).foregroundStyle(.secondary)
+                    Text(disclosure).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
                 }
             }
         }

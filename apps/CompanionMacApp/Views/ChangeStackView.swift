@@ -20,7 +20,7 @@ struct ChangeStackView: View {
                 .padding(Theme.Spacing.eight)
             } else {
                 Text("Choose a preview as the working plan to inspect and edit its complete graph.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.Colors.secondaryText)
                     .frame(maxWidth: .infinity, minHeight: 55, alignment: .leading)
                     .padding(Theme.Spacing.eight)
             }

@@ -36,6 +36,8 @@ enum Theme {
         static let accentSelection = accent.opacity(0.24)
         static let accentSubtle = accent.opacity(0.14)
         static let text = SwiftUI.Color(red: 236 / 255, green: 239 / 255, blue: 243 / 255)
+        static let secondaryText = SwiftUI.Color(red: 181 / 255, green: 185 / 255, blue: 194 / 255)
+        static let mutedText = SwiftUI.Color(red: 137 / 255, green: 142 / 255, blue: 152 / 255)
         static let warningSurface = SwiftUI.Color.orange.opacity(0.12)
         static let clarificationSurface = SwiftUI.Color.yellow.opacity(0.12)
         static let contradictionSurface = SwiftUI.Color.purple.opacity(0.10)
