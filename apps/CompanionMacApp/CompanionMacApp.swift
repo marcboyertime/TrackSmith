@@ -6,9 +6,12 @@ import SwiftUI
 
 @main
 struct CompanionMacApp: App {
+    @StateObject private var model = CompanionSessionModel()
+
     var body: some Scene {
-        WindowGroup { CompanionContentView() }
+        WindowGroup { CompanionContentView(model: model) }
             .defaultSize(width: 1_120, height: 760)
+        Settings { SettingsView(model: model) }
     }
 }
 
@@ -32,42 +35,79 @@ enum CompanionMode: String, CaseIterable, Identifiable {
 }
 
 struct CompanionContentView: View {
-    @StateObject private var model = CompanionSessionModel()
+    @ObservedObject var model: CompanionSessionModel
     @StateObject private var tutor = TutorSessionModel()
     @State private var mode: CompanionMode = .guideMe
     @State private var confirmingCacheDeletion = false
 
     var body: some View {
         NavigationSplitView {
-            List(selection: $model.selectedInstanceID) {
-                Section("Logic Audio Units") {
-                    if model.instances.isEmpty {
-                        ContentUnavailableView(
-                            "No active insert",
-                            systemImage: "waveform.slash",
-                            description: Text("Insert TrackSmith on a track and play audio.")
-                        )
-                    }
-                    ForEach(model.instances) { instance in
-                        VStack(alignment: .leading, spacing: Theme.Spacing.legacy3) {
-                            Text(instance.contextName ?? "TrackSmith")
-                            Text(instanceSummary(instance))
-                                .font(Theme.Font.caption.monospacedDigit())
-                                .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: Theme.Spacing.four) {
+                List {
+                    Section("Mode") {
+                        ForEach(CompanionMode.allCases) { candidate in
+                            Button {
+                                mode = candidate
+                            } label: {
+                                Text(candidate.title)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.vertical, Theme.Spacing.four)
+                                    .padding(.horizontal, Theme.Spacing.eight)
+                                    .background(
+                                        mode == candidate
+                                            ? Color.accentColor.opacity(0.16)
+                                            : Color.clear,
+                                        in: RoundedRectangle(cornerRadius: Theme.Radius.small)
+                                    )
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityAddTraits(mode == candidate ? .isSelected : [])
                         }
-                        .tag(instance.id)
                     }
                 }
+                .listStyle(.sidebar)
+                .accessibilityLabel("TrackSmith mode")
+
+                Divider()
+
+                Text("Sessions")
+                    .font(Theme.Font.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, Theme.Spacing.twelve)
+
+                List(selection: $model.selectedInstanceID) {
+                    Section("Logic Audio Units") {
+                        if model.instances.isEmpty {
+                            ContentUnavailableView(
+                                "No active insert",
+                                systemImage: "waveform.slash",
+                                description: Text("Insert TrackSmith on a track and play audio.")
+                            )
+                        }
+                        ForEach(model.instances) { instance in
+                            VStack(alignment: .leading, spacing: Theme.Spacing.legacy3) {
+                                Text(instance.contextName ?? "TrackSmith")
+                                Text(instanceSummary(instance))
+                                    .font(Theme.Font.caption.monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                            }
+                            .tag(instance.id)
+                        }
+                    }
+                }
+                .listStyle(.sidebar)
             }
-            .navigationTitle("Sessions")
+            .navigationTitle("TrackSmith")
             .frame(minWidth: 250)
         } detail: {
             ScrollView {
                 VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
+                    Text(mode.subtitle)
+                        .font(Theme.Font.caption)
+                        .foregroundStyle(.secondary)
                     StatusHeaderView(model: model)
-                    ModeSelectorView(mode: $mode)
                     CapturePanelView(model: model)
-                    ProviderPanelView(model: model)
+                    ProviderStatusRowView(model: model)
                     switch mode {
                     case .guideMe:
                         TutorGuideView(session: model, tutor: tutor)
@@ -81,7 +121,7 @@ struct CompanionContentView: View {
                 }
                 .padding(Theme.Spacing.legacy22)
             }
-            .navigationTitle("TrackSmith")
+            .navigationTitle(mode.title)
         }
         .task { model.start() }
         .onChange(of: model.providerSelection) { _, _ in
