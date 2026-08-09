@@ -4,7 +4,7 @@
   "title": "Logic Audio Assistant Processing Plan",
   "type": "object",
   "additionalProperties": false,
-  "x-implementedNodeTypes": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "expander", "deEsser", "softClipper", "saturation", "stereoWidth", "delay", "reverb", "limiter", "outputTrim", "loudnessMatch", "meter"],
+  "x-implementedNodeTypes": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "expander", "deEsser", "softClipper", "saturation", "stereoWidth", "delay", "modulatedDelay", "reverb", "limiter", "outputTrim", "loudnessMatch", "meter"],
   "x-realtimeResourceLimits": {
     "maximumDelayNodeCount": 4,
     "maximumTotalDelayTimeMS": 4000,
@@ -12,7 +12,7 @@
     "maximumExpanderNodeCount": 4,
     "maximumSampleRateHz": 192000
   },
-  "$comment": "The node enum is the stable serialized vocabulary. PlanValidator rejects enabled node types not listed in x-implementedNodeTypes and performs node-specific parameter, graph, lock, gain, snapshot, and sample-rate validation that JSON Schema cannot fully express.",
+  "$comment": "The node enum is the stable serialized vocabulary. PlanValidator rejects enabled node types not listed in x-implementedNodeTypes and performs node-specific parameter, graph, lock, gain, snapshot, and sample-rate validation that JSON Schema cannot fully express. Delay resource accounting combines delay and modulatedDelay nodes; a modulatedDelay requests delayTimeMS plus modulationDepthMS.",
   "required": ["schemaVersion", "requestID", "sourceSnapshotID", "scope", "goals", "nodes", "outputConstraints"],
   "properties": {
     "schemaVersion": { "const": "1.0" },
@@ -62,7 +62,7 @@
       "required": ["id", "type", "enabled", "parameters", "rationale", "confidence", "category", "locked"],
       "properties": {
         "id": { "$ref": "#/$defs/uuid" },
-        "type": { "enum": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "expander", "deEsser", "softClipper", "saturation", "transientShaper", "stereoWidth", "midSideEQ", "delay", "reverb", "limiter", "outputTrim", "loudnessMatch", "meter"] },
+        "type": { "enum": ["inputTrim", "polarity", "highPass", "lowPass", "parametricEQ", "compressor", "expander", "deEsser", "softClipper", "saturation", "transientShaper", "stereoWidth", "midSideEQ", "delay", "modulatedDelay", "reverb", "limiter", "outputTrim", "loudnessMatch", "meter"] },
         "enabled": { "type": "boolean" },
         "parameters": { "$ref": "#/$defs/parameters" },
         "rationale": {
@@ -145,6 +145,14 @@
           }
         },
         {
+          "if": { "properties": { "type": { "const": "modulatedDelay" } } },
+          "then": {
+            "properties": { "parameters": { "propertyNames": { "enum": ["algorithmVersion", "delayTimeMS", "feedback", "damping", "mix", "modulationDepthMS", "modulationRateHz", "stereoPhaseDegrees"] } } },
+            "if": { "properties": { "enabled": { "const": true } } },
+            "then": { "properties": { "parameters": { "required": ["algorithmVersion"] } } }
+          }
+        },
+        {
           "if": { "properties": { "type": { "const": "reverb" } } },
           "then": {
             "properties": { "parameters": { "propertyNames": { "enum": ["algorithmVersion", "preDelayMS", "decayTimeSeconds", "roomSize", "damping", "diffusion", "mix"] } } },
@@ -191,9 +199,12 @@
         "lookaheadMS": { "const": 0 },
         "algorithmVersion": { "const": 1 },
         "delayTimeMS": { "type": "number", "minimum": 1, "maximum": 2000 },
-        "feedback": { "type": "number", "minimum": 0, "maximum": 0.95 },
+        "feedback": { "type": "number", "minimum": 0, "maximum": 0.5 },
         "damping": { "type": "number", "minimum": 0, "maximum": 1 },
         "stereoCrossfeed": { "type": "number", "minimum": 0, "maximum": 1 },
+        "modulationDepthMS": { "type": "number", "minimum": 0, "maximum": 20 },
+        "modulationRateHz": { "type": "number", "minimum": 0.05, "maximum": 5 },
+        "stereoPhaseDegrees": { "type": "number", "minimum": 0, "maximum": 180 },
         "preDelayMS": { "type": "number", "minimum": 0, "maximum": 250 },
         "decayTimeSeconds": { "type": "number", "minimum": 0.1, "maximum": 8 },
         "roomSize": { "type": "number", "minimum": 0, "maximum": 1 },

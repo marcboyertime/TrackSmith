@@ -14,6 +14,7 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
     case rationaleTooLong(UUID)
     case excessiveGain(Double)
     case resourceBudgetExceeded(kind: String, actual: Double, maximum: Double)
+    case scopedRealtimeActivationUnsupported
     case missingFinalSafetyLimiter
     case safetyLimiterCeilingExceedsConstraint(ceilingDB: Double, maxTruePeakDB: Double)
     case staleSourceSnapshot(expected: UUID, actual: UUID)
@@ -35,6 +36,8 @@ public enum PlanValidationError: Error, Equatable, CustomStringConvertible, Send
         case let .excessiveGain(value): "Cumulative requested gain \(value) dB exceeds the plan limit."
         case let .resourceBudgetExceeded(kind, actual, maximum):
             "\(kind) resource request \(actual) exceeds the bounded plan maximum \(maximum)."
+        case .scopedRealtimeActivationUnsupported:
+            "A time- or section-scoped plan cannot become a whole-stream real-time graph. Render it through an explicit scoped asset workflow."
         case .missingFinalSafetyLimiter: "Every non-dry real-time graph must end with an enabled safety limiter (meters may follow it)."
         case let .safetyLimiterCeilingExceedsConstraint(ceilingDB, maxTruePeakDB):
             "The final limiter ceiling (\(ceilingDB) dBFS) is above the plan peak constraint (\(maxTruePeakDB) dBTP)."
@@ -54,6 +57,14 @@ public struct PlanValidator: Sendable {
     public static let maximumTotalDelayTimeMS = 4_000.0
     public static let maximumReverbNodeCount = 2
     public static let maximumExpanderNodeCount = 4
+    /// Feedback is capped at the strongest value used by the shipped graph
+    /// catalog. Together with the aggregate four-second delay budget, this
+    /// keeps the declared static AU tail finite and testable.
+    public static let maximumFeedback = 0.5
+    /// A rendered tail is treated as silent only below -120 dB amplitude.
+    /// `tailTime` is static because hosts may cache it across live graph swaps.
+    public static let tailSilenceAmplitude = 0.000_001
+    public static let conservativeTailTimeSeconds = 180.0
 
     public static let ranges: [ParameterID: ClosedRange<Double>] = [
         .gainDB: -60...24, .frequencyHz: 10...24_000, .q: 0.1...20,
@@ -61,8 +72,10 @@ public struct PlanValidator: Sendable {
         .releaseMS: 1...5_000, .makeupGainDB: -24...24, .ceilingDB: -24...0,
         .kneeDB: 0...24, .mix: 0...1, .width: 0...2, .driveDB: 0...36,
         .enabled: 0...1, .lookaheadMS: 0...0,
-        .algorithmVersion: 1...1, .delayTimeMS: 1...2_000, .feedback: 0...0.95,
-        .damping: 0...1, .stereoCrossfeed: 0...1, .preDelayMS: 0...250,
+        .algorithmVersion: 1...1, .delayTimeMS: 1...2_000, .feedback: 0...maximumFeedback,
+        .damping: 0...1, .stereoCrossfeed: 0...1,
+        .modulationDepthMS: 0...20, .modulationRateHz: 0.05...5, .stereoPhaseDegrees: 0...180,
+        .preDelayMS: 0...250,
         .decayTimeSeconds: 0.1...8, .roomSize: 0...1, .diffusion: 0...1,
         .holdMS: 0...1_000, .hysteresisDB: 0...24, .rangeDB: 0...80,
     ]
@@ -70,7 +83,7 @@ public struct PlanValidator: Sendable {
     public static let implementedNodeTypes: Set<NodeType> = [
         .inputTrim, .polarity, .highPass, .lowPass, .parametricEQ, .compressor, .expander, .deEsser,
         .softClipper, .saturation, .stereoWidth, .limiter, .outputTrim, .loudnessMatch, .meter,
-        .delay, .reverb,
+        .delay, .modulatedDelay, .reverb,
     ]
 
     public static let allowedParameters: [NodeType: Set<ParameterID>] = [
@@ -81,6 +94,10 @@ public struct PlanValidator: Sendable {
         .softClipper: [.driveDB, .ceilingDB, .mix], .saturation: [.driveDB, .mix], .transientShaper: [.gainDB, .mix],
         .stereoWidth: [.width, .mix], .midSideEQ: [.frequencyHz, .q, .gainDB, .mix],
         .delay: [.algorithmVersion, .delayTimeMS, .feedback, .damping, .stereoCrossfeed, .mix],
+        .modulatedDelay: [
+            .algorithmVersion, .delayTimeMS, .feedback, .damping, .mix,
+            .modulationDepthMS, .modulationRateHz, .stereoPhaseDegrees,
+        ],
         .reverb: [.algorithmVersion, .preDelayMS, .decayTimeSeconds, .roomSize, .damping, .diffusion, .mix],
         .limiter: [.ceilingDB, .releaseMS, .lookaheadMS], .outputTrim: [.gainDB], .loudnessMatch: [.gainDB], .meter: [],
     ]
@@ -88,6 +105,7 @@ public struct PlanValidator: Sendable {
     public static let requiredParameters: [NodeType: Set<ParameterID>] = [
         .expander: [.algorithmVersion],
         .delay: [.algorithmVersion],
+        .modulatedDelay: [.algorithmVersion],
         .reverb: [.algorithmVersion],
     ]
 
@@ -150,6 +168,10 @@ public struct PlanValidator: Sendable {
             case .delay:
                 delayNodeCount += 1
                 totalDelayTimeMS += node.parameters[.delayTimeMS, default: 250]
+            case .modulatedDelay:
+                delayNodeCount += 1
+                totalDelayTimeMS += node.parameters[.delayTimeMS, default: 15]
+                    + node.parameters[.modulationDepthMS, default: 3]
             case .reverb:
                 reverbNodeCount += 1
             case .expander:
@@ -204,6 +226,9 @@ public struct PlanValidator: Sendable {
         basePlan: ProcessingPlan? = nil
     ) throws {
         try validate(plan, currentSnapshotID: currentSnapshotID, basePlan: basePlan)
+        guard plan.scope.timeRangeSeconds == nil else {
+            throw PlanValidationError.scopedRealtimeActivationUnsupported
+        }
         let audibleNodes = plan.nodes.filter { $0.enabled && $0.type != .meter }
         guard audibleNodes.isEmpty || audibleNodes.last?.type == .limiter else {
             throw PlanValidationError.missingFinalSafetyLimiter

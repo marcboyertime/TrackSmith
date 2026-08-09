@@ -126,7 +126,7 @@ low-latency mode, and result for every run.
 - **AU-09 host buffer/tail contract:** require the production-class probe to pass
   null output `mData`, upstream pull-pointer replacement, undersized byte counts,
   allocation-time maximum-frame enforcement, zero materialization for upstream
-  silence, outgoing silence-hint clearing, and a static 60-second `tailTime` before
+  silence, outgoing silence-hint clearing, and a static 180-second/-120 dB `tailTime` before
   treating the build as safe for Logic. Logic need not expose each synthetic host
   shape directly; do not infer this row from ordinary playback alone.
 

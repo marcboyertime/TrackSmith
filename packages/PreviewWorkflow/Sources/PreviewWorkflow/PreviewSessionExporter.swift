@@ -4,6 +4,7 @@ import DSPCore
 import Foundation
 import PlanSchema
 import PreviewRenderer
+import VocalProduction
 
 public enum PreviewExportError: Error, CustomStringConvertible, Sendable {
     case outputAlreadyExists(String)
@@ -16,7 +17,7 @@ public enum PreviewExportError: Error, CustomStringConvertible, Sendable {
         case let .outputAlreadyExists(path): "Output directory already exists: \(path)"
         case .emptyPrompt: "The production request cannot be empty."
         case .noAudioFrames: "The input WAV contains no audio frames."
-        case let .invalidProductionCandidates(reason): "The production-intelligence candidates are invalid: \(reason)"
+        case let .invalidProductionCandidates(reason): "The preview candidates are invalid: \(reason)"
         }
     }
 }
@@ -57,6 +58,7 @@ public struct PreviewSessionManifest: Codable, Sendable {
     public var variants: [PreviewVariantManifest]
     public var productionIntentResult: ProductionIntentResult? = nil
     public var providerMetadata: ProviderExecutionMetadata? = nil
+    public var vocalCreativeCandidates: [VocalCreativeCandidate]? = nil
 
     public var validVariantCount: Int { variants.count { $0.status == .valid } }
 }
@@ -192,7 +194,8 @@ public struct PreviewSessionExporter: Sendable {
             scopeKind: scopeKind,
             sourceSnapshotID: sourceSnapshotID,
             productionIntentResult: nil,
-            providerMetadata: nil
+            providerMetadata: nil,
+            vocalCreativeCandidates: nil
         )
     }
 
@@ -217,7 +220,34 @@ public struct PreviewSessionExporter: Sendable {
             scopeKind: scopeKind,
             sourceSnapshotID: sourceSnapshotID,
             productionIntentResult: result,
-            providerMetadata: providerMetadata
+            providerMetadata: providerMetadata,
+            vocalCreativeCandidates: nil
+        )
+    }
+
+    /// Renders exactly three TrackSmith-owned Vocal candidates. Their typed
+    /// source, scope, preservation, boundary, and plan identities are validated
+    /// locally; no provider prose or arbitrary parameter payload reaches this
+    /// boundary.
+    public func exportVocalCandidates(
+        inputURL: URL,
+        prompt: String,
+        sourceType: SourceType,
+        outputDirectory: URL,
+        scopeKind: ScopeKind = .importedFile,
+        sourceSnapshotID: UUID,
+        candidates: [VocalCreativeCandidate]
+    ) throws -> PreviewExportResult {
+        try export(
+            inputURL: inputURL,
+            prompt: prompt,
+            sourceType: sourceType,
+            outputDirectory: outputDirectory,
+            scopeKind: scopeKind,
+            sourceSnapshotID: sourceSnapshotID,
+            productionIntentResult: nil,
+            providerMetadata: nil,
+            vocalCreativeCandidates: candidates
         )
     }
 
@@ -229,7 +259,8 @@ public struct PreviewSessionExporter: Sendable {
         scopeKind: ScopeKind,
         sourceSnapshotID: UUID?,
         productionIntentResult: ProductionIntentResult?,
-        providerMetadata: ProviderExecutionMetadata?
+        providerMetadata: ProviderExecutionMetadata?,
+        vocalCreativeCandidates: [VocalCreativeCandidate]?
     ) throws -> PreviewExportResult {
         let request = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !request.isEmpty else { throw PreviewExportError.emptyPrompt }
@@ -257,10 +288,22 @@ public struct PreviewSessionExporter: Sendable {
             kind: scopeKind,
             channelFormat: source.channelCount == 1 ? .mono : .stereo,
             sourceType: sourceType,
-            timeRangeSeconds: .init(start: 0, end: duration)
+            // This exporter always processes the complete supplied file or
+            // capture. A finite range would falsely imply section authority;
+            // explicit scoped Vocal work uses VocalScopedAssetRenderer.
+            timeRangeSeconds: nil
         )
         let candidates: [ExportCandidate]
-        if let productionIntentResult {
+        if let vocalCreativeCandidates {
+            candidates = try vocalCandidates(
+                from: vocalCreativeCandidates,
+                request: request,
+                snapshotID: snapshotID,
+                scopeKind: scopeKind,
+                channelFormat: scope.channelFormat,
+                sourceType: sourceType
+            )
+        } else if let productionIntentResult {
             candidates = try productionCandidates(
                 from: productionIntentResult,
                 snapshotID: snapshotID,
@@ -279,6 +322,7 @@ public struct PreviewSessionExporter: Sendable {
         let originalFileName = "00-original.wav"
         try WAVFile.writeFloat32(source, url: staging.appendingPathComponent(originalFileName))
         var renderedVariants: [PreviewVariantManifest] = []
+        var materializedVocalCandidates = vocalCreativeCandidates
         var previousAuditionAudio = source
         var acceptedVariantAudio: [AudioBuffer] = []
         let sourceRMSDBFS = originalAnalysis.metrics["rms_dbfs"]?.value
@@ -304,6 +348,42 @@ public struct PreviewSessionExporter: Sendable {
                 preview.rejectionReasons.append(
                     "This option was too similar to another accepted strength under the configured audio-difference threshold after level matching."
                 )
+            }
+            if let vocalCreativeCandidates,
+               vocalCreativeCandidates.indices.contains(index),
+               var materializedCandidates = materializedVocalCandidates,
+               materializedCandidates.indices.contains(index) {
+                let originalCandidate = vocalCreativeCandidates[index]
+                var materializedCandidate = originalCandidate
+                materializedCandidate.previewID = preview.id
+                materializedCandidate.plan = preview.plan
+                do {
+                    // PreviewRenderer may add or recalibrate loudness matching.
+                    // Revalidate that exact graph, not the pre-render proposal,
+                    // against both the typed Vocal preservation matrix and the
+                    // whole-stream realtime activation contract.
+                    try VocalContractValidator().validateForRealtimeActivation(materializedCandidate)
+                } catch {
+                    preview.status = .rejected
+                    preview.rejectionReasons.append(
+                        "The exact materialized Vocal plan failed its preservation or realtime activation contract and cannot receive preview or execution authority: \(error)"
+                    )
+                }
+
+                if preview.status == .valid {
+                    materializedCandidates[index] = materializedCandidate
+                } else {
+                    var refusedCandidate = originalCandidate
+                    refusedCandidate.previewID = nil
+                    refusedCandidate.realtimeActivatable = false
+                    refusedCandidate.authorityStatus = .refused
+                    let refusal = "Preview authority refused: \(preview.rejectionReasons.joined(separator: "; "))"
+                    if !refusedCandidate.limitations.contains(refusal) {
+                        refusedCandidate.limitations.append(refusal)
+                    }
+                    materializedCandidates[index] = refusedCandidate
+                }
+                materializedVocalCandidates = materializedCandidates
             }
             let prefix = String(format: "%02d", index + 1)
             let baseName = "\(prefix)-\(variant.strength.rawValue)"
@@ -351,7 +431,8 @@ public struct PreviewSessionExporter: Sendable {
             originalAnalysis: originalAnalysis,
             variants: renderedVariants,
             productionIntentResult: productionIntentResult,
-            providerMetadata: providerMetadata
+            providerMetadata: providerMetadata,
+            vocalCreativeCandidates: materializedVocalCandidates
         )
         try encoder.encode(manifest).write(to: staging.appendingPathComponent("manifest.json"), options: .atomic)
         try auditionGuide(manifest).data(using: .utf8)!.write(to: staging.appendingPathComponent("AUDITION.txt"), options: .atomic)
@@ -456,6 +537,78 @@ public struct PreviewSessionExporter: Sendable {
                 summary: candidate.summary
             )
         }
+    }
+
+    private func vocalCandidates(
+        from candidates: [VocalCreativeCandidate],
+        request: String,
+        snapshotID: UUID,
+        scopeKind: ScopeKind,
+        channelFormat: ChannelFormat,
+        sourceType: SourceType
+    ) throws -> [ExportCandidate] {
+        guard candidates.count == 3 else {
+            throw PreviewExportError.invalidProductionCandidates(
+                "Vocal preview export requires exactly three candidates"
+            )
+        }
+        guard sourceType == .vocal || sourceType == .vocalBus else {
+            throw PreviewExportError.invalidProductionCandidates("Vocal candidates require vocal source scope")
+        }
+        guard Set(candidates.map(\.id)).count == candidates.count,
+              Set(candidates.map(\.plan.requestID)).count == candidates.count else {
+            throw PreviewExportError.invalidProductionCandidates("Vocal candidate or plan identities repeat")
+        }
+
+        var signatures = Set<String>()
+        let strengths: [PreviewStrength] = [.conservative, .balanced, .strong]
+        return try candidates.enumerated().map { index, candidate in
+            guard candidate.interpretationIndex == index + 1,
+                  candidate.authorityStatus == .locallyValidated,
+                  candidate.realtimeActivatable,
+                  candidate.intent.sourceSnapshotID == snapshotID,
+                  candidate.plan.sourceSnapshotID == snapshotID,
+                  candidate.intent.originalPrompt.trimmingCharacters(in: .whitespacesAndNewlines) == request,
+                  candidate.plan.scope.kind == scopeKind,
+                  candidate.plan.scope.channelFormat == channelFormat,
+                  candidate.plan.scope.sourceType == sourceType,
+                  candidate.intent.scope.kind == .fullSource,
+                  candidate.plan.scope.timeRangeSeconds == nil else {
+                throw PreviewExportError.invalidProductionCandidates(
+                    "Vocal AU previews require current full-source realtime candidate authority"
+                )
+            }
+            try VocalContractValidator().validate(candidate: candidate)
+            try PlanValidator().validateForRealtimeActivation(
+                candidate.plan,
+                currentSnapshotID: snapshotID
+            )
+            let signature = processingSignature(candidate.plan.nodes)
+            guard signatures.insert(signature).inserted else {
+                throw PreviewExportError.invalidProductionCandidates(
+                    "Vocal candidates must use three structurally distinct processing graphs"
+                )
+            }
+            return ExportCandidate(
+                variant: .init(strength: strengths[index], plan: candidate.plan),
+                candidateIdentifier: candidate.id.uuidString.lowercased(),
+                hypothesisIdentifier: "tracksmith-vocal-\(candidate.intent.archetype.rawValue)-\(candidate.interpretationIndex)",
+                summary: "\(candidate.title) — \(candidate.summary)"
+            )
+        }
+    }
+
+    private func processingSignature(_ nodes: [ProcessingNode]) -> String {
+        nodes
+            .filter { ![.outputTrim, .loudnessMatch, .limiter, .meter].contains($0.type) }
+            .map { node in
+                let parameters = node.parameters
+                    .sorted { $0.key.rawValue < $1.key.rawValue }
+                    .map { "\($0.key.rawValue)=\(String(format: "%.8g", $0.value))" }
+                    .joined(separator: ",")
+                return "\(node.type.rawValue){\(parameters)}"
+            }
+            .joined(separator: "|")
     }
 
     private func fingerprint(_ buffer: AudioBuffer) -> String {

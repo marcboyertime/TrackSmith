@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ActionBarView: View {
     @ObservedObject var model: CompanionSessionModel
+    var commitAuthorityIsCurrent = true
 
     var body: some View {
         ViewThatFits(in: .horizontal) {
@@ -63,6 +64,11 @@ struct ActionBarView: View {
             .disabled(!model.canToggleGlobalBypass || model.isBusy)
             Button("Commit Working Plan") { model.commitSelected() }
                 .buttonStyle(.borderedProminent)
-                .disabled(model.selectedPlan == nil || !model.capturedInstanceIsAvailable || model.isBusy)
+                .disabled(
+                    model.selectedPlan == nil
+                        || !model.capturedInstanceIsAvailable
+                        || model.isBusy
+                        || !commitAuthorityIsCurrent
+                )
     }
 }

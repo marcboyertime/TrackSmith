@@ -121,10 +121,13 @@ public final class AssistantAudioUnit: AUAudioUnit, @unchecked Sendable {
     public override var outputBusses: AUAudioUnitBusArray { outputBusArray }
     public override var channelCapabilities: [NSNumber]? { Self.supportedChannelCapabilities }
     /// Hosts may cache this property, so it cannot safely vary with graph
-    /// publication. The minimum-frequency/highest-Q supported IIR can retain
-    /// state for roughly 44 seconds at the engine's 1e-30 denormal threshold;
-    /// report a static conservative bound that remains valid after live commits.
-    public override var tailTime: TimeInterval { 60 }
+    /// publication. The bound covers the validator's aggregate delay budget at
+    /// maximum feedback, two maximum-decay rooms, filter state and margin down
+    /// to the declared -120 dB amplitude threshold. A max-bound impulse test
+    /// keeps this declaration coupled to the executable DSP contract.
+    public override var tailTime: TimeInterval {
+        PlanValidator.conservativeTailTimeSeconds
+    }
 
     /// Logic and other hosts use this AUAudioUnit property for native insert
     /// bypass. Route it through the same atomic, serialized state used by the

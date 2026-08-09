@@ -1,4 +1,4 @@
-.PHONY: general-tutor-knowledge-audit build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -52,6 +52,18 @@ general-tutor-evaluation:
 tutor-evaluation:
 	swift run -c release ProductionTutorEvaluation research/evaluation/TRACKSMITH_TUTOR_INTENT_CORPUS_V1.json
 
+vocal-evaluation:
+	swift run -c release VocalProductionEvaluation \
+		--corpus research/evaluation/TRACKSMITH_VOCAL_SEMANTIC_CORPUS_V1.json \
+		--failure-map research/evaluation/tracksmith-vocal-v1/failure-map.json \
+		--output research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json \
+		--source-revision "$$(git rev-parse HEAD)" \
+		--source-tree-state "$$(if test -z "$$(git status --porcelain)"; then echo clean; else echo dirty; fi)" \
+		--toolchain "$$(swift --version | tr '\n' ' ')"
+
+vocal-listening-selfcheck:
+	swift run -c release VocalListeningStudyCLI selfcheck
+
 native-build: project
 	xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath .build/xcode-derived CODE_SIGNING_ALLOWED=NO build
 
@@ -60,4 +72,4 @@ native-verify: native-build au-host-probe realtime-heap-probe
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check general-tutor-knowledge-audit build test au-host-probe
+verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test au-host-probe

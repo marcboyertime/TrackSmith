@@ -80,6 +80,12 @@ public struct CompiledGraph: Sendable {
                 return .width(WidthNode(width: node.parameters[.width, default: 1], mix: node.parameters[.mix, default: 1]))
             case .delay:
                 return .delay(DelayNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
+            case .modulatedDelay:
+                return .modulatedDelay(ModulatedDelayNode(
+                    parameters: node.parameters,
+                    sampleRate: sampleRate,
+                    channelCount: channelCount
+                ))
             case .reverb:
                 return .reverb(ReverbNode(parameters: node.parameters, sampleRate: sampleRate, channelCount: channelCount))
             case .limiter:
@@ -168,6 +174,7 @@ private enum CompiledNode: Sendable {
     case saturator(SaturatorNode)
     case width(WidthNode)
     case delay(DelayNode)
+    case modulatedDelay(ModulatedDelayNode)
     case reverb(ReverbNode)
     case limiter(LimiterNode)
 
@@ -184,6 +191,7 @@ private enum CompiledNode: Sendable {
         case let .saturator(node): node.process(&buffer)
         case let .width(node): node.process(&buffer)
         case let .delay(node): node.process(&buffer)
+        case let .modulatedDelay(node): node.process(&buffer)
         case let .reverb(node): node.process(&buffer)
         case var .limiter(node): node.process(&buffer); self = .limiter(node)
         }
@@ -210,6 +218,7 @@ private enum CompiledNode: Sendable {
         case let .saturator(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .width(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .delay(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
+        case let .modulatedDelay(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case let .reverb(node): node.processRealtime(left: left, right: right, frameCount: frameCount)
         case var .limiter(node): node.processRealtime(left: left, right: right, frameCount: frameCount); self = .limiter(node)
         }
@@ -223,6 +232,7 @@ private enum CompiledNode: Sendable {
         case var .expander(node): node.reset(); self = .expander(node)
         case var .deEsser(node): node.reset(); self = .deEsser(node)
         case let .delay(node): node.reset()
+        case let .modulatedDelay(node): node.reset()
         case let .reverb(node): node.reset()
         case var .limiter(node): node.reset(); self = .limiter(node)
         default: break
@@ -276,6 +286,55 @@ private final class GenerationDelayLine: @unchecked Sendable {
         // No old sample can be read until every reachable delayed position has
         // been overwritten after reset, so reset remains constant-time without
         // a per-cell generation sidecar in the render callback.
+        validSampleCount = 0
+    }
+}
+
+/// A preallocated fractional delay line with constant-time reset. A post-reset
+/// read becomes valid only after both interpolation endpoints have been written,
+/// so old storage is never observable even though reset does not clear it.
+private final class FractionalGenerationDelayLine: @unchecked Sendable {
+    private let samples: UnsafeMutablePointer<Float>
+    private let capacity: Int
+    private var writeIndex = 0
+    private var validSampleCount = 0
+
+    init(maximumDelaySamples: Double) {
+        capacity = max(3, Int(maximumDelaySamples.rounded(.up)) + 2)
+        samples = .allocate(capacity: capacity)
+        samples.initialize(repeating: 0, count: capacity)
+    }
+
+    deinit {
+        samples.deinitialize(count: capacity)
+        samples.deallocate()
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    func read(delaySamples: Double) -> Float {
+        guard Double(validSampleCount) >= delaySamples else { return 0 }
+        var position = Double(writeIndex) - delaySamples
+        if position < 0 { position += Double(capacity) }
+        let lowerIndex = Int(position)
+        let fraction = Float(position - Double(lowerIndex))
+        let lower = samples[lowerIndex]
+        if fraction == 0 { return lower }
+        let upperIndex = lowerIndex + 1 == capacity ? 0 : lowerIndex + 1
+        return lower + (samples[upperIndex] - lower) * fraction
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    func write(_ sample: Float) {
+        samples[writeIndex] = sample
+        writeIndex += 1
+        if writeIndex == capacity { writeIndex = 0 }
+        if validSampleCount < capacity { validSampleCount += 1 }
+    }
+
+    func reset() {
+        writeIndex = 0
         validSampleCount = 0
     }
 }
@@ -464,6 +523,134 @@ private final class DelayNode: @unchecked Sendable {
     func reset() {
         leftLine.reset()
         rightLine?.reset()
+        filteredLeft = 0
+        filteredRight = 0
+    }
+}
+
+/// Version-1 TrackSmith modulated delay. `delayTimeMS` is the minimum delay;
+/// the bounded sine LFO moves continuously through the additional modulation
+/// depth. Stereo uses the same oscillator with an independently bounded right
+/// phase offset, while mono executes only the left path.
+private final class ModulatedDelayNode: @unchecked Sendable {
+    private let leftLine: FractionalGenerationDelayLine
+    private let rightLine: FractionalGenerationDelayLine?
+    private let baseDelaySamples: Double
+    private let modulationDepthSamples: Double
+    private let oscillatorStepSine: Double
+    private let oscillatorStepCosine: Double
+    private let stereoOffsetSine: Double
+    private let stereoOffsetCosine: Double
+    private let feedback: Float
+    private let dampingPole: Float
+    private let mix: Float
+    private var oscillatorSine: Double = 0
+    private var oscillatorCosine: Double = 1
+    private var samplesUntilOscillatorNormalization = 4_096
+    private var filteredLeft: Float = 0
+    private var filteredRight: Float = 0
+
+    init(parameters: [ParameterID: Double], sampleRate: Double, channelCount: Int) {
+        baseDelaySamples = parameters[.delayTimeMS, default: 15] * sampleRate / 1_000
+        modulationDepthSamples = parameters[.modulationDepthMS, default: 3] * sampleRate / 1_000
+        let maximumDelaySamples = baseDelaySamples + modulationDepthSamples
+        leftLine = FractionalGenerationDelayLine(maximumDelaySamples: maximumDelaySamples)
+        rightLine = channelCount == 2
+            ? FractionalGenerationDelayLine(maximumDelaySamples: maximumDelaySamples)
+            : nil
+        let phaseIncrement = 2 * Double.pi * parameters[.modulationRateHz, default: 0.35] / sampleRate
+        oscillatorStepSine = sin(phaseIncrement)
+        oscillatorStepCosine = cos(phaseIncrement)
+        let stereoPhaseRadians = Double.pi * parameters[.stereoPhaseDegrees, default: 90] / 180
+        stereoOffsetSine = sin(stereoPhaseRadians)
+        stereoOffsetCosine = cos(stereoPhaseRadians)
+        feedback = Float(parameters[.feedback, default: 0.15])
+        dampingPole = Float(parameters[.damping, default: 0.5] * 0.995)
+        mix = Float(parameters[.mix, default: 0.35])
+    }
+
+    @_optimize(speed)
+    func process(_ buffer: inout AudioBuffer) {
+        for frame in 0..<buffer.frameCount {
+            let right = buffer.channelCount == 2 ? buffer.channels[1][frame] : nil
+            let output = processSample(left: buffer.channels[0][frame], right: right)
+            buffer.channels[0][frame] = output.0
+            if let processedRight = output.1 { buffer.channels[1][frame] = processedRight }
+        }
+    }
+
+    @_optimize(speed)
+    func processRealtime(
+        left: UnsafeMutablePointer<Float>,
+        right: UnsafeMutablePointer<Float>?,
+        frameCount: Int
+    ) {
+        for frame in 0..<frameCount {
+            let output = processSample(left: left[frame], right: right?[frame])
+            left[frame] = output.0
+            if let right, let processedRight = output.1 { right[frame] = processedRight }
+        }
+    }
+
+    @inline(__always)
+    @_optimize(speed)
+    private func processSample(left dryLeft: Float, right dryRight: Float?) -> (Float, Float?) {
+        let leftModulation = min(max(0.5 + 0.5 * oscillatorSine, 0), 1)
+        let leftDelay = baseDelaySamples + modulationDepthSamples * leftModulation
+        let delayedLeft = leftLine.read(delaySamples: leftDelay)
+
+        let delayedRight: Float
+        if let rightLine {
+            let rightSine = oscillatorSine * stereoOffsetCosine
+                + oscillatorCosine * stereoOffsetSine
+            let rightModulation = min(max(0.5 + 0.5 * rightSine, 0), 1)
+            let rightDelay = baseDelaySamples + modulationDepthSamples * rightModulation
+            delayedRight = rightLine.read(delaySamples: rightDelay)
+        } else {
+            delayedRight = 0
+        }
+
+        filteredLeft = delayedLeft + dampingPole * (filteredLeft - delayedLeft)
+        filteredRight = delayedRight + dampingPole * (filteredRight - delayedRight)
+        if abs(filteredLeft) < 1e-30 { filteredLeft = 0 }
+        if abs(filteredRight) < 1e-30 { filteredRight = 0 }
+
+        let output: (Float, Float?)
+        if let dryRight, let rightLine {
+            leftLine.write(dryLeft + feedback * filteredLeft)
+            rightLine.write(dryRight + feedback * filteredRight)
+            output = (
+                dryLeft * (1 - mix) + delayedLeft * mix,
+                dryRight * (1 - mix) + delayedRight * mix
+            )
+        } else {
+            leftLine.write(dryLeft + feedback * filteredLeft)
+            output = (dryLeft * (1 - mix) + delayedLeft * mix, nil)
+        }
+
+        let previousSine = oscillatorSine
+        oscillatorSine = previousSine * oscillatorStepCosine
+            + oscillatorCosine * oscillatorStepSine
+        oscillatorCosine = oscillatorCosine * oscillatorStepCosine
+            - previousSine * oscillatorStepSine
+        samplesUntilOscillatorNormalization -= 1
+        if samplesUntilOscillatorNormalization == 0 {
+            let inverseMagnitude = 1 / sqrt(
+                oscillatorSine * oscillatorSine + oscillatorCosine * oscillatorCosine
+            )
+            oscillatorSine *= inverseMagnitude
+            oscillatorCosine *= inverseMagnitude
+            samplesUntilOscillatorNormalization = 4_096
+        }
+        return output
+    }
+
+    func reset() {
+        leftLine.reset()
+        rightLine?.reset()
+        oscillatorSine = 0
+        oscillatorCosine = 1
+        samplesUntilOscillatorNormalization = 4_096
         filteredLeft = 0
         filteredRight = 0
     }

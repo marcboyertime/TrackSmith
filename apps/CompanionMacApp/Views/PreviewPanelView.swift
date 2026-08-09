@@ -1,12 +1,16 @@
+import PreviewWorkflow
 import SwiftUI
 
 struct PreviewPanelView: View {
     @ObservedObject var model: CompanionSessionModel
+    var allowsUseAsWorking = true
 
     @ViewBuilder
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
-            Text("Level-matched preview variants")
+            Text(model.previewManifest?.vocalCreativeCandidates == nil
+                ? "Level-matched preview variants"
+                : "Level-matched vocal interpretations")
                 .font(Theme.Font.section)
             if model.previewManifest != nil {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 180, maximum: 280), spacing: Theme.Spacing.legacy10)], spacing: Theme.Spacing.legacy10) {
@@ -18,7 +22,7 @@ struct PreviewPanelView: View {
                     ) { model.selectAudition(index: 0) }
                     ForEach(Array(model.auditionVariants.enumerated()), id: \.element.previewID) { index, variant in
                         PreviewCard(
-                            title: variant.strength.rawValue.capitalized,
+                            title: previewTitle(variant),
                             subtitle: variant.status == .valid
                                 ? String(format: "%+.2f dB match", variant.loudnessMatchGainDB)
                                 : "Rejected",
@@ -26,7 +30,9 @@ struct PreviewPanelView: View {
                             selected: model.selectedAuditionIndex == index + 1,
                             warning: variant.warnings.first ?? variant.rejectionReasons.first,
                             working: model.workingPlanIsVariant(variant),
-                            useAction: { model.useVariantAsWorking(index: index + 1) }
+                            useAction: allowsUseAsWorking
+                                ? { model.useVariantAsWorking(index: index + 1) }
+                                : nil
                         ) { model.selectAudition(index: index + 1) }
                     }
                     if let revision = model.workingPreview,
@@ -50,5 +56,14 @@ struct PreviewPanelView: View {
         }
         .padding(Theme.Spacing.twelve)
         .instrumentSurface(.raised, radius: Theme.Radius.medium)
+    }
+
+    private func previewTitle(_ variant: PreviewVariantManifest) -> String {
+        guard let summary = variant.candidateSummary,
+              let title = summary.components(separatedBy: " — ").first,
+              !title.isEmpty else {
+            return variant.strength.rawValue.capitalized
+        }
+        return title
     }
 }

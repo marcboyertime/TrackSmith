@@ -4,6 +4,8 @@ import SwiftUI
 
 struct CapturePanelView: View {
     @ObservedObject var model: CompanionSessionModel
+    var beforeCapture: (() -> Bool)? = nil
+    var captureButtonTitle = "Analyze Recent Playback"
     @State private var isExpanded = false
 
     var body: some View {
@@ -61,7 +63,10 @@ struct CapturePanelView: View {
                         }
                     }
                     .frame(width: 220)
-                    Button("Analyze Recent Playback") { model.captureRecent() }
+                    Button(captureButtonTitle) {
+                        guard beforeCapture?() != false else { return }
+                        model.captureRecent()
+                    }
                         .disabled(model.selectedInstanceID == nil || model.isBusy)
                     if let capture = model.captureArtifact {
                         Text(String(format: "%.1f s · %.0f Hz · %d ch",

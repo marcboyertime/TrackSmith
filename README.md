@@ -51,22 +51,26 @@ carried by a validated procedure — the answer validator rejects the
 alternative. TrackSmith will also tell you plainly when its reviewed knowledge
 does not cover your question.
 
-The active engineering focus is General Production Tutor v2;
-see [`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md), the
-[General Tutor v2 plan](docs/GENERAL_PRODUCTION_TUTOR_V2.md) and its
-[ledger](research/evaluation/general-production-tutor-v2/ledger.json). Logic
-Production Tutor v1 is closed at an explicitly
-[bounded scope](docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md).
-The open-domain engine passes 518/518 corpus cases offline across 99 domains,
-including 10 multi-turn conversations and 10 retrieval precision cases, and is
-reachable from the app's Ask action. What TrackSmith remembers about you is
-local, explicit, and deletable. Gates GP0-GP7 pass; GP8 and GP9 remain open
-and are blocked on the owner. **No external or YouTube source has been
-ingested** — the review pipeline is built and its refusal paths proven, but
-every shipped claim derives from artifacts already in this repository, and
-Research This is present only as an explicitly labeled not-built control. No
-real production-question session and no in-host validation of the broad tutor
-has been run, so whether these answers are useful is not established.
+The active engineering focus is [TrackSmith Vocal v1](docs/TRACKSMITH_VOCAL_V1.md),
+which is **in progress**; this is not a claim that its implementation, installed
+build, Logic validation, or listening evidence is complete. See
+[`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md) for the exact
+sequencing and evidence boundary, and the dated
+[automated-verification record](docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md)
+for the bounded post-baseline results. General Production Tutor v2 remains open:
+its engine passes 518/518 corpus cases offline across 99 evaluated domains, including
+10 multi-turn conversations and 10 retrieval-precision cases, and its native Ask
+surface is implemented. The reviewed catalog contains 458 claims and 78 strategies.
+What TrackSmith remembers about you is local, explicit, and deletable. Gates
+GP0-GP7 pass; GP8 and GP9 remain pending and owner-blocked. **No external or
+YouTube source has been ingested** — the review pipeline is built and its refusal
+paths proven, but every shipped claim derives from artifacts already in this
+repository, and Research This is present only as an explicitly labeled not-built
+control. No real production-question session and no in-host validation of the
+broad tutor has been run, so whether these answers are useful is not established.
+Logic Production Tutor v1 remains closed at an explicitly
+[bounded scope](docs/evidence/LOGIC_PRODUCTION_TUTOR_V1_BOUNDED_CLOSURE_2026-08-05.md),
+with T7 recorded as **CLOSED BOUNDED, NOT PASSED**.
 
 ## Current status
 
@@ -166,27 +170,23 @@ AU/companion session slice are implemented. The portable core builds and runs:
   Git cleanliness/origin/commit identity, rights metadata, quarantine, append-only
   history, and explicit version/supersession policy before publication.
 
-On the development Mac, the frozen Production Intelligence v1 baseline passed
-68/68 `TestRunner` checks in Debug, Release, and Thread Sanitizer; that dated
-baseline is historical. The current `TestRunner` harness declares 82
-unconditional checks plus one optional official-vector lane (83 possible when
-`TRACKSMITH_BS2217_VECTORS` is enabled): the previous 72 checks plus ten
-Tutor v1 checks covering issue vocabulary/negation, fail-closed procedure
-catalog validation, deterministic nasal lesson generation, every feedback
-transition, the 77-case tutor corpus, bounded/redacted/quarantining tutor
-persistence, provider-proposal fail-closed validation, lesson forbidden-claim
-and bounds validation, evidence-mode demotion, and explanation honesty.
-Current 2026-08-05 Debug and Release runs each pass 82/82 with the vector
-variable omitted. The dated 2026-08-02 vector-enabled 73/73 runs are
-historical evidence for the earlier 73-check harness. The current-harness
-Thread Sanitizer run remains open/unproven. The added checks
-cover mailbox
-retention, fail-closed quota behavior, command ordering, runtime-bound terminal
-replies, hard command-file expiry, Short-term/LRA behavior, six source classes,
-the 28 requested descriptors plus four explicit preservation concepts, eight
-production flows, the 420-case semantic/adversarial corpus, provider failure and
-state-reference validation, durable conversation reconciliation, competing
-hypotheses, and immutable research ingestion. `AudioUnitHostProbe`
+On the development Mac, the frozen Production Intelligence v1 68/68 result, the
+2026-08-02 72/72 ordinary and 73/73 vector-enabled results, and the 2026-08-05
+Tutor v1 83/83 result remain dated historical evidence for their respective
+harnesses. The frozen pre-Vocal baseline at commit `406b446` declares 91 ordinary
+checks plus one optional official-vector lane. On 2026-08-08, Debug and Release
+ordinary runs passed 91/91; an isolated Release/Thread Sanitizer run with the 14
+local BS.2217-2 vectors passed 92/92 with no sanitizer report. Those baseline
+ordinary checks include the Tutor v1 lanes plus General Tutor v2 routing,
+knowledge/provenance, answer-honesty, unsupported-authority,
+measurement-relevance, local profile persistence/deletion, and non-generalization
+regressions. They also cover mailbox retention, fail-closed quota behavior,
+command ordering, runtime-bound terminal replies, hard command-file expiry,
+Short-term/LRA behavior, six source classes, the 28 requested descriptors plus
+four explicit preservation concepts, eight production flows, the 420-case
+semantic/adversarial corpus, provider failure and state-reference validation,
+durable conversation reconciliation, competing hypotheses, and immutable research
+ingestion. `AudioUnitHostProbe`
 instantiates the real `AUAudioUnit` class and exercises the full local round trip:
 render input, discover the instance heartbeat, request a recent capture, publish and
 hash its WAV artifact, render three previews, commit the exact balanced audition,
@@ -196,16 +196,23 @@ probe also covers two isolated AU instances, lost-acknowledgement reconciliation
 invalid-state recovery, nonfinite-input sanitation, publication reset behavior,
 capture teardown/reallocation, atomic commit guards, and AU/offline sample parity.
 The current `AudioUnitHostProbe` also covers native `shouldBypassEffect`, conservative
-60-second tail reporting, null-output/upstream-pointer host layouts, scheduled
+180-second/-120 dB tail reporting, null-output/upstream-pointer host layouts, scheduled
 output-gain events, cross-block ramps, distinct reset-versus-bypass automation
-semantics, and conservative output-silence-flag handling. Current
-`AudioUnitHostProbe` Debug/Release/Thread Sanitizer runs succeeded; the latest
-Release verification measured 9.2 us mean, 10.0 us p99, and 30.0 us maximum at
-48 kHz/128 frames against a 2,666.7 us
-deadline. A thread-local DYLD heap interposer additionally observed zero malloc,
-calloc, realloc, free, aligned, or macOS zone heap operations across 4,000 complete
-callbacks of the representative graph; that lane measured 9.2 us mean, 9.9 us p99,
-and 78.4 us maximum.
+semantics, and conservative output-silence-flag handling. The final combined-tree
+Release probe passed at 14.7 us mean, 16.9 us p99, and 46.0 us maximum against its
+2,666.7 us deadline; the thread-local heap interposer observed zero heap operations
+across 4,000 callbacks (14.8 us mean, 16.8 us p99, 57.8 us maximum). The
+instrumented Thread Sanitizer probe passed at 550.1 us mean, 611.0 us p99, and
+680.4 us maximum against the same deadline with no race report. The dated
+[Vocal automated-verification record](docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md)
+also records final development-tree Debug and Release runs of 104/104 and a
+Release/Thread Sanitizer vector run of 105/105. The exact signed arm64 app/AU was
+installed and byte-matched to the signed build; Team ID and App Group
+entitlements matched, PlugInKit exposed exactly the installed extension, and
+out-of-process `auval` succeeded. See the
+[signed-install record](docs/evidence/TRACKSMITH_VOCAL_V1_SIGNED_INSTALL_2026-08-08.md).
+These remain development guardrails, not direct Logic-host, real-vocal listening,
+or release-completion proof.
 The AU commit transaction checks the captured snapshot identity, expected graph,
 locked nodes and captured sample-rate/channel format, then publishes the graph and
 advances serialized state under one lifecycle lock. Current host controls prove

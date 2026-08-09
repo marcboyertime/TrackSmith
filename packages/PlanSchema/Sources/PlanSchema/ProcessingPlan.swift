@@ -54,7 +54,7 @@ public struct ProcessingGoal: Codable, Equatable, Sendable {
 
 public enum NodeType: String, Codable, CaseIterable, Sendable {
     case inputTrim, polarity, highPass, lowPass, parametricEQ, compressor, expander, deEsser
-    case softClipper, saturation, transientShaper, stereoWidth, midSideEQ, delay, reverb, limiter
+    case softClipper, saturation, transientShaper, stereoWidth, midSideEQ, delay, modulatedDelay, reverb, limiter
     case outputTrim, loudnessMatch, meter
 }
 
@@ -62,6 +62,7 @@ public enum ParameterID: String, Codable, CaseIterable, Sendable {
     case gainDB, frequencyHz, q, thresholdDB, ratio, attackMS, releaseMS, makeupGainDB
     case ceilingDB, kneeDB, mix, width, driveDB, enabled, lookaheadMS
     case algorithmVersion, delayTimeMS, feedback, damping, stereoCrossfeed
+    case modulationDepthMS, modulationRateHz, stereoPhaseDegrees
     case preDelayMS, decayTimeSeconds, roomSize, diffusion
     case holdMS, hysteresisDB, rangeDB
 }
