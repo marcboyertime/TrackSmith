@@ -35,7 +35,7 @@ Authoritative ranges are in `PlanValidator.ranges`: gain -60...+24 dB; frequency
 10...24 kHz; Q 0.1...20; compressor
 threshold -80...0 dBFS; ratio 1...40; attack 0.05...500 ms; release 1...5000 ms;
 makeup -24...+24 dB; ceiling -24...0 dBFS; mix 0...1; width 0...2; drive
-0...36 dB; delay 1...2000 ms; feedback 0...0.95; damping/crossfeed 0...1;
+0...36 dB; delay 1...2000 ms; feedback 0...0.5; damping/crossfeed 0...1;
 reverb predelay 0...250 ms, decay 0.1...8 seconds, room size/diffusion 0...1;
 expander hold 0...1000 ms, hysteresis 0...24 dB, and range 0...80 dB.
 Lookahead is currently constrained to 0 ms. The three production-mastery nodes
@@ -115,10 +115,12 @@ latency. A future
 lookahead limiter, linear-phase process, denoiser, or convolution must report a
 fixed worst-case delay through `AUAudioUnit.latency`; Apple notes that variable
 latency is generally not useful to hosts ([latency API](https://developer.apple.com/documentation/audiotoolbox/auaudiounit/latency)). Reverb/delay tails must report `tailTime`.
-The current AU reports a static conservative `tailTime` of 60 seconds. Hosts may
-cache this property, and the supported low-frequency/high-Q IIR can be committed
-after instantiation, so dynamically returning zero for a dry graph would understate
-a later graph's tail. This is a host-scheduling bound, not inserted reverb or delay.
+The current AU reports a static conservative `tailTime` of 180 seconds against a
+declared -120 dB amplitude threshold. Hosts may cache this property, and the
+maximum-feedback aggregate delay graph or supported low-frequency/high-Q IIR can be
+committed after instantiation, so dynamically returning zero for a dry graph would
+understate a later graph's tail. A maximum-bound impulse test couples the validator,
+DSP decay, and AU declaration. This is a host-scheduling bound, not inserted latency.
 
 ## Analysis 1.1
 
@@ -147,13 +149,13 @@ report literal energy ranges and do not claim a perceptual defect.
 
 ## Test methodology
 
-The current portable suite declares 72 unconditional checks plus one optional
-official-vector lane (73 possible when `TRACKSMITH_BS2217_VECTORS` is enabled).
-Previously verified current 2026-08-02 Debug and Release runs each pass 72/72
-with that variable omitted. The same-date vector-enabled Debug and Release runs
-now each pass 73/73 with `TRACKSMITH_BS2217_VECTORS` set to the local directory
-containing the 14 official BS.2217-2 vectors. The current 73-lane Thread
-Sanitizer run remains open/unproven. The added coverage exercises
+The frozen pre-Vocal portable suite at commit `406b446` declares 91 ordinary
+checks plus one optional official-vector lane (92 possible when
+`TRACKSMITH_BS2217_VECTORS` is enabled). On 2026-08-08 the Debug and Release
+ordinary lanes pass 91/91, and an isolated Release/Thread Sanitizer run with the
+14 local BS.2217-2 vectors passes 92/92 with no sanitizer report. The earlier
+2026-08-02 72/72 ordinary and 73/73 vector-enabled results remain dated
+historical evidence for that earlier harness. The added coverage exercises
 Short-term Loudness, LRA, source-aware analysis, production-intent hypotheses,
 semantic evaluation, immutable research ingestion, mailbox retention,
 reply-capacity reservation, strict reply correlation, command sequence/expiry, and
@@ -179,7 +181,7 @@ restoration, atomic publication/reset stress, two-instance isolation, exact
 revision/commit/undo/redo, persisted global bypass, nonfinite bypass sanitation,
 capture teardown/reallocation, atomic commit guards, and callback timing. Current
 probe cases also cover the expander, delay, and reverb in the representative graph,
-native bypass routing, a 60-second static tail, null output
+native bypass routing, a 180-second static tail with a -120 dB bound, null output
 buffers, upstream pointer replacement, maximum-frame validation, output-silence
 handling, sample-offset output-gain events, cross-block ramps, reset/bypass timeline
 semantics, and one-graph-per-callback publication isolation. The expanded

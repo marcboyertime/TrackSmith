@@ -1,5 +1,35 @@
 # Changelog
 
+## 2026-08-08
+
+- Reconciled current-facing status without rewriting dated evidence. The frozen
+  pre-Vocal baseline is commit `406b446`: ordinary `TestRunner` runs pass 91/91
+  in Debug and Release, and the isolated Release/Thread Sanitizer run passes
+  92/92 with the optional 14-file BS.2217-2 vector lane enabled.
+- Recorded TrackSmith Vocal v1 as **in progress** and linked its plan. This is
+  not a completion, installed-build, Logic-host, or listening-evidence claim.
+  At the frozen baseline, Guide Me and Create For Me both exist but there is no
+  typed Guide-to-Create handoff.
+- Added a dated, development-only
+  [`Vocal automated-verification record`](docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md).
+  It records final development-tree Debug and Release 104/104 checks plus the
+  post-handoff Release/Thread Sanitizer vector 105/105 check, bounded custom-host and heap results, the
+  dirty-source 89/89 synthetic semantic evaluation, listening-CLI self-check,
+  Tutor regressions, and native builds. The exact arm64 app/AU was also installed
+  under the matching Apple Development Team/App Group, byte-matched to its build,
+  registered as the sole matching extension, and passed out-of-process `auval`;
+  see the signed-install evidence record. The clean source-bound `make verify`
+  regression now passes at implementation commit `a9e21e5`; direct Logic, owner
+  listening, and release closure remain open.
+- Reconciled General Production Tutor v2 to its ledger and checked-in catalog:
+  518/518 offline cases across 99 evaluated domains; 458 reviewed claims and
+  78 strategies; native open-question Guide Me UI; bounded local, per-item
+  deletable confirmed-outcome personalization; GP0-GP7 passed; GP8 and GP9
+  pending and owner-blocked. No external or YouTube source has been ingested.
+- Clarified that Tutor v1 T7 is **CLOSED BOUNDED, NOT PASSED**. Its partial
+  direct Logic exercise did not include owner perceptual evidence and is not a
+  passed or pending gate.
+
 ## 2026-08-06
 
 - Closed Logic Production Tutor v1 at an explicitly documented **bounded

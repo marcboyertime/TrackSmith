@@ -69,10 +69,12 @@
   outgoing silence hint after processing because an IIR may emit a tail. This is
   conservative for scheduling and can prevent a host from skipping work on a block
   that actually remains silent.
-- `tailTime` is a static 60-second conservative scheduling bound because hosts can
-  cache it and a live commit can later activate the longest supported low-frequency/
-  high-Q IIR. It is not a measured tail for the current graph, and dry/memoryless
-  graphs therefore report substantially more tail than they generate.
+- `tailTime` is a static 180-second conservative scheduling bound against a declared
+  -120 dB amplitude threshold because hosts can cache it and a live commit can later
+  activate the maximum aggregate feedback-delay graph or longest supported
+  low-frequency/high-Q IIR. A maximum-bound impulse regression couples that value to
+  the validator and DSP. It is not a measured tail for the current graph, and dry/
+  memoryless graphs therefore report substantially more tail than they generate.
 - Limiting is zero-lookahead sample peak, not true peak. `lookaheadMS` is constrained
   to zero until a fixed-latency lookahead implementation exists. Activation rejects
   a final limiter ceiling above `maxTruePeakDB`, but that structural relationship
@@ -84,8 +86,8 @@
   parameters are immutable within a compiled graph; a revised plan publishes a
   reset replacement graph at a callback boundary, without a click-free crossfade or
   sample-accurate general-node automation.
-- Delay is bounded to 1–2000 ms per node and 4000 ms total per plan, feedback to
-  0.95, and at most four instances. Reverb is a compact fixed topology with two
+- Fixed and modulated delay share a bound of 1–2000 ms per node, 4000 ms aggregate
+  delay storage per plan, feedback at most 0.5, and at most four instances. Reverb is a compact fixed topology with two
   unequal feedback-comb paths and one scalar allpass diffusion stage per channel;
   requested predelay shifts both comb-path offsets. It has a 0.1–8 second nominal
   decay and at most two instances. Expander/gate is linked stereo and bounded to
@@ -220,7 +222,7 @@
   still target UX; a few removals are possible only through the narrow revision
   engine.
 
-## Guide Me tutor (Tutor v1)
+## Guide Me tutor
 
 - TrackSmith cannot verify the user's Logic channel strip. Existing inserts,
   their settings, selection, automation, and project state are invisible; the
@@ -232,26 +234,29 @@
 - Manual UI navigation is Logic-version-scoped (12.3) and documentary unless
   marked directly verified; an Apple UI change can invalidate a navigation
   card. The tutor invites "Can't find it" and never asserts a control exists.
-- The procedure catalog is deliberately narrow (8 vocal-focused procedures,
-  18 steps). Many recognized issues (for example too wet, too distant,
-  clipping, noise between phrases) currently end in an honest
-  no-safe-procedure limitation rather than guidance, and non-vocal sources
-  mostly generalize to that limitation.
+- The exact-instruction procedure catalog remains deliberately narrow (8
+  vocal-focused procedures, 18 steps). General Tutor v2 can return reviewed
+  strategy guidance for much broader questions, but it still reports an honest
+  no-safe-exact-procedure limitation when no reviewed Logic procedure exists.
 - Vowel-specific or otherwise time-varying resonances have no safe exact
   manual procedure in the current validated knowledge; the tutor says so and
   records the requirement for Vocal Module v1 instead of improvising.
 - Tutor advice remains source- and listening-dependent; feedback is the
   user's subjective judgment under their monitoring conditions. Level matching
   is by ear, not measured through the monitoring path.
-- The tutor never performs automatic Logic-native edits, and there is no
-  handoff from a tutor lesson to Create For Me commit in v1.
-- Direct Logic 12.3 user-mediated validation (tutor gate T7) and the owner's
-  real-lesson evidence are pending; no claim of host-validated tutoring is
-  made. Restored tutor sessions demote audio-grounded claims to historical.
+- The tutor never performs automatic Logic-native edits. At the frozen
+  pre-Vocal baseline (`406b446`), there is no typed handoff from a tutor result
+  into Create For Me; TrackSmith Vocal v1 is addressing that gap but remains in
+  progress.
+- Tutor v1 gate T7 is **CLOSED BOUNDED, NOT PASSED**, not pending. Its partial
+  Logic Pro 12.3 exercise covered the signed UI and deterministic step flow but
+  did not include the owner's real-lesson/perceptual evidence. Broad-tutor owner
+  sessions and direct Logic validation remain pending under General Tutor gate
+  GP8. Restored tutor sessions demote audio-grounded claims to historical.
 
 ## General Production Tutor v2
 
-- Domain coverage is uneven. 458 claims and 68 strategies come from reviewed
+- Domain coverage is uneven. 458 claims and 78 strategies come from reviewed
   in-repo artifacts, so vocal, mix, and effects domains are far better covered
   than arrangement, MIDI expression, and mastering delivery.
 - **No external source has ever been ingested.** No web fetch, no YouTube, no
@@ -259,8 +264,11 @@
   proven, but nothing has flowed through it: every shipped claim derives from
   artifacts already in this repository. Research This exists in the UI only as
   an explicitly labeled not-built control.
-- Personalization stores and ranks, but has never been used: no real confirmed
-  outcome exists, so the ranking preference has never affected a real session.
+- Personalization is implemented as a bounded, checksummed, atomic 0600 local
+  profile with credential redaction, corruption quarantine, per-item forget,
+  delete-all, and a human-readable export. It has not been validated with a real
+  confirmed outcome, so its bounded ranking preference has never affected a real
+  owner session.
 - Retrieval is lexical. It has no synonym expansion beyond the curated cue
   lists, so unusual phrasing can retrieve weakly; coverage is reported rather
   than hidden, but a weak-coverage answer is still less useful.
@@ -273,6 +281,7 @@
   the answers are useful to a producer.
 - **No owner session and no in-host validation of the broad tutor exist.** The
   decisive question — whether this beats opening a browser — is unanswered.
+  GP0-GP7 pass; GP8 and GP9 remain pending and owner-blocked.
 
 ## State and operations
 

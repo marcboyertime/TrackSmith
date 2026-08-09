@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "1.0",
+  "milestone": "TrackSmith Vocal v1",
+  "status": "active",
+  "plan": "docs/TRACKSMITH_VOCAL_V1.md",
+  "openedAt": "2026-08-08",
+  "centralRule": "TrackSmith may teach, propose, preview, and render only through typed local authority; provider prose never owns DSP, assets, Logic state, or commit authority.",
+  "baseline": {
+    "head": "406b446",
+    "record": "docs/evidence/TRACKSMITH_VOCAL_V1_BASELINE_2026-08-08.md",
+    "portableReleaseTestRunner": "91_of_91_passed",
+    "threadSanitizerTestRunner": "92_of_92_passed_with_optional_bs2217_vectors_no_race_report",
+    "generalTutorCorpus": "518_of_518_passed",
+    "productionTutorCorpus": "77_of_77_passed",
+    "historicalEvidenceMutable": false
+  },
+  "currentAutomatedVerification": {
+    "record": "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md",
+    "statusDate": "2026-08-09",
+    "classification": "development_only_automated_evidence",
+    "debugTestRunner": "104_of_104_passed_after_guide_create_handoff_regression",
+    "releaseTestRunner": "104_of_104_passed_after_guide_create_handoff_regression_and_reproduced_by_make_verify",
+    "releaseThreadSanitizerTestRunner": "105_of_105_passed_with_optional_bs2217_vectors_after_handoff_regression_no_race_report",
+    "releaseHostProbe": "clean_source_bound_make_verify_passed_mean_14.9us_p99_19.6us_max_85.1us_deadline_2666.7us",
+    "realtimeHeapProbe": "passed_4000_callbacks_zero_observed_heap_operations_mean_14.8us_p99_16.8us_max_57.8us",
+    "threadSanitizerHostProbe": "passed_mean_550.1us_p99_611.0us_max_680.4us_deadline_2666.7us_no_race_report",
+    "vocalSemanticEvaluator": {
+      "result": "89_of_89_passed_on_tracksmith_owned_synthetic_vocal_like_fixtures",
+      "report": "research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json",
+      "sourceRevision": "a9e21e57e481a8ffeaca7fd02837401cd8a98edf",
+      "sourceTreeState": "clean",
+      "claimBoundary": "clean_source_bound_automated_regression_not_listening_or_direct_logic_proof"
+    },
+    "vocalListeningCLISelfcheck": "passed",
+    "productionTutorCorpus": "77_of_77_passed",
+    "generalTutorCorpus": "518_of_518_passed",
+    "nativeDevelopmentBuild": "xcodegen_and_clean_unsigned_debug_arm64_companion_mac_app_build_passed",
+    "finalCleanSourceBoundRegression": "passed_at_a9e21e57e481a8ffeaca7fd02837401cd8a98edf",
+    "signedInstalledVerification": {
+      "status": "passed_at_bounded_development_scope",
+      "record": "docs/evidence/TRACKSMITH_VOCAL_V1_SIGNED_INSTALL_2026-08-08.md",
+      "teamID": "KDV9RC892F",
+      "appCDHash": "50dcaffa61f648a02d3f082aea5988cd94e4e418",
+      "audioUnitCDHash": "e102031e47697b12f46d67d5b4352097f80e65b5",
+      "auval": "passed_out_of_process",
+      "installedAppGroupPublication": "passed_bounded",
+      "directLogic": "pending"
+    }
+  },
+  "gates": [
+    {
+      "id": "V0",
+      "name": "frozen_baseline_and_current_truth",
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/TRACKSMITH_VOCAL_V1_BASELINE_2026-08-08.md"
+      ]
+    },
+    {
+      "id": "V1",
+      "name": "typed_capture_intelligence_and_test_take_loop",
+      "status": "in_progress",
+      "evidence": [
+        "packages/VocalProduction/Sources/VocalProduction/VocalCapture.swift",
+        "apps/CompanionMacApp/Vocal",
+        "tests/TestRunner/main.swift",
+        "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md"
+      ]
+    },
+    {
+      "id": "V2",
+      "name": "typed_creative_state_three_hypotheses_and_revision",
+      "status": "in_progress",
+      "evidence": [
+        "packages/VocalProduction/Sources/VocalProduction/VocalContracts.swift",
+        "packages/VocalProduction/Sources/VocalProduction/VocalIntentInterpreter.swift",
+        "packages/VocalProduction/Sources/VocalProduction/VocalCreativePlanner.swift",
+        "packages/VocalProduction/Sources/VocalProduction/VocalRevision.swift",
+        "tests/TestRunner/main.swift",
+        "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md"
+      ]
+    },
+    {
+      "id": "V3",
+      "name": "editable_au_and_scoped_rendered_asset_boundaries",
+      "status": "in_progress",
+      "evidence": [
+        "packages/VocalProduction/Sources/VocalProduction/VocalScopedAssetRenderer.swift",
+        "packages/SessionCore/Sources/SessionCore/CompanionSessionClient.swift",
+        "packages/DSPCore/Sources/DSPCore/CompiledGraph.swift",
+        "tests/TestRunner/main.swift",
+        "tools/AudioUnitHostProbe/Sources/AudioUnitHostProbe/main.swift",
+        "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md"
+      ]
+    },
+    {
+      "id": "V4",
+      "name": "guide_create_handoff_local_personalization_and_privacy",
+      "status": "in_progress",
+      "evidence": [
+        "packages/VocalProduction/Sources/VocalProduction/VocalHandoff.swift",
+        "tests/TestRunner/main.swift",
+        "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md"
+      ]
+    },
+    {
+      "id": "V5",
+      "name": "semantic_adversarial_audio_and_listening_evaluation",
+      "status": "in_progress",
+      "evidence": [
+        "packages/VocalEvaluation/Sources/VocalEvaluation/VocalBlindedEvaluation.swift",
+        "tools/VocalListeningStudyCLI/Sources/VocalListeningStudyCLI/main.swift",
+        "tools/VocalProductionEvaluation/Sources/VocalProductionEvaluation/main.swift",
+        "research/evaluation/TRACKSMITH_VOCAL_SEMANTIC_CORPUS_V1.json",
+        "research/evaluation/tracksmith-vocal-v1/failure-map.json",
+        "research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json",
+        "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md"
+      ],
+      "boundary": "Owner listening is SINGLE_LISTENER_FORMATIVE_EVIDENCE only and remains unclaimed until physically performed."
+    },
+    {
+      "id": "V6",
+      "name": "portable_native_realtime_state_and_regression_matrix",
+      "status": "passed",
+      "evidence": [
+        "tests/TestRunner/main.swift",
+        "tools/AudioUnitHostProbe/Sources/AudioUnitHostProbe/main.swift",
+        "tools/RealtimeHeapProbe/RealtimeHeapInterposer.c",
+        "Makefile",
+        "docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md"
+      ],
+      "boundary": "Clean source-bound automated regression passed at a9e21e5. This does not prove direct Logic behavior, a real-vocal session, or owner listening."
+    },
+    {
+      "id": "V7",
+      "name": "signed_install_auval_ipc_and_installed_identity",
+      "status": "passed",
+      "evidence": [
+        "docs/evidence/TRACKSMITH_VOCAL_V1_SIGNED_INSTALL_2026-08-08.md",
+        "scripts/install-development-build.sh",
+        "tools/AudioUnitHostProbe/Sources/AudioUnitHostProbe/main.swift"
+      ],
+      "boundary": "Local Apple Development signed artifact only; direct Logic and owner listening remain V8."
+    },
+    {
+      "id": "V8",
+      "name": "direct_logic_and_owner_only_listening",
+      "status": "pending",
+      "evidence": [],
+      "requiresOwnerPhysicalAction": true
+    },
+    {
+      "id": "V9",
+      "name": "release_reconciliation_and_closure",
+      "status": "pending",
+      "evidence": []
+    }
+  ],
+  "auditDerivedBoundaries": {
+    "thirdPartyRuntimeDependenciesAdded": 0,
+    "thirdPartyCodeCopied": false,
+    "thirdPartyModelsOrWeightsBundled": false,
+    "networkRequired": false,
+    "audioToMIDI": "typed_offline_contract_and_deterministic_mock_only",
+    "speechCleanup": "rnnoise_study_boundary_only",
+    "listeningStudy": "tracksmith_owned_blinded_runner",
+    "realtimeDSP": "tracksmith_owned_bounded_modulated_delay_in_preallocated_graph"
+  },
+  "proofBoundaries": [
+    "objective_audio_metrics_are_guardrails_not_listening_proof",
+    "no_provider_or_model_output_directly_selects_nodes_or_parameters",
+    "no_inference_allocation_blocking_or_network_access_in_render_callback",
+    "section_scopes_use_explicit_local_asset_rendering_not_claimed_logic_region_authority",
+    "original_capture_and_source_hash_remain_authoritative",
+    "rendered_assets_require_explicit_typed_permission_and_complete_provenance",
+    "owner_results_are_local_forgettable_and_never_universalized",
+    "direct_logic_and_owner_listening_remain_pending_until_performed"
+  ]
+}

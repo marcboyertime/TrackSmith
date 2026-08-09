@@ -248,6 +248,13 @@ public struct ProductionRevisionCoordinator: Sendable {
                 if let width = before.parameters[.width] {
                     plan.nodes[index].parameters[.width] = 1 + (width - 1) * scale
                 }
+            case .modulatedDelay:
+                if let depth = before.parameters[.modulationDepthMS] {
+                    plan.nodes[index].parameters[.modulationDepthMS] = depth * scale
+                }
+                if let mix = before.parameters[.mix] {
+                    plan.nodes[index].parameters[.mix] = mix * scale
+                }
             case .inputTrim, .outputTrim:
                 if let gain = before.parameters[.gainDB] {
                     plan.nodes[index].parameters[.gainDB] = gain * scale

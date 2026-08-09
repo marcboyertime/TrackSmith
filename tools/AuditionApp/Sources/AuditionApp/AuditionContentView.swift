@@ -228,6 +228,7 @@ private struct ProcessingNodeCard: View {
         case .stereoWidth: "Stereo width"
         case .midSideEQ: "Mid/side EQ"
         case .delay: "Delay"
+        case .modulatedDelay: "Modulated delay"
         case .reverb: "Reverb"
         case .limiter: "Limiter"
         case .outputTrim: "Output trim"
@@ -258,6 +259,9 @@ private struct ProcessingNodeCard: View {
         case .feedback: "Feedback"
         case .damping: "Damping"
         case .stereoCrossfeed: "Stereo crossfeed"
+        case .modulationDepthMS: "Modulation depth"
+        case .modulationRateHz: "Modulation rate"
+        case .stereoPhaseDegrees: "Stereo phase"
         case .preDelayMS: "Predelay"
         case .decayTimeSeconds: "Decay time"
         case .roomSize: "Room size"
@@ -271,9 +275,11 @@ private struct ProcessingNodeCard: View {
     private func format(_ value: Double, key: ParameterID) -> String {
         switch key {
         case .frequencyHz: value >= 1_000 ? String(format: "%.2f kHz", value / 1_000) : String(format: "%.0f Hz", value)
-        case .attackMS, .releaseMS, .lookaheadMS, .delayTimeMS, .preDelayMS, .holdMS: String(format: "%.1f ms", value)
+        case .attackMS, .releaseMS, .lookaheadMS, .delayTimeMS, .modulationDepthMS, .preDelayMS, .holdMS: String(format: "%.1f ms", value)
         case .thresholdDB, .makeupGainDB, .gainDB, .ceilingDB, .driveDB, .kneeDB, .hysteresisDB, .rangeDB: String(format: "%+.2f dB", value)
         case .decayTimeSeconds: String(format: "%.2f s", value)
+        case .modulationRateHz: String(format: "%.2f Hz", value)
+        case .stereoPhaseDegrees: String(format: "%.0f°", value)
         case .ratio: String(format: "%.2f:1", value)
         case .mix, .feedback, .damping, .stereoCrossfeed, .roomSize, .diffusion: String(format: "%.0f%%", value * 100)
         default: String(format: "%.3f", value)

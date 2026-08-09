@@ -21,9 +21,14 @@ let package = Package(
         .library(name: "AudioUnitExtensionCore", targets: ["AudioUnitExtensionCore"]),
         .library(name: "ResearchIngestion", targets: ["ResearchIngestion"]),
         .library(name: "ProductionTutor", targets: ["ProductionTutor"]),
+        .library(name: "VocalProduction", targets: ["VocalProduction"]),
+        .library(name: "VocalAudioToMIDI", targets: ["VocalAudioToMIDI"]),
+        .library(name: "VocalEvaluation", targets: ["VocalEvaluation"]),
         .executable(name: "ProductionTutorEvaluation", targets: ["ProductionTutorEvaluation"]),
         .executable(name: "GeneralTutorEvaluation", targets: ["GeneralTutorEvaluation"]),
         .executable(name: "GeneralTutorSpotCheck", targets: ["GeneralTutorSpotCheck"]),
+        .executable(name: "VocalProductionEvaluation", targets: ["VocalProductionEvaluation"]),
+        .executable(name: "VocalListeningStudyCLI", targets: ["VocalListeningStudyCLI"]),
         .executable(name: "CompanionApp", targets: ["CompanionApp"]),
         .executable(name: "OfflineRenderer", targets: ["OfflineRenderer"]),
         .executable(name: "AnalysisCLI", targets: ["AnalysisCLI"]),
@@ -53,12 +58,12 @@ let package = Package(
             linkerSettings: [.linkedFramework("Security")]
         ),
         .target(name: "PreviewRenderer", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis"], path: "packages/PreviewRenderer/Sources/PreviewRenderer"),
-        .target(name: "PreviewWorkflow", dependencies: ["AgentCore", "PreviewRenderer", "PlanSchema", "DSPCore", "AudioAnalysis"], path: "packages/PreviewWorkflow/Sources/PreviewWorkflow"),
+        .target(name: "PreviewWorkflow", dependencies: ["AgentCore", "PreviewRenderer", "PlanSchema", "DSPCore", "AudioAnalysis", "VocalProduction"], path: "packages/PreviewWorkflow/Sources/PreviewWorkflow"),
         .target(name: "LogicBridge", dependencies: ["PlanSchema"], path: "packages/LogicBridge/Sources/LogicBridge"),
         .target(name: "SharedIPC", dependencies: ["PlanSchema"], path: "packages/SharedIPC/Sources/SharedIPC"),
         .target(
             name: "SessionCore",
-            dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "SharedIPC", "PreviewRenderer", "PreviewWorkflow", "PlanSchema"],
+            dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "SharedIPC", "PreviewRenderer", "PreviewWorkflow", "PlanSchema", "VocalProduction"],
             path: "packages/SessionCore/Sources/SessionCore"
         ),
         .target(
@@ -80,6 +85,19 @@ let package = Package(
             name: "ProductionTutor",
             dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "PlanSchema"],
             path: "packages/ProductionTutor/Sources/ProductionTutor"
+        ),
+        .target(
+            name: "VocalProduction",
+            dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema"],
+            path: "packages/VocalProduction/Sources/VocalProduction"
+        ),
+        .target(
+            name: "VocalAudioToMIDI",
+            path: "packages/VocalAudioToMIDI/Sources/VocalAudioToMIDI"
+        ),
+        .target(
+            name: "VocalEvaluation",
+            path: "packages/VocalEvaluation/Sources/VocalEvaluation"
         ),
         .executableTarget(name: "CompanionApp", dependencies: ["AgentCore", "ProductionIntelligence", "PreviewRenderer", "SharedIPC", "DSPCore", "AudioAnalysis", "PlanSchema"], path: "apps/CompanionApp/Sources/CompanionApp"),
         .executableTarget(name: "OfflineRenderer", dependencies: ["DSPCore", "PlanSchema", "AudioAnalysis"], path: "tools/OfflineRenderer/Sources/OfflineRenderer"),
@@ -125,6 +143,16 @@ let package = Package(
             dependencies: ["ProductionTutor", "AudioAnalysis", "DSPCore", "PlanSchema"],
             path: "tools/ProductionTutorEvaluation/Sources/ProductionTutorEvaluation"
         ),
-        .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "ProductionIntelligence", "ProductionTutor", "PreviewRenderer", "PreviewWorkflow", "SharedIPC", "SessionCore", "ResearchIngestion"], path: "tests/TestRunner"),
+        .executableTarget(
+            name: "VocalProductionEvaluation",
+            dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema", "VocalProduction"],
+            path: "tools/VocalProductionEvaluation/Sources/VocalProductionEvaluation"
+        ),
+        .executableTarget(
+            name: "VocalListeningStudyCLI",
+            dependencies: ["VocalEvaluation"],
+            path: "tools/VocalListeningStudyCLI/Sources/VocalListeningStudyCLI"
+        ),
+        .executableTarget(name: "TestRunner", dependencies: ["PlanSchema", "DSPCore", "AudioAnalysis", "StateStore", "AgentCore", "ProductionIntelligence", "ProductionTutor", "PreviewRenderer", "PreviewWorkflow", "SharedIPC", "SessionCore", "ResearchIngestion", "VocalProduction", "VocalAudioToMIDI", "VocalEvaluation"], path: "tests/TestRunner"),
     ]
 )

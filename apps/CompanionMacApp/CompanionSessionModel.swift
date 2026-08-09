@@ -10,6 +10,7 @@ import PreviewWorkflow
 import SessionCore
 import SharedIPC
 import SwiftUI
+import VocalProduction
 
 enum CompanionProviderSelection: String, CaseIterable, Identifiable {
     case offline
@@ -35,6 +36,16 @@ enum CompanionProviderSelection: String, CaseIterable, Identifiable {
     }
 
     var usesCloud: Bool { self == .openAI || self == .gemini }
+}
+
+struct VocalCaptureRuntimeContext: Sendable {
+    var sourceAuthority: VocalSourceAuthority
+    var analysis: SourceAwareAnalysisReport
+    var assessment: VocalTestTakeAssessment
+    var sourceType: SourceType
+    var channelFormat: ChannelFormat
+    var capturedInstanceID: UUID
+    var capturedRuntimeEpoch: UUID
 }
 
 @MainActor
@@ -66,6 +77,11 @@ final class CompanionSessionModel: ObservableObject {
     @Published var basePlan: ProcessingPlan?
     @Published var workingPlan: ProcessingPlan?
     @Published var workingPreview: PreviewVariantManifest?
+    @Published var vocalIntent: VocalCreativeIntent?
+    @Published var vocalCandidates: [VocalCreativeCandidate] = []
+    @Published var vocalRevisionRecords: [VocalRevisionRecord] = []
+    @Published var vocalRenderedAssetManifest: VocalRenderedAssetManifest?
+    @Published var vocalRenderedAssetDirectory: URL?
     @Published var isGlobalBypassed = false
     @Published private(set) var canUndoWorking = false
     @Published private(set) var canRedoWorking = false
@@ -206,6 +222,10 @@ final class CompanionSessionModel: ObservableObject {
     private var activeCaptureOperationID: UUID?
     private var activeWorkingRenderID: UUID?
     private var activeProductionTurnID: UUID?
+    private var activeVocalRenderID: UUID?
+    private var auditionLoadTail: Task<Void, Never>?
+    private var auditionLoadTailID: UUID?
+    private var loadedAuditionCount = 0
     /// Terminal failures remain visible long enough to be read and audited.
     /// The heartbeat scanner must not erase them on its next 350 ms refresh.
     private var failureStatusExpiresAt: Date?
@@ -302,14 +322,16 @@ final class CompanionSessionModel: ObservableObject {
         statusColor = .orange
         let selectedProvider = providerSelection
         let consent = cloudReasoningConsent
-        activeProductionTurnID = UUID()
+        let operationID = UUID()
+        activeProductionTurnID = operationID
         Task {
             do {
                 let analysis = try await client.analyzeCapture(
                     artifact: artifact,
                     sourceType: sourceType
                 )
-                guard self.capturedInstanceID == capturedInstanceID,
+                guard self.activeProductionTurnID == operationID,
+                      self.capturedInstanceID == capturedInstanceID,
                       self.capturedRuntimeEpoch == capturedRuntimeEpoch,
                       self.captureArtifact?.id == artifact.id else {
                     throw ModelProviderFailure.staleResult
@@ -353,6 +375,7 @@ final class CompanionSessionModel: ObservableObject {
                     currentAuthority: { [weak self] in
                         await MainActor.run {
                             guard let self,
+                                  self.activeProductionTurnID == operationID,
                                   self.captureArtifact?.id == artifact.id,
                                   self.capturedInstanceID == capturedInstanceID,
                                   self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return nil }
@@ -364,6 +387,10 @@ final class CompanionSessionModel: ObservableObject {
                         }
                     }
                 )
+                guard self.activeProductionTurnID == operationID,
+                      self.capturedInstanceID == capturedInstanceID,
+                      self.capturedRuntimeEpoch == capturedRuntimeEpoch,
+                      self.captureArtifact?.id == artifact.id else { return }
                 guard !outcome.productionResult.hypotheses.isEmpty else {
                     productionOutcome = outcome
                     isBusy = false
@@ -385,19 +412,34 @@ final class CompanionSessionModel: ObservableObject {
                     result: outcome.productionResult,
                     providerMetadata: outcome.validatedInterpretation.metadata
                 )
-                guard self.capturedInstanceID == capturedInstanceID,
+                guard self.activeProductionTurnID == operationID,
+                      self.capturedInstanceID == capturedInstanceID,
                       self.capturedRuntimeEpoch == capturedRuntimeEpoch,
                       self.captureArtifact?.id == artifact.id else {
                     throw ModelProviderFailure.staleResult
                 }
                 let urls = auditionURLs(result: result)
-                try await audition.load(urls: urls)
-                // Loading suspends. An explicit new capture may have replaced
-                // this transaction while the audio engine was preparing files.
-                guard self.capturedInstanceID == capturedInstanceID,
-                      self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return }
+                guard try await installAuditionAudio(
+                    urls: urls,
+                    authorityIsCurrent: { [weak self] in
+                        guard let self else { return false }
+                        return self.activeProductionTurnID == operationID
+                            && self.capturedInstanceID == capturedInstanceID
+                            && self.capturedRuntimeEpoch == capturedRuntimeEpoch
+                            && self.captureArtifact?.id == artifact.id
+                    }
+                ) else { return }
+                guard self.activeProductionTurnID == operationID,
+                      self.capturedInstanceID == capturedInstanceID,
+                      self.capturedRuntimeEpoch == capturedRuntimeEpoch,
+                      self.captureArtifact?.id == artifact.id else { return }
                 previewManifest = result.manifest
                 productionOutcome = outcome
+                vocalIntent = nil
+                vocalCandidates = []
+                vocalRevisionRecords = []
+                vocalRenderedAssetManifest = nil
+                vocalRenderedAssetDirectory = nil
                 previewDirectory = result.directory
                 workingPreview = nil
                 workingPreviewURL = nil
@@ -416,11 +458,384 @@ final class CompanionSessionModel: ObservableObject {
                 recordConversation(outcome: outcome, manifest: result.manifest)
                 activeProductionTurnID = nil
             } catch {
-                guard self.capturedInstanceID == capturedInstanceID,
+                guard self.activeProductionTurnID == operationID,
+                      self.capturedInstanceID == capturedInstanceID,
                       self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return }
                 fail(error)
             }
         }
+    }
+
+    /// Builds and renders the focused Vocal v1 full-source path. Interpretation
+    /// is typed locally, every graph is constructed by TrackSmith, and the
+    /// immutable AU capture is rechecked after each suspension. Section scopes
+    /// deliberately use the separate rendered-asset workflow and cannot enter
+    /// this realtime-activatable preview path.
+    func generateVocalPreviews(intent: VocalCreativeIntent) {
+        let prompt = intent.originalPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !prompt.isEmpty else { return }
+
+        // A typed Vocal intent is a transaction boundary. Clear every prior
+        // preview/audition authority before either presenting a clarification
+        // or beginning asynchronous planning so stale cards cannot remain live.
+        clearVocalPreviewAuthority()
+        vocalIntent = intent
+        vocalCandidates = []
+        vocalRevisionRecords = []
+        if let clarification = intent.blockingClarification {
+            status = "One Vocal clarification is needed"
+            detailStatus = clarification.prompt
+            statusColor = .orange
+            return
+        }
+        guard !isBusy,
+              sourceType == .vocal || sourceType == .vocalBus,
+              let client,
+              let artifact = captureArtifact,
+              let capturedInstanceID,
+              let capturedRuntimeEpoch,
+              intent.scope.kind == .fullSource,
+              intent.sourceSnapshotID == artifact.id else { return }
+        let operationID = UUID()
+        activeVocalRenderID = operationID
+        isBusy = true
+        status = "Building three Vocal interpretations"
+        detailStatus = "Typed local intent · bounded TrackSmith graphs · source-preserving level-matched render"
+        statusColor = .orange
+        Task {
+            do {
+                let analysis = try await client.analyzeCapture(
+                    artifact: artifact,
+                    sourceType: sourceType
+                )
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ) else {
+                    throw ModelProviderFailure.staleResult
+                }
+                sourceAwareAnalysis = analysis
+                let processingScope = processingScope(for: artifact)
+                let planned = try VocalCreativePlanner().plan(
+                    intent: intent,
+                    processingScope: processingScope,
+                    analysis: analysis.baseReport
+                )
+                guard planned.count == 3,
+                      planned.allSatisfy(\.realtimeActivatable) else {
+                    throw VocalContractError.validationFailed(
+                        "The full-source Vocal request did not produce three realtime candidates."
+                    )
+                }
+                let result = try await client.renderVocalPreviews(
+                    artifact: artifact,
+                    prompt: prompt,
+                    sourceType: sourceType,
+                    candidates: planned
+                )
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ) else {
+                    throw ModelProviderFailure.staleResult
+                }
+                let urls = auditionURLs(result: result)
+                guard try await installAuditionAudio(
+                    urls: urls,
+                    authorityIsCurrent: { [weak self] in
+                        self?.vocalRenderMatches(
+                            operationID,
+                            intentID: intent.id,
+                            artifactID: artifact.id,
+                            capturedInstanceID: capturedInstanceID,
+                            capturedRuntimeEpoch: capturedRuntimeEpoch
+                        ) == true
+                    }
+                ) else { return }
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ) else { return }
+                previewManifest = result.manifest
+                previewDirectory = result.directory
+                workingPreview = nil
+                workingPreviewURL = nil
+                productionOutcome = nil
+                vocalIntent = intent
+                vocalCandidates = result.manifest.vocalCreativeCandidates ?? planned
+                vocalRevisionRecords = []
+                vocalRenderedAssetManifest = nil
+                vocalRenderedAssetDirectory = nil
+                let valid = result.manifest.variants.filter {
+                    $0.status == .valid && $0.audioFileName != nil
+                }
+                selectedAuditionIndex = valid.isEmpty ? 0 : 1
+                // Audition starts on the first valid interpretation, but no
+                // candidate gains commit authority until the user explicitly
+                // chooses Use as working.
+                workingPlan = nil
+                resetWorkingHistory()
+                audition.select(index: selectedAuditionIndex)
+                activeVocalRenderID = nil
+                status = "\(result.manifest.validVariantCount) Vocal interpretations ready"
+                detailStatus = "TrackSmith rendered three structurally distinct local hypotheses. Preference and intelligibility remain listening judgments."
+                statusColor = result.manifest.validVariantCount == 3 ? .green : .orange
+                isBusy = false
+            } catch {
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ) else { return }
+                fail(error)
+            }
+        }
+    }
+
+    /// Returns the exact current immutable capture authority plus the local
+    /// source-aware report used by Vocal Guide. The AU capture WAV is hash-
+    /// verified by SessionCore before analysis and again while constructing
+    /// the logical audio hash; no provider, network, or host mutation occurs.
+    func vocalCaptureContext() async throws -> VocalCaptureRuntimeContext? {
+        guard sourceType == .vocal || sourceType == .vocalBus,
+              let client,
+              let artifact = captureArtifact,
+              let capturedInstanceID,
+              let capturedRuntimeEpoch else { return nil }
+        let analysis: SourceAwareAnalysisReport
+        if let existing = sourceAwareAnalysis {
+            analysis = existing
+        } else {
+            analysis = try await client.analyzeCapture(artifact: artifact, sourceType: sourceType)
+        }
+        let audio = try await client.loadCapturedAudio(artifact)
+        guard captureArtifact?.id == artifact.id,
+              self.capturedInstanceID == capturedInstanceID,
+              self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return nil }
+        sourceAwareAnalysis = analysis
+        let authority = try VocalAudioHasher().authority(
+            for: audio,
+            sourceSnapshotID: artifact.id,
+            immutableSourceID: "tracksmith-au-capture:\(artifact.id.uuidString.lowercased())",
+            capturedAt: artifact.createdAt
+        )
+        return VocalCaptureRuntimeContext(
+            sourceAuthority: authority,
+            analysis: analysis,
+            assessment: VocalTestTakeAssessor().assess(analysis),
+            sourceType: sourceType,
+            channelFormat: artifact.channelCount == 1 ? .mono : .stereo,
+            capturedInstanceID: capturedInstanceID,
+            capturedRuntimeEpoch: capturedRuntimeEpoch
+        )
+    }
+
+    /// Materializes one explicit Vocal hypothesis. Full-source candidates use
+    /// the existing immutable working-preview path and remain committable as a
+    /// validated AU graph. Scoped candidates can only become a labeled local
+    /// derivative asset with the original beside it; they never enter AU
+    /// activation or imply Logic region/automation authority.
+    func renderVocalCandidate(
+        _ candidate: VocalCreativeCandidate,
+        sourceAuthority: VocalSourceAuthority,
+        completedAuthorityIsCurrent: @escaping @MainActor (VocalSourceAuthority) -> Bool
+    ) {
+        guard !isBusy,
+              let client,
+              let artifact = captureArtifact,
+              let capturedInstanceID,
+              let capturedRuntimeEpoch,
+              vocalIntent?.id == candidate.intent.id,
+              vocalCandidates.contains(where: { $0.id == candidate.id }),
+              sourceAuthority.sourceSnapshotID == artifact.id,
+              candidate.intent.sourceSnapshotID == artifact.id,
+              candidate.plan.sourceSnapshotID == artifact.id,
+              completedAuthorityIsCurrent(sourceAuthority) else { return }
+        if candidate.realtimeActivatable {
+            guard candidate.intent.scope.kind == .fullSource else {
+                fail(VocalContractError.scopedRealtimeActivationForbidden)
+                return
+            }
+            beginWorkingRender(status: "Rendering selected Vocal hypothesis")
+            let operationID = UUID()
+            activeWorkingRenderID = operationID
+            Task {
+                do {
+                    let result = try await client.renderWorkingPlanPreview(
+                        artifact: artifact,
+                        plan: candidate.plan
+                    )
+                    guard activeWorkingRenderID == operationID,
+                          self.capturedInstanceID == capturedInstanceID,
+                          self.capturedRuntimeEpoch == capturedRuntimeEpoch,
+                          self.captureArtifact?.id == artifact.id else { return }
+                    _ = try await installWorkingPreview(
+                        result,
+                        operationID: operationID,
+                        capturedInstanceID: capturedInstanceID,
+                        capturedRuntimeEpoch: capturedRuntimeEpoch,
+                        historyUpdate: .appendCurrent
+                    )
+                } catch {
+                    guard activeWorkingRenderID == operationID,
+                          self.capturedInstanceID == capturedInstanceID,
+                          self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return }
+                    fail(error)
+                }
+            }
+            return
+        }
+
+        guard candidate.intent.scope.kind != .fullSource,
+              candidate.intent.assetAcceptance == .allowLocalRenderedAsset
+                || candidate.intent.assetAcceptance == .requireLocalRenderedAsset else {
+            fail(VocalHandoffError.scopedAssetPermissionRequired)
+            return
+        }
+        // Scoped audition has exactly two slots: immutable original and the
+        // derivative. Remove any older full-source manifest and labels before
+        // the async render begins, rather than after audio loading completes.
+        clearVocalPreviewAuthority()
+        let operationID = UUID()
+        activeVocalRenderID = operationID
+        isBusy = true
+        status = "Rendering scoped Vocal derivative"
+        detailStatus = "Local offline asset · exact scope · original retained · no AU or Logic-region mutation"
+        statusColor = .orange
+        Task {
+            do {
+                let result = try await client.renderVocalAsset(
+                    artifact: artifact,
+                    sourceAuthority: sourceAuthority,
+                    candidate: candidate,
+                    parentPreviewID: candidate.previewID,
+                    parentAssetID: candidate.assetID
+                )
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: candidate.intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ),
+                      result.asset.manifest.sourceAuthority == sourceAuthority,
+                      completedAuthorityIsCurrent(sourceAuthority) else {
+                    throw ModelProviderFailure.staleResult
+                }
+                let urls = [result.sourceAudioURL, result.audioURL]
+                guard try await installAuditionAudio(
+                    urls: urls,
+                    authorityIsCurrent: { [weak self] in
+                        guard let self else { return false }
+                        return self.vocalRenderMatches(
+                            operationID,
+                            intentID: candidate.intent.id,
+                            artifactID: artifact.id,
+                            capturedInstanceID: capturedInstanceID,
+                            capturedRuntimeEpoch: capturedRuntimeEpoch
+                        )
+                            && result.asset.manifest.sourceAuthority == sourceAuthority
+                            && completedAuthorityIsCurrent(sourceAuthority)
+                    }
+                ) else { return }
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: candidate.intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ),
+                      result.asset.manifest.sourceAuthority == sourceAuthority,
+                      completedAuthorityIsCurrent(sourceAuthority) else { return }
+                vocalRenderedAssetManifest = result.asset.manifest
+                vocalRenderedAssetDirectory = result.directory
+                selectedAuditionIndex = 1
+                audition.select(index: 1)
+                isPlaying = false
+                activeVocalRenderID = nil
+                isBusy = false
+                status = "Scoped Vocal derivative ready"
+                detailStatus = "Original and rendered asset are synchronized for comparison. This asset cannot be committed as a whole-stream AU plan."
+                statusColor = .green
+            } catch {
+                guard vocalRenderMatches(
+                    operationID,
+                    intentID: candidate.intent.id,
+                    artifactID: artifact.id,
+                    capturedInstanceID: capturedInstanceID,
+                    capturedRuntimeEpoch: capturedRuntimeEpoch
+                ) else { return }
+                fail(error)
+            }
+        }
+    }
+
+    /// Atomically invalidates Vocal preview, render, and audition authority
+    /// without touching the immutable capture, captured base graph, or Revert.
+    /// This is the shared boundary for new intents, blocking clarifications,
+    /// scoped renders, capture-authority changes, and stale-output rejection.
+    func clearVocalPreviewAuthority() {
+        let invalidatedInFlightWork = activeVocalRenderID != nil
+            || activeWorkingRenderID != nil
+            || activeProductionTurnID != nil
+        activeVocalRenderID = nil
+        activeWorkingRenderID = nil
+        activeProductionTurnID = nil
+        previewManifest = nil
+        previewDirectory = nil
+        workingPlan = nil
+        workingPreview = nil
+        workingPreviewURL = nil
+        vocalRenderedAssetManifest = nil
+        vocalRenderedAssetDirectory = nil
+        productionOutcome = nil
+        resetWorkingHistory()
+        audition.unload()
+        loadedAuditionCount = 0
+        selectedAuditionIndex = 0
+        isPlaying = false
+        if !isBusy || invalidatedInFlightWork {
+            status = "Vocal preview authority cleared"
+            detailStatus = "No prior preview, rendered asset, or audition selection is authoritative for the current Vocal request."
+            statusColor = .orange
+        }
+        if invalidatedInFlightWork { isBusy = false }
+    }
+
+    /// Clears only the editable/committable preview graph. The captured base
+    /// graph remains available for exact Revert, and Create mode keeps its
+    /// existing behavior outside an explicit Vocal request.
+    func clearVocalWorkingAuthority() {
+        let invalidatedWorkingRender = activeWorkingRenderID != nil
+        activeWorkingRenderID = nil
+        workingPlan = nil
+        workingPreview = nil
+        workingPreviewURL = nil
+        resetWorkingHistory()
+        if invalidatedWorkingRender { isBusy = false }
+    }
+
+    /// Drops an unaccepted scoped-render result when the exact completed
+    /// test-take transaction changes between render and UI reconciliation.
+    /// The local output is deliberately left untouched on disk, but it gains
+    /// no audition, working-plan, or persistence authority.
+    func discardVocalRenderedAssetOutput() {
+        clearVocalPreviewAuthority()
+        isBusy = false
+        status = "Scoped Vocal derivative rejected"
+        detailStatus = "The exact completed test-take authority changed before this render could be accepted."
+        statusColor = .orange
     }
 
     func saveProviderCredential() {
@@ -464,6 +879,8 @@ final class CompanionSessionModel: ObservableObject {
     }
 
     func selectAudition(index: Int) {
+        guard loadedAuditionCount > 0,
+              (0..<loadedAuditionCount).contains(index) else { return }
         selectedAuditionIndex = index
         audition.select(index: index)
     }
@@ -912,10 +1329,20 @@ final class CompanionSessionModel: ObservableObject {
             return nil
         }
         let urls = auditionURLs(workingURL: audioURL)
-        try await audition.load(urls: urls)
+        guard try await installAuditionAudio(
+            urls: urls,
+            authorityIsCurrent: { [weak self] in
+                guard let self else { return false }
+                return self.activeWorkingRenderID == operationID
+                    && self.capturedInstanceID == capturedInstanceID
+                    && self.capturedRuntimeEpoch == capturedRuntimeEpoch
+                    && self.captureArtifact?.id == result.variant.plan.sourceSnapshotID
+            }
+        ) else { return nil }
         guard activeWorkingRenderID == operationID,
               self.capturedInstanceID == capturedInstanceID,
-              self.capturedRuntimeEpoch == capturedRuntimeEpoch else { return nil }
+              self.capturedRuntimeEpoch == capturedRuntimeEpoch,
+              self.captureArtifact?.id == result.variant.plan.sourceSnapshotID else { return nil }
         switch historyUpdate {
         case .appendCurrent:
             appendCurrentPlanToHistory(ifChangingTo: result.variant.plan)
@@ -1233,6 +1660,58 @@ final class CompanionSessionModel: ObservableObject {
         return urls
     }
 
+    /// Serializes suspension-bearing engine loads and validates authority both
+    /// before and after each load. A superseded load is unloaded before the next
+    /// queued load can begin, preventing an older task from overwriting newer
+    /// audition audio after the UI has already changed intents.
+    private func installAuditionAudio(
+        urls: [URL],
+        authorityIsCurrent: @escaping @MainActor () -> Bool
+    ) async throws -> Bool {
+        let precedingLoad = auditionLoadTail
+        let loadID = UUID()
+        let loadTask = Task { @MainActor [weak self] () throws -> Bool in
+            await precedingLoad?.value
+            guard let self, authorityIsCurrent() else { return false }
+            do {
+                try await self.audition.load(urls: urls)
+            } catch {
+                self.audition.unload()
+                self.loadedAuditionCount = 0
+                throw error
+            }
+            guard authorityIsCurrent() else {
+                self.audition.unload()
+                self.loadedAuditionCount = 0
+                return false
+            }
+            self.loadedAuditionCount = urls.count
+            return true
+        }
+        auditionLoadTailID = loadID
+        auditionLoadTail = Task { @MainActor [weak self] in
+            _ = await loadTask.result
+            guard self?.auditionLoadTailID == loadID else { return }
+            self?.auditionLoadTail = nil
+            self?.auditionLoadTailID = nil
+        }
+        return try await loadTask.value
+    }
+
+    private func vocalRenderMatches(
+        _ operationID: UUID,
+        intentID: UUID,
+        artifactID: UUID,
+        capturedInstanceID: UUID,
+        capturedRuntimeEpoch: UUID
+    ) -> Bool {
+        activeVocalRenderID == operationID
+            && vocalIntent?.id == intentID
+            && captureArtifact?.id == artifactID
+            && self.capturedInstanceID == capturedInstanceID
+            && self.capturedRuntimeEpoch == capturedRuntimeEpoch
+    }
+
     nonisolated private static func waveformSamples(_ audio: AudioBuffer, targetCount: Int = 1_600) -> [Float] {
         guard audio.frameCount > 0 else { return [] }
         let stride = max(1, audio.frameCount / targetCount)
@@ -1264,6 +1743,7 @@ final class CompanionSessionModel: ObservableObject {
         activeWorkingRenderID = nil
         activeCaptureOperationID = nil
         activeProductionTurnID = nil
+        activeVocalRenderID = nil
         pendingCaptureRequest = nil
         pendingCommitRequest = nil
     }
@@ -1280,15 +1760,22 @@ final class CompanionSessionModel: ObservableObject {
         workingPreviewURL = nil
         activeWorkingRenderID = nil
         activeProductionTurnID = nil
+        activeVocalRenderID = nil
         selectedAuditionIndex = 0
         basePlan = nil
         expectedCurrentPlan = nil
         productionOutcome = nil
+        vocalIntent = nil
+        vocalCandidates = []
+        vocalRevisionRecords = []
+        vocalRenderedAssetManifest = nil
+        vocalRenderedAssetDirectory = nil
         sourceAwareAnalysis = nil
         resetWorkingHistory()
         capturedInstanceID = nil
         capturedRuntimeEpoch = nil
         audition.unload()
+        loadedAuditionCount = 0
         isPlaying = false
         if pendingCommitRequest == nil { isBusy = false }
     }
@@ -1328,15 +1815,10 @@ final class CompanionSessionModel: ObservableObject {
         _ existing: ProcessingPlan?,
         to artifact: CaptureArtifact
     ) -> ProcessingPlan {
-        let scope = ProcessingScope(
-            kind: .pluginInput,
-            channelFormat: artifact.channelCount == 1 ? .mono : .stereo,
-            sourceType: sourceType,
-            timeRangeSeconds: TimeRangeSeconds(
-                start: 0,
-                end: Double(artifact.frameCount) / artifact.sampleRate
-            )
-        )
+        // A capture rebound is still the full realtime source. Giving its base
+        // plan a bounded time range makes later realtime activation reject
+        // Revert even though no scoped authority was requested.
+        let scope = processingScope(for: artifact)
         guard var rebound = existing else {
             return ProcessingPlan(
                 sourceSnapshotID: artifact.id,
@@ -1355,10 +1837,7 @@ final class CompanionSessionModel: ObservableObject {
             kind: .pluginInput,
             channelFormat: artifact.channelCount == 1 ? .mono : .stereo,
             sourceType: sourceType,
-            timeRangeSeconds: .init(
-                start: 0,
-                end: Double(artifact.frameCount) / artifact.sampleRate
-            )
+            timeRangeSeconds: nil
         )
     }
 

@@ -8,8 +8,9 @@ swift run -c release TestRunner
 
 On 2026-07-27 the frozen Production Intelligence v1 baseline passed 68/68 checks
 in Debug, Release, and Thread Sanitizer when the 14 selected official BS.2217-2
-vectors were supplied; that dated baseline is historical. The current harness
-declares 72 unconditional checks plus one optional official-vector lane (73
+vectors were supplied; the later 72/73- and 83-check results remain historical
+evidence for their dated harnesses. The frozen pre-Vocal baseline at commit
+`406b446` declares 91 ordinary checks plus one optional official-vector lane (92
 possible when `TRACKSMITH_BS2217_VECTORS` is enabled).
 Coverage
 includes: plan
@@ -56,15 +57,18 @@ retrieval, explicit no-node/no-host/no-measurement/no-constraint authority,
 durable conversation migration/corruption/reconciliation, typed conversational
 references, structurally distinct competing hypotheses, immutable research
 publication/quarantine/version history, and clean pinned Git checkout enforcement.
+General Tutor v2 additionally covers open-ended routing without an issue-enum
+match, knowledge/provenance validation, grounded-answer and unsupported-authority
+refusals, measurement-relevance honesty, bounded local personal-profile
+persistence/deletion, and rejection of generalized personal results.
 
-Previously verified current 2026-08-02 Debug and Release runs each pass 72/72
-with `TRACKSMITH_BS2217_VECTORS` omitted (the 72 unconditional checks). The
-same-date vector-enabled Debug and Release runs now each pass 73/73 with
+The 2026-08-08 frozen pre-Vocal Debug and Release ordinary runs pass 91/91.
+An isolated Release/Thread Sanitizer run with
 `TRACKSMITH_BS2217_VECTORS` set to the local directory containing the 14 official
-BS.2217-2 vectors. The current 73-lane Thread Sanitizer run remains
-open/unproven. This is evidence
-for exercised paths, not proof that all possible races or real-time allocations are
-absent.
+BS.2217-2 vectors passes 92/92 with no sanitizer report. This is evidence for the
+exercised paths, not proof that all possible races or real-time allocations are
+absent. The older 2026-08-02 72/72 ordinary and 73/73 vector-enabled results remain
+dated historical evidence rather than current harness counts.
 
 The repository retains a dependency-free executable harness so the core can run in
 CI and on Command Line Tools-only machines. `make native-verify` additionally builds
@@ -261,7 +265,7 @@ snapshot mismatch inside the same AU transaction. Each failed commit preserves t
 live graph and serialized state. This proves the class and local session contracts.
 
 Current probe source adds cases for the native `shouldBypassEffect` route, static
-60-second `tailTime`, null output `mData`, upstream replacement of pull-input
+180-second/-120 dB `tailTime`, maximum-bound feedback decay, null output `mData`, upstream replacement of pull-input
 pointers, undersized/oversized host layouts, maximum-frame validation, defensive
 zero input for upstream silence, clearing a potentially false outgoing silence hint,
 sample-offset output-gain events, ramps spanning callbacks, host-reset cancellation

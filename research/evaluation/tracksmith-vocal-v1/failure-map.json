@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "1.0",
+  "milestone": "TrackSmith Vocal v1",
+  "corpus": "research/evaluation/TRACKSMITH_VOCAL_SEMANTIC_CORPUS_V1.json",
+  "statusDate": "2026-08-08",
+  "selectionRationale": "The 89 cases are explicit requirement and failure-mode probes, not generated paraphrases. Coverage is weighted toward stateful and destructive-risk boundaries: 16 capture-plan/assessment/revision cases, 30 distinct semantic and scope behaviors, 20 revision/refusal cases, 9 rendered-asset cases, and 7 direct contract-mutation cases, with intentional overlap where one case must prove multiple invariants.",
+  "claimBoundary": "This map defines objective contract and execution risks. It does not convert passing fixtures into claims of vocal quality, intelligibility, naturalness, emotional success, or listener preference.",
+  "risks": [
+    {
+      "id": "F01",
+      "area": "capture-plan relevance and diversity",
+      "failure": "The system collapses recording preparation into one universal setup or omits the typed test-take comparison structure.",
+      "requiredAssertion": "Exactly three deterministic, genuinely different capture interpretations carry placement, gain/headroom, monitoring, comparison, stop, rollback, uncertainty, and provenance.",
+      "caseIDs": ["CAP-PLAN-UNKNOWN-BEDROOM", "CAP-PLAN-REFLECTIVE-NO-EXTRAS", "CAP-PLAN-KNOWN-CONTROLLED", "CAP-PLAN-HARD-FIXED-ROOM"]
+    },
+    {
+      "id": "F02",
+      "area": "unknown gear honesty",
+      "failure": "Unknown microphone, pattern, interface, or room behavior is converted into fabricated precision or purchase advice.",
+      "requiredAssertion": "Unknown hardware produces relative reversible experiments, explicit missing information, and no purchase/add-gear instruction.",
+      "caseIDs": ["CAP-PLAN-UNKNOWN-BEDROOM", "CAP-PLAN-REFLECTIVE-NO-EXTRAS"]
+    },
+    {
+      "id": "F03",
+      "area": "hard recording constraints",
+      "failure": "A hard fixed-room or quiet-recording constraint is ignored by a capture interpretation.",
+      "requiredAssertion": "All interpretations preserve the room position when fixedRoomPosition is hard, and no plan invents unavailable equipment.",
+      "caseIDs": ["CAP-PLAN-HARD-FIXED-ROOM"]
+    },
+    {
+      "id": "F04",
+      "area": "objective test-take safety",
+      "failure": "Clipping, silence, very low level, active-window share, or gated variability is missed, mislabeled, or treated as a quality verdict.",
+      "requiredAssertion": "Synthetic fixtures produce bounded typed findings, stop only for supported conditions, and retain metric limitations.",
+      "caseIDs": ["CAP-ASSESS-CLEAN-ACTIVE", "CAP-ASSESS-CLIPPING", "CAP-ASSESS-SILENCE", "CAP-ASSESS-VERY-LOW", "CAP-ASSESS-PHRASES-WITH-SILENCE", "CAP-ASSESS-WRONG-SOURCE-CLASS", "CAP-REVISE-CLIPPING-LOWER-GAIN", "CAP-REVISE-LOW-LEVEL-RAISE-GAIN"]
+    },
+    {
+      "id": "F05",
+      "area": "measurement versus listening boundary",
+      "failure": "Measurements are claimed to identify plosives, room, naturalness, comfort, emotion, or preference.",
+      "requiredAssertion": "The assessor exposes listening-only judgments separately; user feedback drives revisions without being relabeled as measured truth.",
+      "caseIDs": ["CAP-ASSESS-CLEAN-ACTIVE", "CAP-ASSESS-PHRASES-WITH-SILENCE", "CAP-REVISE-PLOSIVE-LISTENING", "CAP-REVISE-ROOM-LISTENING", "CAP-REVISE-COMFORT-ROLLBACK", "CAP-REVISE-EXPLICIT-PREFERENCE"]
+    },
+    {
+      "id": "F06",
+      "area": "source-class authority",
+      "failure": "A caller-selected non-vocal source is treated as vocal or a valid vocal bus is rejected.",
+      "requiredAssertion": "Vocal and vocalBus planning are accepted; other source classes fail closed or yield an explicit insufficient-evidence finding.",
+      "caseIDs": ["CAP-ASSESS-WRONG-SOURCE-CLASS", "VOC-SOURCE-VOCAL-BUS", "VOC-REFUSE-NONVOCAL-SOURCE"]
+    },
+    {
+      "id": "F07",
+      "area": "test-take revision precision",
+      "failure": "Compact feedback causes an unbounded setup rewrite, loses ancestry, or stores an unconfirmed preference.",
+      "requiredAssertion": "Each supported signal changes one bounded capture relationship, preserves exact parent ancestry/rollback, and stores preference only after explicit confirmation.",
+      "caseIDs": ["CAP-REVISE-CLIPPING-LOWER-GAIN", "CAP-REVISE-LOW-LEVEL-RAISE-GAIN", "CAP-REVISE-PLOSIVE-LISTENING", "CAP-REVISE-ROOM-LISTENING", "CAP-REVISE-COMFORT-ROLLBACK", "CAP-REVISE-EXPLICIT-PREFERENCE"]
+    },
+    {
+      "id": "F08",
+      "area": "exact creative demonstrations",
+      "failure": "The exact underwater or trumpet request fails to map to a typed honest archetype.",
+      "requiredAssertion": "The required prompts create typed underwater and vocalToBrass intent while accepting vocalBus authority where declared.",
+      "caseIDs": ["VOC-CREATIVE-UNDERWATER-EXACT", "VOC-CREATIVE-TRUMPET-EXACT", "VOC-SOURCE-VOCAL-BUS"]
+    },
+    {
+      "id": "F09",
+      "area": "three-way hypothesis diversity",
+      "failure": "Candidates are weak/medium/strong parameterizations of one chain or lose the processing-boundary distinction.",
+      "requiredAssertion": "Every actionable request yields exactly three unique node-type structures; underwater and brass retain their declared deterministic/modulation/scoped boundaries.",
+      "caseIDs": ["VOC-CREATIVE-UNDERWATER-EXACT", "VOC-CREATIVE-TRUMPET-EXACT", "VOC-SCOPE-SECONDS-UNDERWATER", "VOC-SCOPE-NAMED-CHORUS-BRASS"]
+    },
+    {
+      "id": "F10",
+      "area": "honest creative limitation",
+      "failure": "Underwater is mislabeled static filtering or vocal-to-brass is claimed as acoustic reconstruction.",
+      "requiredAssertion": "Underwater candidates contain real bounded modulatedDelay nodes; brass candidates retain vocal identity/preservation and explicit hybrid-color limitations.",
+      "caseIDs": ["VOC-CREATIVE-UNDERWATER-EXACT", "VOC-CREATIVE-TRUMPET-EXACT", "VOC-PRESERVE-UNDERWATER-INTELLIGIBILITY", "VOC-PRESERVE-BRASS-MELODY-DYNAMICS"]
+    },
+    {
+      "id": "F11",
+      "area": "metaphor and onomatopoeia breadth",
+      "failure": "The interpreter is overfit to two showcase phrases or turns metaphor into unsupported execution authority.",
+      "requiredAssertion": "Distinct glassy, smoky, enormous/distant, fragile, broken, floating, metallic, radio-like, dreamlike, unstable, intimate, and woo-wobble requests map to typed aspects and bounded candidates.",
+      "caseIDs": ["VOC-METAPHOR-GLASSY", "VOC-METAPHOR-SMOKY", "VOC-METAPHOR-ENORMOUS-DISTANT", "VOC-METAPHOR-FRAGILE", "VOC-METAPHOR-BROKEN", "VOC-METAPHOR-FLOATING", "VOC-METAPHOR-METALLIC", "VOC-METAPHOR-RADIO", "VOC-METAPHOR-DREAMLIKE", "VOC-METAPHOR-UNSTABLE", "VOC-METAPHOR-EXTREMELY-INTIMATE", "VOC-ONOMATOPOEIA-WOO-WOBBLE"]
+    },
+    {
+      "id": "F12",
+      "area": "corrective vocal intent",
+      "failure": "Ordinary clarity, darkness/control, warmth/width, or closeness becomes a generic preset or loses the named constraint.",
+      "requiredAssertion": "Corrective requests retain typed aspects and produce three bounded, structurally different audition hypotheses.",
+      "caseIDs": ["VOC-CORRECTIVE-CLEAR-WORDS", "VOC-CORRECTIVE-DARK-CONTROLLED", "VOC-CORRECTIVE-WARM-WIDE", "VOC-CORRECTIVE-CLOSER-NOT-LOUDER"]
+    },
+    {
+      "id": "F13",
+      "area": "preservation and prohibition",
+      "failure": "A requested change overlaps a prohibited change, or explicit pitch/timing/melody/dynamics/loudness preservation disappears.",
+      "requiredAssertion": "Preserved and prohibited aspects remain typed and contradictions fail before planning.",
+      "caseIDs": ["VOC-CORRECTIVE-CLOSER-NOT-LOUDER", "VOC-PRESERVE-UNDERWATER-INTELLIGIBILITY", "VOC-PRESERVE-BRASS-MELODY-DYNAMICS", "VOC-REFUSE-MELODY-CONTRADICTION", "VOC-REFUSE-SPACE-CONTRADICTION", "VOC-REFUSE-LIVE-DESIRED-PROHIBITED-COLLISION", "VOC-CONTRACT-DESIRED-AND-PROHIBITED"]
+    },
+    {
+      "id": "F14",
+      "area": "seconds and named-section scope",
+      "failure": "Scope prose is treated as mutation authority, malformed ranges pass, or scoped plans are activated as whole-source realtime graphs.",
+      "requiredAssertion": "Exact typed ranges/section identities round-trip; scoped candidates are offline-only, revisions require resolved authority, and exact-scope locks block scope movement.",
+      "caseIDs": ["VOC-SCOPE-SECONDS-UNDERWATER", "VOC-SCOPE-NAMED-CHORUS-BRASS", "VOC-REFUSE-INVALID-SECONDS-SCOPE", "VOC-REVISION-LAST-PHRASE", "VOC-REVISION-MISSING-LAST-PHRASE-AUTHORITY", "VOC-REVISION-EXACT-SCOPE-LOCK-CONFLICT", "VOC-ASSET-SCOPED-UNDERWATER", "VOC-ASSET-NAMED-REQUIRED", "VOC-CONTRACT-MALFORMED-NAMED-SCOPE"]
+    },
+    {
+      "id": "F15",
+      "area": "provider-offline semantics",
+      "failure": "A local Vocal request becomes unavailable, nondeterministic, or network-dependent when no provider exists.",
+      "requiredAssertion": "The deterministic local interpreter/planner returns replay-identical candidates with no network or provider dependency.",
+      "caseIDs": ["VOC-PROVIDER-OFFLINE-DREAMLIKE"]
+    },
+    {
+      "id": "F16",
+      "area": "bounded clarification",
+      "failure": "An underspecified quality request is guessed, or the product asks an unbounded questionnaire.",
+      "requiredAssertion": "Better, natural, and professional each produce exactly one explicit ambiguity and no executable plan in the clarification case; a negated supported goal remains a typed prohibition and cannot satisfy the missing positive goal.",
+      "caseIDs": ["VOC-AMBIGUITY-BETTER-ONE-CLARIFICATION", "VOC-AMBIGUITY-BETTER-NOT-BRIGHTER", "VOC-AMBIGUITY-NATURAL", "VOC-AMBIGUITY-PROFESSIONAL"]
+    },
+    {
+      "id": "F17",
+      "area": "unsupported-request honesty",
+      "failure": "Identity cloning, literal instrument reconstruction, unresolved scope, conflicting goals, or unsupported revision language is silently approximated as authorized DSP.",
+      "requiredAssertion": "Unsupported or contradictory requests fail with a typed bounded error and no candidates or mutations.",
+      "caseIDs": ["VOC-REFUSE-EMPTY", "VOC-REFUSE-CLONE-SINGER", "VOC-REFUSE-LITERAL-TRUMPET", "VOC-REFUSE-MELODY-CONTRADICTION", "VOC-REFUSE-SPACE-CONTRADICTION", "VOC-REFUSE-LIVE-DESIRED-PROHIBITED-COLLISION", "VOC-REFUSE-NONVOCAL-SOURCE", "VOC-REFUSE-INVALID-SECONDS-SCOPE", "VOC-REVISION-DYNAMICS-FOLLOW-BOUNDARY", "VOC-REVISION-UNSUPPORTED-PROSE", "VOC-REVISION-MISSING-LAST-PHRASE-AUTHORITY"]
+    },
+    {
+      "id": "F18",
+      "area": "prompt injection and malformed semantic authority",
+      "failure": "Prompt prose overrides locks, selects arbitrary code/network behavior, injects unsupported nodes, or bypasses numeric/complexity bounds.",
+      "requiredAssertion": "Malicious prompts and mutated contracts fail closed before execution.",
+      "caseIDs": ["VOC-REFUSE-LOCK-INJECTION", "VOC-REFUSE-GENERIC-PROMPT-INJECTION", "VOC-CONTRACT-UNSUPPORTED-NODE-INJECTION", "VOC-CONTRACT-NONFINITE-PARAMETER", "VOC-CONTRACT-TOO-MANY-NODES"]
+    },
+    {
+      "id": "F19",
+      "area": "multi-turn revision precision",
+      "failure": "Natural revision prose rebuilds a chain, mutates without exact authority, or loses deterministic replay.",
+      "requiredAssertion": "Supported phrases become typed operations against exact candidate IDs, keep one parent, validate again, and replay identically; unsupported prose refuses.",
+      "caseIDs": ["VOC-REVISION-CLEARER-KEEP-MOVEMENT", "VOC-REVISION-LESS-REVERB-MORE-WOBBLE", "VOC-REVISION-LAST-PHRASE", "VOC-REVISION-STRANGER-PRESERVE-INTELLIGIBILITY", "VOC-REVISION-MORE-BRASS-LESS-VOICE", "VOC-REVISION-KEEP-MORE-CONSONANTS", "VOC-REVISION-KEEP-MELODY-EXACT", "VOC-REVISION-PRESERVE-MELODY-DYNAMICS", "VOC-REVISION-DYNAMICS-FOLLOW-BOUNDARY", "VOC-REVISION-NATURAL-EXACT-REVERT", "VOC-REVISION-EXACT-REVERT-CANDIDATE-ONE", "VOC-REVISION-UNSUPPORTED-PROSE", "VOC-REVISION-MISSING-DETERMINISTIC-IDS"]
+    },
+    {
+      "id": "F20",
+      "area": "unrelated-aspect preservation",
+      "failure": "A revision changes movement, attack, or another unrelated bound aspect while attempting a focused change.",
+      "requiredAssertion": "Exact bound nodes survive focused revision, and inherited changes identify only their referenced aspect.",
+      "caseIDs": ["VOC-REVISION-CLEARER-KEEP-MOVEMENT", "VOC-REVISION-SPACE-FROM-VERSION-TWO", "VOC-REVISION-ATTACK-FROM-FIRST", "VOC-REVISION-STALE-MIXED-CANDIDATE"]
+    },
+    {
+      "id": "F21",
+      "area": "mixed ancestry and exact revert",
+      "failure": "Version/candidate references resolve by position without preserved exact identities or revert fabricates a new approximation.",
+      "requiredAssertion": "Inherited references record the exact source candidate and nodes; revert records the exact target and ancestry.",
+      "caseIDs": ["VOC-REVISION-SPACE-FROM-VERSION-TWO", "VOC-REVISION-ATTACK-FROM-FIRST", "VOC-REVISION-NATURAL-EXACT-REVERT", "VOC-REVISION-EXACT-REVERT-CANDIDATE-ONE"]
+    },
+    {
+      "id": "F22",
+      "area": "aspect locks",
+      "failure": "A revision modifies locked content, changes an exact-scope lock's range, or drops a preservation lock from state.",
+      "requiredAssertion": "Locks keep exact source/scope/candidate/node authority; conflicts fail before result publication.",
+      "caseIDs": ["VOC-REVISION-STRANGER-PRESERVE-INTELLIGIBILITY", "VOC-REVISION-KEEP-MORE-CONSONANTS", "VOC-REVISION-KEEP-MELODY-EXACT", "VOC-REVISION-PRESERVE-MELODY-DYNAMICS", "VOC-REVISION-VOICE-LOCK-CONFLICT", "VOC-REVISION-EXACT-SCOPE-LOCK-CONFLICT", "VOC-CONTRACT-STALE-LOCK-SOURCE"]
+    },
+    {
+      "id": "F23",
+      "area": "stale source and capture authority",
+      "failure": "A candidate, lock, render, hash, or format from another capture is accepted.",
+      "requiredAssertion": "Snapshot, hash, source format, scope, and candidate references must match exactly or fail closed.",
+      "caseIDs": ["VOC-REVISION-STALE-MIXED-CANDIDATE", "VOC-ASSET-STALE-SNAPSHOT-REFUSAL", "VOC-ASSET-STALE-HASH-REFUSAL", "VOC-ASSET-CHANGED-FORMAT-REFUSAL", "VOC-CONTRACT-STALE-PLAN-SOURCE", "VOC-CONTRACT-STALE-LOCK-SOURCE"]
+    },
+    {
+      "id": "F24",
+      "area": "deterministic identity completeness",
+      "failure": "A revision creates an inserted node, lock, intent, request, or candidate identity implicitly when deterministic identity is required.",
+      "requiredAssertion": "Missing application identity fails before mutation; supplied identities replay exactly.",
+      "caseIDs": ["VOC-REVISION-MISSING-DETERMINISTIC-IDS"]
+    },
+    {
+      "id": "F25",
+      "area": "rendered-asset permission and provenance",
+      "failure": "A renderer runs without typed permission, loses plan/source/ancestry identity, accepts stale authority, or uses undeclared third-party material.",
+      "requiredAssertion": "Only allow/requireLocalRenderedAsset can render; the manifest binds source, prompt, intent, plan, node IDs, engine, ancestry, seed, local/offline state, and boundary decision.",
+      "caseIDs": ["VOC-ASSET-SCOPED-UNDERWATER", "VOC-ASSET-FULL-BRASS", "VOC-ASSET-NAMED-REQUIRED", "VOC-ASSET-EDITABLE-ONLY-REFUSAL", "VOC-ASSET-REJECT-RENDERED-REFUSAL", "VOC-ASSET-THIRD-PARTY-REFUSAL", "VOC-ASSET-STALE-SNAPSHOT-REFUSAL", "VOC-ASSET-STALE-HASH-REFUSAL", "VOC-ASSET-CHANGED-FORMAT-REFUSAL"]
+    },
+    {
+      "id": "F26",
+      "area": "offline render determinism and source preservation",
+      "failure": "Rendered output is nonfinite/nondeterministic, mutates source, changes samples outside scope, or fabricates perceptual proof.",
+      "requiredAssertion": "Two identical local renders have identical hashes/manifests, finite bounded output, unchanged source, and bit-exact samples outside the scoped range.",
+      "caseIDs": ["VOC-ASSET-SCOPED-UNDERWATER", "VOC-ASSET-FULL-BRASS", "VOC-ASSET-NAMED-REQUIRED"]
+    },
+    {
+      "id": "F27",
+      "area": "third-party boundary",
+      "failure": "Unknown or merely caller-declared third-party material enters a TrackSmith-owned render without licensing authority.",
+      "requiredAssertion": "Vocal v1 local rendering accepts noneUsed only and reports no network use.",
+      "caseIDs": ["VOC-ASSET-THIRD-PARTY-REFUSAL"]
+    },
+    {
+      "id": "F28",
+      "area": "contract validator adversarial mutations",
+      "failure": "Manually malformed typed state bypasses interpreter-level safety and reaches DSP.",
+      "requiredAssertion": "Stale sources/locks, contradictory intent, malformed scope, unsupported nodes, nonfinite values, and excessive graph complexity all fail validation.",
+      "caseIDs": ["VOC-CONTRACT-STALE-PLAN-SOURCE", "VOC-CONTRACT-STALE-LOCK-SOURCE", "VOC-CONTRACT-DESIRED-AND-PROHIBITED", "VOC-CONTRACT-MALFORMED-NAMED-SCOPE", "VOC-CONTRACT-UNSUPPORTED-NODE-INJECTION", "VOC-CONTRACT-NONFINITE-PARAMETER", "VOC-CONTRACT-TOO-MANY-NODES"]
+    }
+  ]
+}

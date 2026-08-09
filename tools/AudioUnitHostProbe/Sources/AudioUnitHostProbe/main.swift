@@ -129,12 +129,14 @@ enum AudioUnitHostProbe {
         )
 
         try verifyFormatContract(description: description)
+        try verifyMaximumFeedbackTailBound()
         try verifyHostBufferContracts(description: description)
         try rejectMismatchedBusAllocations(description: description)
         try verifyAtomicCommitGuards(description: description)
         try exercise(description: description, sampleRate: 44_100, channelCount: 1, frameCount: 257)
         try exercise(description: description, sampleRate: 96_000, channelCount: 2, frameCount: 1_024)
         try exercise(description: description, sampleRate: 48_000, channelCount: 1, frameCount: 16_384)
+        try verifyVocalModulatedDelayHostLifecycle(description: description)
         try rejectMismatchedPlan(description: description)
         try verifyEmergencyBypassAfterPublicationExhaustion(description: description)
         try verifyGlobalBypassNonfiniteSanitization(description: description)
@@ -1158,7 +1160,7 @@ enum AudioUnitHostProbe {
               outputGain.flags.contains(.flag_CanRamp) else {
             throw ProbeFailure.message("post-limiter output trim could add unvalidated gain")
         }
-        guard unit.tailTime == 60 else {
+        guard unit.tailTime == PlanValidator.conservativeTailTimeSeconds else {
             throw ProbeFailure.message("AU did not report its static conservative IIR tail bound")
         }
         guard let fractionalFormat = AVAudioFormat(
@@ -1182,6 +1184,87 @@ enum AudioUnitHostProbe {
         if fractionalUnit.renderResourcesAllocated { fractionalUnit.deallocateRenderResources() }
         guard fractionalAllocationRejected else {
             throw ProbeFailure.message("AU allocation did not defensively reject a fractional sample rate")
+        }
+    }
+
+    /// Couples the validator's maximum aggregate feedback-delay graph to the
+    /// AU's static tail declaration. The final one-second window must be below
+    /// the declared -120 dB amplitude threshold after a unit impulse.
+    private static func verifyMaximumFeedbackTailBound() throws {
+        let sampleRate = 8_000.0
+        let durationSeconds = PlanValidator.conservativeTailTimeSeconds + 1
+        let frameCount = Int(durationSeconds * sampleRate)
+        let delayNodes: [ProcessingNode] = [
+            ProcessingNode(
+                type: .delay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 2_000,
+                    .feedback: PlanValidator.maximumFeedback, .damping: 0,
+                    .stereoCrossfeed: 0, .mix: 1,
+                ],
+                rationale: "Maximum legal feedback-delay tail bound.",
+                confidence: 1,
+                category: .creative
+            ),
+            ProcessingNode(
+                type: .delay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 1_978,
+                    .feedback: PlanValidator.maximumFeedback, .damping: 0,
+                    .stereoCrossfeed: 0, .mix: 1,
+                ],
+                rationale: "Maximum aggregate delay tail bound.",
+                confidence: 1,
+                category: .creative
+            ),
+            ProcessingNode(
+                type: .modulatedDelay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 1,
+                    .feedback: PlanValidator.maximumFeedback, .damping: 0, .mix: 1,
+                    .modulationDepthMS: 10, .modulationRateHz: 0.05,
+                    .stereoPhaseDegrees: 0,
+                ],
+                rationale: "Maximum-feedback Vocal modulation tail bound.",
+                confidence: 1,
+                category: .creative
+            ),
+            ProcessingNode(
+                type: .modulatedDelay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 1,
+                    .feedback: PlanValidator.maximumFeedback, .damping: 0, .mix: 1,
+                    .modulationDepthMS: 10, .modulationRateHz: 5,
+                    .stereoPhaseDegrees: 180,
+                ],
+                rationale: "Maximum aggregate Vocal modulation tail bound.",
+                confidence: 1,
+                category: .creative
+            ),
+        ]
+        let plan = ProcessingPlan(
+            sourceSnapshotID: UUID(),
+            scope: ProcessingScope(
+                kind: .pluginInput,
+                channelFormat: .mono,
+                sourceType: .vocal
+            ),
+            goals: [],
+            nodes: delayNodes + [finalSafetyLimiter()]
+        )
+        try PlanValidator().validateForRealtimeActivation(plan)
+        var samples = [Float](repeating: 0, count: frameCount)
+        samples[0] = 1
+        var audio = AudioBuffer(channels: [samples], sampleRate: sampleRate)
+        var graph = try CompiledGraph(plan: plan, sampleRate: sampleRate, channelCount: 1)
+        try graph.process(&audio)
+        let tailStart = Int(PlanValidator.conservativeTailTimeSeconds * sampleRate)
+        let tailPeak = audio.channels[0][tailStart...]
+            .reduce(Float.zero) { max($0, abs($1)) }
+        guard tailPeak <= Float(PlanValidator.tailSilenceAmplitude) else {
+            throw ProbeFailure.message(
+                "maximum feedback-delay tail peak \(tailPeak) exceeded the declared threshold"
+            )
         }
     }
 
@@ -1774,6 +1857,7 @@ enum AudioUnitHostProbe {
             .init(type: .saturation, parameters: [.driveDB: 2, .mix: 0.2], rationale: "performance", confidence: 1, category: .creative),
             .init(type: .stereoWidth, parameters: [.width: 1.1, .mix: 0.6], rationale: "performance", confidence: 1, category: .creative),
             .init(type: .delay, parameters: [.algorithmVersion: 1, .delayTimeMS: 90, .feedback: 0.2, .damping: 0.35, .stereoCrossfeed: 0.15, .mix: 0.1], rationale: "performance", confidence: 1, category: .creative),
+            .init(type: .modulatedDelay, parameters: [.algorithmVersion: 1, .delayTimeMS: 14, .feedback: 0.12, .damping: 0.4, .mix: 0.18, .modulationDepthMS: 4, .modulationRateHz: 0.6, .stereoPhaseDegrees: 90], rationale: "performance", confidence: 1, category: .creative),
             .init(type: .reverb, parameters: [.algorithmVersion: 1, .preDelayMS: 12, .decayTimeSeconds: 0.7, .roomSize: 0.4, .damping: 0.45, .diffusion: 0.6, .mix: 0.1], rationale: "performance", confidence: 1, category: .creative),
             .init(type: .limiter, parameters: [.ceilingDB: -1, .releaseMS: 80, .lookaheadMS: 0], rationale: "performance", confidence: 1, category: .loudness),
         ].filter { !excludedPerformanceNodes.contains($0.type.rawValue) }
@@ -2698,6 +2782,183 @@ enum AudioUnitHostProbe {
                     throw ProbeFailure.message("corrupt-state recovery was not dry at channel \(channel) frame \(frame)")
                 }
             }
+        }
+    }
+
+    /// Host-edge regression for the only new Vocal v1 render processor. This
+    /// is independently authored TrackSmith coverage informed by the audit's
+    /// validator/host-scenario lesson; it does not import pluginval, JUCE,
+    /// iPlug2, chowdsp_utils, or any third-party implementation.
+    private static func verifyVocalModulatedDelayHostLifecycle(
+        description: AudioComponentDescription
+    ) throws {
+        let sampleRate = 48_000.0
+        let frameCount: AVAudioFrameCount = 257
+        let blockCount = 12
+        let format = AVAudioFormat(
+            standardFormatWithSampleRate: sampleRate,
+            channels: 1
+        )!
+        let plan = ProcessingPlan(
+            sourceSnapshotID: UUID(),
+            scope: ProcessingScope(
+                kind: .pluginInput,
+                channelFormat: .mono,
+                sourceType: .vocal
+            ),
+            goals: [],
+            nodes: [
+                ProcessingNode(
+                    type: .modulatedDelay,
+                    parameters: [
+                        .algorithmVersion: 1,
+                        .delayTimeMS: 14,
+                        .feedback: 0.18,
+                        .damping: 0.42,
+                        .mix: 0.22,
+                        .modulationDepthMS: 4,
+                        .modulationRateHz: 0.63,
+                        .stereoPhaseDegrees: 90,
+                    ],
+                    rationale: "Exercise the bounded Vocal movement path through AU lifecycle transitions.",
+                    confidence: 1,
+                    category: .creative
+                ),
+                finalSafetyLimiter(),
+            ]
+        )
+
+        func configuredUnit(restoring state: [String: Any]? = nil) throws -> AssistantAudioUnit {
+            let unit = try AssistantAudioUnit(componentDescription: description)
+            unit.detachSessionBridgeForTesting()
+            unit.maximumFramesToRender = frameCount
+            if let state {
+                unit.fullState = state
+            } else {
+                try unit.setProcessingPlan(plan)
+            }
+            guard unit.currentProcessingPlan == plan else {
+                throw ProbeFailure.message("Vocal modulation plan did not stage or restore exactly")
+            }
+            try unit.inputBusses[0].setFormat(format)
+            try unit.outputBusses[0].setFormat(format)
+            try unit.allocateRenderResources()
+            return unit
+        }
+
+        func renderImpulseSequence(
+            _ unit: AssistantAudioUnit,
+            expectDry: Bool = false
+        ) throws -> [Float] {
+            guard let output = AVAudioPCMBuffer(
+                pcmFormat: format,
+                frameCapacity: frameCount
+            ), let rendered = output.floatChannelData?[0] else {
+                throw ProbeFailure.message("could not allocate Vocal lifecycle output")
+            }
+            output.frameLength = frameCount
+            var source = [Float](repeating: 0, count: Int(frameCount))
+            var flags: AudioUnitRenderActionFlags = []
+            var timestamp = AudioTimeStamp(
+                mSampleTime: 0,
+                mHostTime: 0,
+                mRateScalar: 0,
+                mWordClockTime: 0,
+                mSMPTETime: SMPTETime(),
+                mFlags: .sampleTimeValid,
+                mReserved: 0
+            )
+            let pull: AURenderPullInputBlock = { _, _, frames, _, outputData in
+                guard frames == frameCount,
+                      let destination = UnsafeMutableAudioBufferListPointer(outputData)[0]
+                        .mData?.assumingMemoryBound(to: Float.self) else {
+                    return kAudio_ParamError
+                }
+                source.withUnsafeBufferPointer {
+                    destination.update(from: $0.baseAddress!, count: Int(frameCount))
+                }
+                return noErr
+            }
+            let renderBlock = unit.internalRenderBlock
+            var result: [Float] = []
+            result.reserveCapacity(Int(frameCount) * blockCount)
+            for blockIndex in 0..<blockCount {
+                source.withUnsafeMutableBufferPointer { samples in
+                    samples.initialize(repeating: 0)
+                }
+                if blockIndex == 0 { source[0] = 0.4 }
+                let status = renderBlock(
+                    &flags,
+                    &timestamp,
+                    frameCount,
+                    0,
+                    output.mutableAudioBufferList,
+                    nil,
+                    pull
+                )
+                guard status == noErr else {
+                    throw ProbeFailure.message("Vocal lifecycle render returned \(status)")
+                }
+                for frame in 0..<Int(frameCount) {
+                    let value = rendered[frame]
+                    guard value.isFinite, abs(value) <= 1.000_001 else {
+                        throw ProbeFailure.message("Vocal lifecycle render emitted unsafe audio")
+                    }
+                    if expectDry {
+                        let expected: Float = blockIndex == 0 && frame == 0 ? 0.4 : 0
+                        guard value == expected else {
+                            throw ProbeFailure.message("Vocal global bypass was not bit-exact dry")
+                        }
+                    }
+                    result.append(value)
+                }
+                timestamp.mSampleTime += Float64(frameCount)
+            }
+            return result
+        }
+
+        let unit = try configuredUnit()
+        defer { if unit.renderResourcesAllocated { unit.deallocateRenderResources() } }
+        let serializedState = unit.fullState
+
+        unit.reset()
+        let baseline = try renderImpulseSequence(unit)
+        guard baseline.dropFirst().contains(where: { abs($0) > 1e-7 }) else {
+            throw ProbeFailure.message("Vocal modulation plan produced no bounded tail")
+        }
+
+        unit.reset()
+        let resetReplay = try renderImpulseSequence(unit)
+        guard resetReplay == baseline else {
+            throw ProbeFailure.message("Vocal modulation reset changed deterministic replay")
+        }
+
+        unit.setGlobalBypass(true)
+        _ = try renderImpulseSequence(unit, expectDry: true)
+        unit.setGlobalBypass(false)
+        let bypassRestore = try renderImpulseSequence(unit)
+        guard bypassRestore == baseline,
+              unit.currentProcessingPlan == plan,
+              !unit.globalBypassEnabled else {
+            throw ProbeFailure.message("Vocal modulation bypass/restore lost exact graph state")
+        }
+
+        unit.deallocateRenderResources()
+        try unit.inputBusses[0].setFormat(format)
+        try unit.outputBusses[0].setFormat(format)
+        try unit.allocateRenderResources()
+        let reallocated = try renderImpulseSequence(unit)
+        guard reallocated == baseline else {
+            throw ProbeFailure.message("Vocal modulation deallocate/reallocate changed replay")
+        }
+
+        let restored = try configuredUnit(restoring: serializedState)
+        defer { restored.deallocateRenderResources() }
+        let restoredReplay = try renderImpulseSequence(restored)
+        guard restoredReplay == baseline,
+              restored.currentProcessingPlan == plan,
+              restored.tailTime == PlanValidator.conservativeTailTimeSeconds else {
+            throw ProbeFailure.message("Vocal modulation fullState restore or tail contract failed")
         }
     }
 

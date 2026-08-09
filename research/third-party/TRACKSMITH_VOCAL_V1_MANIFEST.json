@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "1.0.0",
+  "milestone": "tracksmith-vocal-v1",
+  "auditDate": "2026-08-08",
+  "declaration": {
+    "thirdPartyCodeIntegrated": false,
+    "thirdPartyModelsOrWeightsIntegrated": false,
+    "thirdPartyTrainingDataIntegrated": false,
+    "thirdPartyAudioOrContentIntegrated": false,
+    "thirdPartyRuntimeDependenciesAdded": false,
+    "networkRuntimeAdded": false,
+    "frameworkMigrationPerformed": false,
+    "notes": "All Vocal v1 audit-derived Swift contracts and research protocols are independently authored TrackSmith material. Inspiration is not shipping approval."
+  },
+  "references": [
+    {
+      "name": "basic-pitch",
+      "repository": "https://github.com/spotify/basic-pitch",
+      "pinnedCommit": "fa5997af0a8210982619003269994a1be25eddf3",
+      "auditClassification": "STUDY_ONLY",
+      "topLevelLicense": "Apache-2.0",
+      "abstractLessonApplied": "A local offline or companion off-render audio-to-MIDI proposal must be typed, bounded, provenance-bound, source-preserving, stale-safe, and replayable.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "Python runtime and dependencies",
+        "pretrained model serializations",
+        "training data",
+        "Vocadito test audio",
+        "generated output"
+      ],
+      "unresolvedForReuse": [
+        "complete runtime and transitive license closure",
+        "separate pretrained weight rights",
+        "dataset-by-dataset training rights",
+        "notice and content attribution closure",
+        "determinism across inference backends"
+      ],
+      "shippingDecision": "No code, model, runtime, data, content, or output shipping approval."
+    },
+    {
+      "name": "RNNoise",
+      "repository": "https://github.com/xiph/rnnoise",
+      "pinnedCommit": "70f1d256acd4b34a572f999a05c87bf00b67730d",
+      "auditClassification": "STUDY_ONLY",
+      "topLevelLicense": "BSD-3-Clause-style",
+      "abstractLessonApplied": "A speech-only cleanup experiment needs explicit framing, state, off-render execution, source preservation, deterministic fixtures, and measured license/realtime gates.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "downloaded model source or weights",
+        "training data",
+        "dataset content",
+        "sample content",
+        "generated output"
+      ],
+      "unresolvedForReuse": [
+        "exact model license and provenance",
+        "complete training-data rights ledger",
+        "patent review",
+        "Apple-Silicon allocation and deadline evidence",
+        "cross-vector deterministic replay",
+        "sung-vocal safety"
+      ],
+      "shippingDecision": "Research protocol only; no code or model import and no production-readiness claim."
+    },
+    {
+      "name": "webMUSHRA",
+      "repository": "https://github.com/audiolabs/webMUSHRA",
+      "pinnedCommit": "8c353f738aa88fa9dee0dc1aa7d18d2a06441cb5",
+      "auditClassification": "LICENSE_BLOCKED",
+      "topLevelLicense": "Custom Fraunhofer webMUSHRA Software License",
+      "abstractLessonApplied": "Listening comparisons need blinded identities, explicit conditions, bounded scores, preference, and durable result exports.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "browser application",
+        "server code",
+        "vendored libraries",
+        "configuration text",
+        "demo audio",
+        "layouts and assets"
+      ],
+      "unresolvedForReuse": [
+        "source-delivery and modified-name obligations",
+        "reserved patent rights",
+        "complete Node and vendored dependency closure",
+        "demo-audio rights"
+      ],
+      "shippingDecision": "Reject or obtain written rights first; TrackSmith runner is independently authored."
+    },
+    {
+      "name": "akouste",
+      "repository": "https://github.com/robvanson/akouste",
+      "pinnedCommit": "ef5130b52c1bdec3ddf7467d50bb7f787cab27fa",
+      "auditClassification": "LICENSE_BLOCKED",
+      "topLevelLicense": "AGPL-3.0",
+      "abstractLessonApplied": "A local study export benefits from deterministic order, artifact hashes, separate identities, integrity checks, and no-network operation.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "HTML and JavaScript",
+        "minified dependencies",
+        "templates and text",
+        "fixtures and remote stimuli",
+        "images and video"
+      ],
+      "unresolvedForReuse": [
+        "AGPL source and network obligations",
+        "bundled and remote stimulus rights",
+        "optional CDN and minified dependency provenance"
+      ],
+      "shippingDecision": "Reject or obtain separate commercial rights first; TrackSmith runner is independently authored."
+    },
+    {
+      "name": "pluginval",
+      "repository": "https://github.com/Tracktion/pluginval",
+      "pinnedCommit": "4c5adc2c1a9910251667152166139a0c37b953e6",
+      "auditClassification": "LICENSE_BLOCKED",
+      "topLevelLicense": "GPL-3.0",
+      "abstractLessonApplied": "New AU processors need independently authored hostile-host lifecycle coverage beyond a happy-path render.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "executable",
+        "JUCE framework",
+        "test implementation",
+        "assets and configuration"
+      ],
+      "unresolvedForReuse": [
+        "GPL distribution obligations",
+        "JUCE and transitive dependency closure",
+        "external executable provenance and sandboxing",
+        "Apple-Silicon environment reproducibility"
+      ],
+      "shippingDecision": "No linking, embedding, distribution, or source reuse; TrackSmith's host scenarios are independently authored."
+    },
+    {
+      "name": "chowdsp_utils",
+      "repository": "https://github.com/Chowdhury-DSP/chowdsp_utils",
+      "pinnedCommit": "e97b826ef3de0b0fd92b15cb2e286076f678d8b9",
+      "auditClassification": "SAFE_TO_PORT_SELECTIVELY",
+      "topLevelLicense": "Mixed per-module and GPL",
+      "abstractLessonApplied": "A render-thread utility must be a small independently authored fixed-capacity primitive with explicit allocation, reset, sanitizer, and parity proof.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "headers and templates",
+        "JUCE modules",
+        "tests and benchmarks",
+        "build configuration"
+      ],
+      "unresolvedForReuse": [
+        "file-by-file and module license selection",
+        "JUCE dependency closure",
+        "notice requirements for any selected source",
+        "TrackSmith-specific realtime proof"
+      ],
+      "shippingDecision": "No upstream material is used; the Vocal delay storage/reset implementation is clean-room TrackSmith code."
+    },
+    {
+      "name": "JUCE",
+      "repository": "https://github.com/juce-framework/JUCE",
+      "pinnedCommit": "7dda739b9be09f1dfb9592a09e1701acf808cd44",
+      "auditClassification": "LICENSE_BLOCKED",
+      "topLevelLicense": "AGPL-3.0 or commercial",
+      "abstractLessonApplied": "Host edge cases are useful test scenarios, but a framework migration would weaken the established native TrackSmith boundary.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "modules",
+        "plug-in host code",
+        "examples and assets",
+        "build system"
+      ],
+      "unresolvedForReuse": [
+        "commercial license decision",
+        "AGPL obligations",
+        "module and dependency closure",
+        "architecture migration risk"
+      ],
+      "shippingDecision": "No framework migration or reuse; native SwiftPM/macOS/AUv3 remains authoritative."
+    },
+    {
+      "name": "iPlug2",
+      "repository": "https://github.com/iPlug2/iPlug2",
+      "pinnedCommit": "5c2df9dce3f5258acfeff3846a6a9563f382212c",
+      "auditClassification": "SAFE_TO_PORT_SELECTIVELY",
+      "topLevelLicense": "zlib-style",
+      "abstractLessonApplied": "Cross-host reset, state, format, and lifecycle behavior should be verified independently around each new DSP path.",
+      "materialsImported": [],
+      "excludedMaterials": [
+        "source code",
+        "framework",
+        "examples and DSP implementations",
+        "assets",
+        "build configuration"
+      ],
+      "unresolvedForReuse": [
+        "exact selected-file notice review",
+        "transitive dependency closure",
+        "fixture and content rights",
+        "native architecture fit"
+      ],
+      "shippingDecision": "No framework or source reuse; only an abstract host-testing lesson informed TrackSmith-owned tests."
+    }
+  ],
+  "tracksmithOwnedArtifacts": [
+    "packages/VocalAudioToMIDI/Sources/VocalAudioToMIDI/AudioToMIDIContracts.swift",
+    "packages/VocalEvaluation/Sources/VocalEvaluation/VocalEvaluationContracts.swift",
+    "packages/VocalEvaluation/Sources/VocalEvaluation/VocalBlindedEvaluation.swift",
+    "packages/DSPCore/Sources/DSPCore/CompiledGraph.swift",
+    "tools/AudioUnitHostProbe/Sources/AudioUnitHostProbe/main.swift",
+    "research/evaluation/tracksmith-vocal-v1/RNNOISE_SPEECH_CLEANUP_STUDY_BOUNDARY.md",
+    "research/evaluation/tracksmith-vocal-v1/AUDIT_DERIVED_BOUNDARIES.md"
+  ]
+}

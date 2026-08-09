@@ -6,6 +6,7 @@ import PlanSchema
 import PreviewRenderer
 import PreviewWorkflow
 import SharedIPC
+import VocalProduction
 
 public enum CompanionSessionError: Error, Equatable, CustomStringConvertible, Sendable {
     case noCaptureReply(UUID)
@@ -26,6 +27,9 @@ public enum CompanionSessionError: Error, Equatable, CustomStringConvertible, Se
     case planPreflightRejected([String])
     case commandSequenceExhausted
     case unsupportedSourceAnalysis(SourceType)
+    case vocalAssetAlreadyExists(String)
+    case vocalAssetWriteVerificationFailed(expected: String, actual: String)
+    case vocalSourceAuthorityMismatch(String)
 
     public var description: String {
         switch self {
@@ -62,6 +66,12 @@ public enum CompanionSessionError: Error, Equatable, CustomStringConvertible, Se
             "This Audio Unit runtime has exhausted its command sequence space. Reopen the insert before sending another command."
         case let .unsupportedSourceAnalysis(sourceType):
             "Source-aware analysis v1 does not support \(sourceType.rawValue). Choose vocal, drums, bass, guitar, synth/keys, or full mix."
+        case let .vocalAssetAlreadyExists(path):
+            "The immutable Vocal asset destination already exists: \(path)"
+        case let .vocalAssetWriteVerificationFailed(expected, actual):
+            "The published Vocal asset did not reproduce its in-memory render hash (expected \(expected), received \(actual))."
+        case let .vocalSourceAuthorityMismatch(reason):
+            "The caller-provided Vocal source authority does not match this immutable capture: \(reason)"
         }
     }
 }
@@ -75,6 +85,31 @@ public enum CommandResolution: Equatable, Sendable {
     case acknowledged(ExchangeMessage)
     case reconciled(PluginInstanceRecord)
     case rejected(ExchangeMessage)
+}
+
+/// One TrackSmith-owned, locally rendered Vocal asset. The source capture is
+/// never overwritten; audio and provenance become visible together only after
+/// both have been written and the WAV has reproduced the renderer's hash.
+public struct VocalRenderedAssetExportResult: Sendable {
+    public var directory: URL
+    public var sourceAudioURL: URL
+    public var audioURL: URL
+    public var manifestURL: URL
+    public var asset: VocalRenderedAsset
+
+    public init(
+        directory: URL,
+        sourceAudioURL: URL,
+        audioURL: URL,
+        manifestURL: URL,
+        asset: VocalRenderedAsset
+    ) {
+        self.directory = directory
+        self.sourceAudioURL = sourceAudioURL
+        self.audioURL = audioURL
+        self.manifestURL = manifestURL
+        self.asset = asset
+    }
 }
 
 /// Non-UI orchestration for one durable companion/AU session. Natural-language and
@@ -150,7 +185,7 @@ public actor CompanionSessionClient {
         let inputURL = try exchange.resolveArtifact(artifact)
         _ = try loadCapturedAudio(artifact)
         let outputURL = try exchange.previewDirectory(captureID: artifact.id)
-        return try PreviewSessionExporter().export(
+        let result = try PreviewSessionExporter().export(
             inputURL: inputURL,
             prompt: prompt,
             sourceType: sourceType,
@@ -158,6 +193,10 @@ public actor CompanionSessionClient {
             scopeKind: .pluginInput,
             sourceSnapshotID: artifact.id
         )
+        // Do not return a preview if its immutable capture changed while the
+        // renderer was working. `resolveArtifact` verifies the artifact hash.
+        _ = try exchange.resolveArtifact(artifact)
+        return result
     }
 
     public func analyzeCapture(
@@ -188,7 +227,7 @@ public actor CompanionSessionClient {
         let inputURL = try exchange.resolveArtifact(artifact)
         _ = try loadCapturedAudio(artifact)
         let outputURL = try exchange.previewDirectory(captureID: artifact.id)
-        return try PreviewSessionExporter().exportProductionIntelligence(
+        let preview = try PreviewSessionExporter().exportProductionIntelligence(
             inputURL: inputURL,
             prompt: prompt,
             sourceType: sourceType,
@@ -197,6 +236,132 @@ public actor CompanionSessionClient {
             sourceSnapshotID: artifact.id,
             result: result,
             providerMetadata: providerMetadata
+        )
+        _ = try exchange.resolveArtifact(artifact)
+        return preview
+    }
+
+    /// Renders the three locally validated TrackSmith Vocal interpretations
+    /// against the exact immutable AU capture. The candidates already contain
+    /// bounded ProcessingPlans; this boundary revalidates their capture/scope
+    /// authority and never accepts provider-authored nodes or parameters.
+    public func renderVocalPreviews(
+        artifact: CaptureArtifact,
+        prompt: String,
+        sourceType: SourceType,
+        candidates: [VocalCreativeCandidate]
+    ) throws -> PreviewExportResult {
+        let inputURL = try exchange.resolveArtifact(artifact)
+        _ = try loadCapturedAudio(artifact)
+        let outputURL = try exchange.previewDirectory(captureID: artifact.id)
+        let preview = try PreviewSessionExporter().exportVocalCandidates(
+            inputURL: inputURL,
+            prompt: prompt,
+            sourceType: sourceType,
+            outputDirectory: outputURL,
+            scopeKind: .pluginInput,
+            sourceSnapshotID: artifact.id,
+            candidates: candidates
+        )
+        _ = try exchange.resolveArtifact(artifact)
+        return preview
+    }
+
+    /// Renders a Vocal candidate as an explicitly new local asset. This is the
+    /// only execution path for section- or time-scoped candidates because the
+    /// current AU owns a full-source graph and does not claim host automation
+    /// or region authority. The renderer preserves the supplied source buffer,
+    /// validates its typed hash/scope/locks, and blends only inside the exact
+    /// authorized frame range.
+    public func renderVocalAsset(
+        artifact: CaptureArtifact,
+        sourceAuthority: VocalSourceAuthority,
+        candidate: VocalCreativeCandidate,
+        renderID: UUID = UUID(),
+        parentPreviewID: UUID? = nil,
+        parentAssetID: UUID? = nil,
+        assetAncestry: [UUID] = [],
+        randomSeed: UInt64? = nil,
+        crossfadeSeconds: Double = 0.01,
+        createdAt: Date = Date()
+    ) throws -> VocalRenderedAssetExportResult {
+        let source = try resolveVocalSource(artifact, authority: sourceAuthority)
+        let hasher = VocalAudioHasher()
+        let request = VocalScopedRenderRequest(
+            renderID: renderID,
+            candidate: candidate,
+            sourceAuthority: sourceAuthority,
+            randomSeed: randomSeed,
+            parentPreviewID: parentPreviewID,
+            parentAssetID: parentAssetID,
+            assetAncestry: assetAncestry,
+            createdAt: createdAt,
+            crossfadeSeconds: crossfadeSeconds,
+            thirdPartyMaterialStatus: .noneUsed
+        )
+        let rendered = try VocalScopedAssetRenderer().render(source: source, request: request)
+
+        let destination = try exchange.previewDirectory(captureID: artifact.id, requestID: renderID)
+        let fileManager = FileManager.default
+        guard !fileManager.fileExists(atPath: destination.path) else {
+            throw CompanionSessionError.vocalAssetAlreadyExists(destination.path)
+        }
+        let parent = destination.deletingLastPathComponent()
+        try fileManager.createDirectory(at: parent, withIntermediateDirectories: true)
+        try fileManager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: parent.path)
+        let staging = parent.appendingPathComponent(
+            "\(renderID.uuidString.lowercased())-staging-\(UUID().uuidString.lowercased())",
+            isDirectory: true
+        )
+        try fileManager.createDirectory(at: staging, withIntermediateDirectories: false)
+        try fileManager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: staging.path)
+        var published = false
+        defer { if !published { try? fileManager.removeItem(at: staging) } }
+
+        let sourceAudioName = "00-original.wav"
+        let audioName = "rendered-vocal.wav"
+        let manifestName = "manifest.json"
+        let stagedSourceAudio = staging.appendingPathComponent(sourceAudioName)
+        let stagedAudio = staging.appendingPathComponent(audioName)
+        let stagedManifest = staging.appendingPathComponent(manifestName)
+        try WAVFile.writeFloat32(source, url: stagedSourceAudio)
+        try WAVFile.writeFloat32(rendered.audio, url: stagedAudio)
+        let sourceRoundTripHash = try hasher.sha256(WAVFile.read(url: stagedSourceAudio))
+        guard sourceRoundTripHash == sourceAuthority.contentHashSHA256 else {
+            throw CompanionSessionError.vocalAssetWriteVerificationFailed(
+                expected: sourceAuthority.contentHashSHA256,
+                actual: sourceRoundTripHash
+            )
+        }
+        let roundTripped = try WAVFile.read(url: stagedAudio)
+        let roundTripHash = try hasher.sha256(roundTripped)
+        guard roundTripHash == rendered.manifest.renderHashSHA256 else {
+            throw CompanionSessionError.vocalAssetWriteVerificationFailed(
+                expected: rendered.manifest.renderHashSHA256,
+                actual: roundTripHash
+            )
+        }
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        // Vocal provenance requires exact save/reload identity. Foundation's
+        // default ISO-8601 strategy discards subsecond precision, so store the
+        // exact Date scalar for this new versioned manifest format.
+        encoder.dateEncodingStrategy = .secondsSince1970
+        try encoder.encode(rendered.manifest).write(to: stagedManifest, options: .atomic)
+
+        // Re-resolve and revalidate the immutable capture after all off-render
+        // work. A caller cannot receive a published asset if its exact
+        // caller-validated authority changed mid-run.
+        _ = try resolveVocalSource(artifact, authority: sourceAuthority)
+        try fileManager.moveItem(at: staging, to: destination)
+        published = true
+        return VocalRenderedAssetExportResult(
+            directory: destination,
+            sourceAudioURL: destination.appendingPathComponent(sourceAudioName),
+            audioURL: destination.appendingPathComponent(audioName),
+            manifestURL: destination.appendingPathComponent(manifestName),
+            asset: rendered
         )
     }
 
@@ -223,11 +388,13 @@ public actor CompanionSessionClient {
         let inputURL = try exchange.resolveArtifact(artifact)
         _ = try loadCapturedAudio(artifact)
         let outputURL = try exchange.previewDirectory(captureID: artifact.id)
-        return try PreviewSessionExporter().renderWorkingPlan(
+        let preview = try PreviewSessionExporter().renderWorkingPlan(
             inputURL: inputURL,
             plan: plan,
             outputDirectory: outputURL
         )
+        _ = try exchange.resolveArtifact(artifact)
+        return preview
     }
 
     /// Resolves, hashes, decodes, and metadata-checks a capture before UI or
@@ -237,6 +404,29 @@ public actor CompanionSessionClient {
         let capturedAudio = try WAVFile.read(url: inputURL)
         try validate(capturedAudio: capturedAudio, against: artifact)
         return capturedAudio
+    }
+
+    /// A Vocal asset must retain the exact source authority that the caller
+    /// validated against its completed capture/test-take context. This client
+    /// verifies the immutable bytes and artifact binding, but deliberately
+    /// never manufactures a replacement generic capture identity.
+    private func resolveVocalSource(
+        _ artifact: CaptureArtifact,
+        authority: VocalSourceAuthority
+    ) throws -> AudioBuffer {
+        let source = try loadCapturedAudio(artifact)
+        let resolved = try VocalAudioHasher().authority(
+            for: source,
+            sourceSnapshotID: artifact.id,
+            immutableSourceID: authority.immutableSourceID,
+            capturedAt: artifact.createdAt
+        )
+        guard resolved == authority else {
+            throw CompanionSessionError.vocalSourceAuthorityMismatch(
+                "source snapshot, immutable ID, hash, format, frame count, or capture timestamp changed"
+            )
+        }
+        return source
     }
 
     private func validate(capturedAudio: AudioBuffer, against artifact: CaptureArtifact) throws {

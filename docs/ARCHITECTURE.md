@@ -263,8 +263,9 @@ host automation timeline invisibly while dry audio passes, so un-bypass does not
 replay a stale one-shot ramp. Upstream `OutputIsSilence` means zero pulled input; the
 AU explicitly zeroes that input, processes any IIR tail, and conservatively clears
 the output-silence hint because the effect may still emit finite audio. `tailTime`
-is a static 60-second conservative bound: hosts may cache it, and live graph commits
-can activate the longest supported low-frequency/high-Q IIR after instantiation.
+is a static 180-second conservative bound at a declared -120 dB amplitude threshold:
+hosts may cache it, and live graph commits can activate the maximum-feedback aggregate
+delay/reverb or longest supported low-frequency/high-Q IIR after instantiation.
 
 ## State flow
 

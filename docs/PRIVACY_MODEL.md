@@ -33,6 +33,17 @@ targets.
   requests, typed interpretations, hypotheses/references, the accepted six-stage
   validation audit, configured and provider-reported model identifiers, response ID
   and bounded usage metadata, but not provider credentials, headers or raw audio.
+- Vocal workspace state: bounded checksummed `VocalSessionStore` envelopes in the
+  App Group `VocalSessions-v1` directory, written atomically as private 0600 files
+  with credential-pattern redaction, strict validation, corruption quarantine, and
+  source-authority reconciliation. The store contains typed capture briefs and
+  interpretations, measurement findings, explicit owner feedback/preferences,
+  creative intent, candidate/plan ancestry, revision and handoff records, and
+  source/preview/asset identities and hashes. It contains no raw audio, provider
+  credential, header, hidden reasoning, or executable provider response. A relaunch
+  restores typed history read-only until the exact source authority is current;
+  operational preview/asset audio is not reconstructed from metadata and must be
+  re-established from the separate local cache.
 - Cloud request: bounded user language plus labeled typed source context,
   measurements, current graph/reference identities, relevant production knowledge,
   capabilities and limitations. Captured audio, preview audio, file names/paths,
@@ -66,7 +77,13 @@ targets.
   hashes, rights basis, and paraphrased notes retained.
 - Personal production outcomes: `PersonalOutcomeRecord` is local-only, created
   only on explicit user confirmation, never cloud-synced, and never presented
-  as general knowledge. Persistence and deletion UI are not yet implemented.
+  as general knowledge. It persists in a separate bounded, checksummed, atomic
+  0600 profile with credential-pattern redaction, corruption quarantine, count
+  and size bounds, per-item forget, delete-all, and a human-readable export.
+  Guide Me exposes remember-helped / remember-did-not-help, per-item forget, and
+  delete-all-learning controls. A confirmed outcome can only apply a bounded
+  ranking preference for this user; it cannot manufacture relevance or become a
+  general claim.
 - Credentials: macOS Keychain service
   `com.marcboyer.tracksmith.provider-credentials`, provider-specific accounts,
   when-unlocked device-only accessibility; never logs, prompts, requests, App Group,
@@ -83,11 +100,17 @@ test lane. Model downloads need signature/hash verification.
 
 ## User controls
 
-The companion implements secure credential save/delete and confirmed deletion of all
-App Group capture/preview audio without deleting Logic source files, AU document
-state, heartbeats, or protocol diagnostics. That audio-cache action intentionally
-does not alter a live command transaction or the separate local conversation store;
-independent bounded mailbox maintenance expires protocol metadata according to the
-policy above. A conversation-history deletion UI, provider-terms disclosure,
-audio-cache inventory/automatic expiry, diagnostic export preview, and permission-
-revocation instructions remain release gates. No opt-in telemetry path exists.
+The companion implements secure credential save/delete, per-outcome forget and
+delete-all-learning for the local tutor profile, per-category forget for confirmed
+Vocal capture/creative preferences, deletion of the current or all known typed Vocal
+sessions, and confirmed deletion of all App Group capture/preview audio without
+deleting Logic source files, AU document state, heartbeats, or protocol diagnostics.
+Deleting Vocal typed state does not delete raw captures, Logic projects, or AU state;
+deleting the audio cache does not delete Vocal ancestry or preference records. The
+audio-cache action intentionally does not alter a live command transaction, the
+separate local conversation store, or the separate tutor profile; each control states
+its own scope. Independent bounded
+mailbox maintenance expires protocol metadata according to the policy above. A
+conversation-history deletion UI, provider-terms disclosure, audio-cache
+inventory/automatic expiry, diagnostic export preview, and permission-revocation
+instructions remain release gates. No opt-in telemetry path exists.

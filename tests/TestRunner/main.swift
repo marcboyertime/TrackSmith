@@ -12,6 +12,9 @@ import ResearchIngestion
 import SessionCore
 import SharedIPC
 import StateStore
+import VocalAudioToMIDI
+import VocalEvaluation
+import VocalProduction
 
 private final class NeverCompletingURLProtocol: URLProtocol, @unchecked Sendable {
     override class func canInit(with request: URLRequest) -> Bool { true }
@@ -187,6 +190,30 @@ enum TestRunner {
             try tests.expectThrows("audible graph without a final limiter was activatable") {
                 try PlanValidator().validateForRealtimeActivation(unboundedRealtimeGraph)
             }
+            let reboundSnapshotID = UUID()
+            let reboundBasePlan = ProcessingPlan(
+                sourceSnapshotID: reboundSnapshotID,
+                scope: ProcessingScope(
+                    kind: .pluginInput,
+                    channelFormat: .mono,
+                    sourceType: .vocal,
+                    timeRangeSeconds: nil
+                ),
+                goals: [],
+                nodes: []
+            )
+            try PlanValidator().validateForRealtimeActivation(
+                reboundBasePlan,
+                currentSnapshotID: reboundSnapshotID
+            )
+            var incorrectlyTimedRebound = reboundBasePlan
+            incorrectlyTimedRebound.scope.timeRangeSeconds = TimeRangeSeconds(start: 0, end: 12)
+            try tests.expectThrows("a capture-rebound timed base plan remained realtime-activatable") {
+                try PlanValidator().validateForRealtimeActivation(
+                    incorrectlyTimedRebound,
+                    currentSnapshotID: reboundSnapshotID
+                )
+            }
             let gainAfterLimiter = makePlan(nodes: [
                 safetyLimiter(),
                 .init(type: .outputTrim, parameters: [.gainDB: 1], rationale: "after limiter", confidence: 1, category: .loudness),
@@ -250,6 +277,7 @@ enum TestRunner {
             let disabledNodes = [
                 ProcessingNode(type: .expander, enabled: false, rationale: "disabled", confidence: 1, category: .corrective),
                 ProcessingNode(type: .delay, enabled: false, rationale: "disabled", confidence: 1, category: .creative),
+                ProcessingNode(type: .modulatedDelay, enabled: false, rationale: "disabled", confidence: 1, category: .creative),
                 ProcessingNode(type: .reverb, enabled: false, rationale: "disabled", confidence: 1, category: .creative),
             ]
             var buffer = AudioBuffer(channels: [[0, 0.1, -0.2, 0.3]], sampleRate: 48_000)
@@ -368,6 +396,7 @@ enum TestRunner {
                 ProcessingNode(type: .expander, parameters: [.algorithmVersion: 1, .thresholdDB: -45, .ratio: 3, .attackMS: 2, .releaseMS: 70, .holdMS: 10, .hysteresisDB: 4, .rangeDB: 20, .mix: 0.5], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .deEsser, parameters: [.frequencyHz: 5_500, .thresholdDB: -30, .ratio: 4, .attackMS: 1, .releaseMS: 50, .mix: 1], rationale: "test", confidence: 1, category: .corrective),
                 ProcessingNode(type: .delay, parameters: [.algorithmVersion: 1, .delayTimeMS: 7, .feedback: 0.3, .damping: 0.4, .stereoCrossfeed: 0, .mix: 0.2], rationale: "test", confidence: 1, category: .creative),
+                ProcessingNode(type: .modulatedDelay, parameters: [.algorithmVersion: 1, .delayTimeMS: 8, .feedback: 0.15, .damping: 0.4, .mix: 0.2, .modulationDepthMS: 3, .modulationRateHz: 0.7, .stereoPhaseDegrees: 90], rationale: "test", confidence: 1, category: .creative),
                 ProcessingNode(type: .reverb, parameters: [.algorithmVersion: 1, .preDelayMS: 0, .decayTimeSeconds: 0.3, .roomSize: 0.2, .damping: 0.5, .diffusion: 0.5, .mix: 0.1], rationale: "test", confidence: 1, category: .creative),
             ]
             var graph = try CompiledGraph(plan: makePlan(nodes: nodes), sampleRate: 48_000, channelCount: 1)
@@ -524,6 +553,82 @@ enum TestRunner {
                 _ = try CompiledGraph(plan: makePlan(nodes: validNodes), sampleRate: 384_000, channelCount: 1)
             }
         }
+        await tests.run("modulated delay validation is versioned and shares the delay budget") {
+            func modulatedDelay(
+                delayTimeMS: Double = 15,
+                depthMS: Double = 4,
+                rateHz: Double = 0.6,
+                phaseDegrees: Double = 90
+            ) -> ProcessingNode {
+                ProcessingNode(
+                    type: .modulatedDelay,
+                    parameters: [
+                        .algorithmVersion: 1, .delayTimeMS: delayTimeMS,
+                        .feedback: 0.2, .damping: 0.45, .mix: 0.4,
+                        .modulationDepthMS: depthMS, .modulationRateHz: rateHz,
+                        .stereoPhaseDegrees: phaseDegrees,
+                    ],
+                    rationale: "bounded time-varying vocal movement",
+                    confidence: 1,
+                    category: .creative
+                )
+            }
+
+            var missingVersion = modulatedDelay()
+            missingVersion.parameters[.algorithmVersion] = nil
+            try tests.expectThrows("enabled modulated delay accepted an implicit algorithm version") {
+                try PlanValidator().validate(makePlan(nodes: [missingVersion]))
+            }
+
+            var wrongVersion = modulatedDelay()
+            wrongVersion.parameters[.algorithmVersion] = 2
+            try tests.expectThrows("modulated delay accepted an unknown algorithm version") {
+                try PlanValidator().validate(makePlan(nodes: [wrongVersion]))
+            }
+
+            for (parameter, value) in [
+                (ParameterID.modulationRateHz, 0.049),
+                (.modulationRateHz, 5.001),
+                (.modulationDepthMS, -0.001),
+                (.modulationDepthMS, 20.001),
+                (.stereoPhaseDegrees, -0.001),
+                (.stereoPhaseDegrees, 180.001),
+            ] {
+                var invalid = modulatedDelay()
+                invalid.parameters[parameter] = value
+                try tests.expectThrows("modulated delay accepted out-of-range \(parameter.rawValue)=\(value)") {
+                    try PlanValidator().validate(makePlan(nodes: [invalid]))
+                }
+            }
+
+            try PlanValidator().validate(makePlan(nodes: [modulatedDelay()]))
+            let overTimeBudget = [
+                ProcessingNode(
+                    type: .delay,
+                    parameters: [.algorithmVersion: 1, .delayTimeMS: 2_000],
+                    rationale: "fixed delay budget",
+                    confidence: 1,
+                    category: .creative
+                ),
+                modulatedDelay(delayTimeMS: 1_981, depthMS: 20),
+            ]
+            try tests.expectThrows("modulated depth was omitted from the shared delay-time budget") {
+                try PlanValidator().validate(makePlan(nodes: overTimeBudget))
+            }
+
+            let combinedCount = (0..<PlanValidator.maximumDelayNodeCount).map { _ in
+                ProcessingNode(
+                    type: .delay,
+                    parameters: [.algorithmVersion: 1, .delayTimeMS: 1],
+                    rationale: "fixed delay count",
+                    confidence: 1,
+                    category: .creative
+                )
+            } + [modulatedDelay(delayTimeMS: 1, depthMS: 0)]
+            try tests.expectThrows("modulated delay was omitted from the shared node-count budget") {
+                try PlanValidator().validate(makePlan(nodes: combinedCount))
+            }
+        }
         await tests.run("expander gate is linked, tail-aware, deterministic, and resettable") {
             let rate = 48_000.0
             let node = ProcessingNode(
@@ -644,6 +749,127 @@ enum TestRunner {
             try tests.expect(abs(stereo.channels[0][480] - 1) < 1e-7, "stereo delay lost the first left repeat")
             try tests.expect(abs(stereo.channels[1][960] - 0.5) < 1e-7, "cross-feedback did not move the second repeat")
             try tests.expect(abs(stereo.channels[0][960]) < 1e-7, "full cross-feedback leaked the second repeat left")
+        }
+        await tests.run("modulated delay is deterministic, finite, nontrivial, and resettable") {
+            let rate = 48_000.0
+            let node = ProcessingNode(
+                type: .modulatedDelay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 9,
+                    .feedback: 0.25, .damping: 0.4, .mix: 0.65,
+                    .modulationDepthMS: 6, .modulationRateHz: 0.73,
+                    .stereoPhaseDegrees: 90,
+                ],
+                rationale: "controlled vocal movement",
+                confidence: 1,
+                category: .creative
+            )
+            let source = (0..<48_000).map { frame -> Float in
+                let time = Double(frame) / rate
+                return Float(0.24 * sin(2 * .pi * 223 * time) + 0.11 * sin(2 * .pi * 997 * time))
+            }
+            var first = AudioBuffer(channels: [source], sampleRate: rate)
+            var second = AudioBuffer(channels: [source], sampleRate: rate)
+            var graph = try CompiledGraph(plan: makePlan(nodes: [node]), sampleRate: rate, channelCount: 1)
+            var secondGraph = try CompiledGraph(plan: makePlan(nodes: [node]), sampleRate: rate, channelCount: 1)
+            try graph.process(&first)
+            try secondGraph.process(&second)
+            try tests.expect(first == second, "modulated delay changed across identical fresh renders")
+            try tests.expect(first.channels[0].allSatisfy(\.isFinite), "modulated delay emitted nonfinite output")
+            let difference = zip(first.channels[0], source).map { $0 - $1 }
+            try tests.expect(rms(difference) > 0.04, "modulated delay was not meaningfully different from dry")
+
+            graph.reset()
+            let probe = Array(source.prefix(4_097))
+            var afterReset = AudioBuffer(channels: [probe], sampleRate: rate)
+            var fresh = AudioBuffer(channels: [probe], sampleRate: rate)
+            try graph.process(&afterReset)
+            var freshGraph = try CompiledGraph(plan: makePlan(nodes: [node]), sampleRate: rate, channelCount: 1)
+            try freshGraph.process(&fresh)
+            try tests.expect(afterReset == fresh, "modulated delay reset exposed stale history or LFO state")
+        }
+        await tests.run("modulated delay is safe from 8 to 192 kHz with stereo phase movement") {
+            let node = ProcessingNode(
+                type: .modulatedDelay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 6,
+                    .feedback: 0.1, .damping: 0.3, .mix: 1,
+                    .modulationDepthMS: 5, .modulationRateHz: 1.2,
+                    .stereoPhaseDegrees: 90,
+                ],
+                rationale: "stereo chorus movement",
+                confidence: 1,
+                category: .creative
+            )
+            for rate in [8_000.0, 48_000, 192_000] {
+                let frames = Int(rate * 0.12)
+                let source = (0..<frames).map { frame -> Float in
+                    Float(0.3 * sin(2 * .pi * 317 * Double(frame) / rate))
+                }
+                var mono = AudioBuffer(channels: [source], sampleRate: rate)
+                var stereo = AudioBuffer(channels: [source, source], sampleRate: rate)
+                var monoGraph = try CompiledGraph(plan: makePlan(nodes: [node]), sampleRate: rate, channelCount: 1)
+                var stereoGraph = try CompiledGraph(
+                    plan: makePlan(nodes: [node], channelFormat: .stereo),
+                    sampleRate: rate,
+                    channelCount: 2
+                )
+                try monoGraph.process(&mono)
+                try stereoGraph.process(&stereo)
+                try tests.expect(mono.channels[0] == stereo.channels[0], "mono path diverged from the safe left-channel algorithm at \(rate) Hz")
+                try tests.expect(stereo.channels.flatMap { $0 }.allSatisfy(\.isFinite), "modulated delay failed at \(rate) Hz")
+                let stereoDifference = zip(stereo.channels[0], stereo.channels[1]).map { $0 - $1 }
+                try tests.expect(rms(stereoDifference) > 0.005, "right-channel phase offset produced no stereo movement at \(rate) Hz")
+            }
+        }
+        await tests.run("modulated delay pointer output matches offline across irregular blocks") {
+            let rate = 48_000.0
+            let node = ProcessingNode(
+                type: .modulatedDelay,
+                parameters: [
+                    .algorithmVersion: 1, .delayTimeMS: 7.25,
+                    .feedback: 0.32, .damping: 0.55, .mix: 0.6,
+                    .modulationDepthMS: 4.75, .modulationRateHz: 0.83,
+                    .stereoPhaseDegrees: 117,
+                ],
+                rationale: "fractional host-block parity",
+                confidence: 1,
+                category: .creative
+            )
+            let left = (0..<8_191).map { frame -> Float in
+                Float(0.2 * sin(2 * .pi * 211 * Double(frame) / rate))
+            }
+            let right = (0..<8_191).map { frame -> Float in
+                Float(0.17 * sin(2 * .pi * 353 * Double(frame) / rate + 0.31))
+            }
+            let plan = makePlan(nodes: [node], channelFormat: .stereo)
+            var offline = AudioBuffer(channels: [left, right], sampleRate: rate)
+            var offlineGraph = try CompiledGraph(plan: plan, sampleRate: rate, channelCount: 2)
+            try offlineGraph.process(&offline)
+
+            var realtimeLeft = left
+            var realtimeRight = right
+            var realtimeGraph = try CompiledGraph(plan: plan, sampleRate: rate, channelCount: 2)
+            let blockSizes = [1, 17, 3, 257, 64, 509, 1_024, 5]
+            var offset = 0
+            var blockIndex = 0
+            while offset < realtimeLeft.count {
+                let count = min(blockSizes[blockIndex % blockSizes.count], realtimeLeft.count - offset)
+                let status = realtimeLeft.withUnsafeMutableBufferPointer { leftBuffer in
+                    realtimeRight.withUnsafeMutableBufferPointer { rightBuffer in
+                        realtimeGraph.processRealtime(
+                            left: leftBuffer.baseAddress!.advanced(by: offset),
+                            right: rightBuffer.baseAddress!.advanced(by: offset),
+                            frameCount: count
+                        )
+                    }
+                }
+                try tests.expect(status == .processed, "modulated delay rejected a valid irregular block")
+                offset += count
+                blockIndex += 1
+            }
+            try tests.expect(realtimeLeft == offline.channels[0], "modulated delay left pointer output diverged from offline")
+            try tests.expect(realtimeRight == offline.channels[1], "modulated delay right pointer output diverged from offline")
         }
         await tests.run("algorithmic reverb is bounded, rate-aware, deterministic, and resettable") {
             func reverbNode(decay: Double) -> ProcessingNode {
@@ -1160,7 +1386,7 @@ enum TestRunner {
                 kind: .pluginInput,
                 channelFormat: .mono,
                 sourceType: .vocal,
-                timeRangeSeconds: .init(start: 0, end: 3)
+                timeRangeSeconds: nil
             )
             let previewOneID = UUID()
             let previewTwoID = UUID()
@@ -3504,7 +3730,7 @@ enum TestRunner {
                 kind: .importedFile,
                 channelFormat: .stereo,
                 sourceType: .drums,
-                timeRangeSeconds: .init(start: 0, end: 0.5)
+                timeRangeSeconds: nil
             )
             let interpretation = try ProductionIntentEngine().interpret(
                 request: "Make these punchier and warmer without making the cymbals harsher",
@@ -4463,7 +4689,1795 @@ enum TestRunner {
         await tests.run("personal results rank locally but never generalize") {
             try testPersonalResultsNeverGeneralize(tests)
         }
+        await tests.run("audit-derived Vocal adapters stay local deterministic and bounded") {
+            let audioToMIDICheck = try AudioToMIDIDeterministicFixtures.selfCheck()
+            try tests.expect(
+                audioToMIDICheck,
+                "offline audio-to-MIDI contract self-check failed"
+            )
+            let vocalEvaluationCheck = try VocalEvaluationDeterministicFixtures.selfCheck()
+            try tests.expect(
+                vocalEvaluationCheck,
+                "blinded owner-only Vocal evaluation self-check failed"
+            )
+        }
+        await tests.run("Vocal capture planning uses every brief category deterministically") {
+            try testVocalCapturePlanning(tests)
+        }
+        await tests.run("Vocal preservation matrix clamps planning and rejects unsafe revisions") {
+            try testVocalPreservationMatrix(tests)
+        }
+        await tests.run("Vocal Guide-to-Create handoff requires explicit current local authority") {
+            try testVocalGuideCreateHandoff(tests)
+        }
+        await tests.run("Vocal underwater and brass hypotheses are typed distinct and honest") {
+            try testVocalCreativeHypotheses(tests)
+        }
+        await tests.run("Vocal underwater and brass previews preserve source provenance and deterministic PCM") {
+            try testVocalPreviewCandidateExport(tests)
+        }
+        await tests.run("Vocal revision graph preserves deep ancestry exact recovery and reload") {
+            try testVocalRevisionRecovery(tests)
+        }
+        await tests.run("Vocal scoped assets preserve source and publish verified provenance") {
+            try await testVocalScopedAssetPublication(tests)
+        }
+        await tests.run("Vocal session state redacts reloads demotes quarantines and deletes") {
+            try testVocalSessionStore(tests)
+        }
         tests.finish()
+    }
+
+    @MainActor private static func testVocalCapturePlanning(_ tests: Harness) throws {
+        func equipmentItem(
+            _ kind: VocalEquipmentKind,
+            _ state: VocalKnowledgeState,
+            manufacturer: String? = nil,
+            model: String? = nil
+        ) -> VocalEquipmentItem {
+            VocalEquipmentItem(
+                kind: kind,
+                state: state,
+                manufacturer: manufacturer,
+                model: model,
+                userConfirmedFeatures: state == .known ? ["owner-confirmed test label"] : [],
+                uncertainty: state == .known || state == .notPresent
+                    ? []
+                    : ["Exact hardware behavior is unknown."]
+            )
+        }
+
+        func brief(
+            priorities: [VocalCapturePriorityWeight],
+            knownHardware: Bool,
+            fixedRoom: Bool = false
+        ) -> VocalCaptureBrief {
+            let hardwareState: VocalKnowledgeState = knownHardware ? .known : .unknown
+            let equipment = VocalCaptureEquipment(
+                microphone: equipmentItem(
+                    .microphone,
+                    hardwareState,
+                    manufacturer: knownHardware ? "Owner-declared maker" : nil,
+                    model: knownHardware ? "Owner Mic 7" : nil
+                ),
+                audioInterface: equipmentItem(
+                    .audioInterface,
+                    hardwareState,
+                    manufacturer: knownHardware ? "Owner-declared maker" : nil,
+                    model: knownHardware ? "Owner Interface 3" : nil
+                ),
+                externalPreamp: equipmentItem(.externalPreamp, .notPresent),
+                headphones: equipmentItem(
+                    .headphones,
+                    hardwareState,
+                    model: knownHardware ? "Owner Headphones 2" : nil
+                ),
+                popFilter: equipmentItem(.popFilter, knownHardware ? .known : .userUnsure)
+            )
+            var constraints = [
+                VocalCaptureConstraint(
+                    kind: .hearingSafety,
+                    description: "Keep monitoring at the owner's already-safe level.",
+                    hardConstraint: true
+                ),
+                VocalCaptureConstraint(
+                    kind: .noAdditionalEquipment,
+                    description: "Use only the equipment already present.",
+                    hardConstraint: true
+                ),
+            ]
+            if fixedRoom {
+                constraints.append(VocalCaptureConstraint(
+                    kind: .fixedRoomPosition,
+                    description: "The stand and performer must stay beside the desk mark.",
+                    hardConstraint: true
+                ))
+            }
+            return VocalCaptureBrief(
+                id: UUID(),
+                desiredResult: "Close and intimate, but clear enough to edit",
+                priorities: priorities,
+                equipment: equipment,
+                microphonePattern: VocalMicPatternKnowledge(
+                    state: knownHardware ? .known : .userUnsure,
+                    pattern: knownHardware ? .cardioid : nil,
+                    confirmedByUser: knownHardware
+                ),
+                environment: VocalCaptureEnvironment(
+                    backgroundNoise: .moderate,
+                    reflectionRisk: .high,
+                    roomSizeKnown: true,
+                    roomDescription: "Small room with one hard wall beside the desk",
+                    movableSoftMaterialsAvailable: .notPresent,
+                    knownNoiseSources: ["air-conditioner"],
+                    observations: ["owner hears a short room sound between phrases"],
+                    provenance: [VocalProvenance(
+                        identifier: "capture-test-room",
+                        evidenceKind: .userReported,
+                        statement: "Owner-declared room facts for deterministic test coverage.",
+                        limitations: ["Not an acoustic measurement."],
+                        confidence: 1
+                    )]
+                ),
+                practicalConstraints: constraints,
+                preservePerformanceAttributes: [.emotionalDelivery, .naturalDynamics, .diction],
+                preserveVoiceAttributes: [.voiceIdentity, .pitch, .timing, .dynamics],
+                assumptions: ["The same passage can be repeated once."],
+                missingInformation: ["No measured room response is available."],
+                uncertainty: ["Listening decides whether intimacy improved."],
+                provenance: [VocalProvenance(
+                    identifier: "capture-test-brief",
+                    evidenceKind: .userReported,
+                    statement: "Typed deterministic capture-planning fixture.",
+                    limitations: ["No device behavior is inferred."],
+                    confidence: 1
+                )]
+            )
+        }
+
+        let ids = [UUID(), UUID(), UUID()]
+        let intimacyPriorities = [
+            VocalCapturePriorityWeight(priority: .intimacy, weight: 1),
+            VocalCapturePriorityWeight(priority: .intelligibility, weight: 0.7),
+            VocalCapturePriorityWeight(priority: .lowReflection, weight: 0.1),
+        ]
+        let reflectionPriorities = [
+            VocalCapturePriorityWeight(priority: .lowReflection, weight: 1),
+            VocalCapturePriorityWeight(priority: .controlledPlosives, weight: 0.9),
+            VocalCapturePriorityWeight(priority: .intimacy, weight: 0.1),
+        ]
+        let planner = VocalCapturePlanner()
+        let unknownBrief = brief(
+            priorities: intimacyPriorities,
+            knownHardware: false
+        )
+        let first = try planner.plan(brief: unknownBrief, interpretationIDs: ids)
+        let replay = try planner.plan(brief: unknownBrief, interpretationIDs: ids)
+        try tests.expect(first == replay, "identical capture facts and IDs did not replay exactly")
+        try tests.expect(first.count == 3, "capture planner did not return three hypotheses")
+        try tests.expect(
+            first.allSatisfy {
+                $0.gainAndHeadroom.unknownHardwareBoundary
+                    .localizedCaseInsensitiveContains("unknown or unconfirmed hardware")
+            },
+            "computed unknown-hardware gain boundary was not attached to every plan"
+        )
+        let captureRevert = VocalCapturePlanReviser().revise(
+            selected: first[0],
+            assessment: VocalTestTakeAssessment(
+                id: UUID(),
+                analysisVersion: "tracksmith.capture-test.v1",
+                sourceClass: nil,
+                findings: [],
+                listeningOnlyJudgments: [],
+                measurementLimitations: []
+            ),
+            feedback: VocalCaptureListeningFeedback(
+                breathBlastOrPlosiveRisk: .worse,
+                roomOrReflectionImpression: .worse,
+                performanceComfort: .worse,
+                voiceNaturalness: .worse
+            ),
+            revisedInterpretationID: UUID(),
+            revisionID: UUID(),
+            preferenceID: UUID(),
+            revisedAt: Date(timeIntervalSince1970: 1_786_233_512)
+        )
+        try tests.expect(
+            captureRevert.revisedInterpretation.parentInterpretationID == first[0].id
+                && captureRevert.revisedInterpretation.placement == first[0].placement
+                && captureRevert.revisedInterpretation.roomPosition == first[0].roomPosition
+                && captureRevert.appliedReasons.contains(where: {
+                    $0.localizedCaseInsensitiveContains("rolls back exactly")
+                }),
+            "capture feedback did not retain ancestry and exactly revert placement/room when comfort worsened"
+        )
+
+        let encoded = String(decoding: try JSONEncoder().encode(first), as: UTF8.self)
+        for required in [
+            "Close and intimate, but clear enough to edit",
+            "air-conditioner",
+            "Small room with one hard wall beside the desk",
+            "Use only the equipment already present",
+            "emotionalDelivery",
+            "voiceIdentity",
+            "No measured room response is available",
+            "Listening decides whether intimacy improved",
+        ] {
+            try tests.expect(
+                encoded.localizedCaseInsensitiveContains(required),
+                "capture output did not surface brief fact: \(required)"
+            )
+        }
+
+        let reflectionFirst = try planner.plan(
+            brief: brief(priorities: reflectionPriorities, knownHardware: false),
+            interpretationIDs: ids
+        )
+        try tests.expect(
+            first.map(\.title) != reflectionFirst.map(\.title),
+            "changing weighted capture priorities did not change surfaced ranking"
+        )
+
+        let fixed = try planner.plan(
+            brief: brief(
+                priorities: intimacyPriorities,
+                knownHardware: false,
+                fixedRoom: true
+            ),
+            interpretationIDs: ids
+        )
+        try tests.expect(
+            fixed.allSatisfy {
+                $0.placement.distance == .currentMarked
+                    && $0.placement.height == .currentMarked
+                    && $0.placement.angle == .currentMarked
+                    && $0.roomPosition == .preserveCurrentPosition
+            },
+            "hard fixed-room constraint did not remove movement authority"
+        )
+
+        let known = try planner.plan(
+            brief: brief(priorities: intimacyPriorities, knownHardware: true),
+            interpretationIDs: ids
+        )
+        let knownText = String(decoding: try JSONEncoder().encode(known), as: UTF8.self)
+        try tests.expect(
+            knownText.contains("Owner Mic 7")
+                && knownText.contains("Owner Interface 3")
+                && knownText.localizedCaseInsensitiveContains("not authority"),
+            "known owner hardware labels were lost or gained fabricated behavior authority"
+        )
+        try tests.expect(
+            known.allSatisfy {
+                $0.gainAndHeadroom.unknownHardwareBoundary
+                    .localizedCaseInsensitiveContains("no device-specific knob position")
+            },
+            "known hardware label was converted into device-specific gain advice"
+        )
+    }
+
+    @MainActor private static func testVocalPreservationMatrix(_ tests: Harness) throws {
+        let snapshotID = UUID()
+        let scope = VocalCreativeScope.fullSource(id: UUID())
+        var intent = try VocalIntentInterpreter().interpret(
+            prompt: "Make this feel strongly underwater, but keep the words understandable.",
+            sourceSnapshotID: snapshotID,
+            scope: scope
+        )
+        intent.preservation = VocalPreservationContract(
+            preserved: [.intelligibility, .consonants, .pitch, .timing, .melody, .voiceIdentity],
+            prohibitedChanges: [],
+            stopConditions: ["Stop if any protected quality is lost."],
+            rollbackInstructions: ["Restore the exact source candidate."]
+        )
+        let initial = try VocalCreativePlanner().plan(
+            intent: intent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            createdAt: Date(timeIntervalSince1970: 1_786_234_100)
+        )
+        let deterministicIDs = VocalDeterministicIDs(
+            candidateIDs: initial.map(\.id),
+            planRequestIDs: initial.map(\.plan.requestID),
+            nodeIDsByCandidate: initial.map { $0.plan.nodes.map(\.id) }
+        )
+        let first = try VocalCreativePlanner().plan(
+            intent: intent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            deterministicIDs: deterministicIDs,
+            createdAt: Date(timeIntervalSince1970: 1_786_234_100)
+        )
+        let replay = try VocalCreativePlanner().plan(
+            intent: intent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            deterministicIDs: deterministicIDs,
+            createdAt: Date(timeIntervalSince1970: 1_786_234_100)
+        )
+        try tests.expect(first == replay, "preservation-aware Vocal planning was not deterministic")
+        try tests.expect(
+            first.allSatisfy {
+                VocalDSPPreservationMatrix.violations(
+                    in: $0.plan.nodes,
+                    preservation: $0.intent.preservation
+                ).isEmpty
+            },
+            "planner emitted a graph outside the protected-aspect matrix"
+        )
+        try tests.expect(
+            first.contains {
+                $0.limitations.contains {
+                    $0.localizedCaseInsensitiveContains("deterministically downgraded")
+                }
+            },
+            "preservation clamping was not surfaced as an honest candidate limitation"
+        )
+        try tests.expect(
+            first.allSatisfy { candidate in
+                candidate.plan.nodes
+                    .filter { $0.type == .lowPass }
+                    .allSatisfy { $0.parameters[.frequencyHz, default: 24_000] >= 5_800 }
+            },
+            "underwater low-pass escaped the consonant-preservation floor"
+        )
+
+        var unsafe = first[0]
+        guard let modulationIndex = unsafe.plan.nodes.firstIndex(where: { $0.type == .modulatedDelay }) else {
+            throw CheckFailure(message: "underwater candidate omitted modulated delay")
+        }
+        unsafe.plan.nodes[modulationIndex].parameters[.mix] = 1
+        let violations = VocalDSPPreservationMatrix.violations(
+            in: unsafe.plan.nodes,
+            preservation: unsafe.intent.preservation
+        )
+        try tests.expect(
+            violations.contains { $0.aspect == .intelligibility || $0.aspect == .consonants },
+            "unsafe wet modulation did not produce a typed preservation violation"
+        )
+        try tests.expectThrows("unsafe persisted Vocal candidate passed validation") {
+            try VocalContractValidator().validate(candidate: unsafe)
+        }
+
+        let excessiveFeedback = ProcessingPlan(
+            sourceSnapshotID: snapshotID,
+            scope: ProcessingScope(
+                kind: .pluginInput,
+                channelFormat: .mono,
+                sourceType: .vocal
+            ),
+            goals: [],
+            nodes: [
+                ProcessingNode(
+                    type: .delay,
+                    parameters: [
+                        .algorithmVersion: 1,
+                        .delayTimeMS: 100,
+                        .feedback: PlanValidator.maximumFeedback + 0.001,
+                        .damping: 0,
+                        .stereoCrossfeed: 0,
+                        .mix: 0.2,
+                    ],
+                    rationale: "tail-bound rejection test",
+                    confidence: 1,
+                    category: .creative
+                ),
+                ProcessingNode(
+                    type: .limiter,
+                    parameters: [.ceilingDB: -1, .releaseMS: 80, .lookaheadMS: 0],
+                    rationale: "safety",
+                    confidence: 1,
+                    category: .loudness
+                ),
+            ]
+        )
+        try tests.expectThrows("feedback above the declared tail bound passed validation") {
+            try PlanValidator().validateForRealtimeActivation(excessiveFeedback)
+        }
+    }
+
+    @MainActor private static func testVocalSessionStore(_ tests: Harness) throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tracksmith-vocal-session-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = VocalSessionStore(rootURL: root)
+        let sourceID = UUID()
+        let authority = VocalSourceAuthority(
+            sourceSnapshotID: sourceID,
+            immutableSourceID: "test-vocal-source",
+            contentHashSHA256: String(repeating: "a", count: 64),
+            sampleRate: 48_000,
+            channelCount: 1,
+            frameCount: 96_000,
+            capturedAt: Date(timeIntervalSince1970: 1_786_233_800)
+        )
+        let intent = try VocalIntentInterpreter().interpret(
+            prompt: "Make my voice sound more like a trumpet.",
+            sourceSnapshotID: sourceID,
+            scope: .fullSource(id: UUID())
+        )
+        let candidates = try VocalCreativePlanner().plan(
+            intent: intent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_801)
+        )
+        let sessionID = UUID()
+        let secret = "sk-abcdefgh12345678"
+        let state = VocalSessionState(
+            id: sessionID,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_802),
+            updatedAt: Date(timeIntervalSince1970: 1_786_233_802),
+            sourceAuthority: authority,
+            creativeIntents: [intent],
+            candidates: candidates,
+            confirmedCreativePreferences: [VocalConfirmedCreativePreference(
+                id: UUID(),
+                candidateID: candidates[0].id,
+                preferredAspects: [.brassLikeColoration],
+                note: "authorization: \(secret)",
+                explicitlyConfirmedByUser: true,
+                confirmedAt: Date(timeIntervalSince1970: 1_786_233_803)
+            )],
+            selectedCandidateID: candidates[0].id
+        )
+        let url = try store.save(state)
+        let permissions = try FileManager.default.attributesOfItem(atPath: url.path)[.posixPermissions] as? NSNumber
+        try tests.expect(permissions?.intValue == 0o600, "Vocal session permissions were not owner-only")
+        let savedText = String(decoding: try Data(contentsOf: url), as: UTF8.self)
+        try tests.expect(!savedText.contains(secret), "Vocal session persisted a provider-shaped credential")
+        try tests.expect(savedText.contains("REDACTED CREDENTIAL"), "Vocal session did not record credential redaction")
+
+        let current = try store.load(sessionID: sessionID, currentSourceAuthority: authority)
+        try tests.expect(!current.staleAuthorityDemoted, "matching Vocal source authority was demoted")
+        try tests.expect(
+            current.state.confirmedCreativePreferences[0].note?.contains("REDACTED CREDENTIAL") == true,
+            "redacted preference did not round-trip"
+        )
+        var changedAuthority = authority
+        changedAuthority.contentHashSHA256 = String(repeating: "b", count: 64)
+        let stale = try store.load(sessionID: sessionID, currentSourceAuthority: changedAuthority)
+        try tests.expect(
+            stale.staleAuthorityDemoted
+                && stale.state.authorityStatus == .staleSourceDemoted
+                && stale.state.candidates.allSatisfy { !$0.realtimeActivatable && $0.authorityStatus == .staleSourceReadOnly },
+            "stale Vocal source retained executable candidate authority"
+        )
+        var immutableIdentifierOnlyChange = authority
+        immutableIdentifierOnlyChange.immutableSourceID = "different-immutable-source-identity"
+        let immutableIdentifierStale = try store.load(
+            sessionID: sessionID,
+            currentSourceAuthority: immutableIdentifierOnlyChange
+        )
+        try tests.expect(
+            immutableIdentifierStale.staleAuthorityDemoted
+                && immutableIdentifierStale.state.authorityStatus == .staleSourceDemoted,
+            "an immutable-source-ID-only change retained Vocal authority"
+        )
+
+        func expectInvalidState(
+            _ message: String,
+            state: VocalSessionState
+        ) throws {
+            do {
+                _ = try store.save(state)
+                throw CheckFailure(message: message)
+            } catch let error as VocalSessionStoreError {
+                guard case .invalidState = error else {
+                    throw CheckFailure(message: "\(message): expected invalidState, received \(error)")
+                }
+            }
+        }
+
+        let scopedSourceID = UUID()
+        let scopedSource = AudioBuffer(
+            channels: [(0..<48_000).map { frame in
+                Float(0.2 * sin(2 * .pi * 173 * Double(frame) / 48_000))
+            }],
+            sampleRate: 48_000
+        )
+        let completedSourceAuthority = try VocalAudioHasher().authority(
+            for: scopedSource,
+            sourceSnapshotID: scopedSourceID,
+            immutableSourceID: [
+                "tracksmith-au-capture:\(scopedSourceID.uuidString.lowercased())",
+                "test-take-binding-version:v1",
+                "test-take-completion-sha256:\(String(repeating: "c", count: 64))",
+            ].joined(separator: ";"),
+            capturedAt: Date(timeIntervalSince1970: 1_786_233_804)
+        )
+        try tests.expect(
+            completedSourceAuthority.immutableSourceID.contains(";")
+                && !completedSourceAuthority.immutableSourceID.contains("\n"),
+            "completed test-take fixture did not exercise the production semicolon-delimited identifier"
+        )
+        let scopedIntent = try VocalIntentInterpreter().interpret(
+            prompt: "Only make the last phrase underwater, but keep the words understandable.",
+            sourceSnapshotID: scopedSourceID,
+            scope: .seconds(id: UUID(), start: 0.25, end: 0.75),
+            assetAcceptance: .allowLocalRenderedAsset
+        )
+        let scopedCandidates = try VocalCreativePlanner().plan(
+            intent: scopedIntent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_805)
+        )
+        let scopedCandidate = scopedCandidates[0]
+        let renderedScopedAsset = try VocalScopedAssetRenderer().render(
+            source: scopedSource,
+            request: VocalScopedRenderRequest(
+                renderID: UUID(),
+                candidate: scopedCandidate,
+                sourceAuthority: completedSourceAuthority,
+                createdAt: Date(timeIntervalSince1970: 1_786_233_806)
+            )
+        )
+        let scopedAsset = VocalAssetAncestryRecord(
+            id: renderedScopedAsset.manifest.renderID,
+            candidateID: scopedCandidate.id,
+            manifest: renderedScopedAsset.manifest
+        )
+        let executableHandoff = try VocalGuideCreateHandoffBuilder().build(
+            handoffID: UUID(),
+            explicitUserIntentConfirmed: true,
+            candidate: scopedCandidate,
+            captureAuthority: VocalCaptureHandoffAuthority(
+                sourceAuthority: completedSourceAuthority
+            ),
+            reviewedKnowledgeIDs: ["knowledge.vocal.local.v1"],
+            reviewedProcedureIDs: ["procedure.vocal.test-take.v1"],
+            relevantMeasurements: [],
+            createdAt: Date(timeIntervalSince1970: 1_786_233_807)
+        )
+        let storedExecutableHandoff = VocalStoredHandoffRecord(
+            id: executableHandoff.id,
+            handoff: executableHandoff
+        )
+        let scopedState = VocalSessionState(
+            id: UUID(),
+            createdAt: Date(timeIntervalSince1970: 1_786_233_808),
+            updatedAt: Date(timeIntervalSince1970: 1_786_233_808),
+            sourceAuthority: completedSourceAuthority,
+            creativeIntents: [scopedIntent],
+            candidates: scopedCandidates,
+            assets: [scopedAsset],
+            handoffs: [storedExecutableHandoff],
+            selectedCandidateID: scopedCandidate.id
+        )
+        _ = try store.save(scopedState)
+        let scopedReload = try store.load(
+            sessionID: scopedState.id,
+            currentSourceAuthority: completedSourceAuthority
+        ).state
+        try tests.expect(
+            scopedReload.assets == [scopedAsset]
+                && scopedReload.handoffs == [storedExecutableHandoff]
+                && scopedReload.assets[0].manifest.originalPrompt == scopedIntent.originalPrompt
+                && scopedReload.assets[0].manifest.processingPlan == scopedCandidate.plan
+                && scopedReload.assets[0].manifest.boundaryDecision
+                    == VocalProcessingBoundaryEvaluator().decision(for: scopedIntent),
+            "scoped Vocal asset or executable handoff lost exact authority-bound provenance across save/reload"
+        )
+
+        var genericAssetState = scopedState
+        genericAssetState.id = UUID()
+        genericAssetState.assets[0].manifest.sourceAuthority.immutableSourceID = "tracksmith-au-capture:generic"
+        try expectInvalidState(
+            "generic persisted scoped asset was accepted",
+            state: genericAssetState
+        )
+        var unboundAssetState = scopedState
+        unboundAssetState.id = UUID()
+        unboundAssetState.sourceAuthority = nil
+        unboundAssetState.handoffs = []
+        try expectInvalidState(
+            "unbound persisted scoped asset was accepted",
+            state: unboundAssetState
+        )
+        var mismatchedAssetState = scopedState
+        mismatchedAssetState.id = UUID()
+        mismatchedAssetState.assets[0].manifest.sourceAuthority.contentHashSHA256 = String(repeating: "d", count: 64)
+        try expectInvalidState(
+            "mismatched persisted scoped asset was accepted",
+            state: mismatchedAssetState
+        )
+
+        var genericHandoffState = scopedState
+        genericHandoffState.id = UUID()
+        genericHandoffState.assets = []
+        genericHandoffState.handoffs[0].handoff.captureAuthority.sourceAuthority.immutableSourceID = "tracksmith-au-capture:generic"
+        try expectInvalidState(
+            "generic executable Vocal handoff was accepted",
+            state: genericHandoffState
+        )
+        var unboundHandoffState = scopedState
+        unboundHandoffState.id = UUID()
+        unboundHandoffState.assets = []
+        unboundHandoffState.sourceAuthority = nil
+        try expectInvalidState(
+            "unbound executable Vocal handoff was accepted",
+            state: unboundHandoffState
+        )
+        var mismatchedHandoffState = scopedState
+        mismatchedHandoffState.id = UUID()
+        mismatchedHandoffState.assets = []
+        mismatchedHandoffState.handoffs[0].handoff.captureAuthority.sourceAuthority.contentHashSHA256 = String(repeating: "d", count: 64)
+        try expectInvalidState(
+            "mismatched executable Vocal handoff was accepted",
+            state: mismatchedHandoffState
+        )
+
+        func captureEquipmentItem(_ kind: VocalEquipmentKind) -> VocalEquipmentItem {
+            VocalEquipmentItem(kind: kind, state: .unknown)
+        }
+        let bindingCriticalBrief = VocalCaptureBrief(
+            id: UUID(),
+            desiredResult: "authorization: \(secret)",
+            priorities: [VocalCapturePriorityWeight(priority: .intelligibility, weight: 1)],
+            equipment: VocalCaptureEquipment(
+                microphone: captureEquipmentItem(.microphone),
+                audioInterface: captureEquipmentItem(.audioInterface),
+                externalPreamp: captureEquipmentItem(.externalPreamp),
+                headphones: captureEquipmentItem(.headphones),
+                popFilter: captureEquipmentItem(.popFilter)
+            ),
+            microphonePattern: VocalMicPatternKnowledge(state: .unknown),
+            environment: VocalCaptureEnvironment()
+        )
+        var redactedBindingState = scopedState
+        redactedBindingState.id = UUID()
+        redactedBindingState.captureBrief = bindingCriticalBrief
+        try expectInvalidState(
+            "completed test-take capture evidence was silently redacted",
+            state: redactedBindingState
+        )
+        var completedPreferenceRedactionState = scopedState
+        completedPreferenceRedactionState.id = UUID()
+        completedPreferenceRedactionState.confirmedCreativePreferences = [
+            VocalConfirmedCreativePreference(
+                id: UUID(),
+                candidateID: scopedCandidate.id,
+                preferredAspects: [.intelligibility],
+                note: "authorization: \(secret)",
+                explicitlyConfirmedByUser: true,
+                confirmedAt: Date(timeIntervalSince1970: 1_786_233_809)
+            ),
+        ]
+        _ = try store.save(completedPreferenceRedactionState)
+        let completedPreferenceReload = try store.load(
+            sessionID: completedPreferenceRedactionState.id,
+            currentSourceAuthority: completedSourceAuthority
+        ).state
+        try tests.expect(
+            completedPreferenceReload.confirmedCreativePreferences[0].note?.contains("REDACTED CREDENTIAL") == true,
+            "unrelated creative preference redaction was blocked for a completed test-take binding"
+        )
+
+        try Data("{".utf8).write(to: url, options: .atomic)
+        let quarantineDate = Date(timeIntervalSince1970: 1_786_233_900)
+        let quarantineID = UUID()
+        try tests.expectThrows("corrupt Vocal session was loaded") {
+            _ = try store.load(
+                sessionID: sessionID,
+                quarantineDate: quarantineDate,
+                quarantineID: quarantineID
+            )
+        }
+        try tests.expect(
+            FileManager.default.fileExists(atPath: store.quarantineURL(date: quarantineDate, quarantineID: quarantineID).path),
+            "corrupt Vocal session was not quarantined deterministically"
+        )
+
+        var deletable = state
+        deletable.id = UUID()
+        deletable.confirmedCreativePreferences = []
+        _ = try store.save(deletable)
+        try store.delete(sessionID: deletable.id)
+        try tests.expect(
+            !FileManager.default.fileExists(atPath: store.sessionURL(deletable.id).path),
+            "Vocal session delete left retained personal state"
+        )
+    }
+
+    @MainActor private static func testVocalCreativeHypotheses(_ tests: Harness) throws {
+        let snapshotID = UUID()
+        let fullScope = VocalCreativeScope.fullSource(id: UUID())
+        for prompt in ["Make it better.", "Make it sound natural.", "Make it professional."] {
+            let vagueOrdinary = try VocalIntentInterpreter().interpret(
+                prompt: prompt,
+                sourceSnapshotID: snapshotID,
+                scope: fullScope
+            )
+            guard let blockingClarification = vagueOrdinary.blockingClarification else {
+                throw CheckFailure(message: "F16 vague Vocal prompt did not expose a blocking clarification: \(prompt)")
+            }
+            try tests.expect(
+                blockingClarification.reason == .missingDesiredChanges
+                    && vagueOrdinary.requiresBlockingClarification,
+                "F16 vague Vocal prompt exposed the wrong clarification contract: \(prompt)"
+            )
+            do {
+                _ = try VocalCreativePlanner().plan(
+                    intent: vagueOrdinary,
+                    channelFormat: .mono,
+                    sourceType: .vocal,
+                    scopeKind: .importedFile,
+                    createdAt: Date(timeIntervalSince1970: 1_786_233_599)
+                )
+                throw CheckFailure(message: "F16 vague Vocal prompt produced executable candidates: \(prompt)")
+            } catch let VocalContractError.blockingClarificationRequired(received) {
+                try tests.expect(
+                    received == blockingClarification,
+                    "F16 planner did not return the intent's exact blocking clarification: \(prompt)"
+                )
+            }
+        }
+        let negatedGoalCases: [(prompt: String, prohibited: Set<VocalAspect>)] = [
+            ("Do not make it clearer.", [.intelligibility]),
+            ("Do not make it warmer.", [.warmth]),
+            ("Do not make it brighter.", [.brightness]),
+            ("Do not make it darker.", [.darkness]),
+            ("Do not bring it closer.", [.closeness]),
+            ("Do not make it distant.", [.distance]),
+            ("Do not make it wider.", [.width]),
+            ("Do not make it narrow.", [.width]),
+            ("Do not make it more controlled.", [.dynamics]),
+            ("Do not add more movement.", [.movement]),
+            ("Do not make it underwater.", [.underwaterColoration, .movement, .darkness]),
+            ("Do not make it brass-like.", [.brassLikeColoration, .metallicCharacter]),
+            ("Do not make it giant and far away.", [.distance, .space, .body]),
+            ("Do not make it whisper-close.", [.closeness, .breath]),
+            ("Do not make it radio-like.", [.radioLike]),
+            ("Do not make it glassy.", [.glassyCharacter, .air]),
+            ("Do not make it smoky.", [.smokyCharacter, .warmth]),
+            ("Do not make it fragile.", [.fragility, .air]),
+            ("Do not make it broken.", [.distortion, .instability]),
+            ("Do not make it floating.", [.floating, .space]),
+            ("Do not make it metallic.", [.metallicCharacter]),
+            ("Do not make it dreamlike.", [.space, .movement]),
+            ("Do not make it unstable.", [.instability, .wobble]),
+        ]
+        for testCase in negatedGoalCases {
+            let intent = try VocalIntentInterpreter().interpret(
+                prompt: testCase.prompt,
+                sourceSnapshotID: snapshotID,
+                scope: fullScope
+            )
+            try tests.expect(
+                intent.archetype == .ordinary
+                    && intent.desiredChanges.isEmpty
+                    && Set(intent.preservation.prohibitedChanges) == testCase.prohibited
+                    && intent.requiresBlockingClarification,
+                "a negated supported Vocal goal became positive authority: \(testCase.prompt)"
+            )
+        }
+
+        let negatedF16Prompt = "Make it better but don't make it brighter."
+        let negatedF16 = try VocalIntentInterpreter().interpret(
+            prompt: negatedF16Prompt,
+            sourceSnapshotID: snapshotID,
+            scope: fullScope
+        )
+        guard let negatedF16Clarification = negatedF16.blockingClarification else {
+            throw CheckFailure(message: "F16 negated supported goal bypassed clarification")
+        }
+        try tests.expect(
+            negatedF16.desiredChanges.isEmpty
+                && negatedF16.preservation.prohibitedChanges == [.brightness]
+                && negatedF16.ambiguities.count == 1,
+            "F16 negated brightness was not represented as a prohibition-only ambiguity"
+        )
+        do {
+            _ = try VocalCreativePlanner().plan(
+                intent: negatedF16,
+                channelFormat: .mono,
+                sourceType: .vocal,
+                scopeKind: .importedFile,
+                createdAt: Date(timeIntervalSince1970: 1_786_233_599.25)
+            )
+            throw CheckFailure(message: "F16 negated supported goal produced executable candidates")
+        } catch let VocalContractError.blockingClarificationRequired(received) {
+            try tests.expect(
+                received == negatedF16Clarification,
+                "F16 negated supported goal returned the wrong blocking clarification"
+            )
+        }
+
+        let scopedOrdinary = try VocalIntentInterpreter().interpret(
+            prompt: "Make this vocal warmer but don't make it brighter.",
+            sourceSnapshotID: snapshotID,
+            scope: fullScope
+        )
+        try tests.expect(
+            scopedOrdinary.desiredChanges.map(\.aspect) == [.warmth]
+                && scopedOrdinary.preservation.prohibitedChanges == [.brightness]
+                && scopedOrdinary.blockingClarification == nil,
+            "scoped ordinary positive and prohibited goals were not kept separate"
+        )
+        do {
+            _ = try VocalIntentInterpreter().interpret(
+                prompt: "Make it brighter but don't make it brighter.",
+                sourceSnapshotID: snapshotID,
+                scope: fullScope
+            )
+            throw CheckFailure(message: "a live desired/prohibited Vocal collision was accepted")
+        } catch let VocalContractError.contradictoryIntent(message) {
+            try tests.expect(
+                message.localizedCaseInsensitiveContains("both requested and prohibited"),
+                "a live desired/prohibited Vocal collision returned the wrong typed error"
+            )
+        }
+        let detailedOrdinary = try VocalIntentInterpreter().interpret(
+            prompt: "Make this vocal clearer and warmer while preserving pitch and timing.",
+            sourceSnapshotID: snapshotID,
+            scope: fullScope
+        )
+        let detailedOrdinaryCandidates = try VocalCreativePlanner().plan(
+            intent: detailedOrdinary,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .importedFile,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_599.5)
+        )
+        try tests.expect(
+            detailedOrdinary.blockingClarification == nil
+                && detailedOrdinaryCandidates.count == 3,
+            "a detailed ordinary Vocal request no longer produces three candidates"
+        )
+        let underwater = try VocalIntentInterpreter().interpret(
+            prompt: "Make this feel underwater, but keep the words understandable.",
+            sourceSnapshotID: snapshotID,
+            scope: fullScope,
+            assetAcceptance: .allowLocalRenderedAsset
+        )
+        let underwaterCandidates = try VocalCreativePlanner().plan(
+            intent: underwater,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .importedFile,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_600)
+        )
+        try tests.expect(underwater.archetype == .underwater, "underwater prompt lost its typed archetype")
+        try tests.expect(underwaterCandidates.count == 3, "underwater request did not create exactly three interpretations")
+        try tests.expect(underwaterCandidates.allSatisfy(\.realtimeActivatable), "full-source underwater plan was not AU eligible")
+        let underwaterSignatures = Set(underwaterCandidates.map { candidate in
+            candidate.plan.nodes
+                .filter { ![.limiter, .loudnessMatch, .meter, .outputTrim].contains($0.type) }
+                .map { $0.type.rawValue }
+                .joined(separator: "|")
+        })
+        try tests.expect(underwaterSignatures.count == 3, "underwater interpretations collapsed to one chain")
+        try tests.expect(
+            underwaterCandidates.contains { $0.plan.nodes.contains(where: { $0.type == .modulatedDelay }) },
+            "underwater interpretations contained no real time-varying modulation"
+        )
+        try tests.expect(
+            underwater.preservation.preserved.contains(.intelligibility),
+            "explicit underwater intelligibility preservation was lost"
+        )
+
+        let brass = try VocalIntentInterpreter().interpret(
+            prompt: "Make my voice sound more like a trumpet.",
+            sourceSnapshotID: snapshotID,
+            scope: fullScope
+        )
+        let brassCandidates = try VocalCreativePlanner().plan(
+            intent: brass,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .importedFile,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_601)
+        )
+        try tests.expect(brass.archetype == .vocalToBrass, "trumpet language did not route to vocal-to-brass")
+        try tests.expect(brassCandidates.count == 3, "trumpet request did not create three honest interpretations")
+        try tests.expect(
+            !brass.ambiguities.isEmpty && brass.blockingClarification == nil,
+            "brass ambiguity was incorrectly made blocking or was lost"
+        )
+        try tests.expect(
+            brassCandidates.allSatisfy { candidate in
+                candidate.limitations.contains { limitation in
+                    limitation.localizedCaseInsensitiveContains("not")
+                        && (limitation.localizedCaseInsensitiveContains("brass")
+                            || limitation.localizedCaseInsensitiveContains("trumpet")
+                            || limitation.localizedCaseInsensitiveContains("reconstruction"))
+                }
+            },
+            "vocal-to-brass candidate omitted its reconstruction limitation"
+        )
+
+        let authority = VocalRevisionReferenceAuthority(
+            orderedCandidateIDs: brassCandidates.map(\.id),
+            selectedCandidateID: brassCandidates[0].id,
+            explicitRevertCandidateID: brassCandidates[0].id
+        )
+        let revision = try VocalRevisionParser().parse("More brass, less voice", authority: authority)
+        let revised = try VocalRevisionEngine().apply(
+            revision,
+            to: brassCandidates[0],
+            availableCandidates: brassCandidates,
+            ids: VocalRevisionApplicationIDs(
+                resultCandidateID: UUID(),
+                resultIntentID: UUID(),
+                resultPlanRequestID: UUID()
+            ),
+            createdAt: Date(timeIntervalSince1970: 1_786_233_602)
+        )
+        try tests.expect(
+            !revised.record.changedNodeIDs.isEmpty,
+            "more-brass revision rebuilt no typed processing"
+        )
+        try tests.expect(
+            revised.candidate.parentCandidateID == brassCandidates[0].id,
+            "brass revision lost immutable ancestry"
+        )
+        try tests.expectThrows("unsupported dynamics-following brass claim was accepted") {
+            _ = try VocalRevisionParser().parse(
+                "Make the brass movement follow my dynamics",
+                authority: authority
+            )
+        }
+
+        let lockCommand = VocalRevisionCommand(
+            id: UUID(),
+            originalProse: "Lock movement",
+            operations: [.lockAspect(.movement)],
+            parsedAgainstCandidateIDs: underwaterCandidates.map(\.id)
+        )
+        let locked = try VocalRevisionEngine().apply(
+            lockCommand,
+            to: underwaterCandidates[0],
+            availableCandidates: underwaterCandidates,
+            ids: VocalRevisionApplicationIDs(
+                resultCandidateID: UUID(),
+                resultIntentID: UUID(),
+                resultPlanRequestID: UUID(),
+                aspectLockIDs: [UUID()]
+            ),
+            createdAt: Date(timeIntervalSince1970: 1_786_233_603)
+        )
+        try tests.expect(
+            locked.candidate.intent.aspectLocks.contains { $0.aspect == .movement },
+            "typed Vocal aspect lock was not retained"
+        )
+        let unlockCommand = try VocalRevisionParser().parse(
+            "Unlock the movement",
+            authority: VocalRevisionReferenceAuthority(
+                orderedCandidateIDs: [locked.candidate.id],
+                selectedCandidateID: locked.candidate.id
+            )
+        )
+        let unlocked = try VocalRevisionEngine().apply(
+            unlockCommand,
+            to: locked.candidate,
+            availableCandidates: underwaterCandidates + [locked.candidate],
+            ids: VocalRevisionApplicationIDs(
+                resultCandidateID: UUID(),
+                resultIntentID: UUID(),
+                resultPlanRequestID: UUID()
+            ),
+            createdAt: Date(timeIntervalSince1970: 1_786_233_604)
+        )
+        try tests.expect(
+            !unlocked.candidate.intent.aspectLocks.contains { $0.aspect == .movement }
+                && unlocked.candidate.plan.nodes == locked.candidate.plan.nodes,
+            "typed Vocal unlock changed audio or retained exact lock authority"
+        )
+    }
+
+    @MainActor private static func testVocalGuideCreateHandoff(_ tests: Harness) throws {
+        let sourceSnapshotID = UUID()
+        let source = AudioBuffer(
+            channels: [[Float](repeating: 0.05, count: 4_800)],
+            sampleRate: 48_000
+        )
+        let sourceAuthority = try VocalAudioHasher().authority(
+            for: source,
+            sourceSnapshotID: sourceSnapshotID,
+            immutableSourceID: "tracksmith-test-take:guide-create-handoff",
+            capturedAt: Date(timeIntervalSince1970: 1_786_262_400)
+        )
+        let captureAuthority = VocalCaptureHandoffAuthority(
+            captureBriefID: UUID(),
+            selectedCaptureInterpretationID: UUID(),
+            testTakeAssessmentID: UUID(),
+            confirmedPreferenceID: UUID(),
+            sourceAuthority: sourceAuthority
+        )
+        let fullIntent = try VocalIntentInterpreter().interpret(
+            prompt: "Make this feel underwater, but keep the words understandable.",
+            sourceSnapshotID: sourceSnapshotID,
+            scope: .fullSource(id: UUID()),
+            assetAcceptance: .allowLocalRenderedAsset
+        )
+        let fullCandidate = try VocalCreativePlanner().plan(
+            intent: fullIntent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+        )[0]
+        let builder = VocalGuideCreateHandoffBuilder()
+        try tests.expectThrows("Guide mode crossed into Create without explicit user intent") {
+            _ = try builder.build(
+                handoffID: UUID(),
+                explicitUserIntentConfirmed: false,
+                candidate: fullCandidate,
+                captureAuthority: captureAuthority,
+                reviewedKnowledgeIDs: [],
+                reviewedProcedureIDs: [],
+                relevantMeasurements: [],
+                createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+            )
+        }
+
+        let measurement = VocalHandoffMeasurement(
+            metricIdentifier: "peak_dbfs",
+            value: -8,
+            unit: "dBFS",
+            confidence: 0.9,
+            analysisVersion: "tracksmith.analysis.v1",
+            limitation: "Peak level is a safety guardrail, not a listening preference."
+        )
+        let handoff = try builder.build(
+            handoffID: UUID(),
+            explicitUserIntentConfirmed: true,
+            candidate: fullCandidate,
+            captureAuthority: captureAuthority,
+            reviewedKnowledgeIDs: ["knowledge.vocal.local.v1", "knowledge.vocal.local.v1"],
+            reviewedProcedureIDs: ["procedure.vocal.reversible.v1"],
+            relevantMeasurements: [measurement],
+            createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+        )
+        try builder.validate(handoff)
+        try tests.expect(
+            handoff.mutationAuthority == .explicitUserCreateIntentOnly
+                && !handoff.providerProseHasMutationAuthority
+                && !handoff.tutorModeHasMutationAuthority
+                && handoff.requiresFinalUserAction,
+            "Handoff widened provider, Tutor, or implicit mutation authority"
+        )
+        try tests.expect(
+            handoff.reviewedKnowledgeIDs == ["knowledge.vocal.local.v1"]
+                && handoff.proposal.candidateID == fullCandidate.id
+                && handoff.proposal.intentID == fullCandidate.intent.id
+                && handoff.proposal.sourceSnapshotID == sourceSnapshotID
+                && handoff.proposal.plan == fullCandidate.plan
+                && handoff.proposal.exactNodeIDs == fullCandidate.plan.nodes.map(\.id)
+                && handoff.proposal.executionMode == .realtimeFullSourceActivation,
+            "Handoff lost exact reviewed references, candidate, intent, source, plan, node order, or realtime boundary"
+        )
+
+        var staleAuthority = captureAuthority
+        staleAuthority.sourceAuthority.sourceSnapshotID = UUID()
+        try tests.expectThrows("Handoff accepted stale capture authority") {
+            _ = try builder.build(
+                handoffID: UUID(),
+                explicitUserIntentConfirmed: true,
+                candidate: fullCandidate,
+                captureAuthority: staleAuthority,
+                reviewedKnowledgeIDs: [],
+                reviewedProcedureIDs: [],
+                relevantMeasurements: [],
+                createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+            )
+        }
+        var widened = handoff
+        widened.providerProseHasMutationAuthority = true
+        try tests.expectThrows("Stored handoff accepted provider mutation authority") {
+            try builder.validate(widened)
+        }
+
+        let scopedIntent = try VocalIntentInterpreter().interpret(
+            prompt: "Only make the last phrase underwater, but keep the words understandable.",
+            sourceSnapshotID: sourceSnapshotID,
+            scope: .seconds(id: UUID(), start: 0.02, end: 0.08),
+            assetAcceptance: .allowLocalRenderedAsset
+        )
+        let scopedCandidate = try VocalCreativePlanner().plan(
+            intent: scopedIntent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .importedFile,
+            createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+        )[0]
+        let scopedHandoff = try builder.build(
+            handoffID: UUID(),
+            explicitUserIntentConfirmed: true,
+            candidate: scopedCandidate,
+            captureAuthority: captureAuthority,
+            reviewedKnowledgeIDs: [],
+            reviewedProcedureIDs: [],
+            relevantMeasurements: [],
+            createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+        )
+        try builder.validate(scopedHandoff)
+        try tests.expect(
+            scopedHandoff.proposal.executionMode == .offlineScopedAssetRender
+                && scopedHandoff.proposal.processingBoundary == .scopedEditablePlanForOfflineRender
+                && !scopedCandidate.realtimeActivatable,
+            "Section-scoped handoff was mislabeled as whole-stream realtime authority"
+        )
+    }
+
+    @MainActor private static func testVocalPreviewCandidateExport(_ tests: Harness) throws {
+        let fileManager = FileManager.default
+        let root = fileManager.temporaryDirectory
+            .appendingPathComponent("tracksmith-vocal-preview-\(UUID().uuidString)", isDirectory: true)
+        defer { try? fileManager.removeItem(at: root) }
+        try fileManager.createDirectory(at: root, withIntermediateDirectories: false)
+
+        let sampleRate = 48_000.0
+        let frameCount = Int(sampleRate * 0.5)
+        var phase = 0.0
+        let samples = (0..<frameCount).map { frame -> Float in
+            let time = Double(frame) / sampleRate
+            let fundamental = 174 + 5.5 * sin(2 * .pi * 4.7 * time)
+            phase += 2 * .pi * fundamental / sampleRate
+            let phraseEnvelope = 0.58 + 0.25 * sin(2 * .pi * 1.35 * time - 0.4)
+            let voiced = phraseEnvelope * (
+                0.19 * sin(phase)
+                    + 0.085 * sin(2 * phase + 0.15)
+                    + 0.045 * sin(3 * phase + 0.4)
+                    + 0.022 * sin(5 * phase + 0.8)
+            )
+            let consonantEnvelope = [0.10, 0.25, 0.41].reduce(0.0) { amount, center in
+                let distance = abs(time - center)
+                return amount + (distance < 0.025 ? 1 - distance / 0.025 : 0)
+            }
+            let consonant = 0.018 * consonantEnvelope * (
+                sin(2 * .pi * 3_700 * time + 0.2)
+                    + 0.65 * sin(2 * .pi * 6_100 * time + 0.7)
+            )
+            return Float(voiced + consonant)
+        }
+        let fixture = AudioBuffer(channels: [samples], sampleRate: sampleRate)
+        let inputURL = root.appendingPathComponent("deterministic-vocal-mono.wav")
+        try WAVFile.writeFloat32(fixture, url: inputURL)
+        let sourceBytesBefore = try Data(contentsOf: inputURL)
+        let sourceFileHashBefore = ResearchPayloadValidator.sha256(sourceBytesBefore)
+        let persistedSource = try WAVFile.read(url: inputURL)
+        let sourcePCMHashBefore = try VocalAudioHasher().sha256(persistedSource)
+        let sourceAnalysis = AudioAnalyzer().analyze(persistedSource)
+        guard let sourceRMSDBFS = sourceAnalysis.metrics["rms_dbfs"]?.value else {
+            throw CheckFailure(message: "deterministic Vocal fixture omitted RMS provenance")
+        }
+        try tests.expect(
+            persistedSource.channels[0].allSatisfy(\.isFinite)
+                && sourceAnalysis.metrics.values.allSatisfy {
+                    $0.value.isFinite && $0.confidence.isFinite
+                },
+            "deterministic Vocal fixture contained nonfinite PCM or measurements"
+        )
+        let materialDifferenceFloorDBFS = sourceRMSDBFS - 40
+
+        func stableUUID(_ value: UInt64) -> UUID {
+            UUID(uuidString: String(format: "00000000-0000-4000-8000-%012llx", value))!
+        }
+
+        let sourceSnapshotID = stableUUID(1)
+        let promptFixtures: [(name: String, prompt: String, archetype: VocalCreativeArchetype, idBase: UInt64)] = [
+            (
+                name: "underwater",
+                prompt: "Make this vocal feel underwater, but keep the words understandable.",
+                archetype: .underwater,
+                idBase: 100
+            ),
+            (
+                name: "brass",
+                prompt: "Make my voice sound more like a trumpet.",
+                archetype: .vocalToBrass,
+                idBase: 1_000
+            ),
+        ]
+        let exporter = PreviewSessionExporter()
+        let renderer = PreviewRenderer()
+
+        for promptFixture in promptFixtures {
+            let intent = try VocalIntentInterpreter().interpret(
+                prompt: promptFixture.prompt,
+                intentID: stableUUID(promptFixture.idBase),
+                sourceSnapshotID: sourceSnapshotID,
+                scope: .fullSource(id: stableUUID(promptFixture.idBase + 1))
+            )
+            try tests.expect(
+                intent.archetype == promptFixture.archetype,
+                "\(promptFixture.name) export fixture routed to the wrong Vocal archetype"
+            )
+
+            let provisionalCandidates = try VocalCreativePlanner().plan(
+                intent: intent,
+                channelFormat: .mono,
+                sourceType: .vocal,
+                scopeKind: .importedFile,
+                analysis: sourceAnalysis,
+                createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+            )
+            let deterministicIDs = VocalDeterministicIDs(
+                candidateIDs: provisionalCandidates.indices.map {
+                    stableUUID(promptFixture.idBase + 10 + UInt64($0))
+                },
+                planRequestIDs: provisionalCandidates.indices.map {
+                    stableUUID(promptFixture.idBase + 20 + UInt64($0))
+                },
+                nodeIDsByCandidate: provisionalCandidates.enumerated().map { candidateIndex, candidate in
+                    candidate.plan.nodes.indices.map { nodeIndex in
+                        stableUUID(
+                            promptFixture.idBase
+                                + 100
+                                + UInt64(candidateIndex * 32 + nodeIndex)
+                        )
+                    }
+                }
+            )
+            let candidates = try VocalCreativePlanner().plan(
+                intent: intent,
+                channelFormat: .mono,
+                sourceType: .vocal,
+                scopeKind: .importedFile,
+                analysis: sourceAnalysis,
+                deterministicIDs: deterministicIDs,
+                createdAt: Date(timeIntervalSince1970: 1_786_262_400)
+            )
+            let candidatesBeforeExport = candidates
+            let first = try exporter.exportVocalCandidates(
+                inputURL: inputURL,
+                prompt: promptFixture.prompt,
+                sourceType: .vocal,
+                outputDirectory: root.appendingPathComponent("\(promptFixture.name)-first", isDirectory: true),
+                sourceSnapshotID: sourceSnapshotID,
+                candidates: candidates
+            )
+            let replay = try exporter.exportVocalCandidates(
+                inputURL: inputURL,
+                prompt: promptFixture.prompt,
+                sourceType: .vocal,
+                outputDirectory: root.appendingPathComponent("\(promptFixture.name)-replay", isDirectory: true),
+                sourceSnapshotID: sourceSnapshotID,
+                candidates: candidates
+            )
+            try tests.expect(candidates == candidatesBeforeExport, "\(promptFixture.name) export mutated its input candidates")
+            try tests.expect(
+                first.manifest.variants.count == 3
+                    && first.manifest.validVariantCount == 3
+                    && replay.manifest.variants.count == 3
+                    && replay.manifest.validVariantCount == 3,
+                "\(promptFixture.name) export did not produce exactly three valid variants on both runs"
+            )
+            try tests.expect(
+                first.manifest.sourceSnapshotID == sourceSnapshotID
+                    && replay.manifest.sourceSnapshotID == sourceSnapshotID
+                    && first.manifest.sourceFingerprint == replay.manifest.sourceFingerprint,
+                "\(promptFixture.name) export changed source identity across deterministic replay"
+            )
+
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let persistedManifest = try decoder.decode(
+                PreviewSessionManifest.self,
+                from: Data(contentsOf: first.directory.appendingPathComponent("manifest.json"))
+            )
+            guard let persistedCandidates = persistedManifest.vocalCreativeCandidates,
+                  persistedCandidates.count == candidates.count,
+                  persistedManifest.variants.count == candidates.count else {
+                throw CheckFailure(message: "\(promptFixture.name) manifest omitted Vocal candidate provenance")
+            }
+            try tests.expect(
+                persistedManifest.sourceSnapshotID == sourceSnapshotID
+                    && persistedManifest.sourceType == .vocal
+                    && persistedManifest.channelCount == 1
+                    && persistedManifest.frameCount == frameCount
+                    && persistedManifest.inputFileName == inputURL.lastPathComponent,
+                "\(promptFixture.name) manifest changed source provenance"
+            )
+            let copiedOriginal = try WAVFile.read(
+                url: first.directory.appendingPathComponent(persistedManifest.originalAudioFileName)
+            )
+            let copiedOriginalHash = try VocalAudioHasher().sha256(copiedOriginal)
+            try tests.expect(
+                copiedOriginalHash == sourcePCMHashBefore,
+                "\(promptFixture.name) exported original did not preserve source PCM identity"
+            )
+
+            var firstAudios: [AudioBuffer] = []
+            for index in candidates.indices {
+                let variant = persistedManifest.variants[index]
+                let replayVariant = replay.manifest.variants[index]
+                let candidate = candidates[index]
+                let persistedCandidate = persistedCandidates[index]
+                guard variant.status == .valid,
+                      let audioFileName = variant.audioFileName,
+                      let replayAudioFileName = replayVariant.audioFileName,
+                      let previousDifference = variant.pairwiseDifferenceFromPrevious else {
+                    throw CheckFailure(message: "\(promptFixture.name) candidate \(index + 1) was not a persisted valid WAV")
+                }
+
+                let audioURL = first.directory.appendingPathComponent(audioFileName)
+                let replayAudioURL = replay.directory.appendingPathComponent(replayAudioFileName)
+                let audioBytes = try Data(contentsOf: audioURL)
+                let replayAudioBytes = try Data(contentsOf: replayAudioURL)
+                let audio = try WAVFile.read(url: audioURL)
+                let replayAudio = try WAVFile.read(url: replayAudioURL)
+                firstAudios.append(audio)
+
+                try tests.expect(
+                    audioBytes == replayAudioBytes && audio == replayAudio,
+                    "\(promptFixture.name) candidate \(index + 1) changed byte or PCM output on replay"
+                )
+                try tests.expect(
+                    audio.channelCount == 1
+                        && audio.frameCount == frameCount
+                        && audio.channels[0].allSatisfy(\.isFinite),
+                    "\(promptFixture.name) candidate \(index + 1) emitted invalid or nonfinite PCM"
+                )
+                let differenceValues = [
+                    variant.difference.differenceRMSDBFS,
+                    variant.difference.crestFactorDeltaDB,
+                    variant.difference.spectralCentroidDeltaHz,
+                    variant.difference.bandEnergyDistance,
+                    previousDifference.differenceRMSDBFS,
+                    previousDifference.crestFactorDeltaDB,
+                    previousDifference.spectralCentroidDeltaHz,
+                    previousDifference.bandEnergyDistance,
+                    variant.loudnessMatchGainDB,
+                ]
+                let seriesAreFinite = variant.analysis.series?.values.allSatisfy { series in
+                    series.values.allSatisfy(\.isFinite)
+                } ?? true
+                try tests.expect(
+                    differenceValues.allSatisfy(\.isFinite)
+                        && seriesAreFinite
+                        && variant.analysis.metrics.values.allSatisfy {
+                            $0.value.isFinite && $0.confidence.isFinite
+                        }
+                        && variant.plan.nodes.allSatisfy {
+                            $0.parameters.values.allSatisfy(\.isFinite)
+                        },
+                    "\(promptFixture.name) candidate \(index + 1) persisted nonfinite report or plan data"
+                )
+                try tests.expect(
+                    variant.loudnessMatchMethod != .unavailable
+                        && variant.plan.nodes.filter { $0.type == .loudnessMatch }.count == 1,
+                    "\(promptFixture.name) candidate \(index + 1) was not rendered through its persisted loudness match"
+                )
+                let originalLevel: Double?
+                let renderedLevel: Double?
+                switch variant.loudnessMatchMethod {
+                case .bs1770Integrated:
+                    originalLevel = persistedManifest.originalAnalysis.metrics["integrated_loudness_lufs"]?.value
+                    renderedLevel = variant.analysis.metrics["integrated_loudness_lufs"]?.value
+                case .rmsFallback:
+                    originalLevel = persistedManifest.originalAnalysis.metrics["rms_dbfs"]?.value
+                    renderedLevel = variant.analysis.metrics["rms_dbfs"]?.value
+                case .unavailable:
+                    originalLevel = nil
+                    renderedLevel = nil
+                }
+                guard let originalLevel, let renderedLevel else {
+                    throw CheckFailure(message: "\(promptFixture.name) candidate \(index + 1) omitted its level-match measurement")
+                }
+                try tests.expect(
+                    abs(originalLevel - renderedLevel) < 0.35,
+                    "\(promptFixture.name) candidate \(index + 1) missed its measured level match"
+                )
+                try tests.expect(
+                    variant.difference.differenceRMSDBFS >= materialDifferenceFloorDBFS
+                        && previousDifference.differenceRMSDBFS >= materialDifferenceFloorDBFS,
+                    "\(promptFixture.name) candidate \(index + 1) fell below the exporter's material-difference floor"
+                )
+                try tests.expect(
+                    replayAudioFileName == audioFileName
+                        && replayVariant.candidateIdentifier == variant.candidateIdentifier
+                        && replayVariant.hypothesisIdentifier == variant.hypothesisIdentifier
+                        && replayVariant.plan == variant.plan
+                        && replayVariant.difference == variant.difference
+                        && replayVariant.analysis == variant.analysis,
+                    "\(promptFixture.name) candidate \(index + 1) changed its persisted graph or report on replay"
+                )
+
+                var expectedPersistedCandidate = candidate
+                expectedPersistedCandidate.previewID = variant.previewID
+                expectedPersistedCandidate.plan = variant.plan
+                try tests.expect(
+                    persistedCandidate == expectedPersistedCandidate
+                        && variant.candidateIdentifier == candidate.id.uuidString.lowercased()
+                        && variant.hypothesisIdentifier
+                            == "tracksmith-vocal-\(promptFixture.archetype.rawValue)-\(candidate.interpretationIndex)",
+                    "\(promptFixture.name) candidate \(index + 1) lost typed identity or provenance"
+                )
+            }
+
+            for firstIndex in firstAudios.indices {
+                for secondIndex in firstAudios.indices where secondIndex > firstIndex {
+                    let pairwise = try renderer.compare(
+                        reference: firstAudios[firstIndex],
+                        candidate: firstAudios[secondIndex]
+                    )
+                    try tests.expect(
+                        pairwise.differenceRMSDBFS.isFinite
+                            && pairwise.differenceRMSDBFS >= materialDifferenceFloorDBFS,
+                        "\(promptFixture.name) candidates \(firstIndex + 1) and \(secondIndex + 1) collapsed after level matching"
+                    )
+                }
+            }
+        }
+
+        let noLouderPrompt = "Make this vocal feel underwater without making it louder."
+        let noLouderIntent = try VocalIntentInterpreter().interpret(
+            prompt: noLouderPrompt,
+            sourceSnapshotID: sourceSnapshotID,
+            scope: .fullSource(id: stableUUID(9_001))
+        )
+        try tests.expect(
+            noLouderIntent.preservation.prohibitedChanges.contains(.loudness),
+            "without making it louder did not produce the typed Vocal loudness prohibition"
+        )
+        var noLouderCandidates = try VocalCreativePlanner().plan(
+            intent: noLouderIntent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .importedFile,
+            analysis: sourceAnalysis,
+            createdAt: Date(timeIntervalSince1970: 1_786_262_401)
+        )
+        // This attenuation is valid under the typed no-louder contract. The
+        // renderer must add positive preview compensation to this candidate,
+        // which makes the exact materialized graph invalid for execution.
+        noLouderCandidates[0].plan.nodes.insert(
+            ProcessingNode(
+                id: stableUUID(9_002),
+                type: .inputTrim,
+                parameters: [.gainDB: -24],
+                rationale: "Deterministically require positive preview loudness compensation.",
+                confidence: 1,
+                category: .loudness
+            ),
+            at: 0
+        )
+        try VocalContractValidator().validateForRealtimeActivation(noLouderCandidates[0])
+        let rejectedCandidateBeforeExport = noLouderCandidates[0]
+        let noLouderExport = try exporter.exportVocalCandidates(
+            inputURL: inputURL,
+            prompt: noLouderPrompt,
+            sourceType: .vocal,
+            outputDirectory: root.appendingPathComponent("no-louder", isDirectory: true),
+            sourceSnapshotID: sourceSnapshotID,
+            candidates: noLouderCandidates
+        )
+        guard let persistedNoLouderCandidates = noLouderExport.manifest.vocalCreativeCandidates,
+              persistedNoLouderCandidates.count == noLouderCandidates.count else {
+            throw CheckFailure(message: "no-louder export omitted its typed Vocal candidates")
+        }
+        let rejectedVariant = noLouderExport.manifest.variants[0]
+        let refusedCandidate = persistedNoLouderCandidates[0]
+        let executableVariants = noLouderExport.manifest.variants.filter {
+            $0.status == .valid && $0.audioFileName != nil
+        }
+        try tests.expect(
+            rejectedVariant.status == .rejected
+                && rejectedVariant.audioFileName == nil
+                && rejectedVariant.plan.nodes.contains {
+                    $0.type == .loudnessMatch && $0.parameters[.gainDB, default: 0] > 0
+                }
+                && rejectedVariant.rejectionReasons.contains {
+                    $0.localizedCaseInsensitiveContains("materialized Vocal plan")
+                        && $0.localizedCaseInsensitiveContains("loudness")
+                },
+            "a positive materialized loudness match escaped the exact typed Vocal preservation contract"
+        )
+        try tests.expect(
+            refusedCandidate.previewID == nil
+                && refusedCandidate.authorityStatus == .refused
+                && !refusedCandidate.realtimeActivatable
+                && refusedCandidate.plan == rejectedCandidateBeforeExport.plan
+                && !executableVariants.contains {
+                    $0.candidateIdentifier == rejectedCandidateBeforeExport.id.uuidString.lowercased()
+                },
+            "a rejected Vocal variant retained preview, handoff, working-plan, or commit authority"
+        )
+        let refusedCaptureAuthority = VocalCaptureHandoffAuthority(
+            sourceAuthority: VocalSourceAuthority(
+                sourceSnapshotID: sourceSnapshotID,
+                immutableSourceID: "no-louder-vocal-fixture",
+                contentHashSHA256: sourcePCMHashBefore,
+                sampleRate: sampleRate,
+                channelCount: 1,
+                frameCount: frameCount,
+                capturedAt: Date(timeIntervalSince1970: 1_786_262_401)
+            )
+        )
+        try tests.expectThrows("a refused preview candidate entered executable Vocal handoff") {
+            _ = try VocalGuideCreateHandoffBuilder().build(
+                handoffID: stableUUID(9_003),
+                explicitUserIntentConfirmed: true,
+                candidate: refusedCandidate,
+                captureAuthority: refusedCaptureAuthority,
+                reviewedKnowledgeIDs: [],
+                reviewedProcedureIDs: [],
+                relevantMeasurements: [],
+                createdAt: Date(timeIntervalSince1970: 1_786_262_402)
+            )
+        }
+
+        let sourceBytesAfter = try Data(contentsOf: inputURL)
+        let sourcePCMAfter = try WAVFile.read(url: inputURL)
+        let sourcePCMHashAfter = try VocalAudioHasher().sha256(sourcePCMAfter)
+        try tests.expect(
+            sourceBytesAfter == sourceBytesBefore
+                && ResearchPayloadValidator.sha256(sourceBytesAfter) == sourceFileHashBefore
+                && sourcePCMHashAfter == sourcePCMHashBefore,
+            "Vocal candidate exports modified the immutable source file or its hash"
+        )
+    }
+
+    @MainActor private static func testVocalRevisionRecovery(_ tests: Harness) throws {
+        let snapshotID = UUID()
+        let scope = VocalCreativeScope.fullSource(id: UUID())
+        let intent = try VocalIntentInterpreter().interpret(
+            prompt: "Make this feel underwater, but keep the words understandable.",
+            sourceSnapshotID: snapshotID,
+            scope: scope,
+            assetAcceptance: .allowLocalRenderedAsset
+        )
+        let roots = try VocalCreativePlanner().plan(
+            intent: intent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            createdAt: Date(timeIntervalSince1970: 1_786_234_000)
+        )
+        let root = roots[0]
+        var retained = roots
+        var records: [VocalRevisionRecord] = []
+        var head = root
+
+        func apply(
+            _ operation: VocalRevisionOperation,
+            prose: String,
+            timestamp: TimeInterval
+        ) throws -> VocalRevisionResult {
+            let command = VocalRevisionCommand(
+                id: UUID(),
+                originalProse: prose,
+                operations: [operation],
+                parsedAgainstCandidateIDs: retained.map(\.id)
+            )
+            return try VocalRevisionEngine().apply(
+                command,
+                to: head,
+                availableCandidates: retained,
+                ids: VocalRevisionApplicationIDs(
+                    resultCandidateID: UUID(),
+                    resultIntentID: UUID(),
+                    resultPlanRequestID: UUID(),
+                    insertedNodeIDs: (0..<8).map { _ in UUID() },
+                    aspectLockIDs: (0..<8).map { _ in UUID() }
+                ),
+                createdAt: Date(timeIntervalSince1970: timestamp)
+            )
+        }
+
+        for (operation, prose, timestamp) in [
+            (VocalRevisionOperation.lockAspect(.movement), "Lock movement", 1_786_234_001.0),
+            (VocalRevisionOperation.unlockAspect(.movement), "Unlock movement", 1_786_234_002.0),
+            (VocalRevisionOperation.strangerPreservingIntelligibility, "Make it stranger while preserving intelligibility", 1_786_234_003.0),
+        ] {
+            let revision = try apply(operation, prose: prose, timestamp: timestamp)
+            retained.append(revision.candidate)
+            records.append(revision.record)
+            head = revision.candidate
+        }
+
+        let expectedChain = [root.id, retained[3].id, retained[4].id, head.id]
+        try tests.expect(
+            records.last?.exactAncestorCandidateIDs == Array(expectedChain.dropLast()),
+            "third-generation Vocal revision did not retain its complete root-to-parent ancestry"
+        )
+
+        let recoveryAuthority = VocalRevisionReferenceAuthority(
+            orderedCandidateIDs: retained.map(\.id),
+            selectedCandidateID: head.id,
+            explicitRevertCandidateID: root.id
+        )
+        let recoveryCommand = try VocalRevisionParser().parse(
+            "Go back to the version before it became synthetic.",
+            authority: recoveryAuthority,
+            commandID: UUID()
+        )
+        let recovered = try VocalRevisionEngine().apply(
+            recoveryCommand,
+            to: head,
+            availableCandidates: retained,
+            ids: VocalRevisionApplicationIDs(
+                resultCandidateID: UUID(),
+                resultIntentID: UUID(),
+                resultPlanRequestID: UUID()
+            ),
+            createdAt: Date(timeIntervalSince1970: 1_786_234_004)
+        )
+        retained.append(recovered.candidate)
+        records.append(recovered.record)
+
+        try tests.expect(
+            recovered.candidate.revertedToCandidateID == root.id
+                && recovered.candidate.plan == root.plan
+                && recovered.record.exactAncestorCandidateIDs == expectedChain,
+            "natural exact recovery did not restore the retained root plan with complete branch ancestry"
+        )
+
+        let persistenceRoot = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tracksmith-vocal-recovery-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: persistenceRoot) }
+        let authority = VocalSourceAuthority(
+            sourceSnapshotID: snapshotID,
+            immutableSourceID: "test-vocal-revision-source",
+            contentHashSHA256: String(repeating: "c", count: 64),
+            sampleRate: 48_000,
+            channelCount: 1,
+            frameCount: 96_000,
+            capturedAt: Date(timeIntervalSince1970: 1_786_233_999)
+        )
+        let sessionID = UUID()
+        let state = VocalSessionState(
+            id: sessionID,
+            createdAt: Date(timeIntervalSince1970: 1_786_234_005),
+            updatedAt: Date(timeIntervalSince1970: 1_786_234_005),
+            sourceAuthority: authority,
+            creativeIntents: [intent],
+            candidates: retained,
+            revisions: records,
+            selectedCandidateID: recovered.candidate.id
+        )
+        let store = VocalSessionStore(rootURL: persistenceRoot)
+        _ = try store.save(state)
+        let reloaded = try store.load(sessionID: sessionID, currentSourceAuthority: authority)
+        try tests.expect(
+            reloaded.state.candidates == retained
+                && reloaded.state.revisions == records
+                && reloaded.state.selectedCandidateID == recovered.candidate.id,
+            "deep Vocal revision graph changed across save/reload"
+        )
+    }
+
+    @MainActor private static func testVocalScopedAssetPublication(_ tests: Harness) async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("tracksmith-vocal-asset-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let exchange = try FileExchange(directory: root)
+        let instanceID = UUID()
+        let runtimeEpoch = UUID()
+        let sampleRate = 48_000.0
+        let frameCount = Int(sampleRate * 2)
+        let samples = (0..<frameCount).map { frame -> Float in
+            let time = Double(frame) / sampleRate
+            let phraseEnvelope = 0.55 + 0.35 * sin(2 * .pi * 1.7 * time)
+            return Float(phraseEnvelope * (
+                0.18 * sin(2 * .pi * 173 * time)
+                    + 0.07 * sin(2 * .pi * 997 * time + 0.2)
+                    + 0.025 * sin(2 * .pi * 2_713 * time + 0.7)
+            ))
+        }
+        let source = AudioBuffer(channels: [samples], sampleRate: sampleRate)
+        let sourceHash = try VocalAudioHasher().sha256(source)
+        let reservation = try exchange.reserveWAVArtifact(instanceID: instanceID)
+        try WAVFile.writeFloat32(source, url: reservation.temporaryURL)
+        let artifact = try exchange.publishArtifact(
+            reservation,
+            sampleRate: sampleRate,
+            channelCount: 1,
+            frameCount: frameCount,
+            runtimeEpoch: runtimeEpoch
+        )
+        let sourceAuthority = try VocalAudioHasher().authority(
+            for: source,
+            sourceSnapshotID: artifact.id,
+            immutableSourceID: "tracksmith-test-take:scoped-asset-publication",
+            capturedAt: artifact.createdAt
+        )
+
+        let scope = VocalCreativeScope.seconds(id: UUID(), start: 0.7, end: 1.35)
+        let intent = try VocalIntentInterpreter().interpret(
+            prompt: "Only make the last phrase underwater, but keep the words understandable.",
+            sourceSnapshotID: artifact.id,
+            scope: scope,
+            assetAcceptance: .allowLocalRenderedAsset
+        )
+        let candidates = try VocalCreativePlanner().plan(
+            intent: intent,
+            channelFormat: .mono,
+            sourceType: .vocal,
+            scopeKind: .pluginInput,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_700)
+        )
+        try tests.expect(
+            candidates.count == 3 && candidates.allSatisfy { !$0.realtimeActivatable },
+            "section-scoped candidates were not isolated from AU activation"
+        )
+        try tests.expectThrows("section-scoped candidate passed realtime validation") {
+            try PlanValidator().validateForRealtimeActivation(
+                candidates[0].plan,
+                currentSnapshotID: artifact.id
+            )
+        }
+
+        let renderID = UUID()
+        let client = CompanionSessionClient(exchange: exchange)
+        let result = try await client.renderVocalAsset(
+            artifact: artifact,
+            sourceAuthority: sourceAuthority,
+            candidate: candidates[0],
+            renderID: renderID,
+            createdAt: Date(timeIntervalSince1970: 1_786_233_701)
+        )
+        try tests.expect(FileManager.default.fileExists(atPath: result.sourceAudioURL.path), "asset package omitted original audio")
+        try tests.expect(FileManager.default.fileExists(atPath: result.audioURL.path), "asset package omitted rendered audio")
+        try tests.expect(FileManager.default.fileExists(atPath: result.manifestURL.path), "asset package omitted provenance")
+        let publishedSource = try WAVFile.read(url: result.sourceAudioURL)
+        let publishedRender = try WAVFile.read(url: result.audioURL)
+        let publishedSourceHash = try VocalAudioHasher().sha256(publishedSource)
+        let publishedRenderHash = try VocalAudioHasher().sha256(publishedRender)
+        try tests.expect(publishedSourceHash == sourceHash, "asset package changed the original source")
+        try tests.expect(
+            publishedRenderHash == result.asset.manifest.renderHashSHA256,
+            "published render hash disagrees with provenance"
+        )
+        let lower = Int((0.7 * sampleRate).rounded(.down))
+        let upper = Int((1.35 * sampleRate).rounded(.up))
+        for frame in 0..<lower {
+            try tests.expect(
+                publishedSource.channels[0][frame].bitPattern == publishedRender.channels[0][frame].bitPattern,
+                "scoped render changed a sample before its authority range"
+            )
+        }
+        for frame in upper..<frameCount {
+            try tests.expect(
+                publishedSource.channels[0][frame].bitPattern == publishedRender.channels[0][frame].bitPattern,
+                "scoped render changed a sample after its authority range"
+            )
+        }
+        try tests.expect(
+            result.asset.manifest.outsideScopePreservedExactly
+                && result.asset.manifest.localOffline
+                && !result.asset.manifest.usesNetwork
+                && result.asset.manifest.thirdPartyMaterialStatus == .noneUsed,
+            "scoped asset provenance overstated or lost its execution boundary"
+        )
+        try tests.expect(
+            result.asset.manifest.sourceAuthority == sourceAuthority,
+            "scoped asset did not retain the caller-validated source authority"
+        )
+        let manifestDecoder = JSONDecoder()
+        manifestDecoder.dateDecodingStrategy = .secondsSince1970
+        let decodedManifest = try manifestDecoder.decode(
+            VocalRenderedAssetManifest.self,
+            from: Data(contentsOf: result.manifestURL)
+        )
+        try tests.expect(decodedManifest == result.asset.manifest, "published Vocal manifest changed during serialization")
+        try tests.expect(
+            decodedManifest.originalPrompt == candidates[0].intent.originalPrompt
+                && decodedManifest.processingPlan == candidates[0].plan
+                && decodedManifest.boundaryDecision
+                    == VocalProcessingBoundaryEvaluator().decision(for: candidates[0].intent),
+            "F25 persisted Vocal manifest lost exact original prompt, processing plan, or boundary decision"
+        )
+        do {
+            _ = try await client.renderVocalAsset(
+                artifact: artifact,
+                sourceAuthority: sourceAuthority,
+                candidate: candidates[0],
+                renderID: renderID
+            )
+            throw CheckFailure(message: "immutable asset destination was overwritten")
+        } catch is CompanionSessionError {
+            // Expected fail-closed collision.
+        }
     }
 
     /// The defining property of General Tutor v2: an ordinary production
@@ -5502,6 +7516,7 @@ enum TestRunner {
             "schema unsupported-node activation rule differs from PlanValidator"
         )
         var schemaAllowedParameters: [NodeType: Set<ParameterID>] = [:]
+        var schemaRequiredParameters: [NodeType: Set<ParameterID>] = [:]
         for rule in nodeRules.dropFirst() {
             guard let condition = rule["if"] as? [String: Any],
                   let conditionProperties = condition["properties"] as? [String: Any],
@@ -5527,10 +7542,31 @@ enum TestRunner {
                 )
                 schemaAllowedParameters[nodeType] = Set(typedParameters)
             }
+            if let requiredConsequence = consequence["then"] as? [String: Any] {
+                guard let enabledCondition = consequence["if"] as? [String: Any],
+                      let enabledConditionProperties = enabledCondition["properties"] as? [String: Any],
+                      let enabledRule = enabledConditionProperties["enabled"] as? [String: Any],
+                      (enabledRule["const"] as? Bool) == true,
+                      let requiredProperties = requiredConsequence["properties"] as? [String: Any],
+                      let requiredParametersRule = requiredProperties["parameters"] as? [String: Any],
+                      let rawRequired = requiredParametersRule["required"] as? [String] else {
+                    throw CheckFailure(message: "schema required-parameter rule for \(rawType) is malformed")
+                }
+                let typedRequired = rawRequired.compactMap(ParameterID.init(rawValue:))
+                try tests.expect(
+                    typedRequired.count == rawRequired.count,
+                    "schema required-parameter rule for \(rawType) contains an unknown parameter"
+                )
+                schemaRequiredParameters[nodeType] = Set(typedRequired)
+            }
         }
         try tests.expect(
             schemaAllowedParameters == PlanValidator.allowedParameters,
             "schema node-specific parameter allowlists differ from PlanValidator"
+        )
+        try tests.expect(
+            schemaRequiredParameters == PlanValidator.requiredParameters,
+            "schema node-specific required parameters differ from PlanValidator"
         )
         for (parameter, range) in PlanValidator.ranges {
             guard let schemaParameter = parameterProperties[parameter.rawValue] as? [String: Any] else {

@@ -292,13 +292,12 @@ ordinary plan/render/safety gates before commit.
 
 - `TestRunner`: the frozen Production Intelligence v1 closure passed 68/68 in
   Debug, Release, and Thread Sanitizer with the selected official BS.2217-2
-  vectors; that dated closure is historical. The current harness declares 72
-  unconditional checks plus one optional official-vector lane (73 possible when
-  `TRACKSMITH_BS2217_VECTORS` is enabled). Previously verified current
-  2026-08-02 Debug and Release runs each pass 72/72 with that variable omitted.
-  The same-date vector-enabled Debug and Release runs now each pass 73/73 with
-  the variable set to the local directory containing the 14 official BS.2217-2
-  vectors. The current 73-lane Thread Sanitizer run remains open/unproven.
+  vectors; that dated closure is historical. The frozen pre-Vocal repository
+  baseline at commit `406b446` declares 91 ordinary checks plus one optional
+  official-vector lane. Its 2026-08-08 Debug and Release ordinary runs pass
+  91/91; an isolated Release/Thread Sanitizer run with the 14 local vectors
+  passes 92/92 with no sanitizer report. The 2026-08-02 72/72 ordinary and
+  73/73 vector-enabled results remain dated evidence for that earlier harness.
 - Provider tests: OpenAI/Gemini request shape, no tools/audio/file names/credentials,
   strict output, consent, missing/inaccessible/rejected credential, timeout,
   cancellation, network loss, malformed/oversized response, rate limit, bounded
