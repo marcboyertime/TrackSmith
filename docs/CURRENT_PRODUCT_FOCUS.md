@@ -1,6 +1,6 @@
 # Current product focus
 
-Status date: 2026-08-08. This record is additive. It changes engineering priority
+Status date: 2026-08-09. This record is additive. It changes engineering priority
 only; it does not alter, close, weaken, or reinterpret any existing milestone,
 gate status, or dated evidence record.
 
@@ -24,8 +24,9 @@ Final development-tree Debug and Release `TestRunner` runs each passed 104/104;
 the vector-enabled Release/Thread Sanitizer run passed 105/105 with no race
 report. The record also bounds the current custom-host, heap-interposer,
 synthetic semantic-evaluator, listening-CLI self-check, Tutor-regression, and
-native-build observations. V0 and V7 are passed; V1-V6 remain in progress, with
-V6 still awaiting final clean source-bound regression evidence. V7 is supported
+native-build observations. The final clean source-bound `make verify` run at
+implementation commit `a9e21e5` passed, so V0, V6, and V7 are passed while V1-V5
+remain in progress. V7 is supported
 by the separate signed-install record: the exact arm64 app/AU, entitlements,
 registration, installed hashes, out-of-process `auval`, and installed App Group
 publication all passed at local Apple Development scope. V8-V9 remain pending.

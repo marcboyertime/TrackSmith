@@ -18,8 +18,9 @@
   Tutor regressions, and native builds. The exact arm64 app/AU was also installed
   under the matching Apple Development Team/App Group, byte-matched to its build,
   registered as the sole matching extension, and passed out-of-process `auval`;
-  see the signed-install evidence record. Final clean source-bound regression,
-  direct Logic, owner listening, and release closure remain open.
+  see the signed-install evidence record. The clean source-bound `make verify`
+  regression now passes at implementation commit `a9e21e5`; direct Logic, owner
+  listening, and release closure remain open.
 - Reconciled General Production Tutor v2 to its ledger and checked-in catalog:
   518/518 offline cases across 99 evaluated domains; 458 reviewed claims and
   78 strategies; native open-question Guide Me UI; bounded local, per-item

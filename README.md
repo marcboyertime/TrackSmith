@@ -199,7 +199,7 @@ The current `AudioUnitHostProbe` also covers native `shouldBypassEffect`, conser
 180-second/-120 dB tail reporting, null-output/upstream-pointer host layouts, scheduled
 output-gain events, cross-block ramps, distinct reset-versus-bypass automation
 semantics, and conservative output-silence-flag handling. The final combined-tree
-Release probe passed at 14.7 us mean, 16.9 us p99, and 46.0 us maximum against its
+Release probe passed at 14.9 us mean, 19.6 us p99, and 85.1 us maximum against its
 2,666.7 us deadline; the thread-local heap interposer observed zero heap operations
 across 4,000 callbacks (14.8 us mean, 16.8 us p99, 57.8 us maximum). The
 instrumented Thread Sanitizer probe passed at 550.1 us mean, 611.0 us p99, and

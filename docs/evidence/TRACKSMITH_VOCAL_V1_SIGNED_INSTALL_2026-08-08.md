@@ -19,6 +19,7 @@ release completion.
 | AU bundle ID | `com.marcboyer.logicaudioassistant.AudioUnit` |
 | AU component | `aufx / LgAA / ExAI`, version `1.0.0` |
 | Signing identity class | Apple Development |
+| Source commit | `a9e21e57e481a8ffeaca7fd02837401cd8a98edf` (source-equivalent final tree; evidence-only metadata followed) |
 | Team ID | `KDV9RC892F` for both app and AU |
 | App CDHash | `50dcaffa61f648a02d3f082aea5988cd94e4e418` |
 | AU CDHash | `e102031e47697b12f46d67d5b4352097f80e65b5` |
