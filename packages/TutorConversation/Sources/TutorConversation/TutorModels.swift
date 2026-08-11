@@ -20,6 +20,8 @@ public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
     case logicObserved
     case userReported
     case reviewedKnowledge
+    case separatedSourceEstimate
+    case structureEstimate
     case inference
     case unavailable
 
@@ -30,6 +32,8 @@ public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
         case .logicObserved: "Saw"
         case .userReported: "You told me"
         case .reviewedKnowledge: "Reviewed"
+        case .separatedSourceEstimate: "Separated estimate"
+        case .structureEstimate: "Structure estimate"
         case .inference: "Inference"
         case .unavailable: "Unavailable"
         }
@@ -152,10 +156,14 @@ public struct TutorCaptureSnapshot: Codable, Equatable, Sendable {
     public var capturedAt: Date
     public var durationSeconds: Double
     public var scopeDescription: String
+    /// Additive format label (for example "48000 Hz stereo Float32 WAV").
+    public var formatDescription: String?
     public var isLive: Bool
     public var metrics: [TutorMetricEvidence]
     public var localAnalysisLimitations: [String]
     public var cloudListening: TutorCloudListeningEvidence
+    /// Optional so records written before the local waveform specialist remain decodable.
+    public var audioIntelligence: TutorAudioIntelligenceResult?
 
     public init(
         sourceType: SourceType,
@@ -166,10 +174,12 @@ public struct TutorCaptureSnapshot: Codable, Equatable, Sendable {
         capturedAt: Date,
         durationSeconds: Double,
         scopeDescription: String,
+        formatDescription: String? = nil,
         isLive: Bool,
         metrics: [TutorMetricEvidence],
         localAnalysisLimitations: [String],
-        cloudListening: TutorCloudListeningEvidence = .init(status: .notRequested)
+        cloudListening: TutorCloudListeningEvidence = .init(status: .notRequested),
+        audioIntelligence: TutorAudioIntelligenceResult? = nil
     ) {
         self.sourceType = sourceType
         self.instanceID = instanceID
@@ -179,10 +189,12 @@ public struct TutorCaptureSnapshot: Codable, Equatable, Sendable {
         self.capturedAt = capturedAt
         self.durationSeconds = durationSeconds.isFinite ? min(max(durationSeconds, 0), 30) : 0
         self.scopeDescription = scopeDescription
+        self.formatDescription = formatDescription
         self.isLive = isLive
         self.metrics = Array(metrics.prefix(16))
         self.localAnalysisLimitations = Array(localAnalysisLimitations.prefix(8))
         self.cloudListening = cloudListening
+        self.audioIntelligence = audioIntelligence
     }
 }
 
@@ -346,6 +358,7 @@ public enum TutorExperimentOutcome: String, Codable, CaseIterable, Sendable {
     case worse
     case noChange
     case cannotFind
+    case notSure
 }
 
 public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable {
@@ -356,6 +369,9 @@ public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable 
     public var userNote: String?
     public var userReportedSettings: [String]
     public var evidenceReceiptID: UUID?
+    /// Optional additive Phase 2 fields preserve older persisted records.
+    public var comparisonAuthority: TutorComparisonAuthority?
+    public var waveformComparison: TutorWaveformComparison?
 
     public init(
         draft: TutorExperimentDraft,
@@ -363,7 +379,9 @@ public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable 
         outcome: TutorExperimentOutcome? = nil,
         userNote: String? = nil,
         userReportedSettings: [String] = [],
-        evidenceReceiptID: UUID? = nil
+        evidenceReceiptID: UUID? = nil,
+        comparisonAuthority: TutorComparisonAuthority? = nil,
+        waveformComparison: TutorWaveformComparison? = nil
     ) {
         self.draft = draft
         self.createdAt = createdAt
@@ -371,6 +389,8 @@ public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable 
         self.userNote = userNote
         self.userReportedSettings = Array(userReportedSettings.prefix(12))
         self.evidenceReceiptID = evidenceReceiptID
+        self.comparisonAuthority = comparisonAuthority
+        self.waveformComparison = waveformComparison
     }
 }
 

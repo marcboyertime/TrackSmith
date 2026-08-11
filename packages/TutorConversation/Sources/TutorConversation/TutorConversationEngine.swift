@@ -61,7 +61,9 @@ public actor TutorConversationEngine {
         experimentID: UUID,
         outcome: TutorExperimentOutcome,
         note: String? = nil,
-        userReportedSettings: [String] = []
+        userReportedSettings: [String] = [],
+        followUpCapture: TutorCaptureSnapshot? = nil,
+        userConfirmedUpstreamAndObservable: Bool = false
     ) throws -> TutorExperimentRecord {
         guard activeTurnID == nil else { throw TutorConversationError.turnInProgress }
         guard let index = state.experiments.firstIndex(where: { $0.id == experimentID }) else {
@@ -70,6 +72,11 @@ public actor TutorConversationEngine {
         state.experiments[index].outcome = outcome
         state.experiments[index].userNote = note
         state.experiments[index].userReportedSettings = Array(userReportedSettings.prefix(12))
+        state.experiments[index].waveformComparison = TutorComparisonAuthorityValidator.validate(
+            authority: state.experiments[index].comparisonAuthority,
+            followUp: followUpCapture,
+            userConfirmedUpstreamAndObservable: userConfirmedUpstreamAndObservable
+        )
         state.updatedAt = Date()
         try persistState()
         return state.experiments[index]
@@ -315,7 +322,10 @@ public actor TutorConversationEngine {
                 ))
                 responseInputItemsJSON.append(try functionOutputJSON(callID: call.callID, output: result.outputJSON))
                 if let draft = result.experiment {
-                    var record = TutorExperimentRecord(draft: draft)
+                    var record = TutorExperimentRecord(
+                        draft: draft,
+                        comparisonAuthority: context.capture.map { TutorComparisonAuthority(baseline: $0) }
+                    )
                     if state.experiments.contains(where: { $0.id == record.id }) {
                         record.draft.id = UUID()
                     }
@@ -345,6 +355,14 @@ public actor TutorConversationEngine {
                     kind: .locallyMeasured,
                     label: "Current local analysis",
                     detail: "\(capture.metrics.count) bounded descriptive measurements from capture \(capture.captureSnapshotID.uuidString.prefix(8)).",
+                    captureSnapshotID: capture.captureSnapshotID
+                ))
+            }
+            if let intelligence = capture.audioIntelligence {
+                values.append(TutorEvidenceReference(
+                    kind: .locallyMeasured,
+                    label: "Exact local waveform specialist",
+                    detail: intelligence.failure ?? "Exact WAV bytes were measured locally; this is not model listening.",
                     captureSnapshotID: capture.captureSnapshotID
                 ))
             }

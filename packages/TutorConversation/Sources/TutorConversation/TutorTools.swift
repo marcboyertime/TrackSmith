@@ -151,10 +151,31 @@ public struct TutorToolExecutor: Sendable {
                 captureSnapshotID: capture.captureSnapshotID
             ))
         }
+        let audioIntelligence: [String: Any]
+        if let local = capture.audioIntelligence {
+            audioIntelligence = [
+                "provider": local.providerIdentifier,
+                "received_original_waveform_bytes": local.receivedOriginalWaveformBytes,
+                "waveform_binding_status": local.waveformBindingStatus?.rawValue ?? "legacy_unknown",
+                "source_provenance": local.sourceProvenance,
+                "failure": local.failure ?? NSNull(),
+                "limitations": local.limitations,
+                "calibrated_tasks": local.capabilities.filter(\.calibrated).map(\.task.rawValue),
+            ]
+            evidence.append(TutorEvidenceReference(
+                kind: .locallyMeasured,
+                label: "Exact local waveform analysis",
+                detail: local.failure ?? "Exact WAV bytes were measured locally; this is not model listening.",
+                captureSnapshotID: capture.captureSnapshotID
+            ))
+        } else {
+            audioIntelligence = ["available": false, "reason": "No exact waveform-specialist result is attached to this turn."]
+        }
         return try result(call, object: [
             "available": true,
             "source_type": capture.sourceType.rawValue,
             "scope": capture.scopeDescription,
+            "format": capture.formatDescription ?? NSNull(),
             "capture_snapshot_id": capture.captureSnapshotID.uuidString,
             "captured_at": ISO8601DateFormatter().string(from: capture.capturedAt),
             "duration_seconds": capture.durationSeconds,
@@ -163,6 +184,7 @@ public struct TutorToolExecutor: Sendable {
             "local_analysis_limitations": capture.localAnalysisLimitations,
             "model_listening_status": capture.cloudListening.status.rawValue,
             "model_listening_summary": capture.cloudListening.summary ?? NSNull(),
+            "audio_intelligence": audioIntelligence,
         ], evidence: evidence)
     }
 

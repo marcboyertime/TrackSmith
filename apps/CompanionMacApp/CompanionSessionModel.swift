@@ -1555,6 +1555,7 @@ final class CompanionSessionModel: ObservableObject {
             capturedAt: artifact.createdAt,
             durationSeconds: Double(artifact.frameCount) / artifact.sampleRate,
             scopeDescription: "Dry input at the selected TrackSmith insert, labeled \(sourceType.rawValue) by the musician.",
+            formatDescription: "\(Int(artifact.sampleRate)) Hz \(artifact.channelCount == 1 ? "mono" : "stereo") WAV",
             isLive: capturedInstanceIsAvailable,
             metrics: Array(metrics),
             localAnalysisLimitations: limitations,

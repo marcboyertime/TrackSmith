@@ -1,4 +1,4 @@
-.PHONY: general-tutor-knowledge-audit build test tutor-conversation-test logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -8,6 +8,9 @@ test:
 
 tutor-conversation-test:
 	swift run -c release TutorConversationTests
+
+tutor-audio-intelligence-lab:
+	swift run -c release TutorAudioIntelligenceLab --output research/evaluation/tutor-audio-intelligence-v1
 
 logic-tutor-observation-probe:
 	swift run -c release LogicTutorObservationProbe

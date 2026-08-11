@@ -12,6 +12,7 @@ final class TutorConversationSessionModel: ObservableObject {
     @Published var projectGoal = ""
     @Published var attachCurrentCapture = true
     @Published var requestModelListening = false
+    @Published var confirmEditedUpstreamOfTap = false
     @Published private(set) var streamingText = ""
     @Published private(set) var isStreaming = false
     @Published private(set) var activity = "Ready"
@@ -65,6 +66,21 @@ final class TutorConversationSessionModel: ObservableObject {
                 var capture = shouldAttach
                     ? try await session.tutorConversationCaptureSnapshot()
                     : nil
+                var exactWAV: Data?
+                if let current = capture {
+                    do {
+                        let bytes = try await session.tutorValidatedCaptureWAVData(
+                            for: current, maximumBytes: 12 * 1_024 * 1_024
+                        )
+                        exactWAV = bytes
+                        capture?.audioIntelligence = await LocalWaveformSpecialist().analyze(
+                            wavData: bytes, capture: current
+                        )
+                    } catch {
+                        // The snapshot remains useful for already-derived local metrics.
+                        // No exact-waveform claim is added when the immutable bytes cannot load.
+                    }
+                }
                 if shouldListen {
                     if !session.tutorCloudAudioConsent {
                         let snapshotID = capture?.captureSnapshotID
@@ -76,10 +92,14 @@ final class TutorConversationSessionModel: ObservableObject {
                     } else if let current = capture {
                         activity = "Sending the exact bounded WAV to the audio-listening model"
                         do {
-                            let bytes = try await session.tutorValidatedCaptureWAVData(
-                                for: current,
-                                maximumBytes: 12 * 1_024 * 1_024
-                            )
+                            let bytes: Data
+                            if let exactWAV {
+                                bytes = exactWAV
+                            } else {
+                                bytes = try await session.tutorValidatedCaptureWAVData(
+                                    for: current, maximumBytes: 12 * 1_024 * 1_024
+                                )
+                            }
                             let listener = OpenAITutorAudioListener(configuration: .init(
                                 modelIdentifier: session.tutorAudioModelIdentifier,
                                 cloudAudioConsent: true,
@@ -171,6 +191,7 @@ final class TutorConversationSessionModel: ObservableObject {
                 state = try await engine.startNewConversation(
                     projectGoal: projectGoal.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
                 )
+                confirmEditedUpstreamOfTap = false
                 activity = "New local Tutor conversation"
             } catch {
                 activity = "A new conversation could not be created"
@@ -186,6 +207,7 @@ final class TutorConversationSessionModel: ObservableObject {
                 try await engine.deleteAllHistory()
                 state = await engine.snapshot()
                 projectGoal = ""
+                confirmEditedUpstreamOfTap = false
                 activity = "Tutor transcript, experiments, and receipts deleted locally"
             } catch {
                 activity = "Tutor history could not be deleted"
@@ -201,8 +223,16 @@ final class TutorConversationSessionModel: ObservableObject {
         guard !isStreaming, let engine else { return }
         Task {
             do {
-                _ = try await engine.recordOutcome(experimentID: experiment.id, outcome: outcome)
+                let followUp = try await session.tutorConversationCaptureSnapshot()
+                _ = try await engine.recordOutcome(
+                    experimentID: experiment.id,
+                    outcome: outcome,
+                    followUpCapture: followUp,
+                    userConfirmedUpstreamAndObservable: confirmEditedUpstreamOfTap
+                )
                 state = await engine.snapshot()
+                // A confirmation never carries into the automatic follow-up or another experiment.
+                confirmEditedUpstreamOfTap = false
                 composer = Self.feedbackText(outcome)
                 send(session: session)
             } catch {
@@ -264,6 +294,7 @@ final class TutorConversationSessionModel: ObservableObject {
         case .worse: "That sounded worse. Help me undo the downside and choose a different one-step experiment."
         case .noChange: "I heard no meaningful change. What does that rule out, and what should I try next?"
         case .cannotFind: "I couldn't find that control in Logic. Give me an exact path or a simpler alternative."
+        case .notSure: "I'm not sure what changed. Help me make the next comparison smaller and clearer."
         }
     }
 }

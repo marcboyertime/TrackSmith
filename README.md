@@ -7,6 +7,15 @@ measurements, optional separately consented model audio listening, explicit user
 outcomes, and read-only visible-Logic observation. It teaches and proposes one
 reversible experiment; the musician performs every Logic edit.
 
+Phase 2 adds an exact-WAV local waveform specialist and guarded before/after
+authority. Local waveform results are measurements, not model listening; a
+deterministic comparison requires a distinct later capture on the same authorized
+tap and the musician's explicit signal-path confirmation. Run
+`swift run -c release TutorAudioIntelligenceLab --output research/evaluation/tutor-audio-intelligence-v1`
+to regenerate the synthetic calibration artifacts. See
+[audio-intelligence architecture](docs/AUDIO_INTELLIGENCE_ARCHITECTURE.md) and the
+[listening capability matrix](docs/TUTOR_LISTENING_CAPABILITY_MATRIX.md).
+
 The historical deterministic Guide, Create, and Vocal implementations remain
 compiled and intact behind **Future / Legacy**. Their graph-generation and commit
 capabilities are not exposed as Tutor model tools. No model can click, insert, set,

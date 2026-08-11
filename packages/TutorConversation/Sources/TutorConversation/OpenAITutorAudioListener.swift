@@ -46,6 +46,30 @@ public struct OpenAITutorAudioListener: Sendable {
         capture: TutorCaptureSnapshot,
         musicianQuestion: String
     ) async throws -> TutorCloudListeningEvidence {
+        let intelligence = try await listenIntelligence(
+            wavData: wavData, capture: capture, musicianQuestion: musicianQuestion
+        )
+        guard let observation = intelligence.observations.first,
+              intelligence.failure == nil else {
+            throw TutorConversationError.malformedProviderResponse("Audio listening returned no bounded observation.")
+        }
+        return TutorCloudListeningEvidence(
+            status: .listened,
+            summary: observation.detail,
+            providerIdentifier: intelligence.providerIdentifier,
+            modelIdentifier: intelligence.modelIdentifier,
+            captureSnapshotID: capture.captureSnapshotID
+        )
+    }
+
+    /// Shared evidence result for the optional remote route. Calibration is
+    /// explicitly false because the local lab does not test this provider.
+    public func listenIntelligence(
+        wavData: Data,
+        capture: TutorCaptureSnapshot,
+        musicianQuestion: String
+    ) async throws -> TutorAudioIntelligenceResult {
+        let started = ContinuousClock.now
         guard configuration.cloudAudioConsent else {
             throw TutorConversationError.audioConsentRequired
         }
@@ -138,13 +162,30 @@ public struct OpenAITutorAudioListener: Sendable {
               !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw TutorConversationError.malformedProviderResponse("Audio listening returned no bounded text observation.")
         }
-        return TutorCloudListeningEvidence(
-            status: .listened,
-            summary: bounded(summary, maximumBytes: 8_192),
+        return TutorAudioIntelligenceResult(
+            capture: TutorAudioCaptureIdentity(capture),
             providerIdentifier: "openai-chat-completions-audio-v1",
             modelIdentifier: (object["model"] as? String) ?? configuration.modelIdentifier,
-            captureSnapshotID: capture.captureSnapshotID
+            receivedOriginalWaveformBytes: true,
+            waveformBindingStatus: .captureBoundExactWAV,
+            sourceProvenance: "Exact hash-validated WAV bytes were included in this completed provider request.",
+            capabilities: TutorAudioTask.allCases.map {
+                TutorAudioTaskCapability(task: $0, calibrated: false, detail: "Not calibrated by the deterministic local lab.")
+            },
+            observations: [TutorAudioObservation(
+                identifier: "bounded_model_observation",
+                evidence: .modelHeardWaveform,
+                detail: bounded(summary, maximumBytes: 8_192)
+            )],
+            limitations: ["A completed remote response is a bounded excerpt observation only; it does not expose tracks, inserts, or whole-mix causality."],
+            runtimeMilliseconds: elapsed(started),
+            deadlineSeconds: configuration.timeoutSeconds
         )
+    }
+
+    private func elapsed(_ started: ContinuousClock.Instant) -> Int {
+        let components = (ContinuousClock.now - started).components
+        return max(0, Int(components.seconds * 1_000 + components.attoseconds / 1_000_000_000_000_000))
     }
 
     private func extractText(_ content: Any?) -> String? {

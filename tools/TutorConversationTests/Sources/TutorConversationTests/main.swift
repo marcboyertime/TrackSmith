@@ -37,6 +37,11 @@ private final class Suite {
         await test("reviewed knowledge, procedures, capture, Logic, and experiment tools execute", testToolExecution)
         await test("conversation store is checksummed, redacted, bounded, and receipt write-once", testStoreAndReceipts)
         await test("audio listening requires separate consent and exact live hash", testAudioListening)
+        await test("audio intelligence evidence keeps exact waveform and calibration truth separate", testAudioIntelligenceTruth)
+        await test("local waveform provider emits capture-bound exact-WAV observations", testLocalProviderExactWAV)
+        await test("comparison authority rejects hash-only follow-ups and accepts guarded continuity", testComparisonAuthority)
+        await test("legacy experiment records decode with Phase 2 fields absent", testLegacyExperimentDecoding)
+        await test("not sure and clearer-but-thin dialogue remain useful without listening claims", testResponseQualityVerticalSlice)
         await test("muddy to thin stateful conversation retains turns, tools, experiment, and outcome", testStatefulVerticalSlice)
         await test("cloud failure activates deterministic offline fallback", testAutomaticOfflineFallback)
         await test("cancellation persists an honest partial turn and blocks concurrent turns", testCancellationAndExclusion)
@@ -102,6 +107,9 @@ private final class Suite {
                    "Vocal package was removed")
         try expect(FileManager.default.fileExists(atPath: root.appendingPathComponent("packages/ProductionIntelligence").path),
                    "Create foundation was removed")
+        let tutorSession = try source("apps/CompanionMacApp/TutorConversationSessionModel.swift")
+        try expect(tutorSession.components(separatedBy: "confirmEditedUpstreamOfTap = false").count >= 4,
+                   "signal-path confirmation is not reset after outcome/new conversation/history deletion")
     }
 
     private func testToolSchemas() async throws {
@@ -512,6 +520,87 @@ private final class Suite {
         }), "cloud-text consent receipt missing")
     }
 
+    private func testAudioIntelligenceTruth() async throws {
+        let bytes = Data("not-a-wav-but-exact".utf8)
+        let capture = sampleCapture(wavData: bytes)
+        let local = await LocalWaveformSpecialist().analyze(wavData: bytes, capture: capture)
+        try expect(!local.receivedOriginalWaveformBytes, "undecodable bytes were mislabeled as a validated capture waveform")
+        try expect(local.providerIdentifier.contains("local-waveform"), "local specialist identity missing")
+        try expect(local.capabilities.allSatisfy(\.calibrated), "local lab capability calibration was not declared")
+        try expect(local.failure != nil, "malformed WAV did not fail soft")
+        try expect(local.limitations.joined().contains("did not hear"), "local measurement was mislabeled as listening")
+        try expect(local.waveformBindingStatus == .bytesReceivedUndecodable, "undecodable bytes were labeled capture-bound")
+        var mismatchCapture = capture
+        mismatchCapture.sha256 = sha256(Data("different bytes".utf8))
+        let mismatch = await LocalWaveformSpecialist().analyze(wavData: bytes, capture: mismatchCapture)
+        try expect(mismatch.waveformBindingStatus == .bytesReceivedHashMismatch, "hash mismatch was not typed")
+        try expect(!mismatch.receivedOriginalWaveformBytes, "hash mismatch was mislabeled as a validated capture waveform")
+        try expect(!mismatch.sourceProvenance.lowercased().contains("hash-validated"), "hash mismatch claimed validated provenance")
+    }
+
+    private func testLocalProviderExactWAV() async throws {
+        let bytes = validMonoWAV()
+        let capture = sampleCapture(wavData: bytes)
+        let result = await LocalWaveformSpecialist().analyze(wavData: bytes, capture: capture)
+        try expect(result.waveformBindingStatus == .captureBoundExactWAV, "valid exact WAV was not capture-bound")
+        try expect(result.failure == nil && !result.observations.isEmpty, "provider emitted no local measurements for valid WAV")
+        try expect(result.observations.allSatisfy { $0.evidence == .localMeasurement }, "provider observation claimed non-local evidence")
+    }
+
+    private func testComparisonAuthority() async throws {
+        let baseline = sampleCapture(wavData: Data("baseline".utf8))
+        let authority = TutorComparisonAuthority(baseline: baseline)
+        var hashOnly = baseline
+        hashOnly.sha256 = sha256(Data("different".utf8))
+        hashOnly.captureSnapshotID = UUID()
+        let rejected = TutorComparisonAuthorityValidator.validate(
+            authority: authority, followUp: hashOnly, userConfirmedUpstreamAndObservable: true
+        )
+        try expect(!rejected.available && rejected.reason.contains("distinct later"), "hash-only comparison was accepted")
+        var acceptedCapture = baseline
+        acceptedCapture.captureSnapshotID = UUID()
+        acceptedCapture.sha256 = sha256(Data("later".utf8))
+        acceptedCapture.capturedAt = baseline.capturedAt.addingTimeInterval(1)
+        let accepted = TutorComparisonAuthorityValidator.validate(
+            authority: authority, followUp: acceptedCapture, userConfirmedUpstreamAndObservable: true
+        )
+        try expect(accepted.available, "guarded same-authority follow-up was rejected")
+        try expect(accepted.measurementDeltas?.first?.identifier == "vocal_200_500_hz_energy_ratio", "accepted comparison omitted bounded metric delta")
+        let noConfirmation = TutorComparisonAuthorityValidator.validate(
+            authority: authority, followUp: acceptedCapture, userConfirmedUpstreamAndObservable: false
+        )
+        try expect(!noConfirmation.available && noConfirmation.reason.contains("did not confirm"), "missing signal-path confirmation was accepted")
+    }
+
+    private func testLegacyExperimentDecoding() async throws {
+        let record = TutorExperimentRecord(draft: experimentDraft(title: "Old record"), outcome: .notSure)
+        let data = try JSONEncoder().encode(record)
+        var object = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        object.removeValue(forKey: "comparisonAuthority")
+        object.removeValue(forKey: "waveformComparison")
+        let legacy = try JSONDecoder().decode(TutorExperimentRecord.self, from: JSONSerialization.data(withJSONObject: object))
+        try expect(legacy.comparisonAuthority == nil && legacy.waveformComparison == nil, "older record did not decode additively")
+        try expect(legacy.outcome == .notSure, "Not sure outcome was not retained")
+    }
+
+    private func testResponseQualityVerticalSlice() async throws {
+        let root = temporaryRoot("response-quality")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = TutorConversationStore(rootURL: root)
+        let engine = TutorConversationEngine(store: store, tools: try TutorToolExecutor(), fallbackProvider: try OfflineTutorProvider())
+        let provider = StatefulScriptedProvider()
+        let context = TutorRuntimeContext(sourceType: .vocal, capture: sampleCapture(wavData: Data("quality".utf8)))
+        _ = try await collectTurn(engine, "My vocal sounds muddy.", context, provider)
+        _ = try await collectTurn(engine, "It is muddy in the full mix, not in solo.", context, provider)
+        guard let experiment = (await engine.snapshot()).experiments.last else { throw TestFailure(description: "quality fixture lacks experiment") }
+        _ = try await engine.recordOutcome(experimentID: experiment.id, outcome: .notSure, note: "Clearer, but now thin")
+        _ = try await collectTurn(engine, "Why did that happen? It is clearer but thin now.", context, provider)
+        let state = await engine.snapshot()
+        try expect(state.experiments.last?.outcome == .notSure, "natural uncertainty outcome was not retained")
+        try expect(state.messages.last?.text.lowercased().contains("thin") == true, "follow-up was generic instead of using clearer-but-thin continuity")
+        try expect(!state.messages.last!.text.lowercased().contains("i heard"), "response fabricated model listening")
+    }
+
     private func testAutomaticOfflineFallback() async throws {
         let root = temporaryRoot("fallback")
         defer { try? FileManager.default.removeItem(at: root) }
@@ -618,6 +707,7 @@ private final class Suite {
             capturedAt: Date(timeIntervalSince1970: 1_786_300_000),
             durationSeconds: 8,
             scopeDescription: "Dry vocal input at the selected TrackSmith insert.",
+            formatDescription: "48000 Hz mono WAV",
             isLive: true,
             metrics: [TutorMetricEvidence(
                 identifier: "vocal_200_500_hz_energy_ratio",
@@ -687,6 +777,21 @@ private final class Suite {
     private func sha256(_ data: Data) -> String {
         SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
+
+    private func validMonoWAV() -> Data {
+        let samples: [Float] = (0..<512).map { Float(sin(Double($0) * 0.08) * 0.2) }
+        var data = Data("RIFF".utf8)
+        appendUInt32(UInt32(36 + samples.count * 4), to: &data)
+        data.append(Data("WAVEfmt ".utf8)); appendUInt32(16, to: &data)
+        appendUInt16(3, to: &data); appendUInt16(1, to: &data); appendUInt32(48_000, to: &data)
+        appendUInt32(192_000, to: &data); appendUInt16(4, to: &data); appendUInt16(32, to: &data)
+        data.append(Data("data".utf8)); appendUInt32(UInt32(samples.count * 4), to: &data)
+        for sample in samples { appendUInt32(sample.bitPattern, to: &data) }
+        return data
+    }
+
+    private func appendUInt16(_ value: UInt16, to data: inout Data) { data.append(UInt8(value & 0xff)); data.append(UInt8(value >> 8)) }
+    private func appendUInt32(_ value: UInt32, to data: inout Data) { data.append(UInt8(value & 0xff)); data.append(UInt8((value >> 8) & 0xff)); data.append(UInt8((value >> 16) & 0xff)); data.append(UInt8((value >> 24) & 0xff)) }
 }
 
 private final class RecordingStreamingTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
