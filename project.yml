@@ -15,12 +15,15 @@ targets:
       path: apps/CompanionMacApp/Info.plist
       properties:
         CFBundleDisplayName: Logic Audio Assistant
+        CFBundleURLTypes:
+          - CFBundleURLName: com.marcboyer.logicaudioassistant.tutor
+            CFBundleURLSchemes:
+              - tracksmith
         LSApplicationCategoryType: public.app-category.music
         NSHighResolutionCapable: true
     entitlements:
       path: apps/CompanionMacApp/CompanionMacApp.entitlements
       properties:
-        com.apple.security.app-sandbox: true
         com.apple.security.application-groups:
           - KDV9RC892F.com.marcboyer.logicaudioassistant
         com.apple.security.network.client: true
@@ -50,6 +53,10 @@ targets:
         product: ProductionIntelligence
       - package: CorePackage
         product: ProductionTutor
+      - package: CorePackage
+        product: TutorConversation
+      - package: CorePackage
+        product: TutorLogicObserver
       - package: CorePackage
         product: VocalProduction
       - target: AssistantAudioUnitExtension

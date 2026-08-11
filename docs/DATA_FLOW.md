@@ -38,6 +38,32 @@ source-aware evidence, hypothesis, and plan-validation stages are ordinary versi
 data structures. A perceptual adjective can select competing source-conditioned
 hypotheses, but no single metric is allowed to assert that adjective as fact.
 
+The default Tutor follows a separate non-mutating path:
+
+```text
+musician message + local transcript
+  + explicit source role
+  + optional immutable capture identity and descriptive local metrics
+  + optional separately consented/hash-bound bounded WAV listening summary
+        ↓
+OpenAI Responses SSE stream (store=false) or deterministic offline fallback
+        ↓
+strict allowlisted calls: capture context / reviewed knowledge / reviewed procedure /
+prior outcomes / visible Logic observation / presentation-only experiment card
+        ↓
+natural response + one user-performed reversible experiment
+        ↓
+Better / Worse / No change / Can't find it → persisted outcome → next real turn
+        ↓
+checksummed local state + exclusive-create immutable evidence receipt
+```
+
+No arrow from this Tutor path reaches plan commit, global bypass, AU parameters,
+Logic actions, files, automation, MIDI, or project mutation. The broad companion
+session client is never a model-facing tool. Read-only Logic observation copies
+currently visible Accessibility attributes only; a companion callout is
+mouse-transparent and non-activating.
+
 Research material follows a separate immutable trust path:
 
 ```text
@@ -138,9 +164,9 @@ DSP history and scheduled automation; host/companion bypass clears graph history
 keeps advancing the scheduled gain timeline while output remains dry. When upstream
 sets `OutputIsSilence`, the AU substitutes zero input and clears the outgoing flag
 after processing because an IIR tail may still be audible. The static reported tail
-bound is 60 seconds.
+bound is 180 seconds.
 
-Cloud path: the companion selects relevant typed context, obtains explicit consent,
+Future/Legacy Create cloud path: the companion selects relevant typed context, obtains explicit consent,
 reads the selected provider credential from Keychain, sends bounded text and
 measurements over an ephemeral TLS session, validates the untrusted response through
 six local gates, and records provider/model/version and bounded usage metadata. Raw
@@ -150,3 +176,12 @@ saved-project playback continue. The adapters pass mocked wire/failure tests,
 OpenAI/Gemini live cross-provider cases, Gemini's 30-case cloud lane, and a direct
 Gemini/Logic Pro 12.3 workflow through save/reload and provider-offline graph
 restoration. Provider output still never crosses directly into AU or DSP authority.
+
+Tutor cloud text is independent of Create. It sends bounded transcript/context and
+strict tool schemas through Responses streaming with `store=false`; a credential,
+network, timeout, validation, or consent failure automatically activates the local
+deterministic Tutor. Optional audio listening is a second request to an audio-capable
+model, requires separate audio consent plus a per-turn toggle, and sends only the
+exact current validated WAV under a 12 MiB cap. Its bounded observation is labeled
+Heard; local metrics remain labeled Measured. Neither provider receives a mutation
+tool or executable plan.

@@ -1,11 +1,60 @@
 import SwiftUI
+import TutorConversation
 
 struct SettingsView: View {
     @ObservedObject var model: CompanionSessionModel
 
     var body: some View {
         Form {
-            Section("Production Intelligence") {
+            Section("LLM-First Tutor") {
+                HStack {
+                    TextField("Conversation model", text: $model.tutorModelIdentifier)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 260)
+                    Picker("Reasoning", selection: $model.tutorReasoningEffort) {
+                        ForEach(TutorReasoningEffort.allCases, id: \.self) { effort in
+                            Text(effort.rawValue).tag(effort)
+                        }
+                    }
+                    .frame(width: 180)
+                    Spacer()
+                }
+                Toggle(
+                    "Allow Tutor conversation text, labeled context, and local measurements to be sent to OpenAI",
+                    isOn: $model.tutorCloudTextConsent
+                )
+                Text("Without this consent, Tutor automatically uses the deterministic offline fallback. Conversation history and evidence receipts remain local; provider storage is disabled in requests.")
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Colors.secondaryText)
+            }
+
+            Section("Optional Tutor Audio Listening") {
+                Toggle(
+                    "Allow an exact bounded TrackSmith capture to be sent only when I also enable ‘Let audio model listen next turn’",
+                    isOn: $model.tutorCloudAudioConsent
+                )
+                TextField("Audio-listening model", text: $model.tutorAudioModelIdentifier)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 260)
+                Text("This consent is separate from text/measurement consent. TrackSmith rechecks the immutable WAV hash, live capture authority, metadata, and a 12 MiB byte cap immediately before upload. Local measurements alone are never labeled as model listening.")
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Colors.secondaryText)
+            }
+
+            Section("Tutor OpenAI Credential") {
+                HStack {
+                    SecureField("OpenAI API credential", text: $model.tutorCredentialDraft)
+                        .textFieldStyle(.roundedBorder)
+                    Button("Save to Keychain") { model.saveTutorCredential() }
+                        .disabled(model.tutorCredentialDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button("Remove", role: .destructive) { model.deleteTutorCredential() }
+                }
+                Text(model.tutorCredentialStatus)
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Colors.secondaryText)
+            }
+
+            Section("Future / Legacy Production Intelligence") {
                 HStack {
                     Picker("Provider", selection: $model.providerSelection) {
                         ForEach(CompanionProviderSelection.allCases) { provider in
@@ -21,7 +70,7 @@ struct SettingsView: View {
             }
 
             if model.providerSelection.usesCloud {
-                Section("Cloud Consent") {
+                Section("Future / Legacy Cloud Consent") {
                     Toggle(
                         "Allow this request's labeled text context and measurements to be sent to the selected cloud provider",
                         isOn: $model.cloudReasoningConsent
@@ -31,7 +80,7 @@ struct SettingsView: View {
                         .foregroundStyle(Theme.Colors.secondaryText)
                 }
 
-                Section("Credential") {
+                Section("Future / Legacy Credential") {
                     HStack {
                         SecureField("Provider API credential", text: $model.credentialDraft)
                             .textFieldStyle(.roundedBorder)
@@ -63,5 +112,10 @@ struct SettingsView: View {
         .onChange(of: model.providerSelection) { _, _ in
             model.refreshCredentialStatus()
         }
+        .onChange(of: model.tutorModelIdentifier) { _, _ in model.persistTutorSettings() }
+        .onChange(of: model.tutorReasoningEffort) { _, _ in model.persistTutorSettings() }
+        .onChange(of: model.tutorCloudTextConsent) { _, _ in model.persistTutorSettings() }
+        .onChange(of: model.tutorCloudAudioConsent) { _, _ in model.persistTutorSettings() }
+        .onChange(of: model.tutorAudioModelIdentifier) { _, _ in model.persistTutorSettings() }
     }
 }

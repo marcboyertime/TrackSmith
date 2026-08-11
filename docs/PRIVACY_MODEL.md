@@ -2,14 +2,19 @@
 
 ## Defaults
 
-Core capture, analysis, planning recipes, DSP, previews, state and manual editing are
-local. No telemetry or raw-audio upload path is implemented. Provider-neutral OpenAI
-Responses and Google Gemini Interactions text/measurement adapters exist only in the
-companion and are disabled unless the user selects one, stores a credential in
-Keychain, and enables cloud-reasoning consent. The plug-in does not request
-microphone access because it receives host insert audio. The app requests user-
-selected read access only for explicit imports. Accessibility is absent from stable
-targets.
+Core capture, analysis, reviewed knowledge, DSP, previews, state and manual editing
+are local. No telemetry path is implemented. The LLM-first Tutor's OpenAI Responses
+text/measurement route is disabled without explicit cloud-text consent and a
+Keychain credential; it falls back locally. A separate optional OpenAI audio route
+requires independent cloud-audio consent, a per-turn Listen toggle, a current
+hash-bound capture, metadata validation, and a 12 MiB cap. The plug-in does not
+request microphone access because it receives host insert audio. A read-only Logic
+observer requests Accessibility only from an explicit user action and never prompts
+during ordinary observation; it exposes no setters or actions. The directly
+distributed companion is not App-Sandboxed because macOS forbids assistive-app
+Accessibility APIs inside App Sandbox. The AU extension remains sandboxed, and the
+model-facing tool receives only the observer's bounded value projection—not an
+Accessibility object or general filesystem/process capability.
 
 ## Data classes and retention
 
@@ -44,11 +49,24 @@ targets.
   restores typed history read-only until the exact source authority is current;
   operational preview/asset audio is not reconstructed from metadata and must be
   re-established from the separate local cache.
-- Cloud request: bounded user language plus labeled typed source context,
+- Future/Legacy Create cloud request: bounded user language plus labeled typed source context,
   measurements, current graph/reference identities, relevant production knowledge,
   capabilities and limitations. Captured audio, preview audio, file names/paths,
   project names, AU state blobs, credentials, and executable plans are excluded by
   the provider input type.
+- LLM-first Tutor text request: up to 80 bounded local transcript messages, labeled
+  runtime context, explicit source role, immutable capture IDs/hashes, at most 16
+  descriptive metrics, limitations, bounded tool outputs, and locally confirmed
+  experiment outcomes. Requests use an ephemeral no-cache/no-cookie session,
+  `store=false`, strict tools, disabled parallel tool calls, a hard body/output
+  bound, timeout, and cancellation. Credentials, headers, local paths, raw AU state,
+  hidden reasoning, executable plans, and mutation capabilities are excluded.
+- Optional Tutor audio request: only the exact validated WAV bytes for the current
+  capture plus a bounded musician question and explicit scope label. The listener
+  rechecks liveness, SHA-256, byte size, model identifier, and Keychain credential
+  immediately before sending. Audio is never attached merely because text consent
+  is on or a capture exists. The returned text is stored as a bounded Heard evidence
+  summary linked to the capture ID; the WAV itself is not copied into Tutor history.
 - Provider response: bounded typed semantic contract and provider usage/identity
   metadata. Configured model authority and provider-reported resolved-model evidence
   remain separate. Both adapters request `store=false`; this is not a guarantee that a
@@ -66,6 +84,17 @@ targets.
   is used at all, is the same bounded labeled text/measurement context class
   as Production Intelligence — never audio — and provider output is reduced
   to validated canonical IDs plus a bounded audit summary before persistence.
+- LLM-first Tutor conversation state: bounded checksummed atomic 0600 snapshots
+  under `Application Support/com.marcboyer.tracksmith/TutorConversation/`, retaining
+  hard ceilings of 240 user/assistant messages and 120 experiment records with
+  explicit outcomes, plus oldest-first eviction to remain inside the canonical
+  byte envelope. Separate evidence receipts are created with POSIX exclusive-create,
+  owner-only permissions, checksums, capture identity/hash, provider/model/usage,
+  assistant-text hash, tool argument/output hashes, evidence modalities, and consent
+  records. Receipts have no overwrite path but can be removed through the explicit
+  Delete All Tutor History action. Transcript and receipts exclude credentials,
+  headers, audio bytes, file paths, screenshots, hidden reasoning, AU state, and
+  executable plans; credential-like strings are redacted before persistence.
 - General tutor knowledge and sources: the generated knowledge base contains
   paraphrased claims and TrackSmith-authored strategy/concept cards derived
   from reviewed artifacts already in this repository, each with a source ID,
@@ -89,18 +118,18 @@ targets.
   when-unlocked device-only accessibility; never logs, prompts, requests, App Group,
   presets, project state, conversation state or source.
 
-The current UI names the active provider and separates local deterministic behavior
-from cloud-assisted reasoning. A cloud call requires explicit text/measurement
-consent and uses TLS through an ephemeral no-cache/no-cookie session with bounded
-timeout, cancellation, output and attempts. Before external release, the disclosure
-must also link current provider retention terms and describe the exact data classes.
-Text consent never implies audio consent. Any future raw/reference-audio path needs a
-separate interface, disclosure, per-use informed consent, retention handling, and
-test lane. Model downloads need signature/hash verification.
+The current UI names the Tutor models and separates local deterministic behavior
+from cloud-assisted reasoning. Cloud text and audio have independent toggles, and
+audio also requires a per-turn request. Both use TLS through ephemeral sessions with
+bounded timeout, cancellation, and output; requests set `store=false`. This does not
+guarantee a provider retains no safety/abuse data. Before external release, the
+disclosure must link current provider retention terms and describe these exact data
+classes. Model downloads need signature/hash verification.
 
 ## User controls
 
-The companion implements secure credential save/delete, per-outcome forget and
+The companion implements secure credential save/delete, new/delete-all Tutor
+conversation history and receipts, per-outcome feedback, per-outcome forget and
 delete-all-learning for the local tutor profile, per-category forget for confirmed
 Vocal capture/creative preferences, deletion of the current or all known typed Vocal
 sessions, and confirmed deletion of all App Group capture/preview audio without
@@ -111,6 +140,6 @@ audio-cache action intentionally does not alter a live command transaction, the
 separate local conversation store, or the separate tutor profile; each control states
 its own scope. Independent bounded
 mailbox maintenance expires protocol metadata according to the policy above. A
-conversation-history deletion UI, provider-terms disclosure, audio-cache
-inventory/automatic expiry, diagnostic export preview, and permission-revocation
-instructions remain release gates. No opt-in telemetry path exists.
+provider-terms disclosure, audio-cache inventory/automatic expiry, diagnostic export
+preview, and permission-revocation instructions remain release gates. No opt-in
+telemetry path exists.

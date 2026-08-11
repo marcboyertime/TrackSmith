@@ -1,10 +1,16 @@
-.PHONY: general-tutor-knowledge-audit build test demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit build test tutor-conversation-test logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck native-build native-verify native-install verify
 
 build:
 	swift build -c release
 
 test:
 	swift run -c release TestRunner
+
+tutor-conversation-test:
+	swift run -c release TutorConversationTests
+
+logic-tutor-observation-probe:
+	swift run -c release LogicTutorObservationProbe
 
 demo:
 	swift run -c release CompanionApp make this clearer and more controlled
@@ -72,4 +78,4 @@ native-verify: native-build au-host-probe realtime-heap-probe
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test au-host-probe
+verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test tutor-conversation-test au-host-probe

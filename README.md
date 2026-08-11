@@ -1,12 +1,17 @@
 # TrackSmith
 
-A native, reversible audio-production assistant designed around a reliable Audio
-Unit effect for Logic Pro. The current build combines a deterministic offline
-fallback with provider-neutral OpenAI Responses and Google Gemini Interactions
-adapters. Every model result remains untrusted semantic input to six local
-validation gates; only TrackSmith constructs, renders, measures, and commits bounded
-DSP graphs. The user remains in control of preview selection, revision, locks,
-commit, bypass, and restoration.
+A native, conversational production tutor designed to stay beside a musician in
+Logic Pro. Tutor is now the primary product: a persistent streaming LLM conversation
+can use bounded reviewed knowledge, exact capture identities, descriptive local
+measurements, optional separately consented model audio listening, explicit user
+outcomes, and read-only visible-Logic observation. It teaches and proposes one
+reversible experiment; the musician performs every Logic edit.
+
+The historical deterministic Guide, Create, and Vocal implementations remain
+compiled and intact behind **Future / Legacy**. Their graph-generation and commit
+capabilities are not exposed as Tutor model tools. No model can click, insert, set,
+bypass, automate, render, commit, or otherwise mutate Logic, the Audio Unit, files,
+or project state.
 
 The product name is TrackSmith. The development app/AU still use the earlier
 `Logic Audio Assistant` display name and bundle identifiers for compatibility;
@@ -14,25 +19,18 @@ that identity is not silently changed by this research milestone.
 
 ## Product modes
 
-TrackSmith has two permanent top-level modes in the native companion:
+TrackSmith has two top-level boundaries in the native companion:
 
-- **Guide Me** — a user-mediated Logic production tutor. You describe a problem
-  ("I sound nasal") or a goal; TrackSmith presents competing possible causes
-  with visible uncertainty, then exactly one reversible manual experiment at a
-  time: what to do, where in Logic Pro 12.3, a validated bounded starting
-  value when one applies, what to listen for, why, when to stop, what could go
-  wrong, and exactly how to undo it. You report Better / Worse / No change /
-  Not sure / Not applicable / Can't find it / Done / Undo and a deterministic
-  reducer picks the next validated step. Every exact instruction comes from a
-  reviewed, versioned local procedure catalog — never from model prose — and
-  TrackSmith never operates Logic itself: no Accessibility, coordinates,
-  AppleScript, key-command injection, or host control of any kind. Tutor mode
-  cannot mutate the AU processing graph.
-- **Create For Me** — the existing workflow: capture recent playback, analyze
-  locally, render three bounded level-matched previews, audition, revise,
-  and commit explicitly.
+- **Tutor** — the default chat workspace. It retains real dialogue turns and
+  experiments locally, streams responses, adapts to Better / Worse / No change /
+  Can't find it, and labels evidence as Heard, Measured, Saw, You told me,
+  Reviewed, Inference, or Unavailable. The deterministic General Tutor remains
+  the automatic no-network/no-consent fallback.
+- **Future / Legacy** — preserved Classic Guide, Create For Me, and Vocal
+  workspaces. Create remains the only companion path that can publish a graph,
+  and only through its existing explicit user commit controls.
 
-**Guide Me now accepts open-ended production questions.** You are not limited
+**Tutor accepts open-ended production questions.** You are not limited
 to a fixed list of problems: ask "Why does my chorus feel smaller than the
 verse?", "How do I tighten my MIDI piano without making it robotic?", or "What
 is pre-delay actually doing?" and TrackSmith routes the question across 9
@@ -51,16 +49,16 @@ carried by a validated procedure — the answer validator rejects the
 alternative. TrackSmith will also tell you plainly when its reviewed knowledge
 does not cover your question.
 
-The active engineering focus is [TrackSmith Vocal v1](docs/TRACKSMITH_VOCAL_V1.md),
-which is **in progress**; this is not a claim that its implementation, installed
-build, Logic validation, or listening evidence is complete. See
-[`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md) for the exact
-sequencing and evidence boundary, and the dated
-[automated-verification record](docs/evidence/TRACKSMITH_VOCAL_V1_AUTOMATED_VERIFICATION_2026-08-08.md)
-for the bounded post-baseline results. General Production Tutor v2 remains open:
-its engine passes 518/518 corpus cases offline across 99 evaluated domains, including
-10 multi-turn conversations and 10 retrieval-precision cases, and its native Ask
-surface is implemented. The reviewed catalog contains 458 claims and 78 strategies.
+The active engineering focus is the
+[LLM-first Tutor north star](docs/TRACKSMITH_TUTOR_NORTH_STAR.md). See
+[`docs/CURRENT_PRODUCT_FOCUS.md`](docs/CURRENT_PRODUCT_FOCUS.md) and the
+[architecture](docs/TUTOR_LLM_FIRST_ARCHITECTURE.md) for the exact boundary.
+General Production Tutor v2's preserved engine still passes 518/518 corpus cases
+offline across 99 evaluated domains. Its historical "10 conversations / 58 turns"
+cases are ordered routing regressions: each turn is independently answered and they
+must not be cited as conversation-memory proof. The new Tutor has a separate
+stateful muddy → full-mix → experiment → thin → why → listen-again regression.
+The reviewed catalog contains 458 claims and 78 strategies.
 What TrackSmith remembers about you is local, explicit, and deletable. Gates
 GP0-GP7 pass; GP8 and GP9 remain pending and owner-blocked. **No external or
 YouTube source has been ingested** — the review pipeline is built and its refusal
@@ -356,7 +354,12 @@ audio formats, snapshot identity, and saved plans before playback.
 
 - `packages/`: host-independent schema, DSP, source-aware analysis, production
   intent/hypotheses, state, preview, IPC, research ingestion, and Logic adapter
-  boundaries. `packages/ProductionTutor/` is the user-mediated Guide Me tutor:
+  boundaries. `packages/TutorConversation/` is the LLM-first conversation engine,
+  streaming provider, read-only tool executor, write-once evidence receipts,
+  experiment/outcome state, optional consent-gated audio listener, and deterministic
+  fallback adapter. `packages/TutorLogicObserver/` reads bounded visible Logic
+  accessibility attributes and contains no setter or action path.
+  `packages/ProductionTutor/` is the preserved deterministic Guide Me foundation:
   typed issue/cause/step/feedback contracts, the generated reviewed procedure
   catalog with fail-closed validation, a deterministic planner and feedback
   reducer, staged lesson/proposal validators, and a bounded checksummed
@@ -418,11 +421,12 @@ optional adapter and never a dependency of the audio product.
 
 ## Privacy default
 
-Core measurement, recipes, graph execution, preview rendering, and manual editing
-are local. No audio upload path or telemetry is implemented. The required semantic
-path is also local and uses no API key. Optional cloud text/measurement reasoning
-requires provider selection, a Keychain credential, and explicit consent; all
-responses remain untrusted typed proposals. See
-[`PRODUCTION_INTELLIGENCE.md`](docs/PRODUCTION_INTELLIGENCE.md) for the implemented
-boundary and [`PRODUCTION_INTELLIGENCE_NO_KEY_MILESTONE.md`](docs/PRODUCTION_INTELLIGENCE_NO_KEY_MILESTONE.md)
-for the amended completion standard.
+Tutor conversation, reviewed knowledge, local measurements, outcomes, and receipts
+remain local by default. Without a Keychain credential and explicit cloud-text
+consent, the Tutor uses its deterministic offline fallback. Optional audio listening
+has a separate persistent consent plus a per-turn toggle and sends only one current,
+hash-checked, bounded capture; local measurements are never labeled as listening.
+The companion's optional visible-Logic observer requires explicit Accessibility
+permission and exposes copy-only semantic reads—never actions or setters. No
+telemetry path is implemented. See [`PRIVACY_MODEL.md`](docs/PRIVACY_MODEL.md) and
+[`TUTOR_LLM_FIRST_ARCHITECTURE.md`](docs/TUTOR_LLM_FIRST_ARCHITECTURE.md).

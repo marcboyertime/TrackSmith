@@ -1,5 +1,7 @@
 import AgentCore
 import AudioAnalysis
+import CryptoKit
+import Darwin
 import DSPCore
 import Foundation
 import PlanSchema
@@ -404,6 +406,47 @@ public actor CompanionSessionClient {
         let capturedAudio = try WAVFile.read(url: inputURL)
         try validate(capturedAudio: capturedAudio, against: artifact)
         return capturedAudio
+    }
+
+    /// Returns one bounded, hash-bound WAV byte snapshot for an explicitly
+    /// consented Tutor listening request. No model-facing API receives this
+    /// method, the filesystem URL, or the broader session client.
+    public func loadValidatedCaptureWAVData(
+        _ artifact: CaptureArtifact,
+        maximumBytes: Int = 24 * 1_024 * 1_024
+    ) throws -> Data {
+        guard maximumBytes > 0, maximumBytes <= 24 * 1_024 * 1_024 else {
+            throw ExchangeError.artifactTooLarge
+        }
+        let inputURL = try exchange.resolveArtifact(artifact)
+        let descriptor = Darwin.open(inputURL.path, O_RDONLY | O_NOFOLLOW)
+        guard descriptor >= 0 else { throw ExchangeError.invalidArtifactPath }
+        defer { Darwin.close(descriptor) }
+        var status = stat()
+        guard Darwin.fstat(descriptor, &status) == 0,
+              (status.st_mode & S_IFMT) == S_IFREG,
+              status.st_size >= 0 else { throw ExchangeError.invalidArtifactPath }
+        guard status.st_size <= maximumBytes else { throw ExchangeError.artifactTooLarge }
+        // Deliberately copy from one no-follow descriptor instead of memory-mapping:
+        // the digest, WAV decoder, and provider encoder must observe the same stable
+        // in-memory snapshot even if another same-App-Group process misbehaves.
+        let handle = FileHandle(fileDescriptor: descriptor, closeOnDealloc: false)
+        var data = Data()
+        while data.count <= maximumBytes {
+            let remaining = maximumBytes + 1 - data.count
+            let chunk = try handle.read(upToCount: min(64 * 1_024, remaining)) ?? Data()
+            if chunk.isEmpty { break }
+            data.append(chunk)
+        }
+        guard data.count <= maximumBytes,
+              (try handle.read(upToCount: 1) ?? Data()).isEmpty else {
+            throw ExchangeError.artifactTooLarge
+        }
+        let digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        guard digest == artifact.sha256 else { throw ExchangeError.artifactHashMismatch }
+        let capturedAudio = try WAVFile.read(data: data)
+        try validate(capturedAudio: capturedAudio, against: artifact)
+        return data
     }
 
     /// A Vocal asset must retain the exact source authority that the caller
