@@ -12,7 +12,7 @@ final class TutorConversationSessionModel: ObservableObject {
     @Published var projectGoal = ""
     @Published var attachCurrentCapture = true
     @Published var requestModelListening = false
-    @Published var confirmEditedUpstreamOfTap = false
+    @Published private var signalPathConfirmedExperimentIDs: Set<UUID> = []
     @Published private(set) var streamingText = ""
     @Published private(set) var isStreaming = false
     @Published private(set) var activity = "Ready"
@@ -191,7 +191,7 @@ final class TutorConversationSessionModel: ObservableObject {
                 state = try await engine.startNewConversation(
                     projectGoal: projectGoal.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
                 )
-                confirmEditedUpstreamOfTap = false
+                signalPathConfirmedExperimentIDs.removeAll()
                 activity = "New local Tutor conversation"
             } catch {
                 activity = "A new conversation could not be created"
@@ -207,7 +207,7 @@ final class TutorConversationSessionModel: ObservableObject {
                 try await engine.deleteAllHistory()
                 state = await engine.snapshot()
                 projectGoal = ""
-                confirmEditedUpstreamOfTap = false
+                signalPathConfirmedExperimentIDs.removeAll()
                 activity = "Tutor transcript, experiments, and receipts deleted locally"
             } catch {
                 activity = "Tutor history could not be deleted"
@@ -221,24 +221,43 @@ final class TutorConversationSessionModel: ObservableObject {
         session: CompanionSessionModel
     ) {
         guard !isStreaming, let engine else { return }
+        // Freeze this card's confirmation before asynchronous capture work.
+        // A different pending experiment can never donate authority to it.
+        let signalPathConfirmed = signalPathConfirmedExperimentIDs.contains(experiment.id)
         Task {
             do {
-                let followUp = try await session.tutorConversationCaptureSnapshot()
+                let followUp: TutorCaptureSnapshot?
+                do {
+                    followUp = try await session.tutorConversationCaptureSnapshot()
+                } catch {
+                    // Outcome persistence is more important than fresh capture
+                    // availability. The engine records comparison unavailable.
+                    followUp = nil
+                }
                 _ = try await engine.recordOutcome(
                     experimentID: experiment.id,
                     outcome: outcome,
                     followUpCapture: followUp,
-                    userConfirmedUpstreamAndObservable: confirmEditedUpstreamOfTap
+                    userConfirmedUpstreamAndObservable: signalPathConfirmed
                 )
                 state = await engine.snapshot()
-                // A confirmation never carries into the automatic follow-up or another experiment.
-                confirmEditedUpstreamOfTap = false
+                signalPathConfirmedExperimentIDs.remove(experiment.id)
                 composer = Self.feedbackText(outcome)
                 send(session: session)
             } catch {
                 activity = "That outcome could not be attached to the experiment"
             }
         }
+    }
+
+    func signalPathConfirmationBinding(for experimentID: UUID) -> Binding<Bool> {
+        Binding(
+            get: { self.signalPathConfirmedExperimentIDs.contains(experimentID) },
+            set: { isConfirmed in
+                if isConfirmed { self.signalPathConfirmedExperimentIDs.insert(experimentID) }
+                else { self.signalPathConfirmedExperimentIDs.remove(experimentID) }
+            }
+        )
     }
 
     func showMe(_ experiment: TutorExperimentRecord) {

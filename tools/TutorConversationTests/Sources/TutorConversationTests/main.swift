@@ -43,6 +43,7 @@ private final class Suite {
         await test("double provider failure leaves an honest attached-capture assistant status", testAttachedCaptureDoubleFailure)
         await test("attached generic offline fallback gives one honest reversible tonal next step", testAttachedGenericOfflineFallback)
         await test("comparison authority rejects hash-only follow-ups and accepts guarded continuity", testComparisonAuthority)
+        await test("two pending experiment confirmations cannot cross-authorize comparisons", testPendingExperimentConfirmationIsolation)
         await test("legacy experiment records decode with Phase 2 fields absent", testLegacyExperimentDecoding)
         await test("not sure and clearer-but-thin dialogue remain useful without listening claims", testResponseQualityVerticalSlice)
         await test("muddy to thin stateful conversation retains turns, tools, experiment, and outcome", testStatefulVerticalSlice)
@@ -111,8 +112,10 @@ private final class Suite {
         try expect(FileManager.default.fileExists(atPath: root.appendingPathComponent("packages/ProductionIntelligence").path),
                    "Create foundation was removed")
         let tutorSession = try source("apps/CompanionMacApp/TutorConversationSessionModel.swift")
-        try expect(tutorSession.components(separatedBy: "confirmEditedUpstreamOfTap = false").count >= 4,
-                   "signal-path confirmation is not reset after outcome/new conversation/history deletion")
+        try expect(tutorSession.contains("signalPathConfirmedExperimentIDs.contains(experiment.id)"),
+                   "signal-path confirmation is not scoped to the selected experiment")
+        try expect(tutorSession.contains("signalPathConfirmedExperimentIDs.remove(experiment.id)"),
+                   "selected experiment confirmation is not cleared after outcome")
     }
 
     private func testToolSchemas() async throws {
@@ -660,6 +663,63 @@ private final class Suite {
             authority: authority, followUp: acceptedCapture, userConfirmedUpstreamAndObservable: false
         )
         try expect(!noConfirmation.available && noConfirmation.reason.contains("did not confirm"), "missing signal-path confirmation was accepted")
+    }
+
+    private func testPendingExperimentConfirmationIsolation() async throws {
+        let root = temporaryRoot("confirmation-isolation")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let baseline = sampleCapture(wavData: Data("baseline-confirmation".utf8))
+        let first = TutorExperimentRecord(
+            draft: experimentDraft(title: "First pending experiment"),
+            comparisonAuthority: TutorComparisonAuthority(baseline: baseline)
+        )
+        let second = TutorExperimentRecord(
+            draft: experimentDraft(title: "Second pending experiment"),
+            comparisonAuthority: TutorComparisonAuthority(baseline: baseline)
+        )
+        let engine = TutorConversationEngine(
+            state: TutorConversationState(experiments: [first, second]),
+            store: TutorConversationStore(rootURL: root),
+            tools: try TutorToolExecutor(),
+            fallbackProvider: try OfflineTutorProvider()
+        )
+        var followUp = baseline
+        followUp.captureSnapshotID = UUID()
+        followUp.sha256 = sha256(Data("later-confirmation".utf8))
+        followUp.capturedAt = baseline.capturedAt.addingTimeInterval(1)
+
+        // This models confirmation captured atomically from the first card.
+        _ = try await engine.recordOutcome(
+            experimentID: first.id, outcome: .better, followUpCapture: followUp,
+            userConfirmedUpstreamAndObservable: true
+        )
+        // The second card receives no confirmation, even though the first did.
+        _ = try await engine.recordOutcome(
+            experimentID: second.id, outcome: .notSure, followUpCapture: followUp,
+            userConfirmedUpstreamAndObservable: false
+        )
+        let records = (await engine.snapshot()).experiments
+        try expect(records.first(where: { $0.id == first.id })?.waveformComparison?.available == true,
+                   "selected experiment did not retain its own authorized comparison")
+        let secondComparison = records.first(where: { $0.id == second.id })?.waveformComparison
+        try expect(secondComparison?.available == false && secondComparison?.reason.contains("did not confirm") == true,
+                   "confirmation leaked from one pending experiment to another")
+
+        let third = TutorExperimentRecord(
+            draft: experimentDraft(title: "Capture failure outcome"),
+            comparisonAuthority: TutorComparisonAuthority(baseline: baseline)
+        )
+        let failureEngine = TutorConversationEngine(
+            state: TutorConversationState(experiments: [third]),
+            store: TutorConversationStore(rootURL: temporaryRoot("capture-failure")),
+            tools: try TutorToolExecutor(), fallbackProvider: try OfflineTutorProvider()
+        )
+        let persisted = try await failureEngine.recordOutcome(
+            experimentID: third.id, outcome: .noChange, followUpCapture: nil,
+            userConfirmedUpstreamAndObservable: true
+        )
+        try expect(persisted.outcome == .noChange && persisted.waveformComparison?.available == false,
+                   "missing follow-up capture did not preserve the user-only outcome as comparison unavailable")
     }
 
     private func testLegacyExperimentDecoding() async throws {

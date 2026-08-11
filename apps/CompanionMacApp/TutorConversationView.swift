@@ -185,7 +185,7 @@ struct TutorConversationView: View {
                 }.padding(.top, Theme.Spacing.eight)
             }.font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
             if experiment.comparisonAuthority != nil, experiment.outcome == nil {
-                Toggle("My edit is upstream of TrackSmith and the follow-up capture contains its signal", isOn: $tutor.confirmEditedUpstreamOfTap)
+                Toggle("My edit is upstream of TrackSmith and the follow-up capture contains its signal", isOn: tutor.signalPathConfirmationBinding(for: experiment.id))
                     .font(Theme.Font.meta).toggleStyle(.checkbox)
                     .accessibilityHint("Required for a bounded local measurement comparison, not a listening claim.")
             }
