@@ -54,8 +54,9 @@ The first detached-worktree attempt failed before compilation because the intent
 - Xcode Release installation: `BUILD SUCCEEDED`.
 - App and nested AU pass `codesign --verify --deep --strict` / strict nested verification.
 - Signing Team ID: `KDV9RC892F`.
-- Staged and installed app executable SHA-256 both equal `75848746cb80a0359ed5310554ea008063625e07beede8403c1d93bfbebb293f`.
-- Staged and installed AU executable SHA-256 both equal `0bd623fbcae5cb9a0b1ab33938cabc42929d04435abc1a2cab0eb17bcaac7bc1`.
+- The final signed build was produced in an isolated worktree at exact evidence commit `dccb99e602ffec3dfb32ab0194bb16f422a7726e`, with no concurrent asset catalog or generated project changes present.
+- Final clean staging and installed app executable SHA-256 both equal `93265d1890c1bee4ee551caddd0157869332cfb74c59a58c4efb828cbf04e574`.
+- Final clean staging and installed AU executable SHA-256 both equal `bd1ced471662cb17685a2c7e8f607b7551ddf51e6846ddd6070d4372aeeb8794`.
 - App entitlements: App Group, network client, development `get-task-allow`; no App Sandbox so the opt-in accessibility observer can make read-only AX queries.
 - AU entitlements: App Sandbox, App Group, development `get-task-allow`.
 - Preserved app bundle ID: `com.marcboyer.logicaudioassistant`.
@@ -63,6 +64,8 @@ The first detached-worktree attempt failed before compilation because the intent
 - Preserved component: `aufx/LgAA/ExAI`.
 - `pluginkit` registration: `com.marcboyer.logicaudioassistant.AudioUnit(1.0)`.
 - `auval -v aufx LgAA ExAI`: `AU VALIDATION SUCCEEDED`; AUv3 loaded out of process, mono/stereo formats rendered from 11.025 through 192 kHz.
+
+Immediately after the clean bundle replacement, the first `auval` retry could not discover the component. The installer-prescribed launch-once step registered the exact installed extension; the following `pluginkit` query resolved only the installed path and the complete `auval` retry passed. This was a post-replacement discovery race, not a render failure.
 
 The final installed app was launched directly by absolute path. It opened in Tutor mode with `Future / Legacy` off. With cloud consent off, the installed Tutor answered a muddy-vocal request with a low-mid masking hypothesis, one user-controlled broad `1–2 dB` A/B around `250–400 Hz`, explicit listen/stop/undo guidance, a persistent experiment card, `Show Me`, and Better/Worse/No change/Can't find it outcomes.
 
@@ -79,6 +82,8 @@ Installed receipt `4AB53057-AD16-4DED-95B6-17DAAFA0B7E4` is `0600`, records `tra
 - First live capture: `60EAE608-C12F-4502-9E67-B1F55465E1F6`, SHA-256 `24d075cf941cc454b19834ff07774c9bcf6a2015d31034d436c649ae9bdfbdbe`, about `10.4 s`, 44.1 kHz mono, with seven bounded local measurements retained in the receipt.
 - Final installed-AU capture: `53CA9B9A-2D9E-45AD-AE22-770082BC3510`, SHA-256 `747a83d9128530ef715b8e9f621e11e15d12827e12106e5817ba3b446cbf535d`, `8.986122 s`, 44.1 kHz mono Float32, owner-only WAV.
 - The test region and AU insert were removed with Logic undo and the original muted empty-track state was restored. That recovered state was preserved as the isolated project `/Users/marcboyer/Music/Logic/TrackSmith Tutor Acceptance 2026-08-10.logicx`; unrelated Logic projects were not overwritten.
+
+The Logic playback/capture acceptance above preceded the final clean-isolated reinstall. The application and AU source code was still exact commit `5b0c5839070318a2b8e2ec73f3a746be7e63e28b`; later commits through the clean build point changed only this evidence record and the evaluator report. After the final reinstall, the exact installed AU was launch-registered and reran the complete out-of-process `auval` suite, but Logic was not reopened for a redundant second project-level pass.
 
 This is proof of installed AU hosting, actual Logic playback capture, and local measurement generation. It is not proof that a model or the user listened.
 
