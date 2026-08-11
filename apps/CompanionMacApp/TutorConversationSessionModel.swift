@@ -22,6 +22,12 @@ final class TutorConversationSessionModel: ObservableObject {
     private let engine: TutorConversationEngine?
     private let overlay = LogicCalloutOverlayController()
     private var turnTask: Task<Void, Never>?
+    // Provider deltas can arrive much faster than SwiftUI can lay out a selectable
+    // text field. Keep the provider stream lossless, but publish its text at a
+    // bounded cadence so one response cannot monopolize the main actor.
+    private var pendingStreamingTextChunks: [String] = []
+    private var streamingPublicationTask: Task<Void, Never>?
+    private static let streamingPublicationDelayNanoseconds: UInt64 = 100_000_000
 
     init() {
         do {
@@ -38,7 +44,10 @@ final class TutorConversationSessionModel: ObservableObject {
         Task { [weak self] in await self?.restore() }
     }
 
-    deinit { turnTask?.cancel() }
+    deinit {
+        turnTask?.cancel()
+        streamingPublicationTask?.cancel()
+    }
 
     func restore() async {
         guard let engine else { return }
@@ -52,6 +61,7 @@ final class TutorConversationSessionModel: ObservableObject {
         let text = composer.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         composer = ""
+        discardStagedStreamingText()
         streamingText = ""
         fallbackNotice = nil
         isStreaming = true
@@ -62,6 +72,11 @@ final class TutorConversationSessionModel: ObservableObject {
 
         turnTask = Task { [weak self, weak session] in
             guard let self, let session else { return }
+            defer {
+                self.discardStagedStreamingText()
+                self.isStreaming = false
+                self.turnTask = nil
+            }
             do {
                 var capture = shouldAttach
                     ? try await session.tutorConversationCaptureSnapshot()
@@ -149,7 +164,7 @@ final class TutorConversationSessionModel: ObservableObject {
                     if Task.isCancelled { throw TutorConversationError.cancelled }
                     switch event {
                     case let .textDelta(_, delta):
-                        streamingText += delta
+                        stageStreamingText(delta)
                     case let .toolActivity(name):
                         activity = Self.toolActivity(name)
                     case let .experiment(record):
@@ -159,6 +174,9 @@ final class TutorConversationSessionModel: ObservableObject {
                         fallbackNotice = reason
                         activity = "Using deterministic offline fallback"
                     case .completed:
+                        // Publish any final staged delta before replacing the transient
+                        // bubble with the engine's persisted, authoritative message.
+                        flushStagedStreamingText()
                         state = await engine.snapshot()
                         streamingText = ""
                         activity = "Ready for what you heard next"
@@ -173,8 +191,6 @@ final class TutorConversationSessionModel: ObservableObject {
                 state = await engine.snapshot()
                 activity = "Tutor response failed safely; no Logic or Audio Unit state changed"
             }
-            isStreaming = false
-            turnTask = nil
         }
     }
 
@@ -293,6 +309,40 @@ final class TutorConversationSessionModel: ObservableObject {
     func dismissCallout() {
         overlay.dismiss()
         logicStatus = "Logic callout dismissed."
+    }
+
+    private func stageStreamingText(_ delta: String) {
+        guard !delta.isEmpty else { return }
+        pendingStreamingTextChunks.append(delta)
+        guard streamingPublicationTask == nil else { return }
+
+        streamingPublicationTask = Task { [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: Self.streamingPublicationDelayNanoseconds)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled, let self else { return }
+            self.flushStagedStreamingText()
+        }
+    }
+
+    private func flushStagedStreamingText() {
+        // A completion-triggered flush can run before the delayed task wakes.
+        // Cancel that task before releasing its slot so it cannot publish chunks
+        // from a subsequent turn. Cancelling the task currently executing here is
+        // harmless; it has no more suspension points after this call.
+        streamingPublicationTask?.cancel()
+        streamingPublicationTask = nil
+        guard !pendingStreamingTextChunks.isEmpty else { return }
+        streamingText += pendingStreamingTextChunks.joined()
+        pendingStreamingTextChunks.removeAll(keepingCapacity: true)
+    }
+
+    private func discardStagedStreamingText() {
+        streamingPublicationTask?.cancel()
+        streamingPublicationTask = nil
+        pendingStreamingTextChunks.removeAll(keepingCapacity: true)
     }
 
     private static func toolActivity(_ name: String) -> String {

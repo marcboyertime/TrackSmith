@@ -30,6 +30,7 @@ private final class Suite {
     func run() async {
         await test("tool registry is mutation-incapable", testToolMutationFirewall)
         await test("legacy identifiers and Create/Vocal boundary are preserved", testLegacyBoundary)
+        await test("Tutor streaming UI batches text with stable eager transcript layout", testTutorStreamingUIContract)
         await test("strict OpenAI tool schemas stay bounded", testToolSchemas)
         await test("SSE decoder reconstructs deltas, text, calls, and metadata", testSSEDecoder)
         await test("streaming provider emits SSE and sends store false", testStreamingProvider)
@@ -116,6 +117,42 @@ private final class Suite {
                    "signal-path confirmation is not scoped to the selected experiment")
         try expect(tutorSession.contains("signalPathConfirmedExperimentIDs.remove(experiment.id)"),
                    "selected experiment confirmation is not cleared after outcome")
+    }
+
+    private func testTutorStreamingUIContract() async throws {
+        let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        func source(_ relativePath: String) throws -> String {
+            try String(contentsOf: root.appendingPathComponent(relativePath), encoding: .utf8)
+        }
+        let session = try source("apps/CompanionMacApp/TutorConversationSessionModel.swift")
+        try expect(session.contains("pendingStreamingTextChunks.append(delta)"),
+                   "provider deltas are no longer staged before publication")
+        try expect(session.contains("Task.sleep(nanoseconds: Self.streamingPublicationDelayNanoseconds)"),
+                   "streaming text publication is no longer throttled")
+        try expect(session.contains("streamingPublicationDelayNanoseconds: UInt64 = 100_000_000"),
+                   "streaming UI publication no longer leaves enough layout headroom")
+        try expect(session.contains("streamingPublicationTask?.cancel()\n        streamingPublicationTask = nil"),
+                   "a manual streaming flush can leave a prior publisher alive")
+        try expect(session.contains("flushStagedStreamingText()"),
+                   "final streamed text is not explicitly flushed before completion")
+
+        let view = try source("apps/CompanionMacApp/TutorConversationView.swift")
+        try expect(!view.contains("ScrollViewReader"),
+                   "the transcript still has a programmatic scroll controller")
+        try expect(!view.contains("scrollTo("),
+                   "the transcript can still override a manual scroll position")
+        try expect(!view.contains(".id(message.id)") && !view.contains(".id(\"streaming\")"),
+                   "the transcript still carries programmatic scroll anchors")
+        try expect(!view.contains("LazyVStack"),
+                   "the transcript still uses lazy estimate-based layout")
+        try expect(view.contains("VStack(alignment: .leading, spacing: Theme.Spacing.twentyFour)"),
+                   "the transcript is no longer backed by a stable eager stack")
+        try expect(!view.contains("axis: .vertical") && !view.contains(".lineLimit(1...5)"),
+                   "the composer still uses a multiline self-sizing text field")
+        try expect(view.contains("TextField(\"What changed, or what do you want to understand?\", text: $tutor.composer)"),
+                   "the primary composer is no longer a stable single-line text field")
+        try expect(view.contains(".onSubmit { tutor.send(session: session) }"),
+                   "the primary composer no longer sends on submit")
     }
 
     private func testToolSchemas() async throws {

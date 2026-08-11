@@ -93,24 +93,22 @@ struct TutorConversationView: View {
     }
 
     private var transcript: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: Theme.Spacing.twentyFour) {
-                    if tutor.state.messages.isEmpty { welcome }
-                    ForEach(tutor.state.messages) { message in
-                        VStack(alignment: message.role == .user ? .trailing : .leading, spacing: Theme.Spacing.twelve) {
-                            messageBubble(message)
-                            if let id = message.experimentID, let experiment = tutor.state.experiments.first(where: { $0.id == id }) { experimentCard(experiment) }
-                        }
-                        .frame(maxWidth: .infinity, alignment: message.role == .user ? .trailing : .leading).id(message.id)
+        ScrollView {
+            // Tutor history is bounded to 240 messages. Eager layout avoids the
+            // lazy-stack estimate cycle observed during manual transcript scrolling.
+            VStack(alignment: .leading, spacing: Theme.Spacing.twentyFour) {
+                if tutor.state.messages.isEmpty { welcome }
+                ForEach(tutor.state.messages) { message in
+                    VStack(alignment: message.role == .user ? .trailing : .leading, spacing: Theme.Spacing.twelve) {
+                        messageBubble(message)
+                        if let id = message.experimentID, let experiment = tutor.state.experiments.first(where: { $0.id == id }) { experimentCard(experiment) }
                     }
-                    if tutor.isStreaming { streamingBubble.id("streaming") }
+                    .frame(maxWidth: .infinity, alignment: message.role == .user ? .trailing : .leading)
                 }
-                .frame(maxWidth: 850, alignment: .leading)
-                .padding(.horizontal, Theme.Spacing.twentyFour).padding(.vertical, Theme.Spacing.twentyFour)
+                if tutor.isStreaming { streamingBubble }
             }
-            .onChange(of: tutor.state.messages.count) { _, _ in if let last = tutor.state.messages.last { proxy.scrollTo(last.id, anchor: .bottom) } }
-            .onChange(of: tutor.streamingText) { _, _ in if tutor.isStreaming { proxy.scrollTo("streaming", anchor: .bottom) } }
+            .frame(maxWidth: 850, alignment: .leading)
+            .padding(.horizontal, Theme.Spacing.twentyFour).padding(.vertical, Theme.Spacing.twentyFour)
         }
     }
 
@@ -230,8 +228,8 @@ struct TutorConversationView: View {
     private var composer: some View {
         VStack(spacing: Theme.Spacing.eight) {
             HStack(alignment: .bottom, spacing: Theme.Spacing.twelve) {
-                TextField("What changed, or what do you want to understand?", text: $tutor.composer, axis: .vertical)
-                    .textFieldStyle(.plain).font(Theme.Font.body).lineLimit(1...5).onSubmit { tutor.send(session: session) }
+                TextField("What changed, or what do you want to understand?", text: $tutor.composer)
+                    .textFieldStyle(.plain).font(Theme.Font.body).onSubmit { tutor.send(session: session) }
                     .accessibilityLabel("Tutor question")
                 if tutor.isStreaming { Button("Cancel", role: .cancel) { tutor.cancel() }.buttonStyle(.bordered) }
                 else { Button("Send", systemImage: "arrow.up") { tutor.send(session: session) }.buttonStyle(.borderedProminent).disabled(tutor.composer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty).accessibilityHint("Sends your question to Tutor") }
