@@ -124,6 +124,7 @@ public actor TutorConversationEngine {
             if activeTurnID == assistantMessageID { activeTurnID = nil }
         }
         var accumulatedText = ""
+        var primaryFailureReason: String?
         do {
             let result: ProviderTurnResult
             do {
@@ -139,7 +140,9 @@ public actor TutorConversationEngine {
             } catch is CancellationError {
                 throw TutorConversationError.cancelled
             } catch {
-                continuation.yield(.fallbackActivated(fallbackReason(error)))
+                let reason = fallbackReason(error)
+                primaryFailureReason = reason
+                continuation.yield(.fallbackActivated(reason))
                 if !accumulatedText.isEmpty {
                     let divider = "\n\n— Offline fallback —\n\n"
                     let accepted = appendBounded(divider, to: &accumulatedText)
@@ -176,6 +179,7 @@ public actor TutorConversationEngine {
                 userMessageID: userMessage.id,
                 assistantMessageID: assistantMessage.id,
                 provider: result.metadata,
+                fallbackReason: primaryFailureReason,
                 assistantTextSHA256: sha256(Data(assistantMessage.text.utf8)),
                 captureSnapshotID: context.capture?.captureSnapshotID,
                 captureSHA256: context.capture?.sha256,
@@ -475,16 +479,9 @@ public actor TutorConversationEngine {
     }
 
     private func fallbackReason(_ error: Error) -> String {
-        switch error {
-        case TutorConversationError.consentRequired:
-            "Cloud text consent is off. Using the deterministic offline Tutor."
-        case TutorConversationError.credentialMissing:
-            "No OpenAI credential is available. Using the deterministic offline Tutor."
-        case TutorConversationError.timedOut:
-            "The cloud Tutor timed out. Using the deterministic offline Tutor."
-        default:
-            "The cloud Tutor was unavailable. Using the deterministic offline Tutor."
-        }
+        let detail = (error as? TutorConversationError)?.safeFailureDescription
+            ?? "The cloud Tutor was unavailable."
+        return "\(detail) Using the deterministic offline Tutor."
     }
 
     private func sha256(_ data: Data) -> String {

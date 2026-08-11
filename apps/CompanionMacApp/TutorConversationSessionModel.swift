@@ -93,9 +93,11 @@ final class TutorConversationSessionModel: ObservableObject {
                         } catch is CancellationError {
                             throw TutorConversationError.cancelled
                         } catch {
+                            let reason = (error as? TutorConversationError)?.safeFailureDescription
+                                ?? "The audio-listening provider was unavailable."
                             capture?.cloudListening = TutorCloudListeningEvidence(
                                 status: .unavailable,
-                                summary: "The optional audio-listening request did not complete. No listening claim is authorized.",
+                                summary: "The optional audio-listening request did not complete. \(reason) No listening claim is authorized.",
                                 captureSnapshotID: current.captureSnapshotID
                             )
                         }

@@ -533,6 +533,22 @@ private final class Suite {
         try expect(state.messages.count == 2, "fallback turn did not persist")
         try expect(state.messages.last?.text.contains("Offline fallback") == true,
                    "fallback did not disclose its grounding boundary")
+        try expect(state.messages.last?.text.contains("250–400 Hz") == true,
+                   "muddy request did not receive the issue-aware low-mid test")
+        try expect(state.messages.last?.text.contains("kick and bass") != true,
+                   "muddy request fell through to an unrelated lesson")
+        try expect(state.experiments.count == 1,
+                   "offline fallback did not persist its reversible experiment")
+        guard let completedReceipt = events.compactMap({ event -> TutorEvidenceReceipt? in
+            if case let .completed(_, receipt) = event { return receipt }
+            return nil
+        }).last else {
+            throw TestFailure(description: "fallback receipt missing")
+        }
+        try expect(completedReceipt.fallbackReason?.contains("Cloud conversation consent is off") == true,
+                   "bounded primary failure reason was not retained")
+        try expect(completedReceipt.tools.contains(where: { $0.name == "present_experiment" }),
+                   "offline experiment tool receipt missing")
     }
 
     private func testCancellationAndExclusion() async throws {

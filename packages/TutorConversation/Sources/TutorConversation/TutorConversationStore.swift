@@ -126,8 +126,12 @@ public struct TutorConversationStore: @unchecked Sendable {
     /// Writes a new evidence receipt without any overwrite path. A duplicate
     /// ID is rejected even when the bytes match, making accidental mutation or
     /// replay visible to callers and tests.
-    public func saveReceipt(_ receipt: TutorEvidenceReceipt) throws {
+    public func saveReceipt(_ input: TutorEvidenceReceipt) throws {
         try prepareRoot()
+        var receipt = input
+        receipt.fallbackReason = receipt.fallbackReason.map {
+            redactAndBound($0, limit: 1_024)
+        }
         let encoder = canonicalEncoder()
         let body = try encoder.encode(receipt)
         let envelope = TutorReceiptEnvelope(

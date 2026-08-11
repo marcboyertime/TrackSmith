@@ -594,6 +594,10 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
     public var assistantMessageID: UUID
     public var createdAt: Date
     public var provider: TutorProviderMetadata
+    /// Present only when a primary provider failed and the completed answer
+    /// came from the deterministic fallback. This is a bounded, redacted
+    /// operational summary, never a raw response body or credential value.
+    public var fallbackReason: String?
     public var assistantTextSHA256: String
     public var captureSnapshotID: UUID?
     public var captureSHA256: String?
@@ -609,6 +613,7 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
         assistantMessageID: UUID,
         createdAt: Date = Date(),
         provider: TutorProviderMetadata,
+        fallbackReason: String? = nil,
         assistantTextSHA256: String,
         captureSnapshotID: UUID?,
         captureSHA256: String?,
@@ -623,6 +628,7 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
         self.assistantMessageID = assistantMessageID
         self.createdAt = Date(timeIntervalSince1970: createdAt.timeIntervalSince1970.rounded(.down))
         self.provider = provider
+        self.fallbackReason = fallbackReason
         self.assistantTextSHA256 = assistantTextSHA256
         self.captureSnapshotID = captureSnapshotID
         self.captureSHA256 = captureSHA256
@@ -661,4 +667,65 @@ public enum TutorConversationError: Error, Equatable, Sendable {
     case audioConsentRequired
     case audioAttachmentTooLarge
     case staleCapture
+}
+
+public extension TutorConversationError {
+    /// A user/receipt-safe reason that deliberately excludes response bodies,
+    /// paths, request contents, and credentials. Provider details are reduced
+    /// to an HTTP status or a fixed category.
+    var safeFailureDescription: String {
+        switch self {
+        case .emptyMessage:
+            "The request was empty."
+        case .turnInProgress:
+            "Another Tutor turn is already running."
+        case .messageTooLarge:
+            "The request exceeded the bounded message limit."
+        case .consentRequired:
+            "Cloud conversation consent is off."
+        case .credentialMissing:
+            "No OpenAI credential is available."
+        case .credentialUnavailable:
+            "The local credential store was unavailable."
+        case .invalidModel:
+            "The configured model identifier is invalid."
+        case let .providerRejected(detail):
+            Self.safeProviderRejection(detail)
+        case .malformedProviderResponse:
+            "The provider returned no usable bounded response."
+        case .responseTooLarge:
+            "The provider response exceeded a TrackSmith size limit."
+        case .timedOut:
+            "The provider request timed out."
+        case .cancelled:
+            "The request was cancelled."
+        case .toolLimitReached:
+            "The bounded tool-call limit was reached."
+        case .unknownTool:
+            "The provider requested a tool outside TrackSmith's allowlist."
+        case .invalidToolArguments:
+            "The provider supplied invalid bounded tool arguments."
+        case .persistence:
+            "Local Tutor persistence was unavailable."
+        case .audioConsentRequired:
+            "Separate cloud-audio consent is off."
+        case .audioAttachmentTooLarge:
+            "The audio attachment exceeded the bounded upload limit."
+        case .staleCapture:
+            "The selected capture no longer matched its immutable snapshot."
+        }
+    }
+
+    private static func safeProviderRejection(_ detail: String) -> String {
+        let lowercased = detail.lowercased()
+        if lowercased.contains("credential") {
+            return "The provider rejected the OpenAI credential."
+        }
+        for token in detail.split(whereSeparator: { !$0.isNumber }) {
+            if token.count == 3, let status = Int(token), (100...599).contains(status) {
+                return "The provider returned HTTP \(status)."
+            }
+        }
+        return "The provider rejected the request."
+    }
 }
