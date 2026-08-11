@@ -468,6 +468,14 @@ private extension JSONEncoder {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         encoder.dateEncodingStrategy = .iso8601
+        // Provider context must never abort a conversation because an upstream
+        // measurement surfaced a non-finite value. Domain initializers sanitize
+        // known metrics; this remains a final fail-soft transport boundary.
+        encoder.nonConformingFloatEncodingStrategy = .convertToString(
+            positiveInfinity: "unavailable",
+            negativeInfinity: "unavailable",
+            nan: "unavailable"
+        )
         return encoder
     }
 }

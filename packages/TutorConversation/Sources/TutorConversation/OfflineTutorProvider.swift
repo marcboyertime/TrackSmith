@@ -7,13 +7,16 @@ import ProductionTutor
 public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
     public let providerIdentifier = "tracksmith-offline-tutor-v1"
     private let coordinator: GeneralTutorCoordinator
+    private let forceGenericFallback: Bool
 
-    public init(coordinator: GeneralTutorCoordinator) {
+    public init(coordinator: GeneralTutorCoordinator, forceGenericFallback: Bool = false) {
         self.coordinator = coordinator
+        self.forceGenericFallback = forceGenericFallback
     }
 
     public init() throws {
         self.coordinator = try GeneralTutorCoordinator()
+        forceGenericFallback = false
     }
 
     public func stream(_ request: TutorProviderRequest) -> AsyncThrowingStream<TutorProviderEvent, Error> {
@@ -55,14 +58,23 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
                         problemLocation: request.context.capture?.scopeDescription,
                         preservationPriorities: request.context.userReportedContext
                     )
-                    let outcome = try coordinator.answer(GeneralTutorRequest(
-                        question: latest.text,
-                        sourceType: request.context.sourceType,
-                        context: context,
-                        analysis: nil,
-                        explanationDepth: .simple
-                    ))
-                    let text = Self.render(outcome.answer, captureAvailable: request.context.capture != nil)
+                    let text: String
+                    do {
+                        if forceGenericFallback { throw TutorConversationError.malformedProviderResponse("Forced generic fallback for deterministic regression coverage.") }
+                        let outcome = try coordinator.answer(GeneralTutorRequest(
+                            question: latest.text,
+                            sourceType: request.context.sourceType,
+                            context: context,
+                            analysis: nil,
+                            explanationDepth: .simple
+                        ))
+                        text = Self.render(outcome.answer, captureAvailable: request.context.capture != nil)
+                    } catch {
+                        // Generic/unsupported requests must still leave the
+                        // musician with an actionable local next move. This is
+                        // deliberately not a diagnosis from DSP metrics.
+                        text = Self.gracefulGenericFallback(captureAvailable: request.context.capture != nil)
+                    }
                     for chunk in Self.chunks(text, approximateCharacters: 36) {
                         if Task.isCancelled { throw TutorConversationError.cancelled }
                         continuation.yield(.textDelta(chunk))
@@ -128,6 +140,19 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
             "Undo: \(lesson.undo)",
             "Why this test: \(lesson.why)",
             grounding,
+        ].joined(separator: "\n\n")
+    }
+
+    public static func gracefulGenericFallback(captureAvailable: Bool) -> String {
+        let evidence = captureAvailable
+            ? "An exact capture has descriptive local measurements attached, but those measurements cannot identify the clearest audible tonal issue or tell us whether a change is better."
+            : "No capture is attached, so this next move starts from your listening report."
+        return [
+            evidence,
+            "First, listen in the full musical context and tell me whether the concern is too dark, too bright, too boxy, too thin, or something else.",
+            "One reversible Logic test: loop one short representative phrase, open a user-controlled Channel EQ, keep the output level matched, and make one broad 1 dB move only in the direction you name. Toggle bypass against the unchanged signal before deciding.",
+            "Undo the band or bypass the user-added EQ if the comparison is unclear or the source loses what you want to preserve.",
+            "The user performs every edit; TrackSmith made no Logic or Audio Unit change."
         ].joined(separator: "\n\n")
     }
 

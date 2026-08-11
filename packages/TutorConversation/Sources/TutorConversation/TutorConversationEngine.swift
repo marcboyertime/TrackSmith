@@ -229,6 +229,15 @@ public actor TutorConversationEngine {
             continuation.yield(.cancelled(messageID: assistantMessageID))
             continuation.finish(throwing: TutorConversationError.cancelled)
         } catch {
+            // A malformed local context or a double-provider failure must not
+            // leave the musician with only their user bubble. Preserve a
+            // bounded, truthful assistant status without claiming that the
+            // capture was heard or that Logic changed.
+            if accumulatedText.isEmpty {
+                let fallback = "Tutor could not complete this turn safely. No Logic or Audio Unit state changed, and no conclusion was drawn from the capture. Please try again or describe what you hear."
+                accumulatedText = fallback
+                continuation.yield(.textDelta(messageID: assistantMessageID, text: fallback))
+            }
             persistInterruptedMessage(
                 id: assistantMessageID,
                 text: accumulatedText,

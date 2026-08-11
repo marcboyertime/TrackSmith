@@ -39,6 +39,9 @@ private final class Suite {
         await test("audio listening requires separate consent and exact live hash", testAudioListening)
         await test("audio intelligence evidence keeps exact waveform and calibration truth separate", testAudioIntelligenceTruth)
         await test("local waveform provider emits capture-bound exact-WAV observations", testLocalProviderExactWAV)
+        await test("live-like Float WAV local evidence is finite, encodable, and cannot abort a tool turn", testLiveLikeLocalEvidenceTurn)
+        await test("double provider failure leaves an honest attached-capture assistant status", testAttachedCaptureDoubleFailure)
+        await test("attached generic offline fallback gives one honest reversible tonal next step", testAttachedGenericOfflineFallback)
         await test("comparison authority rejects hash-only follow-ups and accepts guarded continuity", testComparisonAuthority)
         await test("legacy experiment records decode with Phase 2 fields absent", testLegacyExperimentDecoding)
         await test("not sure and clearer-but-thin dialogue remain useful without listening claims", testResponseQualityVerticalSlice)
@@ -547,6 +550,93 @@ private final class Suite {
         try expect(result.observations.allSatisfy { $0.evidence == .localMeasurement }, "provider observation claimed non-local evidence")
     }
 
+    private func testLiveLikeLocalEvidenceTurn() async throws {
+        let bytes = validMonoWAV(sampleRate: 44_100, frameCount: 157_696)
+        var capture = sampleCapture(wavData: bytes)
+        capture.formatDescription = "44100 Hz mono Float32 WAV"
+        capture.durationSeconds = Double(157_696) / 44_100
+        capture.audioIntelligence = await LocalWaveformSpecialist().analyze(wavData: bytes, capture: capture)
+        guard let intelligence = capture.audioIntelligence else { throw TestFailure(description: "local provider did not return a result") }
+        try expect(intelligence.waveformBindingStatus == .captureBoundExactWAV, "live-like WAV was not bound")
+        try expect(intelligence.observations.allSatisfy { $0.value?.isFinite ?? true }, "local observation contains a non-finite value")
+
+        let executor = try TutorToolExecutor()
+        let context = TutorRuntimeContext(sourceType: .vocal, capture: capture)
+        let output = try await executor.execute(TutorToolCall(
+            callID: "live-like-capture", name: "get_current_capture_context", argumentsJSON: "{}"
+        ), context: context)
+        let toolObject = try JSONSerialization.jsonObject(with: Data(output.outputJSON.utf8))
+        try expect(toolObject is [String: Any], "local tool context was not JSON-encodable")
+
+        let transport = RecordingStreamingTransport(lines: [
+            #"data: {"type":"response.completed","response":{"id":"resp_live","model":"test","output":[{"type":"message","content":[{"type":"output_text","text":"Bounded response."}]}]}}"#,
+            "",
+        ])
+        let provider = OpenAITutorProvider(
+            configuration: TutorProviderConfiguration(modelIdentifier: "gpt-test", cloudTextConsent: true),
+            credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "test-key-not-secret"]),
+            transport: transport
+        )
+        for try await _ in provider.stream(TutorProviderRequest(
+            messages: [TutorConversationMessage(role: .user, text: "Use this bounded local evidence.")],
+            context: context, tools: TutorToolExecutor.defaultDefinitions
+        )) {}
+        guard let request = transport.latestRequest() else { throw TestFailure(description: "provider did not receive live-like context") }
+        let body = String(decoding: request.body, as: UTF8.self)
+        _ = try JSONSerialization.jsonObject(with: request.body)
+        try expect(!body.contains(":NaN") && !body.contains(":Infinity") && !body.contains(":-Infinity"), "provider context serialized a non-finite numeric token")
+    }
+
+    private func testAttachedCaptureDoubleFailure() async throws {
+        let root = temporaryRoot("attached-double-failure")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let bytes = validMonoWAV(sampleRate: 44_100, frameCount: 157_696)
+        var capture = sampleCapture(wavData: bytes)
+        capture.audioIntelligence = await LocalWaveformSpecialist().analyze(wavData: bytes, capture: capture)
+        let engine = TutorConversationEngine(
+            store: TutorConversationStore(rootURL: root),
+            tools: try TutorToolExecutor(),
+            fallbackProvider: FailingConversationProvider(error: .malformedProviderResponse("test fallback failure"))
+        )
+        let stream = try await engine.streamTurn(
+            text: "Use the attached capture as bounded local evidence.",
+            context: TutorRuntimeContext(sourceType: .vocal, capture: capture),
+            provider: FailingConversationProvider(error: .malformedProviderResponse("test primary failure"))
+        )
+        do { for try await _ in stream {} } catch { }
+        let state = await engine.snapshot()
+        try expect(state.messages.last?.status == .failed, "double failure did not retain an assistant status")
+        try expect(state.messages.last?.text.contains("No Logic or Audio Unit state changed") == true, "double failure status overclaimed or disappeared")
+    }
+
+    private func testAttachedGenericOfflineFallback() async throws {
+        let bytes = validMonoWAV(sampleRate: 44_100, frameCount: 157_696)
+        var capture = sampleCapture(wavData: bytes)
+        capture.audioIntelligence = await LocalWaveformSpecialist().analyze(wavData: bytes, capture: capture)
+        let provider = OfflineTutorProvider(
+            coordinator: try GeneralTutorCoordinator(),
+            forceGenericFallback: true
+        )
+        let prompt = "Use the attached capture as bounded local evidence. What is the clearest tonal issue, and what is one reversible Logic test?"
+        let request = TutorProviderRequest(
+            messages: [TutorConversationMessage(role: .user, text: prompt)],
+            context: TutorRuntimeContext(sourceType: .vocal, capture: capture),
+            tools: TutorToolExecutor.defaultDefinitions
+        )
+        var text = ""
+        var completed = false
+        for try await event in provider.stream(request) {
+            switch event {
+            case let .textDelta(delta): text += delta
+            case .completed: completed = true
+            }
+        }
+        try expect(completed, "generic offline fallback did not complete")
+        try expect(text.contains("descriptive local measurements"), "fallback did not disclose the measurement boundary")
+        try expect(text.contains("Channel EQ") && text.contains("Toggle bypass"), "fallback did not provide a reversible next action")
+        try expect(!text.localizedCaseInsensitiveContains("i hear") && !text.localizedCaseInsensitiveContains("I listened"), "fallback fabricated listening")
+    }
+
     private func testComparisonAuthority() async throws {
         let baseline = sampleCapture(wavData: Data("baseline".utf8))
         let authority = TutorComparisonAuthority(baseline: baseline)
@@ -778,13 +868,13 @@ private final class Suite {
         SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 
-    private func validMonoWAV() -> Data {
-        let samples: [Float] = (0..<512).map { Float(sin(Double($0) * 0.08) * 0.2) }
+    private func validMonoWAV(sampleRate: UInt32 = 48_000, frameCount: Int = 512) -> Data {
+        let samples: [Float] = (0..<frameCount).map { Float(sin(Double($0) * 0.08) * 0.2) }
         var data = Data("RIFF".utf8)
         appendUInt32(UInt32(36 + samples.count * 4), to: &data)
         data.append(Data("WAVEfmt ".utf8)); appendUInt32(16, to: &data)
-        appendUInt16(3, to: &data); appendUInt16(1, to: &data); appendUInt32(48_000, to: &data)
-        appendUInt32(192_000, to: &data); appendUInt16(4, to: &data); appendUInt16(32, to: &data)
+        appendUInt16(3, to: &data); appendUInt16(1, to: &data); appendUInt32(sampleRate, to: &data)
+        appendUInt32(sampleRate * 4, to: &data); appendUInt16(4, to: &data); appendUInt16(32, to: &data)
         data.append(Data("data".utf8)); appendUInt32(UInt32(samples.count * 4), to: &data)
         for sample in samples { appendUInt32(sample.bitPattern, to: &data) }
         return data

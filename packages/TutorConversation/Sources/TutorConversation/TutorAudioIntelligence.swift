@@ -141,7 +141,7 @@ public struct TutorAudioIntelligenceResult: Codable, Equatable, Sendable {
         self.runtimeMilliseconds = max(0, runtimeMilliseconds)
         self.failure = failure
         self.cancelled = cancelled
-        self.deadlineSeconds = deadlineSeconds
+        self.deadlineSeconds = deadlineSeconds?.isFinite == true ? deadlineSeconds : nil
     }
 }
 
