@@ -4,10 +4,32 @@ Status date: 2026-08-09. This record is additive. It changes engineering priorit
 only; it does not alter, close, weaken, or reinterpret any existing milestone,
 gate status, or dated evidence record.
 
-## Active implementation priority: TrackSmith Vocal v1
+## Active implementation priority: LLM-first TrackSmith Tutor
 
-[TrackSmith Vocal v1](TRACKSMITH_VOCAL_V1.md) is the active implementation
-milestone and is **in progress**. That label is sequencing, not evidence that any
+The primary product is now a natural, persistent production conversation rather
+than a deterministic answer renderer or processing generator. The north star is
+[`TRACKSMITH_TUTOR_NORTH_STAR.md`](TRACKSMITH_TUTOR_NORTH_STAR.md); implementation
+and authority boundaries are in
+[`TUTOR_LLM_FIRST_ARCHITECTURE.md`](TUTOR_LLM_FIRST_ARCHITECTURE.md).
+
+The implemented vertical slice streams an OpenAI Responses conversation, executes
+only a six-tool read-only/presentation allowlist, persists real message and
+experiment/outcome state, writes checksummed write-once evidence receipts, grounds
+turns in immutable capture identities and local descriptive measurements, supports
+separately consented/hash-bound audio listening, and falls back automatically to
+the deterministic General Tutor. A read-only Logic observer can inspect visible
+Accessibility attributes and place a mouse-transparent callout after a user action;
+it has no setter, action, keyboard, mouse, Apple Event, Audio Unit, or graph command
+path. The model never receives the broader session client.
+
+Create and Vocal remain compiled and preserved behind the companion's
+**Future / Legacy** boundary. This focus change grants Tutor no mutation authority
+and does not reinterpret any historical milestone or evidence.
+
+## Preserved Future / Legacy milestone: TrackSmith Vocal v1
+
+[TrackSmith Vocal v1](TRACKSMITH_VOCAL_V1.md) remains **in progress** as a
+preserved Future / Legacy milestone. That label is not evidence that any
 Vocal capability, installed build, Logic workflow, listening result, or milestone
 gate is complete.
 
@@ -45,7 +67,9 @@ catalog.
 Current General Tutor status (2026-08-08):
 
 - The offline evaluation passes 518/518 cases across 99 evaluated domains,
-  including 10 multi-turn conversations and 10 retrieval-precision cases.
+  including 58 ordered turns grouped under 10 conversation IDs and 10
+  retrieval-precision cases. Each historical turn is independently answered with
+  no prior-message input, so this is routing coverage—not conversation-memory proof.
 - The reviewed catalog contains 15 sources, 458 claims, 78 strategies, 12
   concepts, and 2 preserved contradictions. No external or YouTube source has
   been ingested.
@@ -92,16 +116,13 @@ useful rather than throwaway scaffolding. The historical plan is
 record is
 [`ARCHITECTURE_DECISION_RECORDS/0005-user-mediated-production-tutor.md`](ARCHITECTURE_DECISION_RECORDS/0005-user-mediated-production-tutor.md).
 
-## Permanent product modes
+## Product boundaries
 
-1. **Guide Me** — a user-mediated, inside-the-Logic-workflow production tutor.
-   The user asks a problem or goal; TrackSmith returns grounded guidance or an
-   honest limitation. Where a reviewed exact procedure exists, it presents one
-   reversible manual experiment at a time with the reason, listen-for, stop rule,
-   risk, and undo. The tutor adapts deterministically to explicit user feedback.
-2. **Create For Me** — the existing TrackSmith workflow: bounded deterministic
-   processing alternatives, audition, revision, and explicit commit. This mode
-   must not regress.
+1. **Tutor** — the default LLM-first conversation. It may read bounded evidence and
+   present advice, but the user performs every Logic action and the model has no AU,
+   graph, file, or host mutation capability.
+2. **Future / Legacy** — preserved Classic Guide, Create For Me, and Vocal. Their
+   existing user-controlled mutation paths stay outside Tutor's tool registry.
 
 ## Milestone bookkeeping
 
@@ -131,5 +152,7 @@ record is
 - The Audio Unit's real-time contract is unchanged: no model calls, network,
   file I/O, UI, blocking, arbitrary allocation, unbounded loops, or tutor lesson
   generation in the render path.
-- Guide Me is user-mediated only. TrackSmith does not operate Logic through
-  Accessibility, coordinates, AppleScript, key commands, MIDI, or private APIs.
+- Tutor is user-mediated only. Its optional observer reads visible semantic
+  Accessibility attributes and may draw a mouse-transparent companion-owned
+  callout. It does not perform Accessibility actions, use coordinates to click,
+  send AppleScript/key commands/MIDI, or invoke private APIs.

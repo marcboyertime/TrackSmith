@@ -29,8 +29,10 @@
   release signing, distribution provisioning and notarization remain release work.
 - Logic project selection, source files, channel strips, plug-in insertion/reorder,
   arbitrary automation, tracks/regions and bounce are not stable capabilities.
-- ARA 2 has not been licensed or integrated. Accessibility, Core MIDI and control-
-  surface adapters are not implemented.
+- ARA 2 has not been licensed or integrated. A bounded read-only Accessibility
+  observer now exists for visible Logic labels, values, roles, and frames. It is not
+  a project DOM, cannot see hidden state reliably, and contains no setter/action
+  path. Core MIDI and control-surface adapters are not implemented.
 
 ## Audio engine
 
@@ -222,15 +224,30 @@
   still target UX; a few removals are possible only through the narrow revision
   engine.
 
-## Guide Me tutor
+## LLM-first Tutor
 
-- TrackSmith cannot verify the user's Logic channel strip. Existing inserts,
-  their settings, selection, automation, and project state are invisible; the
-  tutor relies on user-reported chain context and labels it as such. It cannot
-  confirm a user actually performed, or correctly performed, a step.
+- TrackSmith can read a bounded subset of currently visible Logic Accessibility
+  attributes after macOS permission is granted. It still cannot enumerate or verify
+  the complete channel strip, hidden plug-in state, selection, automation, routing,
+  regions, or project structure, and it cannot confirm that the user performed a
+  suggested edit. A visible label/value is evidence of that UI instant only.
+- The optional observer requires the directly distributed companion to run outside
+  App Sandbox; Apple forbids assistive-app Accessibility APIs in sandboxed apps. The
+  AU remains sandboxed, and TrackSmith deliberately exposes no setters or actions,
+  but this packaging tradeoff still needs an external security review before broad
+  distribution.
 - The analyzer is descriptive and not phoneme-aware. It cannot detect vowels,
   consonants, or nasality; measured statements are worded as consistent-with
   evidence and never as proof of a perceived quality's cause.
+- Optional model audio listening is a separate OpenAI Chat Completions request,
+  not a capability of the default text/reasoning model. It requires separate
+  settings consent plus a per-turn Listen toggle, a live hash-bound capture, and a
+  12 MiB cap. No capture can exceed 30 seconds; high-rate stereo captures may be
+  shorter or too large. Model listening does not reveal Logic tracks, routing,
+  inserts, settings, or audio outside the supplied excerpt.
+- Cloud text and audio provider calls have mocked wire/consent/failure coverage in
+  the new focused suite, but no new live-provider conversation or live model-audio
+  listening session is claimed by source tests alone.
 - Manual UI navigation is Logic-version-scoped (12.3) and documentary unless
   marked directly verified; an Apple UI change can invalidate a navigation
   card. The tutor invites "Can't find it" and never asserts a control exists.
@@ -244,10 +261,10 @@
 - Tutor advice remains source- and listening-dependent; feedback is the
   user's subjective judgment under their monitoring conditions. Level matching
   is by ear, not measured through the monitoring path.
-- The tutor never performs automatic Logic-native edits. At the frozen
-  pre-Vocal baseline (`406b446`), there is no typed handoff from a tutor result
-  into Create For Me; TrackSmith Vocal v1 is addressing that gap but remains in
-  progress.
+- The Tutor model never performs Logic-native or TrackSmith graph edits. Its tool
+  allowlist is read-only except for a presentation-only experiment formatter.
+  Create/Vocal retain their existing user-controlled mutation paths behind
+  **Future / Legacy**, but those APIs are never passed to the Tutor executor.
 - Tutor v1 gate T7 is **CLOSED BOUNDED, NOT PASSED**, not pending. Its partial
   Logic Pro 12.3 exercise covered the signed UI and deterministic step flow but
   did not include the owner's real-lesson/perceptual evidence. Broad-tutor owner
@@ -275,10 +292,11 @@
 - Strategy cards are decision patterns, not measured results. Most carry
   professional-practice evidence class and none has been validated against the
   owner's own material.
-- The evaluation corpus (518 cases, 10 multi-turn conversations, 10 retrieval
-  precision cases) is authored by the same process that built the knowledge,
-  so it demonstrates internal consistency and honesty invariants — not that
-  the answers are useful to a producer.
+- The evaluation corpus (518 cases, 58 independently answered turns grouped under
+  10 conversation IDs, and 10 retrieval-precision cases) is authored by the same
+  process that built the knowledge. It demonstrates routing consistency and honesty
+  invariants—not stateful dialogue memory or usefulness to a producer. Stateful
+  memory is covered separately by the focused muddy → thin Tutor regression.
 - **No owner session and no in-host validation of the broad tutor exist.** The
   decisive question — whether this beats opening a browser — is unanswered.
   GP0-GP7 pass; GP8 and GP9 remain pending and owner-blocked.

@@ -14,7 +14,13 @@ public enum WAVError: Error, CustomStringConvertible, Sendable {
 
 public enum WAVFile {
     public static func read(url: URL) throws -> AudioBuffer {
-        let data = try Data(contentsOf: url)
+        try read(data: Data(contentsOf: url))
+    }
+
+    /// Decodes an already-validated byte snapshot. This lets callers bind
+    /// metadata validation and any later upload to the exact same immutable
+    /// bytes instead of reopening a filesystem path between checks.
+    public static func read(data: Data) throws -> AudioBuffer {
         guard data.count >= 44, String(decoding: data[0..<4], as: UTF8.self) == "RIFF", String(decoding: data[8..<12], as: UTF8.self) == "WAVE" else {
             throw WAVError.invalidFile("Missing RIFF/WAVE header")
         }

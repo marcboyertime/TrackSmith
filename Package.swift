@@ -21,12 +21,16 @@ let package = Package(
         .library(name: "AudioUnitExtensionCore", targets: ["AudioUnitExtensionCore"]),
         .library(name: "ResearchIngestion", targets: ["ResearchIngestion"]),
         .library(name: "ProductionTutor", targets: ["ProductionTutor"]),
+        .library(name: "TutorConversation", targets: ["TutorConversation"]),
+        .library(name: "TutorLogicObserver", targets: ["TutorLogicObserver"]),
         .library(name: "VocalProduction", targets: ["VocalProduction"]),
         .library(name: "VocalAudioToMIDI", targets: ["VocalAudioToMIDI"]),
         .library(name: "VocalEvaluation", targets: ["VocalEvaluation"]),
         .executable(name: "ProductionTutorEvaluation", targets: ["ProductionTutorEvaluation"]),
         .executable(name: "GeneralTutorEvaluation", targets: ["GeneralTutorEvaluation"]),
         .executable(name: "GeneralTutorSpotCheck", targets: ["GeneralTutorSpotCheck"]),
+        .executable(name: "TutorConversationTests", targets: ["TutorConversationTests"]),
+        .executable(name: "LogicTutorObservationProbe", targets: ["LogicTutorObservationProbe"]),
         .executable(name: "VocalProductionEvaluation", targets: ["VocalProductionEvaluation"]),
         .executable(name: "VocalListeningStudyCLI", targets: ["VocalListeningStudyCLI"]),
         .executable(name: "CompanionApp", targets: ["CompanionApp"]),
@@ -87,6 +91,20 @@ let package = Package(
             path: "packages/ProductionTutor/Sources/ProductionTutor"
         ),
         .target(
+            name: "TutorConversation",
+            dependencies: ["AudioAnalysis", "PlanSchema", "ProductionIntelligence", "ProductionTutor"],
+            path: "packages/TutorConversation/Sources/TutorConversation"
+        ),
+        .target(
+            name: "TutorLogicObserver",
+            dependencies: ["TutorConversation"],
+            path: "packages/TutorLogicObserver/Sources/TutorLogicObserver",
+            linkerSettings: [
+                .linkedFramework("AppKit"),
+                .linkedFramework("ApplicationServices"),
+            ]
+        ),
+        .target(
             name: "VocalProduction",
             dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema"],
             path: "packages/VocalProduction/Sources/VocalProduction"
@@ -132,6 +150,16 @@ let package = Package(
             name: "GeneralTutorSpotCheck",
             dependencies: ["ProductionTutor", "PlanSchema"],
             path: "tools/GeneralTutorSpotCheck/Sources/GeneralTutorSpotCheck"
+        ),
+        .executableTarget(
+            name: "TutorConversationTests",
+            dependencies: ["AudioAnalysis", "PlanSchema", "ProductionIntelligence", "ProductionTutor", "TutorConversation", "TutorLogicObserver"],
+            path: "tools/TutorConversationTests/Sources/TutorConversationTests"
+        ),
+        .executableTarget(
+            name: "LogicTutorObservationProbe",
+            dependencies: ["TutorLogicObserver"],
+            path: "tools/LogicTutorObservationProbe/Sources/LogicTutorObservationProbe"
         ),
         .executableTarget(
             name: "GeneralTutorEvaluation",

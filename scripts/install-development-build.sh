@@ -46,6 +46,21 @@ if [[ "$app_team" != "$development_team" || "$extension_team" != "$development_t
   print -u2 "expected Team ID: $development_team; app: $app_team; extension: $extension_team"
   exit 2
 fi
+codesign --verify --deep --strict --verbose=1 "$source_app"
+
+# Building is safe while Logic or the companion is in use; replacing a loaded
+# host/app is not. Stop after producing and verifying the signed staging source
+# rather than commandeering or terminating a human-owned session.
+if pgrep -x "Logic Pro" >/dev/null 2>&1; then
+  print -u2 "install deferred: Logic Pro is running"
+  print -u2 "signed build is ready at: $source_app"
+  exit 3
+fi
+if pgrep -x "Logic Audio Assistant" >/dev/null 2>&1; then
+  print -u2 "install deferred: Logic Audio Assistant is running"
+  print -u2 "signed build is ready at: $source_app"
+  exit 3
+fi
 
 mkdir -p "$HOME/Applications"
 rm -rf "$staged_destination"

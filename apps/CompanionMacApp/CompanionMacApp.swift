@@ -28,21 +28,40 @@ struct CompanionMacApp: App {
 }
 
 enum CompanionMode: String, CaseIterable, Identifiable {
-    case guideMe
+    case tutor
+    case futureLegacy
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .tutor: "Tutor"
+        case .futureLegacy: "Future / Legacy"
+        }
+    }
+    var subtitle: String {
+        switch self {
+        case .tutor: "A persistent, evidence-aware production conversation. You perform every Logic edit."
+        case .futureLegacy: "Preserved deterministic Guide, Create, and Vocal workspaces."
+        }
+    }
+}
+
+enum FutureLegacyMode: String, CaseIterable, Identifiable {
+    case classicGuide
     case createForMe
     case vocal
 
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .guideMe: "Guide Me"
+        case .classicGuide: "Classic Guide"
         case .createForMe: "Create For Me"
         case .vocal: "Vocal"
         }
     }
     var subtitle: String {
         switch self {
-        case .guideMe: "TrackSmith tells you exactly what to try in Logic, step by step. You perform every action."
+        case .classicGuide: "Preserved deterministic lesson and one-answer Tutor."
         case .createForMe: "TrackSmith renders bounded processing alternatives you audition, revise, and commit explicitly."
         case .vocal: "Build a truthful capture brief, assess an AU test take, and audition three bounded vocal hypotheses."
         }
@@ -77,11 +96,13 @@ private enum VocalWorkspaceIntegrationError: Error, CustomStringConvertible {
 
 struct CompanionContentView: View {
     @ObservedObject var model: CompanionSessionModel
+    @StateObject private var conversationTutor = TutorConversationSessionModel()
     @StateObject private var tutor = TutorSessionModel()
     @StateObject private var vocal = VocalWorkspaceModel()
     @StateObject private var vocalBriefEditor = VocalCaptureBriefEditorModel()
     @StateObject private var vocalPersistence = VocalWorkspacePersistenceCoordinator.live()
-    @State private var mode: CompanionMode = .guideMe
+    @State private var mode: CompanionMode = .tutor
+    @State private var legacyMode: FutureLegacyMode = .classicGuide
     @State private var confirmingCacheDeletion = false
     @State private var vocalCaptureRuntimeContext: VocalCaptureRuntimeContext?
     @State private var pendingVocalTestTakeBinding: VocalTestTakeBinding?
@@ -94,14 +115,10 @@ struct CompanionContentView: View {
             Divider().overlay(Theme.Colors.hairline)
             Group {
                 switch mode {
-                case .guideMe:
-                    TutorGuideView(session: model, tutor: tutor)
-                case .createForMe:
-                    ScrollView {
-                        createWorkspace
-                    }
-                case .vocal:
-                    vocalWorkspace
+                case .tutor:
+                    TutorConversationView(session: model, tutor: conversationTutor)
+                case .futureLegacy:
+                    futureLegacyWorkspace
                 }
             }
             .frame(maxWidth: 960)
@@ -110,8 +127,8 @@ struct CompanionContentView: View {
         .background(Theme.Colors.canvas)
         .task { model.start() }
         .task { vocalPersistence.restore(into: vocal) }
-        .task(id: mode) {
-            guard mode == .vocal else { return }
+        .task(id: vocalWorkspaceIsActive) {
+            guard vocalWorkspaceIsActive else { return }
             await refreshVocalCaptureContext(force: false)
         }
         .task(id: model.captureArtifact?.id) {
@@ -120,7 +137,7 @@ struct CompanionContentView: View {
                 vocal.clearAnalysis()
                 return
             }
-            guard mode == .vocal else { return }
+            guard vocalWorkspaceIsActive else { return }
             guard acceptPendingVocalTestTake() else {
                 vocal.clearAnalysis()
                 vocalPersistence.sourceBecameUnavailable(into: vocal)
@@ -138,7 +155,7 @@ struct CompanionContentView: View {
             pendingVocalTestTakeBinding = nil
             acceptedVocalTestTakeBinding = nil
             clearCompanionVocalPlanningAuthority()
-            guard mode == .vocal else { return }
+            guard vocalWorkspaceIsActive else { return }
             Task { await refreshVocalCaptureContext(force: true) }
         }
         .onChange(of: model.sourceAwareAnalysis) { _, report in
@@ -165,6 +182,11 @@ struct CompanionContentView: View {
         } message: {
             Text("This removes local captured WAVs and rendered previews. It does not alter Logic projects, source audio, plug-in state, or protocol diagnostics.")
         }
+        .onOpenURL { url in
+            guard url.scheme?.lowercased() == "tracksmith",
+                  url.host?.lowercased() == "tutor" else { return }
+            mode = .tutor
+        }
     }
 
     private var topChrome: some View {
@@ -184,7 +206,7 @@ struct CompanionContentView: View {
             }
             .labelsHidden()
             .pickerStyle(.segmented)
-            .frame(maxWidth: 360)
+            .frame(maxWidth: 320)
             .accessibilityLabel("TrackSmith mode")
 
             Spacer(minLength: Theme.Spacing.eight)
@@ -214,6 +236,42 @@ struct CompanionContentView: View {
         .background(Theme.Colors.card)
     }
 
+    private var vocalWorkspaceIsActive: Bool {
+        mode == .futureLegacy && legacyMode == .vocal
+    }
+
+    private var futureLegacyWorkspace: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: Theme.Spacing.twelve) {
+                Label("Preserved Future / Legacy workspaces", systemImage: "archivebox")
+                    .font(Theme.Font.section)
+                    .foregroundStyle(Theme.Colors.secondaryText)
+                Picker("Legacy workspace", selection: $legacyMode) {
+                    ForEach(FutureLegacyMode.allCases) { candidate in
+                        Text(candidate.title).tag(candidate)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(maxWidth: 440)
+                Spacer()
+            }
+            .padding(.horizontal, Theme.Spacing.twentyFour)
+            .padding(.vertical, Theme.Spacing.twelve)
+            .background(Theme.Colors.card)
+            Divider().overlay(Theme.Colors.hairline)
+            Group {
+                switch legacyMode {
+                case .classicGuide:
+                    TutorGuideView(session: model, tutor: tutor)
+                case .createForMe:
+                    ScrollView { createWorkspace }
+                case .vocal:
+                    vocalWorkspace
+                }
+            }
+        }
+    }
+
     @ViewBuilder
     private var activeInsertPicker: some View {
         if model.instances.isEmpty {
@@ -239,7 +297,7 @@ struct CompanionContentView: View {
 
     private var createWorkspace: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.legacy18) {
-            Text(mode.subtitle)
+            Text(legacyMode.subtitle)
                 .font(Theme.Font.meta)
                 .foregroundStyle(Theme.Colors.secondaryText)
             CapturePanelView(model: model)
@@ -255,7 +313,7 @@ struct CompanionContentView: View {
     private var vocalWorkspace: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Spacing.twentyFour) {
-                Text(mode.subtitle)
+                Text(legacyMode.subtitle)
                     .font(Theme.Font.meta)
                     .foregroundStyle(Theme.Colors.secondaryText)
 
@@ -651,7 +709,7 @@ struct CompanionContentView: View {
               let artifact = model.captureArtifact,
               let binding = acceptedVocalTestTakeBinding,
               context.sourceAuthority.sourceSnapshotID == artifact.id else {
-            if mode == .vocal {
+            if vocalWorkspaceIsActive {
                 Task { await refreshVocalCaptureContext(force: false) }
             }
             return

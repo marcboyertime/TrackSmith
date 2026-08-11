@@ -7,6 +7,7 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
     private var gainSlider: NSSlider!
     private var gainValueLabel: NSTextField!
     private var inputStatusLabel: NSTextField!
+    private var companionStatusLabel: NSTextField!
     private var refreshTimer: Timer?
     private var lastRenderCycleSeen: UInt64 = 0
 
@@ -29,7 +30,7 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
     }
 
     public override func loadView() {
-        let root = NSView(frame: NSRect(x: 0, y: 0, width: 520, height: 250))
+        let root = NSView(frame: NSRect(x: 0, y: 0, width: 520, height: 286))
         let title = NSTextField(labelWithString: "Logic Audio Assistant")
         title.font = .systemFont(ofSize: 19, weight: .semibold)
         let subtitle = NSTextField(labelWithString: "Deterministic graph active · recent dry input retained in bounded memory")
@@ -54,17 +55,25 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
         gainRow.spacing = 12
         gainSlider.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        let companionNote = NSTextField(labelWithString: "Open the companion app for conversation, previews, measurements, and history.")
-        companionNote.textColor = .secondaryLabelColor
-        companionNote.maximumNumberOfLines = 2
+        let openTutorButton = NSButton(title: "Open TrackSmith Tutor", target: self, action: #selector(openTutor(_:)))
+        openTutorButton.bezelStyle = .rounded
+        companionStatusLabel = NSTextField(labelWithString: "Tutor opens in the companion. It can read bounded evidence but cannot change Logic or this Audio Unit.")
+        companionStatusLabel.textColor = .secondaryLabelColor
+        companionStatusLabel.maximumNumberOfLines = 2
+        let companionRow = NSStackView(views: [openTutorButton, companionStatusLabel])
+        companionRow.orientation = .horizontal
+        companionRow.alignment = .centerY
+        companionRow.spacing = 12
+        companionStatusLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        let stack = NSStackView(views: [title, subtitle, inputStatusLabel, gainRow, companionNote])
+        let stack = NSStackView(views: [title, subtitle, inputStatusLabel, gainRow, companionRow])
         stack.orientation = .vertical
         stack.alignment = .leading
         stack.spacing = 14
         stack.translatesAutoresizingMaskIntoConstraints = false
         root.addSubview(stack)
         gainRow.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+        companionRow.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 24),
             stack.trailingAnchor.constraint(equalTo: root.trailingAnchor, constant: -24),
@@ -90,6 +99,21 @@ public final class AudioUnitViewController: AUViewController, AUAudioUnitFactory
     @objc private func gainChanged(_ sender: NSSlider) {
         audioUnit?.parameterTree?.parameter(withAddress: 0)?.value = AUValue(sender.doubleValue)
         refreshControls()
+    }
+
+    @objc private func openTutor(_ sender: NSButton) {
+        guard let url = URL(string: "tracksmith://tutor") else { return }
+        guard let context = extensionContext else {
+            companionStatusLabel.stringValue = "Open the Logic Audio Assistant companion from Applications to use Tutor."
+            return
+        }
+        context.open(url) { [weak self] opened in
+            Task { @MainActor in
+                self?.companionStatusLabel.stringValue = opened
+                    ? "TrackSmith Tutor requested. All Logic edits remain user-performed."
+                    : "Logic did not open the companion. Open Logic Audio Assistant from Applications."
+            }
+        }
     }
 
     private func refreshControls() {

@@ -10,6 +10,7 @@ import PreviewWorkflow
 import SessionCore
 import SharedIPC
 import SwiftUI
+import TutorConversation
 import VocalProduction
 
 enum CompanionProviderSelection: String, CaseIterable, Identifiable {
@@ -62,6 +63,23 @@ final class CompanionSessionModel: ObservableObject {
     @Published var cloudReasoningConsent = false
     @Published var credentialDraft = ""
     @Published var credentialStatus = "No cloud credential is being used"
+    @Published var tutorModelIdentifier = UserDefaults.standard.string(
+        forKey: "TrackSmithTutorModelIdentifier"
+    ) ?? "gpt-5.6-sol"
+    @Published var tutorReasoningEffort = TutorReasoningEffort(
+        rawValue: UserDefaults.standard.string(forKey: "TrackSmithTutorReasoningEffort") ?? "high"
+    ) ?? .high
+    @Published var tutorCloudTextConsent = UserDefaults.standard.bool(
+        forKey: "TrackSmithTutorCloudTextConsent"
+    )
+    @Published var tutorCloudAudioConsent = UserDefaults.standard.bool(
+        forKey: "TrackSmithTutorCloudAudioConsent"
+    )
+    @Published var tutorAudioModelIdentifier = UserDefaults.standard.string(
+        forKey: "TrackSmithTutorAudioModelIdentifier"
+    ) ?? "gpt-audio-1.5"
+    @Published var tutorCredentialDraft = ""
+    @Published var tutorCredentialStatus = "Checking OpenAI Keychain credential"
     @Published var productionOutcome: ProductionIntelligenceOutcome?
     @Published var sourceAwareAnalysis: SourceAwareAnalysisReport?
     @Published var restoredConversationStatus = ""
@@ -248,6 +266,7 @@ final class CompanionSessionModel: ObservableObject {
         }
         restoreActiveConversation()
         refreshCredentialStatus()
+        refreshTutorCredentialStatus()
     }
 
     deinit { pollingTask?.cancel() }
@@ -878,6 +897,47 @@ final class CompanionSessionModel: ObservableObject {
         }
     }
 
+    func saveTutorCredential() {
+        do {
+            try credentialStore.saveCredential(tutorCredentialDraft, for: .openAI)
+            tutorCredentialDraft = ""
+            refreshTutorCredentialStatus()
+            status = "Tutor credential saved securely"
+            detailStatus = "Stored in macOS Keychain. It is never written to Tutor history, receipts, prompts, Audio Unit state, or diagnostics."
+            statusColor = .green
+        } catch { fail(error) }
+    }
+
+    func deleteTutorCredential() {
+        do {
+            try credentialStore.deleteCredential(for: .openAI)
+            tutorCredentialDraft = ""
+            refreshTutorCredentialStatus()
+            status = "Tutor credential removed"
+            detailStatus = "The LLM Tutor will fall back offline until a new OpenAI credential is saved."
+            statusColor = .green
+        } catch { fail(error) }
+    }
+
+    func refreshTutorCredentialStatus() {
+        do {
+            tutorCredentialStatus = try credentialStore.credential(for: .openAI) == nil
+                ? "No OpenAI credential saved; Tutor will fall back offline"
+                : "OpenAI credential available in macOS Keychain"
+        } catch {
+            tutorCredentialStatus = "OpenAI Keychain credential status unavailable"
+        }
+    }
+
+    func persistTutorSettings() {
+        let defaults = UserDefaults.standard
+        defaults.set(tutorModelIdentifier, forKey: "TrackSmithTutorModelIdentifier")
+        defaults.set(tutorReasoningEffort.rawValue, forKey: "TrackSmithTutorReasoningEffort")
+        defaults.set(tutorCloudTextConsent, forKey: "TrackSmithTutorCloudTextConsent")
+        defaults.set(tutorCloudAudioConsent, forKey: "TrackSmithTutorCloudAudioConsent")
+        defaults.set(tutorAudioModelIdentifier, forKey: "TrackSmithTutorAudioModelIdentifier")
+    }
+
     func selectAudition(index: Int) {
         guard loadedAuditionCount > 0,
               (0..<loadedAuditionCount).contains(index) else { return }
@@ -1444,6 +1504,90 @@ final class CompanionSessionModel: ObservableObject {
                 sourceType: sourceType
             )
         )
+    }
+
+    /// Projects the current immutable capture into the narrow read-only Tutor
+    /// evidence contract. Source choice and insert scope are explicit; local
+    /// measurements are descriptive and are never mislabeled as listening.
+    func tutorConversationCaptureSnapshot(
+        cloudListening: TutorCloudListeningEvidence = .init(status: .notRequested)
+    ) async throws -> TutorCaptureSnapshot? {
+        guard let context = try await tutorCaptureContext(),
+              let artifact = captureArtifact,
+              let capturedInstanceID,
+              let capturedRuntimeEpoch,
+              context.authority.captureSnapshotID == artifact.id,
+              context.authority.instanceID == capturedInstanceID,
+              context.authority.runtimeEpoch == capturedRuntimeEpoch else { return nil }
+
+        let metrics = context.analysis.metrics.values
+            .sorted { $0.definition.identifier < $1.definition.identifier }
+            .prefix(16)
+            .map { metric in
+                TutorMetricEvidence(
+                    identifier: metric.definition.identifier,
+                    value: metric.value,
+                    unit: metric.definition.unit.rawValue,
+                    confidence: metric.confidence,
+                    interpretationBoundary: metric.definition.knownFailureModes.prefix(2).joined(separator: " ")
+                )
+            }
+        var limitations = [
+            "The source role is musician-selected, not inferred from Logic or audio.",
+            "This is dry audio arriving at this TrackSmith insert before TrackSmith processing; it is not the whole mix unless the insert is on that scope.",
+            "Measurements describe this bounded capture and do not prove a cause, treatment, or improvement.",
+        ]
+        for metric in context.analysis.metrics.values.sorted(by: {
+            $0.definition.identifier < $1.definition.identifier
+        }) {
+            for failure in metric.definition.knownFailureModes where !limitations.contains(failure) {
+                limitations.append(failure)
+                if limitations.count == 8 { break }
+            }
+            if limitations.count == 8 { break }
+        }
+        return TutorCaptureSnapshot(
+            sourceType: sourceType,
+            instanceID: capturedInstanceID,
+            runtimeEpoch: capturedRuntimeEpoch,
+            captureSnapshotID: artifact.id,
+            sha256: artifact.sha256,
+            capturedAt: artifact.createdAt,
+            durationSeconds: Double(artifact.frameCount) / artifact.sampleRate,
+            scopeDescription: "Dry input at the selected TrackSmith insert, labeled \(sourceType.rawValue) by the musician.",
+            isLive: capturedInstanceIsAvailable,
+            metrics: Array(metrics),
+            localAnalysisLimitations: limitations,
+            cloudListening: cloudListening
+        )
+    }
+
+    /// Loads audio only for an explicit separate audio-consent flow and only
+    /// while the snapshot still names the exact live capture transaction.
+    func tutorValidatedCaptureWAVData(
+        for snapshot: TutorCaptureSnapshot,
+        maximumBytes: Int = 12 * 1_024 * 1_024
+    ) async throws -> Data {
+        guard let client,
+              let artifact = captureArtifact,
+              let capturedInstanceID,
+              let capturedRuntimeEpoch,
+              artifact.id == snapshot.captureSnapshotID,
+              artifact.sha256 == snapshot.sha256,
+              capturedInstanceID == snapshot.instanceID,
+              capturedRuntimeEpoch == snapshot.runtimeEpoch,
+              capturedInstanceIsAvailable else {
+            throw TutorConversationError.staleCapture
+        }
+        let data = try await client.loadValidatedCaptureWAVData(artifact, maximumBytes: maximumBytes)
+        guard captureArtifact?.id == snapshot.captureSnapshotID,
+              captureArtifact?.sha256 == snapshot.sha256,
+              self.capturedInstanceID == snapshot.instanceID,
+              self.capturedRuntimeEpoch == snapshot.runtimeEpoch,
+              capturedInstanceIsAvailable else {
+            throw TutorConversationError.staleCapture
+        }
+        return data
     }
 
     /// True while the lesson's originating AU instance, runtime epoch, and

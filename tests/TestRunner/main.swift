@@ -1,6 +1,7 @@
 import AgentCore
 import AudioAnalysis
 import CAtomics
+import CryptoKit
 import DSPCore
 import Foundation
 import PlanSchema
@@ -8289,6 +8290,25 @@ enum TestRunner {
             client: client,
             tests: tests
         )
+
+        let validArtifact = try publish(
+            sampleRate: audio.sampleRate,
+            channelCount: audio.channelCount,
+            frameCount: audio.frameCount
+        )
+        let immutableWAV = try await client.loadValidatedCaptureWAVData(validArtifact)
+        let immutableDecoded = try WAVFile.read(data: immutableWAV)
+        try tests.expect(immutableDecoded == audio, "Tutor capture byte snapshot changed decoded audio")
+        try tests.expect(
+            SHA256.hash(data: immutableWAV).map { String(format: "%02x", $0) }.joined() == validArtifact.sha256,
+            "Tutor capture byte snapshot lost the artifact hash binding"
+        )
+        do {
+            _ = try await client.loadValidatedCaptureWAVData(validArtifact, maximumBytes: immutableWAV.count - 1)
+            throw CheckFailure(message: "Tutor capture byte ceiling was not enforced")
+        } catch ExchangeError.artifactTooLarge {
+            // Expected.
+        }
 
         let previewRoot = root.appendingPathComponent("previews", isDirectory: true)
         let previewEntries = try FileManager.default.contentsOfDirectory(atPath: previewRoot.path)
