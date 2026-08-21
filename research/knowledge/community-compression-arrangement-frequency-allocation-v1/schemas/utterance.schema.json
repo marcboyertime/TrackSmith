@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "canonical_id": {
+      "type": "string"
+    },
+    "domain": {
+      "enum": [
+        "compression",
+        "arrangement",
+        "frequency_allocation"
+      ]
+    },
+    "review_status": {
+      "const": "candidate_not_yet_human_reviewed"
+    },
+    "text": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "utterance_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "utterance_id",
+    "canonical_id",
+    "domain",
+    "text",
+    "source_kind",
+    "review_status"
+  ],
+  "title": "TrackSmith Package 3 utterance",
+  "type": "object"
+}

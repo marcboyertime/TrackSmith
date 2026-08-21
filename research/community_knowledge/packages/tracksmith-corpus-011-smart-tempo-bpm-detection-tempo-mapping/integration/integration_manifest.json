@@ -1,0 +1,257 @@
+{
+  "collision_mappings": [
+    {
+      "collides_with_domains": [
+        "Smart Tempo",
+        "Flex Time",
+        "MIDI quantization",
+        "editing",
+        "vocal alignment"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "fix timing",
+      "resolution": "diagnostic_only_require_audio_or_midi_tempo_authority_and_scope"
+    },
+    {
+      "collides_with_domains": [
+        "BPM estimation",
+        "Smart Tempo analysis",
+        "Tap Tempo",
+        "Beat Mapping",
+        "sample metadata"
+      ],
+      "collision_type": "diagnostic_multi_intent",
+      "incoming_fixture_id": null,
+      "normalized_alias": "detect tempo",
+      "resolution": "diagnostic_only_require_source_and_goal"
+    },
+    {
+      "collides_with_domains": [
+        "Smart Tempo conformance",
+        "sample-rate mismatch",
+        "Flex Time",
+        "creative speed effect"
+      ],
+      "collision_type": "diagnostic_low_margin",
+      "incoming_fixture_id": null,
+      "normalized_alias": "audio changed speed",
+      "resolution": "diagnostic_only_require_original_speed_and_current_follow_state"
+    },
+    {
+      "collides_with_domains": [
+        "Adapt Project Tempo",
+        "Beat Mapping",
+        "manual Tempo track",
+        "free-tempo recording"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "make project follow performance",
+      "resolution": "diagnostic_only_require_existing_map_and_reference_source"
+    },
+    {
+      "collides_with_domains": [
+        "file tempo metadata",
+        "Smart Tempo follow",
+        "Apple Loop behavior",
+        "manual time stretch"
+      ],
+      "collision_type": "diagnostic_multi_intent",
+      "incoming_fixture_id": null,
+      "normalized_alias": "loop different bpm",
+      "resolution": "diagnostic_only_require_loop_type_and_project_authority"
+    },
+    {
+      "collides_with_domains": [
+        "Smart Tempo",
+        "Beat Mapping",
+        "Tempo track",
+        "Tempo Operations",
+        "manual programming"
+      ],
+      "collision_type": "diagnostic_low_margin",
+      "incoming_fixture_id": null,
+      "normalized_alias": "tempo map",
+      "resolution": "diagnostic_only_require_source_and_map_goal"
+    }
+  ],
+  "compatibility": {
+    "general_tutor_generated_swift_modified": false,
+    "mode": "additive",
+    "overwrites_prior_ids": false,
+    "requires_registered_prerequisites": true,
+    "runtime_schema": "bounded-jsonl-projection-v1"
+  },
+  "contract": "tracksmith-corpus-integration-manifest",
+  "contract_version": "1.0",
+  "counts": {
+    "canonical_qa": 450,
+    "claim_candidates": 450,
+    "contradictions": 50,
+    "logic_procedure_candidates": 450,
+    "multiturn_scenarios": 1350,
+    "myths_and_antipatterns": 60,
+    "provenance": 450,
+    "retrieval_evaluations": 2250,
+    "sources": 79,
+    "strategy_candidates": 450,
+    "user_utterances": 10350
+  },
+  "development_only_files": [
+    "knowledge_candidates/claims.jsonl",
+    "knowledge_candidates/strategies.jsonl",
+    "sources/provenance_manifest.jsonl",
+    "schemas/",
+    "reports/",
+    "examples/",
+    "tools/"
+  ],
+  "exact_fixture_policy": {
+    "expected_mapping_cardinality": 1,
+    "expected_top_1": true,
+    "non_exact_policy": "diagnostic_only",
+    "required_class": "exact_unique"
+  },
+  "file_hashes": {
+    "README.md": "afe6ff888fd66eee36aef76fa686e8e084ae510b373c46d19e474e32cfa28da9",
+    "corpus/canonical_qa.jsonl": "1bcfb6a80925dae13b541b48713b42c758f6032897048e12731f333e60678c5d",
+    "corpus/contradictions.jsonl": "0b6f3768a5a31563d6df2f58df46920fc12b93952d1490a37f343e94d0cd5620",
+    "corpus/multiturn_scenarios.jsonl": "4be2e110b13bef75c3041100f2a034928b6fa6d240a84625cc3833a3075e3744",
+    "corpus/myths_and_antipatterns.jsonl": "1fd7e8f1835d11cda19af85e4af00c6d15da1531f2ee187741e69b91527f94be",
+    "corpus/retrieval_evaluations.jsonl": "41a99cfefb0bf0c2382079f6f5edd9fa7eaf09892a0965b576d36b05e6c6b61f",
+    "corpus/user_utterances.jsonl": "a7063931f7651978ee519830b4926e36a8f74ea0da780c85744a6cbd90869f95",
+    "database/corpus.sqlite": "814a15901e7c81ae297fc2539ed4eb40ae252821ac5f40ec32509e079cb4b6d2",
+    "database/database_manifest.json": "d9014ffe52a961cbd319ca2e2bc0cd7033fb384e7a689c25975a893050f40890",
+    "examples/example_canonical_record.json": "827081fb998fe6f181280f569efb9f9cab8c3866f9df74ba8c2a5f7c54e2ce02",
+    "examples/example_multiturn_scenario.json": "b34f88338cb9420879ea6c709a76c8c0a0c5769148ffec363399288bedd7d16b",
+    "examples/example_queries.md": "084f462962307264f275ce42ae0f1474f1acd1fc54d5e6ca3852424d5fccce90",
+    "integration/PACKAGE_SEQUENCE.md": "4f46e51c3af76d90a8c5c5ab073b06bca066f6ab045e58f2cf97ac0b6064182c",
+    "integration/REVIEW_CHECKLIST.md": "930c9a0fb47b794d53eb6da6ec19fa0f0aa3db3874528b41a6f946853c7bfedd",
+    "integration/START_HERE_FOR_CODEX.md": "abbe41f0144859bacd144a7816862bde4709c43d4087488d5dd2dbb276f70693",
+    "integration/TOOL_CONTRACT.md": "c9216e651ed104847cc2bba4e0d75b7edd3fd093d930245616dff8cb7341fa4e",
+    "integration/TRACKSMITH_IMPORT_PLAN.md": "5cfa9d19f218a19e359d2cbc5bd36b1fc0dfa6abb5b496fe17f131d6ac854f05",
+    "knowledge_candidates/claims.jsonl": "8ddf002bc2845b882ec973589c57e5ae46e61866d45a6820063feef6965a1a9b",
+    "knowledge_candidates/logic_procedures.jsonl": "2c6d61ba1fd44e05e93231795d45f201d5bc1e027bb9a6aa379321f56323413d",
+    "knowledge_candidates/strategies.jsonl": "318b15947464d502b0f9a5208b2eb9e96cc5fa627d578be0cbcc7e32f5bb208e",
+    "package_manifest.json": "49db3cf8b10ca9dade637811aa63d34fe6ae753d8d04c91b88e1baf16da980b8",
+    "reports/COVERAGE_REPORT.md": "9e65d8f56471f17e0e2f389c755884b6cb3f301d6abfd1dc2275b80d96a7d046",
+    "reports/QUALITY_BOUNDARIES.md": "1c846d9739357f5ba51283284f98a8f0c2d90b253dda7279dcf429b0b89460e5",
+    "reports/SOURCE_REPORT.md": "6094f1e581f5b2c8874d9b03541c25a030a1549c7775917828bfa1800fb6eebc",
+    "reports/VALIDATION_REPORT.md": "2e9f3e17b6a2c0d8547822b5d228987c4926146cbf916c3766455c8b74c9b14a",
+    "schemas/canonical_qa.schema.json": "4c3df69325344cead34c9ab0fdf46f8108b7032ab9c1e1fadb9ff922eb9cbc27",
+    "schemas/claim_candidate.schema.json": "d0322d3b4ed86f185a8a39c337de01cc0c74ce5618853f30a30a41764bec4f65",
+    "schemas/contradiction.schema.json": "c895899cb71cf71f39653239f3d69d6230243b5c1a8e7295fcc4c0c2f1926352",
+    "schemas/logic_procedure_candidate.schema.json": "a420e3ce8c7a217cfa99598094aab2f903d67d604c2a8a6bbb143f3c27968088",
+    "schemas/multiturn_scenario.schema.json": "58c8842ea8b82715cd564ec0eb834c3917764c21e6f25eeec176ec3439096718",
+    "schemas/myth.schema.json": "c63b0f256b1e9afe8de599e21b1748e6d3708287f5ad0f2a374e0a3db5c2a391",
+    "schemas/retrieval_evaluation.schema.json": "06244ac381e975e11cc84a54fc0088cae78a96099ab11ad56863b08bbccba7cf",
+    "schemas/strategy_candidate.schema.json": "808664132bbfe42ed2ccda4fdd1a37c4e64219975ae08e8c32c5274ae2945f97",
+    "schemas/user_utterance.schema.json": "27eefdfe81220a934179f566b99de2a549ae08283d499a0909a9aa4d13807d42",
+    "sources/provenance_manifest.jsonl": "a87273da93c71c34f1b2f52abc5f006fcce6dd1ef0210bf6a0e7c48be20d3d08",
+    "sources/source_access_manifest.json": "537c8494b13268cf29a9d1faffb5d5a2731787d594746bd8d5232e82c171831e",
+    "sources/source_registry.jsonl": "6c5f91f500204cd67855ba7f46f9427d1bb7eede31fef007877aaa79b735abdd",
+    "tests/expected_statistics.json": "c10cf8720808ea2f54809fd9059cb74037f00a0d330ab1083682de6b84451bd7",
+    "tests/integrity_cases.jsonl": "a78fc6074120d63f12d9f717b60fd42e9a4a944e72a912062b162e1d3e08687b",
+    "tests/retrieval_cases.jsonl": "c12b40e37112df3f6011987fcba823608356d23fd7f99ab788ac844ed69dcd1a",
+    "tools/build_database.py": "5f02638497780f28695a9a1905ef577398dc5ec0c9135c3a803c55e7c7c60ab0",
+    "tools/import_to_tracksmith.py": "207050681493e94cbbe68b3c46b2d6e2253a35279c67c242a29b059844e48709",
+    "tools/inspect_package.py": "d10dee3a1de00e602c621c2884f1be7c45c5ab7540b64273b96d8cfe6c9a6c3f",
+    "tools/query_corpus.py": "2ac746760109bed75d3d5796a18fded276cbb4853e5d2cdbff6f5496dfd28fb5",
+    "tools/validate_package.py": "60d89663cad17e1560f91fcb8bf4af189ae471ff632aa5d5d6399eef8e4dc6cd"
+  },
+  "generated_at": "2026-08-12",
+  "hash_scope_excludes": [
+    "integration/integration_manifest.json",
+    "PACKAGE_SHA256SUMS.txt",
+    "outer ZIP and sidecar checksum"
+  ],
+  "legacy_prerequisite_archive_mappings": {
+    "TrackSmith_Compression_Arrangement_Frequency_Allocation_QA_Corpus_v1.zip": "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+    "TrackSmith_Level_Balancing_EQ_QA_Corpus_v1.zip": "tracksmith-corpus-002-level-balancing-eq",
+    "TrackSmith_Reverb_Delay_QA_Corpus_v1.zip": "tracksmith-corpus-004-reverb-delay",
+    "TrackSmith_Vocal_Quantization_QA_Corpus_v1.zip": "tracksmith-corpus-001-vocal-quantization"
+  },
+  "logic_verification_states": [
+    "candidate_unverified_on_installed_logic",
+    "not_applicable_to_source"
+  ],
+  "namespace": "pkg011",
+  "native_review_states": [
+    "candidate_discovery_only",
+    "candidate_not_yet_human_reviewed",
+    "candidate_reviewed_documentary",
+    "candidate_reviewed_primary_research",
+    "candidate_reviewed_professional_practice"
+  ],
+  "original_review_states": [
+    "candidate_discovery_only",
+    "candidate_procedure_synthesis",
+    "candidate_reviewed_documentary",
+    "candidate_reviewed_primary_research",
+    "candidate_reviewed_professional_practice",
+    "community_and_professional_disagreement",
+    "derived_myth_correction",
+    "derived_synthesis",
+    "owner_supplied_example_language",
+    "synthetic_exact_retrieval_fixture"
+  ],
+  "original_verification_statuses": [
+    "candidate_generated_from_registered_sources",
+    "deterministic_fixture_alias",
+    "literal_user_example_preserved",
+    "source_metadata_registered",
+    "source_span_or_documentary_metadata_registered"
+  ],
+  "package_contract": "tracksmith-corpus-package/1.0",
+  "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+  "package_version": "1.0.0",
+  "prerequisites": [
+    "tracksmith-corpus-001-vocal-quantization",
+    "tracksmith-corpus-002-level-balancing-eq",
+    "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+    "tracksmith-corpus-004-reverb-delay",
+    "tracksmith-corpus-005-automation",
+    "tracksmith-corpus-006-saturation-transient-shaping",
+    "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+    "tracksmith-corpus-008-editing-layering",
+    "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+    "tracksmith-corpus-010-flex-time-manual-timing"
+  ],
+  "preserved_status_fields": [
+    "review_state",
+    "native_review_state",
+    "original_review_state",
+    "original_verification_status",
+    "logic_verification_status",
+    "runtime_eligibility"
+  ],
+  "runtime_files": [
+    "generated:research/community_knowledge/runtime/pkg011_smart_tempo_bpm_detection_tempo_mapping.runtime.jsonl"
+  ],
+  "runtime_projection": {
+    "forbidden_categories": [
+      "procedures",
+      "Logic navigation instructions",
+      "evaluations",
+      "multi-turn scenarios",
+      "SQLite databases",
+      "test fixtures"
+    ],
+    "generated_by": "tools/import_to_tracksmith.py",
+    "purity_validation": "recursive key and text scan plus full validator",
+    "record_count": 450,
+    "source": "corpus/canonical_qa.jsonl"
+  },
+  "sequence": 11,
+  "test_only_files": [
+    "corpus/multiturn_scenarios.jsonl",
+    "corpus/retrieval_evaluations.jsonl",
+    "knowledge_candidates/logic_procedures.jsonl",
+    "database/corpus.sqlite",
+    "database/database_manifest.json",
+    "tests/retrieval_cases.jsonl",
+    "tests/integrity_cases.jsonl",
+    "tests/expected_statistics.json"
+  ]
+}

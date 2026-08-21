@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "execution_authority": {
+      "const": false
+    },
+    "verification_status": {
+      "enum": [
+        "candidate_unverified_on_installed_logic",
+        "verified_on_installed_logic",
+        "documentary_only",
+        "rejected",
+        "superseded"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "canonical_qa_id",
+    "logic_version_scope",
+    "location",
+    "steps",
+    "listen_for",
+    "risk",
+    "undo",
+    "verification_status",
+    "execution_authority"
+  ],
+  "title": "TrackSmith Logic Procedure Candidate",
+  "type": "object"
+}

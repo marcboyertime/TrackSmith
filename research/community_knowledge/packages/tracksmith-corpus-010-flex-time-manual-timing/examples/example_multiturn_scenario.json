@@ -1,0 +1,53 @@
+{
+  "canonical_qa_id": "pkg010.qa.000002",
+  "domain": "flex_time_manual_timing",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity and references the exact prior timing experiment.",
+    "Distinguishes user report, Logic documentation, transient/tempo analysis, visual grid position, model listening, and inference.",
+    "Recommends at most one next timing experiment.",
+    "Preserves the baseline, adjacent material, stop condition, undo, and version-scoped Logic guidance.",
+    "Explains the transferable timing principle in natural language."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard or measured an artifact without current evidence.",
+    "Treats grid alignment, one Flex mode, or one quantization amount as universal truth.",
+    "Invents a Logic action, automatic edit, or exact safe amount.",
+    "Adds several unrelated timing operations or restarts from a generic recipe."
+  ],
+  "id": "pkg010.scenario.0000004",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "messages": [
+    {
+      "role": "user",
+      "text": "I am hearing this problem: Flex seems enabled but the region does not behave as expected. How could enabling Flex Time at track and region scope be involved?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes the decision, then present one reversible timing experiment: Duplicate or preserve the region, enable Flex on the intended track, set only that region to the minimal Flex & Follow behavior needed, and confirm that unrelated regions remain unchanged."
+    },
+    {
+      "role": "user",
+      "text": "That is tighter, but now another region started following the tempo too."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact edit, reduce or relocate only the responsible marker/mode/amount, and explain the timing-versus-artifact tradeoff."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and connect it to the exact A/B: Flex availability, the selected Flex algorithm, and each region’s Flex & Follow state are separate decisions. Verify scope before diagnosing timing."
+    }
+  ],
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-010-flex-time-manual-timing",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "scenario_type": "better_tradeoff",
+  "subdomain": "flex_time_enable_track_region"
+}

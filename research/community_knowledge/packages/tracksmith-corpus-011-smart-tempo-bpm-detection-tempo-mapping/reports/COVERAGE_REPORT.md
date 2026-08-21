@@ -1,0 +1,49 @@
+# Coverage Report
+
+Package 011 contains 450 canonical records: ten Tutor intents for each of 45 Smart Tempo/BPM/tempo-mapping subdomains.
+
+- `tempo_authority_decision` — deciding whether the project or performance owns tempo
+- `keep_project_tempo_mode` — Keep Project Tempo mode
+- `adapt_project_tempo_mode` — Adapt Project Tempo mode
+- `automatic_project_tempo_mode` — Automatic Project Tempo mode
+- `musical_tempo_reference_detection` — what Logic treats as a musical tempo reference
+- `free_tempo_recording` — Free Tempo Recording workflow
+- `empty_project_free_recording` — recording freely in an empty project
+- `existing_project_free_recording` — free recording inside an existing project
+- `detect_audio_tempo` — detecting BPM and tempo variation from recorded audio
+- `detect_midi_performance_tempo` — detecting tempo from a free MIDI performance
+- `smart_tempo_editor_overview` — working in the Smart Tempo Editor
+- `preview_with_metronome` — verifying Smart Tempo analysis with the editor metronome
+- `downbeat_hints` — using downbeat hints to establish bar starts
+- `beat_hints` — using beat hints to clarify the pulse
+- `time_signature_hints` — adding time-signature hints
+- `lock_analyzed_range` — locking a correct Smart Tempo range
+- `beat_vs_transient_markers` — Smart Tempo beat markers versus transient markers
+- `wrong_downbeat_correction` — correcting an incorrectly detected downbeat
+- `half_double_tempo` — correcting half-time or double-time BPM detection
+- `move_individual_beat_marker` — moving one Smart Tempo beat marker
+- `scale_beat_marker_selection` — scaling a selected range of beat markers
+- `gradual_drift_correction` — correcting gradual tempo drift and rubato
+- `reanalyze_remove_edits` — reanalyzing or removing incorrect tempo data
+- `apply_region_tempo_to_project` — applying region tempo to the project
+- `apply_project_tempo_to_region` — applying project tempo to a region
+- `maintain_relative_positions` — maintaining relative positions when applying a tempo map
+- `adapt_region_edit_side_effects` — region edits affecting tempo in Adapt mode
+- `wrong_imported_tempo_metadata` — incorrect or stale tempo metadata in imported audio
+- `imported_loop_different_bpm` — importing a loop at a different BPM
+- `multiple_loops_remix` — combining files with different tempos
+- `flex_follow_region_behavior` — Smart Tempo Off, On, Bars, and Beats behavior
+- `bars_vs_beats_alignment` — bar-level versus beat-level conformance
+- `multitrack_smart_tempo_analysis` — analyzing multitrack performances together
+- `multitrack_downmix_reference` — choosing the multitrack analysis downmix
+- `record_multitrack_without_click` — recording a multitrack performance without a click
+- `tempo_track_points` — editing tempo points in the Tempo track
+- `gradual_tempo_curves` — creating gradual tempo changes
+- `tempo_list_granularity` — using the Tempo List and curve granularity
+- `tempo_sets` — using tempo sets for alternative maps
+- `tempo_operations` — using Tempo Operations for large-scale map edits
+- `tap_tempo_interpreter` — tap tempo and Tempo Interpreter
+- `region_length_locators_bpm` — deriving tempo from region length and locators
+- `tempo_synced_dependents` — tempo-synced instruments and effects following a map
+- `mixed_meter_mapping` — mapping mixed meter and changing time signatures
+- `recover_changed_speed_import` — recovering an imported recording that changed speed

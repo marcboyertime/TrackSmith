@@ -1,0 +1,119 @@
+{
+  "canonical_question": "What should I understand about deciding whether the project or performance owns tempo, and why does it matter in Logic Pro?",
+  "clarification_questions": [
+    "Which should remain unchanged: the project grid, the recorded performance, or the imported file at its native speed?",
+    "Is this audio or MIDI, single-track or multitrack, and what are the current Project Tempo mode and region Smart Tempo/Flex & Follow settings?",
+    "Is the problem the BPM number, downbeat, bar count, meter, gradual drift, local beat marker, audio speed, stretching artifact, or movement of other project material?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Deciding whether the project or performance owns tempo is the correct feature, but the tempo direction, map range, or conformance depth is wrong.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "The detected BPM, downbeat, meter, beat markers, source metadata, multitrack reference, or half/double interpretation is wrong.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "A fixed BPM, manual tempo points, tap/region-length calculation, Flex-only edit, alternate source, or no conformance would preserve the music better.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-12",
+  "direct_answer": "Before changing BPM or enabling conformance, decide which thing should remain musically unchanged: the project grid, the recorded performance, or an imported reference. A BPM number, grid, or beat marker is a hypothesis about musical structure until it is verified by listening.",
+  "domain": "smart_tempo_bpm_detection_tempo_mapping",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The current Logic version, Project Tempo mode, selected region Smart Tempo/Flex & Follow state, source type, file metadata, and analysis source/downmix.",
+    "The untouched native-speed source plus the applied map or conformed version, with the beginning, middle, end, and transitions checked against a metronome.",
+    "Detected BPM, downbeat, meter, beat-marker placement, Tempo track events, and whether half/double tempo or gradual drift is present.",
+    "The user’s report of groove, bar alignment, audio speed/pitch, stretching artifacts, moved regions, and behavior of MIDI, loops, Drummer, automation, and tempo-synced effects."
+  ],
+  "id": "pkg011.qa.000001",
+  "key_distinction": "Before changing BPM or enabling conformance, decide which thing should remain musically unchanged: the project grid, the recorded performance, or an imported reference.",
+  "limitations": [
+    "A displayed BPM or grid alignment does not prove the musical interpretation is correct.",
+    "Tempo and beat detection are fallible for rubato, syncopation, weak pulse, pickups, mixed meter, dense polyphony, silence, and ambiguous half/double tempo.",
+    "Professional/community sources are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "the chosen authority remaining unchanged while later elements follow it naturally",
+    "location": "Logic tempo display, Tempo track, and selected region Smart Tempo setting",
+    "risk": "Choosing the wrong authority can stretch good audio or rewrite a useful project tempo map.",
+    "show_me_query": "Logic tempo display, Tempo track, and selected region Smart Tempo setting",
+    "starting_point": "Begin with no destructive change: identify the intended tempo authority and preserve a baseline.",
+    "steps": [
+      "Save a Project Alternative or duplicate tempo set/region, and document the current Project Tempo mode, region Smart Tempo/Flex & Follow state, analysis source, downbeat, meter, and tempo-dependent tracks/effects.",
+      "Duplicate the project or create a Project Alternative, audition the performance against a click, and explicitly choose whether the grid should follow the performance or the performance should follow the grid.",
+      "Preview the beginning, middle, end, and every tempo/meter transition against the Smart Tempo Editor or project metronome, then compare against the untouched baseline.",
+      "Listen and inspect for: the chosen authority remaining unchanged while later elements follow it naturally.",
+      "Stop or back off if: Choosing the wrong authority can stretch good audio or rewrite a useful project tempo map.",
+      "Restore the saved Project Alternative and prior Project Tempo/region settings."
+    ],
+    "stop_condition": "Stop once the tempo/grid problem is no longer audible or structurally wrong in context and the result meets this target: the chosen authority remaining unchanged while later elements follow it naturally. Back off or undo if Choosing the wrong authority can stretch good audio or rewrite a useful project tempo map.",
+    "undo": "Restore the saved Project Alternative and prior Project Tempo/region settings.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact Smart Tempo labels, Project Tempo modes, region settings, Smart Tempo Editor handles, tempo commands, Tempo track/List, and project-setting behavior against the installed version.",
+    "visual_target_query": "Logic tempo display, Tempo track, and selected region Smart Tempo setting"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "Use a fixed project tempo, tap/region-length calculation, manual tempo points, a different analysis source, no tempo following, or preserve the free performance without forcing it to a grid."
+  ],
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+  "package_number": 11,
+  "problem_summary": "I do not know whether Logic should follow me or make my recording follow the project",
+  "recommended_first_experiment": "Duplicate the project or create a Project Alternative, audition the performance against a click, and explicitly choose whether the grid should follow the performance or the performance should follow the grid.",
+  "retrieval_tags": [
+    "BPM",
+    "Logic Pro",
+    "Smart Tempo",
+    "adapt",
+    "authority",
+    "concept",
+    "deciding",
+    "keep",
+    "or",
+    "owns",
+    "performance",
+    "project",
+    "smart_tempo",
+    "smart_tempo_bpm_detection_tempo_mapping",
+    "tempo",
+    "tempo map",
+    "tempo_authority_decision",
+    "tempo_map",
+    "the",
+    "whether"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "retrieval_candidate",
+  "source_ids": [
+    "pkg011.source.000002",
+    "pkg011.source.000003",
+    "pkg011.source.000007",
+    "pkg011.source.000043",
+    "pkg011.source.000048"
+  ],
+  "subdomain": "tempo_authority_decision",
+  "teaching_principle": "Before changing BPM or enabling conformance, decide which thing should remain musically unchanged: the project grid, the recorded performance, or an imported reference.",
+  "title": "Deciding Whether The Project Or Performance Owns Tempo — concept",
+  "topic": "tempo_authority_decision",
+  "tradeoffs": [
+    "The workflow can improve the chosen authority remaining unchanged while later elements follow it naturally, but Choosing the wrong authority can stretch good audio or rewrite a useful project tempo map.",
+    "A mathematically clean map can flatten intentional timing or create unnecessary audio stretching.",
+    "A project-tempo correction can improve the grid while moving or changing unrelated tempo-dependent material."
+  ],
+  "user_intent": "Understand the Logic tempo feature and avoid a misleading shortcut.",
+  "variant_kind": "concept"
+}

@@ -6665,6 +6665,26 @@ enum TestRunner {
         try tests.expectThrows("transcript-only source was accepted for a trusted claim") {
             try GeneralTutorKnowledgeValidator().validate(probe)
         }
+        // Tier C may seed candidate retrieval and evaluation, but is never a
+        // material-truth foundation once a claim is reviewed.
+        var tierCProbe = base
+        guard let targetClaim = tierCProbe.claims.first else {
+            throw CheckFailure(message: "missing trusted claim")
+        }
+        tierCProbe.sources = tierCProbe.sources.map { source in
+            var source = source
+            if source.id == targetClaim.sourceID { source.tier = .tierCDiscoveryOrAnecdotal }
+            return source
+        }
+        do {
+            try GeneralTutorKnowledgeValidator().validate(tierCProbe)
+            throw CheckFailure(message: "Tier C source was accepted for a trusted claim")
+        } catch let error as GeneralTutorKnowledgeError {
+            guard case let .tierCSourceForTrustedClaim(card, source) = error,
+                  card == targetClaim.id, source == targetClaim.sourceID else {
+                throw CheckFailure(message: "Tier C rejection used the wrong error: \(error)")
+            }
+        }
     }
 
     @MainActor private static func testGeneralTutorAnswerGrounding(_ tests: Harness) throws {

@@ -1,0 +1,98 @@
+{
+  "canonical_question": "When should I start automating a mix?",
+  "clarification_questions": [
+    "What exact musical moment needs to change over time?",
+    "Is the static balance already working for most of the song?",
+    "What would count as a successful audible result?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Automation is the correct solution to a genuinely time-varying need.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "A static balance, arrangement, performance, or processing decision should be solved first.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "The current automation is too complex to reveal which change matters.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-11",
+  "direct_answer": "Build a static balance that works for most of the song first, then automate only the moments where the arrangement or performance changes what the listener needs to hear.",
+  "domain": "automation",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact parameter and whether it is track, region, MIDI, Smart Control, plug-in, send, bus, VCA, or output automation.",
+    "A before/after or automation Off/Read comparison in the relevant musical section.",
+    "The user's report of what improved, worsened, or did not change.",
+    "Current Logic version and visible mode/parameter state when exact navigation matters."
+  ],
+  "id": "pkg005.qa.000001",
+  "key_distinction": "Automation solves time-varying needs; a poor baseline balance is a different problem.",
+  "limitations": [
+    "Starting values and workflows are context-dependent and must be judged by listening.",
+    "Forum and professional-practice sources do not establish universal rules.",
+    "Exact menu labels and parameter exposure can change by Logic or plug-in version.",
+    "This candidate record is not yet promoted to TrackSmith reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "Whether the problem is isolated to specific phrases or sections rather than present everywhere.",
+    "location": "Tracks area > press A to compare automation Off/Read; Mixer for the static balance.",
+    "risk": "Starting too early can bury structural problems under hundreds of edits.",
+    "show_me_query": "Tracks area > press A to compare automation Off/Read; Mixer for the static balance.",
+    "starting_point": "Make a small, reversible change and compare in context.",
+    "steps": [
+      "Save a Project Alternative or note the current value so the comparison is reversible.",
+      "Bypass all existing automation, set a workable static balance, then replay one section that still fails and automate only that section.",
+      "Compare in the full musical context and listen for: Whether the problem is isolated to specific phrases or sections rather than present everywhere.",
+      "Stop or back off if: Starting too early can bury structural problems under hundreds of edits.",
+      "Return the parameter to its previous value or undo the automation edit."
+    ],
+    "stop_condition": "Stop when whether the problem is isolated to specific phrases or sections rather than present everywhere is achieved without the main risk becoming audible.",
+    "undo": "Return the parameter to its previous value or undo the automation edit.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3; verify exact labels against the installed version."
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "non_automation_possibilities": [
+    "Improve the static balance.",
+    "Change the arrangement or performance.",
+    "Use a simpler processing or routing decision."
+  ],
+  "package_id": "tracksmith-corpus-005-automation",
+  "package_number": 5,
+  "problem_summary": "Automation solves time-varying needs; a poor baseline balance is a different problem.",
+  "recommended_first_experiment": "Bypass all existing automation, set a workable static balance, then replay one section that still fails and automate only that section.",
+  "retrieval_tags": [
+    "Logic Pro",
+    "automation",
+    "fundamentals",
+    "mixing",
+    "static balance",
+    "static_vs_dynamic",
+    "workflow"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "source_ids": [
+    "pkg005.source.000001",
+    "pkg005.source.000033",
+    "pkg005.source.000034"
+  ],
+  "subdomain": "fundamentals",
+  "teaching_principle": "Build a static balance that works for most of the song first, then automate only the moments where the arrangement or performance changes what the listener needs to hear.",
+  "title": "From static balance to automation",
+  "topic": "static_vs_dynamic",
+  "tradeoffs": [
+    "Starting too early can bury structural problems under hundreds of edits.",
+    "The most technically precise curve may not be the most musical result.",
+    "A local improvement can create a new section-level or routing problem."
+  ],
+  "user_intent": "Understand the underlying automation decision and choose the correct control point.",
+  "variant_kind": "concept"
+}

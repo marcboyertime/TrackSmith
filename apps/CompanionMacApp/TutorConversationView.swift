@@ -242,5 +242,5 @@ struct TutorConversationView: View {
     }
 
     private var captureSummary: String { guard let capture = session.captureArtifact else { return session.instances.isEmpty ? "No TrackSmith capture available" : "No capture attached — Tutor can still work from your report" }; return "Capture \(capture.id.uuidString.prefix(6)) · \(String(format: "%.1fs", Double(capture.frameCount) / capture.sampleRate)) · local evidence" }
-    private func evidenceColor(_ kind: TutorEvidenceKind) -> Color { switch kind { case .heardByModel: .green; case .locallyMeasured: .blue; case .logicObserved: .purple; case .userReported: .cyan; case .reviewedKnowledge: .indigo; case .separatedSourceEstimate: .teal; case .structureEstimate: .mint; case .inference: .orange; case .unavailable: .gray } }
+    private func evidenceColor(_ kind: TutorEvidenceKind) -> Color { switch kind { case .heardByModel: .green; case .locallyMeasured: .blue; case .logicObserved: .purple; case .userReported: .cyan; case .reviewedKnowledge: .indigo; case .candidateKnowledge: .yellow; case .separatedSourceEstimate: .teal; case .structureEstimate: .mint; case .inference: .orange; case .unavailable: .gray } }
 }

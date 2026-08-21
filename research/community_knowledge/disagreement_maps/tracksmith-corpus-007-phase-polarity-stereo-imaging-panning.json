@@ -1,0 +1,466 @@
+{
+ "contradictions": {
+  "pkg007.contradiction.000001": {
+   "canonicalID": "pkg007.qa.000004",
+   "rationale": "Direct semantic attachment: polarity_flip_vs_time_alignment weighs 'Try polarity inversion first' against 'Move or delay the signal first'; Phase Versus Polarity — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "phase_vs_polarity"
+  },
+  "pkg007.contradiction.000002": {
+   "canonicalID": "pkg007.qa.000036",
+   "rationale": "Direct semantic attachment: align_every_multimic_track weighs 'Sample-align every microphone' against 'Preserve natural arrival differences'; Moving Microphones Before Digital Alignment — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "move_mic_before_align"
+  },
+  "pkg007.contradiction.000003": {
+   "canonicalID": "pkg007.qa.000018",
+   "rationale": "Direct semantic attachment: the visual_waveform_alignment choice between 'Align by waveform peaks' and 'Align by listening' is evaluated by the frequency_dependent_phase card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "frequency_dependent_phase"
+  },
+  "pkg007.contradiction.000004": {
+   "canonicalID": "pkg007.qa.000044",
+   "rationale": "Direct semantic attachment: the snare_bottom_polarity choice between 'Always invert the bottom snare mic' and 'Test both polarities' is evaluated by the snare_top_bottom card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "snare_top_bottom"
+  },
+  "pkg007.contradiction.000005": {
+   "canonicalID": "pkg007.qa.000040",
+   "rationale": "Direct semantic attachment: overheads_reference weighs 'Use overheads as timing reference' against 'Use close mics as timing reference'; Overheads And Snare Timing Reference — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "overheads_snare_reference"
+  },
+  "pkg007.contradiction.000006": {
+   "canonicalID": "pkg007.qa.000053",
+   "rationale": "Direct semantic attachment: the room_mic_alignment choice between 'Align room mics for punch' and 'Keep room delay for size' is evaluated by the room_close_mics card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "room_close_mics"
+  },
+  "pkg007.contradiction.000007": {
+   "canonicalID": "pkg007.qa.000060",
+   "rationale": "Direct semantic attachment: di_amp_alignment weighs 'Align DI and amp exactly' against 'Blend by ear without exact alignment'; Bass Di And Amplifier Phase Relationship — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "bass_di_amp"
+  },
+  "pkg007.contradiction.000008": {
+   "canonicalID": "pkg007.qa.000118",
+   "rationale": "Direct semantic attachment: the parallel_latency_manual_fix choice between 'Manually delay parallel paths' and 'Trust plug-in delay compensation' is evaluated by the plugin_latency_mismatch card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "plugin_latency_mismatch"
+  },
+  "pkg007.contradiction.000009": {
+   "canonicalID": "pkg007.qa.000112",
+   "rationale": "Direct semantic attachment: minimum_vs_linear_phase weighs 'Use linear phase to avoid phase shift' against 'Use minimum phase for natural transient behavior'; Linear-Phase Filtering Tradeoffs — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "linear_phase_tradeoff"
+  },
+  "pkg007.contradiction.000010": {
+   "canonicalID": "pkg007.qa.000150",
+   "rationale": "Direct semantic attachment: the correlation_target choice between 'Keep correlation always above zero' and 'Allow brief negative correlation for creative effects' is evaluated by the negative_correlation card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "negative_correlation"
+  },
+  "pkg007.contradiction.000011": {
+   "canonicalID": "pkg007.qa.000148",
+   "rationale": "Direct semantic attachment: mono_identical_goal weighs 'Stereo and mono should sound identical' against 'Mono may change while remaining compatible'; Mono Compatibility Versus Identical Mono Sound — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_compatibility_priority"
+  },
+  "pkg007.contradiction.000012": {
+   "canonicalID": "pkg007.qa.000168",
+   "rationale": "Direct semantic attachment: wide_reference weighs 'Match the reference track’s global width' against 'Build width from the current arrangement'; Reference-Track Stereo-Width Comparison — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "reference_width_comparison"
+  },
+  "pkg007.contradiction.000013": {
+   "canonicalID": "pkg007.qa.000180",
+   "rationale": "Direct semantic attachment: ms_widening weighs 'Boost Side for width' against 'Reduce Mid for width'; Mid/Side Width Changes — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "ms_width_change"
+  },
+  "pkg007.contradiction.000014": {
+   "canonicalID": "pkg007.qa.000184",
+   "rationale": "Direct semantic attachment: haas_width weighs 'Use short delay for natural width' against 'Avoid Haas widening because of mono combing'; Haas-Style Delay Widening — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "haas_delay_width"
+  },
+  "pkg007.contradiction.000015": {
+   "canonicalID": "pkg007.qa.000070",
+   "rationale": "Direct semantic attachment: the true_double_vs_fake choice between 'Use duplicated delayed tracks' and 'Record true doubles' is evaluated by the duplicate_track_comb_filter card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "duplicate_track_comb_filter"
+  },
+  "pkg007.contradiction.000016": {
+   "canonicalID": "pkg007.qa.000192",
+   "rationale": "Direct semantic attachment: chorus_vs_micro_pitch weighs 'Use chorus for width' against 'Use micro-pitch for width'; Chorus And Ensemble Width — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "chorus_width"
+  },
+  "pkg007.contradiction.000017": {
+   "canonicalID": "pkg007.qa.000276",
+   "rationale": "Direct semantic attachment: one_global_widener weighs 'Widen the mix bus' against 'Widen selected sources only'; Stereo Width As An Arrangement Dimension — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_width_as_arrangement"
+  },
+  "pkg007.contradiction.000018": {
+   "canonicalID": "pkg007.qa.000252",
+   "rationale": "Direct semantic attachment: mono_below_frequency weighs 'Mono everything below a fixed frequency' against 'Preserve contextual low-frequency stereo'; Mono Low End As A Contextual Choice — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_low_end_context"
+  },
+  "pkg007.contradiction.000019": {
+   "canonicalID": "pkg007.qa.000216",
+   "rationale": "Direct semantic attachment: ms_low_end weighs 'Remove all low Side information' against 'Keep natural stereo bass information'; Mid/Side Low-Frequency Control — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "ms_low_end_control"
+  },
+  "pkg007.contradiction.000020": {
+   "canonicalID": "pkg007.qa.000052",
+   "rationale": "Direct semantic attachment: stereo_piano_mono weighs 'Collapse stereo piano to mono' against 'Keep a wide piano perspective'; Stereo Piano Microphone Coherence — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "piano_stereo_mics"
+  },
+  "pkg007.contradiction.000021": {
+   "canonicalID": "pkg007.qa.000284",
+   "rationale": "Direct semantic attachment: balance_vs_stereo_pan weighs 'Use Balance for stereo tracks' against 'Use Stereo Pan or Direction Mixer'; Stereo Pan Position And Width Handles — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_pan_handles"
+  },
+  "pkg007.contradiction.000022": {
+   "canonicalID": "pkg007.qa.000322",
+   "rationale": "Direct semantic attachment: the hard_pan_vs_partial choice between 'Hard-pan doubles' and 'Use moderate pan positions' is evaluated by the hard_pan_vs_intermediate card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "hard_pan_vs_intermediate"
+  },
+  "pkg007.contradiction.000023": {
+   "canonicalID": "pkg007.qa.000348",
+   "rationale": "Direct semantic attachment: center_vocal weighs 'Always center lead vocal' against 'Pan lead vocal creatively'; Lead Vocal Panning And Focus — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "lead_vocal_panning"
+  },
+  "pkg007.contradiction.000024": {
+   "canonicalID": "pkg007.qa.000368",
+   "rationale": "Direct semantic attachment: center_bass weighs 'Always center bass' against 'Pan bass for artistic effect'; Bass Panning And Low-Frequency Focus — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "bass_panning"
+  },
+  "pkg007.contradiction.000025": {
+   "canonicalID": "pkg007.qa.000325",
+   "rationale": "Direct semantic attachment: the symmetrical_mix choice between 'Make left and right symmetrical' and 'Use intentional asymmetry' is evaluated by the symmetry_vs_asymmetry card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "symmetry_vs_asymmetry"
+  },
+  "pkg007.contradiction.000026": {
+   "canonicalID": "pkg007.qa.000330",
+   "rationale": "Direct semantic attachment: the pan_to_unmask choice between 'Pan competing parts apart' and 'Fix masking with arrangement/EQ/level' is evaluated by the frequency_overlap_panning card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "frequency_overlap_panning"
+  },
+  "pkg007.contradiction.000027": {
+   "canonicalID": "pkg007.qa.000342",
+   "rationale": "Direct semantic attachment: the mono_first choice between 'Build the whole mix in mono first' and 'Mix in stereo with frequent mono checks' is evaluated by the mono_first_panning card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_first_panning"
+  },
+  "pkg007.contradiction.000028": {
+   "canonicalID": "pkg007.qa.000356",
+   "rationale": "Direct semantic attachment: audience_vs_drummer_perspective weighs 'Use audience perspective' against 'Use drummer perspective'; Drum-Kit Panning Perspective — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "drum_kit_panning"
+  },
+  "pkg007.contradiction.000029": {
+   "canonicalID": "pkg007.qa.000374",
+   "rationale": "Direct semantic attachment: the send_pan_vs_return_pan choice between 'Pan the send' and 'Pan the return' is evaluated by the send_pan_vs_return_pan card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "send_pan_vs_return_pan"
+  },
+  "pkg007.contradiction.000030": {
+   "canonicalID": "pkg007.qa.000380",
+   "rationale": "Direct semantic attachment: opposite_reverb weighs 'Pan ambience opposite the dry source' against 'Keep ambience with the dry source'; Opposite-Side Delay Or Reverb Placement — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "opposite_side_effects"
+  },
+  "pkg007.contradiction.000031": {
+   "canonicalID": "pkg007.qa.000384",
+   "rationale": "Direct semantic attachment: wide_reverb_return weighs 'Keep returns hard stereo' against 'Narrow and position effect returns'; Stereo Return Width And Position — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_return_width_position"
+  },
+  "pkg007.contradiction.000032": {
+   "canonicalID": "pkg007.qa.000304",
+   "rationale": "Direct semantic attachment: pan_law_setting weighs 'Use 0 dB pan law' against 'Use -3 dB or compensated pan law'; Pan Law And Center Compensation — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "pan_law_definition"
+  },
+  "pkg007.contradiction.000033": {
+   "canonicalID": "pkg007.qa.000302",
+   "rationale": "Direct semantic attachment: change_pan_law_midmix weighs 'Change pan law to fix center level' against 'Leave pan law and rebalance tracks'; Pan Law And Center Compensation — diagnosis is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "pan_law_definition"
+  },
+  "pkg007.contradiction.000034": {
+   "canonicalID": "pkg007.qa.000394",
+   "rationale": "Direct semantic attachment: the binaural_for_stereo choice between 'Use binaural panning for more realism' and 'Use conventional stereo panning for compatibility' is evaluated by the headphone_vs_speaker_pan card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "headphone_vs_speaker_pan"
+  },
+  "pkg007.contradiction.000035": {
+   "canonicalID": "pkg007.qa.000136",
+   "rationale": "Direct semantic attachment: correlation_meter_vs_ears weighs 'Trust the correlation meter' against 'Trust mono listening'; Logic Correlation Meter Interpretation — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "correlation_meter_use"
+  },
+  "pkg007.contradiction.000036": {
+   "canonicalID": "pkg007.qa.000036",
+   "rationale": "Direct semantic attachment: phase_alignment_plugin weighs 'Use an automatic phase-alignment plug-in' against 'Adjust manually or at recording'; Moving Microphones Before Digital Alignment — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "move_mic_before_align"
+  },
+  "pkg007.contradiction.000037": {
+   "canonicalID": "pkg007.qa.000155",
+   "rationale": "Direct semantic attachment: the goniometer_target choice between 'Aim for a specific vectorscope shape' and 'Use the scope only diagnostically' is evaluated by the vectorscope_interpretation card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "vectorscope_interpretation"
+  },
+  "pkg007.contradiction.000038": {
+   "canonicalID": "pkg007.qa.000228",
+   "rationale": "Direct semantic attachment: stereo_recording_widen weighs 'Widen a narrow X/Y recording artificially' against 'Accept or re-record the original perspective'; X/Y Coincident Stereo Pair — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "xy_pair"
+  },
+  "pkg007.contradiction.000039": {
+   "canonicalID": "pkg007.qa.000230",
+   "rationale": "Direct semantic attachment: the spaced_pair_alignment choice between 'Time-align spaced microphones' and 'Preserve spacing cues' is evaluated by the spaced_pair card; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "spaced_pair"
+  },
+  "pkg007.contradiction.000040": {
+   "canonicalID": "pkg007.qa.000224",
+   "rationale": "Direct semantic attachment: ms_mastering weighs 'Use M/S on every master' against 'Use M/S only for a demonstrated issue'; Mid/Side Mastering Restraint — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "ms_mastering_limits"
+  },
+  "pkg007.contradiction.000041": {
+   "canonicalID": "pkg007.qa.000268",
+   "rationale": "Direct semantic attachment: automated_width weighs 'Automate width for every chorus' against 'Use arrangement contrast instead'; Automated Stereo Width — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "moving_width_automation"
+  },
+  "pkg007.contradiction.000042": {
+   "canonicalID": "pkg007.qa.000396",
+   "rationale": "Direct semantic attachment: panning_extremes_headphones weighs 'Avoid hard pans for headphones' against 'Use hard pans when arrangement supports them'; Headphone Versus Speaker Panning — tradeoff and listening decision is the closest candidate framing for that decision. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "headphone_vs_speaker_pan"
+  }
+ },
+ "myths": {
+  "pkg007.myth.000001": {
+   "canonicalID": "pkg007.qa.000001",
+   "rationale": "Direct semantic attachment: the myth 'Polarity inversion and a 180-degree phase shift are always the same thing.' is bounded by Phase Versus Polarity — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "phase_vs_polarity"
+  },
+  "pkg007.myth.000002": {
+   "canonicalID": "pkg007.qa.000013",
+   "rationale": "Direct semantic attachment: the myth 'A polarity button fixes every phase problem.' is bounded by Polarity-Flip Diagnosis — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "polarity_flip_diagnosis"
+  },
+  "pkg007.myth.000003": {
+   "canonicalID": "pkg007.qa.000017",
+   "rationale": "Direct semantic attachment: the myth 'If two waveforms line up visually, they are phase-correct.' is bounded by Frequency-Dependent Phase Relationships — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "frequency_dependent_phase"
+  },
+  "pkg007.myth.000004": {
+   "canonicalID": "pkg007.qa.000033",
+   "rationale": "Direct semantic attachment: the myth 'Every multi-mic track should be sample-aligned.' is bounded by Moving Microphones Before Digital Alignment — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "move_mic_before_align"
+  },
+  "pkg007.myth.000005": {
+   "canonicalID": "pkg007.qa.000014",
+   "rationale": "Direct semantic attachment: the myth 'The fullest polarity setting is always correct.' is corrected by the polarity_flip_diagnosis card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "polarity_flip_diagnosis"
+  },
+  "pkg007.myth.000006": {
+   "canonicalID": "pkg007.qa.000022",
+   "rationale": "Direct semantic attachment: the myth 'A single signal can be universally “out of phase” by itself.' is corrected by the single_signal_phase card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "single_signal_phase"
+  },
+  "pkg007.myth.000007": {
+   "canonicalID": "pkg007.qa.000150",
+   "rationale": "Direct semantic attachment: the myth 'Negative correlation always means the mix is broken.' is corrected by the negative_correlation card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "negative_correlation"
+  },
+  "pkg007.myth.000008": {
+   "canonicalID": "pkg007.qa.000159",
+   "rationale": "Direct semantic attachment: the myth 'Correlation above zero guarantees good mono translation.' is corrected by the frequency_specific_correlation card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "frequency_specific_correlation"
+  },
+  "pkg007.myth.000009": {
+   "canonicalID": "pkg007.qa.000153",
+   "rationale": "Direct semantic attachment: the myth 'A vertical vectorscope is always better than a wide one.' is bounded by Vectorscope And Goniometer Interpretation — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "vectorscope_interpretation"
+  },
+  "pkg007.myth.000010": {
+   "canonicalID": "pkg007.qa.000154",
+   "rationale": "Direct semantic attachment: the myth 'A wide vectorscope proves a professional stereo image.' is bounded by Vectorscope And Goniometer Interpretation — diagnosis, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "vectorscope_interpretation"
+  },
+  "pkg007.myth.000011": {
+   "canonicalID": "pkg007.qa.000145",
+   "rationale": "Direct semantic attachment: the myth 'Stereo and mono should sound identical.' is bounded by Mono Compatibility Versus Identical Mono Sound — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_compatibility_priority"
+  },
+  "pkg007.myth.000012": {
+   "canonicalID": "pkg007.qa.000273",
+   "rationale": "Direct semantic attachment: the myth 'Wider is always better.' is bounded by Stereo Width As An Arrangement Dimension — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_width_as_arrangement"
+  },
+  "pkg007.myth.000013": {
+   "canonicalID": "pkg007.qa.000070",
+   "rationale": "Direct semantic attachment: the myth 'Duplicating and panning a track creates true stereo.' is corrected by the duplicate_track_comb_filter card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "duplicate_track_comb_filter"
+  },
+  "pkg007.myth.000014": {
+   "canonicalID": "pkg007.qa.000182",
+   "rationale": "Direct semantic attachment: the myth 'Haas delay is mono compatible if the delay is short enough.' is corrected by the haas_delay_width card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "haas_delay_width"
+  },
+  "pkg007.myth.000015": {
+   "canonicalID": "pkg007.qa.000201",
+   "rationale": "Direct semantic attachment: the myth 'Mid equals the lead vocal and Side equals the instruments.' is bounded by Mid/Side Representation — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mid_side_definition"
+  },
+  "pkg007.myth.000016": {
+   "canonicalID": "pkg007.qa.000177",
+   "rationale": "Direct semantic attachment: the myth 'Boosting Side only makes a mix wider, not quieter in the center.' is bounded by Mid/Side Width Changes — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "ms_width_change"
+  },
+  "pkg007.myth.000017": {
+   "canonicalID": "pkg007.qa.000249",
+   "rationale": "Direct semantic attachment: the myth 'All low frequencies must be mono below one fixed number.' is bounded by Mono Low End As A Contextual Choice — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_low_end_context"
+  },
+  "pkg007.myth.000018": {
+   "canonicalID": "pkg007.qa.000253",
+   "rationale": "Direct semantic attachment: the myth 'Stereo bass is always unsafe.' is bounded by Centered Bass With Stereo Harmonics — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_bass_harmonics"
+  },
+  "pkg007.myth.000019": {
+   "canonicalID": "pkg007.qa.000278",
+   "rationale": "Direct semantic attachment: the myth 'A stereo file should always use the default Balance control.' is corrected by the mono_pan_vs_stereo_balance card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_pan_vs_stereo_balance"
+  },
+  "pkg007.myth.000020": {
+   "canonicalID": "pkg007.qa.000281",
+   "rationale": "Direct semantic attachment: the myth 'Stereo Pan and Balance are two names for the same thing.' is bounded by Stereo Pan Position And Width Handles — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_pan_handles"
+  },
+  "pkg007.myth.000021": {
+   "canonicalID": "pkg007.qa.000301",
+   "rationale": "Direct semantic attachment: the myth 'Pan law creates stereo width.' is bounded by Pan Law And Center Compensation — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "pan_law_definition"
+  },
+  "pkg007.myth.000022": {
+   "canonicalID": "pkg007.qa.000301",
+   "rationale": "Direct semantic attachment: the myth 'Changing pan law is a harmless preference at any time.' is corrected by the pan_law_definition card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "pan_law_definition"
+  },
+  "pkg007.myth.000023": {
+   "canonicalID": "pkg007.qa.000321",
+   "rationale": "Direct semantic attachment: the myth 'Hard panning is inherently amateur.' is bounded by Hard Panning Versus Intermediate Positions — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "hard_pan_vs_intermediate"
+  },
+  "pkg007.myth.000024": {
+   "canonicalID": "pkg007.qa.000322",
+   "rationale": "Direct semantic attachment: the myth 'Intermediate pan positions are always more natural.' is corrected by the hard_pan_vs_intermediate card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "hard_pan_vs_intermediate"
+  },
+  "pkg007.myth.000025": {
+   "canonicalID": "pkg007.qa.000325",
+   "rationale": "Direct semantic attachment: the myth 'A mix must be perfectly symmetrical left to right.' is bounded by Symmetrical Versus Asymmetrical Panning — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "symmetry_vs_asymmetry"
+  },
+  "pkg007.myth.000026": {
+   "canonicalID": "pkg007.qa.000329",
+   "rationale": "Direct semantic attachment: the myth 'Panning alone solves frequency masking.' is corrected by the frequency_overlap_panning card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "frequency_overlap_panning"
+  },
+  "pkg007.myth.000027": {
+   "canonicalID": "pkg007.qa.000345",
+   "rationale": "Direct semantic attachment: the myth 'Lead vocals must never move from center.' is bounded by Lead Vocal Panning And Focus — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "lead_vocal_panning"
+  },
+  "pkg007.myth.000028": {
+   "canonicalID": "pkg007.qa.000317",
+   "rationale": "Direct semantic attachment: the myth 'Kick, bass, snare, and vocal must all be centered in every genre.' is bounded by Center Anchors In A Stereo Mix — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "center_anchor_roles"
+  },
+  "pkg007.myth.000029": {
+   "canonicalID": "pkg007.qa.000396",
+   "rationale": "Direct semantic attachment: the myth 'Binaural panning is simply better stereo panning.' is corrected by the headphone_vs_speaker_pan card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "headphone_vs_speaker_pan"
+  },
+  "pkg007.myth.000030": {
+   "canonicalID": "pkg007.qa.000389",
+   "rationale": "Direct semantic attachment: the myth 'Binaural placement will externalize identically for everyone.' is bounded by Binaural Post Processing Compensation — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "binaural_post_processing"
+  },
+  "pkg007.myth.000031": {
+   "canonicalID": "pkg007.qa.000286",
+   "rationale": "Direct semantic attachment: the myth 'Direction Mixer is always better than the channel pan control.' is corrected by the direction_mixer_vs_stereo_pan card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "direction_mixer_vs_stereo_pan"
+  },
+  "pkg007.myth.000032": {
+   "canonicalID": "pkg007.qa.000173",
+   "rationale": "Direct semantic attachment: the myth 'Stereo Spread is transparent because it only changes width.' is bounded by Logic Stereo Spread — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_spread_logic"
+  },
+  "pkg007.myth.000033": {
+   "canonicalID": "pkg007.qa.000201",
+   "rationale": "Direct semantic attachment: the myth 'M/S processing isolates specific named instruments.' is bounded by Mid/Side Representation — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mid_side_definition"
+  },
+  "pkg007.myth.000034": {
+   "canonicalID": "pkg007.qa.000205",
+   "rationale": "Direct semantic attachment: the myth 'Side-only EQ cannot affect the center image.' is bounded by Mid/Side Eq For Center And Sides — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "ms_eq_center_sides"
+  },
+  "pkg007.myth.000035": {
+   "canonicalID": "pkg007.qa.000109",
+   "rationale": "Direct semantic attachment: the myth 'Linear-phase EQ has no phase-related downside.' is bounded by Linear-Phase Filtering Tradeoffs — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "linear_phase_tradeoff"
+  },
+  "pkg007.myth.000036": {
+   "canonicalID": "pkg007.qa.000018",
+   "rationale": "Direct semantic attachment: the myth 'Sample Delay can perfectly align every frequency of two complex recordings.' is corrected by the frequency_dependent_phase card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "frequency_dependent_phase"
+  },
+  "pkg007.myth.000037": {
+   "canonicalID": "pkg007.qa.000033",
+   "rationale": "Direct semantic attachment: the myth 'Automatic phase alignment always improves multi-mic recordings.' is bounded by Moving Microphones Before Digital Alignment — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "move_mic_before_align"
+  },
+  "pkg007.myth.000038": {
+   "canonicalID": "pkg007.qa.000145",
+   "rationale": "Direct semantic attachment: the myth 'Mono summing is only relevant to old radios.' is bounded by Mono Compatibility Versus Identical Mono Sound — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_compatibility_priority"
+  },
+  "pkg007.myth.000039": {
+   "canonicalID": "pkg007.qa.000161",
+   "rationale": "Direct semantic attachment: the myth 'If a stereo source sounds louder on one side, it needs more widening.' is bounded by Stereo Balance Versus Stereo Width — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "balance_vs_width_meter"
+  },
+  "pkg007.myth.000040": {
+   "canonicalID": "pkg007.qa.000277",
+   "rationale": "Direct semantic attachment: the myth 'Panning a stereo source with Balance moves the full image intact.' is bounded by Mono Pan Versus Stereo Balance — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "mono_pan_vs_stereo_balance"
+  },
+  "pkg007.myth.000041": {
+   "canonicalID": "pkg007.qa.000374",
+   "rationale": "Direct semantic attachment: the myth 'Send pan and return pan produce the same spatial result.' is corrected by the send_pan_vs_return_pan card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "send_pan_vs_return_pan"
+  },
+  "pkg007.myth.000042": {
+   "canonicalID": "pkg007.qa.000377",
+   "rationale": "Direct semantic attachment: the myth 'Reverb should always be panned with the dry source.' is bounded by Opposite-Side Delay Or Reverb Placement — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "opposite_side_effects"
+  },
+  "pkg007.myth.000043": {
+   "canonicalID": "pkg007.qa.000273",
+   "rationale": "Direct semantic attachment: the myth 'Every chorus should become wider through a master widener.' is bounded by Stereo Width As An Arrangement Dimension — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_width_as_arrangement"
+  },
+  "pkg007.myth.000044": {
+   "canonicalID": "pkg007.qa.000161",
+   "rationale": "Direct semantic attachment: the myth 'If the meter looks balanced, the mix is balanced.' is bounded by Stereo Balance Versus Stereo Width — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "balance_vs_width_meter"
+  },
+  "pkg007.myth.000045": {
+   "canonicalID": "pkg007.qa.000245",
+   "rationale": "Direct semantic attachment: the myth 'Swapping left and right fixes phase problems.' is bounded by Left/Right Channel Orientation And Swap — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_file_channel_orientation"
+  },
+  "pkg007.myth.000046": {
+   "canonicalID": "pkg007.qa.000126",
+   "rationale": "Direct semantic attachment: the myth 'Destructively inverting a file is the best first polarity test.' is corrected by the gain_phase_invert card’s bounded diagnostic framing; disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "gain_phase_invert"
+  },
+  "pkg007.myth.000047": {
+   "canonicalID": "pkg007.qa.000365",
+   "rationale": "Direct semantic attachment: the myth 'Panning a low-frequency source off-center always causes phase cancellation.' is bounded by Bass Panning And Low-Frequency Focus — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "bass_panning"
+  },
+  "pkg007.myth.000048": {
+   "canonicalID": "pkg007.qa.000361",
+   "rationale": "Direct semantic attachment: the myth 'Two hard-panned true doubles will always cancel in mono.' is bounded by Guitar Panning And Doubles — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "guitar_panning"
+  },
+  "pkg007.myth.000049": {
+   "canonicalID": "pkg007.qa.000193",
+   "rationale": "Direct semantic attachment: the myth 'Decorrelated stereo ambience must be eliminated because it changes in mono.' is bounded by Stereo Ambience As Width — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "stereo_reverb_width"
+  },
+  "pkg007.myth.000050": {
+   "canonicalID": "pkg007.qa.000133",
+   "rationale": "Direct semantic attachment: the myth 'There is one ideal correlation value for a finished mix.' is bounded by Logic Correlation Meter Interpretation — what it changes, the closest candidate framing for that claim. Disagreement provenance is preserved separately and does not turn it into instruction.",
+   "topicCompatibility": "correlation_meter_use"
+  }
+ }
+}

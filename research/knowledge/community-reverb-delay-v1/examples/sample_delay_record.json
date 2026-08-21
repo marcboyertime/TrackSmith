@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "package_sequence": 4,
+  "id": "delay.routing_and_creative.delay_throw",
+  "domain": "delay",
+  "category": "routing_and_creative",
+  "subcategory": "delay_throw",
+  "title": "How do I create a vocal delay throw in Logic",
+  "canonical_user_question": "How do I create a vocal delay throw in Logic?",
+  "natural_language_variants": [
+    "How do I create a vocal delay throw in Logic?",
+    "In Logic Pro, how do I create a vocal delay throw in Logic?",
+    "Can you explain this simply: How do I create a vocal delay throw in Logic?",
+    "Can you walk me through this without giving me a preset: How do I create a vocal delay throw in Logic?",
+    "What would an experienced producer listen for here: How do I create a vocal delay throw in Logic?",
+    "I keep getting conflicting advice about last word delay Logic. How should I decide?",
+    "I am still learning production. How do I create a vocal delay throw in Logic?",
+    "This changes depending on the section. How do I create a vocal delay throw in Logic?",
+    "It sounds fine in solo but not in the full mix. How do I create a vocal delay throw in Logic?",
+    "What is the fastest reversible test for last word delay Logic?"
+  ],
+  "user_language_aliases": [
+    "last word delay Logic",
+    "vocal throw",
+    "delay throw",
+    "A brief send automation on selected words feeds an otherwise idle delay return, creating emphasis wi"
+  ],
+  "candidate_hypotheses": [
+    {
+      "label": "H1: Delay timing or repeat pattern is materially involved",
+      "mechanism": "A brief send automation on selected words feeds an otherwise idle delay return, creating emphasis without continuous clutter.",
+      "evidence_needed": "A current representative capture, exact phrase/tempo/scope, and matched-level comparison through the next musical event.",
+      "discriminating_test": "Create a 100% wet delay aux, choose a value with available space, and automate the send only on one phrase-ending word."
+    },
+    {
+      "label": "H2: Feedback, filtering, or modulation is creating the problem",
+      "mechanism": "Repeat generations may accumulate spectrum, noise, pitch movement, or density even when the first repeat timing is appropriate.",
+      "evidence_needed": "Wet-only audition and repeat-by-repeat listening through the tail.",
+      "discriminating_test": "Keep time fixed and change only feedback or feedback-loop color, then restore it."
+    },
+    {
+      "label": "H3: Stereo/phase/latency behavior is changing the dry source",
+      "mechanism": "Short offsets, crossfeed, parallel routing, or compensation can create comb filtering, localization shifts, or mono cancellation.",
+      "evidence_needed": "Mono check, polarity/correlation evidence, and path timing measurement where applicable.",
+      "discriminating_test": "Center/narrow the delay or remove manual offsets, then compare before changing rhythm."
+    },
+    {
+      "label": "H4: The arrangement, performance, or automation does not leave a useful gap",
+      "mechanism": "Repeats may collide with lyrics, hits, chord changes, and dense sections rather than being technically wrong.",
+      "evidence_needed": "Phrase/section context, tempo map, and user report of where repeats collide.",
+      "discriminating_test": "Automate one selected throw or mute the effect during dense events to test the arrangement explanation."
+    }
+  ],
+  "clarification_questions": [
+    "What source or bus is receiving the effect, and is TrackSmith hearing that exact scope?",
+    "What are you trying to preserve: intelligibility, transient punch, groove, mono focus, realism, or an obvious creative effect?",
+    "Does the problem happen in solo, only in the full mix, or only in a particular section?",
+    "What routing, timing, feedback/decay, filtering, width, automation, and other processing are currently active?"
+  ],
+  "recommended_first_experiment": {
+    "summary": "Create a 100% wet delay aux, choose a value with available space, and automate the send only on one phrase-ending word.",
+    "action": "Create a 100% wet delay aux, choose a value with available space, and automate the send only on one phrase-ending word.",
+    "scope": "one controlled reversible comparison",
+    "why_this_first": "It is designed to distinguish the leading explanation from level, routing, spectrum, stereo, performance, arrangement, and monitoring alternatives before adding more processing."
+  },
+  "rationale": "The immediate issue is that a brief send automation on selected words feeds an otherwise idle delay return, creating emphasis without continuous clutter. The first experiment changes one meaningful variable and produces causal information before a broader chain or preset is recommended.",
+  "logic_pro_steps": [
+    "Loop the exact phrase or rhythmic passage where the delay should contribute, including the next important event or section boundary.",
+    "Save or note the current dry level, send/return level, delay time, feedback, filtering, stereo mode, and automation.",
+    "Create a 100% wet delay aux, choose a value with available space, and automate the send only on one phrase-ending word.",
+    "Change only one timing, feedback, filter, modulation, routing, or pan variable at a time.",
+    "Match perceived effect level before comparing groove, clarity, width, and repeat decay.",
+    "Replay the full mix, mono, and a second section before keeping the result."
+  ],
+  "starting_points": [
+    "Begin with feedback at zero or very low and the wet contribution at zero, then add only enough to hear the first repeat in context.",
+    "Start from the nearest useful musical subdivision or a short single-repeat time, then nudge by ear around the groove.",
+    "Filter repeats so they support rather than duplicate the dry source; any frequency values are starting orientations, not presets.",
+    "Check the final repeat against the next lyric, hit, chord, or section boundary."
+  ],
+  "what_to_listen_for": [
+    "Repeats should occupy deliberate rhythmic or spatial gaps rather than duplicate every important event.",
+    "The dry source should remain intelligible and correctly localized unless the artistic goal explicitly changes it.",
+    "Listen for clutter, harmonic clashes, comb filtering, feedback buildup, stereo-image movement, and mono cancellation.",
+    "Check whether the result survives a level-matched bypass and the next chord, lyric, hit, or section."
+  ],
+  "stop_rule": "Stop or back off when the intended rhythm or space improves but repeats begin masking the source, crossing important events, destabilizing mono, or building uncontrollably.",
+  "stop_conditions": [
+    "Stop or back off when the intended rhythm or space improves but repeats begin masking the source, crossing important events, destabilizing mono, or building uncontrollably."
+  ],
+  "undo_or_reset": "Restore the saved send, return, delay time, feedback, filtering, stereo mode, automation, and routing, then replay the same passage.",
+  "undo": "Restore the saved send, return, delay time, feedback, filtering, stereo mode, automation, and routing, then replay the same passage.",
+  "tradeoffs_and_risks": [
+    "A louder repeat can appear better even when it disrupts groove or intelligibility.",
+    "Feedback, stereo offsets, modulation, and distortion can accumulate unexpectedly.",
+    "Repeats can cross chord changes, lyrics, and section boundaries and become arrangement conflicts.",
+    "A timing, performance, source, or monitoring problem may be mistaken for a delay-setting problem."
+  ],
+  "alternatives_if_wrong": [
+    "Use short ambience or reverb when discrete repeats call too much attention to themselves.",
+    "Use real double tracking, arrangement gaps, note-length edits, or automation instead of delay.",
+    "Print and edit a special repeat pattern as an arrangement asset when live feedback is difficult to bound."
+  ],
+  "non_dsp_possibilities": [
+    "arrangement gaps",
+    "editing/resampling",
+    "performance timing"
+  ],
+  "preservation_goals": [
+    "dry-source clarity",
+    "section rhythm"
+  ],
+  "common_mistakes": [
+    "Copying a decay, pre-delay, feedback, note value, filter, or wet percentage without matching the source and arrangement.",
+    "Judging the effect soloed or louder than bypass.",
+    "Changing timing, tone, level, feedback, stereo mode, and routing simultaneously.",
+    "Using ambience or repeats to solve a performance, arrangement, balance, editing, or source-selection problem."
+  ],
+  "do_not_assume": [
+    "A common setting, tempo formula, room label, or forum answer is correct for this source and song.",
+    "A spectrum, waveform, model observation, or plug-in label proves the artistic complaint or its cause.",
+    "More width, length, density, feedback, brightness, or wet level is automatically better.",
+    "The first plausible cause is the true cause."
+  ],
+  "teaching_principle": "Delay is arrangement in time: decide where each repeat belongs, how it changes, and when it must get out of the way.",
+  "requires_mix_context": true,
+  "audio_context_useful": true,
+  "logic_version_scope": "Logic Pro 12.x; reverify every visible label, routing behavior, and exact procedure on the installed version before promotion.",
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "source_ids": [
+    "apple.logic.delay_designer_display",
+    "apple.logic.delay_designer_master",
+    "apple.logic.delay_designer_overview",
+    "izotope.vocal_delay",
+    "sos.vocal_production",
+    "waves.famous_vocal_fx",
+    "waves.pop_vocal_fx",
+    "gearspace.delay_reverb_dummies"
+  ],
+  "evidence_class": "official_documentation_research_professional_practice_and_bounded_community_synthesis",
+  "copyright_handling": "Original paraphrased synthesis; no raw forum body or long quotation included.",
+  "review_status": "candidate_not_yet_human_reviewed",
+  "confidence_class": "review_candidate",
+  "tracksmith_domains": [
+    "delay",
+    "sends",
+    "automation",
+    "creativeEffects",
+    "transitions"
+  ],
+  "tags": [
+    "delay",
+    "routing_and_creative",
+    "delay throw",
+    "last word delay Logic",
+    "vocal throw",
+    "vocal",
+    "automation",
+    "logic_tools"
+  ],
+  "created_at": "2026-08-11"
+}

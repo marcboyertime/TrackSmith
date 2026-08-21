@@ -1,0 +1,94 @@
+Building for debugging...
+[0/47] Write sources
+[2/47] Write swift-version--58304C5D6DBC2206.txt
+[4/19] Emitting module ProductionTutor
+[5/19] Compiling ProductionTutor CommunityCandidateCorpus.swift
+[6/45] Compiling ProductionTutor TutorProcedureKnowledge.generated.swift
+[7/45] Compiling ProductionTutor TutorProcedureKnowledge.swift
+[8/45] Compiling ProductionTutor TutorSessionStore.swift
+[9/45] Compiling ProductionTutor resource_bundle_accessor.swift
+[10/45] Compiling ProductionTutor TutorLessonValidator.swift
+[11/45] Compiling ProductionTutor TutorPlanner.swift
+[12/45] Compiling ProductionTutor GeneralTutorDomains.swift
+[13/45] Compiling ProductionTutor GeneralTutorEvaluation.swift
+[14/45] Compiling ProductionTutor GeneralTutorKnowledge.generated.swift
+[15/45] Compiling ProductionTutor TutorExplanationFormatter.swift
+[16/45] Compiling ProductionTutor TutorFeedbackReducer.swift
+[17/45] Compiling ProductionTutor TutorInterpretationContract.swift
+[18/45] Compiling ProductionTutor CommunityCandidateCorpus.generated.swift
+/Users/marcboyer/LogicAudioAssistant/packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorCoordinator.swift:472:23: warning: no calls to throwing functions occur within 'try' expression
+470 |     private func exactProcedures(for intent: GeneralTutorQuestionIntent) -> [String] {
+471 |         guard let issue = intent.recognizedTutorIssues.first else { return [] }
+472 |         let planner = try? TutorPlanner(catalog: procedureCatalog)
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+473 |         guard let planner else { return [] }
+474 |         let ordered = planner.orderedCandidateProcedureIDs(
+[19/45] Compiling ProductionTutor GeneralTutorAnswer.swift
+/Users/marcboyer/LogicAudioAssistant/packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorCoordinator.swift:472:23: warning: no calls to throwing functions occur within 'try' expression
+470 |     private func exactProcedures(for intent: GeneralTutorQuestionIntent) -> [String] {
+471 |         guard let issue = intent.recognizedTutorIssues.first else { return [] }
+472 |         let planner = try? TutorPlanner(catalog: procedureCatalog)
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+473 |         guard let planner else { return [] }
+474 |         let ordered = planner.orderedCandidateProcedureIDs(
+[20/45] Compiling ProductionTutor GeneralTutorCoordinator.swift
+/Users/marcboyer/LogicAudioAssistant/packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorCoordinator.swift:472:23: warning: no calls to throwing functions occur within 'try' expression
+470 |     private func exactProcedures(for intent: GeneralTutorQuestionIntent) -> [String] {
+471 |         guard let issue = intent.recognizedTutorIssues.first else { return [] }
+472 |         let planner = try? TutorPlanner(catalog: procedureCatalog)
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+473 |         guard let planner else { return [] }
+474 |         let ordered = planner.orderedCandidateProcedureIDs(
+[21/45] Compiling ProductionTutor GeneralTutorRouter.swift
+[22/45] Compiling ProductionTutor PersonalProfileStore.swift
+[23/45] Compiling ProductionTutor TutorCauseModel.swift
+[24/45] Compiling ProductionTutor GeneralTutorKnowledge.swift
+[25/45] Compiling ProductionTutor GeneralTutorQuestion.swift
+[26/45] Compiling ProductionTutor GeneralTutorRetriever.swift
+[27/45] Compiling ProductionTutor TutorIssueVocabulary.swift
+[28/45] Compiling ProductionTutor TutorKnowledgeValidator.swift
+[29/45] Compiling ProductionTutor TutorContextBuilder.swift
+[30/45] Compiling ProductionTutor TutorContracts.swift
+[31/45] Compiling ProductionTutor TutorEvaluationHarness.swift
+[32/66] Compiling GeneralTutorSpotCheck main.swift
+[33/66] Emitting module GeneralTutorSpotCheck
+[33/67] Write Objects.LinkFileList
+[35/67] Compiling ProductionTutorEvaluation main.swift
+[36/67] Emitting module ProductionTutorEvaluation
+[36/67] Write Objects.LinkFileList
+[38/67] Emitting module GeneralTutorEvaluation
+[39/67] Compiling GeneralTutorEvaluation main.swift
+[39/68] Write Objects.LinkFileList
+[41/68] Compiling TutorConversation OfflineTutorProvider.swift
+[42/68] Compiling TutorConversation OpenAITutorAudioListener.swift
+[42/68] Linking GeneralTutorSpotCheck
+[43/68] Linking ProductionTutorEvaluation
+[44/68] Applying GeneralTutorSpotCheck
+[46/68] Emitting module TutorConversation
+[46/68] Applying ProductionTutorEvaluation
+[47/68] Linking GeneralTutorEvaluation
+[49/68] Compiling TutorConversation TutorConversationStore.swift
+[50/68] Compiling TutorConversation TutorConversationEngine.swift
+[50/68] Applying GeneralTutorEvaluation
+[52/68] Compiling TutorConversation OpenAITutorProvider.swift
+[53/68] Compiling TutorConversation TutorTools.swift
+[54/68] Compiling TutorConversation TutorAudioIntelligence.swift
+[55/68] Compiling TutorConversation TutorModels.swift
+[55/69] Write Objects.LinkFileList
+[58/72] Compiling TutorConversationTests resource_bundle_accessor.swift
+[59/72] Emitting module TutorConversationTests
+[59/72] Linking TutorAudioIntelligenceLab
+[60/72] Applying TutorAudioIntelligenceLab
+[61/72] Linking LogicTutorObservationProbe
+[62/72] Applying LogicTutorObservationProbe
+[64/72] Compiling TutorConversationTests TutorConversationTests.swift
+[64/72] Write Objects.LinkFileList
+[65/72] Linking TutorConversationTests
+[66/72] Applying TutorConversationTests
+[68/72] Compiling TestRunner main.swift
+[69/72] Emitting module TestRunner
+[69/72] Write Objects.LinkFileList
+[70/72] Linking TestRunner
+[71/72] Applying TestRunner
+Build complete! (10.15s)
+exit=0

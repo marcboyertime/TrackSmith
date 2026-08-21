@@ -1,0 +1,109 @@
+{
+  "canonical_question": "What should I understand about signal level through the complete chain, and why does it matter?",
+  "clarification_questions": [
+    "Where exactly in the signal chain does the level, routing, clipping, or processing change occur?",
+    "Is the concern audible, visible only on a meter, or both—and on which source, bus, or output?",
+    "What changed immediately before the problem appeared, and can the prior state be restored?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Signal level through the complete chain is the main cause of the reported result.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "The apparent problem is primarily monitoring level, arrangement, source balance, routing, or loudness bias rather than the named process.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "The technique is appropriate, but its input level, output compensation, membership, timing, ceiling, meter window, or location is wrong.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-12",
+  "direct_answer": "Gain staging is the management of level at every handoff, not a single target on one meter. Map where gain changes before solving the symptom. Treat numeric levels as context and evidence, not a universal recipe.",
+  "domain": "gain_staging",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact source, bus, output, plug-in order, meter position, and current Logic version.",
+    "A matched before/after comparison using the same representative musical section.",
+    "Input, output, gain-reduction, peak, true-peak, RMS/LUFS, and routing evidence only where relevant.",
+    "The user’s report of what became cleaner, louder, denser, flatter, harsher, punchier, quieter, or more cohesive."
+  ],
+  "id": "pkg009.qa.000001",
+  "key_distinction": "Gain staging is the management of level at every handoff, not a single target on one meter. Map where gain changes before solving the symptom.",
+  "limitations": [
+    "Numeric levels, headroom values, bus settings, ceilings, and loudness readings are orientations or measurements, not universal presets.",
+    "Meters describe signal behavior; they do not prove artistic improvement.",
+    "Analog-modeled plug-ins use product-specific calibration and nonlinear behavior.",
+    "Professional and community sources are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to TrackSmith reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "the first point where level, tone, noise, or dynamics diverge from the intended chain",
+    "location": "Logic Mixer > source channel > inserts > fader > bus/aux > Stereo Out",
+    "risk": "Changing several stages at once can hide the true overload or under-drive point.",
+    "show_me_query": "Logic Mixer > source channel > inserts > fader > bus/aux > Stereo Out",
+    "starting_point": "Keep the fader position unchanged while using meters or a temporary Gain plug-in to identify the first stage that becomes unexpectedly hot or quiet.",
+    "steps": [
+      "Save or document the current routing, gain, processor, fader, meter, and automation state before the experiment.",
+      "Bypass nothing; play the loudest representative section and inspect one stage at a time from region/source through inserts, fader, buses, and output.",
+      "Use the same representative passage and match perceived output loudness before judging tone, dynamics, punch, or cohesion.",
+      "Listen for: the first point where level, tone, noise, or dynamics diverge from the intended chain.",
+      "Stop or back off if: Changing several stages at once can hide the true overload or under-drive point.",
+      "Remove the temporary meter/Gain instance and restore the documented starting values."
+    ],
+    "stop_condition": "Stop once you can repeatably hear the first point where level, tone, noise, or dynamics diverge from the intended chain in the full context. Back off or undo if Changing several stages at once can hide the true overload or under-drive point.",
+    "undo": "Remove the temporary meter/Gain instance and restore the documented starting values.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify current menu labels, channel-strip topology, plug-in controls, metering modes, and behavior against the installed version.",
+    "visual_target_query": "Logic Mixer > source channel > inserts > fader > bus/aux > Stereo Out"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "non_processing_possibilities": [
+    "Check the source recording or instrument patch before processing.",
+    "Change arrangement, source level, monitoring level, or performance before adding more processing when that is the true cause."
+  ],
+  "package_id": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+  "package_number": 9,
+  "problem_summary": "the track is fine at the source but unexpectedly hot or weak later",
+  "recommended_first_experiment": "Bypass nothing; play the loudest representative section and inspect one stage at a time from region/source through inserts, fader, buses, and output.",
+  "retrieval_tags": [
+    "Logic Pro",
+    "chain",
+    "complete",
+    "concept",
+    "gain",
+    "gain_staging",
+    "level",
+    "logic",
+    "signal",
+    "signal_chain_fundamentals",
+    "signal_flow",
+    "the",
+    "through"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "source_ids": [
+    "pkg009.source.000001",
+    "pkg009.source.000002",
+    "pkg009.source.000013",
+    "pkg009.source.000014",
+    "pkg009.source.000030"
+  ],
+  "subdomain": "signal_chain_fundamentals",
+  "teaching_principle": "Gain staging is the management of level at every handoff, not a single target on one meter. Map where gain changes before solving the symptom.",
+  "title": "Signal Level Through The Complete Chain — concept",
+  "topic": "signal_chain_fundamentals",
+  "tradeoffs": [
+    "The change can improve the first point where level, tone, noise, or dynamics diverge from the intended chain, but Changing several stages at once can hide the true overload or under-drive point.",
+    "A louder result can be mistaken for a better result.",
+    "A local level fix can alter downstream dynamics, nonlinear color, sends, buses, or delivery peaks."
+  ],
+  "user_intent": "Understand the production concept and avoid a misleading shortcut.",
+  "variant_kind": "concept"
+}

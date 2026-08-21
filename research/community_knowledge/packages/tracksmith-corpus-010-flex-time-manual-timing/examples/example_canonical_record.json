@@ -1,0 +1,114 @@
+{
+  "canonical_question": "How do I choose between track Flex mode and region Flex & Follow for enabling Flex Time at track and region scope?",
+  "clarification_questions": [
+    "Is the entire phrase late, one event late, or is the project tempo/grid itself the wrong reference?",
+    "What source is this, which Flex mode and Flex & Follow setting are active, and is the audio dry, stereo, grouped, or multitrack?",
+    "What exactly became wrong after the edit: pitch, attack, sustain, ambience, stereo image, phase, neighboring timing, or musical feel?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Enabling flex time at track and region scope is the correct tool, but the amount or boundary is wrong.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "The transient/tempo analysis, selected Flex algorithm, group/reference configuration, or tempo direction is wrong.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "A region move, slice/crossfade, alternate take, re-recording, or tempo-map change would preserve the performance better than time stretching.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-12",
+  "direct_answer": "Flex availability, the selected Flex algorithm, and each region’s Flex & Follow state are separate decisions. Verify scope before diagnosing timing. Track flex mode and region Flex & Follow solve different timing scopes; compare them on the same event.",
+  "domain": "flex_time_manual_timing",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The current Logic version, source type, mono/stereo or multimic scope, Flex mode, Flex & Follow setting, Smart Tempo mode, markers, and group state.",
+    "The untouched baseline plus the exact event before, during, and after the timing edit.",
+    "Current transient-marker and flex-marker placement, and whether audio quantization or Smart Tempo is also active.",
+    "The user’s report of timing improvement, artifacts, groove, emotion, attack, pitch, ambience, phase, and adjacent-material changes."
+  ],
+  "id": "pkg010.qa.000004",
+  "key_distinction": "Flex availability, the selected Flex algorithm, and each region’s Flex & Follow state are separate decisions. Verify scope before diagnosing timing.",
+  "limitations": [
+    "Timing appearance on a grid does not prove musical improvement.",
+    "Flex algorithms and artifacts depend on source type, amount, ambience, stereo/multimic relationships, and current Logic behavior.",
+    "Professional/community sources are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "only the intended region becoming editable and following the desired timing reference",
+    "location": "Logic Tracks area > Show Flex > track Flex mode; Region inspector > Flex & Follow",
+    "risk": "Enabling broader tempo-follow behavior can move more material than the user intended.",
+    "show_me_query": "Logic Tracks area > Show Flex > track Flex mode; Region inspector > Flex & Follow",
+    "starting_point": "Begin with the selected region and Flex & Follow On rather than Bars/Beats unless tempo conformance is intended.",
+    "steps": [
+      "Save a Track/Project Alternative or duplicate the region, and document the current Flex mode, Flex & Follow state, tempo mode, markers, quantization, and group settings.",
+      "Create two preserved alternatives: one using track Flex mode and one using region Flex & Follow. Use the same event and change nothing else.",
+      "Replay at least one musical event before and after the target, then compare against the untouched baseline in the full arrangement.",
+      "Listen for: only the intended region becoming editable and following the desired timing reference.",
+      "Stop or back off if: Enabling broader tempo-follow behavior can move more material than the user intended.",
+      "Turn Flex/Flex & Follow back to its documented prior state and restore the duplicated region."
+    ],
+    "stop_condition": "Stop once the distracting timing problem is no longer audible in context and the result meets this listening target: only the intended region becoming editable and following the desired timing reference. Back off or undo if Enabling broader tempo-follow behavior can move more material than the user intended.",
+    "undo": "Turn Flex/Flex & Follow back to its documented prior state and restore the duplicated region.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact labels, modes, marker behavior, Smart Tempo settings, quantization parameters, and group controls against the installed version.",
+    "visual_target_query": "Logic Tracks area > Show Flex > track Flex mode; Region inspector > Flex & Follow"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "Move the complete region, slice/crossfade, choose another take, re-record, or let the project tempo follow the performance when those better preserve the source."
+  ],
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-010-flex-time-manual-timing",
+  "package_number": 10,
+  "problem_summary": "Flex seems enabled but the region does not behave as expected",
+  "recommended_first_experiment": "Create two preserved alternatives: one using track Flex mode and one using region Flex & Follow. Use the same event and change nothing else.",
+  "retrieval_tags": [
+    "Flex Time",
+    "Logic Pro",
+    "and",
+    "at",
+    "compare",
+    "enabling",
+    "flex",
+    "flex_follow",
+    "flex_time_enable_track_region",
+    "flex_time_manual_timing",
+    "logic",
+    "region",
+    "scope",
+    "time",
+    "track"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "retrieval_candidate",
+  "source_ids": [
+    "pkg010.source.000001",
+    "pkg010.source.000002",
+    "pkg010.source.000003",
+    "pkg010.source.000004",
+    "pkg010.source.000007"
+  ],
+  "subdomain": "flex_time_enable_track_region",
+  "teaching_principle": "Flex availability, the selected Flex algorithm, and each region’s Flex & Follow state are separate decisions. Verify scope before diagnosing timing.",
+  "title": "Enabling Flex Time At Track And Region Scope — compare",
+  "topic": "flex_time_enable_track_region",
+  "tradeoffs": [
+    "The edit can improve only the intended region becoming editable and following the desired timing reference, but Enabling broader tempo-follow behavior can move more material than the user intended.",
+    "A visually tighter result can sound less musical.",
+    "A local timing improvement can redistribute stretch or phase damage to neighboring material."
+  ],
+  "user_intent": "Choose between two commonly confused timing approaches.",
+  "variant_kind": "compare"
+}

@@ -1,0 +1,48 @@
+{
+  "canonical_qa_id": "pkg006.qa.000001",
+  "domain": "saturation_harmonic_distortion",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity and references the exact prior experiment.",
+    "Separates user report from model listening, measurement, documentation, and inference.",
+    "Recommends at most one next experiment.",
+    "Preserves level matching, stop, undo, and version-scoped Logic guidance.",
+    "Explains the transferable principle in natural language."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard the result without a current audio receipt.",
+    "Treats a candidate record or product claim as reviewed universal truth.",
+    "Invents a Logic control, automatic action, or exact setting.",
+    "Adds several unrelated processors or restarts from a generic chain."
+  ],
+  "id": "pkg006.scenario.0000001",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about saturation versus audible distortion, and when is it useful?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Use only context that changes the next move, then present one reversible, level-matched experiment: Build a clean listening reference: Level-match a barely audible drive setting against a deliberately obvious one, then choose the least amount that creates the intended density in context."
+    },
+    {
+      "role": "user",
+      "text": "That feels denser and more audible, but the top end is grittier and the mix feels a little smaller."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Remember the exact prior experiment, treat the reported outcome as evidence, and adjust or replace one hypothesis without restarting from generic advice."
+    },
+    {
+      "role": "user",
+      "text": "Why does that result make sense, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language, connect it to the exact A/B, and preserve uncertainty: Saturation is a degree and shape of nonlinear distortion, not a completely separate physical process; the useful distinction is subtle enrichment versus clearly audible waveform reshaping."
+    }
+  ],
+  "package_id": "tracksmith-corpus-006-saturation-transient-shaping",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "scenario_type": "better_with_tradeoff",
+  "subdomain": "fundamentals_harmonics"
+}

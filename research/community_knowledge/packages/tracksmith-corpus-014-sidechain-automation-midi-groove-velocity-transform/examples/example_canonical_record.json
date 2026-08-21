@@ -1,0 +1,103 @@
+{
+  "canonical_question": "What should I understand about external sidechain detection, and why does it matter in Logic Pro?",
+  "clarification_questions": [
+    "What source should trigger external sidechain detection, what should be affected, and what must remain unchanged?",
+    "Which detector source and target processor is involved, and what should remain unchanged?",
+    "Is the goal a corrective fix, a musical gesture, or a batch workflow?"
+  ],
+  "competing_hypotheses": [
+    "The current behavior may come from external sidechain detection; it may instead be caused by source timing, routing, detection, automation ownership, or ordinary level balance.",
+    "The feature may be working correctly while another layer—routing, automation, note selection, instrument mapping, or musical context—creates the symptom."
+  ],
+  "direct_answer": "A sidechain changes what controls a processor; the detector source is not automatically the audio being heard through the processed channel. Focus on the concept and scope before changing parameters. A safe first test is: On a duplicated test route, feed a clearly different trigger into Compressor side chain, use Listen to verify the detector where available, then compare bypassed and active processing. Listen for the target signal changing only when the trigger crosses the detector threshold. The main risk is routing the trigger into the audible path, choosing the wrong source, or judging makeup gain as ducking.",
+  "domain": "sidechain_routing_ducking",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact Logic version and the visible routing, automation owner/mode, region/event selection, and relevant parameter values.",
+    "A preserved baseline and one controlled comparison with no unrelated changes.",
+    "Meters, automation lanes, selected MIDI events, detector activity, and the audible result where each is relevant.",
+    "The user’s report of what improved, worsened, or remained unchanged after the test."
+  ],
+  "id": "pkg014.qa.000001",
+  "key_distinction": "A sidechain changes what controls a processor; the detector source is not automatically the audio being heard through the processed channel.",
+  "limitations": [
+    "Editor data, meters, detector activity, or event values do not by themselves prove the musical result.",
+    "Professional and community practices are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "the target signal changing only when the trigger crosses the detector threshold",
+    "location": "Compressor plug-in window > Side Chain input and Side Chain panel",
+    "risk": "routing the trigger into the audible path, choosing the wrong source, or judging makeup gain as ducking",
+    "show_me_query": "Compressor plug-in window > Side Chain input and Side Chain panel",
+    "starting_point": "Preserve the current project state and test one detector, owner, timing, velocity, or Transform relationship at a time.",
+    "steps": [
+      "Save a Project Alternative or duplicate the affected track/region; document the current sidechain, automation mode/owner, quantize settings, velocity data, Transform conditions, and processing.",
+      "On a duplicated test route, feed a clearly different trigger into Compressor side chain, use Listen to verify the detector where available, then compare bypassed and active processing.",
+      "Audition the same short representative section against the untouched baseline and change no unrelated parameter.",
+      "Listen and inspect for: the target signal changing only when the trigger crosses the detector threshold.",
+      "Stop or back off if: routing the trigger into the audible path, choosing the wrong source, or judging makeup gain as ducking.",
+      "Restore the saved Project Alternative or duplicate region/track, then revert the one routing, automation, quantize, velocity, or Transform change used in the test."
+    ],
+    "stop_condition": "Stop once the target signal changing only when the trigger crosses the detector threshold without introducing routing the trigger into the audible path, choosing the wrong source, or judging makeup gain as ducking. Undo if the result becomes less musical, less predictable, or harder to recover.",
+    "undo": "Restore the saved Project Alternative or duplicate region/track, then revert the one routing, automation, quantize, velocity, or Transform change used in the test.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact Side Chain, automation, Region inspector, Piano Roll, MIDI Transform, and menu labels against the installed version.",
+    "visual_target_query": "Compressor plug-in window > Side Chain input and Side Chain panel"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "Use ordinary volume automation or arrangement changes when it solves the musical problem more directly."
+  ],
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+  "package_number": 14,
+  "problem_summary": "the user confuses the trigger signal with the processed signal",
+  "recommended_first_experiment": "On a duplicated test route, feed a clearly different trigger into Compressor side chain, use Listen to verify the detector where available, then compare bypassed and active processing.",
+  "retrieval_tags": [
+    "sidechain",
+    "external",
+    "detector",
+    "trigger",
+    "target",
+    "detection",
+    "user",
+    "confuses",
+    "processed",
+    "separate",
+    "input",
+    "whose",
+    "gain",
+    "gate",
+    "being",
+    "controlled",
+    "concept",
+    "understand",
+    "about",
+    "matter"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "retrieval_candidate",
+  "source_ids": [
+    "pkg014.source.000002",
+    "pkg014.source.000003",
+    "pkg014.source.000006",
+    "pkg014.source.000049",
+    "pkg014.source.000069"
+  ],
+  "subdomain": "sidechain_concept",
+  "teaching_principle": "A sidechain changes what controls a processor; the detector source is not automatically the audio being heard through the processed channel.",
+  "title": "Sidechain Concept — Concept",
+  "topic": "sidechain_concept",
+  "tradeoffs": [
+    "The experiment may improve separate detector input from the signal whose gain or gate is being controlled, but routing the trigger into the audible path, choosing the wrong source, or judging makeup gain as ducking.",
+    "A technically valid edit can still weaken groove, dynamics, hierarchy, or project clarity.",
+    "Popular workflows are starting points; the correct amount and scope remain source- and song-dependent."
+  ],
+  "user_intent": "Use external sidechain detection to separate detector input from the signal whose gain or gate is being controlled while preserving musical intent and a reversible project state.",
+  "variant_kind": "concept"
+}

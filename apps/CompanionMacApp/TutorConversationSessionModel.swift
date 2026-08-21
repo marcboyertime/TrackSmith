@@ -31,12 +31,16 @@ final class TutorConversationSessionModel: ObservableObject {
 
     init() {
         do {
-            engine = try TutorConversationEngine.live(observeLogic: { query in
+            let liveEngine = try TutorConversationEngine.live(observeLogic: { query in
                 await MainActor.run {
                     LogicReadOnlyObserver().observe(query: query)
                 }
             })
+            engine = liveEngine
             activity = "Restoring Tutor history"
+            // The loader itself is detached from MainActor. Do not make history
+            // restore or initial SwiftUI construction wait on candidate material.
+            Task { await liveEngine.warmupCandidateCorpus() }
         } catch {
             engine = nil
             activity = "Tutor history is unavailable"

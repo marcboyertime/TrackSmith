@@ -1,0 +1,150 @@
+{
+  "alternatives_if_wrong": [
+    "Change level, pan, timing, register, voicing, or note length before permanent EQ.",
+    "Treat the competing source rather than reshaping a target that already sounds right alone.",
+    "Use dynamic or automated space when the collision is intermittent."
+  ],
+  "audio_context_useful": true,
+  "candidate_hypotheses": [
+    {
+      "discriminating_test": "Transpose, invert, shorten, or simplify one part for a reversible comparison before processing.",
+      "evidence_needed": "The exact collision in context, source roles, solo-versus-mix result, level match, register/timing, and current processing.",
+      "label": "H1: Level or hierarchy",
+      "mechanism": "The target may be obscured because the competing source is simply too prominent."
+    },
+    {
+      "discriminating_test": "Change only this suspected cause and replay the exact passage in context.",
+      "evidence_needed": "The exact collision in context, source roles, solo-versus-mix result, level match, register/timing, and current processing.",
+      "label": "H2: Arrangement/register/time overlap",
+      "mechanism": "Voicing, note length, rhythm, density, or role may create the conflict before EQ."
+    },
+    {
+      "discriminating_test": "Change only this suspected cause and replay the exact passage in context.",
+      "evidence_needed": "The exact collision in context, source roles, solo-versus-mix result, level match, register/timing, and current processing.",
+      "label": "H3: Spectral masking",
+      "mechanism": "Important perceptual cues overlap in time and frequency."
+    },
+    {
+      "discriminating_test": "Change only this suspected cause and replay the exact passage in context.",
+      "evidence_needed": "The exact collision in context, source roles, solo-versus-mix result, level match, register/timing, and current processing.",
+      "label": "H4: Processing/monitoring confound",
+      "mechanism": "Dynamics, saturation, ambience, phase, room response, or loudness bias may create the impression."
+    }
+  ],
+  "canonical_user_question": "When should I rewrite or revoice a part instead of EQing it?",
+  "category": "foundations",
+  "clarification_questions": [
+    "Which source should lead, and which source is supporting it?",
+    "Does the conflict happen in solo, only together, or only in a particular phrase/section?",
+    "Have you tested relative level, register/voicing, rhythm, and note length before EQ?",
+    "Which tonal quality must remain unchanged while creating space?"
+  ],
+  "common_mistakes": [
+    "Treating frequency charts as presets.",
+    "Carving both sources before testing level, role, voicing, timing, or note length.",
+    "Assuming spectral overlap is automatically masking.",
+    "Judging space in solo or unmatched loudness rather than the real arrangement."
+  ],
+  "community_disagreement_ids": [],
+  "confidence_class": "review_candidate",
+  "copyright_handling": "Original paraphrased synthesis; no raw forum post body or long quotation included.",
+  "created_at": "2026-08-11",
+  "do_not_assume": [
+    "A common setting or arrangement pattern is correct for this source and song.",
+    "A meter, spectrum, forum consensus, or model output proves the perceptual complaint or cause.",
+    "The first plausible explanation is the true cause."
+  ],
+  "domain": "frequency_allocation",
+  "evidence_class": "documentary_professional_research_synthesis_with_bounded_community_patterns",
+  "id": "frequency.foundation.arrangement_first",
+  "logic_pro_steps": [
+    "Loop the representative section and name the focal role before opening an analyzer.",
+    "Map each relevant part by register, activity, envelope, and important audible cue.",
+    "Identify one actual time-frequency collision rather than generalized overlap.",
+    "Run the proposed mute, level, voicing, or timing experiment.",
+    "Keep processing only if the collision remains after arrangement and level checks."
+  ],
+  "logic_version_scope": "Logic Pro 12.x; reverify visible labels, routing, and control behavior on the installed version",
+  "natural_language_variants": [
+    "When should I rewrite or revoice a part instead of EQing it?",
+    "In Logic Pro, when should I rewrite or revoice a part instead of EQing it?",
+    "Can you explain this simply: When should I rewrite or revoice a part instead of EQing it?",
+    "I keep getting conflicting advice about arrangement before EQ. What should I actually listen for?",
+    "What is one reversible test for this: When should I rewrite or revoice a part instead of EQing it?",
+    "Why does arrangement before EQ keep causing problems in my mix?",
+    "I am a beginner and I do not understand arrangement before EQ. Where should I start?",
+    "What would an experienced producer test first here: When should I rewrite or revoice a part instead of EQing it?"
+  ],
+  "non_dsp_possibilities": [
+    "level hierarchy",
+    "register and voicing",
+    "rhythm and note length",
+    "arrangement density and sound selection"
+  ],
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "package_sequence": 3,
+  "preservation_goals": [
+    "composition",
+    "performance"
+  ],
+  "rationale": "The immediate issue is register, voicing, rhythm, and note length may create structural overlap. The first experiment tests that explanation while protecting against level, source, arrangement, processing, and monitoring confounds.",
+  "recommended_first_experiment": {
+    "action": "Transpose, invert, shorten, or simplify one part for a reversible comparison before processing.",
+    "scope": "one controlled, reversible, context-matched A/B",
+    "summary": "Transpose, invert, shorten, or simplify one part for a reversible comparison before processing.",
+    "why_this_first": "It changes one high-information variable and can strengthen or weaken competing explanations before a permanent treatment."
+  },
+  "requires_mix_context": true,
+  "review_status": "candidate_not_yet_human_reviewed",
+  "schema_version": "1.0",
+  "source_ids": [
+    "research.masking_subgroups",
+    "research.masking_adaptive",
+    "research.masking_thesis",
+    "izotope.masking",
+    "izotope.unmask",
+    "sos.mixing_essentials"
+  ],
+  "starting_points": [
+    "Test level, register/voicing, timing, note length, and arrangement role before carving permanent spectral holes.",
+    "When EQ is justified, begin broad and modest—often about 1–2 dB as a diagnostic move—then level-match and adjust by ear.",
+    "Use dynamic processing only when the collision is demonstrably intermittent and preserve tone between events."
+  ],
+  "stop_rule": "Stop or back off when the target cue becomes clear but the supporting source loses useful body, character, blend, or mono stability.",
+  "subcategory": "arrangement_first",
+  "tags": [
+    "frequency_allocation",
+    "foundations",
+    "arrangement_first",
+    "fullMix",
+    "composition",
+    "performance"
+  ],
+  "teaching_principle": "Frequency allocation is role, register, timing, envelope, level, and spectrum working together; EQ is only one possible last-mile tool.",
+  "title": "When should I rewrite or revoice a part instead of EQing it",
+  "tracksmith_domains": [
+    "masking",
+    "tonalDistribution",
+    "registerAllocation",
+    "balance",
+    "eqAndFiltering",
+    "mixContext"
+  ],
+  "tradeoffs_and_risks": [
+    "Creating spectral space can remove useful body, blend, realism, or source identity.",
+    "Dynamic or multiband methods add timing, crossover, and detector complexity.",
+    "Stereo separation may collapse in mono and does not solve center masking reliably."
+  ],
+  "undo_or_reset": "Restore the preserved regions, mutes, levels, voicings, automation, or project alternative and replay the same section.",
+  "user_language_aliases": [
+    "arrangement before EQ",
+    "register, voicing, rhythm, and note length may create structural overlap",
+    "fullMix"
+  ],
+  "what_to_listen_for": [
+    "The obscured cue—pitch, lyric, attack, body, rhythm, or texture—should become clearer in the full mix.",
+    "The supporting source should retain enough body, character, and role rather than sounding hollow or disconnected.",
+    "The improvement should survive matched loudness and, where relevant, mono or small-speaker checks.",
+    "Explicitly preserve: composition, performance."
+  ]
+}

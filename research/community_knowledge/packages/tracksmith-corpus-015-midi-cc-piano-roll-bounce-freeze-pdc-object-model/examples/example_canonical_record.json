@@ -1,0 +1,101 @@
+{
+  "canonical_question": "What should I understand about MIDI Controller Events Beyond Notes, and what does it actually affect in Logic Pro?",
+  "clarification_questions": [
+    "Is the material MIDI, audio, or a final output file, and which object is currently selected?",
+    "Do you want the project to preserve the original musical performance and an undoable project state, or is committing the result acceptable?"
+  ],
+  "competing_hypotheses": [
+    "The issue is genuinely caused by midi controller events beyond notes.",
+    "The visible symptom is instead caused by track automation or instrument-specific modulation routing.",
+    "The wrong region, track, channel strip, event type, file, or output path is being inspected."
+  ],
+  "direct_answer": "MIDI regions can contain notes plus control change, pitch bend, aftertouch, and other events; the event type, channel, time, and value determine what the instrument receives. For understanding the feature and its ownership, first identify the exact owner and preserve a baseline. Do not assume that a visually similar control, copied region, bounced file, or bypassed processor has the same scope.",
+  "domain": "midi_cc_sustain_expression",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "Exact selected object and owner",
+    "Untouched baseline or Project Alternative",
+    "Whether the test changes the sound changing at the same time as a visible controller event while note timing remains unchanged",
+    "Installed Logic version and visible control labels"
+  ],
+  "id": "pkg015.qa.000001",
+  "key_distinction": "MIDI regions can contain notes plus control change, pitch bend, aftertouch, and other events; the event type, channel, time, and value determine what the instrument receives.",
+  "limitations": [
+    "The Tutor cannot infer hidden object ownership, file state, or processor latency without current project evidence.",
+    "Exact Logic navigation remains candidate guidance until verified on the installed build.",
+    "This synthesized candidate is not yet promoted to reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "the sound changing at the same time as a visible controller event while note timing remains unchanged",
+    "location": "Event List or Piano Roll controller/MIDI Draw area",
+    "risk": "editing or deleting the wrong event type or MIDI channel",
+    "steps": [
+      "Save a Project Alternative or duplicate the affected region/track; write down the current selection, settings, routing, and file ownership.",
+      "Duplicate the MIDI region, open an event view that exposes non-note data, filter to one controller type, and compare playback before changing anything.",
+      "Change no unrelated setting and audition or inspect the same representative passage against the untouched baseline.",
+      "Listen or inspect for: the sound changing at the same time as a visible controller event while note timing remains unchanged.",
+      "Stop or back off if: editing or deleting the wrong event type or MIDI channel.",
+      "Restore the Project Alternative or duplicate and revert the single tested change."
+    ],
+    "undo": "Restore the saved Project Alternative or duplicate, then revert the one MIDI, editor, bounce, freeze, latency, or object-model change used in the test.",
+    "verification_status": "candidate_unverified_on_installed_logic"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "track automation or instrument-specific modulation routing",
+    "Different source/region/track ownership",
+    "User monitoring or playback-path difference"
+  ],
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+  "package_number": 15,
+  "problem_summary": "The user needs help with midi controller events beyond notes while understanding the feature and its ownership.",
+  "recommended_first_experiment": "Duplicate the MIDI region, open an event view that exposes non-note data, filter to one controller type, and compare playback before changing anything.",
+  "retrieval_tags": [
+    "midi",
+    "controller",
+    "event",
+    "cc",
+    "pitch bend",
+    "aftertouch",
+    "events",
+    "beyond",
+    "notes",
+    "what",
+    "should",
+    "i",
+    "understand",
+    "about",
+    "and",
+    "does",
+    "it",
+    "actually",
+    "affect",
+    "in",
+    "logic",
+    "pro"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "retrieval_candidate",
+  "source_ids": [
+    "pkg015.source.000001",
+    "pkg015.source.000002",
+    "pkg015.source.000003",
+    "pkg015.source.000004",
+    "pkg015.source.000005"
+  ],
+  "subdomain": "midi_controller_event_concept",
+  "teaching_principle": "MIDI regions can contain notes plus control change, pitch bend, aftertouch, and other events; the event type, channel, time, and value determine what the instrument receives.",
+  "title": "MIDI Controller Events Beyond Notes — Concept",
+  "topic": "midi_controller_event_concept",
+  "tradeoffs": [
+    "The experiment may improve the sound changing at the same time as a visible controller event while note timing remains unchanged, but editing or deleting the wrong event type or MIDI channel.",
+    "A technically valid edit can still reduce musical feel, editability, or project clarity.",
+    "Exact menu labels and processor behavior remain version-scoped until verified."
+  ],
+  "user_intent": "Use midi controller events beyond notes correctly while preserving the original musical performance and an undoable project state.",
+  "variant_kind": "concept"
+}

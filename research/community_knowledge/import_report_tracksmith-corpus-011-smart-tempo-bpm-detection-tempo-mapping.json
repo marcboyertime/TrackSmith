@@ -1,0 +1,108 @@
+{
+  "dependency_resolution": {
+    "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+    "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+    "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+    "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+    "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+    "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+    "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+    "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+    "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+    "tracksmith-corpus-010-flex-time-manual-timing": "tracksmith-corpus-010-flex-time-manual-timing"
+  },
+  "force_semantics": false,
+  "incoming_importer_executed": false,
+  "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+  "package_manifest_sha256": "49db3cf8b10ca9dade637811aa63d34fe6ae753d8d04c91b88e1baf16da980b8",
+  "package_version": "1.0.0",
+  "record_counts": {
+    "canonical_qa": 450,
+    "claim_candidates": 450,
+    "contradictions": 50,
+    "logic_procedure_candidates": 450,
+    "multiturn_scenarios": 1350,
+    "myths_and_antipatterns": 60,
+    "provenance": 450,
+    "retrieval_evaluations": 2250,
+    "sources": 79,
+    "strategy_candidates": 450,
+    "user_utterances": 10350
+  },
+  "runtime_contract_reconciliation": {
+    "evaluation_test_only_sha256": "6c5e5b4d7d4bca7c22e674b38531c3606d6e6b15a50dc1c027bddb6a27ceacb0",
+    "incoming_runtime_projection": {
+      "forbidden_categories": [
+        "procedures",
+        "Logic navigation instructions",
+        "evaluations",
+        "multi-turn scenarios",
+        "SQLite databases",
+        "test fixtures"
+      ],
+      "generated_by": "tools/import_to_tracksmith.py",
+      "purity_validation": "recursive key and text scan plus full validator",
+      "record_count": 450,
+      "source": "corpus/canonical_qa.jsonl"
+    },
+    "integration_contract": "tracksmith-corpus-integration-manifest",
+    "integration_contract_version": "1.0",
+    "integration_manifest_sha256": "9d704cbd98dd06192452a77257ebd2cdd40343256ffcb45a8d5604f96b6b6202",
+    "observed_status_contract": {
+      "logic_verification_status": [
+        "candidate_unverified_on_installed_logic",
+        "not_applicable_to_source"
+      ],
+      "native_review_state": [
+        "candidate_discovery_only",
+        "candidate_not_yet_human_reviewed",
+        "candidate_reviewed_documentary",
+        "candidate_reviewed_primary_research",
+        "candidate_reviewed_professional_practice"
+      ],
+      "original_review_state": [
+        "candidate_discovery_only",
+        "candidate_procedure_synthesis",
+        "candidate_reviewed_documentary",
+        "candidate_reviewed_primary_research",
+        "candidate_reviewed_professional_practice",
+        "community_and_professional_disagreement",
+        "derived_myth_correction",
+        "derived_synthesis",
+        "owner_supplied_example_language",
+        "synthetic_exact_retrieval_fixture"
+      ],
+      "original_verification_status": [
+        "candidate_generated_from_registered_sources",
+        "deterministic_fixture_alias",
+        "literal_user_example_preserved",
+        "source_metadata_registered",
+        "source_span_or_documentary_metadata_registered"
+      ],
+      "review_state": [
+        "candidate_discovery_only",
+        "candidate_not_yet_human_reviewed",
+        "candidate_reviewed_documentary",
+        "candidate_reviewed_primary_research",
+        "candidate_reviewed_professional_practice"
+      ],
+      "runtime_eligibility": [
+        "excluded_from_runtime",
+        "retrieval_candidate",
+        "source_reference_only",
+        "test_only"
+      ]
+    },
+    "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+    "runtime_resource_sha256": "d008767d97cb762c98565d3b83c62ff4d78cd789361bd586c8563a684777a878",
+    "shipping_canonical_count": 450,
+    "shipping_runtime_projection": "canonical-only",
+    "shipping_schema_version": "2.0"
+  },
+  "staged_tree": {
+    "fileCount": 47,
+    "sha256": "4f553a43ee3cddadb182423033c1c8b58f3c9699e9c5daa6d50c04106ed2ec6d"
+  },
+  "staging_authority": "repository_owned_no_follow_copy",
+  "status": "staged"
+}

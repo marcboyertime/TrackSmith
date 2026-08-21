@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "expected_behaviors": {
+      "minItems": 2,
+      "type": "array"
+    },
+    "messages": {
+      "minItems": 4,
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "canonical_qa_id",
+    "scenario_type",
+    "messages",
+    "expected_behaviors",
+    "forbidden_behaviors"
+  ],
+  "title": "TrackSmith Multi-turn Scenario",
+  "type": "object"
+}

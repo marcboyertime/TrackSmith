@@ -1,0 +1,108 @@
+{
+  "canonical_question": "What should I understand about saturation versus audible distortion, and when is it useful?",
+  "clarification_questions": [
+    "What exactly do you want to change in the a full mix: onset, body, sustain, spectrum, density, peak shape, or perceived position?",
+    "Does the problem remain when the processed and unprocessed versions are closely level-matched?",
+    "Is the problem present in the source alone, or only in the full mix or after later processors?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Saturation versus audible distortion is addressing the intended envelope or nonlinear problem and needs only a bounded amount.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "The audible complaint is mainly caused by level, source, performance, arrangement, timing, masking, or routing rather than saturation versus audible distortion.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "The method is plausible, but an implementation detail—gain staging, phase, detector timing, oversampling, crossover, latency, or order—is producing the unwanted result.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-11",
+  "direct_answer": "Saturation is a degree and shape of nonlinear distortion, not a completely separate physical process; the useful distinction is subtle enrichment versus clearly audible waveform reshaping. A practical listening test is: Level-match a barely audible drive setting against a deliberately obvious one, then choose the least amount that creates the intended density in context.",
+  "domain": "saturation_harmonic_distortion",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact source scope, musical section, processor, routing, and current input/output level.",
+    "A synchronized, level-matched bypass or before/after comparison of the same passage.",
+    "The user’s report of what improved, worsened, or did not change.",
+    "Current Logic version and visible parameter state when exact navigation matters."
+  ],
+  "id": "pkg006.qa.000001",
+  "key_distinction": "Saturation is a degree and shape of nonlinear distortion, not a completely separate physical process; the useful distinction is subtle enrichment versus clearly audible waveform reshaping.",
+  "limitations": [
+    "Starting values are orientations, not universal presets.",
+    "Product documentation establishes controls and stated behavior, not artistic superiority.",
+    "Professional and community sources are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This candidate record is not yet promoted to TrackSmith reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "added density, softened peaks, and improved audibility without losing articulation or depth",
+    "location": "Logic insert menu > Distortion; choose the named processor (for example ChromaGlow, Clip Distortion, Overdrive, Distortion II, Phase Distortion, Bitcrusher, Exciter, Phat FX, or Pedalboard) and verify the installed-version labels.",
+    "risk": "Louder output can masquerade as warmth, while excess drive can flatten contrast and create grit.",
+    "show_me_query": "Logic insert menu > Distortion; choose the named processor (for example ChromaGlow, Clip Distortion, Overdrive, Distortion II, Phase Distortion, Bitcrusher, Exciter, Phat FX, or Pedalboard) and verify the installed-version labels.",
+    "starting_point": "Begin at the lowest drive that creates a repeatable bypass difference, then match output level before judging.",
+    "steps": [
+      "Save a Project Alternative or record the current input, output, mix, routing, and processor state so the test is reversible.",
+      "Build a clean listening reference: Level-match a barely audible drive setting against a deliberately obvious one, then choose the least amount that creates the intended density in context.",
+      "Compensate output level and compare the same musical passage in full context; use mono and quiet monitoring when relevant.",
+      "Listen for: added density, softened peaks, and improved audibility without losing articulation or depth.",
+      "Stop or back off if: Louder output can masquerade as warmth, while excess drive can flatten contrast and create grit..",
+      "Bypass the processor and restore the saved input, output, mix, timing, and routing values; if a duplicate or parallel path was created, mute or remove it."
+    ],
+    "stop_condition": "Stop once you can reliably judge added density, softened peaks, and improved audibility without losing articulation or depth. Back off or undo immediately if louder output can masquerade as warmth, while excess drive can flatten contrast and create grit.",
+    "undo": "Bypass the processor and restore the saved input, output, mix, timing, and routing values; if a duplicate or parallel path was created, mute or remove it.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3; verify exact processor availability, menu labels, parameter names, and ranges against the installed version.",
+    "visual_target_query": "Logic insert menu > Distortion; choose the named processor (for example ChromaGlow, Clip Distortion, Overdrive, Distortion II, Phase Distortion, Bitcrusher, Exciter, Phat FX, or Pedalboard) and verify the installed-version labels."
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "non_processing_possibilities": [
+    "Rebalance the source.",
+    "Change the arrangement or sound selection.",
+    "Use compression or automation if the main problem is level movement.",
+    "Check level and loudness bias before processing.",
+    "Check the source, performance, timing, arrangement, and masking context."
+  ],
+  "package_id": "tracksmith-corpus-006-saturation-transient-shaping",
+  "package_number": 6,
+  "problem_summary": "Saturation is a degree and shape of nonlinear distortion, not a completely separate physical process; the useful distinction is subtle enrichment versus clearly audible waveform reshaping.",
+  "recommended_first_experiment": "Build a clean listening reference: Level-match a barely audible drive setting against a deliberately obvious one, then choose the least amount that creates the intended density in context.",
+  "retrieval_tags": [
+    "Logic Pro",
+    "concept",
+    "distortion",
+    "full",
+    "fundamentals_harmonics",
+    "harmonics",
+    "level_matching",
+    "mix",
+    "saturation",
+    "saturation_harmonic_distortion",
+    "saturation_vs_distortion"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "source_ids": [
+    "pkg006.source.000001",
+    "pkg006.source.000068",
+    "pkg006.source.000052",
+    "pkg006.source.000072"
+  ],
+  "subdomain": "fundamentals_harmonics",
+  "teaching_principle": "Saturation is a degree and shape of nonlinear distortion, not a completely separate physical process; the useful distinction is subtle enrichment versus clearly audible waveform reshaping.",
+  "title": "Saturation versus audible distortion — what it changes",
+  "topic": "saturation_vs_distortion",
+  "tradeoffs": [
+    "Louder output can masquerade as warmth, while excess drive can flatten contrast and create grit.",
+    "A louder or peak-reduced version can seem better before the actual timbral or envelope change is judged.",
+    "A local improvement can create a new masking, headroom, phase, noise, or arrangement problem."
+  ],
+  "user_intent": "Concept and listening foundation for add density without obvious fuzz.",
+  "variant_kind": "concept"
+}

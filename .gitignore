@@ -13,6 +13,31 @@ xcuserdata/
 fixtures/generated/*
 !fixtures/generated/.gitkeep
 *.jsonl
+# This immutable, shipped candidate package is intentionally versioned. Keep
+# every other JSONL corpus ignored.
+!research/knowledge/community-vocal-quantization-v1/corpus/*.jsonl
+!research/knowledge/community-vocal-quantization-v1/integration/*.jsonl
+!research/knowledge/community-vocal-quantization-v1/research/*.jsonl
+!research/knowledge/community-level-balancing-eq-v1/corpus/*.jsonl
+!research/knowledge/community-level-balancing-eq-v1/integration/*.jsonl
+!research/knowledge/community-level-balancing-eq-v1/research/*.jsonl
+!research/knowledge/community-compression-arrangement-frequency-allocation-v1/corpus/*.jsonl
+!research/knowledge/community-compression-arrangement-frequency-allocation-v1/integration/*.jsonl
+!research/knowledge/community-compression-arrangement-frequency-allocation-v1/research/*.jsonl
+!research/knowledge/community-reverb-delay-v1/corpus/*.jsonl
+!research/knowledge/community-reverb-delay-v1/integration/*.jsonl
+!research/knowledge/community-reverb-delay-v1/research/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-005-automation/corpus/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-005-automation/knowledge_candidates/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-005-automation/sources/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-005-automation/tests/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping/corpus/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping/knowledge_candidates/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping/sources/*.jsonl
+!research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping/tests/*.jsonl
+# Stable TrackSmith package trees are immutable, shipped contract data. This is
+# intentionally narrower than a repository-wide JSONL exception.
+!research/community_knowledge/packages/tracksmith-corpus-*/**/*.jsonl
 .DS_Store
 tmp/
 __pycache__/

@@ -420,6 +420,7 @@ public enum GeneralTutorKnowledgeError: Error, Equatable, Sendable {
     case duplicateID(String)
     case unknownSource(card: String, source: String)
     case unusableSourceForMaterialClaim(card: String, source: String)
+    case tierCSourceForTrustedClaim(card: String, source: String)
     case untrustedClaimInTrustedStrategy(strategy: String, claim: String)
     case unknownClaimReference(card: String, claim: String)
     case unknownContradictionClaim(record: String, claim: String)
@@ -453,6 +454,13 @@ public struct GeneralTutorKnowledgeValidator: Sendable {
             // audiovisual review or has been superseded.
             if claim.reviewState.isTrusted, !source.isUsableForMaterialClaims {
                 throw GeneralTutorKnowledgeError.unusableSourceForMaterialClaim(
+                    card: claim.id, source: source.id
+                )
+            }
+            // Community/discovery sources can teach retrieval language and
+            // candidate hypotheses, never ground trusted material claims.
+            if claim.reviewState.isTrusted, source.tier == .tierCDiscoveryOrAnecdotal {
+                throw GeneralTutorKnowledgeError.tierCSourceForTrustedClaim(
                     card: claim.id, source: source.id
                 )
             }

@@ -42,6 +42,12 @@ public actor TutorConversationEngine {
         )
     }
 
+    /// Starts the shared, lower-authority candidate corpus warmup. Callers do
+    /// not need to await this before restoring history or constructing Tutor UI.
+    public func warmupCandidateCorpus() async {
+        await tools.warmupCandidateCorpus()
+    }
+
     public func snapshot() -> TutorConversationState { state }
 
     public func startNewConversation(projectGoal: String? = nil) throws -> TutorConversationState {
@@ -322,8 +328,10 @@ public actor TutorConversationEngine {
                 throw TutorConversationError.toolLimitReached
             }
             for call in calls {
+                guard activeTurnID == assistantMessageID else { throw TutorConversationError.staleResult }
                 continuation.yield(.toolActivity(call.name))
                 let result = try await tools.execute(call, context: context)
+                guard activeTurnID == assistantMessageID, !Task.isCancelled else { throw TutorConversationError.staleResult }
                 toolResults.append(result)
                 providerContinuations.append(TutorProviderContinuation(
                     call: call,

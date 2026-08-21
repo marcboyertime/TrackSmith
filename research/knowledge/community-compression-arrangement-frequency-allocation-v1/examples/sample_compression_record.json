@@ -1,0 +1,159 @@
+{
+  "alternatives_if_wrong": [
+    "Use clip/region gain or automation for broad phrase placement.",
+    "Change the source, performance, or upstream processing when compression is treating a symptom.",
+    "Use a transient shaper, saturation, limiting, or no processing when the desired mechanism is different."
+  ],
+  "audio_context_useful": true,
+  "candidate_hypotheses": [
+    {
+      "discriminating_test": "Compare Auto with a manually tuned release over several sections, keeping the version that handles both typical and extreme passages.",
+      "evidence_needed": "A current bypass/active capture, matched output, gain-reduction behavior, signal order, and the exact passage where the issue repeats.",
+      "label": "H1: Envelope mismatch",
+      "mechanism": "Attack, release, detector, ratio, or threshold is reshaping the source differently than intended."
+    },
+    {
+      "discriminating_test": "Change only this suspected cause and replay the exact passage in context.",
+      "evidence_needed": "A current bypass/active capture, matched output, gain-reduction behavior, signal order, and the exact passage where the issue repeats.",
+      "label": "H2: Macro-level mismatch",
+      "mechanism": "Phrase or section placement needs gain riding rather than more envelope compression."
+    },
+    {
+      "discriminating_test": "Change only this suspected cause and replay the exact passage in context.",
+      "evidence_needed": "A current bypass/active capture, matched output, gain-reduction behavior, signal order, and the exact passage where the issue repeats.",
+      "label": "H3: Upstream/source cause",
+      "mechanism": "Performance, clipping, room, saturation, or earlier processing is creating the symptom."
+    },
+    {
+      "discriminating_test": "Change only this suspected cause and replay the exact passage in context.",
+      "evidence_needed": "A current bypass/active capture, matched output, gain-reduction behavior, signal order, and the exact passage where the issue repeats.",
+      "label": "H4: Monitoring/loudness bias",
+      "mechanism": "Makeup gain, solo listening, or level mismatch makes the compressed version seem preferable."
+    }
+  ],
+  "canonical_user_question": "When should I trust Auto Release?",
+  "category": "advanced",
+  "clarification_questions": [
+    "What audible result do you want from compression: leveling, transient control, sustain, density, glue, pump, or peak safety?",
+    "Does the problem remain with Compressor bypassed and output loudness matched?",
+    "Which source or bus is this, and what processing occurs before and after the compressor?",
+    "Is the issue constant, note/phrase-specific, or section-specific?"
+  ],
+  "common_mistakes": [
+    "Judging a compressed version that is louder than bypass.",
+    "Copying attack, release, ratio, or gain-reduction numbers without matching source and goal.",
+    "Using compression for phrase/section balance that needs automation or arrangement.",
+    "Changing several controls at once and losing the causal lesson."
+  ],
+  "community_disagreement_ids": [
+    "contradiction.01.compression.eq_before_after",
+    "contradiction.02.compression.fast_slow_attack",
+    "contradiction.03.compression.fast_slow_release",
+    "contradiction.04.compression.serial_single",
+    "contradiction.05.compression.automation_compression",
+    "contradiction.06.compression.parallel_insert"
+  ],
+  "confidence_class": "review_candidate",
+  "copyright_handling": "Original paraphrased synthesis; no raw forum post body or long quotation included.",
+  "created_at": "2026-08-11",
+  "do_not_assume": [
+    "A common setting or arrangement pattern is correct for this source and song.",
+    "A meter, spectrum, forum consensus, or model output proves the perceptual complaint or cause.",
+    "The first plausible explanation is the true cause."
+  ],
+  "domain": "compression",
+  "evidence_class": "documentary_professional_research_synthesis_with_bounded_community_patterns",
+  "id": "compression.advanced.auto_release",
+  "logic_pro_steps": [
+    "Loop the shortest repeatable passage where the envelope question is audible.",
+    "Open Logic Compressor and turn Auto Gain off for an honest comparison.",
+    "Temporarily exaggerate threshold/ratio only enough to hear the targeted envelope behavior.",
+    "Change one control at a time and manually match output loudness to bypass.",
+    "Listen for the named target first, then the preservation risk in the full arrangement.",
+    "Return threshold/ratio/output to the saved values or bypass the temporary instance."
+  ],
+  "logic_version_scope": "Logic Pro 12.x; reverify visible labels, routing, and control behavior on the installed version",
+  "natural_language_variants": [
+    "When should I trust Auto Release?",
+    "In Logic Pro, when should I trust Auto Release?",
+    "Can you explain this simply: When should I trust Auto Release?",
+    "I keep getting conflicting advice about auto release. What should I actually listen for?",
+    "What is one reversible test for this: When should I trust Auto Release?",
+    "Why does auto release keep causing problems in my mix?",
+    "I am a beginner and I do not understand auto release. Where should I start?",
+    "What would an experienced producer test first here: When should I trust Auto Release?"
+  ],
+  "non_dsp_possibilities": [
+    "performance and recording technique",
+    "clip/region gain or automation",
+    "arrangement and sound selection",
+    "upstream clipping, saturation, room, or monitoring"
+  ],
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "package_sequence": 3,
+  "preservation_goals": [
+    "groove",
+    "consistency"
+  ],
+  "rationale": "The immediate issue is program-dependent recovery can help but may not follow the desired groove. The first experiment tests that explanation while protecting against level, source, arrangement, processing, and monitoring confounds.",
+  "recommended_first_experiment": {
+    "action": "Compare Auto with a manually tuned release over several sections, keeping the version that handles both typical and extreme passages.",
+    "scope": "one controlled, reversible, context-matched A/B",
+    "summary": "Compare Auto with a manually tuned release over several sections, keeping the version that handles both typical and extreme passages.",
+    "why_this_first": "It changes one high-information variable and can strengthen or weaken competing explanations before a permanent treatment."
+  },
+  "requires_mix_context": true,
+  "review_status": "candidate_not_yet_human_reviewed",
+  "schema_version": "1.0",
+  "source_ids": [
+    "apple.logic.dynamics_overview",
+    "apple.logic.compressor_overview",
+    "apple.logic.compressor_main",
+    "apple.logic.compressor_use",
+    "izotope.dynamics101",
+    "sos.compressor_circuits",
+    "gearspace.attack_release",
+    "fabfilter.proc.dynamics"
+  ],
+  "starting_points": [
+    "Start with Auto Gain off, a moderate ratio, and threshold set so only the intended events move the gain-reduction meter.",
+    "Treat attack and release as envelope-shaping controls; exaggerate briefly to learn, then back off and level-match.",
+    "Use the minimum gain reduction or range that solves the named problem across representative sections."
+  ],
+  "stop_rule": "Stop or back off as soon as the named envelope/level problem improves but attacks, expression, groove, tone, noise, or depth become worse.",
+  "subcategory": "auto_release",
+  "tags": [
+    "compression",
+    "advanced",
+    "auto_release",
+    "unknown",
+    "groove",
+    "consistency"
+  ],
+  "teaching_principle": "Bus and multiband compression trade global movement and density against transient integrity, depth, phase, and section contrast.",
+  "title": "When should I trust Auto Release",
+  "tracksmith_domains": [
+    "compression",
+    "dynamics",
+    "gainStaging",
+    "performanceCapture",
+    "mixContext"
+  ],
+  "tradeoffs_and_risks": [
+    "More control can reduce transient impact, expression, depth, or groove.",
+    "Makeup gain and saturation can bias the A/B and reduce headroom.",
+    "Fast or deep action can expose noise, sibilance, bleed, pumping, or distortion."
+  ],
+  "undo_or_reset": "Restore the saved compressor state, bypass/remove the temporary instance, and match output to the original.",
+  "user_language_aliases": [
+    "auto release",
+    "program-dependent recovery can help but may not follow the desired groove",
+    "unknown"
+  ],
+  "what_to_listen_for": [
+    "The intended envelope or level problem should improve without flattening expression, dulling attacks, exaggerating noise, or changing groove unintentionally.",
+    "The active version should remain preferable after manual output matching and in the full arrangement.",
+    "Gain reduction should recover in a way that supports the phrase or pulse rather than following a memorized number.",
+    "Explicitly preserve: groove, consistency."
+  ]
+}

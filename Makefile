@@ -1,4 +1,5 @@
-.PHONY: general-tutor-knowledge-audit build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck native-build native-verify native-install verify
+P9_ARCHIVE ?= /tmp/tracksmith-package9.pwHKlg/package.zip
+.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -8,6 +9,27 @@ test:
 
 tutor-conversation-test:
 	swift run -c release TutorConversationTests
+
+p16-golden:
+	swift run -c release TutorConversationTests package16-golden
+
+p16-performance:
+	swift run -c release TutorConversationTests package16-performance
+
+p16-fallback:
+	swift run -c release TutorConversationTests package16-fallback
+
+p16-evidence-audit:
+	python3 research/scripts/package16-evidence-release.py --audit
+
+p16-evidence-smoke:
+	python3 research/scripts/package16-evidence-release.py --smoke
+
+p16-controlled-fixtures:
+	python3 research/scripts/package16-evidence-release.py --fixtures
+
+p16-provider-report:
+	python3 research/scripts/package16-evidence-release.py --provider-report
 
 tutor-audio-intelligence-lab:
 	swift run -c release TutorAudioIntelligenceLab --output research/evaluation/tutor-audio-intelligence-v1
@@ -55,6 +77,54 @@ general-tutor-knowledge-check:
 general-tutor-knowledge-audit:
 	python3 research/scripts/general-tutor-knowledge-pipeline.py audit
 
+community-corpus-check:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-005-automation --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-005-automation.json
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-005-automation --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-005-automation.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-005-automation.json --strict-stage
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-006-saturation-transient-shaping.json
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-006-saturation-transient-shaping.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-006-saturation-transient-shaping.json --strict-stage
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json --strict-stage
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-008-editing-layering --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-008-editing-layering.json
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-008-editing-layering --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-008-editing-layering.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-008-editing-layering.json --strict-stage
+	python3 research/scripts/import-community-vocal-quantization-v1.py --check
+	python3 research/scripts/import-community-level-balancing-eq-v1.py --check
+	python3 research/scripts/import-community-compression-arrangement-frequency-allocation-v1.py --check
+	python3 research/scripts/import-community-reverb-delay-v1.py --check
+	python3 research/scripts/import-community-automation-v1.py --check
+	python3 research/scripts/import-community-saturation-transient-shaping-v1.py --check
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-005-automation --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-005-automation
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-006-saturation-transient-shaping
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-007-phase-polarity-stereo-imaging-panning
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-008-editing-layering --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-008-editing-layering
+
+community-phase-stereo-panning-check:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json --strict-stage
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-007-phase-polarity-stereo-imaging-panning
+
+community-editing-layering-check:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-008-editing-layering --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-008-editing-layering.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-008-editing-layering.json --strict-stage
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-008-editing-layering --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-008-editing-layering
+
+community-gain-bus-loudness-check:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-009-gain-staging-bus-processing-loudness --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-009-gain-staging-bus-processing-loudness.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-009-gain-staging-bus-processing-loudness.json --standards-map research/community_knowledge/standards_maps/tracksmith-corpus-009-gain-staging-bus-processing-loudness.json --archive "$(P9_ARCHIVE)" --strict-stage
+	python3 research/scripts/stage-tracksmith-corpus-package.py --external research/community_knowledge/packages/tracksmith-corpus-009-gain-staging-bus-processing-loudness --audit-staged
+	python3 research/scripts/community_corpus_import.py --check --package tracksmith-corpus-009-gain-staging-bus-processing-loudness
+
+community-corpus-preflight-selftest:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-008-editing-layering --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-008-editing-layering.json --disagreement-map research/community_knowledge/disagreement_maps/tracksmith-corpus-008-editing-layering.json --self-test
+
+community-automation-preflight:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py
+
+community-saturation-transient-preflight:
+	python3 research/scripts/preflight-tracksmith-corpus-package.py --incoming research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping --dependency-map research/community_knowledge/dependency_maps/tracksmith-corpus-006-saturation-transient-shaping.json
+
 general-tutor-evaluation:
 	swift run -c release GeneralTutorEvaluation research/evaluation/TRACKSMITH_GENERAL_TUTOR_CORPUS_V1.json
 
@@ -81,4 +151,4 @@ native-verify: native-build au-host-probe realtime-heap-probe
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project production-language-knowledge-check tutor-procedure-knowledge-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test tutor-conversation-test au-host-probe
+verify: project production-language-knowledge-check tutor-procedure-knowledge-check community-corpus-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test tutor-conversation-test au-host-probe

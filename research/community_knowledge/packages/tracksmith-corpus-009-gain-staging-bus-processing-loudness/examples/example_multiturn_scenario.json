@@ -1,0 +1,48 @@
+{
+  "canonical_qa_id": "pkg009.qa.000001",
+  "domain": "gain_staging",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity and references the exact prior experiment.",
+    "Separates user report, measurement, model listening, Logic observation, documentation, community evidence, and inference.",
+    "Recommends at most one next experiment.",
+    "Preserves the baseline, stop condition, undo, and version-scoped Logic guidance.",
+    "Explains the transferable principle in natural language."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard or measured a result without current evidence.",
+    "Treats one level number, bus recipe, loudness target, or candidate record as universal truth.",
+    "Invents a Logic control, automatic action, or exact safe setting.",
+    "Adds several unrelated processors or restarts from a generic recipe."
+  ],
+  "id": "pkg009.scenario.0000001",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about signal level through the complete chain, and why does it matter?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes the decision, then present one reversible experiment: Bypass nothing; play the loudest representative section and inspect one stage at a time from region/source through inserts, fader, buses, and output."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but now the output is safer but the processor reacts differently."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact prior experiment, preserve the baseline, and adjust only the amount, stage, membership, or ceiling responsible for the tradeoff."
+    },
+    {
+      "role": "user",
+      "text": "Why does that result make sense, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and connect it to the exact A/B: Gain staging is the management of level at every handoff, not a single target on one meter. Map where gain changes before solving the symptom."
+    }
+  ],
+  "package_id": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "scenario_type": "better_with_tradeoff",
+  "subdomain": "signal_chain_fundamentals"
+}

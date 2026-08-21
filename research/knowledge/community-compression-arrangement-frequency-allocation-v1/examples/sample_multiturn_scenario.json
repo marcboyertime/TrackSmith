@@ -1,0 +1,46 @@
+{
+  "canonical_id": "compression.advanced.auto_release",
+  "domain": "compression",
+  "forbidden_behavior": [
+    "Restart from generic advice.",
+    "Claim the experiment was performed without user confirmation.",
+    "Treat community popularity, a meter, or model confidence as proof.",
+    "Offer multiple unrelated processing moves at once."
+  ],
+  "package_sequence": 3,
+  "required_memory": [
+    "compression.advanced.auto_release",
+    "Compare Auto with a manually tuned release over several sections, keeping the version that handles both typical and extreme passages.",
+    "groove, consistency"
+  ],
+  "review_status": "candidate_not_yet_human_reviewed",
+  "scenario_id": "scenario.compression.advanced.auto_release.1",
+  "schema_version": "1.0",
+  "title": "When should I trust Auto Release — better",
+  "turns": [
+    {
+      "role": "user",
+      "text": "When should I trust Auto Release?"
+    },
+    {
+      "role": "assistant_expected_behavior",
+      "text": "Ask only a materially useful clarification if needed, then propose no more than one experiment."
+    },
+    {
+      "role": "assistant_experiment",
+      "text": "Compare Auto with a manually tuned release over several sections, keeping the version that handles both typical and extreme passages."
+    },
+    {
+      "role": "user",
+      "text": "That helped. What should I listen for now, and why did it work?"
+    },
+    {
+      "role": "assistant_expected_behavior",
+      "text": "Acknowledge the improvement as user-confirmed, connect it to the tested hypothesis, check the preservation risk, and teach the principle without universalizing."
+    },
+    {
+      "role": "assistant_teaching_target",
+      "text": "Bus and multiband compression trade global movement and density against transient integrity, depth, phase, and section contrast."
+    }
+  ]
+}

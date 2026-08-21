@@ -1,0 +1,145 @@
+{
+  "alternatives_if_wrong": [
+    "Change the competing source rather than the target.",
+    "Use dynamic EQ or automation if the issue is intermittent.",
+    "Change performance, sound selection, mic position, or arrangement."
+  ],
+  "audio_context_useful": true,
+  "candidate_hypotheses": [
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H1: excess low-mid energy",
+      "mechanism": "excess low-mid energy"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H2: multiple sources accumulating in the same range",
+      "mechanism": "multiple sources accumulating in the same range"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H3: compression or reverb sustaining low mids",
+      "mechanism": "compression or reverb sustaining low mids"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H4: monitoring/room exaggeration",
+      "mechanism": "monitoring/room exaggeration"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H5: Masking or relative balance with guitars, keys",
+      "mechanism": "Masking or relative balance with guitars, keys"
+    }
+  ],
+  "canonical_user_question": "Why does my lead vocal sound muddy, and what should I test first?",
+  "category": "source_specific_eq",
+  "clarification_questions": [
+    "Does the lead vocal have this problem solo, in context, or only on certain notes/moments?",
+    "Which source or processing stage makes it most obvious?"
+  ],
+  "common_mistakes": [
+    "Treating “muddy” as one universal frequency.",
+    "Sweeping an extreme boosted notch and trusting the result.",
+    "EQing only in solo.",
+    "Stacking several cuts before evaluating one."
+  ],
+  "confidence_class": "review_candidate",
+  "copyright_handling": "Original paraphrased synthesis; no raw forum body or long quotation included.",
+  "created_at": "2026-08-11",
+  "do_not_assume": [
+    "A meter, spectrum, fader position, or common forum setting determines the artistic answer.",
+    "The most popular suggestion is correct for this source and arrangement.",
+    "A louder result is automatically better."
+  ],
+  "domain": "equalization",
+  "evidence_class": "synthesized_practice_candidate",
+  "id": "eq.source.lead_vocal.muddy",
+  "logic_pro_steps": [
+    "Loop the clearest example.",
+    "Bypass recent EQ/filter moves and compare at matched loudness.",
+    "Open Channel EQ and create one temporary diagnostic band in the relevant search area.",
+    "Toggle in the full mix, then restore it before testing a competing source."
+  ],
+  "logic_version_scope": "Logic Pro 12.x; reverify visible labels and current project behavior on the installed version",
+  "natural_language_variants": [
+    "My lead vocal is muddy.",
+    "My lead vocal is cloudy.",
+    "My lead vocal is murky.",
+    "How do I fix a muddy lead vocal without ruining it?",
+    "The lead vocal sounds fine alone but muddy in the mix.",
+    "What should I do in Logic Channel EQ when the lead vocal is muddy?"
+  ],
+  "non_dsp_possibilities": [
+    "Arrangement overlap",
+    "Sound selection",
+    "Recording/mic technique",
+    "Monitoring level and room"
+  ],
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "preservation_goals": [
+    "source identity",
+    "musical role",
+    "natural body",
+    "translation"
+  ],
+  "rationale": "The word “muddy” describes a perception, not a proven frequency or cause. For this lead vocal, plausible explanations include source tone, processing, relative level, masking, and monitoring.",
+  "recommended_first_experiment": {
+    "action": "First compare the source soloed and in context; if the mud exists in solo, test a small broad low-mid cut, otherwise test the competing source.",
+    "scope": "one controlled reversible comparison",
+    "summary": "First compare the source soloed and in context; if the mud exists in solo, test a small broad low-mid cut, otherwise test the competing source.",
+    "why_this_first": "It is intended to distinguish likely causes before adding more processing or making a permanent move."
+  },
+  "requires_mix_context": true,
+  "review_status": "candidate_not_yet_human_reviewed",
+  "schema_version": "1.0",
+  "source_ids": [
+    "apple.logic.channel_eq_overview",
+    "apple.logic.channel_eq_parameters",
+    "apple.logic.channel_eq_analyzer",
+    "sos.eq.how_when",
+    "fabfilter.eq.introduction",
+    "fabfilter.eq.frequency_ranges",
+    "gearspace.vocal_eq_order_2025"
+  ],
+  "starting_points": [
+    "Use low-mid search area only as a search orientation, not a preset.",
+    "For body, inspect roughly 120–350 Hz; for definition, inspect roughly 1–5 kHz; context decides whether either needs change."
+  ],
+  "stop_rule": "Back off as soon as the named problem improves but the intended body, attack, clarity, or emotion begins to weaken.",
+  "subcategory": "lead_vocal_muddy",
+  "tags": [
+    "eq",
+    "lead_vocal",
+    "muddy",
+    "diagnosis"
+  ],
+  "teaching_principle": "A tone word is a clue; use one reversible, context-aware test to identify the relationship causing it.",
+  "title": "Diagnosing a muddy lead vocal",
+  "tracksmith_domains": [
+    "vocals",
+    "eqAndFiltering",
+    "tonalDistribution",
+    "masking"
+  ],
+  "tradeoffs_and_risks": [
+    "Too much cutting makes the source hollow or weak.",
+    "A louder or visually smoother curve may create false confidence."
+  ],
+  "undo_or_reset": "Bypass/delete the diagnostic band and restore the saved plug-in output level.",
+  "user_language_aliases": [
+    "muddy",
+    "cloudy",
+    "murky",
+    "blanketed"
+  ],
+  "what_to_listen_for": [
+    "Clarity should improve while body and warmth remain.",
+    "Check whether guitars, keys become clearer or weaker when the target changes."
+  ]
+}

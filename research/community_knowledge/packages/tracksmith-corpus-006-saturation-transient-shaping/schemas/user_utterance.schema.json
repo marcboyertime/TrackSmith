@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "canonical_qa_id": {
+      "pattern": "^pkg006\\.qa\\.",
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^pkg006\\.utterance\\.",
+      "type": "string"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "text": {
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "canonical_qa_id",
+    "text",
+    "variant_type",
+    "review_state"
+  ],
+  "title": "TrackSmith User Utterance",
+  "type": "object"
+}

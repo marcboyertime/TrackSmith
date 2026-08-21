@@ -1,0 +1,123 @@
+{
+  "canonical_question": "What should I understand about I/O buffer size, and why does it matter in Logic Pro?",
+  "clarification_questions": [
+    "Is the delayed thing a microphone/instrument monitor, a software instrument, or the placement of the recorded region?",
+    "Does the delay exist in an empty project, only through Logic, only through direct monitoring, or only after specific plug-ins are active?",
+    "What interface, sample rate, I/O buffer, monitoring path, Low Latency Mode state, and high-latency plug-ins are involved?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "I/O buffer size or another audio/MIDI stage is adding real monitoring or placement latency.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "Duplicate monitoring, high-latency routing, driver/device state, or project complexity is being mistaken for one buffer problem.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "direct monitoring or freezing/bypassing heavy processing would provide a cleaner diagnostic or lower-latency recording path.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-12",
+  "direct_answer": "Buffer size trades monitoring latency against processing stability; choose the smallest stable setting for the current recording task. In Logic, first prove which stage or container owns the problem, then change only that stage and compare against the preserved baseline.",
+  "domain": "recording_latency_monitoring_delay",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact Logic version, device/interface, input/output routing, record and monitor state, relevant preferences, and current project/track/container state.",
+    "A preserved baseline plus one controlled test using the same performer, phrase, cue, and playback conditions.",
+    "Meters or recorded regions at each relevant signal-flow checkpoint, along with any audible delay, duplication, click, dropout, changed take, or placement error.",
+    "The user’s report of what improved, worsened, stayed unchanged, or became harder to perform after the test."
+  ],
+  "id": "pkg012.qa.000001",
+  "key_distinction": "Buffer size trades monitoring latency against processing stability; choose the smallest stable setting for the current recording task.",
+  "limitations": [
+    "A meter, waveform, region position, or setting does not by itself prove the performer heard or recorded the intended result.",
+    "Interface and driver behavior is hardware/version specific.",
+    "Professional and community guidance is context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "the performer-to-monitor response becoming more immediate without clicks, dropouts, or instability",
+    "location": "Logic Pro > Settings > Audio > Devices > I/O Buffer Size",
+    "risk": "overloading the CPU or causing clicks",
+    "show_me_query": "Logic Pro > Settings > Audio > Devices > I/O Buffer Size",
+    "starting_point": "Preserve the current state and test one stage or behavior at a time.",
+    "steps": [
+      "Save a Project Alternative or duplicate the affected track, take folder, comp, or recording setup; document the current device, buffer, monitoring, routing, recording, and region state.",
+      "Save the current setting, bypass unnecessary live processing, lower the I/O buffer one step, and compare the same monitored phrase.",
+      "Record or audition the same short representative passage, compare against the untouched baseline, and change no unrelated variable.",
+      "Listen and inspect for: the performer-to-monitor response becoming more immediate without clicks, dropouts, or instability.",
+      "Stop or back off if: overloading the CPU or causing clicks.",
+      "Restore the saved Project Alternative, duplicated track/comp, recording preference, routing, or monitoring state used as the baseline."
+    ],
+    "stop_condition": "Stop once the performer-to-monitor response becoming more immediate without clicks, dropouts, or instability and no new problem is introduced. Undo or choose the alternative if overloading the CPU or causing clicks.",
+    "undo": "Restore the saved Project Alternative, duplicated track/comp, recording preference, routing, or monitoring state used as the baseline.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact recording, monitoring, take-folder, cycle, punch, preference, and menu labels against the installed version.",
+    "visual_target_query": "Logic Pro > Settings > Audio > Devices > I/O Buffer Size"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "direct monitoring or freezing/bypassing heavy processing",
+    "Choose another take, re-record a wider phrase, simplify the cue path, or use a minimal tracking project when that preserves the performance better."
+  ],
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+  "package_number": 12,
+  "problem_summary": "my monitored voice or instrument feels delayed",
+  "recommended_first_experiment": "Save the current setting, bypass unnecessary live processing, lower the I/O buffer one step, and compare the same monitored phrase.",
+  "retrieval_tags": [
+    "buffer",
+    "bypassing",
+    "comping",
+    "concept",
+    "delay",
+    "delayed",
+    "direct",
+    "feels",
+    "flow",
+    "freezing",
+    "heavy",
+    "instrument",
+    "latency",
+    "monitored",
+    "monitoring",
+    "processing",
+    "punch",
+    "recording",
+    "responsive",
+    "signal",
+    "size",
+    "takes",
+    "voice"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "retrieval_candidate",
+  "source_ids": [
+    "pkg012.source.000001",
+    "pkg012.source.000004",
+    "pkg012.source.000037",
+    "pkg012.source.000050",
+    "pkg012.source.000060"
+  ],
+  "subdomain": "io_buffer_size",
+  "teaching_principle": "Buffer size trades monitoring latency against processing stability; choose the smallest stable setting for the current recording task.",
+  "title": "Io Buffer Size — concept",
+  "topic": "io_buffer_size",
+  "tradeoffs": [
+    "The experiment can improve responsive monitoring, but overloading the CPU or causing clicks.",
+    "A technically neat result may still make performance or monitoring feel less natural.",
+    "A global preference or offset can solve one path while making another path worse."
+  ],
+  "user_intent": "Use I/O buffer size correctly and preserve a reversible recording workflow.",
+  "variant_kind": "concept"
+}

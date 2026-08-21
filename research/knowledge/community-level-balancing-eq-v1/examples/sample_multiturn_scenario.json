@@ -1,0 +1,45 @@
+{
+  "canonical_id": "level.foundation.static_mix_first",
+  "domain": "level_balancing",
+  "forbidden_behaviors": [
+    "restart_with_generic_advice",
+    "claim_user_changed_logic",
+    "dump_many_settings",
+    "treat_meter_or_spectrum_as_artistic_truth"
+  ],
+  "id": "scenario.level.foundation.static_mix_first.better_side_effect",
+  "required_behaviors": [
+    "multi_turn_continuity",
+    "one_experiment_at_a_time",
+    "explicit_undo",
+    "evidence_honesty",
+    "teaching"
+  ],
+  "schema_version": "1.0",
+  "turns": [
+    {
+      "role": "user",
+      "text": "Should I set the fader balance before adding EQ and compression?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only the most decision-changing clarification, then present no more than one reversible experiment. Candidate experiment: Bypass nonessential processing, loop the fullest representative section, and build a 60-second fader-only hierarchy from the most important element outward."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but now something important sounds weaker."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Acknowledge the benefit and cost, refer to the exact previous experiment, reduce/reposition the move rather than restarting, and explain the tradeoff."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal tradeoff in plain language and connect it to this reusable principle: Balance is a relationship among musical roles, not a collection of target meter numbers."
+    }
+  ]
+}

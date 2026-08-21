@@ -1,0 +1,525 @@
+{
+  "canonical_subdomain_counts": {},
+  "contract_version": "1.0",
+  "database_format": "sqlite-fts5",
+  "database_schema_version": "2.0",
+  "depends_on": [
+    "tracksmith-corpus-001-vocal-quantization",
+    "tracksmith-corpus-002-level-balancing-eq",
+    "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+    "tracksmith-corpus-004-reverb-delay",
+    "tracksmith-corpus-005-automation",
+    "tracksmith-corpus-006-saturation-transient-shaping",
+    "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+    "tracksmith-corpus-008-editing-layering",
+    "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+    "tracksmith-corpus-010-flex-time-manual-timing",
+    "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+    "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+    "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+    "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+    "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model"
+  ],
+  "domains": [
+    "corpus_integration",
+    "retrieval_quality_control",
+    "runtime_projection",
+    "audio_evaluation_assets"
+  ],
+  "generated_at": "2026-08-12",
+  "id_namespace": "pkg016",
+  "intended_use": [
+    "Migrate legacy Packages 001–004 into the stable schema without losing original status fields",
+    "Validate and register Packages 001–015 additively",
+    "Build one unified development index and bounded runtime projection",
+    "Enforce exact-fixture uniqueness and diagnostic-only ambiguity handling",
+    "Enforce strict retrieval budgets, package diversity, evidence boundaries and retrieval receipts",
+    "Acquire public real-audio evaluation assets autonomously where allowed"
+  ],
+  "logic_procedure_status": "not_applicable_no_new_procedures",
+  "not_intended_use": [
+    "Adding new Tutor knowledge",
+    "Fine-tuning",
+    "Autonomous Logic mutation",
+    "Shipping package SQLite databases to the live Tutor",
+    "Treating test fixtures or candidate procedures as runtime knowledge",
+    "Blocking on request-gated datasets or owner audio"
+  ],
+  "package_contract": "tracksmith-corpus-package",
+  "package_id": "tracksmith-corpus-016-integration-retrieval-quality-control",
+  "package_number": 16,
+  "package_type": "integration_framework",
+  "package_version": "1.0.0",
+  "prior_package_aggregate_counts": {
+    "canonical_qa": 6134,
+    "claim_candidates": 6134,
+    "contradictions": 677,
+    "logic_procedure_candidates": 6134,
+    "multiturn_scenarios": 18188,
+    "myths_and_antipatterns": 795,
+    "provenance": 5110,
+    "retrieval_evaluations": 29280,
+    "sources": 1221,
+    "strategy_candidates": 6134,
+    "user_utterances": 135369
+  },
+  "prior_package_inventory": [
+    {
+      "archive_name": "TrackSmith_Vocal_Quantization_QA_Corpus_v1.zip",
+      "archive_root": "TrackSmith_Vocal_Quantization_QA_Corpus_v1",
+      "archive_sha256": "af5e7e37d7891aebfe9ec77ce5196bc10f7e4d8cacc5cbbb9d09a3ffcddc5ec9",
+      "archive_size_bytes": 464232,
+      "counts": {
+        "canonical_qa": 214,
+        "claim_candidates": 214,
+        "contradictions": 17,
+        "logic_procedure_candidates": 214,
+        "multiturn_scenarios": 428,
+        "myths_and_antipatterns": 0,
+        "provenance": 0,
+        "retrieval_evaluations": 0,
+        "sources": 34,
+        "strategy_candidates": 214,
+        "user_utterances": 3290
+      },
+      "domains": [],
+      "file_count": 32,
+      "package_id": "tracksmith-corpus-001-vocal-quantization",
+      "package_number": 1,
+      "package_version": "1.0.0",
+      "structure_class": "legacy"
+    },
+    {
+      "archive_name": "TrackSmith_Level_Balancing_EQ_QA_Corpus_v1.zip",
+      "archive_root": "TrackSmith_Level_Balancing_EQ_QA_Corpus_v1",
+      "archive_sha256": "ebfebda08ade164bcf0b2ec9122202210a436a89453ddb45688b95bf616f5cba",
+      "archive_size_bytes": 750280,
+      "counts": {
+        "canonical_qa": 190,
+        "claim_candidates": 190,
+        "contradictions": 30,
+        "logic_procedure_candidates": 190,
+        "multiturn_scenarios": 570,
+        "myths_and_antipatterns": 40,
+        "provenance": 0,
+        "retrieval_evaluations": 950,
+        "sources": 80,
+        "strategy_candidates": 190,
+        "user_utterances": 3420
+      },
+      "domains": [
+        "level_balancing",
+        "equalization"
+      ],
+      "file_count": 41,
+      "package_id": "tracksmith-corpus-002-level-balancing-eq",
+      "package_number": 2,
+      "package_version": "1.0.0",
+      "structure_class": "legacy"
+    },
+    {
+      "archive_name": "TrackSmith_Compression_Arrangement_Frequency_Allocation_QA_Corpus_v1.zip",
+      "archive_root": "TrackSmith_Compression_Arrangement_Frequency_Allocation_QA_Corpus_v1",
+      "archive_sha256": "dfd71277e0595a283506af73801c432c605723fd3a24f3c12dd4dd7f43483097",
+      "archive_size_bytes": 1268614,
+      "counts": {
+        "canonical_qa": 320,
+        "claim_candidates": 320,
+        "contradictions": 36,
+        "logic_procedure_candidates": 320,
+        "multiturn_scenarios": 960,
+        "myths_and_antipatterns": 45,
+        "provenance": 0,
+        "retrieval_evaluations": 1280,
+        "sources": 75,
+        "strategy_candidates": 320,
+        "user_utterances": 6399
+      },
+      "domains": [
+        "arrangement",
+        "compression",
+        "frequency_allocation"
+      ],
+      "file_count": 41,
+      "package_id": "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+      "package_number": 3,
+      "package_version": "1.0.0",
+      "structure_class": "legacy"
+    },
+    {
+      "archive_name": "TrackSmith_Reverb_Delay_QA_Corpus_v1.zip",
+      "archive_root": "TrackSmith_Reverb_Delay_QA_Corpus_v1",
+      "archive_sha256": "e6feb712e5dd12ed83150641528c5c1c68195bfb3e06d51c423fc54493b2d962",
+      "archive_size_bytes": 1437011,
+      "counts": {
+        "canonical_qa": 300,
+        "claim_candidates": 300,
+        "contradictions": 40,
+        "logic_procedure_candidates": 300,
+        "multiturn_scenarios": 900,
+        "myths_and_antipatterns": 50,
+        "provenance": 0,
+        "retrieval_evaluations": 1500,
+        "sources": 105,
+        "strategy_candidates": 300,
+        "user_utterances": 6600
+      },
+      "domains": [],
+      "file_count": 40,
+      "package_id": "tracksmith-corpus-004-reverb-delay",
+      "package_number": 4,
+      "package_version": "1.0.0",
+      "structure_class": "legacy"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_005_Automation_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_005_Automation",
+      "archive_sha256": "3e9fccfeeb0fe221c286f3bec8547bdf44feba885561fe67a73c4fc4e04803c7",
+      "archive_size_bytes": 1118380,
+      "counts": {
+        "canonical_qa": 240,
+        "claim_candidates": 240,
+        "contradictions": 36,
+        "logic_procedure_candidates": 240,
+        "multiturn_scenarios": 720,
+        "myths_and_antipatterns": 44,
+        "provenance": 240,
+        "retrieval_evaluations": 1200,
+        "sources": 63,
+        "strategy_candidates": 240,
+        "user_utterances": 5280
+      },
+      "domains": [
+        "automation"
+      ],
+      "file_count": 46,
+      "package_id": "tracksmith-corpus-005-automation",
+      "package_number": 5,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_46"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_006_Saturation_Transient_Shaping_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_006_Saturation_Transient_Shaping",
+      "archive_sha256": "6a4797c1defbce8e576fd420f67b399df597aedee23eee4a34095443b773e004",
+      "archive_size_bytes": 2359371,
+      "counts": {
+        "canonical_qa": 384,
+        "claim_candidates": 384,
+        "contradictions": 42,
+        "logic_procedure_candidates": 384,
+        "multiturn_scenarios": 1152,
+        "myths_and_antipatterns": 50,
+        "provenance": 384,
+        "retrieval_evaluations": 1920,
+        "sources": 82,
+        "strategy_candidates": 384,
+        "user_utterances": 8448
+      },
+      "domains": [
+        "saturation_harmonic_distortion",
+        "transient_shaping"
+      ],
+      "file_count": 46,
+      "package_id": "tracksmith-corpus-006-saturation-transient-shaping",
+      "package_number": 6,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_46"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_007_Phase_Polarity_Stereo_Imaging_Panning_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_007_Phase_Polarity_Stereo_Imaging_Panning",
+      "archive_sha256": "e14258888b0ca05e03b4dfa802bd4c5ae2b5304f0688a8377c6d4dac2ad91923",
+      "archive_size_bytes": 1650557,
+      "counts": {
+        "canonical_qa": 396,
+        "claim_candidates": 396,
+        "contradictions": 42,
+        "logic_procedure_candidates": 396,
+        "multiturn_scenarios": 1188,
+        "myths_and_antipatterns": 50,
+        "provenance": 396,
+        "retrieval_evaluations": 1980,
+        "sources": 82,
+        "strategy_candidates": 396,
+        "user_utterances": 8712
+      },
+      "domains": [
+        "phase_polarity",
+        "stereo_imaging",
+        "panning"
+      ],
+      "file_count": 46,
+      "package_id": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+      "package_number": 7,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_46"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_008_Editing_Layering_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_008_Editing_Layering",
+      "archive_sha256": "2557dedfb39c8452b8d16a6c0a801339b24aee149882cb5b181b8e6f06a559bf",
+      "archive_size_bytes": 1938072,
+      "counts": {
+        "canonical_qa": 420,
+        "claim_candidates": 420,
+        "contradictions": 46,
+        "logic_procedure_candidates": 420,
+        "multiturn_scenarios": 1260,
+        "myths_and_antipatterns": 54,
+        "provenance": 420,
+        "retrieval_evaluations": 2100,
+        "sources": 95,
+        "strategy_candidates": 420,
+        "user_utterances": 9240
+      },
+      "domains": [
+        "editing",
+        "layering"
+      ],
+      "file_count": 46,
+      "package_id": "tracksmith-corpus-008-editing-layering",
+      "package_number": 8,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_46"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_009_Gain_Staging_Bus_Processing_Loudness_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_009_Gain_Staging_Bus_Processing_Loudness",
+      "archive_sha256": "0918e6a8b97d1944696cf62e8072ca01c62540890a76d6a88c1e5956c1060130",
+      "archive_size_bytes": 1735821,
+      "counts": {
+        "canonical_qa": 430,
+        "claim_candidates": 430,
+        "contradictions": 48,
+        "logic_procedure_candidates": 430,
+        "multiturn_scenarios": 1290,
+        "myths_and_antipatterns": 56,
+        "provenance": 430,
+        "retrieval_evaluations": 2150,
+        "sources": 95,
+        "strategy_candidates": 430,
+        "user_utterances": 9460
+      },
+      "domains": [
+        "gain_staging",
+        "bus_processing",
+        "clipping_limiting_loudness"
+      ],
+      "file_count": 46,
+      "package_id": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+      "package_number": 9,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_46"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_010_Flex_Time_Manual_Timing_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_010_Flex_Time_Manual_Timing",
+      "archive_sha256": "bd4f86037377ff4ef070dcb609d7e97f697f22a16b396073b00357098daa8827",
+      "archive_size_bytes": 2225423,
+      "counts": {
+        "canonical_qa": 450,
+        "claim_candidates": 450,
+        "contradictions": 48,
+        "logic_procedure_candidates": 450,
+        "multiturn_scenarios": 1350,
+        "myths_and_antipatterns": 56,
+        "provenance": 450,
+        "retrieval_evaluations": 2250,
+        "sources": 81,
+        "strategy_candidates": 450,
+        "user_utterances": 10350
+      },
+      "domains": [
+        "flex_time_manual_timing"
+      ],
+      "file_count": 47,
+      "package_id": "tracksmith-corpus-010-flex-time-manual-timing",
+      "package_number": 10,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_47"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_011_Smart_Tempo_BPM_Detection_Tempo_Mapping_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_011_Smart_Tempo_BPM_Detection_Tempo_Mapping",
+      "archive_sha256": "0579ec7f516d71a39bf6eca5f284ef2b9fc8ef32e005ff517b94e8482f5d9386",
+      "archive_size_bytes": 2474880,
+      "counts": {
+        "canonical_qa": 450,
+        "claim_candidates": 450,
+        "contradictions": 50,
+        "logic_procedure_candidates": 450,
+        "multiturn_scenarios": 1350,
+        "myths_and_antipatterns": 60,
+        "provenance": 450,
+        "retrieval_evaluations": 2250,
+        "sources": 79,
+        "strategy_candidates": 450,
+        "user_utterances": 10350
+      },
+      "domains": [
+        "smart_tempo_bpm_detection_tempo_mapping"
+      ],
+      "file_count": 47,
+      "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+      "package_number": 11,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_47"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_012_Recording_Latency_Monitoring_Comping_Punch_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_012_Recording_Latency_Monitoring_Comping_Punch",
+      "archive_sha256": "9ed250ad60cccc4eee4544f68b3624187555d5b6b5d725f86b2058a291209557",
+      "archive_size_bytes": 2062325,
+      "counts": {
+        "canonical_qa": 480,
+        "claim_candidates": 480,
+        "contradictions": 52,
+        "logic_procedure_candidates": 480,
+        "multiturn_scenarios": 1440,
+        "myths_and_antipatterns": 64,
+        "provenance": 480,
+        "retrieval_evaluations": 2400,
+        "sources": 84,
+        "strategy_candidates": 480,
+        "user_utterances": 11040
+      },
+      "domains": [
+        "recording_latency_monitoring_delay",
+        "input_monitoring_record_enable_signal_flow",
+        "take_folders_comping_multiple_performances",
+        "cycle_punch_replace_recording"
+      ],
+      "file_count": 47,
+      "package_id": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+      "package_number": 12,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_47"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_013_Sends_Buses_Auxes_Track_Stacks_Groups_Submixes_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_013_Sends_Buses_Auxes_Track_Stacks_Groups_Submixes",
+      "archive_sha256": "ca228a0e546339531df2034c228b2cbf4e4e44097ba8714453e9eb1e01034fd9",
+      "archive_size_bytes": 2579418,
+      "counts": {
+        "canonical_qa": 480,
+        "claim_candidates": 480,
+        "contradictions": 52,
+        "logic_procedure_candidates": 480,
+        "multiturn_scenarios": 1440,
+        "myths_and_antipatterns": 64,
+        "provenance": 480,
+        "retrieval_evaluations": 2400,
+        "sources": 88,
+        "strategy_candidates": 480,
+        "user_utterances": 11040
+      },
+      "domains": [
+        "sends_buses_auxes_shared_effects",
+        "track_stacks_groups_submixes"
+      ],
+      "file_count": 47,
+      "package_id": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+      "package_number": 13,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_47"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_014_Sidechain_Automation_MIDI_Groove_Velocity_Transform_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_014_Sidechain_Automation_MIDI_Groove_Velocity_Transform",
+      "archive_sha256": "2e45a493f575e61c35a995bbd6fb15bf75106efbb92af49087dfceadfba359df",
+      "archive_size_bytes": 3595797,
+      "counts": {
+        "canonical_qa": 660,
+        "claim_candidates": 660,
+        "contradictions": 66,
+        "logic_procedure_candidates": 660,
+        "multiturn_scenarios": 1980,
+        "myths_and_antipatterns": 78,
+        "provenance": 660,
+        "retrieval_evaluations": 3300,
+        "sources": 88,
+        "strategy_candidates": 660,
+        "user_utterances": 15180
+      },
+      "domains": [
+        "sidechain_routing_ducking",
+        "volume_pan_plugin_automation",
+        "automation_modes_troubleshooting",
+        "midi_quantization_groove",
+        "midi_velocity_musical_dynamics",
+        "midi_transform_humanize_batch_editing"
+      ],
+      "file_count": 47,
+      "package_id": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+      "package_number": 14,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_47"
+    },
+    {
+      "archive_name": "TrackSmith_Corpus_Package_015_MIDI_CC_Piano_Roll_Bounce_Freeze_PDC_Object_Model_v1.0.0.zip",
+      "archive_root": "TrackSmith_Corpus_Package_015_MIDI_CC_Piano_Roll_Bounce_Freeze_PDC_Object_Model",
+      "archive_sha256": "bfd65f88b36ba1de1bddddddc1b397f5e36032671dcf1098d0caaf225a7b3f98",
+      "archive_size_bytes": 3464069,
+      "counts": {
+        "canonical_qa": 720,
+        "claim_candidates": 720,
+        "contradictions": 72,
+        "logic_procedure_candidates": 720,
+        "multiturn_scenarios": 2160,
+        "myths_and_antipatterns": 84,
+        "provenance": 720,
+        "retrieval_evaluations": 3600,
+        "sources": 90,
+        "strategy_candidates": 720,
+        "user_utterances": 16560
+      },
+      "domains": [
+        "bounce_export_stems",
+        "freeze_cpu_management",
+        "logic_object_model",
+        "midi_cc_sustain_expression",
+        "piano_roll_precise_editing",
+        "plugin_delay_low_latency"
+      ],
+      "file_count": 47,
+      "package_id": "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+      "package_number": 15,
+      "package_version": "1.0.0",
+      "structure_class": "standardized_47"
+    }
+  ],
+  "record_counts": {
+    "canonical_qa": 0,
+    "claim_candidates": 0,
+    "contradictions": 0,
+    "logic_procedure_candidates": 0,
+    "multiturn_scenarios": 0,
+    "myths_and_antipatterns": 0,
+    "provenance": 0,
+    "retrieval_evaluations": 0,
+    "sources": 17,
+    "strategy_candidates": 0,
+    "user_utterances": 0
+  },
+  "review_state": "infrastructure_review_required",
+  "source_policy": {
+    "audio_bundled": false,
+    "download_manifests_only": true,
+    "owner_audio_required_by_default": false,
+    "public_sources_and_generated_control_fixtures_first": true,
+    "request_required_sources_do_not_block": true
+  },
+  "subdomains": [
+    "legacy_package_migration",
+    "unified_registry",
+    "hybrid_retrieval",
+    "collision_control",
+    "retrieval_budget",
+    "status_preservation",
+    "runtime_purity",
+    "audio_asset_acquisition",
+    "evaluation_orchestration"
+  ],
+  "title": "Corpus Integration, Retrieval & Quality-Control Framework"
+}

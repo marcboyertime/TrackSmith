@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "canonical_user_question": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "domain": {
+      "enum": [
+        "level_balancing",
+        "equalization"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "review_status": {
+      "const": "candidate_not_yet_human_reviewed"
+    },
+    "source_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "domain",
+    "category",
+    "title",
+    "canonical_user_question",
+    "candidate_hypotheses",
+    "recommended_first_experiment",
+    "logic_pro_steps",
+    "source_ids",
+    "review_status"
+  ],
+  "title": "TrackSmith Level/EQ Canonical QA",
+  "type": "object"
+}

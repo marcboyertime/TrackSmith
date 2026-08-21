@@ -20,6 +20,7 @@ public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
     case logicObserved
     case userReported
     case reviewedKnowledge
+    case candidateKnowledge
     case separatedSourceEstimate
     case structureEstimate
     case inference
@@ -32,11 +33,40 @@ public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
         case .logicObserved: "Saw"
         case .userReported: "You told me"
         case .reviewedKnowledge: "Reviewed"
+        case .candidateKnowledge: "Candidate"
         case .separatedSourceEstimate: "Separated estimate"
         case .structureEstimate: "Structure estimate"
         case .inference: "Inference"
         case .unavailable: "Unavailable"
         }
+    }
+}
+
+public struct TutorCandidateCorpusProvenance: Codable, Equatable, Sendable {
+    public var packageID: String
+    public var packageVersion: String
+    public var packageSequence: Int
+    public var recordID: String
+    /// Optional fields preserve decoding of receipts written before P7 provenance.
+    public var querySHA256: String? = nil
+    public var selectedDomain: String? = nil
+    public var sourceIDs: [String]? = nil
+    /// Standards remain an additive, distinct receipt partition rather than
+    /// being relabeled as documentation or ordinary primary research.
+    public var standardsSourceIDs: [String]? = nil
+    public var reviewState: String? = nil
+    public var resultSHA256: String? = nil
+    public var selectedRecordIDs: [String]? = nil
+    public var retrievalID: String? = nil
+    public var corpusVersion: String? = nil
+    public var policyVersion: String? = nil
+    public var omissions: [String]? = nil
+
+    public init(packageID: String, packageVersion: String, packageSequence: Int, recordID: String) {
+        self.packageID = packageID
+        self.packageVersion = packageVersion
+        self.packageSequence = packageSequence
+        self.recordID = recordID
     }
 }
 
@@ -48,6 +78,8 @@ public struct TutorEvidenceReference: Codable, Equatable, Identifiable, Sendable
     public var confidence: Double?
     public var captureSnapshotID: UUID?
     public var metricIdentifier: String?
+    /// Optional for lossless decoding of persisted receipts written before corpus provenance.
+    public var candidateCorpusProvenance: TutorCandidateCorpusProvenance?
 
     public init(
         id: UUID = UUID(),
@@ -56,7 +88,8 @@ public struct TutorEvidenceReference: Codable, Equatable, Identifiable, Sendable
         detail: String,
         confidence: Double? = nil,
         captureSnapshotID: UUID? = nil,
-        metricIdentifier: String? = nil
+        metricIdentifier: String? = nil,
+        candidateCorpusProvenance: TutorCandidateCorpusProvenance? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -65,6 +98,7 @@ public struct TutorEvidenceReference: Codable, Equatable, Identifiable, Sendable
         self.confidence = confidence.map { min(max($0.isFinite ? $0 : 0, 0), 1) }
         self.captureSnapshotID = captureSnapshotID
         self.metricIdentifier = metricIdentifier
+        self.candidateCorpusProvenance = candidateCorpusProvenance
     }
 }
 
@@ -687,6 +721,7 @@ public enum TutorConversationError: Error, Equatable, Sendable {
     case audioConsentRequired
     case audioAttachmentTooLarge
     case staleCapture
+    case staleResult
 }
 
 public extension TutorConversationError {
@@ -733,6 +768,8 @@ public extension TutorConversationError {
             "The audio attachment exceeded the bounded upload limit."
         case .staleCapture:
             "The selected capture no longer matched its immutable snapshot."
+        case .staleResult:
+            "A delayed tool result no longer belonged to the active Tutor turn."
         }
     }
 

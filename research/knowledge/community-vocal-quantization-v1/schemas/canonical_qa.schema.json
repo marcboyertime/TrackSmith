@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tracksmith.local/schemas/canonical_qa.schema.json",
+  "title": "TrackSmith canonical production Q&A",
+  "type": "object",
+  "required": [
+    "id",
+    "schema_version",
+    "domain",
+    "category",
+    "title",
+    "canonical_user_question",
+    "clarification_questions",
+    "candidate_hypotheses",
+    "recommended_first_experiment",
+    "logic_pro_steps",
+    "what_to_listen_for",
+    "stop_rule",
+    "undo_or_reset",
+    "teaching_principle",
+    "source_ids",
+    "review_status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 5
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "domain": {
+      "enum": [
+        "vocal_production",
+        "quantization_and_timing"
+      ]
+    },
+    "category": {
+      "type": "string"
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "canonical_user_question": {
+      "type": "string"
+    },
+    "natural_language_variants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 3
+    },
+    "user_language_aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "clarification_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "candidate_hypotheses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "mechanism",
+          "evidence_needed",
+          "discriminating_test"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "mechanism": {
+            "type": "string"
+          },
+          "evidence_needed": {
+            "type": "string"
+          },
+          "discriminating_test": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "recommended_first_experiment": {
+      "type": "object",
+      "required": [
+        "summary",
+        "why_this_first",
+        "action",
+        "scope"
+      ]
+    },
+    "logic_pro_steps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "starting_points": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "what_to_listen_for": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "stop_rule": {
+      "type": "string"
+    },
+    "undo_or_reset": {
+      "type": "string"
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "tradeoffs_and_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "alternatives_if_wrong": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "common_mistakes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "teaching_principle": {
+      "type": "string"
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "review_status": {
+      "enum": [
+        "candidate_not_yet_human_reviewed",
+        "reviewed",
+        "rejected"
+      ]
+    },
+    "tracksmith_domains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

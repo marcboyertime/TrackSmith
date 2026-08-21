@@ -1,0 +1,53 @@
+{
+  "canonical_qa_id": "pkg012.qa.000001",
+  "domain": "recording_latency_monitoring_delay",
+  "expected_behaviors": [
+    "Maintains continuity with the exact monitoring, signal-flow, comp, take, cycle, or punch experiment.",
+    "Distinguishes user report, documented Logic behavior, hardware/interface behavior, recorded evidence, and inference.",
+    "Recommends at most one next experiment.",
+    "Preserves the baseline, originals, stop condition, undo, and version-scoped Logic guidance.",
+    "Explains the transferable recording-workflow principle naturally."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard, seen, recorded, or verified the result without current evidence.",
+    "Treats one buffer, monitoring mode, take workflow, punch range, or preference as universal.",
+    "Invents an automatic Logic edit or mutation.",
+    "Restarts from a generic checklist without referencing the prior test."
+  ],
+  "id": "pkg012.scenario.0000001",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about I/O buffer size, and why does it matter in Logic Pro?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes the diagnosis, then present one reversible experiment: Save the current setting, bypass unnecessary live processing, lower the I/O buffer one step, and compare the same monitored phrase."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but now the cue or edit feels less natural."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact prior test, preserve what improved, reduce or localize only the responsible change, and explain the tradeoff."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and connect it to the exact A/B: Buffer size trades monitoring latency against processing stability; choose the smallest stable setting for the current recording task."
+    }
+  ],
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "scenario_type": "better_tradeoff",
+  "subdomain": "io_buffer_size"
+}

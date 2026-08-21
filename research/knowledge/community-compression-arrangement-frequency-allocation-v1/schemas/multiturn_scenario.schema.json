@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "canonical_id": {
+      "type": "string"
+    },
+    "required_memory": {
+      "minItems": 1,
+      "type": "array"
+    },
+    "scenario_id": {
+      "type": "string"
+    },
+    "turns": {
+      "minItems": 4,
+      "type": "array"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "canonical_id",
+    "domain",
+    "turns",
+    "required_memory",
+    "forbidden_behavior"
+  ],
+  "title": "TrackSmith Package 3 multi-turn scenario",
+  "type": "object"
+}

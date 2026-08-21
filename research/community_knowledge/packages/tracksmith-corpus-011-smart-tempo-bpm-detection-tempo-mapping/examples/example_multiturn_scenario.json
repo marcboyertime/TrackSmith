@@ -1,0 +1,53 @@
+{
+  "canonical_qa_id": "pkg011.qa.000001",
+  "domain": "smart_tempo_bpm_detection_tempo_mapping",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity and references the exact prior tempo experiment or map change.",
+    "Distinguishes user report, official Logic behavior, tempo analysis, model listening, grid appearance, and inference.",
+    "Recommends at most one next tempo/BPM experiment.",
+    "Preserves the baseline, tempo set/Project Alternative, project scope, stop condition, undo, and version-scoped Logic guidance.",
+    "Explains the transferable tempo-authority principle in natural language."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard or verified the map without current evidence.",
+    "Treats one BPM, Project Tempo mode, downbeat, or alignment depth as universal truth.",
+    "Invents a Logic action, automatic edit, or exact safe tempo change.",
+    "Adds several unrelated tempo operations or restarts from a generic recipe."
+  ],
+  "id": "pkg011.scenario.0000001",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about deciding whether the project or performance owns tempo, and why does it matter in Logic Pro?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes tempo authority, then present one reversible experiment: Duplicate the project or create a Project Alternative, audition the performance against a click, and explicitly choose whether the grid should follow the performance or the performance should follow the grid."
+    },
+    {
+      "role": "user",
+      "text": "The grid is better, but now the grid lines up but the performance no longer breathes."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact map/region change, restore the baseline if needed, refine only the responsible analysis or conformance choice, and explain the tradeoff."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and connect it to the exact A/B: Before changing BPM or enabling conformance, decide which thing should remain musically unchanged: the project grid, the recorded performance, or an imported reference."
+    }
+  ],
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "scenario_type": "better_tradeoff",
+  "subdomain": "tempo_authority_decision"
+}

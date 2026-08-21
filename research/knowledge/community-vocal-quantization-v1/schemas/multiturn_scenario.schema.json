@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrackSmith multi-turn tutor scenario",
+  "type": "object",
+  "required": [
+    "scenario_id",
+    "canonical_id",
+    "domain",
+    "turns",
+    "branch_kind",
+    "evaluation_criteria"
+  ],
+  "properties": {
+    "scenario_id": {
+      "type": "string"
+    },
+    "canonical_id": {
+      "type": "string"
+    },
+    "domain": {
+      "enum": [
+        "vocal_production",
+        "quantization_and_timing"
+      ]
+    },
+    "turns": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ]
+      }
+    },
+    "branch_kind": {
+      "type": "string"
+    },
+    "evaluation_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

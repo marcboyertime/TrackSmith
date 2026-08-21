@@ -1,0 +1,40 @@
+[0/1] Planning build
+Building for production...
+[0/32] Write sources
+[0/37] Copying tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping.json
+[3/37] Copying tracksmith-corpus-009-gain-staging-bus-processing-loudness.json
+[4/37] Copying tracksmith-corpus-005-automation.json
+[4/37] Copying tracksmith-corpus-006-saturation-transient-shaping.json
+[5/37] Copying tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json
+[5/37] Copying tracksmith-corpus-010-flex-time-manual-timing.json
+[5/37] Copying community-vocal-quantization-v1.json
+[5/37] Copying tracksmith-corpus-008-editing-layering.json
+[8/37] Copying community-level-balancing-eq-v1.json
+[8/37] Copying community-reverb-delay-v1.json
+[12/37] Copying community-compression-arrangement-frequency-allocation-v1.json
+[13/37] Copying Resources
+[14/37] Write swift-version--58304C5D6DBC2206.txt
+[16/23] Compiling ProductionTutor CommunityCandidateCorpus.generated.swift
+/Users/marcboyer/LogicAudioAssistant/packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorCoordinator.swift:472:23: warning: no calls to throwing functions occur within 'try' expression
+470 |     private func exactProcedures(for intent: GeneralTutorQuestionIntent) -> [String] {
+471 |         guard let issue = intent.recognizedTutorIssues.first else { return [] }
+472 |         let planner = try? TutorPlanner(catalog: procedureCatalog)
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+473 |         guard let planner else { return [] }
+474 |         let ordered = planner.orderedCandidateProcedureIDs(
+[17/35] Compiling ProductionTutorEvaluation main.swift
+[17/35] Write Objects.LinkFileList
+[19/35] Compiling GeneralTutorSpotCheck main.swift
+[19/35] Write Objects.LinkFileList
+[21/35] Compiling GeneralTutorEvaluation main.swift
+[21/35] Write Objects.LinkFileList
+[22/35] Linking ProductionTutorEvaluation
+[23/35] Linking GeneralTutorSpotCheck
+[24/35] Linking GeneralTutorEvaluation
+[26/35] Compiling TutorConversation OfflineTutorProvider.swift
+[26/35] Write Objects.LinkFileList
+[28/36] Linking TutorAudioIntelligenceLab
+[29/36] Linking LogicTutorObservationProbe
+[31/36] Compiling TutorConversationTests TutorConversationTests.swift
+error: input file '/Users/marcboyer/LogicAudioAssistant/tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift' was modified during the build
+error: input file '/Users/marcboyer/LogicAudioAssistant/tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift' was modified during the build

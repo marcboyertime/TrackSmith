@@ -6,6 +6,7 @@ derived_data="$repo_root/.build/xcode-signed-derived"
 source_app="$derived_data/Build/Products/Release/Logic Audio Assistant.app"
 destination="$HOME/Applications/Logic Audio Assistant.app"
 staged_destination="$HOME/Applications/.Logic Audio Assistant.installing.$$.app"
+previous_destination="$HOME/Applications/.Logic Audio Assistant.previous.$$.app"
 source_extension="$source_app/Contents/PlugIns/Logic Audio Assistant AU.appex"
 installed_extension="$destination/Contents/PlugIns/Logic Audio Assistant AU.appex"
 
@@ -64,19 +65,42 @@ fi
 
 mkdir -p "$HOME/Applications"
 rm -rf "$staged_destination"
-trap 'rm -rf "$staged_destination"' EXIT
+rm -rf "$previous_destination"
+restore_previous() {
+  rm -rf "$staged_destination"
+  if [[ -d "$previous_destination" && ! -d "$destination" ]]; then
+    mv "$previous_destination" "$destination"
+  fi
+}
+trap restore_previous EXIT
 ditto "$source_app" "$staged_destination"
 codesign --verify --deep --strict --verbose=1 "$staged_destination"
-rm -rf "$destination"
+if [[ -d "$destination" ]]; then
+  mv "$destination" "$previous_destination"
+fi
 mv "$staged_destination" "$destination"
-trap - EXIT
 codesign --verify --deep --strict --verbose=1 "$destination"
+rm -rf "$previous_destination"
+trap - EXIT
 
 # Xcode's RegisterWithLaunchServices build phase registers the derived-data copy.
 # Remove that transient record and register only the exact installed bundle so hosts
 # cannot discover two equal-version extensions at different paths.
 pluginkit -r "$source_extension" 2>/dev/null || true
 pluginkit -a "$installed_extension"
+
+# Keep exactly the verified installed registration.  Old derived-data records
+# can share the bundle identifier but must never displace the installed AU.
+while IFS= read -r registered_path; do
+  [[ -z "$registered_path" || "$registered_path" == "$installed_extension" ]] && continue
+  pluginkit -r "$registered_path"
+done < <(pluginkit -m -A -D -v -i com.marcboyer.logicaudioassistant.AudioUnit \
+  | sed -n 's#.*\t\(/.*\.appex\)$#\1#p')
+registered_count="$(pluginkit -m -A -D -v -i com.marcboyer.logicaudioassistant.AudioUnit | grep -F "$installed_extension" | wc -l | tr -d ' ')"
+if [[ "$registered_count" != "1" ]]; then
+  print -u2 "error: expected exactly one installed Audio Unit registration; found $registered_count"
+  exit 2
+fi
 
 print "Installed signed development build:"
 print "  $destination"

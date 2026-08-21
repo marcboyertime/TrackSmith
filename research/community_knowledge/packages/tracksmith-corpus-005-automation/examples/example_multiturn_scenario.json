@@ -1,0 +1,48 @@
+{
+  "canonical_qa_id": "pkg005.qa.000001",
+  "domain": "automation",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity.",
+    "Does not restart from generic automation advice.",
+    "Treats the side effect as evidence about range, timing, or control point.",
+    "Provides a smaller reversible adjustment.",
+    "Explains the transferable principle."
+  ],
+  "forbidden_behaviors": [
+    "Claims the change was heard without an audio receipt.",
+    "Invents a Logic control or exact parameter that is not in the record.",
+    "Adds several unrelated experiments.",
+    "Treats the initial improvement as proof of the diagnosis."
+  ],
+  "id": "pkg005.scenario.0000001",
+  "messages": [
+    {
+      "role": "user",
+      "text": "When should I start automating a mix?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only for context that changes the next move, then recommend one reversible experiment: Bypass all existing automation, set a workable static balance, then replay one section that still fails and automate only that section."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but now the transition feels too obvious and a little unnatural."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Remember the exact experiment, reduce or reshape the same move before proposing a new chain, explain the tradeoff, and request a focused re-listen."
+    },
+    {
+      "role": "user",
+      "text": "Why did making the automation smaller help?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and reconnect it to the intended listen-for: Whether the problem is isolated to specific phrases or sections rather than present everywhere."
+    }
+  ],
+  "package_id": "tracksmith-corpus-005-automation",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "scenario_type": "better_with_tradeoff",
+  "subdomain": "fundamentals"
+}

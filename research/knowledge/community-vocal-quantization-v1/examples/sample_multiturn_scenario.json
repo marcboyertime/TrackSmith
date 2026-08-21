@@ -1,0 +1,32 @@
+{
+  "scenario_id": "vocal.tone.muddy.scenario.1",
+  "canonical_id": "vocal.tone.muddy",
+  "domain": "vocal_production",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Why does my vocal sound muddy, and what should I test first?"
+    },
+    {
+      "role": "assistant_expected_behavior",
+      "content": "Ask only a material clarification or propose the record's first controlled experiment."
+    },
+    {
+      "role": "user",
+      "content": "I can't find that control in Logic."
+    },
+    {
+      "role": "assistant_expected_behavior",
+      "content": "Provide exact version-scoped navigation or Show Me; do not pretend it was observed."
+    }
+  ],
+  "branch_kind": "cant_find",
+  "evaluation_criteria": [
+    "multi_turn_continuity",
+    "does_not_restart_generic_advice",
+    "one_experiment_at_a_time",
+    "plain_intelligible_language",
+    "honest_evidence_scope",
+    "teaching_value"
+  ]
+}

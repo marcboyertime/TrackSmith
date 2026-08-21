@@ -89,7 +89,8 @@ let package = Package(
         .target(
             name: "ProductionTutor",
             dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "PlanSchema"],
-            path: "packages/ProductionTutor/Sources/ProductionTutor"
+            path: "packages/ProductionTutor/Sources/ProductionTutor",
+            resources: [.process("Resources")]
         ),
         .target(
             name: "TutorConversation",
@@ -155,7 +156,8 @@ let package = Package(
         .executableTarget(
             name: "TutorConversationTests",
             dependencies: ["AudioAnalysis", "PlanSchema", "ProductionIntelligence", "ProductionTutor", "TutorConversation", "TutorLogicObserver"],
-            path: "tools/TutorConversationTests/Sources/TutorConversationTests"
+            path: "tools/TutorConversationTests/Sources/TutorConversationTests",
+            resources: [.process("../../Resources")]
         ),
         .executableTarget(
             name: "TutorAudioIntelligenceLab",

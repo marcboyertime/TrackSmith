@@ -15,6 +15,10 @@ Inputs:
 
 Output:
   packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift
+
+The native source registry may also contain candidate-corpus provenance. Those
+sources are included for traceability only; no awaiting-review queue candidate
+is promoted by this builder.
 """
 
 from __future__ import annotations
@@ -153,6 +157,30 @@ def load_jsonl(path: pathlib.Path) -> list[dict]:
         if line:
             out.append(json.loads(line))
     return out
+
+
+def append_registry_sources(sources: list[dict]) -> None:
+    """Add registry provenance without creating a second knowledge authority.
+
+    Candidate source records appear in the generated base so SourceRegistryEntry
+    has one runtime representation, but claims and strategies still come only
+    from the reviewed artifacts assembled below.
+    """
+    registry_path = K / "general-tutor-source-registry.json"
+    if not registry_path.exists():
+        return
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    seen = {source["id"] for source in sources}
+    for source in registry.get("sources", []):
+        if source["id"] in seen:
+            continue
+        sources.append({key: source.get(key) for key in (
+            "id", "type", "title", "creatorOrPublisher", "locator", "publicationDate",
+            "retrievalDate", "exactVersion", "rightsBasis", "handlingClass", "tier",
+            "transcriptAvailable", "transcriptIsAutomatic", "requiresAudiovisualReview",
+            "audiovisualReviewCompleted", "contentSHA256", "limitations", "supersededBy",
+        )})
+        seen.add(source["id"])
 
 
 def build_from_producer_corpus(records, sources, claims, strategies):
@@ -1024,6 +1052,7 @@ def main() -> int:
     strategies.extend(curated_gap_strategies(sources))
     concepts = curated_concepts(sources)
     contradictions = curated_contradictions(claims)
+    append_registry_sources(sources)
 
     # Wire contradiction links back onto the claims themselves.
     by_id = {c["id"]: c for c in claims}
@@ -1038,6 +1067,9 @@ def main() -> int:
     base = {
         "schemaVersion": "tracksmith.general-tutor-knowledge.v1",
         "builtAt": BUILT_AT,
+        # Preserve reviewed-card insertion order: it is an established output
+        # contract. Registry sources are appended in their deterministic native
+        # registry order by append_registry_sources above.
         "sources": sources,
         "claims": claims,
         "strategies": strategies,
