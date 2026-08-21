@@ -5,299 +5,242 @@ import TutorConversation
 struct TutorConversationView: View {
     @ObservedObject var session: CompanionSessionModel
     @ObservedObject var tutor: TutorConversationSessionModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var confirmingHistoryDeletion = false
+    @State private var contextExpanded = false
+    @State private var experimentDetailsExpanded = false
 
     var body: some View {
         VStack(spacing: 0) {
-            contextBar
-            Divider().overlay(Theme.Colors.hairline)
+            compactHeader
             transcript
-            Divider().overlay(Theme.Colors.hairline)
             composer
         }
-        .confirmationDialog(
-            "Delete all Tutor history?",
-            isPresented: $confirmingHistoryDeletion,
-            titleVisibility: .visible
-        ) {
-            Button("Delete Transcript, Experiments, and Receipts", role: .destructive) {
-                tutor.deleteAllHistory()
-            }
+        .background(Theme.Colors.canvas)
+        .confirmationDialog("Delete all Tutor history?", isPresented: $confirmingHistoryDeletion, titleVisibility: .visible) {
+            Button("Delete Transcript, Experiments, and Receipts", role: .destructive) { tutor.deleteAllHistory() }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This deletes Tutor conversation state and immutable local evidence receipts. It does not delete captures, previews, Logic projects, or source audio.")
+            Text("This deletes local Tutor history and receipts, not captures, previews, Logic projects, or source audio.")
         }
     }
 
-    private var contextBar: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
+    private var compactHeader: some View {
+        VStack(spacing: Theme.Spacing.eight) {
             HStack(spacing: Theme.Spacing.twelve) {
-                Picker("Source", selection: $session.sourceType) {
-                    ForEach(SourceType.allCases, id: \.self) { source in
-                        Text(sourceLabel(source)).tag(source)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("TUTOR").font(Theme.Font.kicker).foregroundStyle(Theme.Colors.accentBright)
+                    Text("A considered second pair of ears")
+                        .font(Theme.Font.section).foregroundStyle(Theme.Colors.text)
+                }
+                Spacer()
+                statusPill
+                Menu {
+                    Picker("Source", selection: $session.sourceType) {
+                        ForEach(SourceType.allCases, id: \.self) { Text(sourceLabel($0)).tag($0) }
                     }
+                    Button("Capture Recent Playback", systemImage: "waveform.badge.magnifyingglass") { session.captureRecent() }
+                        .disabled(session.selectedInstanceID == nil || session.isBusy)
+                    Toggle("Attach local capture context", isOn: $tutor.attachCurrentCapture)
+                    if session.captureArtifact != nil {
+                        Toggle("Request audio-model listening next turn", isOn: $tutor.requestModelListening)
+                    }
+                    Divider()
+                    Button("New Conversation", systemImage: "plus.bubble") { tutor.startNewConversation() }
+                    Button("Grant Read-Only Accessibility", systemImage: "eye") { tutor.requestAccessibilityAccess() }
+                    Button("Delete All Tutor History", systemImage: "trash", role: .destructive) { confirmingHistoryDeletion = true }
+                } label: {
+                    Image(systemName: "slider.horizontal.3").frame(width: 28, height: 28)
                 }
-                .frame(width: 210)
-
-                Button("Capture Recent Playback", systemImage: "waveform.badge.magnifyingglass") {
-                    session.captureRecent()
-                }
-                .disabled(session.selectedInstanceID == nil || session.isBusy)
-
-                Toggle("Use local measurements", isOn: $tutor.attachCurrentCapture)
-                    .toggleStyle(.checkbox)
-
-                if session.captureArtifact != nil {
-                    Toggle("Let audio model listen next turn", isOn: $tutor.requestModelListening)
-                        .toggleStyle(.checkbox)
-                        .help("Requires separate cloud-audio consent. The exact bounded WAV is hash-checked immediately before upload.")
-                }
-                Spacer()
+                .accessibilityLabel("Tutor context and actions")
             }
-
-            HStack(spacing: Theme.Spacing.eight) {
-                Circle().fill(session.statusColor).frame(width: 8, height: 8)
-                Text(captureSummary)
-                    .font(Theme.Font.meta)
-                    .foregroundStyle(Theme.Colors.secondaryText)
-                Spacer()
-                Text(tutor.activity)
-                    .font(Theme.Font.meta)
-                    .foregroundStyle(Theme.Colors.mutedText)
+            Button { withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.18)) { contextExpanded.toggle() } } label: {
+                HStack(spacing: Theme.Spacing.eight) {
+                    Circle().fill(session.statusColor).frame(width: 7, height: 7)
+                    Text(captureSummary).lineLimit(1)
+                    Spacer()
+                    Image(systemName: contextExpanded ? "chevron.up" : "chevron.down")
+                }
+                .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
             }
-
-            Text(tutor.logicStatus)
-                .font(Theme.Font.meta)
-                .foregroundStyle(Theme.Colors.mutedText)
+            .buttonStyle(.plain)
+            .accessibilityLabel("Capture and evidence status")
+            if contextExpanded {
+                VStack(alignment: .leading, spacing: Theme.Spacing.four) {
+                    Label("\(tutor.activity)", systemImage: tutor.isStreaming ? "ellipsis.message" : "checkmark.circle")
+                    Text("Local measurement is not model listening. Audio is sent only with separate consent and an exact capture hash.")
+                    Text(tutor.logicStatus)
+                }
+                .font(Theme.Font.meta).foregroundStyle(Theme.Colors.mutedText)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
-        .padding(.horizontal, Theme.Spacing.twentyFour)
-        .padding(.vertical, Theme.Spacing.twelve)
-        .background(Theme.Colors.card)
+        .padding(.horizontal, Theme.Spacing.twentyFour).padding(.vertical, Theme.Spacing.twelve)
+        .background(Theme.Colors.header)
+        .overlay(alignment: .bottom) { Rectangle().fill(Theme.Colors.hairline).frame(height: 1) }
+    }
+
+    private var statusPill: some View {
+        HStack(spacing: 5) {
+            Image(systemName: tutor.isStreaming ? "waveform" : "waveform.path.ecg")
+            Text(tutor.isStreaming ? "Thinking" : "Ready")
+        }
+        .font(Theme.Font.meta.weight(.semibold)).foregroundStyle(Theme.Colors.secondaryText)
+        .padding(.horizontal, Theme.Spacing.eight).padding(.vertical, Theme.Spacing.legacy5)
+        .background(Theme.Colors.control, in: Capsule())
+        .accessibilityLabel(tutor.isStreaming ? "Tutor is responding" : "Tutor is ready")
     }
 
     private var transcript: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: Theme.Spacing.sixteen) {
-                    if tutor.state.messages.isEmpty {
-                        welcome
+        ScrollView {
+            // Tutor history is bounded to 240 messages. Eager layout avoids the
+            // lazy-stack estimate cycle observed during manual transcript scrolling.
+            VStack(alignment: .leading, spacing: Theme.Spacing.twentyFour) {
+                if tutor.state.messages.isEmpty { welcome }
+                ForEach(tutor.state.messages) { message in
+                    VStack(alignment: message.role == .user ? .trailing : .leading, spacing: Theme.Spacing.twelve) {
+                        messageBubble(message)
+                        if let id = message.experimentID, let experiment = tutor.state.experiments.first(where: { $0.id == id }) { experimentCard(experiment) }
                     }
-                    ForEach(tutor.state.messages) { message in
-                        VStack(alignment: message.role == .user ? .trailing : .leading, spacing: Theme.Spacing.eight) {
-                            messageBubble(message)
-                            if let experimentID = message.experimentID,
-                               let experiment = tutor.state.experiments.first(where: { $0.id == experimentID }) {
-                                experimentCard(experiment)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: message.role == .user ? .trailing : .leading)
-                        .id(message.id)
-                    }
-                    if !tutor.streamingText.isEmpty {
-                        streamingBubble.id("streaming")
-                    }
+                    .frame(maxWidth: .infinity, alignment: message.role == .user ? .trailing : .leading)
                 }
-                .padding(Theme.Spacing.twentyFour)
+                if tutor.isStreaming { streamingBubble }
             }
-            .onChange(of: tutor.state.messages.count) { _, _ in
-                if let last = tutor.state.messages.last { proxy.scrollTo(last.id, anchor: .bottom) }
-            }
-            .onChange(of: tutor.streamingText) { _, _ in
-                proxy.scrollTo("streaming", anchor: .bottom)
-            }
+            .frame(maxWidth: 850, alignment: .leading)
+            .padding(.horizontal, Theme.Spacing.twentyFour).padding(.vertical, Theme.Spacing.twentyFour)
         }
     }
 
     private var welcome: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
-            Text("Tell me what you want to hear.")
-                .font(Theme.Font.display)
-            Text("I’ll ask only what changes the next move, use reviewed local knowledge and capture evidence when available, then give you one reversible experiment in Logic. You perform every edit.")
-                .font(Theme.Font.body)
-                .foregroundStyle(Theme.Colors.secondaryText)
-            HStack {
-                starter("My vocal sounds muddy in the mix")
-                starter("Why does my chorus feel smaller?")
-                starter("Teach me compression by ear")
+        VStack(alignment: .leading, spacing: Theme.Spacing.sixteen) {
+            Text("What are you noticing?").font(Theme.Font.hero)
+            Text("Describe the moment. I’ll keep the next move small, show the evidence I used, and leave every edit in your hands.")
+                .font(Theme.Font.body).foregroundStyle(Theme.Colors.secondaryText).frame(maxWidth: 520, alignment: .leading)
+            ViewThatFits(in: .horizontal) {
+                HStack { starter("My vocal is muddy in the mix"); starter("Why is my chorus smaller?"); starter("Teach compression by ear") }
+                VStack(alignment: .leading) { starter("My vocal is muddy in the mix"); starter("Why is my chorus smaller?"); starter("Teach compression by ear") }
             }
         }
-        .padding(Theme.Spacing.twentyFour)
-        .instrumentSurface(.raised, radius: Theme.Radius.medium)
+        .padding(Theme.Spacing.twentyFour).frame(maxWidth: 680, alignment: .leading)
+        .background(Theme.Colors.raised, in: RoundedRectangle(cornerRadius: Theme.Radius.large))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.large).stroke(Theme.Colors.hairline))
     }
 
     private func starter(_ text: String) -> some View {
-        Button(text) { tutor.composer = text }
-            .buttonStyle(.bordered)
+        Button(text) { tutor.composer = text }.buttonStyle(.bordered).accessibilityHint("Places this idea in the Tutor composer")
     }
 
     private func messageBubble(_ message: TutorConversationMessage) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
-            Text(message.text)
-                .font(Theme.Font.body)
-                .foregroundStyle(Theme.Colors.text)
-                .textSelection(.enabled)
+            Text(message.role == .assistant ? "TRACKSMITH" : "YOU").font(Theme.Font.kicker).foregroundStyle(message.role == .assistant ? Theme.Colors.accentBright : Theme.Colors.mutedText)
+            Text(message.text).font(Theme.Font.body).foregroundStyle(Theme.Colors.text).textSelection(.enabled)
             if !message.evidence.isEmpty {
-                evidenceChips(message.evidence)
+                DisclosureGroup("Evidence and limits") { evidenceDetails(message.evidence) }
+                    .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
             }
-            if message.status != .complete {
-                Text(message.status.rawValue.capitalized)
-                    .font(Theme.Font.meta)
-                    .foregroundStyle(.orange)
-            }
+            if message.status != .complete { Label(message.status.rawValue.capitalized, systemImage: "exclamationmark.circle").font(Theme.Font.meta).foregroundStyle(.orange) }
         }
-        .padding(Theme.Spacing.twelve)
-        .frame(maxWidth: 720, alignment: .leading)
-        .background(
-            message.role == .user ? Theme.Colors.accentSelection : Theme.Colors.raised,
-            in: RoundedRectangle(cornerRadius: Theme.Radius.medium)
-        )
-        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.medium).stroke(Theme.Colors.hairline))
+        .padding(Theme.Spacing.sixteen).frame(maxWidth: message.role == .user ? 580 : 720, alignment: .leading)
+        .background(message.role == .user ? Theme.Colors.userMessage : Theme.Colors.assistantMessage, in: RoundedRectangle(cornerRadius: Theme.Radius.large))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.large).stroke(Theme.Colors.hairline))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(message.role == .assistant ? "Tutor response" : "Your message")
+    }
+
+    private func evidenceDetails(_ evidence: [TutorEvidenceReference]) -> some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.four) {
+            ForEach(Array(evidence.prefix(8))) { item in
+                HStack(alignment: .top, spacing: Theme.Spacing.legacy6) {
+                    Circle().fill(evidenceColor(item.kind)).frame(width: 6, height: 6).padding(.top, 4)
+                    Text("\(item.kind.compactLabel): \(item.detail)")
+                }
+            }
+        }.padding(.top, Theme.Spacing.eight)
     }
 
     private var streamingBubble: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
-            HStack {
-                ProgressView().controlSize(.small)
-                Text(tutor.activity).font(Theme.Font.meta).foregroundStyle(Theme.Colors.mutedText)
-            }
-            Text(tutor.streamingText)
-                .font(Theme.Font.body)
-                .textSelection(.enabled)
-            if let notice = tutor.fallbackNotice {
-                Text(notice)
-                    .font(Theme.Font.meta)
-                    .foregroundStyle(.orange)
-            }
+            HStack { ProgressView().controlSize(.small); Text(tutor.activity).font(Theme.Font.meta) }
+            if !tutor.streamingText.isEmpty { Text(tutor.streamingText).font(Theme.Font.body).textSelection(.enabled) }
+            if let fallback = tutor.fallbackNotice { Label(fallback, systemImage: "wifi.slash").font(Theme.Font.meta).foregroundStyle(.orange) }
         }
-        .padding(Theme.Spacing.twelve)
-        .frame(maxWidth: 720, alignment: .leading)
-        .instrumentSurface(.raised, radius: Theme.Radius.medium)
-    }
-
-    private func evidenceChips(_ values: [TutorEvidenceReference]) -> some View {
-        HStack(spacing: Theme.Spacing.four) {
-            ForEach(Array(values.prefix(6))) { evidence in
-                Text(evidence.kind.compactLabel)
-                    .font(Theme.Font.meta.weight(.semibold))
-                    .padding(.horizontal, Theme.Spacing.legacy6)
-                    .padding(.vertical, Theme.Spacing.legacy2)
-                    .background(evidenceColor(evidence.kind).opacity(0.16), in: Capsule())
-                    .help("\(evidence.label): \(evidence.detail)")
-            }
-        }
+        .padding(Theme.Spacing.sixteen).frame(maxWidth: 720, alignment: .leading)
+        .background(Theme.Colors.assistantMessage, in: RoundedRectangle(cornerRadius: Theme.Radius.large))
+        .accessibilityLabel("Tutor is responding")
     }
 
     private func experimentCard(_ experiment: TutorExperimentRecord) -> some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
-            HStack {
-                Label("One reversible experiment", systemImage: "dial.medium")
-                    .font(Theme.Font.section)
-                Spacer()
-                Text("User performs this")
-                    .font(Theme.Font.meta)
-                    .foregroundStyle(Theme.Colors.mutedText)
-            }
-            Text(experiment.draft.title).font(Theme.Font.body.weight(.semibold))
-            experimentRow("Where", experiment.draft.logicLocation)
-            experimentRow("Try", "\(experiment.draft.action) Starting point: \(experiment.draft.startingRange)")
+        VStack(alignment: .leading, spacing: Theme.Spacing.twelve) {
+            HStack { Label("ONE SMALL EXPERIMENT", systemImage: "sparkles").font(Theme.Font.kicker).foregroundStyle(Theme.Colors.accentBright); Spacer(); Text("You stay in control").font(Theme.Font.meta).foregroundStyle(Theme.Colors.mutedText) }
+            Text(experiment.draft.title).font(Theme.Font.section)
+            experimentRow("Try", "\(experiment.draft.action) Start: \(experiment.draft.startingRange)")
             experimentRow("Listen for", experiment.draft.listenFor)
-            experimentRow("Why", experiment.draft.why)
-            experimentRow("Risk / stop", experiment.draft.risk)
-            experimentRow("Undo", experiment.draft.undo)
-            HStack {
-                Button("Show Me", systemImage: "scope") { tutor.showMe(experiment) }
-                Button("Dismiss Callout") { tutor.dismissCallout() }
-                Spacer()
-                if let outcome = experiment.outcome {
-                    Text("Reported: \(outcome.rawValue)")
-                        .font(Theme.Font.meta)
-                        .foregroundStyle(Theme.Colors.secondaryText)
-                } else {
-                    Button("Better") { tutor.submitOutcome(experiment: experiment, outcome: .better, session: session) }
-                    Button("Worse") { tutor.submitOutcome(experiment: experiment, outcome: .worse, session: session) }
-                    Button("No change") { tutor.submitOutcome(experiment: experiment, outcome: .noChange, session: session) }
-                    Button("Can't find it") { tutor.submitOutcome(experiment: experiment, outcome: .cannotFind, session: session) }
-                }
+            DisclosureGroup("Where, why, risk, and undo", isExpanded: $experimentDetailsExpanded) {
+                VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
+                    experimentRow("Where", experiment.draft.logicLocation); experimentRow("Why", experiment.draft.why)
+                    experimentRow("Risk", experiment.draft.risk); experimentRow("Undo", experiment.draft.undo)
+                }.padding(.top, Theme.Spacing.eight)
+            }.font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
+            if experiment.comparisonAuthority != nil, experiment.outcome == nil {
+                Toggle("My edit is upstream of TrackSmith and the follow-up capture contains its signal", isOn: tutor.signalPathConfirmationBinding(for: experiment.id))
+                    .font(Theme.Font.meta).toggleStyle(.checkbox)
+                    .accessibilityHint("Required for a bounded local measurement comparison, not a listening claim.")
             }
-            .buttonStyle(.bordered)
+            if let comparison = experiment.waveformComparison { comparisonDetail(comparison) }
+            HStack(spacing: Theme.Spacing.eight) {
+                Button("Show Me", systemImage: "scope") { tutor.showMe(experiment) }.accessibilityHint("Shows a read-only Logic overlay when available")
+                Button("Listen Again", systemImage: "waveform.badge.magnifyingglass") { session.captureRecent() }
+                    .disabled(session.selectedInstanceID == nil || session.isBusy)
+                    .accessibilityHint("Captures recent playback for an optional bounded follow-up measurement")
+                if experiment.outcome == nil {
+                    Menu("What changed?") {
+                        Button("Better") { tutor.submitOutcome(experiment: experiment, outcome: .better, session: session) }
+                        Button("Worse") { tutor.submitOutcome(experiment: experiment, outcome: .worse, session: session) }
+                        Button("No change") { tutor.submitOutcome(experiment: experiment, outcome: .noChange, session: session) }
+                        Button("Not sure") { tutor.submitOutcome(experiment: experiment, outcome: .notSure, session: session) }
+                        Button("Can't find it") { tutor.submitOutcome(experiment: experiment, outcome: .cannotFind, session: session) }
+                    }
+                } else { Label("You reported: \(experiment.outcome!.rawValue)", systemImage: "person.fill.checkmark") }
+                Spacer()
+                Button("Dismiss", systemImage: "xmark") { tutor.dismissCallout() }.labelStyle(.iconOnly).accessibilityLabel("Dismiss Show Me callout")
+            }.buttonStyle(.bordered)
         }
-        .padding(Theme.Spacing.twelve)
-        .frame(maxWidth: 760, alignment: .leading)
-        .background(Theme.Colors.accentSubtle, in: RoundedRectangle(cornerRadius: Theme.Radius.medium))
-        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.medium).stroke(Theme.Colors.accent.opacity(0.55)))
+        .padding(Theme.Spacing.sixteen).frame(maxWidth: 760, alignment: .leading)
+        .background(Theme.Colors.experimentSurface, in: RoundedRectangle(cornerRadius: Theme.Radius.large))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.large).stroke(Theme.Colors.accent.opacity(0.45)))
+    }
+
+    private func comparisonDetail(_ comparison: TutorWaveformComparison) -> some View {
+        DisclosureGroup { VStack(alignment: .leading, spacing: Theme.Spacing.four) {
+            Text(comparison.reason)
+            ForEach(comparison.measurementDeltas ?? []) { delta in Text("\(delta.identifier): \(delta.before, specifier: "%.3f") → \(delta.after, specifier: "%.3f") (Δ \(delta.delta, specifier: "%+.3f") \(delta.unit))") }
+        }.font(Theme.Font.data).padding(.top, Theme.Spacing.four) } label: {
+            Label(comparison.available ? "Bounded local measurement delta" : "Comparison unavailable", systemImage: comparison.available ? "chart.line.uptrend.xyaxis" : "exclamationmark.triangle")
+                .font(Theme.Font.meta).foregroundStyle(comparison.available ? Theme.Colors.evidenceAvailable : Theme.Colors.evidenceUnavailable)
+        }
     }
 
     private func experimentRow(_ label: String, _ value: String) -> some View {
-        HStack(alignment: .top, spacing: Theme.Spacing.eight) {
-            Text(label).font(Theme.Font.meta.weight(.semibold)).frame(width: 72, alignment: .leading)
-            Text(value).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
-        }
+        HStack(alignment: .top, spacing: Theme.Spacing.eight) { Text(label).font(Theme.Font.meta.weight(.semibold)).frame(width: 68, alignment: .leading); Text(value).font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText) }
     }
 
     private var composer: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
-            TextField("Project goal (optional)", text: $tutor.projectGoal)
-                .textFieldStyle(.plain)
-                .font(Theme.Font.meta)
-                .foregroundStyle(Theme.Colors.secondaryText)
-            HStack(alignment: .bottom, spacing: Theme.Spacing.eight) {
-                TextField("Ask about what you hear, what changed, or why…", text: $tutor.composer, axis: .vertical)
-                    .textFieldStyle(.roundedBorder)
-                    .lineLimit(1...6)
-                    .onSubmit { tutor.send(session: session) }
-                if tutor.isStreaming {
-                    Button("Cancel", role: .cancel) { tutor.cancel() }
-                } else {
-                    Button("Send", systemImage: "arrow.up.circle.fill") { tutor.send(session: session) }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(tutor.composer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                }
-                Menu {
-                    Button("New Conversation", systemImage: "plus.bubble") { tutor.startNewConversation() }
-                    Button("Grant Read-Only Accessibility", systemImage: "eye") { tutor.requestAccessibilityAccess() }
-                    Divider()
-                    Button("Delete All Tutor History", systemImage: "trash", role: .destructive) {
-                        confirmingHistoryDeletion = true
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle").accessibilityLabel("Tutor actions")
-                }
-                .menuStyle(.borderlessButton)
-                .frame(width: 28)
+        VStack(spacing: Theme.Spacing.eight) {
+            HStack(alignment: .bottom, spacing: Theme.Spacing.twelve) {
+                TextField("What changed, or what do you want to understand?", text: $tutor.composer)
+                    .textFieldStyle(.plain).font(Theme.Font.body).onSubmit { tutor.send(session: session) }
+                    .accessibilityLabel("Tutor question")
+                if tutor.isStreaming { Button("Cancel", role: .cancel) { tutor.cancel() }.buttonStyle(.bordered) }
+                else { Button("Send", systemImage: "arrow.up") { tutor.send(session: session) }.buttonStyle(.borderedProminent).disabled(tutor.composer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty).accessibilityHint("Sends your question to Tutor") }
             }
-            Text("Text and measurements leave this Mac only with cloud-text consent. Audio requires a second consent and an exact hash-bound capture. The model has no Logic or Audio Unit mutation tools.")
-                .font(Theme.Font.meta)
-                .foregroundStyle(Theme.Colors.mutedText)
+            HStack { Text("Optional goal").font(Theme.Font.meta); TextField("Keep the vocal natural", text: $tutor.projectGoal).textFieldStyle(.plain).font(Theme.Font.meta); Spacer(); Text("No Logic edits are made by Tutor").font(Theme.Font.meta).foregroundStyle(Theme.Colors.mutedText) }
         }
-        .padding(.horizontal, Theme.Spacing.twentyFour)
-        .padding(.vertical, Theme.Spacing.twelve)
-        .background(Theme.Colors.card)
+        .padding(Theme.Spacing.twelve).background(Theme.Colors.composer, in: RoundedRectangle(cornerRadius: Theme.Radius.large))
+        .padding(.horizontal, Theme.Spacing.twentyFour).padding(.vertical, Theme.Spacing.twelve)
+        .background(Theme.Colors.header).overlay(alignment: .top) { Rectangle().fill(Theme.Colors.hairline).frame(height: 1) }
     }
 
-    private var captureSummary: String {
-        guard let capture = session.captureArtifact else {
-            return session.instances.isEmpty
-                ? "Add the TrackSmith Audio Unit in Logic to capture playback."
-                : "No capture attached. Tutor can still teach from your description and reviewed knowledge."
-        }
-        return String(
-            format: "Current immutable capture %@ · %.1f s · %.0f Hz · %d ch · local measurements are not model listening",
-            String(capture.id.uuidString.prefix(8)),
-            Double(capture.frameCount) / capture.sampleRate,
-            capture.sampleRate,
-            capture.channelCount
-        )
-    }
-
-    private func evidenceColor(_ kind: TutorEvidenceKind) -> Color {
-        switch kind {
-        case .heardByModel: .green
-        case .locallyMeasured: .blue
-        case .logicObserved: .purple
-        case .userReported: .cyan
-        case .reviewedKnowledge: .indigo
-        case .inference: .orange
-        case .unavailable: .gray
-        }
-    }
+    private var captureSummary: String { guard let capture = session.captureArtifact else { return session.instances.isEmpty ? "No TrackSmith capture available" : "No capture attached — Tutor can still work from your report" }; return "Capture \(capture.id.uuidString.prefix(6)) · \(String(format: "%.1fs", Double(capture.frameCount) / capture.sampleRate)) · local evidence" }
+    private func evidenceColor(_ kind: TutorEvidenceKind) -> Color { switch kind { case .heardByModel: .green; case .locallyMeasured: .blue; case .logicObserved: .purple; case .userReported: .cyan; case .reviewedKnowledge: .indigo; case .candidateKnowledge: .yellow; case .separatedSourceEstimate: .teal; case .structureEstimate: .mint; case .inference: .orange; case .unavailable: .gray } }
 }

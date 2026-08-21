@@ -1,0 +1,48 @@
+{
+  "canonical_qa_id": "pkg007.qa.000001",
+  "domain": "phase_polarity",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity and references the exact prior experiment.",
+    "Separates user report, measurement, model listening, Logic observation, documentation, and inference.",
+    "Recommends at most one next experiment.",
+    "Preserves matched loudness, mono checking, stop condition, undo, and version-scoped Logic guidance.",
+    "Explains the transferable principle in natural language."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard or seen the result without current evidence.",
+    "Treats a meter target, candidate record, or forum preference as universal truth.",
+    "Invents a Logic control, automatic action, or exact setting.",
+    "Adds several unrelated processors or restarts from a generic stereo recipe."
+  ],
+  "id": "pkg007.scenario.0000001",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about phase versus polarity, and when does it matter in a mix?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes the decision, then present one reversible stereo/mono experiment: Blend the two related signals at matched level, toggle polarity on one, then compare both settings in stereo and mono without moving any timing."
+    },
+    {
+      "role": "user",
+      "text": "That is more focused and translates better in mono, but it feels a little smaller in stereo."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact prior experiment, treat the user report as evidence, and adapt one hypothesis without restarting from generic panning or phase advice."
+    },
+    {
+      "role": "user",
+      "text": "Why does that result make sense, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and connect it to the exact A/B: Polarity inversion flips the entire waveform vertically; phase describes a frequency-dependent time relationship between signals. A polarity flip can improve one blend but is not a universal phase-alignment command."
+    }
+  ],
+  "package_id": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "scenario_type": "better_with_tradeoff",
+  "subdomain": "fundamentals_phase_polarity"
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "package_sequence": 4,
+  "id": "scenario.reverb.diagnosis_and_clarity.vocal_washed_out.tradeoff",
+  "canonical_id": "reverb.diagnosis_and_clarity.vocal_washed_out",
+  "domain": "reverb",
+  "category": "diagnosis_and_clarity",
+  "scenario_type": "tradeoff",
+  "turns": [
+    {
+      "role": "user",
+      "text": "Why does reverb make my vocal washed out?"
+    },
+    {
+      "role": "assistant_expected",
+      "behavior": "Use available audio, reviewed knowledge, and bounded practitioner patterns; ask only a decision-changing clarification and present one reversible experiment."
+    },
+    {
+      "role": "user",
+      "text": "That gives me more depth, but now the source is less clear and feels farther away."
+    },
+    {
+      "role": "assistant_expected",
+      "behavior": "Remember the exact prior experiment, interpret the benefit and downside as a tradeoff, modify or redirect the same hypothesis, and explain the causal lesson."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen?"
+    },
+    {
+      "role": "assistant_expected",
+      "behavior": "Explain the actual timing, spectral, routing, stereo, or arrangement mechanism in plain language without claiming proof beyond the evidence."
+    }
+  ],
+  "required_behaviors": [
+    "maintain_multi_turn_continuity",
+    "one_experiment_at_a_time",
+    "state_what_to_listen_for",
+    "provide_stop_rule_and_undo",
+    "preserve_heard_measured_reviewed_community_inference_boundaries",
+    "teach_a_transferable_principle"
+  ],
+  "forbidden_behaviors": [
+    "restart_from_generic_advice",
+    "claim_user_performed_an_edit_without_confirmation",
+    "treat_numeric_starting_points_as_presets",
+    "dump_raw_source_text",
+    "mutate_logic"
+  ],
+  "review_status": "synthetic_multiturn_evaluation"
+}

@@ -82,6 +82,7 @@
 		D414C2CD45137B3D41D44E13 /* InstrumentSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D9E69284E15A17CF0E7FD /* InstrumentSurface.swift */; };
 		DADE651A68C607D98F375959 /* StatusHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2C653736EE26638B17F13E /* StatusHeaderView.swift */; };
 		E2018EF4202C34539CC63E8F /* PlanSchema in Frameworks */ = {isa = PBXBuildFile; productRef = 3BEA1AE0B9B4D87DB60F9AB3 /* PlanSchema */; };
+		E3235BE744EBD6C08C727E1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C66B1E2A98D86F27F9B09492 /* Assets.xcassets */; };
 		E7806A25AE37EE931530B4C4 /* PreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861C5ABF6FE1C6FB8DE7C2DA /* PreviewCard.swift */; };
 		E9C940F36834AF328DF56350 /* SharedIPC in Frameworks */ = {isa = PBXBuildFile; productRef = 06243F0F93AD016BB2D781AE /* SharedIPC */; };
 		EDC0212EB061ABB1EB9BA693 /* ChangeStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB99F106F815285C1A005A1A /* ChangeStackView.swift */; };
@@ -171,6 +172,7 @@
 		C38C1856B0AD4A7508F32109 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C451AA04E4837DEDF4F2D4A8 /* CompanionMacApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CompanionMacApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5C0D424E6733F5FBFAE0BBB /* VocalAnalysisFeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocalAnalysisFeedbackView.swift; sourceTree = "<group>"; };
+		C66B1E2A98D86F27F9B09492 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C85C16EFEA19BB03688DC409 /* ChainPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainPanelView.swift; sourceTree = "<group>"; };
 		CAEDB70972CCD61F1D5A1FBB /* ProviderStatusRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderStatusRowView.swift; sourceTree = "<group>"; };
 		CB99F106F815285C1A005A1A /* ChangeStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeStackView.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 		5B71499B28D5808629444274 /* CompanionMacApp */ = {
 			isa = PBXGroup;
 			children = (
+				C66B1E2A98D86F27F9B09492 /* Assets.xcassets */,
 				790917278D3E6D6B76AB9CAC /* CompanionMacApp.entitlements */,
 				D3310E77A15A2B25644146A0 /* CompanionMacApp.swift */,
 				A683712EF09E0C959B644643 /* CompanionSessionModel.swift */,
@@ -386,6 +389,7 @@
 			buildConfigurationList = 89910714F2E2CD8FA9D71F76 /* Build configuration list for PBXNativeTarget "CompanionMacApp" */;
 			buildPhases = (
 				B7A77339D8C3C3BE85C30910 /* Sources */,
+				ABC5BC630467DD35A965BE29 /* Resources */,
 				16FFD56037918A10C3A1268F /* Frameworks */,
 				50D46B36953AB3AA60D4BEE0 /* Embed Foundation Extensions */,
 			);
@@ -447,6 +451,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ABC5BC630467DD35A965BE29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3235BE744EBD6C08C727E1F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		32E137E2EB9415942298DE54 /* Sources */ = {

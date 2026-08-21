@@ -1,0 +1,103 @@
+{
+  "canonical_question": "What should I understand about nondestructive versus destructive edits, and when does it matter?",
+  "clarification_questions": [
+    "What exact source, performance, layer, or edit boundary is involved, and what musical role should survive?",
+    "Is the problem audible in the full mix, only in solo, or only on one playback system or section?",
+    "What changed immediately before the problem appeared, and can you return to the previous state?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Nondestructive versus destructive edits is the main cause of the reported result.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "The problem is primarily performance, source, arrangement, level, monitoring, or room context rather than the named edit/layer technique.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "The technique is appropriate, but its amount, boundary, timing, routing, source hierarchy, or Logic mode is wrong.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-11",
+  "direct_answer": "Region edits, fades, Flex operations, and alternatives preserve recovery; Audio File Editor processes can alter the source file. Choose the least destructive tool that still solves the problem. The goal is not a universal cleanup or stacking rule; define the musical role, preserve recovery, and verify one change in context.",
+  "domain": "editing",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact before state, affected passage, source/layer scope, and current Logic version.",
+    "A matched before/after comparison using the same musical section.",
+    "The user’s report of what became cleaner, tighter, fuller, smaller, noisier, phasey, or less natural.",
+    "Original-versus-derived status for any separated, repaired, consolidated, or resampled audio."
+  ],
+  "id": "pkg008.qa.000001",
+  "key_distinction": "Region edits, fades, Flex operations, and alternatives preserve recovery; Audio File Editor processes can alter the source file. Choose the least destructive tool that still solves the problem.",
+  "limitations": [
+    "Starting values and edit amounts are orientations, not universal presets.",
+    "Visual waveforms, grids, meters, and analyzers are diagnostic aids, not proof of musical improvement.",
+    "Professional and community sources are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to TrackSmith reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "whether the edit solves the problem while the untouched source remains immediately recoverable",
+    "location": "Logic Tracks area > audio region > Region inspector / Fade tool / Track Alternatives",
+    "risk": "A destructive repair can make later comp, timing, or restoration decisions impossible.",
+    "show_me_query": "Logic Tracks area > audio region > Region inspector / Fade tool / Track Alternatives",
+    "starting_point": "Save an alternative before editing and make one reversible change.",
+    "steps": [
+      "Save a Project Alternative, Track Alternative, or duplicate source before making a consequential edit or layer change.",
+      "Duplicate the region or create a Track/Project Alternative, then perform the same small edit non-destructively and compare recovery options.",
+      "Compare the same passage at matched perceived loudness in the full arrangement; use solo only to inspect a specific artifact.",
+      "Listen for: whether the edit solves the problem while the untouched source remains immediately recoverable.",
+      "Stop or back off if: A destructive repair can make later comp, timing, or restoration decisions impossible.",
+      "Disable or remove the region edit and return to the saved alternative or untouched source."
+    ],
+    "stop_condition": "Stop once you can repeatably determine whether the edit solves the problem while the untouched source remains immediately recoverable in the full context. Back off or undo if a destructive repair can make later comp, timing, or restoration decisions impossible.",
+    "undo": "Disable or remove the region edit and return to the saved alternative or untouched source.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact menu labels, Flex modes, stack behavior, fade controls, parameter ranges, and current behavior against the installed version.",
+    "visual_target_query": "Logic Tracks area > audio region > Region inspector / Fade tool / Track Alternatives"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "non_processing_possibilities": [
+    "Re-record if the source is still available and the defect is severe.",
+    "Preserve a hidden safety playlist before committing."
+  ],
+  "package_id": "tracksmith-corpus-008-editing-layering",
+  "package_number": 8,
+  "problem_summary": "Region edits, fades, Flex operations, and alternatives preserve recovery; Audio File Editor processes can alter the source file. Choose the least destructive tool that still solves the problem.",
+  "recommended_first_experiment": "Duplicate the region or create a Track/Project Alternative, then perform the same small edit non-destructively and compare recovery options.",
+  "retrieval_tags": [
+    "Logic Pro",
+    "alternatives",
+    "concept",
+    "destructive",
+    "editing",
+    "nondestructive",
+    "nondestructive_editing_workflow",
+    "nondestructive_vs_destructive"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "source_ids": [
+    "pkg008.source.000001",
+    "pkg008.source.000002",
+    "pkg008.source.000003",
+    "pkg008.source.000004",
+    "pkg008.source.000005"
+  ],
+  "subdomain": "nondestructive_editing_workflow",
+  "teaching_principle": "Region edits, fades, Flex operations, and alternatives preserve recovery; Audio File Editor processes can alter the source file. Choose the least destructive tool that still solves the problem.",
+  "title": "Nondestructive versus destructive edits — what it changes",
+  "topic": "nondestructive_vs_destructive",
+  "tradeoffs": [
+    "The destructive version is cleaner, but it removed useful room tone or made revision harder.",
+    "A destructive repair can make later comp, timing, or restoration decisions impossible.",
+    "A local improvement can create a new timing, tone, noise, phase, density, or arrangement problem."
+  ],
+  "user_intent": "Understand the production concept and avoid a misleading shortcut.",
+  "variant_kind": "concept"
+}

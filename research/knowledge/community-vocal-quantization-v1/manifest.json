@@ -1,0 +1,209 @@
+{
+  "package_name": "TrackSmith_Vocal_Quantization_QA_Corpus_v1",
+  "version": "1.0.0",
+  "generated_at": "2026-08-11",
+  "purpose": "Drop-in candidate knowledge, retrieval language, multi-turn evaluation, and integration handoff for the TrackSmith Tutor.",
+  "counts": {
+    "package": "TrackSmith Vocal + Quantization Q&A Corpus v1",
+    "generated_at": "2026-08-11",
+    "canonical_records": 214,
+    "vocal_canonical": 147,
+    "quantization_canonical": 67,
+    "user_utterances": 3290,
+    "multiturn_scenarios": 428,
+    "source_registry_entries": 34,
+    "contradiction_records": 17,
+    "claim_candidates": 214,
+    "strategy_candidates": 214,
+    "categories": {
+      "tone_and_articulation": 30,
+      "recording_and_monitoring": 26,
+      "dynamics_and_level": 23,
+      "space_delay_and_creative_effects": 20,
+      "editing_comping_tuning_and_alignment": 24,
+      "layering_and_mix_context": 23,
+      "logic_routing": 1,
+      "midi_quantization": 25,
+      "audio_quantization_and_flex": 15,
+      "tempo_mapping_and_authority": 12,
+      "quantization_troubleshooting_and_ear_training": 15
+    },
+    "source_tiers": {
+      "A": 17,
+      "C": 4,
+      "B": 13
+    },
+    "source_publishers": {
+      "Apple": 17,
+      "Reddit / r/WeAreTheMusicMakers": 1,
+      "Logic Pro Help": 11,
+      "Gearspace": 5
+    },
+    "review_status": "All knowledge records are candidate_not_yet_human_reviewed; Apple navigation facts still require installed-version UI verification before exact instruction authority.",
+    "procedure_candidates": 214
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4780,
+      "sha256": "70f4164585fdb612b354ca5ea998c9ddf4e2183f89e1b1d9803e651515474040"
+    },
+    {
+      "path": "corpus/canonical_qa.jsonl",
+      "bytes": 1211902,
+      "sha256": "fe0396e65e5dd0f91d9b0afbe89cc7899e63486d66f061db6768869692e0b8b7"
+    },
+    {
+      "path": "corpus/multiturn_scenarios.jsonl",
+      "bytes": 355846,
+      "sha256": "e989b8d8e12e2f47027c9663295d3ce1687375470068736efb080b68636517c6"
+    },
+    {
+      "path": "corpus/quantization_timing_canonical.jsonl",
+      "bytes": 373296,
+      "sha256": "a256d92d0500cd19fa70fc8f22b10b86ac2754603817a27545847c83bcc53d26"
+    },
+    {
+      "path": "corpus/quantization_user_utterances.jsonl",
+      "bytes": 434692,
+      "sha256": "f3494ea3e9d848b8b7d5f0ac5dcd0b9a23b95013ddfe0eb925f98b9836454be2"
+    },
+    {
+      "path": "corpus/user_utterances.jsonl",
+      "bytes": 1486032,
+      "sha256": "40ad0ee2f149c80ee0abda7c1dc62cedd5a53f5546837be154e11968d1b12967"
+    },
+    {
+      "path": "corpus/vocal_production_canonical.jsonl",
+      "bytes": 838606,
+      "sha256": "0288da71e24c2dda8ab88c5b351eb2144afce038dc9e6693660787c7f4a980e9"
+    },
+    {
+      "path": "corpus/vocal_user_utterances.jsonl",
+      "bytes": 1051340,
+      "sha256": "78fe57b90a2c8c0a0739e9065fef48938023c3de63570fdad32ac1689426ae38"
+    },
+    {
+      "path": "examples/sample_multiturn_scenario.json",
+      "bytes": 914,
+      "sha256": "913cd69a4ae67e2aa646abe2adc0379f75ff5c2806f1e3ae8e8486e268df6e17"
+    },
+    {
+      "path": "examples/sample_quantization_record.json",
+      "bytes": 6817,
+      "sha256": "e135cf0b695b86406e27f036c49faaef553a2ae1c9fde5e913e1d2210df7e0a3"
+    },
+    {
+      "path": "examples/sample_vocal_record.json",
+      "bytes": 6554,
+      "sha256": "21120ce01a28bf51af587d1d91297656c8cf6145e27dba209003fe294ac4440b"
+    },
+    {
+      "path": "integration/CODEX_HANDOFF.md",
+      "bytes": 3389,
+      "sha256": "a4f00b5bb01d11e10bc395b34de6e19e1e171ead8551e8c2f24e6e93c33a32c6"
+    },
+    {
+      "path": "integration/REVIEW_CHECKLIST.md",
+      "bytes": 1001,
+      "sha256": "252572b3c133491162412ac3771ec52bc56b25e046d557cb3e77c7dec1cefdce"
+    },
+    {
+      "path": "integration/TRACKSMITH_IMPORT_PLAN.md",
+      "bytes": 2955,
+      "sha256": "f15c6ccd00b21138b336ec73aca6224360f6feb9c2ac89072abbcea9a842c6f5"
+    },
+    {
+      "path": "integration/logic_procedure_candidates.jsonl",
+      "bytes": 346294,
+      "sha256": "0d5d99c0949d98f02c26965353a2e64672066b4eb11a967361337dfb7162fb3f"
+    },
+    {
+      "path": "integration/tracksmith_claim_candidates.jsonl",
+      "bytes": 272350,
+      "sha256": "7c20732725294b34e7f377bc05e77f9efb9a7d2a6b5578417b8c72dbf4a570e2"
+    },
+    {
+      "path": "integration/tracksmith_strategy_candidates.jsonl",
+      "bytes": 729558,
+      "sha256": "d9922b7b0ac8f22c9fce212ad2e00e9590e539f83719654941fdcb21b559f936"
+    },
+    {
+      "path": "reports/QA_REPORT.md",
+      "bytes": 2053,
+      "sha256": "4c317ec2d5698bb273d2c9c5ac0e745de16f602751c226b6b57e9c7faa79fa03"
+    },
+    {
+      "path": "reports/SOURCE_COVERAGE.md",
+      "bytes": 2005,
+      "sha256": "87db5677715873f2da15f2da81cf0dbe0786b3aa0974f7e04deb5e976196284d"
+    },
+    {
+      "path": "reports/VALIDATION.txt",
+      "bytes": 449,
+      "sha256": "a24e35bb5637d9a5adec5c3273115210fdd836572d8781672e11e841a14b7679"
+    },
+    {
+      "path": "reports/stats.json",
+      "bytes": 1213,
+      "sha256": "6329d801cc05b1205a1fcef75c6422cb86487804cf48f533bf0eb16e02b1d637"
+    },
+    {
+      "path": "research/SOURCE_POLICY.md",
+      "bytes": 2513,
+      "sha256": "0ba96c69f37a729a70db48f4ddfedd966d3c5eaba0ff6b481dde18dcd04c9d09"
+    },
+    {
+      "path": "research/contradictions.jsonl",
+      "bytes": 9353,
+      "sha256": "35d3bd2dc75f2fca1c3bab2a3abc0f1b395e43f42d95b3ac9e1e3d16adf1e014"
+    },
+    {
+      "path": "research/source_registry.jsonl",
+      "bytes": 18918,
+      "sha256": "5f0b673a5f01d81679028bb74e26c79daf1a7fefbe342f8a12f1f0fd8eb0c820"
+    },
+    {
+      "path": "research/taxonomy.json",
+      "bytes": 2035,
+      "sha256": "1851bcb2b0ccdbe72d34623ba5611c1a5ea36f460f67fb80ca32875e9da85ffa"
+    },
+    {
+      "path": "schemas/canonical_qa.schema.json",
+      "bytes": 3554,
+      "sha256": "c34f9f5e56d0645598af42a55b07bde979224cfa798f0ffb67f2b148557811a7"
+    },
+    {
+      "path": "schemas/multiturn_scenario.schema.json",
+      "bytes": 847,
+      "sha256": "9654f70d6488fd8e1594bbe6812ceab0f61bbe45b198319c665d9dfe54a01736"
+    },
+    {
+      "path": "schemas/source_registry.schema.json",
+      "bytes": 926,
+      "sha256": "fe1fd94064d62cd2c510da5be422bac7ee59a5006f5fe708ce5e82cb6f07db5a"
+    },
+    {
+      "path": "schemas/utterance.schema.json",
+      "bytes": 789,
+      "sha256": "fb7fd124e66388061358632b9ab7dcc2f8399585f9a522029c38a1e77602100e"
+    },
+    {
+      "path": "tools/validate_package.py",
+      "bytes": 19146,
+      "sha256": "6014aea16a33620fb4cc760de0e7b9c1465262c1ea5d41bf08e9a2ae2307013d"
+    }
+  ],
+  "safety_and_truthfulness": {
+    "raw_forum_bodies_included": false,
+    "private_audio_included": false,
+    "credentials_included": false,
+    "all_knowledge_review_status": "candidate_not_yet_human_reviewed",
+    "reddit_access_note": "Direct Reddit search and thread retrieval were inconsistent. One high-signal discussion was retrievable through an indexed mirror. Reddit-derived material is paraphrased and kept as Tier C community evidence."
+  },
+  "validation": {
+    "command": "python3 tools/validate_package.py",
+    "status_at_packaging": "passed",
+    "note": "Structural validation is not a substitute for human production review or installed-Logic procedure verification."
+  }
+}

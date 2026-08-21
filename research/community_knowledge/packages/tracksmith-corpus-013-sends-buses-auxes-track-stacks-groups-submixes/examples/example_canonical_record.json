@@ -1,0 +1,110 @@
+{
+  "canonical_question": "What should I understand about sends versus inserts, and why does it matter in Logic Pro?",
+  "clarification_questions": [
+    "Is the effect supposed to transform the whole source or add a parallel layer?",
+    "Which tracks or returns are involved, and what should stay unchanged?",
+    "Is the goal shared audio processing, parallel wet processing, linked control, or organization only?"
+  ],
+  "competing_hypotheses": [
+    "The current insert may be correct; a shared aux may give better independent control; the problem may only be level mismatch.",
+    "The routing itself may be correct and the perceived problem may be level, processing, automation, solo behavior, or arrangement context."
+  ],
+  "direct_answer": "An insert processes the whole channel in series; a send splits off a parallel copy to a bus and aux. Focus on the routing concept before touching processing. A safe first test is: Duplicate or preserve the track, compare one effect as an insert against the same effect on a 100% wet aux, and level-match the result. Listen for whether the effect feels integrated into the source or behaves better as a separately controlled layer. The main risk is creating duplicate dry signal or judging the louder route as better.",
+  "domain": "sends_buses_auxes_shared_effects",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "The exact Logic version and the visible Output, Send, Bus, Aux, Group, Stack, and VCA assignments involved.",
+    "A preserved baseline and one controlled mute/bypass/routing test with no unrelated changes.",
+    "Source and return meters, audible dry/wet behavior, and whether the same result occurs in the complete mix and in mono where relevant.",
+    "The user’s report of what changed, stayed unchanged, or became less clear after the test."
+  ],
+  "id": "pkg013.qa.000001",
+  "key_distinction": "An insert processes the whole channel in series; a send splits off a parallel copy to a bus and aux.",
+  "limitations": [
+    "A routing label, meter, solo state, or waveform does not by itself prove the musical result.",
+    "Professional and community routing practices are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "whether the effect feels integrated into the source or behaves better as a separately controlled layer",
+    "location": "Mixer > channel-strip Inserts, Sends, bus destination, and aux return",
+    "risk": "creating duplicate dry signal or judging the louder route as better",
+    "show_me_query": "Mixer > channel-strip Inserts, Sends, bus destination, and aux return",
+    "starting_point": "Preserve the current routing and test one split, sum, or linked-control relationship at a time.",
+    "steps": [
+      "Save a Project Alternative or duplicate the affected routing setup; document current Outputs, Sends, bus inputs, aux outputs, group memberships, stack types, VCA assignments, automation, and processing.",
+      "Duplicate or preserve the track, compare one effect as an insert against the same effect on a 100% wet aux, and level-match the result.",
+      "Audition the same short representative section, compare against the untouched baseline, and change no unrelated parameter.",
+      "Listen and inspect for: whether the effect feels integrated into the source or behaves better as a separately controlled layer.",
+      "Stop or back off if: creating duplicate dry signal or judging the louder route as better.",
+      "Restore the saved Project Alternative or revert the documented Output, Send, Group, Stack, VCA, and aux assignments used as the baseline."
+    ],
+    "stop_condition": "Stop once whether the effect feels integrated into the source or behaves better as a separately controlled layer and no new routing or musical problem is introduced. Undo if creating duplicate dry signal or judging the louder route as better.",
+    "undo": "Restore the saved Project Alternative or revert the documented Output, Send, Group, Stack, VCA, and aux assignments used as the baseline.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact Mixer, Track Stack, Group, VCA, Send, Bus, Aux, and menu labels against the installed version.",
+    "visual_target_query": "Mixer > channel-strip Inserts, Sends, bus destination, and aux return"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "Leave the route unchanged and automate the existing effect if the real need is section movement."
+  ],
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+  "package_number": 13,
+  "problem_summary": "the effect relationship is unclear or duplicated across tracks",
+  "recommended_first_experiment": "Duplicate or preserve the track, compare one effect as an insert against the same effect on a 100% wet aux, and level-match the result.",
+  "retrieval_tags": [
+    "insert",
+    "send",
+    "parallel",
+    "series",
+    "wet",
+    "dry",
+    "sends",
+    "versus",
+    "inserts",
+    "effect",
+    "relationship",
+    "unclear",
+    "duplicated",
+    "across",
+    "choose",
+    "routing",
+    "matches",
+    "whether",
+    "part",
+    "source",
+    "independently",
+    "blended",
+    "layer",
+    "concept",
+    "understand",
+    "about",
+    "matter"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "retrieval_candidate",
+  "source_ids": [
+    "pkg013.source.000002",
+    "pkg013.source.000003",
+    "pkg013.source.000004",
+    "pkg013.source.000043",
+    "pkg013.source.000060"
+  ],
+  "subdomain": "sends_vs_inserts",
+  "teaching_principle": "An insert processes the whole channel in series; a send splits off a parallel copy to a bus and aux.",
+  "title": "Sends Vs Inserts — Concept",
+  "topic": "sends_vs_inserts",
+  "tradeoffs": [
+    "The experiment may improve choose the routing that matches whether the effect is part of the source or an independently blended layer, but creating duplicate dry signal or judging the louder route as better.",
+    "A routing structure can be technically valid yet harder to understand, automate, solo, or export.",
+    "Shared processing can create cohesion, but it can also let one member dominate the complete path."
+  ],
+  "user_intent": "Use sends versus inserts to choose the routing that matches whether the effect is part of the source or an independently blended layer while preserving a reversible, intelligible signal path.",
+  "variant_kind": "concept"
+}

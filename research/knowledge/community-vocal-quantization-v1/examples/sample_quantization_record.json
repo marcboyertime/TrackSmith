@@ -1,0 +1,142 @@
+{
+  "id": "quant.midi.piano_robotic",
+  "schema_version": "1.0",
+  "domain": "quantization_and_timing",
+  "category": "midi_quantization",
+  "subcategory": "piano_robotic",
+  "title": "I quantized my MIDI piano and now it sounds robotic. How do I tighten it without killing the feel",
+  "canonical_user_question": "I quantized my MIDI piano and now it sounds robotic. How do I tighten it without killing the feel?",
+  "natural_language_variants": [
+    "100% quantize ruined my piano performance.",
+    "How do I keep rubato and rolled chords?",
+    "Should I use Smart Quantize on piano?",
+    "What Q-Strength should I try?"
+  ],
+  "user_language_aliases": [
+    "piano robotic",
+    "midi quantize"
+  ],
+  "clarification_questions": [
+    "Is the performance supposed to follow the project grid, or should the project tempo follow the performance?",
+    "Which musical events carry the pulse, and which are intentional ornaments, rolls, pedal events, or expressive offsets?",
+    "Is the timing error systematic, section-specific, or only a few notes?"
+  ],
+  "candidate_hypotheses": [
+    {
+      "label": "H1: Classic quantize moving every note fully",
+      "mechanism": "Classic Quantize moving every note fully",
+      "evidence_needed": "The original MIDI region, region start, tempo map, quantize algorithm/value, and relevant controller events.",
+      "discriminating_test": "Apply the proposed change to a duplicate region and compare note relationships."
+    },
+    {
+      "label": "H2: Rolled chords flattened",
+      "mechanism": "rolled chords flattened",
+      "evidence_needed": "The original MIDI region, region start, tempo map, quantize algorithm/value, and relevant controller events.",
+      "discriminating_test": "Apply the proposed change to a duplicate region and compare note relationships."
+    },
+    {
+      "label": "H3: Sustain cc moved poorly",
+      "mechanism": "sustain CC moved poorly",
+      "evidence_needed": "The original MIDI region, region start, tempo map, quantize algorithm/value, and relevant controller events.",
+      "discriminating_test": "Apply the proposed change to a duplicate region and compare note relationships."
+    },
+    {
+      "label": "H4: Wrong grid",
+      "mechanism": "wrong grid",
+      "evidence_needed": "The original MIDI region, region start, tempo map, quantize algorithm/value, and relevant controller events.",
+      "discriminating_test": "Apply the proposed change to a duplicate region and compare note relationships."
+    },
+    {
+      "label": "H5: Project tempo not matching performance",
+      "mechanism": "project tempo not matching performance",
+      "evidence_needed": "The original MIDI region, region start, tempo map, quantize algorithm/value, and relevant controller events.",
+      "discriminating_test": "Apply the proposed change to a duplicate region and compare note relationships."
+    }
+  ],
+  "recommended_first_experiment": {
+    "summary": "Undo/reset quantization, switch to Smart Quantize, and apply partial Q-Strength to a duplicate region.",
+    "why_this_first": "Non-destructive duplicate-region comparison protects the original feel and reveals whether the grid or algorithm is the real issue.",
+    "action": "Undo/reset quantization, switch to Smart Quantize, and apply partial Q-Strength to a duplicate region.",
+    "scope": "one controlled A/B"
+  },
+  "logic_pro_steps": [
+    "Duplicate the MIDI region or preserve the unquantized original.",
+    "Select the MIDI region, choose Smart Quantize, set the likely rhythmic grid, lower Q-Strength, and compare with the original.",
+    "Loop the smallest representative phrase.",
+    "Toggle Quantize Off/On or compare the duplicate at the same instrument and level.",
+    "Inspect note starts, note lengths, velocities, and CC/pedal events only after listening."
+  ],
+  "starting_points": [
+    "Begin with partial correction and preserve note order; tighten only the passages that distract."
+  ],
+  "what_to_listen_for": [
+    "Pulse should become clearer while chord rolls, hand separation, and phrasing remain.",
+    "Check both the isolated instrument and its relationship to drums/bass/metronome."
+  ],
+  "stop_rule": "Stop increasing correction as soon as the pulse reads clearly and intentional internal timing remains.",
+  "undo_or_reset": "Set Region Quantize to Off/reset advanced parameters, restore the duplicate, or Undo note-level quantization.",
+  "rationale": "Quantization is a relationship between a performance, a grid, and musical roles. The best setting improves the pulse without erasing intentional timing.",
+  "tradeoffs_and_risks": [
+    "More grid precision can reduce groove, hand independence, ornaments, or pedal relationships.",
+    "Visual alignment is not the same as musical alignment."
+  ],
+  "alternatives_if_wrong": [
+    "Manually fix only the distracting outliers.",
+    "Create or use a groove template from a trusted performance.",
+    "Build a tempo map when the performance should lead the project.",
+    "Re-record the passage when latency or performance confusion is the real problem."
+  ],
+  "common_mistakes": [
+    "Applying 100% Classic Quantize to the whole region by default.",
+    "Choosing the grid from the smallest accidental note.",
+    "Ignoring sustain pedal and other CC data.",
+    "Using random humanization as a substitute for groove."
+  ],
+  "teaching_principle": "Quantize anchors and relationships, not every event. Decide what should lead before deciding how much to move.",
+  "non_dsp_possibilities": [],
+  "preservation_goals": [
+    "groove",
+    "rubato",
+    "rolled chords",
+    "sustain pedal",
+    "articulation"
+  ],
+  "do_not_assume": [
+    "Grid-perfect is musically correct.",
+    "Smart Quantize is always superior.",
+    "One quantize value fits every role in the region."
+  ],
+  "source_ids": [
+    "apple.logic.midi_quantization_types",
+    "apple.logic.midi_region_parameters",
+    "apple.logic.advanced_quantization",
+    "apple.logic.quantize_regions"
+  ],
+  "evidence_class": "community_synthesized_with_primary_procedure",
+  "review_status": "candidate_not_yet_human_reviewed",
+  "confidence_class": "review_candidate",
+  "logic_version_scope": "Logic Pro 12.x; reverify visible labels on installed version",
+  "audio_context_useful": true,
+  "requires_mix_context": false,
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "tags": [
+    "logic_pro",
+    "midi",
+    "piano_robotic",
+    "quantization"
+  ],
+  "created_at": "2026-08-11",
+  "copyright_handling": "Paraphrased synthesis; no raw forum post body or long quotation included.",
+  "tracksmith_domains": [
+    "quantization",
+    "smartQuantize",
+    "groove",
+    "humanization",
+    "velocity",
+    "noteLength",
+    "sustainPedal",
+    "pianoAndKeys",
+    "handIndependence",
+    "rubato"
+  ]
+}

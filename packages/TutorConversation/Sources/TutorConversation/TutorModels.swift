@@ -20,6 +20,9 @@ public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
     case logicObserved
     case userReported
     case reviewedKnowledge
+    case candidateKnowledge
+    case separatedSourceEstimate
+    case structureEstimate
     case inference
     case unavailable
 
@@ -30,9 +33,40 @@ public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
         case .logicObserved: "Saw"
         case .userReported: "You told me"
         case .reviewedKnowledge: "Reviewed"
+        case .candidateKnowledge: "Candidate"
+        case .separatedSourceEstimate: "Separated estimate"
+        case .structureEstimate: "Structure estimate"
         case .inference: "Inference"
         case .unavailable: "Unavailable"
         }
+    }
+}
+
+public struct TutorCandidateCorpusProvenance: Codable, Equatable, Sendable {
+    public var packageID: String
+    public var packageVersion: String
+    public var packageSequence: Int
+    public var recordID: String
+    /// Optional fields preserve decoding of receipts written before P7 provenance.
+    public var querySHA256: String? = nil
+    public var selectedDomain: String? = nil
+    public var sourceIDs: [String]? = nil
+    /// Standards remain an additive, distinct receipt partition rather than
+    /// being relabeled as documentation or ordinary primary research.
+    public var standardsSourceIDs: [String]? = nil
+    public var reviewState: String? = nil
+    public var resultSHA256: String? = nil
+    public var selectedRecordIDs: [String]? = nil
+    public var retrievalID: String? = nil
+    public var corpusVersion: String? = nil
+    public var policyVersion: String? = nil
+    public var omissions: [String]? = nil
+
+    public init(packageID: String, packageVersion: String, packageSequence: Int, recordID: String) {
+        self.packageID = packageID
+        self.packageVersion = packageVersion
+        self.packageSequence = packageSequence
+        self.recordID = recordID
     }
 }
 
@@ -44,6 +78,8 @@ public struct TutorEvidenceReference: Codable, Equatable, Identifiable, Sendable
     public var confidence: Double?
     public var captureSnapshotID: UUID?
     public var metricIdentifier: String?
+    /// Optional for lossless decoding of persisted receipts written before corpus provenance.
+    public var candidateCorpusProvenance: TutorCandidateCorpusProvenance?
 
     public init(
         id: UUID = UUID(),
@@ -52,7 +88,8 @@ public struct TutorEvidenceReference: Codable, Equatable, Identifiable, Sendable
         detail: String,
         confidence: Double? = nil,
         captureSnapshotID: UUID? = nil,
-        metricIdentifier: String? = nil
+        metricIdentifier: String? = nil,
+        candidateCorpusProvenance: TutorCandidateCorpusProvenance? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -61,6 +98,7 @@ public struct TutorEvidenceReference: Codable, Equatable, Identifiable, Sendable
         self.confidence = confidence.map { min(max($0.isFinite ? $0 : 0, 0), 1) }
         self.captureSnapshotID = captureSnapshotID
         self.metricIdentifier = metricIdentifier
+        self.candidateCorpusProvenance = candidateCorpusProvenance
     }
 }
 
@@ -152,10 +190,14 @@ public struct TutorCaptureSnapshot: Codable, Equatable, Sendable {
     public var capturedAt: Date
     public var durationSeconds: Double
     public var scopeDescription: String
+    /// Additive format label (for example "48000 Hz stereo Float32 WAV").
+    public var formatDescription: String?
     public var isLive: Bool
     public var metrics: [TutorMetricEvidence]
     public var localAnalysisLimitations: [String]
     public var cloudListening: TutorCloudListeningEvidence
+    /// Optional so records written before the local waveform specialist remain decodable.
+    public var audioIntelligence: TutorAudioIntelligenceResult?
 
     public init(
         sourceType: SourceType,
@@ -166,10 +208,12 @@ public struct TutorCaptureSnapshot: Codable, Equatable, Sendable {
         capturedAt: Date,
         durationSeconds: Double,
         scopeDescription: String,
+        formatDescription: String? = nil,
         isLive: Bool,
         metrics: [TutorMetricEvidence],
         localAnalysisLimitations: [String],
-        cloudListening: TutorCloudListeningEvidence = .init(status: .notRequested)
+        cloudListening: TutorCloudListeningEvidence = .init(status: .notRequested),
+        audioIntelligence: TutorAudioIntelligenceResult? = nil
     ) {
         self.sourceType = sourceType
         self.instanceID = instanceID
@@ -179,10 +223,12 @@ public struct TutorCaptureSnapshot: Codable, Equatable, Sendable {
         self.capturedAt = capturedAt
         self.durationSeconds = durationSeconds.isFinite ? min(max(durationSeconds, 0), 30) : 0
         self.scopeDescription = scopeDescription
+        self.formatDescription = formatDescription
         self.isLive = isLive
         self.metrics = Array(metrics.prefix(16))
         self.localAnalysisLimitations = Array(localAnalysisLimitations.prefix(8))
         self.cloudListening = cloudListening
+        self.audioIntelligence = audioIntelligence
     }
 }
 
@@ -346,6 +392,7 @@ public enum TutorExperimentOutcome: String, Codable, CaseIterable, Sendable {
     case worse
     case noChange
     case cannotFind
+    case notSure
 }
 
 public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable {
@@ -356,6 +403,9 @@ public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable 
     public var userNote: String?
     public var userReportedSettings: [String]
     public var evidenceReceiptID: UUID?
+    /// Optional additive Phase 2 fields preserve older persisted records.
+    public var comparisonAuthority: TutorComparisonAuthority?
+    public var waveformComparison: TutorWaveformComparison?
 
     public init(
         draft: TutorExperimentDraft,
@@ -363,7 +413,9 @@ public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable 
         outcome: TutorExperimentOutcome? = nil,
         userNote: String? = nil,
         userReportedSettings: [String] = [],
-        evidenceReceiptID: UUID? = nil
+        evidenceReceiptID: UUID? = nil,
+        comparisonAuthority: TutorComparisonAuthority? = nil,
+        waveformComparison: TutorWaveformComparison? = nil
     ) {
         self.draft = draft
         self.createdAt = createdAt
@@ -371,6 +423,8 @@ public struct TutorExperimentRecord: Codable, Equatable, Identifiable, Sendable 
         self.userNote = userNote
         self.userReportedSettings = Array(userReportedSettings.prefix(12))
         self.evidenceReceiptID = evidenceReceiptID
+        self.comparisonAuthority = comparisonAuthority
+        self.waveformComparison = waveformComparison
     }
 }
 
@@ -667,6 +721,7 @@ public enum TutorConversationError: Error, Equatable, Sendable {
     case audioConsentRequired
     case audioAttachmentTooLarge
     case staleCapture
+    case staleResult
 }
 
 public extension TutorConversationError {
@@ -713,6 +768,8 @@ public extension TutorConversationError {
             "The audio attachment exceeded the bounded upload limit."
         case .staleCapture:
             "The selected capture no longer matched its immutable snapshot."
+        case .staleResult:
+            "A delayed tool result no longer belonged to the active Tutor turn."
         }
     }
 

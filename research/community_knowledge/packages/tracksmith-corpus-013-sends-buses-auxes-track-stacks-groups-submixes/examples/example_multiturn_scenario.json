@@ -1,0 +1,53 @@
+{
+  "canonical_qa_id": "pkg013.qa.000001",
+  "domain": "sends_buses_auxes_shared_effects",
+  "expected_behaviors": [
+    "Maintains continuity with the exact routing experiment.",
+    "Distinguishes sends, buses, auxes, stack routing, linked controls, and user report.",
+    "Recommends at most one next experiment.",
+    "Preserves baseline, stop condition, undo, and version-scoped guidance.",
+    "Explains the transferable signal-flow principle naturally."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have seen, heard, changed, or verified Logic without current evidence.",
+    "Treats one routing architecture as universally superior.",
+    "Invents autonomous Logic mutation.",
+    "Restarts from a generic checklist without referencing the prior test."
+  ],
+  "id": "pkg013.scenario.0000001",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about sends versus inserts, and why does it matter in Logic Pro?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes routing ownership, then present one reversible experiment: Duplicate or preserve the track, compare one effect as an insert against the same effect on a 100% wet aux, and level-match the result."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but now the dry/wet balance or group control feels less natural."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact prior route, preserve what improved, distinguish level from routing, and recommend at most one next test."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the signal-flow principle in plain language and connect it to the exact A/B: An insert processes the whole channel in series; a send splits off a parallel copy to a bus and aux."
+    }
+  ],
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "scenario_type": "better_tradeoff",
+  "subdomain": "sends_vs_inserts"
+}

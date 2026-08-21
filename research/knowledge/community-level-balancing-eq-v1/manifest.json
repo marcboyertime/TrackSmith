@@ -1,0 +1,229 @@
+{
+  "counts": {
+    "canonical_records": 238,
+    "categories": {
+      "automation_and_dynamics": 18,
+      "eq_fundamentals": 30,
+      "foundations_and_workflow": 38,
+      "masking_and_arrangement": 12,
+      "source_role_balance": 36,
+      "source_specific_eq": 104
+    },
+    "claim_candidates": 238,
+    "contradictions": 23,
+    "equalization_canonical": 146,
+    "generated_at": "2026-08-11",
+    "level_balancing_canonical": 92,
+    "multiturn_scenarios": 714,
+    "myths": 30,
+    "package": "TrackSmith_Level_Balancing_EQ_QA_Corpus_v1",
+    "procedure_candidates": 238,
+    "publishers": {
+      "Apple": 35,
+      "CDC/NIOSH": 1,
+      "FabFilter": 3,
+      "Gearspace": 16,
+      "Logic Pro Help": 4,
+      "Sound On Sound": 11,
+      "iZotope": 11
+    },
+    "retrieval_evaluation_cases": 714,
+    "review_status": "All canonical knowledge, claims, strategies, and procedures are candidate_not_yet_human_reviewed.",
+    "source_tiers": {
+      "A": 36,
+      "B": 25,
+      "C": 20
+    },
+    "sources": 81,
+    "strategy_candidates": 238,
+    "user_utterances": 4007,
+    "version": "1.0.0"
+  },
+  "files": [
+    {
+      "bytes": 1657,
+      "path": "README.md",
+      "sha256": "6b38991e33edc52796b041bd411207d681335d481b3b255df4af768614833d24"
+    },
+    {
+      "bytes": 1377661,
+      "path": "corpus/canonical_qa.jsonl",
+      "sha256": "25bb84b9f64b8ec68accd71b697770f0a23b38176fe3ef73c059c73cb768bf86"
+    },
+    {
+      "bytes": 863471,
+      "path": "corpus/equalization_canonical.jsonl",
+      "sha256": "769fa4d766ed206f0ab00f32ddfe4bd79ac66feb3212425241aee6fd3fe7e4c7"
+    },
+    {
+      "bytes": 514190,
+      "path": "corpus/level_balancing_canonical.jsonl",
+      "sha256": "e343e5fd05d325d14fd972145f044644c2f27cd6f3f83d209f18f6c47022b1d9"
+    },
+    {
+      "bytes": 1006108,
+      "path": "corpus/multiturn_scenarios.jsonl",
+      "sha256": "4b777d73fd5f52642c934f8ea13fad2adf64f882a0000dda3da2fc6f7a22cf1e"
+    },
+    {
+      "bytes": 233133,
+      "path": "corpus/retrieval_evaluation.jsonl",
+      "sha256": "08c2fb6dbcd27d42f1cbcd2ece15fb9fe8a888872233513157a4d07479cf83be"
+    },
+    {
+      "bytes": 1390687,
+      "path": "corpus/user_utterances.jsonl",
+      "sha256": "aa7f3994cc3e76e5dc035aaf3f9dffa8a0dc72ccd5f469364a4fd245f44f17ef"
+    },
+    {
+      "bytes": 4468736,
+      "path": "database/tracksmith_level_eq_knowledge.sqlite3",
+      "sha256": "285752aaa6e40f750b11f476aa574d02fd2792d9945652b8a1bf55dcfc579fff"
+    },
+    {
+      "bytes": 6699,
+      "path": "examples/sample_eq_record.json",
+      "sha256": "3bc93fa4f35bc0f0e321d8df52329cb1360c109e656061c1a6d8302111637f0c"
+    },
+    {
+      "bytes": 6398,
+      "path": "examples/sample_level_record.json",
+      "sha256": "bdcd6fc6d3131f12ff1e58cb6241a0c7a19fc0c4bdc4bb0bb1e16b9d769f4077"
+    },
+    {
+      "bytes": 1633,
+      "path": "examples/sample_multiturn_scenario.json",
+      "sha256": "b8250f1cbbb21461e8b5dd7264be2aed6310e10c4437952a93e166f5acca917a"
+    },
+    {
+      "bytes": 544,
+      "path": "integration/PACKAGE_SEQUENCE.md",
+      "sha256": "7f3c71bed43c46969b936741029b07bba51f8933bce079f7730d69476fffc445"
+    },
+    {
+      "bytes": 620,
+      "path": "integration/REVIEW_CHECKLIST.md",
+      "sha256": "0a225d791f1063bd13e6c62dd5d7ba7627de5a56fd230a832409155ba5a09160"
+    },
+    {
+      "bytes": 2414,
+      "path": "integration/START_HERE_FOR_CODEX.md",
+      "sha256": "0985d900ac9d70cf03fb20ccfe36e0d6b3fd3c70b93beb9cca314d446e0c6c64"
+    },
+    {
+      "bytes": 1238,
+      "path": "integration/TRACKSMITH_IMPORT_PLAN.md",
+      "sha256": "d980fbcf301590d281c399c8b90da8d258e3c3f0ddb5a82002fbada10c3eb59c"
+    },
+    {
+      "bytes": 346888,
+      "path": "integration/logic_procedure_candidates.jsonl",
+      "sha256": "60f52fae2d67a7c1e7134726da7fee62b0f823b6b3aa7ac59726d76edf7cdda0"
+    },
+    {
+      "bytes": 245451,
+      "path": "integration/tracksmith_claim_candidates.jsonl",
+      "sha256": "78ac0acde9af8a8ec67e83ee55f61fe451b83a4f171c3ea9fad78b1025fcdabd"
+    },
+    {
+      "bytes": 365717,
+      "path": "integration/tracksmith_strategy_candidates.jsonl",
+      "sha256": "3f6f6a2243d27180dcd7fc8e3db8cdcc7225f420a8899d23716cc8df54fc257d"
+    },
+    {
+      "bytes": 528,
+      "path": "reports/QA_REPORT.md",
+      "sha256": "cd870e65c2ee6158f13024209c6ca87c90578399c7df5a06eace94190ea0b91f"
+    },
+    {
+      "bytes": 658,
+      "path": "reports/SOURCE_COVERAGE.md",
+      "sha256": "2c73fd250c2a6834b2ac4aab053132490e809d927c83700fd8047f6a5e45d03d"
+    },
+    {
+      "bytes": 64,
+      "path": "reports/VALIDATION.txt",
+      "sha256": "68cef27ceed2f2fad38dd191c04c74529caa956dc8760f31c26ab00474ee85fd"
+    },
+    {
+      "bytes": 1020,
+      "path": "reports/stats.json",
+      "sha256": "44184ad3d58a945de0025a0a08e64cd6ab2f892410cfd1c5337dbbd2fc75ef9f"
+    },
+    {
+      "bytes": 730,
+      "path": "research/SOURCE_POLICY.md",
+      "sha256": "95cc690a96cb42d5497a901cb7b1f2c214b1b050e10f8e0f7ccacf963c12e5ed"
+    },
+    {
+      "bytes": 18089,
+      "path": "research/contradictions.jsonl",
+      "sha256": "f77bf22f870abfec08f28537f1463d170a5f2a91fa70340226edea885450d825"
+    },
+    {
+      "bytes": 8516,
+      "path": "research/myths_and_antipatterns.jsonl",
+      "sha256": "e19e6ab0f9264e8f4445756a479b8266b63d055b554e149b1700aec31129dc93"
+    },
+    {
+      "bytes": 38145,
+      "path": "research/source_registry.jsonl",
+      "sha256": "0572aea30aac3dfcc1696318e8b7c2cbdf3e4dc1c99d955d7a42972e4ba06b99"
+    },
+    {
+      "bytes": 6868,
+      "path": "research/taxonomy.json",
+      "sha256": "ad1318f0d67ae483f8290730057d4847eaefc1f6989faaa2486c5f8b3c949e38"
+    },
+    {
+      "bytes": 909,
+      "path": "schemas/canonical_qa.schema.json",
+      "sha256": "ab69983d2b0b1d81029f8efde7854f2146bc0f7718aae56e18b1da04968b0b2b"
+    },
+    {
+      "bytes": 200,
+      "path": "schemas/multiturn_scenario.schema.json",
+      "sha256": "b6cd2372937af40a0bc32125c0dcf4185b3329f7b6b599be6081027ee5f8db74"
+    },
+    {
+      "bytes": 202,
+      "path": "schemas/source_registry.schema.json",
+      "sha256": "374ccd15dbfcf3ae24aa7ecd03057f976434374e85cdfbdca20b5c7670d49e8a"
+    },
+    {
+      "bytes": 417,
+      "path": "schemas/utterance.schema.json",
+      "sha256": "a76b210d28589ab59968e054679a78fa93bb8586e259ce4660dbd78bb463283e"
+    },
+    {
+      "bytes": 1156,
+      "path": "tools/query_corpus.py",
+      "sha256": "955b5f0919cb7b51be0de86e49ad16bbc16b8ad528870d24d36295e6c9fc13f9"
+    },
+    {
+      "bytes": 262,
+      "path": "tools/rebuild_database.py",
+      "sha256": "04ce88106082a372b7a1e8275d55e8c77f90d84c825e6c20d686dccb7117a11a"
+    },
+    {
+      "bytes": 2109,
+      "path": "tools/validate_package.py",
+      "sha256": "bb232f2bd0e7c0bcdbe586ea2a31a0fa5025a4112010bf5b2f2a1a358a7ed453"
+    }
+  ],
+  "generated_at": "2026-08-11",
+  "package_name": "TrackSmith_Level_Balancing_EQ_QA_Corpus_v1",
+  "purpose": "Second-stage standalone Level Balancing + Equalization corpus for TrackSmith Tutor, to integrate after the Vocal + Quantization package.",
+  "safety_and_truthfulness": {
+    "all_knowledge_review_status": "candidate_not_yet_human_reviewed",
+    "credentials_included": false,
+    "private_audio_included": false,
+    "raw_forum_bodies_included": false,
+    "reddit_note": "No bulk Reddit acquisition was used or required for this package."
+  },
+  "validation": {
+    "command": "python3 tools/validate_package.py",
+    "status_at_packaging": "passed"
+  },
+  "version": "1.0.0"
+}

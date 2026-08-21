@@ -24,15 +24,18 @@ enum Theme {
     enum Radius {
         static let small: CGFloat = 8
         static let medium: CGFloat = 10
+        static let large: CGFloat = 16
     }
 
     enum Colors {
         static let canvas = SwiftUI.Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
+        static let header = SwiftUI.Color(red: 20 / 255, green: 21 / 255, blue: 24 / 255)
         static let card = SwiftUI.Color(red: 26 / 255, green: 26 / 255, blue: 28 / 255)
         static let raised = SwiftUI.Color(red: 34 / 255, green: 34 / 255, blue: 36 / 255)
         static let control = SwiftUI.Color(red: 42 / 255, green: 42 / 255, blue: 45 / 255)
         static let hairline = SwiftUI.Color.white.opacity(0.13)
         static let accent = SwiftUI.Color(red: 111 / 255, green: 66 / 255, blue: 179 / 255)
+        static let accentBright = SwiftUI.Color(red: 177 / 255, green: 140 / 255, blue: 235 / 255)
         static let accentSelection = accent.opacity(0.24)
         static let accentSubtle = accent.opacity(0.14)
         static let text = SwiftUI.Color(red: 236 / 255, green: 239 / 255, blue: 243 / 255)
@@ -41,6 +44,10 @@ enum Theme {
         static let warningSurface = SwiftUI.Color.orange.opacity(0.12)
         static let clarificationSurface = SwiftUI.Color.yellow.opacity(0.12)
         static let contradictionSurface = SwiftUI.Color.purple.opacity(0.10)
+        static let assistantMessage = SwiftUI.Color(red: 31 / 255, green: 32 / 255, blue: 37 / 255)
+        static let userMessage = SwiftUI.Color(red: 56 / 255, green: 43 / 255, blue: 76 / 255)
+        static let experimentSurface = SwiftUI.Color(red: 37 / 255, green: 34 / 255, blue: 48 / 255)
+        static let composer = SwiftUI.Color(red: 32 / 255, green: 33 / 255, blue: 39 / 255)
 
         static let evidenceAudioCurrent = SwiftUI.Color.green
         static let evidenceAudioHistorical = SwiftUI.Color.orange
@@ -78,6 +85,8 @@ enum Theme {
 
     enum Font {
         static let display: SwiftUI.Font = .system(size: 20, weight: .semibold)
+        static let hero: SwiftUI.Font = .system(size: 30, weight: .semibold, design: .rounded)
+        static let kicker: SwiftUI.Font = .system(size: 10, weight: .bold, design: .rounded)
         static let section: SwiftUI.Font = .system(size: 13, weight: .semibold)
         static let body: SwiftUI.Font = .system(size: 16, weight: .regular)
         static let meta: SwiftUI.Font = .system(size: 11, weight: .regular)

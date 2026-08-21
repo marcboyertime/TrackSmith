@@ -1,0 +1,109 @@
+Building for production...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'TestRunner' complete! (0.15s)
+PASS plan validation and Codable round trip
+PASS plan bounds fail closed
+PASS checked-in plan schema matches runtime bounds
+PASS DSP bypass is bit exact
+PASS limiter and nonfinite safety
+PASS limiter release and reset remain bounded
+PASS gain smoothing reset restores its initial state
+PASS compressor log-domain gain computer reaches the documented static curve
+PASS soft clipper honors its full-wet ceiling
+PASS nonfinite input cannot poison stateful DSP
+PASS de-esser reduces sibilant band while preserving lows
+PASS production-mastery nodes require explicit bounded algorithm versions
+PASS modulated delay validation is versioned and shares the delay budget
+PASS expander gate is linked, tail-aware, deterministic, and resettable
+PASS delay has exact repeats, bounded stereo crossfeed, and constant-time reset semantics
+PASS modulated delay is deterministic, finite, nontrivial, and resettable
+PASS modulated delay is safe from 8 to 192 kHz with stereo phase movement
+PASS modulated delay pointer output matches offline across irregular blocks
+PASS algorithmic reverb is bounded, rate-aware, deterministic, and resettable
+PASS realtime pointer DSP matches offline graph across host blocks
+PASS realtime pointer DSP fails dry on layout mismatch
+PASS required rates and buffer sizes
+PASS Float32 WAV round trip
+PASS malformed WAV sample rate fails closed
+PASS PCM24 WAV round trip
+PASS known sine analysis
+PASS time-averaged spectrum distinguishes noise and tone
+PASS dynamics timelines are bounded and level invariant
+PASS analysis sanitizes nonfinite timeline input
+PASS source-aware analysis v1 covers six source classes with provenance
+PASS level variability ignores silent gaps and stays physically plausible
+PASS source-aware stereo evidence follows mid-side and mono-sum direction
+PASS production-intent vocabulary is complete, source-aware, and serializable
+PASS nine source-aware requests produce evidence-grounded editable plans
+PASS production-intent engine preserves planner safety and source-analysis boundaries
+PASS production intelligence builds bounded labeled context and plans through the offline provider
+PASS Logic 12.3 effects knowledge is complete bounded and advisory-only
+PASS Logic 12.3 instrument knowledge is complete explicit and advisory-only
+PASS Logic 12.3 editor-tool knowledge is complete explicit and advisory-only
+PASS OpenAI adapter uses strict privacy-bounded Responses request and validated free-form semantics
+PASS model validation rejects stale authority invented evidence and locked-state hallucinations
+PASS Gemini adapter shares the stateless tool-free TrackSmith contract
+PASS provider failure retry replay cancellation and stale-result matrix fails closed
+PASS provider evaluation harness compares normalized inputs without vendor-specific scoring
+PASS conversation persistence is bounded checksummed secret-redacted and authority-reconciled
+PASS conversational references merge exact preview attributes and preserve locked nodes
+PASS semantic conversational revision reduces existing processing through bounded local controls
+PASS competing hypotheses produce three typed structurally distinct production candidates
+PASS semantic and adversarial production-request corpus expands to 400 plus validated cases
+PASS production-mastery language v2 audits 1,000 plus meaningful cases without inflating human evidence
+PASS research ingestion validates before immutable publication
+PASS research ingestion rejects dirty mutable Git checkouts
+PASS BS.1770 full-scale 997 Hz calibration
+PASS BS.1770 relative gate rejects quiet tail
+PASS EBU short-term loudness uses ungated 3 second windows
+PASS EBU Tech 3342 synthetic LRA minimum cases
+PASS LRA short-content reliability is explicit
+PASS true-peak estimator detects inter-sample peaks at supported rates
+PASS true-peak estimator sanitizes nonfinite samples at supported rates
+PASS capture ring bounded chronology
+PASS three deterministic variants and revision
+PASS targeted revision preserves locks and unrelated nodes
+PASS adversarial planner prompts fail closed
+PASS loudness-matched preview preserves source
+PASS long preview uses BS.1770 loudness matching
+PASS audition is the exact persisted processing graph
+PASS structurally limited preview evaluates exact peak safety
+PASS preview siblings are measured pairwise
+PASS audible preview export preserves input and reloads outputs
+PASS snapshot undo and redo
+PASS IPC message round trip
+PASS IPC rejects corruption and unsafe artifacts
+PASS IPC mailbox retention and quotas are bounded
+PASS companion session capture and commit protocol
+PASS commit preflight fails closed before IPC publication
+PASS lost commit acknowledgement reconciles from heartbeat
+PASS companion rejects captured WAV metadata mismatches
+PASS tutor issue vocabulary recognizes, negates, and refuses
+PASS tutor procedure catalog validates and rejects violations
+PASS tutor nasal lesson generates deterministically
+PASS tutor feedback reducer covers every transition
+PASS tutor evaluation corpus passes offline
+PASS tutor session store bounds, redacts, and quarantines
+PASS tutor provider proposals fail closed on invented authority
+PASS tutor lesson validator rejects forbidden claims and values
+PASS tutor evidence modes demote stale audio grounding
+PASS tutor explanations and summaries stay honest
+PASS silent-window analysis series stay JSON-encodable
+PASS general tutor routes open-ended questions without an enum match
+PASS general tutor knowledge base validates and resolves provenance
+PASS general tutor answers stay grounded and honest
+PASS general tutor refuses unsupported capabilities
+PASS general tutor never overstates audio influence
+PASS personal profile persists, bounds, and deletes safely
+PASS personal results rank locally but never generalize
+PASS audit-derived Vocal adapters stay local deterministic and bounded
+PASS Vocal capture planning uses every brief category deterministically
+PASS Vocal preservation matrix clamps planning and rejects unsafe revisions
+PASS Vocal Guide-to-Create handoff requires explicit current local authority
+PASS Vocal underwater and brass hypotheses are typed distinct and honest
+PASS Vocal underwater and brass previews preserve source provenance and deterministic PCM
+PASS Vocal revision graph preserves deep ancestry exact recovery and reload
+PASS Vocal scoped assets preserve source and publish verified provenance
+PASS Vocal session state redacts reloads demotes quarantines and deletes
+SUMMARY passed=104 failed=0
+TESTRUNNER_EXIT=0

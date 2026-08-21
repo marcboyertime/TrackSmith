@@ -1,0 +1,278 @@
+{
+  "collision_mappings": [
+    {
+      "collides_with_domains": [
+        "Package 003 compression",
+        "Package 013 routing",
+        "ducking",
+        "gate keying"
+      ],
+      "collision_type": "diagnostic_multi_intent",
+      "incoming_fixture_id": null,
+      "normalized_alias": "sidechain",
+      "resolution": "diagnostic_only_require_trigger_target_and_processor"
+    },
+    {
+      "collides_with_domains": [
+        "Package 005 automation",
+        "volume pan plugin automation",
+        "MIDI controller data"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "automation",
+      "resolution": "diagnostic_only_require_owner_parameter_and_time_range"
+    },
+    {
+      "collides_with_domains": [
+        "Package 001 quantization",
+        "Package 010 Flex Time",
+        "compression",
+        "editing"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "make it tighter",
+      "resolution": "diagnostic_only_require_audio_or_midi_and_musical_reference"
+    },
+    {
+      "collides_with_domains": [
+        "timing randomization",
+        "velocity randomization",
+        "groove template",
+        "performance variation"
+      ],
+      "collision_type": "diagnostic_multi_intent",
+      "incoming_fixture_id": null,
+      "normalized_alias": "humanize",
+      "resolution": "diagnostic_only_require_dimension_and_anchor_notes"
+    },
+    {
+      "collides_with_domains": [
+        "velocity",
+        "track level",
+        "expression",
+        "arrangement"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "quiet notes",
+      "resolution": "diagnostic_only_require_midi_event_and_instrument_response"
+    },
+    {
+      "collides_with_domains": [
+        "Package 005 automation",
+        "Read mode",
+        "controller data",
+        "region automation"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "fader jumps back",
+      "resolution": "diagnostic_only_require_owner_and_mode"
+    },
+    {
+      "collides_with_domains": [
+        "Q-Swing",
+        "groove template",
+        "manual timing",
+        "audio quantization"
+      ],
+      "collision_type": "diagnostic_cross_domain_collision",
+      "incoming_fixture_id": null,
+      "normalized_alias": "swing",
+      "resolution": "diagnostic_only_require_midi_or_audio_and_subdivision"
+    },
+    {
+      "collides_with_domains": [
+        "MIDI Humanize",
+        "groove",
+        "Flex timing",
+        "quantization"
+      ],
+      "collision_type": "diagnostic_low_margin",
+      "incoming_fixture_id": null,
+      "normalized_alias": "randomize timing",
+      "resolution": "diagnostic_only_require_event selection and musical anchors"
+    }
+  ],
+  "compatibility": {
+    "general_tutor_generated_swift_modified": false,
+    "mode": "additive",
+    "overwrites_prior_ids": false,
+    "requires_registered_prerequisites": true,
+    "runtime_schema": "bounded-jsonl-projection-v1"
+  },
+  "contract": "tracksmith-corpus-integration-manifest",
+  "contract_version": "1.0",
+  "counts": {
+    "canonical_qa": 660,
+    "claim_candidates": 660,
+    "contradictions": 66,
+    "logic_procedure_candidates": 660,
+    "multiturn_scenarios": 1980,
+    "myths_and_antipatterns": 78,
+    "provenance": 660,
+    "retrieval_evaluations": 3300,
+    "sources": 88,
+    "strategy_candidates": 660,
+    "user_utterances": 15180
+  },
+  "development_only_files": [
+    "knowledge_candidates/claims.jsonl",
+    "knowledge_candidates/strategies.jsonl",
+    "sources/provenance_manifest.jsonl",
+    "schemas/",
+    "reports/",
+    "examples/",
+    "tools/"
+  ],
+  "exact_fixture_policy": {
+    "expected_mapping_cardinality": 1,
+    "expected_top_1": true,
+    "non_exact_policy": "diagnostic_only",
+    "required_class": "exact_unique"
+  },
+  "file_hashes": {
+    "README.md": "041eb1f103f53cd47ac097a2645f1459a17c31fb3df03e041f84ce1969e5f733",
+    "corpus/canonical_qa.jsonl": "3b52c64c1eb5f2916c75589ec28eb14cb6cb79be6696b89b158f5edcf40eb25c",
+    "corpus/contradictions.jsonl": "bd36d6c41c54455dcfab7ae50723d02e244cd84af12a4dffea924b9e43f7cc51",
+    "corpus/multiturn_scenarios.jsonl": "58d5b600025e1ea59cf924930aec70d5eb2d6bdf7d0b330d6a374b55adabf073",
+    "corpus/myths_and_antipatterns.jsonl": "68f75411bcf91788142d381f63f78650e3b8ad01fdb9742fdf7263a8d3ab6af4",
+    "corpus/retrieval_evaluations.jsonl": "803e29ffaa758a9e076640eb15a61f5ba57925faed5099ffb2da6a0688f0d61a",
+    "corpus/user_utterances.jsonl": "9ba7a55f672c8073e70046a14a415e95493037289034f542d64ba9627eec9893",
+    "database/corpus.sqlite": "beb15ac7819d56d90c39b5c05101f71618ec1746d8df6559d797b7fcf3acc3e8",
+    "database/database_manifest.json": "6b03c5cf8098e477e82be7a987e415248278ac11b04b502d6de3aaf962c669f4",
+    "examples/example_canonical_record.json": "d2d0c5161a2f84d6a98329a13b0253678a8b00c929e6936dc222d309d6bf3ca8",
+    "examples/example_multiturn_scenario.json": "7e4d24dd27407467a6b448dd27b18b14cc18665edf48256b46a88c359cd62973",
+    "examples/example_queries.md": "010421864a0a8b1efc9709556fe150c8efbe8099ed7641e879dae058b37d7484",
+    "integration/PACKAGE_SEQUENCE.md": "0b6ee16e25b8276b4f94894dc7631818f5e1c59f4ff72cdc28124b9c2076e4f1",
+    "integration/REVIEW_CHECKLIST.md": "ee7dfb78f079619f951b88d267895e2b5ac83beae7c6645ab65205cb9c9ac9c5",
+    "integration/START_HERE_FOR_CODEX.md": "d85e50b40590a83aba914604ad8589a14c45d53e8c338f50dd28d5d4fd98bf91",
+    "integration/TOOL_CONTRACT.md": "b1acf0a05ac4c301356bb17732e915b91b4d6dac00c25d5f2653929841dbe94a",
+    "integration/TRACKSMITH_IMPORT_PLAN.md": "e140382abad111c074c8fa2e7833840edad7ebb7a578c41ab882e5e229066996",
+    "knowledge_candidates/claims.jsonl": "7c8008f54f08b48b5948bb1f604af4d627181982d60f17c61cecd7c46db748ea",
+    "knowledge_candidates/logic_procedures.jsonl": "54a2e0dc35bab9a01361c9f8046d872912da27ed6847dc0f8b8208741804a584",
+    "knowledge_candidates/strategies.jsonl": "c924fd3447fba08f17e452ceefd6d595016b489b30cdd8a4754d0eb6735f044a",
+    "package_manifest.json": "6abcd58ad650970156c13e982150420b6d446e3d83a8419630be2d9250d5494b",
+    "reports/COVERAGE_REPORT.md": "c005186c52cd0d5adb313a4bb08a69b6a073af3d727f51a1b196e0020ba310fd",
+    "reports/QUALITY_BOUNDARIES.md": "eb48296dfcc4ee2f6780e8aba2b6eb560d363a2f103f2fcc1dba43eeff102680",
+    "reports/SOURCE_REPORT.md": "36570f1522df187ad672b49a370af635211a0d4b565db436b72676d6e3bd0f24",
+    "reports/VALIDATION_REPORT.md": "017e0e414d276fd35584976e1ac5425a31216b5d13c903a44b535c92009f8268",
+    "schemas/canonical_qa.schema.json": "3fc50b533b046e905129125d5620c35580e86b429abd07f34b18e1c4160be3af",
+    "schemas/claim_candidate.schema.json": "d0322d3b4ed86f185a8a39c337de01cc0c74ce5618853f30a30a41764bec4f65",
+    "schemas/contradiction.schema.json": "c895899cb71cf71f39653239f3d69d6230243b5c1a8e7295fcc4c0c2f1926352",
+    "schemas/logic_procedure_candidate.schema.json": "a420e3ce8c7a217cfa99598094aab2f903d67d604c2a8a6bbb143f3c27968088",
+    "schemas/multiturn_scenario.schema.json": "58c8842ea8b82715cd564ec0eb834c3917764c21e6f25eeec176ec3439096718",
+    "schemas/myth.schema.json": "c63b0f256b1e9afe8de599e21b1748e6d3708287f5ad0f2a374e0a3db5c2a391",
+    "schemas/retrieval_evaluation.schema.json": "06244ac381e975e11cc84a54fc0088cae78a96099ab11ad56863b08bbccba7cf",
+    "schemas/strategy_candidate.schema.json": "808664132bbfe42ed2ccda4fdd1a37c4e64219975ae08e8c32c5274ae2945f97",
+    "schemas/user_utterance.schema.json": "10bad37bd6806bf23920ff97c99749f07dde9289c201ce3653e01d3e64631f8e",
+    "sources/provenance_manifest.jsonl": "1f730aee96e9170c8832e87cc36628f39c6c233053f00df7677d180e5efa6bfa",
+    "sources/source_access_manifest.json": "b233d53e82fe941d9aa8bd6b1d0ddd07c89b31101067ddf387943484aa0d1ac9",
+    "sources/source_registry.jsonl": "33ec3c6412ab8c7716f42efa27b080e4e1a98fdb1434acedb19fee9576848cf6",
+    "tests/expected_statistics.json": "11ccb8f1ae0f8684d34be8748b711532ae9ff69ad6c3d8bd65b5004726b341b7",
+    "tests/integrity_cases.jsonl": "c23ec1913445cceb40cb97000f35179b294986f20474ce10ee26f022300f6ac1",
+    "tests/retrieval_cases.jsonl": "57f3806f10e4eff79ecc0d0399cd4b1e4914070c70a2c9407428e7a644cf8592",
+    "tools/build_database.py": "5f02638497780f28695a9a1905ef577398dc5ec0c9135c3a803c55e7c7c60ab0",
+    "tools/import_to_tracksmith.py": "a508971e98d10f2bb8899c6aec9dec3732cf8b84eb51cc19e410f0bdb20e877b",
+    "tools/inspect_package.py": "d10dee3a1de00e602c621c2884f1be7c45c5ab7540b64273b96d8cfe6c9a6c3f",
+    "tools/query_corpus.py": "c59095b30ac870eac3b91eb270016a1c987cf8a0770d76665c3535ac156e9e66",
+    "tools/validate_package.py": "4825b021b671f4fce2de1c09929146329a1bae000a2f22f8d1ec603ffe40bbf3"
+  },
+  "generated_at": "2026-08-12",
+  "hash_scope_excludes": [
+    "integration/integration_manifest.json",
+    "PACKAGE_SHA256SUMS.txt",
+    "outer ZIP and sidecar checksum"
+  ],
+  "legacy_prerequisite_archive_mappings": {
+    "TrackSmith_Compression_Arrangement_Frequency_Allocation_QA_Corpus_v1.zip": "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+    "TrackSmith_Level_Balancing_EQ_QA_Corpus_v1.zip": "tracksmith-corpus-002-level-balancing-eq",
+    "TrackSmith_Reverb_Delay_QA_Corpus_v1.zip": "tracksmith-corpus-004-reverb-delay",
+    "TrackSmith_Vocal_Quantization_QA_Corpus_v1.zip": "tracksmith-corpus-001-vocal-quantization"
+  },
+  "logic_verification_states": [
+    "candidate_unverified_on_installed_logic",
+    "not_applicable_to_source"
+  ],
+  "namespace": "pkg014",
+  "native_review_states": [
+    "candidate_discovery_only",
+    "candidate_not_yet_human_reviewed",
+    "candidate_reviewed_documentary",
+    "candidate_reviewed_professional_practice"
+  ],
+  "original_review_states": [
+    "candidate_discovery_only",
+    "candidate_procedure_synthesis",
+    "candidate_reviewed_documentary",
+    "candidate_reviewed_professional_practice",
+    "community_and_professional_disagreement",
+    "derived_myth_correction",
+    "derived_synthesis",
+    "owner_supplied_example_language",
+    "synthetic_exact_retrieval_fixture"
+  ],
+  "original_verification_statuses": [
+    "candidate_generated_from_registered_sources",
+    "deterministic_fixture_alias",
+    "literal_user_example_preserved",
+    "source_metadata_registered",
+    "source_span_or_documentary_metadata_registered"
+  ],
+  "package_contract": "tracksmith-corpus-package/1.0",
+  "package_id": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+  "package_version": "1.0.0",
+  "prerequisites": [
+    "tracksmith-corpus-001-vocal-quantization",
+    "tracksmith-corpus-002-level-balancing-eq",
+    "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+    "tracksmith-corpus-004-reverb-delay",
+    "tracksmith-corpus-005-automation",
+    "tracksmith-corpus-006-saturation-transient-shaping",
+    "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+    "tracksmith-corpus-008-editing-layering",
+    "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+    "tracksmith-corpus-010-flex-time-manual-timing",
+    "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+    "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+    "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes"
+  ],
+  "preserved_status_fields": [
+    "review_state",
+    "native_review_state",
+    "original_review_state",
+    "original_verification_status",
+    "logic_verification_status",
+    "runtime_eligibility"
+  ],
+  "runtime_files": [
+    "generated:research/community_knowledge/runtime/pkg014_sidechain_automation_midi_groove_velocity_transform.runtime.jsonl"
+  ],
+  "runtime_projection": {
+    "forbidden_categories": [
+      "procedures",
+      "Logic navigation instructions",
+      "evaluations",
+      "multi-turn scenarios",
+      "SQLite databases",
+      "test fixtures"
+    ],
+    "generated_by": "tools/import_to_tracksmith.py",
+    "purity_validation": "recursive key and text scan plus full validator",
+    "record_count": 660,
+    "source": "corpus/canonical_qa.jsonl"
+  },
+  "sequence": 14,
+  "test_only_files": [
+    "corpus/multiturn_scenarios.jsonl",
+    "corpus/retrieval_evaluations.jsonl",
+    "knowledge_candidates/logic_procedures.jsonl",
+    "database/corpus.sqlite",
+    "database/database_manifest.json",
+    "tests/retrieval_cases.jsonl",
+    "tests/integrity_cases.jsonl",
+    "tests/expected_statistics.json"
+  ]
+}

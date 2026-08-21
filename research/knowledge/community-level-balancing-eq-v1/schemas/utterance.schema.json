@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "canonical_id": {
+      "type": "string"
+    },
+    "domain": {
+      "enum": [
+        "level_balancing",
+        "equalization"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "canonical_id",
+    "domain",
+    "text"
+  ],
+  "type": "object"
+}

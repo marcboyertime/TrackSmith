@@ -1,5 +1,35 @@
 # Corpus review and disposition
 
+## Package 005 — Automation candidate boundary
+
+`research/community_knowledge/packages/tracksmith-corpus-005-automation/` is an immutable
+`tracksmith-corpus-package/1.0` input (sequence 5). Its registry-aware preflight resolves
+the four declared standardized dependencies through the explicit legacy map to Packages
+1–4; legacy package identities retain `contract_version: null` and are not recast as the
+new contract. Package 005 contains 240 canonical candidates, 5,280 utterances, 720
+scenarios, 1,200 retrieval evaluations, 36 contradictions, 44 myths, 63 sources, and
+240 each claim, strategy, procedure, and provenance records. The shared
+`CommunityCandidateCorpus` ships only a compact candidate projection and is still
+`lexical_structured_provisional` through `search_candidate_corpus`.
+
+All P5 canonical, utterance, scenario, evaluation, contradiction, myth, claim, strategy,
+procedure, and provenance records remain `candidate_not_yet_human_reviewed`. Procedures
+remain `candidate_unverified_on_installed_logic`, `execution_authority:false`, and are
+represented at runtime only by candidate ID plus status: no steps, locations, show-me or
+visual queries, navigation, scenario, test, or evaluation data ship in the app resource.
+The 32 documentary source records retain `candidate_reviewed_documentary`; the other 31
+retain `candidate_not_yet_human_reviewed`, with original evidence class/access/version
+scope preserved and conservatively mapped A/B/C. No source or candidate is promoted.
+
+The explicit P5 disagreement map covers all 36 contradictions and 44 myths. Every target
+is a P5 canonical card with a source intersection, is reachable, and is capped at three
+contradictions, two myths, and four combined attachments. Retrieval accounting is stored
+separately: supplied normalized unique exact is 480 and nonexact is 720; the runtime-safe
+projection recomputes those counts after recursive leak scanning rather than assuming
+them. Current projection evidence is 480 runtime-safe exact and 720 runtime-safe nonexact.
+This is migration integrity, not a claim of listening, installed-Logic verification, or
+automation execution authority.
+
 This catalog records how every unique PDF family in the original 70-source pre-Logic supplied
 and manifest-driven corpus affects the product. Duplicate copies and alternate
 publication downloads are counted once. “Core” means full-text engineering review;
@@ -151,3 +181,147 @@ and the four Logic manuals are covered by their dedicated atlases.
 - Preview export now measures each level-matched option against its preceding viable sibling and rejects a collapsed option below the bounded pairwise difference gate. The manifest retains the pairwise metrics, so distinctness is auditable rather than inferred from strength labels.
 - Analysis schema 1.1 now carries versioned, bounded metric series: 200 ms RMS and crest-factor timelines with nominal 50% overlap (maximum 2,048 selected windows), plus normalized positive spectral-flux timelines (maximum 512 analyzed spectral windows).
 - Tests cover sibling identity/distinctness and confirm that the crest timeline is level invariant and that the timeline bounds are enforced.
+
+## Vocal + Quantization Candidate Corpus v1
+
+`research/knowledge/community-vocal-quantization-v1/` is an immutable,
+content-addressed input package. The package validator and importer verify its
+manifest hashes before any projection is generated.
+
+The import registers 34 sources in the existing general Tutor source registry
+and creates 642 native queue entries: 214 claims, 214 strategies, and 214
+procedure candidates. The initial import leaves every entry in
+`awaitingReview`; its original package status is retained in
+`originalReviewStatus`. Later deterministic regenerations preserve valid named
+review events while refreshing package/provenance fields. There is no named
+review event, promotion, or trusted candidate created by this initial import.
+
+The generated `CommunityCandidateCorpus` is a read-only query/evaluation
+projection with 214 canonical cards, 3,290 utterance links, and 428 scenarios.
+It carries only candidate teaching material and partitioned provenance:
+
+- Tier A source IDs are documentary support.
+- Tier B source IDs are professional-practice candidate support.
+- Tier C source IDs are discovery language and hypothesis context only.
+
+Tier C cannot ground a trusted material claim, whether it is popular or not.
+Mixed-source records retain all provenance; Tier C never adds authority to the
+Tier A/B portions. Candidate procedure bodies remain in the native review
+queue only and are excluded from the runtime candidate projection,
+`TutorProcedureCatalog`, and `get_logic_procedure`.
+
+Candidate numeric language is starting guidance, never a preset. The candidate
+search tool returns at most one canonical card, proposes one reversible first
+experiment, and uses exact Logic instructions only through the existing
+reviewed procedure tool after a named documentary/installed-version review.
+
+## Level Balancing + EQ Candidate Corpus v1
+
+`research/knowledge/community-level-balancing-eq-v1/` is a second immutable,
+content-addressed candidate package. Its 238 cards (92 level balancing and 146
+equalization), 4,007 utterances, 23 contradictions, and 30 myths stay
+provisional. Its 714 six-turn scenarios and 714 retrieval cases are
+evaluation-only synthetic migration-integrity fixtures, not independent human
+or semantic-retrieval evidence.
+
+The unified external-resource store preserves package identity, version,
+manifest digest, source type, evidence class, Logic-version scope, and context
+metadata. Runtime retrieval is explicitly `lexical_structured_provisional`:
+exact normalized language gets a deterministic boost, results collapse to one
+canonical card, and filters constrain the selected candidate. It is not a claim
+of completed semantic retrieval. The source registry namespaces only the two
+documented package-2 source-ID collisions and retains `originalSourceID`.
+
+## Compression, Arrangement + Frequency Allocation Candidate Corpus v1
+
+`research/knowledge/community-compression-arrangement-frequency-allocation-v1/`
+is the immutable third candidate package. Its 350 cards, 7,700 utterances,
+1,050 scenarios, and 1,750 mixed evaluation cases remain unreviewed. The five
+evaluation kinds are 350 each of retrieval, paraphrase, clarification,
+tradeoff, and myth resistance. The 700 retrieval and paraphrase cases are
+exact-match migration-integrity fixtures; the 1,050 clarification, tradeoff,
+and myth-resistance cases are non-exact and make no semantic-quality claim. The runtime resource excludes evaluation data and
+Logic procedure bodies. Its 91 sources add 1,050 awaiting-review candidates;
+the fixed 12 collisions are namespaced and retain `originalSourceID`.
+
+## Reverb + Delay Candidate Corpus v1
+
+`research/knowledge/community-reverb-delay-v1/` is the immutable fourth
+candidate package. Its 300 cards (160 reverb, 140 delay), 6,600 utterances,
+900 synthetic scenarios (600 four-turn and 300 six-turn), and 1,500 synthetic
+retrieval fixtures remain provisional/test-only. Runtime carries only bounded
+candidate diagnostic and reversible-experiment evidence; it excludes scenarios,
+retrieval cases, the supplied SQLite database, and all Logic procedure bodies.
+The immutable raw package has 316 uniquely exact retrieval fixtures and 1,184
+non-exact lexical fixtures. Runtime safety redaction deliberately removes the
+navigation-bearing `eval.delay.logic_pro_specific.logic_region_delay.1` exact
+utterance, so the test-only fixture records 315 runtime-safe exact and 1,185
+runtime-safe non-exact cases; it is not restored into the app resource.
+
+All 105 sources retain native `reviewState=acquired` and immutable
+`originalReviewStatus=source_registered_not_full_claim_review` (42 Tier A, 43
+Tier B, 20 Tier C).
+The queue carries 300 claims, 300 strategies, and 300 procedures, all
+`awaitingReview`; procedure rows separately preserve
+`originalReviewStatus=candidate_not_yet_human_reviewed` and
+`originalVerificationStatus=candidate_unverified_on_installed_logic`, plus
+`execution_authority=false` and `user_performs_every_action=true` in the
+immutable payload. The runtime descriptor deliberately does not expose those
+procedure fields because no procedure data is shipped; the queue and pipeline
+audit are the authoritative verification boundary. Only the three documented
+source collisions are namespaced, with every nested source reference rewritten.
+
+## Saturation + Harmonic Distortion + Transient Shaping Candidate Corpus v1
+
+`research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping/`
+is an immutable stable-contract 1.0 input package. Its 384 candidate cards (204
+saturation/harmonic-distortion and 180 transient-shaping), 8,448 utterances,
+1,152 six-message scenarios, and 1,920 supplied exact retrieval evaluations are
+candidate retrieval evidence only. The runtime-safe projection preserves the
+honest 1,920 unique exact / 0 nonexact accounting because its navigation safety
+scan redacts no P6 fields. Independent adversarial diagnostics remain a
+separate semantic guard, not a claim of model listening or installed-Logic
+verification.
+
+Its 82 sources retain their original evidence and review classes: 46 official
+documentation, 14 primary research, 11 professional-practice, 10 specialist,
+and one community-pattern source. Primary research is carried in its own
+provenance partition; it is never relabeled as official documentation. All
+1,152 queue candidates await review. P6 procedure payloads remain outside the
+production resource and preserve `candidate_unverified_on_installed_logic`,
+`execution_authority=false`, and user-only execution. Runtime cards expose only
+candidate distinctions, reversible level-matched experiments, listening cues,
+tradeoffs, stop/undo language, non-processing hypotheses, and a procedure
+candidate identifier/status—never steps, locations, visual targets, or a
+mutation capability.
+
+## Recording Latency, Monitoring, Signal Flow, Comping + Punch Candidate Corpus v1
+
+`research/community_knowledge/packages/tracksmith-corpus-012-recording-latency-monitoring-comping-punch/`
+is an immutable stable-contract 1.0 Package 012 staged through the
+repository-owned no-follow CAS path. Its archive, package manifest,
+integration manifest, inventory, and 47-file tree are independently pinned.
+The package has 480 unreviewed canonical cards across four 120-card domains,
+11,040 raw utterances, 1,440 six-message scenarios, 2,400 classified retrieval
+evaluations, 52 contradictions, 64 myths, and 84 sources.
+
+Its runtime is deliberately canonical-card-only: 480 cards and zero utterances,
+contradictions, myths, procedures, scenarios, evaluations, exact aliases,
+SQLite, or mutation capability. The test bundle holds only the 480
+`exact_unique` fixture rows. The remaining 1,920 retrieval rows are
+diagnostic-only; the accounting is raw 480 exact / 1,920 nonexact and runtime
+0 exact / 2,400 nonexact. Exact fixture aliases are test-only linkage data and
+are absent from production lookup.
+
+The 84 source records retain their native evidence/review/access distinctions:
+36 official-documentation documentary/public-HTML, 2 primary-research
+reviewed-primary-research/search-discovery-only, 21 professional-practice
+reviewed-professional/public-HTML, 5 specialist manual-seed-only, 19 specialist
+search-discovery-only, and one community-pattern manual-seed-only. In
+particular, primary research remains discovery-only provenance, not open
+documentation or installed-Logic authority. Every claim, strategy, and
+procedure remains awaiting human review; procedures preserve their original
+candidate synthesis, unverified installed-Logic status, false execution
+authority, and user-only action boundary. GeneralTutor receives exactly the 84
+source records for traceability and no P12 advice, concept, strategy, claim, or
+contradiction promotion.

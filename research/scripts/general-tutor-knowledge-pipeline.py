@@ -44,6 +44,155 @@ QUEUE = K / "general-tutor-review-queue.json"
 GENERATED = (
     ROOT / "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift"
 )
+COMMUNITY_PACKAGES = {
+    "community-vocal-quantization-v1": {
+        "path": K / "community-vocal-quantization-v1", "canonical": 214,
+        "original": {"claim": "candidate_not_reviewed", "strategy": "candidate_not_reviewed", "procedure": "candidate_requires_installed_logic_verification"},
+    },
+    "community-level-balancing-eq-v1": {
+        "path": K / "community-level-balancing-eq-v1", "canonical": 238,
+        "original": {"claim": "candidate_not_yet_human_reviewed", "strategy": "candidate_not_yet_human_reviewed", "procedure": "candidate_not_yet_human_reviewed"},
+    },
+    "community-compression-arrangement-frequency-allocation-v1": {
+        "path": K / "community-compression-arrangement-frequency-allocation-v1", "canonical": 350,
+        "original": {"claim": "candidate_not_yet_human_reviewed", "strategy": "candidate_not_yet_human_reviewed", "procedure": "candidate_not_yet_human_reviewed"},
+    },
+    "community-reverb-delay-v1": {
+        "path": K / "community-reverb-delay-v1", "canonical": 300,
+        "original": {"claim": "candidate_not_yet_human_reviewed", "strategy": "candidate_not_yet_human_reviewed", "procedure": "candidate_not_yet_human_reviewed"},
+        "procedureVerification": "candidate_unverified_on_installed_logic",
+    },
+}
+
+
+def stable_contract_packages() -> dict[str, dict]:
+    """Discover stable packages from their checked-in manifests and source rows.
+
+    This keeps the audit in lockstep with the registry/staged package contract:
+    a newly registered contiguous stable package cannot silently evade its native
+    candidate, source-evidence, and procedure-authority audit.
+    """
+    root = ROOT / "research/community_knowledge/packages"
+    package_registry = json.loads((ROOT / "research/community_knowledge/package_registry.json").read_text(encoding="utf-8"))
+    registered = [
+        row for row in package_registry.get("packages", [])
+        if isinstance(row.get("package_id"), str) and row["package_id"].startswith("tracksmith-corpus-")
+    ]
+    sequences = sorted(row.get("package_number") for row in registered)
+    if sequences != list(range(5, len(sequences) + 5)):
+        raise ValueError("stable package registry sequence is not contiguous from package 5")
+    registered_ids = {row["package_id"] for row in registered}
+    if len(registered_ids) != len(registered):
+        raise ValueError("stable package registry has duplicate package IDs")
+    discovered: dict[str, dict] = {}
+    for row in sorted(registered, key=lambda value: value["package_number"]):
+        package = root / row["package_id"]
+        manifest_path = package / "package_manifest.json"
+        if not manifest_path.is_file():
+            raise ValueError(f"registered stable package is missing manifest: {package}")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest.get("package_contract") != "tracksmith-corpus-package":
+            continue
+        package_id = manifest.get("package_id")
+        counts = manifest.get("record_counts", {})
+        sources = [
+            json.loads(line)
+            for line in (package / "sources/source_registry.jsonl").read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        if not isinstance(package_id, str) or package_id != package.name or not isinstance(counts.get("canonical_qa"), int):
+            raise ValueError(f"invalid stable package manifest: {package}")
+        if manifest.get("package_number") != row["package_number"]:
+            raise ValueError(f"stable package registry/manifest sequence drift: {package_id}")
+        if manifest.get("package_type") == "integration_framework":
+            # P16 is a zero-subject integration/audit package. Its 17 source
+            # records remain outside candidate knowledge, so force that
+            # boundary here instead of trying to infer a review partition from
+            # deliberately empty claim/strategy/procedure files.
+            zero_subject_kinds = {
+                "canonical_qa", "claim_candidates", "contradictions",
+                "logic_procedure_candidates", "multiturn_scenarios",
+                "myths_and_antipatterns", "provenance", "retrieval_evaluations",
+                "strategy_candidates", "user_utterances",
+            }
+            if row.get("package_type") != "integration_framework" or row.get("runtime_resource") != "none":
+                raise ValueError(f"integration package registry/runtime contract drift: {package_id}")
+            if any(counts.get(kind) != 0 for kind in zero_subject_kinds):
+                raise ValueError(f"integration package has subject records: {package_id}")
+            continue
+        candidate_paths = {
+            "claim": package / "knowledge_candidates/claims.jsonl",
+            "strategy": package / "knowledge_candidates/strategies.jsonl",
+            "procedure": package / "knowledge_candidates/logic_procedures.jsonl",
+        }
+        candidate_contracts = {}
+        for kind, candidate_path in candidate_paths.items():
+            candidates = [
+                json.loads(line)
+                for line in candidate_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            if len(candidates) != counts["canonical_qa"]:
+                raise ValueError(f"stable package raw {kind} count drift: {package_id}")
+            original_reviews = {
+                candidate.get("original_review_state") or candidate.get("review_state")
+                for candidate in candidates
+            }
+            original_verifications = {
+                candidate.get("original_verification_status") or candidate.get("verification_status")
+                for candidate in candidates
+            }
+            if len(original_reviews) != 1 or len(original_verifications) != 1:
+                raise ValueError(f"stable package raw {kind} provenance is not a uniform exact partition: {package_id}")
+            candidate_contracts[kind] = {
+                "originalReviewStatus": next(iter(original_reviews)),
+                "originalVerificationStatus": next(iter(original_verifications)),
+            }
+            if kind == "procedure":
+                logic_verifications = {
+                    candidate.get("logic_verification_status")
+                    for candidate in candidates
+                    if candidate.get("logic_verification_status") is not None
+                }
+                if len(logic_verifications) > 1:
+                    raise ValueError(f"stable package raw procedure logic verification is not uniform: {package_id}")
+                candidate_contracts[kind]["logicVerificationStatus"] = (
+                    next(iter(logic_verifications)) if logic_verifications else None
+                )
+        discovered[package_id] = {
+            "path": package,
+            "canonical": counts["canonical_qa"],
+            "candidateContracts": candidate_contracts,
+            "sourceContracts": {
+                # Stable packages may carry a newer native review state while
+                # preserving a discovery-only original state.  The registry
+                # intentionally audits that immutable provenance, not a
+                # promotion-like substitution of the current review label.
+                row["id"]: (row.get("evidence_class"), row.get("original_review_state") or row.get("review_state"))
+                for row in sources
+            },
+        }
+    staged_ids = {
+        json.loads(path.read_text(encoding="utf-8")).get("package_id")
+        for path in root.glob("tracksmith-corpus-*/package_manifest.json")
+        if json.loads(path.read_text(encoding="utf-8")).get("package_contract") == "tracksmith-corpus-package"
+    }
+    if staged_ids != registered_ids:
+        raise ValueError("stable package registry/staged manifest identity drift")
+    return discovered
+
+
+COMMUNITY_PACKAGES.update(stable_contract_packages())
+
+STABLE_SOURCE_TIERS = {
+    "official_documentation": "tierAPrimaryOrDirect",
+    "product_documentation": "tierAPrimaryOrDirect",
+    "primary_research": "tierAPrimaryOrDirect",
+    "professional_practice": "tierBReviewedProfessionalPractice",
+    "specialist_discussion": "tierCDiscoveryOrAnecdotal",
+    "community_pattern": "tierCDiscoveryOrAnecdotal",
+    "community_anecdote": "tierCDiscoveryOrAnecdotal",
+}
 
 VALID_TIERS = {
     "tierAPrimaryOrDirect",
@@ -211,6 +360,11 @@ def cmd_review(args) -> int:
     if args.state in TRUSTED_STATES:
         if not args.reviewer:
             fail("promoting a candidate requires --reviewer")
+        if candidate.get("candidateKind") == "procedure":
+            fail(
+                "procedure candidates require named installed-Logic verification and "
+                "TutorProcedureCatalog regeneration; generic queue promotion is forbidden"
+            )
         if candidate.get("discoveryOnly"):
             fail("discovery-only material cannot be promoted to trusted knowledge")
         if source["tier"] == "tierCDiscoveryOrAnecdotal":
@@ -260,6 +414,32 @@ def cmd_audit(args) -> int:
     registry = load(REGISTRY, {"schemaVersion": "1.0", "sources": []})
     queue = load(QUEUE, {"schemaVersion": "1.0", "candidates": []})
 
+    # The candidate corpus has four intentionally distinct original states.
+    # Audit them here as native state, not merely in the package's standalone
+    # validator, so a queue rewrite cannot obscure an accidental promotion.
+    for package_id, spec in COMMUNITY_PACKAGES.items():
+        if not spec["path"].exists():
+            continue
+        try:
+            canonical_rows = [json.loads(line) for line in (spec["path"] / "corpus/canonical_qa.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+            if len(canonical_rows) != spec["canonical"] or any(row.get("review_status") != "candidate_not_yet_human_reviewed" for row in canonical_rows):
+                if len(canonical_rows) != spec["canonical"] or any(row.get("review_state") != "candidate_not_yet_human_reviewed" for row in canonical_rows):
+                    problems.append(f"{package_id}: canonical original status/count drift")
+            for kind, contract in spec.get("candidateContracts", {}).items():
+                imported = [item for item in queue["candidates"] if item.get("candidateCorpus") == package_id and item.get("candidateKind") == kind]
+                if len(imported) != spec["canonical"] or any(item.get("originalReviewStatus") != contract["originalReviewStatus"] or item.get("originalVerificationStatus") != contract["originalVerificationStatus"] for item in imported):
+                    problems.append(f"{package_id}: {kind} original status/count drift")
+                logic_verification = contract.get("logicVerificationStatus") if kind == "procedure" else None
+                if kind == "procedure" and any(
+                    (logic_verification is not None and item.get("logicVerificationStatus") != logic_verification) or
+                    item.get("candidatePayload", {}).get("execution_authority") is not False or
+                    (item.get("candidatePayload", {}).get("user_performs_every_action") is not True and item.get("userPerformsEveryAction") is not True)
+                    for item in imported
+                ):
+                    problems.append(f"{package_id}: procedure verification/authority provenance drift")
+        except (OSError, json.JSONDecodeError) as error:
+            problems.append(f"{package_id}: status audit unreadable: {error}")
+
     source_ids = set()
     for source in registry["sources"]:
         if source["id"] in source_ids:
@@ -271,10 +451,69 @@ def cmd_audit(args) -> int:
             problems.append(f"{source['id']}: invalid handling class")
         if not source.get("rightsBasis"):
             problems.append(f"{source['id']}: missing rights basis")
+        if source.get("candidateCorpus") == "community-reverb-delay-v1" and (source.get("reviewState") != "acquired" or source.get("originalReviewStatus") != "source_registered_not_full_claim_review"):
+            problems.append(f"{source['id']}: package-4 source review boundary drift")
+        stable_spec = COMMUNITY_PACKAGES.get(source.get("candidateCorpus"))
+        source_contract = (stable_spec or {}).get("sourceContracts", {}).get(source["id"])
+        if source_contract:
+            evidence_class, review_status = source_contract
+            if source.get("originalEvidenceClass") != evidence_class or source.get("originalReviewStatus") != review_status:
+                problems.append(f"{source['id']}: stable-package source evidence/review provenance drift")
+            expected_tier = STABLE_SOURCE_TIERS.get(evidence_class)
+            if expected_tier is None or source.get("tier") != expected_tier:
+                problems.append(f"{source['id']}: stable-package source tier boundary drift")
+        if source.get("candidateCorpus") == "tracksmith-corpus-012-recording-latency-monitoring-comping-punch" and source.get("originalEvidenceClass") == "primary_research":
+            if source.get("originalReviewStatus") != "candidate_reviewed_primary_research" or source.get("type") != "searchDiscoveryOnly" or source.get("handlingClass") != "publicWebMetadataOnly":
+                problems.append(f"{source['id']}: P12 primary research must remain metadata-only discovery provenance")
 
+    candidate_ids = set()
     for candidate in queue["candidates"]:
+        if candidate["id"] in candidate_ids:
+            problems.append(f"duplicate candidate id {candidate['id']}")
+        candidate_ids.add(candidate["id"])
         if candidate["sourceID"] not in source_ids:
             problems.append(f"{candidate['id']}: unknown source {candidate['sourceID']}")
+        partitions = {
+            "authoritativeSupportingSourceIDs": "tierAPrimaryOrDirect",
+            "standardsSourceIDs": "tierAPrimaryOrDirect",
+            "primaryResearchSourceIDs": "tierAPrimaryOrDirect",
+            "professionalPracticeSourceIDs": "tierBReviewedProfessionalPractice",
+            "discoveryLanguageSourceIDs": "tierCDiscoveryOrAnecdotal",
+        }
+        partitioned_ids = []
+        for field, expected_tier in partitions.items():
+            values = candidate.get(field, [])
+            if not isinstance(values, list):
+                problems.append(f"{candidate['id']}: {field} is not a list")
+                continue
+            for source_id in values:
+                partitioned_ids.append(source_id)
+                source = next((s for s in registry["sources"] if s["id"] == source_id), None)
+                if source is None:
+                    problems.append(f"{candidate['id']}: unknown provenance source {source_id}")
+                elif source["tier"] != expected_tier:
+                    problems.append(f"{candidate['id']}: {source_id} in wrong provenance partition")
+        if candidate.get("sourceIDs") and sorted(set(candidate["sourceIDs"])) != sorted(set(partitioned_ids)):
+            problems.append(f"{candidate['id']}: sourceIDs do not equal partitioned provenance")
+        if candidate.get("candidateCorpus") in COMMUNITY_PACKAGES and COMMUNITY_PACKAGES[candidate.get("candidateCorpus")].get("sourceContracts"):
+            primary = candidate.get("primaryResearchSourceIDs", [])
+            if not isinstance(primary, list) or any(next((s for s in registry["sources"] if s["id"] == source_id), {}).get("originalEvidenceClass") != "primary_research" for source_id in primary):
+                problems.append(f"{candidate['id']}: primary research provenance drift")
+            standards = candidate.get("standardsSourceIDs", [])
+            if not isinstance(standards, list) or any(next((s for s in registry["sources"] if s["id"] == source_id), {}).get("originalEvidenceClass") != "primary_research" for source_id in standards):
+                problems.append(f"{candidate['id']}: standards provenance drift")
+        if candidate.get("candidateCorpus") in COMMUNITY_PACKAGES:
+            if candidate.get("reviewState") == "awaitingReview":
+                if any(candidate.get(key) is not None for key in ("reviewer", "reviewedAt", "reviewNote")):
+                    problems.append(f"{candidate['id']}: awaiting review candidate has a review event")
+            elif not candidate.get("reviewer") or not candidate.get("reviewedAt"):
+                problems.append(f"{candidate['id']}: changed imported candidate lacks named reviewer/date")
+            if candidate.get("candidateKind") not in {"claim", "strategy", "procedure"}:
+                problems.append(f"{candidate['id']}: missing candidate kind")
+            if not candidate.get("canonicalQAID") or not candidate.get("originalReviewStatus"):
+                problems.append(f"{candidate['id']}: missing canonical/status provenance")
+            if candidate.get("candidateKind") == "procedure" and candidate.get("reviewState") in TRUSTED_STATES:
+                problems.append(f"{candidate['id']}: procedure candidate cannot become trusted without installed-Logic catalog regeneration")
         if candidate["reviewState"] in TRUSTED_STATES:
             if not candidate.get("reviewer"):
                 problems.append(f"{candidate['id']}: trusted without a reviewer")
@@ -285,6 +524,8 @@ def cmd_audit(args) -> int:
                 )
             if source["tier"] == "tierCDiscoveryOrAnecdotal":
                 problems.append(f"{candidate['id']}: Tier C source promoted to trusted")
+            if not candidate.get("authoritativeSupportingSourceIDs", []) and not candidate.get("professionalPracticeSourceIDs", []):
+                problems.append(f"{candidate['id']}: Tier C-only provenance promoted to trusted")
 
     # Generated base: every trusted claim must resolve to a usable source.
     if GENERATED.exists():
@@ -299,6 +540,8 @@ def cmd_audit(args) -> int:
                     problems.append(f"generated claim {claim['id']}: unknown source")
                     continue
                 if claim["reviewState"] in TRUSTED_STATES:
+                    if source.get("tier") == "tierCDiscoveryOrAnecdotal":
+                        problems.append(f"generated claim {claim['id']}: Tier C source is trusted")
                     if source.get("supersededBy"):
                         problems.append(f"generated claim {claim['id']}: superseded source")
                     if source.get("requiresAudiovisualReview") and not source.get(
@@ -314,6 +557,31 @@ def cmd_audit(args) -> int:
                 "concepts": len(base.get("concepts", [])),
                 "contradictions": len(base.get("contradictions", [])),
             }
+            # Candidate-corpus provenance may reach GeneralTutor only as
+            # source metadata.  Derive every package namespace/count from the
+            # registry so a later package cannot bypass this guard by lacking a
+            # new package-specific audit branch.
+            source_only_packages = {}
+            for source in registry["sources"]:
+                identifier = str(source.get("id", ""))
+                match = re.match(r"^(pkg\d+)\.source\.", identifier)
+                if source.get("candidateCorpus") and match:
+                    source_only_packages.setdefault(match.group(1), set()).add(identifier)
+            for namespace, expected_ids in sorted(source_only_packages.items()):
+                generated = {item["id"] for item in base.get("sources", []) if str(item.get("id", "")).startswith(namespace + ".source.")}
+                forbidden = tuple(namespace + suffix for suffix in (".qa.", ".claim.", ".strategy.", ".procedure.", ".contradiction.", ".myth."))
+                if generated != expected_ids or any(token in text for token in forbidden):
+                    problems.append(f"generated {namespace} source-only projection/leakage drift")
+            registry_source_ids = {item["id"] for item in registry["sources"]}
+            generated_source_ids = set(base_sources)
+            if not registry_source_ids.issubset(generated_source_ids):
+                problems.append("generated source registry projection drift")
+            # The builder adds a small set of reviewed, non-registry curated
+            # sources.  Count those from the generated source-only projection,
+            # while the registry contributes every imported provenance source.
+            expected_source_count = len(registry_source_ids) + len(generated_source_ids - registry_source_ids)
+            if counts != {"sources": expected_source_count, "claims": 458, "strategies": 78, "concepts": 12, "contradictions": 2}:
+                problems.append("generated non-source trusted projection count drift")
         else:
             counts = {}
     else:

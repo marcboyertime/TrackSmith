@@ -42,6 +42,12 @@ public actor TutorConversationEngine {
         )
     }
 
+    /// Starts the shared, lower-authority candidate corpus warmup. Callers do
+    /// not need to await this before restoring history or constructing Tutor UI.
+    public func warmupCandidateCorpus() async {
+        await tools.warmupCandidateCorpus()
+    }
+
     public func snapshot() -> TutorConversationState { state }
 
     public func startNewConversation(projectGoal: String? = nil) throws -> TutorConversationState {
@@ -61,7 +67,9 @@ public actor TutorConversationEngine {
         experimentID: UUID,
         outcome: TutorExperimentOutcome,
         note: String? = nil,
-        userReportedSettings: [String] = []
+        userReportedSettings: [String] = [],
+        followUpCapture: TutorCaptureSnapshot? = nil,
+        userConfirmedUpstreamAndObservable: Bool = false
     ) throws -> TutorExperimentRecord {
         guard activeTurnID == nil else { throw TutorConversationError.turnInProgress }
         guard let index = state.experiments.firstIndex(where: { $0.id == experimentID }) else {
@@ -70,6 +78,11 @@ public actor TutorConversationEngine {
         state.experiments[index].outcome = outcome
         state.experiments[index].userNote = note
         state.experiments[index].userReportedSettings = Array(userReportedSettings.prefix(12))
+        state.experiments[index].waveformComparison = TutorComparisonAuthorityValidator.validate(
+            authority: state.experiments[index].comparisonAuthority,
+            followUp: followUpCapture,
+            userConfirmedUpstreamAndObservable: userConfirmedUpstreamAndObservable
+        )
         state.updatedAt = Date()
         try persistState()
         return state.experiments[index]
@@ -222,6 +235,15 @@ public actor TutorConversationEngine {
             continuation.yield(.cancelled(messageID: assistantMessageID))
             continuation.finish(throwing: TutorConversationError.cancelled)
         } catch {
+            // A malformed local context or a double-provider failure must not
+            // leave the musician with only their user bubble. Preserve a
+            // bounded, truthful assistant status without claiming that the
+            // capture was heard or that Logic changed.
+            if accumulatedText.isEmpty {
+                let fallback = "Tutor could not complete this turn safely. No Logic or Audio Unit state changed, and no conclusion was drawn from the capture. Please try again or describe what you hear."
+                accumulatedText = fallback
+                continuation.yield(.textDelta(messageID: assistantMessageID, text: fallback))
+            }
             persistInterruptedMessage(
                 id: assistantMessageID,
                 text: accumulatedText,
@@ -306,8 +328,10 @@ public actor TutorConversationEngine {
                 throw TutorConversationError.toolLimitReached
             }
             for call in calls {
+                guard activeTurnID == assistantMessageID else { throw TutorConversationError.staleResult }
                 continuation.yield(.toolActivity(call.name))
                 let result = try await tools.execute(call, context: context)
+                guard activeTurnID == assistantMessageID, !Task.isCancelled else { throw TutorConversationError.staleResult }
                 toolResults.append(result)
                 providerContinuations.append(TutorProviderContinuation(
                     call: call,
@@ -315,7 +339,10 @@ public actor TutorConversationEngine {
                 ))
                 responseInputItemsJSON.append(try functionOutputJSON(callID: call.callID, output: result.outputJSON))
                 if let draft = result.experiment {
-                    var record = TutorExperimentRecord(draft: draft)
+                    var record = TutorExperimentRecord(
+                        draft: draft,
+                        comparisonAuthority: context.capture.map { TutorComparisonAuthority(baseline: $0) }
+                    )
                     if state.experiments.contains(where: { $0.id == record.id }) {
                         record.draft.id = UUID()
                     }
@@ -345,6 +372,14 @@ public actor TutorConversationEngine {
                     kind: .locallyMeasured,
                     label: "Current local analysis",
                     detail: "\(capture.metrics.count) bounded descriptive measurements from capture \(capture.captureSnapshotID.uuidString.prefix(8)).",
+                    captureSnapshotID: capture.captureSnapshotID
+                ))
+            }
+            if let intelligence = capture.audioIntelligence {
+                values.append(TutorEvidenceReference(
+                    kind: .locallyMeasured,
+                    label: "Exact local waveform specialist",
+                    detail: intelligence.failure ?? "Exact WAV bytes were measured locally; this is not model listening.",
                     captureSnapshotID: capture.captureSnapshotID
                 ))
             }

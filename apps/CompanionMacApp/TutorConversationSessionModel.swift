@@ -12,6 +12,7 @@ final class TutorConversationSessionModel: ObservableObject {
     @Published var projectGoal = ""
     @Published var attachCurrentCapture = true
     @Published var requestModelListening = false
+    @Published private var signalPathConfirmedExperimentIDs: Set<UUID> = []
     @Published private(set) var streamingText = ""
     @Published private(set) var isStreaming = false
     @Published private(set) var activity = "Ready"
@@ -21,15 +22,25 @@ final class TutorConversationSessionModel: ObservableObject {
     private let engine: TutorConversationEngine?
     private let overlay = LogicCalloutOverlayController()
     private var turnTask: Task<Void, Never>?
+    // Provider deltas can arrive much faster than SwiftUI can lay out a selectable
+    // text field. Keep the provider stream lossless, but publish its text at a
+    // bounded cadence so one response cannot monopolize the main actor.
+    private var pendingStreamingTextChunks: [String] = []
+    private var streamingPublicationTask: Task<Void, Never>?
+    private static let streamingPublicationDelayNanoseconds: UInt64 = 100_000_000
 
     init() {
         do {
-            engine = try TutorConversationEngine.live(observeLogic: { query in
+            let liveEngine = try TutorConversationEngine.live(observeLogic: { query in
                 await MainActor.run {
                     LogicReadOnlyObserver().observe(query: query)
                 }
             })
+            engine = liveEngine
             activity = "Restoring Tutor history"
+            // The loader itself is detached from MainActor. Do not make history
+            // restore or initial SwiftUI construction wait on candidate material.
+            Task { await liveEngine.warmupCandidateCorpus() }
         } catch {
             engine = nil
             activity = "Tutor history is unavailable"
@@ -37,7 +48,10 @@ final class TutorConversationSessionModel: ObservableObject {
         Task { [weak self] in await self?.restore() }
     }
 
-    deinit { turnTask?.cancel() }
+    deinit {
+        turnTask?.cancel()
+        streamingPublicationTask?.cancel()
+    }
 
     func restore() async {
         guard let engine else { return }
@@ -51,6 +65,7 @@ final class TutorConversationSessionModel: ObservableObject {
         let text = composer.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         composer = ""
+        discardStagedStreamingText()
         streamingText = ""
         fallbackNotice = nil
         isStreaming = true
@@ -61,10 +76,30 @@ final class TutorConversationSessionModel: ObservableObject {
 
         turnTask = Task { [weak self, weak session] in
             guard let self, let session else { return }
+            defer {
+                self.discardStagedStreamingText()
+                self.isStreaming = false
+                self.turnTask = nil
+            }
             do {
                 var capture = shouldAttach
                     ? try await session.tutorConversationCaptureSnapshot()
                     : nil
+                var exactWAV: Data?
+                if let current = capture {
+                    do {
+                        let bytes = try await session.tutorValidatedCaptureWAVData(
+                            for: current, maximumBytes: 12 * 1_024 * 1_024
+                        )
+                        exactWAV = bytes
+                        capture?.audioIntelligence = await LocalWaveformSpecialist().analyze(
+                            wavData: bytes, capture: current
+                        )
+                    } catch {
+                        // The snapshot remains useful for already-derived local metrics.
+                        // No exact-waveform claim is added when the immutable bytes cannot load.
+                    }
+                }
                 if shouldListen {
                     if !session.tutorCloudAudioConsent {
                         let snapshotID = capture?.captureSnapshotID
@@ -76,10 +111,14 @@ final class TutorConversationSessionModel: ObservableObject {
                     } else if let current = capture {
                         activity = "Sending the exact bounded WAV to the audio-listening model"
                         do {
-                            let bytes = try await session.tutorValidatedCaptureWAVData(
-                                for: current,
-                                maximumBytes: 12 * 1_024 * 1_024
-                            )
+                            let bytes: Data
+                            if let exactWAV {
+                                bytes = exactWAV
+                            } else {
+                                bytes = try await session.tutorValidatedCaptureWAVData(
+                                    for: current, maximumBytes: 12 * 1_024 * 1_024
+                                )
+                            }
                             let listener = OpenAITutorAudioListener(configuration: .init(
                                 modelIdentifier: session.tutorAudioModelIdentifier,
                                 cloudAudioConsent: true,
@@ -129,7 +168,7 @@ final class TutorConversationSessionModel: ObservableObject {
                     if Task.isCancelled { throw TutorConversationError.cancelled }
                     switch event {
                     case let .textDelta(_, delta):
-                        streamingText += delta
+                        stageStreamingText(delta)
                     case let .toolActivity(name):
                         activity = Self.toolActivity(name)
                     case let .experiment(record):
@@ -139,6 +178,9 @@ final class TutorConversationSessionModel: ObservableObject {
                         fallbackNotice = reason
                         activity = "Using deterministic offline fallback"
                     case .completed:
+                        // Publish any final staged delta before replacing the transient
+                        // bubble with the engine's persisted, authoritative message.
+                        flushStagedStreamingText()
                         state = await engine.snapshot()
                         streamingText = ""
                         activity = "Ready for what you heard next"
@@ -153,8 +195,6 @@ final class TutorConversationSessionModel: ObservableObject {
                 state = await engine.snapshot()
                 activity = "Tutor response failed safely; no Logic or Audio Unit state changed"
             }
-            isStreaming = false
-            turnTask = nil
         }
     }
 
@@ -171,6 +211,7 @@ final class TutorConversationSessionModel: ObservableObject {
                 state = try await engine.startNewConversation(
                     projectGoal: projectGoal.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
                 )
+                signalPathConfirmedExperimentIDs.removeAll()
                 activity = "New local Tutor conversation"
             } catch {
                 activity = "A new conversation could not be created"
@@ -186,6 +227,7 @@ final class TutorConversationSessionModel: ObservableObject {
                 try await engine.deleteAllHistory()
                 state = await engine.snapshot()
                 projectGoal = ""
+                signalPathConfirmedExperimentIDs.removeAll()
                 activity = "Tutor transcript, experiments, and receipts deleted locally"
             } catch {
                 activity = "Tutor history could not be deleted"
@@ -199,16 +241,43 @@ final class TutorConversationSessionModel: ObservableObject {
         session: CompanionSessionModel
     ) {
         guard !isStreaming, let engine else { return }
+        // Freeze this card's confirmation before asynchronous capture work.
+        // A different pending experiment can never donate authority to it.
+        let signalPathConfirmed = signalPathConfirmedExperimentIDs.contains(experiment.id)
         Task {
             do {
-                _ = try await engine.recordOutcome(experimentID: experiment.id, outcome: outcome)
+                let followUp: TutorCaptureSnapshot?
+                do {
+                    followUp = try await session.tutorConversationCaptureSnapshot()
+                } catch {
+                    // Outcome persistence is more important than fresh capture
+                    // availability. The engine records comparison unavailable.
+                    followUp = nil
+                }
+                _ = try await engine.recordOutcome(
+                    experimentID: experiment.id,
+                    outcome: outcome,
+                    followUpCapture: followUp,
+                    userConfirmedUpstreamAndObservable: signalPathConfirmed
+                )
                 state = await engine.snapshot()
+                signalPathConfirmedExperimentIDs.remove(experiment.id)
                 composer = Self.feedbackText(outcome)
                 send(session: session)
             } catch {
                 activity = "That outcome could not be attached to the experiment"
             }
         }
+    }
+
+    func signalPathConfirmationBinding(for experimentID: UUID) -> Binding<Bool> {
+        Binding(
+            get: { self.signalPathConfirmedExperimentIDs.contains(experimentID) },
+            set: { isConfirmed in
+                if isConfirmed { self.signalPathConfirmedExperimentIDs.insert(experimentID) }
+                else { self.signalPathConfirmedExperimentIDs.remove(experimentID) }
+            }
+        )
     }
 
     func showMe(_ experiment: TutorExperimentRecord) {
@@ -246,6 +315,40 @@ final class TutorConversationSessionModel: ObservableObject {
         logicStatus = "Logic callout dismissed."
     }
 
+    private func stageStreamingText(_ delta: String) {
+        guard !delta.isEmpty else { return }
+        pendingStreamingTextChunks.append(delta)
+        guard streamingPublicationTask == nil else { return }
+
+        streamingPublicationTask = Task { [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: Self.streamingPublicationDelayNanoseconds)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled, let self else { return }
+            self.flushStagedStreamingText()
+        }
+    }
+
+    private func flushStagedStreamingText() {
+        // A completion-triggered flush can run before the delayed task wakes.
+        // Cancel that task before releasing its slot so it cannot publish chunks
+        // from a subsequent turn. Cancelling the task currently executing here is
+        // harmless; it has no more suspension points after this call.
+        streamingPublicationTask?.cancel()
+        streamingPublicationTask = nil
+        guard !pendingStreamingTextChunks.isEmpty else { return }
+        streamingText += pendingStreamingTextChunks.joined()
+        pendingStreamingTextChunks.removeAll(keepingCapacity: true)
+    }
+
+    private func discardStagedStreamingText() {
+        streamingPublicationTask?.cancel()
+        streamingPublicationTask = nil
+        pendingStreamingTextChunks.removeAll(keepingCapacity: true)
+    }
+
     private static func toolActivity(_ name: String) -> String {
         switch name {
         case "get_current_capture_context": "Reading capture identity and local measurements"
@@ -264,6 +367,7 @@ final class TutorConversationSessionModel: ObservableObject {
         case .worse: "That sounded worse. Help me undo the downside and choose a different one-step experiment."
         case .noChange: "I heard no meaningful change. What does that rule out, and what should I try next?"
         case .cannotFind: "I couldn't find that control in Logic. Give me an exact path or a simpler alternative."
+        case .notSure: "I'm not sure what changed. Help me make the next comparison smaller and clearer."
         }
     }
 }

@@ -1,0 +1,137 @@
+{
+  "alternatives_if_wrong": [
+    "Change arrangement density when no level position works.",
+    "Use automation for section-specific needs.",
+    "Use tone or dynamics processing only after confirming level alone cannot solve it."
+  ],
+  "audio_context_useful": true,
+  "candidate_hypotheses": [
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H1: The arrangement already works and only needs level hierarchy",
+      "mechanism": "The arrangement already works and only needs level hierarchy"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H2: Tonal masking makes a fader-only balance misleading",
+      "mechanism": "Tonal masking makes a fader-only balance misleading"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H3: Large dynamics prevent a stable static balance",
+      "mechanism": "Large dynamics prevent a stable static balance"
+    },
+    {
+      "discriminating_test": "Change one relevant variable, compare in context, and restore it before testing another cause.",
+      "evidence_needed": "A current capture plus the user’s report of when the issue is audible.",
+      "label": "H4: Monitoring level is distorting priorities",
+      "mechanism": "Monitoring level is distorting priorities"
+    }
+  ],
+  "canonical_user_question": "Should I set the fader balance before adding EQ and compression?",
+  "category": "foundations_and_workflow",
+  "clarification_questions": [
+    "Can you identify the lead element and the section where the arrangement is fullest?",
+    "Does the balance change drastically when you listen quietly?"
+  ],
+  "common_mistakes": [
+    "Using meter numbers as artistic targets.",
+    "Changing multiple faders and processors at once.",
+    "Comparing at different monitoring loudness."
+  ],
+  "confidence_class": "review_candidate",
+  "copyright_handling": "Original paraphrased synthesis; no raw forum body or long quotation included.",
+  "created_at": "2026-08-11",
+  "do_not_assume": [
+    "A meter, spectrum, fader position, or common forum setting determines the artistic answer.",
+    "The most popular suggestion is correct for this source and arrangement.",
+    "A louder result is automatically better."
+  ],
+  "domain": "level_balancing",
+  "evidence_class": "synthesized_practice_candidate",
+  "id": "level.foundation.static_mix_first",
+  "logic_pro_steps": [
+    "Save a project alternative or note the current fader values.",
+    "Bypass nonessential mix processing without changing routing.",
+    "Set a representative loop and lower all musical faders.",
+    "Bring up the anchor element, then add one role at a time.",
+    "Restore processing and level-match the comparison."
+  ],
+  "logic_version_scope": "Logic Pro 12.x; reverify visible labels and current project behavior on the installed version",
+  "natural_language_variants": [
+    "Do I balance all the tracks before using plugins?",
+    "Should I get a rough mix with only faders first?",
+    "Am I supposed to EQ before I even set the levels?"
+  ],
+  "non_dsp_possibilities": [
+    "Arrangement priority",
+    "Performance consistency",
+    "Monitoring position and room",
+    "Reference choice"
+  ],
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "preservation_goals": [
+    "musical focal point",
+    "section contrast",
+    "natural dynamics",
+    "headroom"
+  ],
+  "rationale": "This question concerns the difference between technical signal level, perceived loudness, and musical hierarchy. The useful answer depends on where the level changes and what role the source serves.",
+  "recommended_first_experiment": {
+    "action": "Bypass nonessential processing, loop the fullest representative section, and build a 60-second fader-only hierarchy from the most important element outward.",
+    "scope": "one controlled reversible comparison",
+    "summary": "Bypass nonessential processing, loop the fullest representative section, and build a 60-second fader-only hierarchy from the most important element outward.",
+    "why_this_first": "It is intended to distinguish likely causes before adding more processing or making a permanent move."
+  },
+  "requires_mix_context": true,
+  "review_status": "candidate_not_yet_human_reviewed",
+  "schema_version": "1.0",
+  "source_ids": [
+    "apple.logic.channel_strip_volume",
+    "apple.logic.region_gain",
+    "apple.logic.automation_overview",
+    "sos.gain_staging",
+    "sos.mixing_essentials",
+    "izotope.gain_staging",
+    "gearspace.balanced_mix",
+    "gearspace.proper_gain_staging",
+    "gearspace.order_volume"
+  ],
+  "starting_points": [
+    "Choose one musical anchor rather than starting every fader at the same apparent meter value.",
+    "Work at a consistent, comfortable monitoring level."
+  ],
+  "stop_rule": "Stop when the hierarchy reads clearly and further moves become smaller than the musical uncertainty.",
+  "subcategory": "static_mix_first",
+  "tags": [
+    "level",
+    "balance",
+    "logic_pro",
+    "static_mix_first"
+  ],
+  "teaching_principle": "Balance is a relationship among musical roles, not a collection of target meter numbers.",
+  "title": "Building a static balance before processing",
+  "tracksmith_domains": [
+    "balance",
+    "gainStaging",
+    "levelAutomation",
+    "comparisonBias"
+  ],
+  "tradeoffs_and_risks": [
+    "A fader-only pass cannot solve severe tone or dynamics problems.",
+    "A single loop may not represent every section."
+  ],
+  "undo_or_reset": "Restore the saved fader, gain, routing, automation, and plug-in state before testing another explanation.",
+  "user_language_aliases": [
+    "static mix",
+    "faders first",
+    "rough balance"
+  ],
+  "what_to_listen_for": [
+    "The song’s focal point should remain obvious at low playback level.",
+    "Supporting parts should be audible without competing equally."
+  ]
+}

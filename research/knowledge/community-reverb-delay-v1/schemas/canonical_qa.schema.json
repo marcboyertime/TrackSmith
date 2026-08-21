@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrackSmith Package 4 Reverb + Delay Canonical Q&A",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "package_sequence": {
+      "const": 4
+    },
+    "domain": {
+      "enum": [
+        "reverb",
+        "delay"
+      ]
+    },
+    "category": {
+      "type": "string"
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "canonical_user_question": {
+      "type": "string"
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "review_status": {
+      "const": "candidate_not_yet_human_reviewed"
+    }
+  },
+  "required": [
+    "id",
+    "domain",
+    "category",
+    "title",
+    "canonical_user_question",
+    "candidate_hypotheses",
+    "recommended_first_experiment",
+    "logic_pro_steps",
+    "source_ids",
+    "review_status"
+  ]
+}

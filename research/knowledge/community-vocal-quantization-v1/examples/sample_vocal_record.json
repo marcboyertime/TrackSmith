@@ -1,0 +1,133 @@
+{
+  "id": "vocal.tone.muddy",
+  "schema_version": "1.0",
+  "domain": "vocal_production",
+  "category": "tone_and_articulation",
+  "subcategory": "muddy",
+  "title": "Diagnosing a muddy vocal",
+  "canonical_user_question": "Why does my vocal sound muddy, and what should I test first?",
+  "natural_language_variants": [
+    "My vocal sounds cloudy and hard to understand.",
+    "There is too much low-mid stuff in my vocal.",
+    "The voice feels covered by a blanket.",
+    "How do I clean up a muddy lead vocal without making it thin?"
+  ],
+  "user_language_aliases": [
+    "cloudy",
+    "murky",
+    "low-mid buildup",
+    "blanketed"
+  ],
+  "clarification_questions": [
+    "Does the problem exist on the raw vocal with every plug-in bypassed?",
+    "Is it obvious when the vocal is soloed, or mainly when the full mix plays?",
+    "Does it happen throughout the performance or only on certain notes, vowels, or consonants?"
+  ],
+  "candidate_hypotheses": [
+    {
+      "label": "H1: Proximity effect or room buildup",
+      "mechanism": "proximity effect or room buildup",
+      "evidence_needed": "A current raw and processed capture, plus whether the problem occurs solo and in the full mix.",
+      "discriminating_test": "Change or bypass only the stage/source that would create this cause and compare at matched loudness."
+    },
+    {
+      "label": "H2: Too much low-mid energy in the source",
+      "mechanism": "too much low-mid energy in the source",
+      "evidence_needed": "A current raw and processed capture, plus whether the problem occurs solo and in the full mix.",
+      "discriminating_test": "Change or bypass only the stage/source that would create this cause and compare at matched loudness."
+    },
+    {
+      "label": "H3: Reverb or compression sustaining low mids",
+      "mechanism": "reverb or compression sustaining low mids",
+      "evidence_needed": "A current raw and processed capture, plus whether the problem occurs solo and in the full mix.",
+      "discriminating_test": "Change or bypass only the stage/source that would create this cause and compare at matched loudness."
+    },
+    {
+      "label": "H4: Masking from guitars, keys, or bass",
+      "mechanism": "masking from guitars, keys, or bass",
+      "evidence_needed": "A current raw and processed capture, plus whether the problem occurs solo and in the full mix.",
+      "discriminating_test": "Change or bypass only the stage/source that would create this cause and compare at matched loudness."
+    }
+  ],
+  "recommended_first_experiment": {
+    "summary": "Compare the vocal soloed and in the full mix, then make a small broad temporary low-mid cut only if the mud exists in solo.",
+    "why_this_first": "It separates a source, processing, or mix-interaction problem before committing to a permanent EQ curve.",
+    "action": "Compare the vocal soloed and in the full mix, then make a small broad temporary low-mid cut only if the mud exists in solo.",
+    "scope": "one controlled A/B"
+  },
+  "logic_pro_steps": [
+    "Loop the shortest phrase where the problem is obvious.",
+    "Bypass the vocal processing chain, or bypass one plug-in at a time, while keeping perceived loudness as close as possible.",
+    "Open Channel EQ from the vocal channel strip EQ area or Audio FX > Equalizers > Channel EQ.",
+    "Make only the temporary diagnostic move described below; toggle the band or plug-in off and on in the full mix.",
+    "Return the control to its previous state before testing a competing explanation."
+  ],
+  "starting_points": [
+    "Start with a broad bell and a small cut; sweep slowly through roughly the low-mid region rather than jumping to a fixed frequency.",
+    "Match loudness closely when toggling the change; louder is easily mistaken for better."
+  ],
+  "what_to_listen_for": [
+    "Words should become easier to follow while the chest and warmth remain intact.",
+    "Check the vocal in the full arrangement, then briefly in solo to identify side effects."
+  ],
+  "stop_rule": "Stop or back off as soon as too much cutting makes the vocal thin or hollow.",
+  "undo_or_reset": "Bypass or delete the temporary EQ band, restore the previous plug-in state, and compare against the raw capture.",
+  "rationale": "The word “muddy” describes a perception, not a measured cause. The first job is to discover whether the source, processing, or surrounding arrangement produces it.",
+  "tradeoffs_and_risks": [
+    "Too much cutting makes the vocal thin or hollow.",
+    "A visually impressive EQ curve is not evidence that the vocal improved."
+  ],
+  "alternatives_if_wrong": [
+    "Re-record a short phrase with a changed mic position or delivery when the source itself is the cause.",
+    "Adjust the competing instrument or arrangement when the vocal is fine solo but fails in the mix.",
+    "Use phrase-specific automation or dynamic control when the issue occurs only intermittently."
+  ],
+  "common_mistakes": [
+    "Treating “muddy” as one fixed frequency.",
+    "Sweeping a very loud narrow boost and then leaving an extreme cut.",
+    "Judging only in solo.",
+    "Changing EQ, compression, saturation, and reverb simultaneously."
+  ],
+  "teaching_principle": "A production adjective is a clue. Use one reversible test to identify the cause before prescribing the processor.",
+  "non_dsp_possibilities": [],
+  "preservation_goals": [
+    "lyric intelligibility",
+    "vocal identity",
+    "natural body",
+    "emotional performance"
+  ],
+  "do_not_assume": [
+    "The adjective “muddy” maps to one universal frequency.",
+    "A spectral peak proves the listener's complaint.",
+    "The vocal itself is at fault when the issue may be masking."
+  ],
+  "source_ids": [
+    "apple.logic.channel_eq.use",
+    "apple.logic.channel_eq.analyzer",
+    "reddit.watmm.clear_vocals"
+  ],
+  "evidence_class": "community_synthesized_with_primary_procedure",
+  "review_status": "candidate_not_yet_human_reviewed",
+  "confidence_class": "review_candidate",
+  "logic_version_scope": "Logic Pro 12.x; reverify visible labels on installed version",
+  "audio_context_useful": true,
+  "requires_mix_context": true,
+  "numeric_guidance_policy": "starting_point_not_preset",
+  "tags": [
+    "diagnosis",
+    "eq",
+    "muddy",
+    "one_variable_test",
+    "tone",
+    "vocal"
+  ],
+  "created_at": "2026-08-11",
+  "copyright_handling": "Paraphrased synthesis; no raw forum post body or long quotation included.",
+  "tracksmith_domains": [
+    "vocals",
+    "tonalDistribution",
+    "eqAndFiltering",
+    "masking",
+    "balance"
+  ]
+}

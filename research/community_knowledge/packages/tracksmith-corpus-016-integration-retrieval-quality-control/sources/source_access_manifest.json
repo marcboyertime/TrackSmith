@@ -1,0 +1,671 @@
+{
+  "datasets": [
+    {
+      "access_mode": "direct_download",
+      "canonical_url": "https://magenta.withgoogle.com/datasets/groove",
+      "download": {
+        "checksum": "651cbc524ffb891be1a3e46d89dc82a1cecb09a57c748c7b45b844c4841dcc1e",
+        "checksum_type": "sha256",
+        "extract": true,
+        "filename": "groove-v1.0.0-midionly.zip",
+        "kind": "direct",
+        "profiles": [
+          "smoke",
+          "standard",
+          "full"
+        ],
+        "size_bytes": 3110000,
+        "url": "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0-midionly.zip"
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.groove-midi-midionly",
+      "license": "CC BY 4.0",
+      "limitations": [
+        "MIDI-only archive contains no waveform audio.",
+        "Human performance is electronic-drum MIDI, not acoustic multitrack drums."
+      ],
+      "publisher_or_community": "Google Magenta",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "midi",
+        "drums",
+        "human timing",
+        "velocity",
+        "groove"
+      ],
+      "title": "Groove MIDI Dataset — MIDI-only v1.0.0",
+      "version_scope": "v1.0.0"
+    },
+    {
+      "access_mode": "direct_download",
+      "canonical_url": "https://magenta.withgoogle.com/datasets/groove",
+      "download": {
+        "checksum": "21559feb2f1c96ca53988fd4d7060b1f2afe1d854fb2a8dcea5ff95cf3cce7e9",
+        "checksum_type": "sha256",
+        "extract": true,
+        "filename": "groove-v1.0.0.zip",
+        "kind": "direct",
+        "profiles": [
+          "full"
+        ],
+        "size_bytes": 4760000000,
+        "url": "https://storage.googleapis.com/magentadata/datasets/groove/groove-v1.0.0.zip"
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.groove-midi-full",
+      "license": "CC BY 4.0",
+      "limitations": [
+        "Audio is synthesized from an electronic kit.",
+        "Not a substitute for real multitrack drum recordings."
+      ],
+      "publisher_or_community": "Google Magenta",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "audio",
+        "midi",
+        "drums",
+        "timing",
+        "velocity",
+        "groove"
+      ],
+      "title": "Groove MIDI Dataset — aligned MIDI and synthesized audio v1.0.0",
+      "version_scope": "v1.0.0"
+    },
+    {
+      "access_mode": "direct_download",
+      "canonical_url": "https://magenta.tensorflow.org/datasets/maestro",
+      "download": {
+        "checksum": "70470ee253295c8d2c71e6d9d4a815189e35c89624b76d22fce5a019d5dde12c",
+        "checksum_type": "sha256",
+        "extract": true,
+        "filename": "maestro-v3.0.0-midi.zip",
+        "kind": "direct",
+        "profiles": [
+          "smoke",
+          "standard",
+          "full"
+        ],
+        "size_bytes": 56000000,
+        "url": "https://storage.googleapis.com/magentadata/datasets/maestro/v3.0.0/maestro-v3.0.0-midi.zip"
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.maestro-midi",
+      "license": "CC BY-NC-SA 4.0",
+      "limitations": [
+        "MIDI-only archive contains no waveform audio.",
+        "Classical concert-piano repertoire is not representative of every production style."
+      ],
+      "publisher_or_community": "Google Magenta",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "piano",
+        "midi",
+        "velocity",
+        "sustain pedal",
+        "expressive timing"
+      ],
+      "title": "MAESTRO v3.0.0 — MIDI-only",
+      "version_scope": "v3.0.0"
+    },
+    {
+      "access_mode": "direct_download_large",
+      "canonical_url": "https://magenta.tensorflow.org/datasets/maestro",
+      "download": {
+        "checksum": "6680fea5be2339ea15091a249fbd70e49551246ddbd5ca50f1b2352c08c95291",
+        "checksum_type": "sha256",
+        "extract": false,
+        "filename": "maestro-v3.0.0.zip",
+        "kind": "direct",
+        "profiles": [
+          "full"
+        ],
+        "size_bytes": 101000000000,
+        "url": "https://storage.googleapis.com/magentadata/datasets/maestro/v3.0.0/maestro-v3.0.0.zip"
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.maestro-full",
+      "license": "CC BY-NC-SA 4.0",
+      "limitations": [
+        "Approximately 101 GB compressed.",
+        "Use only when the smaller public fixtures are insufficient."
+      ],
+      "publisher_or_community": "Google Magenta",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "piano",
+        "audio",
+        "midi",
+        "timing",
+        "pedal",
+        "velocity"
+      ],
+      "title": "MAESTRO v3.0.0 — aligned piano audio and MIDI",
+      "version_scope": "v3.0.0"
+    },
+    {
+      "access_mode": "zenodo_api",
+      "canonical_url": "https://zenodo.org/records/4603844",
+      "download": {
+        "checksum": "ea1797fc57689a0e33c759c17a2292f5",
+        "checksum_type": "md5",
+        "extract": true,
+        "filename": "babyslakh_16k.zip",
+        "kind": "zenodo",
+        "profiles": [
+          "smoke",
+          "standard",
+          "full"
+        ],
+        "record_id": 4603844,
+        "size_bytes": 882900000
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.babyslakh",
+      "license": "Dataset source terms; verify included license at acquisition",
+      "limitations": [
+        "Synthesized material is useful for controlled tests but is not a replacement for real recordings.",
+        "16 kHz audio limits high-frequency evaluation."
+      ],
+      "publisher_or_community": "Northwestern University / MERL via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "multitrack",
+        "mixture",
+        "stems",
+        "midi",
+        "source separation",
+        "controlled fixtures"
+      ],
+      "title": "BabySlakh — 20-track Slakh2100 debugging subset",
+      "version_scope": "Zenodo record 4603844"
+    },
+    {
+      "access_mode": "zenodo_api_large",
+      "canonical_url": "https://zenodo.org/records/4599666",
+      "download": {
+        "extract": false,
+        "filename_pattern": ".*",
+        "kind": "zenodo_record_manual_selection",
+        "profiles": [
+          "full"
+        ],
+        "record_id": 4599666,
+        "size_bytes": 105000000000
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.slakh2100",
+      "license": "Verify record and component licenses at acquisition",
+      "limitations": [
+        "Approximately 145 hours and over 100 GB.",
+        "Synthetic instrumentation does not reproduce every real-recording artifact."
+      ],
+      "publisher_or_community": "Northwestern University / MERL via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "multitrack",
+        "midi",
+        "mixture",
+        "stems",
+        "source separation"
+      ],
+      "title": "Slakh2100 — synthesized multitrack audio and aligned MIDI",
+      "version_scope": "Zenodo record 4599666"
+    },
+    {
+      "access_mode": "zenodo_api",
+      "canonical_url": "https://zenodo.org/records/1203819",
+      "download": {
+        "checksum": "0c09396242f946e7111ad7d8fc649b81",
+        "checksum_type": "md5",
+        "extract": true,
+        "filename": "VocalSet11.zip",
+        "kind": "zenodo",
+        "profiles": [
+          "standard",
+          "full"
+        ],
+        "record_id": 1203819,
+        "size_bytes": 2100000000
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.vocalset",
+      "license": "Verify license metadata and included terms at acquisition",
+      "limitations": [
+        "Mostly isolated a cappella material rather than full productions.",
+        "Does not provide universal perceptual labels for production quality."
+      ],
+      "publisher_or_community": "Northwestern University via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "vocal",
+        "singing",
+        "technique",
+        "monophonic",
+        "timbre"
+      ],
+      "title": "VocalSet — professional singing voice recordings",
+      "version_scope": "Zenodo record 1203819"
+    },
+    {
+      "access_mode": "zenodo_api",
+      "canonical_url": "https://zenodo.org/records/7061507",
+      "download": {
+        "checksum": "f4324592f5edebcb9e572c01531ac63b",
+        "checksum_type": "md5",
+        "extract": true,
+        "filename": "Annotated VocalSet.zip",
+        "kind": "zenodo",
+        "profiles": [
+          "standard",
+          "full"
+        ],
+        "record_id": 7061507,
+        "size_bytes": 411500000
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.annotated-vocalset",
+      "license": "Verify Zenodo license metadata at acquisition",
+      "limitations": [
+        "Annotations supplement VocalSet and require matching audio.",
+        "Annotation accuracy should be audited on the selected subset."
+      ],
+      "publisher_or_community": "Maynooth University via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "vocal",
+        "pitch",
+        "onsets",
+        "offsets",
+        "lyrics",
+        "annotation"
+      ],
+      "title": "Annotated VocalSet",
+      "version_scope": "v1.0.0"
+    },
+    {
+      "access_mode": "zenodo_api",
+      "canonical_url": "https://zenodo.org/records/7984549",
+      "download": {
+        "checksum": "b1c8b3eddfbe2bfe06f84a89e2a83e3e",
+        "checksum_type": "md5",
+        "extract": true,
+        "filename": "MedleyVox.zip",
+        "kind": "zenodo",
+        "profiles": [
+          "standard",
+          "full"
+        ],
+        "record_id": 7984549,
+        "size_bytes": 904000000
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.medleyvox",
+      "license": "CC BY-NC-SA 4.0",
+      "limitations": [
+        "Derived from a bounded set of MedleyDB songs.",
+        "Source-separation tasks do not directly establish production-quality judgments."
+      ],
+      "publisher_or_community": "Seoul National University / Gaudio Lab via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "vocals",
+        "multiple singers",
+        "mixture",
+        "stems",
+        "separation"
+      ],
+      "title": "MedleyVox — multiple singing voices separation evaluation set",
+      "version_scope": "Zenodo record 7984549"
+    },
+    {
+      "access_mode": "zenodo_api",
+      "additional_files": [
+        {
+          "filename": "0-0.zip",
+          "md5": "b9cb1c536c434c584655850a1493eaf3",
+          "size_bytes": 1700000000
+        },
+        {
+          "filename": "2-2.zip",
+          "md5": "67d1cad3a7c4b7145b2c658560ff3112",
+          "size_bytes": 1700000000
+        },
+        {
+          "filename": "3-3.zip",
+          "md5": "b759c3bdf1a0e7a22a06349eeeb929a8",
+          "size_bytes": 1800000000
+        },
+        {
+          "filename": "4-4.zip",
+          "md5": "a8e1402c351c62a97390c4a50fe9a0f9",
+          "size_bytes": 1800000000
+        },
+        {
+          "filename": "5-5.zip",
+          "md5": "a74c4fe631905073d55aa610885f5d73",
+          "size_bytes": 1800000000
+        }
+      ],
+      "canonical_url": "https://zenodo.org/records/8187288",
+      "download": {
+        "checksum": "e76fb98ed803a898c9d8c6153837008f",
+        "checksum_type": "md5",
+        "extract": true,
+        "filename": "1-1.zip",
+        "kind": "zenodo",
+        "profiles": [
+          "standard",
+          "full"
+        ],
+        "record_id": 8187288,
+        "size_bytes": 1700000000
+      },
+      "evidence_class": "official_research_dataset",
+      "id": "pkg016.source.audio.remfx",
+      "license": "Dataset source licenses and research terms; verify included metadata",
+      "limitations": [
+        "Applied effects are controlled research fixtures, not complete musical mixes.",
+        "Effect presence does not establish artistic success."
+      ],
+      "publisher_or_community": "Queen Mary University of London via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "effects",
+        "compression",
+        "reverb",
+        "delay",
+        "distortion",
+        "phaser",
+        "paired audio"
+      ],
+      "title": "RemFX Evaluation Datasets",
+      "version_scope": "v4"
+    },
+    {
+      "access_mode": "direct_download_terms_apply",
+      "canonical_url": "https://tech.ebu.ch/publications/ebu_loudness_test_set",
+      "download": {
+        "checksum": null,
+        "checksum_type": null,
+        "extract": true,
+        "filename": "ebu-loudness-test-setv05.zip",
+        "kind": "direct",
+        "profiles": [
+          "smoke",
+          "standard",
+          "full"
+        ],
+        "size_bytes": 87400000,
+        "url": "https://tech.ebu.ch/files/live/sites/tech/files/shared/testmaterial/ebu-loudness-test-setv05.zip"
+      },
+      "evidence_class": "official_test_material",
+      "id": "pkg016.source.audio.ebu-loudness",
+      "license": "EBU test-material terms of use",
+      "limitations": [
+        "Primarily measurement-compliance material rather than creative music-production examples.",
+        "EBU terms of use apply."
+      ],
+      "publisher_or_community": "European Broadcasting Union",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "loudness",
+        "BS.1770",
+        "EBU R128",
+        "LRA",
+        "reference level"
+      ],
+      "title": "EBU Loudness Test Set v5.0",
+      "version_scope": "v5.0"
+    },
+    {
+      "access_mode": "direct_download",
+      "canonical_url": "https://www.iks.rwth-aachen.de/en/research/tools-downloads/databases/aachen-impulse-response-database/",
+      "download": {
+        "checksum": null,
+        "checksum_type": null,
+        "extract": true,
+        "filename": "air_database_release_1_4.zip",
+        "kind": "direct",
+        "profiles": [
+          "standard",
+          "full"
+        ],
+        "size_bytes": 0,
+        "url": "https://www.iks.rwth-aachen.de/fileadmin/user_upload/downloads/forschung/tools-downloads/air_database_release_1_4.zip"
+      },
+      "evidence_class": "official_research_dataset",
+      "id": "pkg016.source.audio.aachen-air",
+      "license": "MIT license included in dataset",
+      "limitations": [
+        "Designed primarily for dereverberation and spatial research.",
+        "Room responses do not by themselves establish preferred production spaces."
+      ],
+      "publisher_or_community": "RWTH Aachen University",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "room impulse response",
+        "reverb",
+        "binaural",
+        "rooms"
+      ],
+      "title": "Aachen Impulse Response Database v1.4",
+      "version_scope": "v1.4"
+    },
+    {
+      "access_mode": "direct_download_large",
+      "canonical_url": "https://openslr.org/17/",
+      "download": {
+        "checksum_type": "md5_manifest_remote",
+        "checksum_url": "https://www.openslr.org/resources/17/checksum.md5",
+        "extract": false,
+        "filename": "musan.tar.gz",
+        "kind": "direct",
+        "profiles": [
+          "full"
+        ],
+        "size_bytes": 11000000000,
+        "url": "https://www.openslr.org/resources/17/musan.tar.gz"
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.musan",
+      "license": "CC BY 4.0 overall; preserve source-specific licenses",
+      "limitations": [
+        "Mixed source-specific licenses must be preserved.",
+        "Primarily useful for noise/robustness testing, not expert mixing judgments."
+      ],
+      "publisher_or_community": "OpenSLR",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "music",
+        "speech",
+        "noise",
+        "augmentation",
+        "noise robustness"
+      ],
+      "title": "MUSAN — music, speech and noise corpus",
+      "version_scope": "SLR17"
+    },
+    {
+      "access_mode": "request_required",
+      "canonical_url": "https://medleydb.weebly.com/downloads.html",
+      "download": {
+        "kind": "request_required",
+        "profiles": [
+          "request_required"
+        ]
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.medleydb",
+      "license": "CC BY-NC-SA 4.0; request access via official Zenodo repositories",
+      "limitations": [
+        "Full audio requires a permission request.",
+        "Noncommercial research terms apply."
+      ],
+      "publisher_or_community": "NYU Music and Audio Research Lab",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "multitrack",
+        "stems",
+        "vocals",
+        "mixtures",
+        "real recordings"
+      ],
+      "title": "MedleyDB and MedleyDB 2.0",
+      "version_scope": "current Zenodo releases"
+    },
+    {
+      "access_mode": "request_required",
+      "canonical_url": "https://zenodo.org/records/3338373",
+      "download": {
+        "kind": "request_required",
+        "profiles": [
+          "request_required"
+        ],
+        "record_id": 3338373
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.musdb18-hq",
+      "license": "Educational/noncommercial source terms; preserve track-specific rights",
+      "limitations": [
+        "Full audio requires access approval.",
+        "Educational and noncommercial source terms apply."
+      ],
+      "publisher_or_community": "SigSep via Zenodo",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "mixture",
+        "vocals",
+        "drums",
+        "bass",
+        "other",
+        "source separation"
+      ],
+      "title": "MUSDB18-HQ",
+      "version_scope": "v1.0.0"
+    },
+    {
+      "access_mode": "zenodo_api_large",
+      "canonical_url": "https://zenodo.org/records/4060432",
+      "download": {
+        "extract": false,
+        "kind": "zenodo_record_manual_selection",
+        "profiles": [
+          "full"
+        ],
+        "record_id": 4060432,
+        "size_bytes": 30000000000
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.fsd50k",
+      "license": "Dataset CC BY; preserve per-clip licenses",
+      "limitations": [
+        "Not music-production-specific.",
+        "Per-clip licenses and labels must be retained."
+      ],
+      "publisher_or_community": "Music Technology Group / Freesound",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "sound events",
+        "noise",
+        "audio classification",
+        "Creative Commons"
+      ],
+      "title": "FSD50K",
+      "version_scope": "FSD50K release"
+    },
+    {
+      "access_mode": "direct_download_optional",
+      "canonical_url": "https://magenta.tensorflow.org/datasets/nsynth",
+      "download": {
+        "extract": false,
+        "kind": "landing_page_recipe",
+        "profiles": [
+          "standard",
+          "full"
+        ]
+      },
+      "evidence_class": "official_dataset",
+      "id": "pkg016.source.audio.nsynth-test",
+      "license": "Dataset terms published by Google Magenta; verify selected archive",
+      "limitations": [
+        "Four-second isolated notes do not represent full mixes.",
+        "Commercial-sample origins are covered by dataset terms, which must be retained."
+      ],
+      "publisher_or_community": "Google Magenta",
+      "runtime_eligibility": "evaluation_asset_only",
+      "tags": [
+        "notes",
+        "timbre",
+        "velocity",
+        "envelope",
+        "instrument families"
+      ],
+      "title": "NSynth test subset",
+      "version_scope": "test split"
+    }
+  ],
+  "default_policy": {
+    "autonomous_profile": "smoke",
+    "credentials_are_never_requested_for_public_downloads": true,
+    "default_max_download_bytes": 8000000000,
+    "large_datasets_are_deferred_without_blocking": true,
+    "minimum_free_space_multiplier": 2.0,
+    "owner_audio_is_not_required_until_public_and_generated_fixture_work_is_exhausted": true,
+    "request_required_datasets_do_not_block": true
+  },
+  "generated_at": "2026-08-12",
+  "package_id": "tracksmith-corpus-016-integration-retrieval-quality-control",
+  "profiles": {
+    "full": {
+      "dataset_ids": [
+        "pkg016.source.audio.groove-midi-midionly",
+        "pkg016.source.audio.groove-midi-full",
+        "pkg016.source.audio.maestro-midi",
+        "pkg016.source.audio.maestro-full",
+        "pkg016.source.audio.babyslakh",
+        "pkg016.source.audio.slakh2100",
+        "pkg016.source.audio.vocalset",
+        "pkg016.source.audio.annotated-vocalset",
+        "pkg016.source.audio.medleyvox",
+        "pkg016.source.audio.remfx",
+        "pkg016.source.audio.ebu-loudness",
+        "pkg016.source.audio.aachen-air",
+        "pkg016.source.audio.musan",
+        "pkg016.source.audio.fsd50k",
+        "pkg016.source.audio.nsynth-test"
+      ],
+      "description": "Large optional research profile. Requires explicit large-download flag; Codex should continue with smoke/standard if space is insufficient."
+    },
+    "request_required": {
+      "dataset_ids": [
+        "pkg016.source.audio.medleydb",
+        "pkg016.source.audio.musdb18-hq"
+      ],
+      "description": "Datasets requiring owner access approval. Generate a request plan; do not block independent work."
+    },
+    "smoke": {
+      "dataset_ids": [
+        "pkg016.source.audio.babyslakh",
+        "pkg016.source.audio.ebu-loudness",
+        "pkg016.source.audio.groove-midi-midionly",
+        "pkg016.source.audio.maestro-midi"
+      ],
+      "description": "About 1.03 GB: actual multitrack music from BabySlakh, EBU audio tests, and small aligned MIDI sets."
+    },
+    "standard": {
+      "dataset_ids": [
+        "pkg016.source.audio.babyslakh",
+        "pkg016.source.audio.ebu-loudness",
+        "pkg016.source.audio.groove-midi-midionly",
+        "pkg016.source.audio.maestro-midi",
+        "pkg016.source.audio.vocalset",
+        "pkg016.source.audio.annotated-vocalset",
+        "pkg016.source.audio.medleyvox",
+        "pkg016.source.audio.remfx",
+        "pkg016.source.audio.aachen-air"
+      ],
+      "description": "Approximately 6–8 GB depending on AIR size: adds real singing, effect-paired audio, vocal mixtures and room impulse responses."
+    }
+  },
+  "purpose": "Autonomous acquisition plan for real public audio/MIDI evaluation assets. No audio is bundled in Package 016."
+}

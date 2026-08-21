@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "testOnly": true,
+  "runtimeEligibility": "excluded_from_runtime",
+  "cases": [
+    {"packageSequence": 1, "query": "My vocal timing feels late, but I cannot tell whether to quantize it.", "turn": "clarification", "sourceType": "vocal"},
+    {"packageSequence": 2, "query": "The balance improved after EQ, but now the vocal feels thin.", "turn": "better_worse", "sourceType": "vocal"},
+    {"packageSequence": 3, "query": "The lead is muddy in the dense chorus; is it masking or too much compression?", "turn": "causal_uncertainty", "sourceType": "vocal"},
+    {"packageSequence": 4, "query": "I cannot find whether delay or reverb is making this vocal feel farther away.", "turn": "cannot_find", "sourceType": "vocal"},
+    {"packageSequence": 5, "query": "Why did my volume ride make the vocal more obvious but less natural?", "turn": "why", "sourceType": "vocal"},
+    {"packageSequence": 6, "query": "I am not sure whether saturation or clipping is making the snare harsh.", "turn": "not_sure", "sourceType": "drums"},
+    {"packageSequence": 7, "query": "The stereo image is wide, but mono sounds weaker. What should I test first?", "turn": "material_disagreement", "sourceType": "fullMix"},
+    {"packageSequence": 8, "query": "Should I repair this timing edit or leave the performance human?", "turn": "one_experiment", "sourceType": "guitar"},
+    {"packageSequence": 9, "query": "The bus is louder after limiting, but I cannot tell whether it is actually better.", "turn": "no_change", "sourceType": "fullMix"},
+    {"packageSequence": 10, "query": "A stretched guitar is aligned to the grid but feels worse. What is the cause?", "turn": "causal_uncertainty", "sourceType": "guitar"},
+    {"packageSequence": 11, "query": "Smart Tempo found a BPM, but the downbeat still seems wrong. Why?", "turn": "why", "sourceType": "guitar"},
+    {"packageSequence": 12, "query": "The recording is late only while monitoring. Is that performance or latency?", "turn": "clarification", "sourceType": "vocal"},
+    {"packageSequence": 13, "query": "Should this shared reverb live on a send or as inserts on each vocal?", "turn": "material_disagreement", "sourceType": "vocal"},
+    {"packageSequence": 14, "query": "The bass ducks with the kick, but I cannot find the sidechain owner.", "turn": "cannot_find", "sourceType": "fullMix"},
+    {"packageSequence": 15, "query": "Freeze helped CPU but I need to edit MIDI later. What should I do?", "turn": "better_worse", "sourceType": "keyboard"}
+  ]
+}

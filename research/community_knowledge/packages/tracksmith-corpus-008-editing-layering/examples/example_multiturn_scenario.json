@@ -1,0 +1,48 @@
+{
+  "canonical_qa_id": "pkg008.qa.000001",
+  "domain": "editing",
+  "expected_behaviors": [
+    "Maintains multi-turn continuity and references the exact prior experiment.",
+    "Separates user report, measurement, model listening, Logic observation, documentation, and inference.",
+    "Recommends at most one next experiment.",
+    "Preserves source identity, stop condition, undo, and version-scoped Logic guidance.",
+    "Explains the transferable principle in natural language."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have heard or seen the result without current evidence.",
+    "Treats a candidate record, waveform, grid, or community preference as universal truth.",
+    "Invents a Logic control, automatic action, or exact setting.",
+    "Adds several unrelated processors/layers or restarts from a generic recipe."
+  ],
+  "id": "pkg008.scenario.0000001",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about nondestructive versus destructive edits, and when does it matter?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Ask only context that changes the decision, then present one reversible experiment: Duplicate the region or create a Track/Project Alternative, then perform the same small edit non-destructively and compare recovery options."
+    },
+    {
+      "role": "user",
+      "text": "That is better, but it also created a new tradeoff: The destructive version is cleaner, but it removed useful room tone or made revision harder."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact prior experiment, preserve the baseline, and adjust only the amount, boundary, hierarchy, or source responsible for the tradeoff."
+    },
+    {
+      "role": "user",
+      "text": "Why does that result make sense, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain the causal principle in plain language and connect it to the exact A/B: Region edits, fades, Flex operations, and alternatives preserve recovery; Audio File Editor processes can alter the source file. Choose the least destructive tool that still solves the problem."
+    }
+  ],
+  "package_id": "tracksmith-corpus-008-editing-layering",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "scenario_type": "better_with_tradeoff",
+  "subdomain": "nondestructive_editing_workflow"
+}

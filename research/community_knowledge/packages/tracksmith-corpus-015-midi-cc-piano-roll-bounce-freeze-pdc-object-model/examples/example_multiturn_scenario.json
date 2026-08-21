@@ -1,0 +1,53 @@
+{
+  "canonical_qa_id": "pkg015.qa.000001",
+  "domain": "midi_cc_sustain_expression",
+  "expected_behaviors": [
+    "Maintains continuity with the exact experiment.",
+    "Distinguishes MIDI event, region, track, channel strip, file, output, freeze, bounce, and latency ownership.",
+    "Recommends at most one next experiment.",
+    "Preserves baseline, stop condition, undo, and version-scoped guidance.",
+    "Explains the transferable Logic principle naturally."
+  ],
+  "forbidden_behaviors": [
+    "Claims to have seen, heard, changed, bounced, frozen, deleted, or verified Logic without current evidence.",
+    "Treats one export, snap, CC, buffer, or PDC setting as universally correct.",
+    "Invents autonomous Logic mutation.",
+    "Restarts from a generic checklist without referencing the prior test."
+  ],
+  "id": "pkg015.scenario.0000001",
+  "logic_verification_status": "candidate_unverified_on_installed_logic",
+  "messages": [
+    {
+      "role": "user",
+      "text": "What should I understand about MIDI Controller Events Beyond Notes, and what does it actually affect in Logic Pro?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Clarify only ownership or scope that changes the next move, then present one reversible experiment: Duplicate the MIDI region, open an event view that exposes non-note data, filter to one controller type, and compare playback before changing anything."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but now another part of the performance, routing, timing, or editability feels worse."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Reference the exact prior test, state what the result strengthens or rules out, and recommend at most one next experiment."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "Explain naturally and connect the lesson to this principle: MIDI regions can contain notes plus control change, pitch bend, aftertouch, and other events; the event type, channel, time, and value determine what the instrument receives."
+    }
+  ],
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "original_review_state": "derived_synthesis",
+  "original_verification_status": "source_span_or_documentary_metadata_registered",
+  "package_id": "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "scenario_type": "better_tradeoff",
+  "subdomain": "midi_controller_event_concept"
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "canonical_question": {
+      "minLength": 8,
+      "type": "string"
+    },
+    "direct_answer": {
+      "minLength": 20,
+      "type": "string"
+    },
+    "domain": {
+      "enum": [
+        "phase_polarity",
+        "stereo_imaging",
+        "panning"
+      ]
+    },
+    "id": {
+      "pattern": "^pkg007\\.qa\\.\\d{6}$",
+      "type": "string"
+    },
+    "logic_guidance": {
+      "required": [
+        "location",
+        "steps",
+        "listen_for",
+        "risk",
+        "undo",
+        "verification_status"
+      ],
+      "type": "object"
+    },
+    "package_id": {
+      "const": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning"
+    },
+    "recommended_first_experiment": {
+      "minLength": 15,
+      "type": "string"
+    },
+    "review_state": {
+      "enum": [
+        "candidate_not_yet_human_reviewed",
+        "candidate_reviewed",
+        "promoted_to_reviewed_knowledge",
+        "rejected",
+        "superseded"
+      ]
+    },
+    "source_ids": {
+      "items": {
+        "pattern": "^pkg007\\.source\\.",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "subdomain": {
+      "type": "string"
+    },
+    "title": {
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "package_id",
+    "domain",
+    "subdomain",
+    "title",
+    "canonical_question",
+    "direct_answer",
+    "recommended_first_experiment",
+    "logic_guidance",
+    "source_ids",
+    "review_state"
+  ],
+  "title": "TrackSmith Canonical Q&A",
+  "type": "object"
+}

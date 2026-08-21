@@ -30,6 +30,7 @@ let package = Package(
         .executable(name: "GeneralTutorEvaluation", targets: ["GeneralTutorEvaluation"]),
         .executable(name: "GeneralTutorSpotCheck", targets: ["GeneralTutorSpotCheck"]),
         .executable(name: "TutorConversationTests", targets: ["TutorConversationTests"]),
+        .executable(name: "TutorAudioIntelligenceLab", targets: ["TutorAudioIntelligenceLab"]),
         .executable(name: "LogicTutorObservationProbe", targets: ["LogicTutorObservationProbe"]),
         .executable(name: "VocalProductionEvaluation", targets: ["VocalProductionEvaluation"]),
         .executable(name: "VocalListeningStudyCLI", targets: ["VocalListeningStudyCLI"]),
@@ -88,11 +89,12 @@ let package = Package(
         .target(
             name: "ProductionTutor",
             dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "PlanSchema"],
-            path: "packages/ProductionTutor/Sources/ProductionTutor"
+            path: "packages/ProductionTutor/Sources/ProductionTutor",
+            resources: [.process("Resources")]
         ),
         .target(
             name: "TutorConversation",
-            dependencies: ["AudioAnalysis", "PlanSchema", "ProductionIntelligence", "ProductionTutor"],
+            dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema", "ProductionIntelligence", "ProductionTutor"],
             path: "packages/TutorConversation/Sources/TutorConversation"
         ),
         .target(
@@ -154,7 +156,13 @@ let package = Package(
         .executableTarget(
             name: "TutorConversationTests",
             dependencies: ["AudioAnalysis", "PlanSchema", "ProductionIntelligence", "ProductionTutor", "TutorConversation", "TutorLogicObserver"],
-            path: "tools/TutorConversationTests/Sources/TutorConversationTests"
+            path: "tools/TutorConversationTests/Sources/TutorConversationTests",
+            resources: [.process("../../Resources")]
+        ),
+        .executableTarget(
+            name: "TutorAudioIntelligenceLab",
+            dependencies: ["AudioAnalysis", "DSPCore", "PlanSchema", "TutorConversation"],
+            path: "tools/TutorAudioIntelligenceLab/Sources/TutorAudioIntelligenceLab"
         ),
         .executableTarget(
             name: "LogicTutorObservationProbe",

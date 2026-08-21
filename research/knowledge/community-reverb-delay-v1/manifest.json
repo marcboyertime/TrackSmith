@@ -1,0 +1,252 @@
+{
+  "schema_version": "1.0",
+  "package": "TrackSmith_Reverb_Delay_QA_Corpus_v1",
+  "version": "1.0.0",
+  "package_sequence": 4,
+  "generated_at": "2026-08-11",
+  "integrate_after": [
+    "TrackSmith Vocal + Quantization",
+    "TrackSmith Level Balancing + EQ",
+    "TrackSmith Compression + Arrangement + Frequency Allocation"
+  ],
+  "counts": {
+    "package_name": "TrackSmith_Reverb_Delay_QA_Corpus_v1",
+    "package_sequence": 4,
+    "created_at": "2026-08-11",
+    "canonical_total": 300,
+    "canonical_by_domain": {
+      "reverb": 160,
+      "delay": 140
+    },
+    "canonical_by_category": {
+      "reverb::foundations": 25,
+      "reverb::routing_and_processing": 25,
+      "reverb::diagnosis_and_clarity": 35,
+      "reverb::source_specific": 40,
+      "reverb::creative_and_sound_design": 20,
+      "reverb::logic_pro_specific": 15,
+      "delay::foundations": 20,
+      "delay::rhythm_and_tempo": 25,
+      "delay::source_specific": 35,
+      "delay::stereo_phase_and_utility": 25,
+      "delay::routing_and_creative": 20,
+      "delay::logic_pro_specific": 15
+    },
+    "utterances": 6600,
+    "multiturn_scenarios": 900,
+    "retrieval_evaluations": 1500,
+    "sources": 105,
+    "sources_by_tier": {
+      "A": 42,
+      "B": 43,
+      "C": 20
+    },
+    "contradictions": 40,
+    "myths": 50,
+    "candidate_claims": 300,
+    "candidate_strategies": 300,
+    "candidate_logic_procedures": 300,
+    "reddit_access_status": "MANUAL_PUBLIC_SEEDS_ONLY",
+    "review_status": "candidate_not_yet_human_reviewed"
+  },
+  "review_boundary": {
+    "canonical": "candidate_not_yet_human_reviewed",
+    "claims": "candidate_not_yet_human_reviewed",
+    "strategies": "candidate_not_yet_human_reviewed",
+    "logic_procedures": "candidate_not_yet_human_reviewed and candidate_unverified_on_installed_logic"
+  },
+  "reddit_access_status": "MANUAL_PUBLIC_SEEDS_ONLY",
+  "database": "database/tracksmith_reverb_delay_knowledge.sqlite3",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2007,
+      "sha256": "1ca1fa7f01a4b3305c1e2db1776fef42062cff28cceed7d278d0126eecaa583b"
+    },
+    {
+      "path": "corpus/canonical_qa.jsonl",
+      "bytes": 2930022,
+      "sha256": "0833e163cc8668cf3411b9bc1f3969d931ac33943809131047033a58037092dc"
+    },
+    {
+      "path": "corpus/delay_canonical.jsonl",
+      "bytes": 1347916,
+      "sha256": "8066d58dc8d5f1850dc97dbb6ec2f22afe70b852cd126f3c0d08b77cb2d01e36"
+    },
+    {
+      "path": "corpus/multiturn_scenarios.jsonl",
+      "bytes": 1284646,
+      "sha256": "f6a77fe72f0d1bf5dd684062fe62e9d8030ea08543c48616e559651384609f84"
+    },
+    {
+      "path": "corpus/retrieval_evaluation.jsonl",
+      "bytes": 699349,
+      "sha256": "f970abbbbaf45db4b6f8ef3c01a9a7389b148e0845006cae0c91c4f656267542"
+    },
+    {
+      "path": "corpus/reverb_canonical.jsonl",
+      "bytes": 1582106,
+      "sha256": "191465023bed67d0d07147831175afc9adb2230aaa1bdbc7c702f8614df9ced8"
+    },
+    {
+      "path": "corpus/user_utterances.jsonl",
+      "bytes": 3235635,
+      "sha256": "6bf5ba94fa603fb4c98ae1cabec504c933559374eb8221aefa9e0c93000584dd"
+    },
+    {
+      "path": "database/tracksmith_reverb_delay_knowledge.sqlite3",
+      "bytes": 15335424,
+      "sha256": "41413acf031dc2116450157b7d6f7f6870a912746d5b32170bbaff0ea00fe453"
+    },
+    {
+      "path": "examples/sample_contradiction.json",
+      "bytes": 947,
+      "sha256": "d1bf01cebf14e1a41751f1690ca0d195c09e48c0fa9784cd191e8321ecccf014"
+    },
+    {
+      "path": "examples/sample_delay_record.json",
+      "bytes": 10270,
+      "sha256": "0145b99ef6696408220c2e253c94c0cdf5b1170cb5dcfeb834950e001cd39c8d"
+    },
+    {
+      "path": "examples/sample_multiturn_scenario.json",
+      "bytes": 1816,
+      "sha256": "ecf66d3bad65be80a95a44ab96c64a6c069560dcb7bb37b6652ef608103bcc09"
+    },
+    {
+      "path": "examples/sample_reverb_record.json",
+      "bytes": 10432,
+      "sha256": "cdf88c3a16bdf2021ee923d43caec6a54abc93b01c2204be273c1a419ef56235"
+    },
+    {
+      "path": "examples/sample_source.json",
+      "bytes": 1240,
+      "sha256": "5efd2b3591a384ce772308c0580a50bed25b3c6b1d5fad3966525f516ee5c582"
+    },
+    {
+      "path": "integration/CODEX_DROP_IN_INSTRUCTION.txt",
+      "bytes": 573,
+      "sha256": "418cce5f8bc172114e4943b2b1edc2df2ee9aaed7eabe7b1bd7862757f219657"
+    },
+    {
+      "path": "integration/PACKAGE_SEQUENCE.md",
+      "bytes": 381,
+      "sha256": "2a4802d1ef946cbde13d3234eec0f138d4a5e8f5cbb8a9ce96ea6950835fe3a8"
+    },
+    {
+      "path": "integration/REVIEW_CHECKLIST.md",
+      "bytes": 833,
+      "sha256": "08c0ccc385f2b570608b5367cd00f0e105eacdd41ad824ee0901ac56a9b52150"
+    },
+    {
+      "path": "integration/START_HERE_FOR_CODEX.md",
+      "bytes": 1894,
+      "sha256": "41ad122e61c53572ed8c7a31632070e68286c4fd9480def9637e8b16239518ac"
+    },
+    {
+      "path": "integration/TRACKSMITH_IMPORT_PLAN.md",
+      "bytes": 1247,
+      "sha256": "69ee7196f89efdd816411e1fad186a14c3a50c9730d6d9bdb73eb2aebd224e46"
+    },
+    {
+      "path": "integration/logic_procedure_candidates.jsonl",
+      "bytes": 863182,
+      "sha256": "e6d2f11a395c4d6d768c97570df673c2104c397a679ace8a5fe4099a011d067c"
+    },
+    {
+      "path": "integration/tracksmith_claim_candidates.jsonl",
+      "bytes": 323301,
+      "sha256": "6f4bf1189c7c4b3a0e97d86168164e53bc099696c9ec6e848fc83e2513dc1afd"
+    },
+    {
+      "path": "integration/tracksmith_strategy_candidates.jsonl",
+      "bytes": 798277,
+      "sha256": "abae5defa9e6d156107cdef3890ac49a81188a5ee65320401147e02439a9a2f2"
+    },
+    {
+      "path": "reports/QA_REPORT.md",
+      "bytes": 472,
+      "sha256": "efb38892787c87176b744eb0e16c1e2b9a769db837bfe7ece24dcacaa1bf7801"
+    },
+    {
+      "path": "reports/REDDIT_ACCESS_STATUS.md",
+      "bytes": 621,
+      "sha256": "5a762345af2f44badf263bdf46ea88dd8d640d315265464e0b911ad805023595"
+    },
+    {
+      "path": "reports/SOURCE_COVERAGE.md",
+      "bytes": 640,
+      "sha256": "845b31111af29282ab2eaa0a5458b906b096156af80115e890587e5ff1a1eed7"
+    },
+    {
+      "path": "reports/VALIDATION.txt",
+      "bytes": 354,
+      "sha256": "989aa577f6312ffcdea21990c9943e855978ee5824f853e6b8d314ba0b5f5a35"
+    },
+    {
+      "path": "reports/stats.json",
+      "bytes": 1105,
+      "sha256": "36078f7e8a20f8d18facf03deb1abf3546b500802f9cd5caf85b3e20c30bbb5f"
+    },
+    {
+      "path": "research/SOURCE_POLICY.md",
+      "bytes": 568,
+      "sha256": "8f9048c1dd501de7ad71eebdf0f9aa061c1366354eeff6191b6220a2c5774129"
+    },
+    {
+      "path": "research/contradictions.jsonl",
+      "bytes": 35633,
+      "sha256": "edb971aaa990b1e6f95ba3c82f09d12f134c123d0322b059d787535c2402d52b"
+    },
+    {
+      "path": "research/myths_and_antipatterns.jsonl",
+      "bytes": 31525,
+      "sha256": "10f405d57db6890c810329a0e1e44760c08f4e482be2b7bddc6a2effbaaa6e3e"
+    },
+    {
+      "path": "research/source_registry.jsonl",
+      "bytes": 129514,
+      "sha256": "f6530888af2fbd5db0401b81f193c38464460cfb23839b46a39352d6bd6c623c"
+    },
+    {
+      "path": "research/taxonomy.json",
+      "bytes": 2306,
+      "sha256": "b1087e31de31ce17e96fdc8d36862c64326cbeaa4ea7cce88d2436f6732cebad"
+    },
+    {
+      "path": "schemas/canonical_qa.schema.json",
+      "bytes": 960,
+      "sha256": "9919e06a9ff30d44f9e17c72bad65775d35b49e4d5ef2d71fd976dc5139d88c2"
+    },
+    {
+      "path": "schemas/multiturn_scenario.schema.json",
+      "bytes": 200,
+      "sha256": "c99f48c89eba54e3e71bcf5bee4046a236ae9ca7d972d38df4e2d74651fae001"
+    },
+    {
+      "path": "schemas/source_registry.schema.json",
+      "bytes": 202,
+      "sha256": "d9022f81c5592990e859fe73e57b6f83a5249ce0166d94fff9fbdf9a809c2f3a"
+    },
+    {
+      "path": "schemas/utterance.schema.json",
+      "bytes": 401,
+      "sha256": "06c79225d7fe633eef07ad022c9dce56d21f35cb8b04b96bc994ba107353965a"
+    },
+    {
+      "path": "tools/query_corpus.py",
+      "bytes": 1455,
+      "sha256": "8272da5a5c97653cd158625b3553b79bc8a855d29b71520119d08a4598b25bea"
+    },
+    {
+      "path": "tools/rebuild_index.py",
+      "bytes": 5703,
+      "sha256": "764c62895440c0e4a25d7b538b18b043de8a611706e558db4975a3a7d29bd206"
+    },
+    {
+      "path": "tools/validate_package.py",
+      "bytes": 5064,
+      "sha256": "2e8c198787b5f785b2ef91aba672aafe3583c69c34685934886851505e2cc89f"
+    }
+  ]
+}

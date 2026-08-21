@@ -1,0 +1,28 @@
+[0/1] Planning build
+Building for production...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+[1/4] Write sources
+[2/4] Copying tracksmith-corpus-010-flex-time-manual-timing.json
+[3/13] Copying tracksmith-corpus-006-saturation-transient-shaping.json
+[3/13] Copying community-reverb-delay-v1.json
+[4/13] Copying community-level-balancing-eq-v1.json
+[4/13] Copying tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json
+[4/13] Copying tracksmith-corpus-005-automation.json
+[4/13] Copying tracksmith-corpus-009-gain-staging-bus-processing-loudness.json
+[4/13] Copying community-vocal-quantization-v1.json
+[8/13] Copying community-compression-arrangement-frequency-allocation-v1.json
+[10/13] Copying tracksmith-corpus-008-editing-layering.json
+[13/14] Compiling ProductionTutor CommunityCandidateCorpus.generated.swift
+/Users/marcboyer/LogicAudioAssistant/packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorCoordinator.swift:472:23: warning: no calls to throwing functions occur within 'try' expression
+470 |     private func exactProcedures(for intent: GeneralTutorQuestionIntent) -> [String] {
+471 |         guard let issue = intent.recognizedTutorIssues.first else { return [] }
+472 |         let planner = try? TutorPlanner(catalog: procedureCatalog)
+    |                       `- warning: no calls to throwing functions occur within 'try' expression
+473 |         guard let planner else { return [] }
+474 |         let ordered = planner.orderedCandidateProcedureIDs(
+[13/17] Write sources
+[14/17] Copying Resources
+[16/18] Compiling TutorConversationTests TutorConversationTests.swift
+[16/18] Write Objects.LinkFileList
+[17/18] Linking TutorConversationTests
+Build of product 'TutorConversationTests' complete! (36.13s)

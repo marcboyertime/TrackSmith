@@ -1,6 +1,30 @@
+import CryptoKit
 import Foundation
 import PlanSchema
 import ProductionTutor
+
+/// Shares the lower-authority corpus load between every copy of a live tool
+/// executor. The task intentionally owns its own lifetime: a cancelled caller
+/// must not cancel a warmup another turn may still need.
+private actor CandidateCorpusLoader {
+    private var loadTask: Task<CommunityCandidateCorpus?, Never>?
+
+    func warmup() async {
+        _ = await corpus()
+    }
+
+    func corpus() async -> CommunityCandidateCorpus? {
+        if let loadTask {
+            return await loadTask.value
+        }
+
+        let task = Task.detached(priority: .utility) {
+            try? CommunityCandidateCorpus.loadValidated()
+        }
+        loadTask = task
+        return await task.value
+    }
+}
 
 public struct TutorToolExecutor: Sendable {
     public typealias LogicObservationProvider = @Sendable (String) async -> TutorLogicObservation
@@ -8,21 +32,30 @@ public struct TutorToolExecutor: Sendable {
 
     public static let maximumToolCallsPerTurn = 6
     public static let maximumToolOutputBytes = 48 * 1_024
+    public static let maximumCandidateCorpusOutputBytes = 16 * 1_024
 
     public let definitions: [TutorToolDefinition]
     private let knowledge: GeneralTutorKnowledgeBase
     private let procedures: TutorProcedureCatalog
+    private let candidateCorpus: CommunityCandidateCorpus?
+    private let candidateCorpusLoader: CandidateCorpusLoader?
     private let observeLogic: LogicObservationProvider
     private let priorExperiments: PriorExperimentProvider
 
     public init(
         knowledge: GeneralTutorKnowledgeBase,
         procedures: TutorProcedureCatalog,
+        candidateCorpus: CommunityCandidateCorpus? = nil,
         observeLogic: @escaping LogicObservationProvider = { _ in .unavailable },
         priorExperiments: @escaping PriorExperimentProvider = { [] }
     ) {
         self.knowledge = knowledge
         self.procedures = procedures
+        self.candidateCorpus = candidateCorpus
+        // Supplying this initializer, including with an explicit nil corpus,
+        // remains a deterministic injected-corpus test path. Live construction
+        // uses the separate loader-backed initializer below.
+        self.candidateCorpusLoader = nil
         self.observeLogic = observeLogic
         self.priorExperiments = priorExperiments
         self.definitions = Self.defaultDefinitions
@@ -32,12 +65,16 @@ public struct TutorToolExecutor: Sendable {
         observeLogic: @escaping LogicObservationProvider = { _ in .unavailable },
         priorExperiments: @escaping PriorExperimentProvider = { [] }
     ) throws {
-        self.init(
-            knowledge: try GeneralTutorKnowledgeBase.loadValidated(),
-            procedures: try TutorProcedureCatalog.loadValidated(),
-            observeLogic: observeLogic,
-            priorExperiments: priorExperiments
-        )
+        self.knowledge = try GeneralTutorKnowledgeBase.loadValidated()
+        self.procedures = try TutorProcedureCatalog.loadValidated()
+        self.candidateCorpus = nil
+        // Candidate material is strictly lower authority. Its potentially
+        // expensive decode/validation/index build is detached from synchronous
+        // app/session construction, and failure stays fail-soft.
+        self.candidateCorpusLoader = CandidateCorpusLoader()
+        self.observeLogic = observeLogic
+        self.priorExperiments = priorExperiments
+        self.definitions = Self.defaultDefinitions
     }
 
     public static let defaultDefinitions: [TutorToolDefinition] = [
@@ -49,6 +86,11 @@ public struct TutorToolExecutor: Sendable {
         TutorToolDefinition(
             name: "search_production_knowledge",
             description: "Search bounded reviewed TrackSmith production claims, strategies, and teaching concepts.",
+            kind: .readOnly
+        ),
+        TutorToolDefinition(
+            name: "search_candidate_corpus",
+            description: "Search one unreviewed community-corpus candidate card for query language, hypotheses, and a reversible first experiment. It is not factual or exact Logic authority.",
             kind: .readOnly
         ),
         TutorToolDefinition(
@@ -73,6 +115,13 @@ public struct TutorToolExecutor: Sendable {
         ),
     ]
 
+    /// Starts the shared lower-authority corpus work without making a caller
+    /// wait on it during Tutor/session construction.
+    public func warmupCandidateCorpus() async {
+        guard let candidateCorpusLoader else { return }
+        await candidateCorpusLoader.warmup()
+    }
+
     public func execute(
         _ call: TutorToolCall,
         context: TutorRuntimeContext
@@ -86,6 +135,8 @@ public struct TutorToolExecutor: Sendable {
             return try captureContext(call: call, context: context)
         case "search_production_knowledge":
             return try searchKnowledge(call: call, arguments: arguments, sourceType: context.sourceType)
+        case "search_candidate_corpus":
+            return try await searchCandidateCorpus(call: call, arguments: arguments)
         case "get_logic_procedure":
             return try procedure(call: call, arguments: arguments, sourceType: context.sourceType)
         case "retrieve_prior_experiments":
@@ -151,10 +202,31 @@ public struct TutorToolExecutor: Sendable {
                 captureSnapshotID: capture.captureSnapshotID
             ))
         }
+        let audioIntelligence: [String: Any]
+        if let local = capture.audioIntelligence {
+            audioIntelligence = [
+                "provider": local.providerIdentifier,
+                "received_original_waveform_bytes": local.receivedOriginalWaveformBytes,
+                "waveform_binding_status": local.waveformBindingStatus?.rawValue ?? "legacy_unknown",
+                "source_provenance": local.sourceProvenance,
+                "failure": local.failure ?? NSNull(),
+                "limitations": local.limitations,
+                "calibrated_tasks": local.capabilities.filter(\.calibrated).map(\.task.rawValue),
+            ]
+            evidence.append(TutorEvidenceReference(
+                kind: .locallyMeasured,
+                label: "Exact local waveform analysis",
+                detail: local.failure ?? "Exact WAV bytes were measured locally; this is not model listening.",
+                captureSnapshotID: capture.captureSnapshotID
+            ))
+        } else {
+            audioIntelligence = ["available": false, "reason": "No exact waveform-specialist result is attached to this turn."]
+        }
         return try result(call, object: [
             "available": true,
             "source_type": capture.sourceType.rawValue,
             "scope": capture.scopeDescription,
+            "format": capture.formatDescription ?? NSNull(),
             "capture_snapshot_id": capture.captureSnapshotID.uuidString,
             "captured_at": ISO8601DateFormatter().string(from: capture.capturedAt),
             "duration_seconds": capture.durationSeconds,
@@ -163,6 +235,7 @@ public struct TutorToolExecutor: Sendable {
             "local_analysis_limitations": capture.localAnalysisLimitations,
             "model_listening_status": capture.cloudListening.status.rawValue,
             "model_listening_summary": capture.cloudListening.summary ?? NSNull(),
+            "audio_intelligence": audioIntelligence,
         ], evidence: evidence)
     }
 
@@ -247,6 +320,188 @@ public struct TutorToolExecutor: Sendable {
                 ? "No reviewed local match. The Tutor may use general knowledge but must label uncertainty."
                 : "These are reviewed local references, not proof that one treatment is correct for this audio.",
         ], evidence: evidence)
+    }
+
+    /// Candidate retrieval ranks user paraphrases and canonical card language,
+    /// then collapses every result to exactly one canonical card. It does not
+    /// expose candidate procedure bodies or treat the result as reviewed truth.
+    private func searchCandidateCorpus(
+        call: TutorToolCall,
+        arguments: [String: Any]
+    ) async throws -> TutorToolResult {
+        if Task.isCancelled { throw TutorConversationError.cancelled }
+        let query = try requiredString("query", in: arguments)
+        let domain = optionalString("domain", in: arguments)
+        let category = optionalString("category", in: arguments)
+        let sourceType = optionalString("source_type", in: arguments)
+        let evidenceClass = optionalString("evidence_class", in: arguments)
+        let logicVersion = optionalString("logic_version", in: arguments)
+        let currentContext = arguments["current_context"] as? Bool
+        let packageID = optionalString("package_id", in: arguments)
+        let packageVersion = optionalString("package_version", in: arguments)
+        let role = optionalString("role", in: arguments)
+        let section = optionalString("section", in: arguments)
+        let goal = optionalString("goal", in: arguments)
+        let object = optionalString("object", in: arguments)
+        let priorExperiment = optionalString("prior_experiment", in: arguments)
+        let evidenceHint = optionalString("evidence", in: arguments)
+        let loadedCandidateCorpus: CommunityCandidateCorpus?
+        if let candidateCorpus {
+            loadedCandidateCorpus = candidateCorpus
+        } else if let candidateCorpusLoader {
+            if Task.isCancelled { throw TutorConversationError.cancelled }
+            loadedCandidateCorpus = await candidateCorpusLoader.corpus()
+            if Task.isCancelled { throw TutorConversationError.cancelled }
+        } else {
+            loadedCandidateCorpus = nil
+        }
+        guard let candidateCorpus = loadedCandidateCorpus else {
+            return try result(call, object: [
+                "query": query,
+                "match": NSNull(),
+                "coverage_note": "The local candidate corpus is unavailable. Do not substitute exact Logic instructions.",
+            ], evidence: [TutorEvidenceReference(
+                kind: .unavailable,
+                label: "Candidate corpus unavailable",
+                detail: "No unreviewed candidate projection is loaded."
+            )])
+        }
+        let filters = CommunityCandidateCorpusFilters(domain: domain, category: category, sourceType: sourceType, evidenceClass: evidenceClass, logicVersion: logicVersion, currentContext: currentContext, packageID: packageID, packageVersion: packageVersion, role: role, section: section)
+        // Context is retrieval evidence only; it does not turn a candidate into
+        // reviewed knowledge or a deterministic alias identity.
+        let retrievalQuery = [query, goal, object, priorExperiment, evidenceHint].compactMap { $0 }.joined(separator: " ")
+        let rankings = candidateCorpus.ranked(query: retrievalQuery, filters: filters, limit: 4)
+        if Task.isCancelled { throw TutorConversationError.cancelled }
+        guard let ranking = rankings.first else {
+            return try result(call, object: [
+                "query": query,
+                "match": NSNull(),
+                "coverage_note": "No candidate canonical card matched. Do not invent a candidate procedure or Logic path.",
+            ], evidence: [])
+        }
+        let selected = ranking.card
+        guard let packageDescriptor = candidateCorpus.descriptor(selected.packageID), packageDescriptor.packageSequence > 0 else {
+            throw TutorConversationError.invalidToolArguments("candidate corpus descriptor")
+        }
+        let contradictionPayload: [[String: Any]] = selected.contradictions.prefix(1).map {
+            ["summary": $0.summary, "what_decides": $0.whatDecides, "tutor_behavior": $0.tutorBehavior, "source_evidence_classes": $0.sourceEvidenceClasses ?? []]
+        }
+        let mythPayload: [[String: Any]] = selected.myths.prefix(2).map {
+            ["myth": $0.myth, "correction": $0.correction, "source_evidence_classes": $0.sourceEvidenceClasses ?? []]
+        }
+        var payload: [String: Any] = [
+            "domain": selected.domain,
+            "category": selected.category,
+            "topic": selected.topic ?? NSNull(),
+            "title": selected.title,
+            "question": selected.question,
+            "original_review_status": selected.originalReviewStatus ?? NSNull(),
+            "clarification_questions": selected.clarificationQuestions,
+            "competing_hypotheses": selected.competingHypotheses,
+            "recommended_first_experiment": selected.recommendedFirstExperiment,
+            "rationale": selected.rationale,
+            "listening_cues": selected.listeningCues,
+            "stop_or_undo": selected.stopOrUndo,
+            "tradeoffs": selected.tradeoffs,
+            "teaching_principle": selected.teachingPrinciple,
+            "numeric_guidance_policy": selected.numericGuidancePolicy,
+            "source_types": Array(selected.sourceTypes.prefix(6)),
+            "tags": Array(selected.tags.prefix(12)),
+            "evidence_class": selected.evidenceClass,
+            "logic_version": selected.logicVersion ?? NSNull(),
+            "current_context": selected.currentContext,
+            "subcategory": selected.subcategory ?? NSNull(),
+            "tracksmith_domains": selected.tracksmithDomains ?? [],
+            "preservation_goals": selected.preservationGoals ?? [],
+            "non_dsp_possibilities": selected.nonDSPPossibilities ?? [],
+            "starting_points": selected.startingPoints ?? [],
+            "common_mistakes": selected.commonMistakes ?? [],
+            "role_facets": selected.roleFacets ?? [],
+            "section_facets": selected.sectionFacets ?? [],
+            "direct_candidate_answer": selected.directCandidateAnswer ?? NSNull(),
+            "key_distinction": selected.keyDistinction ?? NSNull(),
+            "first_experiment": selected.firstExperiment ?? NSNull(),
+            "listen_for": selected.listenFor ?? NSNull(),
+            "non_automation_possibilities": selected.nonAutomationPossibilities ?? [],
+            "non_processing_possibilities": selected.nonProcessingPossibilities ?? [],
+            "evidence_needed": selected.evidenceNeeded ?? [],
+            "user_intent": selected.userIntent ?? NSNull(),
+            "authoritative_supporting_source_ids": selected.authoritativeSupportingSourceIDs ?? [],
+            "primary_research_source_ids": selected.primaryResearchSourceIDs ?? [],
+            "professional_practice_source_ids": selected.professionalPracticeSourceIDs,
+            "discovery_language_source_ids": selected.discoveryLanguageSourceIDs,
+            "contradictions": contradictionPayload,
+            "myths": mythPayload,
+        ]
+        // Only P9 currently projects this optional partition.  Keep every
+        // legacy package payload byte-for-byte shaped as before, and never
+        // merge standards into a differently classified source partition.
+        let standardsSourceIDs = selected.standardsSourceIDs ?? []
+        if !standardsSourceIDs.isEmpty {
+            payload["standards_source_ids"] = standardsSourceIDs
+        }
+        // Runtime status-free descriptors also exclude authority/procedure
+        // labels from the live candidate-tool shape. Their raw review and
+        // provenance records remain outside the runtime bundle.
+        if packageDescriptor.runtimeStatusFree {
+            ["original_review_status", "authoritative_supporting_source_ids"].forEach {
+                payload.removeValue(forKey: $0)
+            }
+        }
+        let selectedIDs = rankings.map(\.card.id)
+        var sourceIDs: [String] = []
+        for candidate in rankings {
+            let values = (candidate.card.authoritativeSupportingSourceIDs ?? []) +
+                (candidate.card.primaryResearchSourceIDs ?? []) +
+                candidate.card.professionalPracticeSourceIDs + candidate.card.discoveryLanguageSourceIDs +
+                (candidate.card.standardsSourceIDs ?? [])
+            for value in values where !sourceIDs.contains(value) && sourceIDs.count < 6 { sourceIDs.append(value) }
+        }
+        // Candidate source provenance is useful context, but model-facing
+        // output is deliberately capped across the complete aggregate result.
+        let selectedSourceSet = Set(sourceIDs)
+        ["authoritative_supporting_source_ids", "primary_research_source_ids", "professional_practice_source_ids", "discovery_language_source_ids", "standards_source_ids"].forEach { key in
+            if let values = payload[key] as? [String] { payload[key] = values.filter(selectedSourceSet.contains) }
+        }
+        let summaryMatches: [[String: Any]] = rankings.map { candidate in
+            ["domain": candidate.card.domain, "title": candidate.card.title,
+             "score": candidate.score, "first_experiment": candidate.card.recommendedFirstExperiment]
+        }
+        let querySHA256 = SHA256.hash(data: Data(retrievalQuery.utf8)).map { String(format: "%02x", $0) }.joined()
+        let retrievalID = SHA256.hash(data: Data(("p16-policy-1|" + querySHA256 + "|" + selectedIDs.joined(separator: ",")).utf8)).map { String(format: "%02x", $0) }.joined()
+        let output: [String: Any] = [
+            "query": query, "match": payload, "matches": summaryMatches,
+            "retrieval_mode": "lexical_structured_provisional",
+            "deduplicated_candidate_count": min(ranking.deduplicatedCandidates, 8),
+            "coverage_note": "Bounded unreviewed candidate cards, selected by context and diversity. This is lexical structured retrieval, not completed semantic retrieval. Use it for candidate hypotheses and a reversible experiment only; get exact Logic instructions only from get_logic_procedure.",
+        ]
+        let resultSHA256 = SHA256.hash(data: try JSONSerialization.data(withJSONObject: output, options: [.sortedKeys])).map { String(format: "%02x", $0) }.joined()
+        let evidence = TutorEvidenceReference(
+            kind: .candidateKnowledge,
+            label: selected.id,
+            detail: "Unreviewed candidate corpus material; not factual or exact Logic authority.",
+            candidateCorpusProvenance: {
+                var provenance=TutorCandidateCorpusProvenance(
+                packageID: selected.packageID,
+                packageVersion: selected.version,
+                packageSequence: packageDescriptor.packageSequence,
+                recordID: selected.id
+                )
+                provenance.querySHA256=querySHA256
+                let ordinarySourceIDs = (selected.authoritativeSupportingSourceIDs ?? []) + (selected.primaryResearchSourceIDs ?? []) + selected.professionalPracticeSourceIDs + selected.discoveryLanguageSourceIDs
+                provenance.selectedDomain=selected.domain; provenance.sourceIDs=Array((ordinarySourceIDs + standardsSourceIDs).prefix(6))
+                provenance.standardsSourceIDs=standardsSourceIDs.isEmpty ? nil : standardsSourceIDs
+                provenance.reviewState=selected.originalReviewStatus
+                provenance.resultSHA256=resultSHA256
+                provenance.selectedRecordIDs=Array(selectedIDs.prefix(4)); provenance.retrievalID=retrievalID; provenance.corpusVersion="p1-p15-selected-6212"; provenance.policyVersion="p16-policy-1"; provenance.omissions=["exact_fixture_identity", "ambiguous_alias_authority", "candidate_procedures", "development_only_index", "evaluation_data"]
+                return provenance
+            }()
+        )
+        guard try JSONSerialization.data(withJSONObject: output, options: [.sortedKeys]).count <= Self.maximumCandidateCorpusOutputBytes else {
+            throw TutorConversationError.responseTooLarge
+        }
+        if Task.isCancelled { throw TutorConversationError.cancelled }
+        return try result(call, object: output, evidence: [evidence])
     }
 
     private func procedure(

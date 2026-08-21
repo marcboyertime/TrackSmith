@@ -1,0 +1,104 @@
+{
+  "canonical_question": "What should I understand about phase versus polarity, and when does it matter in a mix?",
+  "clarification_questions": [
+    "Is this one isolated signal, two related captures of the same source, or an already stereo file?",
+    "Does the problem remain in mono, and which critical musical element changes?",
+    "Is the issue consistent across the whole song or limited to one note, hit, section, or playback system?"
+  ],
+  "competing_hypotheses": [
+    {
+      "description": "Phase Versus Polarity is the main relationship causing the reported result.",
+      "label": "Hypothesis 1",
+      "status": "open"
+    },
+    {
+      "description": "The audible problem is mainly level, source, arrangement, room, monitoring, or playback context rather than the named stereo/phase method.",
+      "label": "Hypothesis 2",
+      "status": "open"
+    },
+    {
+      "description": "The concept is relevant, but the current Logic mode, routing, latency, channel format, or processor implementation is creating the unwanted result.",
+      "label": "Hypothesis 3",
+      "status": "open"
+    }
+  ],
+  "contract_version": "1.0",
+  "created_at": "2026-08-11",
+  "direct_answer": "Polarity inversion flips the entire waveform vertically; phase describes a frequency-dependent time relationship between signals. A polarity flip can improve one blend but is not a universal phase-alignment command. For this concept question, the useful next step is not to chase a meter or preset: run one controlled comparison and decide from the musical consequence.",
+  "domain": "phase_polarity",
+  "evidence_class": "derived_synthesis",
+  "evidence_needed": [
+    "Exact source scope, channel format, routing, pan mode, processor state, and musical section.",
+    "A matched-loudness comparison of the same passage in stereo and mono.",
+    "The user’s report of what improved, worsened, moved, narrowed, or disappeared.",
+    "Current Logic version and visible parameter state when exact navigation matters."
+  ],
+  "id": "pkg007.qa.000001",
+  "key_distinction": "Polarity inversion flips the entire waveform vertically; phase describes a frequency-dependent time relationship between signals. A polarity flip can improve one blend but is not a universal phase-alignment command.",
+  "limitations": [
+    "Starting values and positions are orientations, not universal presets.",
+    "Meters and visual displays are diagnostic aids, not artistic-quality scores.",
+    "Professional and community sources are context-bound and may disagree.",
+    "Exact Logic procedures remain unverified on the owner’s installed build.",
+    "This synthesized candidate is not yet promoted to TrackSmith reviewed knowledge."
+  ],
+  "logic_guidance": {
+    "listen_for": "low-end solidity, transient focus, and whether the combined tone becomes fuller rather than merely louder",
+    "location": "Logic channel strip > Utility > Gain > Phase Invert on the selected channel",
+    "risk": "A polarity flip can improve one frequency region while worsening another when the real issue is arrival-time difference.",
+    "show_me_query": "Logic channel strip > Utility > Gain > Phase Invert on the selected channel",
+    "starting_point": "Begin with a simple on/off polarity comparison; make no timing move until the result is understood.",
+    "steps": [
+      "Save a Project Alternative or record the current channel, routing, pan mode, polarity, delay, width, and automation state.",
+      "Blend the two related signals at matched level, toggle polarity on one, then compare both settings in stereo and mono without moving any timing.",
+      "Compare the same musical passage at matched loudness in full context, then repeat the important part in mono.",
+      "Listen for: low-end solidity, transient focus, and whether the combined tone becomes fuller rather than merely louder.",
+      "Stop or back off if: A polarity flip can improve one frequency region while worsening another when the real issue is arrival-time difference..",
+      "Bypass the changed processor or restore the saved pan, polarity, delay, width, routing, and automation values; remove any duplicate or diagnostic path created for the test."
+    ],
+    "stop_condition": "Stop once low-end solidity, transient focus, and whether the combined tone becomes fuller rather than merely louder is repeatably improved in context. Back off or undo if a polarity flip can improve one frequency region while worsening another when the real issue is arrival-time difference..",
+    "undo": "Bypass the changed processor or restore the saved pan, polarity, delay, width, routing, and automation values; remove any duplicate or diagnostic path created for the test.",
+    "verification_status": "candidate_unverified_on_installed_logic",
+    "version_scope": "Logic Pro 12.3 target; verify exact menu labels, pan modes, processor availability, parameter ranges, and current behavior against the installed version.",
+    "visual_target_query": "Logic channel strip > Utility > Gain > Phase Invert on the selected channel"
+  },
+  "logic_procedure_status": "candidate_unverified_on_installed_logic",
+  "non_processing_possibilities": [
+    "Check microphone orientation and cable polarity.",
+    "Move a microphone at the source when re-recording is possible."
+  ],
+  "package_id": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+  "package_number": 7,
+  "problem_summary": "Polarity inversion flips the entire waveform vertically; phase describes a frequency-dependent time relationship between signals. A polarity flip can improve one blend but is not a universal phase-alignment command.",
+  "recommended_first_experiment": "Blend the two related signals at matched level, toggle polarity on one, then compare both settings in stereo and mono without moving any timing.",
+  "retrieval_tags": [
+    "Logic Pro",
+    "concept",
+    "fundamentals_phase_polarity",
+    "gain",
+    "multi_mic",
+    "phase",
+    "phase_polarity",
+    "phase_vs_polarity",
+    "polarity"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "source_ids": [
+    "pkg007.source.000002",
+    "pkg007.source.000033",
+    "pkg007.source.000051",
+    "pkg007.source.000053",
+    "pkg007.source.000059"
+  ],
+  "subdomain": "fundamentals_phase_polarity",
+  "teaching_principle": "Polarity inversion flips the entire waveform vertically; phase describes a frequency-dependent time relationship between signals. A polarity flip can improve one blend but is not a universal phase-alignment command.",
+  "title": "Phase Versus Polarity — what it changes",
+  "topic": "phase_vs_polarity",
+  "tradeoffs": [
+    "A polarity flip can improve one frequency region while worsening another when the real issue is arrival-time difference.",
+    "A change that increases apparent width or loudness may be preferred before mono translation and center stability are judged.",
+    "A local improvement can create a new balance, localization, depth, or arrangement problem."
+  ],
+  "user_intent": "Understand the underlying production concept and avoid a misleading shortcut.",
+  "variant_kind": "concept"
+}

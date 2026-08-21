@@ -1,0 +1,778 @@
+{
+  "contract": "tracksmith-community-package-registry",
+  "packages": [
+    {
+      "contract_version": null,
+      "legacy_identity": true,
+      "package_id": "community-vocal-quantization-v1",
+      "package_manifest_sha256": "ecb07b6fb54d0ddcd694a63be2b95a2ed3d2e92533001845c0e872be8902e489",
+      "package_number": 1,
+      "package_version": "1.0.0",
+      "path": "research/knowledge/community-vocal-quantization-v1"
+    },
+    {
+      "contract_version": null,
+      "legacy_identity": true,
+      "package_id": "community-level-balancing-eq-v1",
+      "package_manifest_sha256": "9ccefb7ef7ff7a2cff195c0930ed006ab8802d9d3253d12e3a8b73007b329397",
+      "package_number": 2,
+      "package_version": "1.0.0",
+      "path": "research/knowledge/community-level-balancing-eq-v1"
+    },
+    {
+      "contract_version": null,
+      "legacy_identity": true,
+      "package_id": "community-compression-arrangement-frequency-allocation-v1",
+      "package_manifest_sha256": "910743645106629095b0819a389b5099bb84ecba92ea8960d7c03243f58c408e",
+      "package_number": 3,
+      "package_version": "1.0.0",
+      "path": "research/knowledge/community-compression-arrangement-frequency-allocation-v1"
+    },
+    {
+      "contract_version": null,
+      "legacy_identity": true,
+      "package_id": "community-reverb-delay-v1",
+      "package_manifest_sha256": "8d6a147711fe3864af66e4e54b247bfdd0ed0a70314f6e77d8d96133c71e07d1",
+      "package_number": 4,
+      "package_version": "1.0.0",
+      "path": "research/knowledge/community-reverb-delay-v1"
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-005-automation",
+      "package_manifest_sha256": "01b9d62439e45bb685c6a46ad058ba181b7877415a099ba00d0dccd2312318e7",
+      "package_number": 5,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-005-automation",
+      "review_state": "candidate_not_yet_human_reviewed"
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-006-saturation-transient-shaping",
+      "package_manifest_sha256": "c9258563917bc3a8290cae3de5b0ce5ee0423207a41a76e7a84aa4691afac209",
+      "package_number": 6,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-006-saturation-transient-shaping",
+      "review_state": "candidate_not_yet_human_reviewed"
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+      "package_manifest_sha256": "f91eb7fb74f9c4968ebd1c8e62d27f2109eec6f174954f5ad150134fda432e87",
+      "package_number": 7,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+      "review_state": "candidate_not_yet_human_reviewed"
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-008-editing-layering",
+      "package_manifest_sha256": "e832bbfa2ffe06a740cef29dbb9df4cf4b2e1ebe84296ae00d70067b4812ca1c",
+      "package_number": 8,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-008-editing-layering",
+      "review_state": "candidate_not_yet_human_reviewed"
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+      "package_manifest_sha256": "c17a4cee0168172e6f191c9ad00b7515b821c71b4db82fc2200c9bb1b96c4aa7",
+      "package_number": 9,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+      "review_state": "candidate_not_yet_human_reviewed"
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-010-flex-time-manual-timing",
+      "package_manifest_sha256": "6f56095b16c1ae9560e322623b48f10135001716628467e3db3b68113e42814b",
+      "package_number": 10,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-010-flex-time-manual-timing",
+      "review_state": "candidate_not_yet_human_reviewed",
+      "runtime_contract_reconciliation": {
+        "evaluation_test_only_sha256": "b20b83fd55352d67449e17578b9fb22b8760ce69976667f0a9ae19037d81541c",
+        "incoming_runtime_projection": {
+          "declared_runtime_files": [
+            "generated:research/community_knowledge/runtime/pkg010_flex_time_manual_timing.runtime.jsonl"
+          ],
+          "forbidden_categories": [
+            "procedures",
+            "Logic navigation instructions",
+            "evaluations",
+            "multi-turn scenarios",
+            "SQLite databases",
+            "test fixtures"
+          ],
+          "projection": "bounded-jsonl-projection-v1",
+          "purity_validation": "recursive key and text scan plus full validator",
+          "record_count": 450,
+          "source": "corpus/canonical_qa.jsonl"
+        },
+        "integration_contract": "tracksmith-corpus-integration-manifest",
+        "integration_contract_version": "1.0",
+        "integration_manifest_sha256": "f72f5cbe2290087e93ffc5acd4f50b5b3a2035528248be6ce41077c5f040b310",
+        "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+        "runtime_resource_sha256": "da8c0cb4cf44b192fde0cb64c6063ed81d0106395bff9f7dfb6487bb9b3cf49b",
+        "shipping_canonical_count": 450,
+        "shipping_runtime_projection": "canonical-only",
+        "shipping_schema_version": "2.0"
+      }
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing": "tracksmith-corpus-010-flex-time-manual-timing"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+      "package_manifest_sha256": "49db3cf8b10ca9dade637811aa63d34fe6ae753d8d04c91b88e1baf16da980b8",
+      "package_number": 11,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+      "review_state": "candidate_not_yet_human_reviewed",
+      "runtime_contract_reconciliation": {
+        "evaluation_test_only_sha256": "6c5e5b4d7d4bca7c22e674b38531c3606d6e6b15a50dc1c027bddb6a27ceacb0",
+        "incoming_runtime_projection": {
+          "forbidden_categories": [
+            "procedures",
+            "Logic navigation instructions",
+            "evaluations",
+            "multi-turn scenarios",
+            "SQLite databases",
+            "test fixtures"
+          ],
+          "generated_by": "tools/import_to_tracksmith.py",
+          "purity_validation": "recursive key and text scan plus full validator",
+          "record_count": 450,
+          "source": "corpus/canonical_qa.jsonl"
+        },
+        "integration_contract": "tracksmith-corpus-integration-manifest",
+        "integration_contract_version": "1.0",
+        "integration_manifest_sha256": "9d704cbd98dd06192452a77257ebd2cdd40343256ffcb45a8d5604f96b6b6202",
+        "observed_status_contract": {
+          "logic_verification_status": [
+            "candidate_unverified_on_installed_logic",
+            "not_applicable_to_source"
+          ],
+          "native_review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_primary_research",
+            "candidate_reviewed_professional_practice"
+          ],
+          "original_review_state": [
+            "candidate_discovery_only",
+            "candidate_procedure_synthesis",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_primary_research",
+            "candidate_reviewed_professional_practice",
+            "community_and_professional_disagreement",
+            "derived_myth_correction",
+            "derived_synthesis",
+            "owner_supplied_example_language",
+            "synthetic_exact_retrieval_fixture"
+          ],
+          "original_verification_status": [
+            "candidate_generated_from_registered_sources",
+            "deterministic_fixture_alias",
+            "literal_user_example_preserved",
+            "source_metadata_registered",
+            "source_span_or_documentary_metadata_registered"
+          ],
+          "review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_primary_research",
+            "candidate_reviewed_professional_practice"
+          ],
+          "runtime_eligibility": [
+            "excluded_from_runtime",
+            "retrieval_candidate",
+            "source_reference_only",
+            "test_only"
+          ]
+        },
+        "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+        "runtime_resource_sha256": "d008767d97cb762c98565d3b83c62ff4d78cd789361bd586c8563a684777a878",
+        "shipping_canonical_count": 450,
+        "shipping_runtime_projection": "canonical-only",
+        "shipping_schema_version": "2.0"
+      }
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing": "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+      "package_manifest_sha256": "9a6978a6e070c374156d7b7645e302ad977fd68f2ad8f3ec7be79fbfdd21ee56",
+      "package_number": 12,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+      "review_state": "candidate_not_yet_human_reviewed",
+      "runtime_contract_reconciliation": {
+        "evaluation_test_only_sha256": "3ba0fd27d74047921ffe87af123b380d1f526a1c09888847fe5db1552abbe1c9",
+        "incoming_runtime_projection": {
+          "forbidden_categories": [
+            "procedures",
+            "Logic navigation instructions",
+            "evaluations",
+            "multi-turn scenarios",
+            "SQLite databases",
+            "test fixtures"
+          ],
+          "generated_by": "tools/import_to_tracksmith.py",
+          "purity_validation": "recursive key and text scan plus full validator",
+          "record_count": 480,
+          "source": "corpus/canonical_qa.jsonl"
+        },
+        "integration_contract": "tracksmith-corpus-integration-manifest",
+        "integration_contract_version": "1.0",
+        "integration_manifest_sha256": "12471db2a877563f66bcf091cb278b4745a6a7a530bbccaa852d42ae81ecacc3",
+        "observed_status_contract": {
+          "logic_verification_status": [
+            "candidate_unverified_on_installed_logic",
+            "not_applicable_to_source"
+          ],
+          "native_review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_primary_research",
+            "candidate_reviewed_professional_practice"
+          ],
+          "original_review_state": [
+            "candidate_discovery_only",
+            "candidate_procedure_synthesis",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_primary_research",
+            "candidate_reviewed_professional_practice",
+            "community_and_professional_disagreement",
+            "derived_myth_correction",
+            "derived_synthesis",
+            "owner_supplied_example_language",
+            "synthetic_exact_retrieval_fixture"
+          ],
+          "original_verification_status": [
+            "candidate_generated_from_registered_sources",
+            "deterministic_fixture_alias",
+            "literal_user_example_preserved",
+            "source_metadata_registered",
+            "source_span_or_documentary_metadata_registered"
+          ],
+          "review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_primary_research",
+            "candidate_reviewed_professional_practice"
+          ],
+          "runtime_eligibility": [
+            "excluded_from_runtime",
+            "retrieval_candidate",
+            "source_reference_only",
+            "test_only"
+          ]
+        },
+        "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+        "runtime_resource_sha256": "7552d9ecd0b068e5a1f36c995e8fcaa088661f73dd65829f027a0aa0a1bd2cea",
+        "shipping_canonical_count": 480,
+        "shipping_runtime_projection": "canonical-only",
+        "shipping_schema_version": "2.0"
+      }
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing": "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+        "tracksmith-corpus-012-recording-latency-monitoring-comping-punch": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+        "tracksmith-corpus-012-recording-latency-monitoring-comping-punch"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+      "package_manifest_sha256": "30cc9fb35ac4d6427e64b5f43f82329b6b43323b617fa84b6fb11a84e2cec27d",
+      "package_number": 13,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+      "review_state": "candidate_not_yet_human_reviewed",
+      "runtime_contract_reconciliation": {
+        "evaluation_test_only_sha256": "4cf840862a14a18e883a781a3a82b72996948852f7ae1c4b29f31f1b8fead1a4",
+        "incoming_runtime_projection": {
+          "forbidden_categories": [
+            "procedures",
+            "Logic navigation instructions",
+            "evaluations",
+            "multi-turn scenarios",
+            "SQLite databases",
+            "test fixtures"
+          ],
+          "generated_by": "tools/import_to_tracksmith.py",
+          "purity_validation": "recursive key and text scan plus full validator",
+          "record_count": 480,
+          "source": "corpus/canonical_qa.jsonl"
+        },
+        "integration_contract": "tracksmith-corpus-integration-manifest",
+        "integration_contract_version": "1.0",
+        "integration_manifest_sha256": "fd17b869af4fe68d14b47c60f11945ce9e333fde4b56abe70280961bb7626fe5",
+        "observed_status_contract": {
+          "logic_verification_status": [
+            "candidate_unverified_on_installed_logic",
+            "not_applicable_to_source"
+          ],
+          "native_review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice"
+          ],
+          "original_review_state": [
+            "candidate_discovery_only",
+            "candidate_procedure_synthesis",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice",
+            "community_and_professional_disagreement",
+            "derived_myth_correction",
+            "derived_synthesis",
+            "owner_supplied_example_language",
+            "synthetic_exact_retrieval_fixture"
+          ],
+          "original_verification_status": [
+            "candidate_generated_from_registered_sources",
+            "deterministic_fixture_alias",
+            "literal_user_example_preserved",
+            "source_metadata_registered",
+            "source_span_or_documentary_metadata_registered"
+          ],
+          "review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice"
+          ],
+          "runtime_eligibility": [
+            "excluded_from_runtime",
+            "retrieval_candidate",
+            "source_reference_only",
+            "test_only"
+          ]
+        },
+        "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+        "runtime_resource_sha256": "a9a5bc7d27844da0bfb7fc37349bef2c4c70570b30771ad861b81e67cd6e48e1",
+        "shipping_canonical_count": 480,
+        "shipping_runtime_projection": "canonical-only",
+        "shipping_schema_version": "2.0"
+      }
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing": "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+        "tracksmith-corpus-012-recording-latency-monitoring-comping-punch": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+        "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+        "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+        "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+      "package_manifest_sha256": "6abcd58ad650970156c13e982150420b6d446e3d83a8419630be2d9250d5494b",
+      "package_number": 14,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+      "review_state": "candidate_not_yet_human_reviewed",
+      "runtime_contract_reconciliation": {
+        "evaluation_test_only_sha256": "be1452fc507382371bbc5d088cf8cd37b21cc487df6d911463a6c473992bee5d",
+        "incoming_runtime_projection": {
+          "forbidden_categories": [
+            "procedures",
+            "Logic navigation instructions",
+            "evaluations",
+            "multi-turn scenarios",
+            "SQLite databases",
+            "test fixtures"
+          ],
+          "generated_by": "tools/import_to_tracksmith.py",
+          "purity_validation": "recursive key and text scan plus full validator",
+          "record_count": 660,
+          "source": "corpus/canonical_qa.jsonl"
+        },
+        "integration_contract": "tracksmith-corpus-integration-manifest",
+        "integration_contract_version": "1.0",
+        "integration_manifest_sha256": "256e74f5f1eb03a235e22ce561c9963909772010e67729980bd6e29b471b69fc",
+        "observed_status_contract": {
+          "logic_verification_status": [
+            "candidate_unverified_on_installed_logic",
+            "not_applicable_to_source"
+          ],
+          "native_review_state": [
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice"
+          ],
+          "original_review_state": [
+            "candidate_discovery_only",
+            "candidate_procedure_synthesis",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice",
+            "community_and_professional_disagreement",
+            "derived_myth_correction",
+            "derived_synthesis",
+            "owner_supplied_example_language",
+            "synthetic_exact_retrieval_fixture"
+          ],
+          "original_verification_status": [
+            "candidate_generated_from_registered_sources",
+            "deterministic_fixture_alias",
+            "literal_user_example_preserved",
+            "source_metadata_registered",
+            "source_span_or_documentary_metadata_registered"
+          ],
+          "review_state": [
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice"
+          ],
+          "runtime_eligibility": [
+            "excluded_from_runtime",
+            "retrieval_candidate",
+            "source_reference_only",
+            "test_only"
+          ]
+        },
+        "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+        "runtime_resource_sha256": "a7ab37b8f62d701aba28b5f9655cd5ab50bfd805e0105ddf0f56a6af2fd01435",
+        "shipping_canonical_count": 660,
+        "shipping_runtime_projection": "canonical-only",
+        "shipping_schema_version": "2.0"
+      }
+    },
+    {
+      "contract_version": "1.0",
+      "dependency_resolution": {
+        "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+        "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+        "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+        "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing": "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+        "tracksmith-corpus-012-recording-latency-monitoring-comping-punch": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+        "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+        "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform"
+      },
+      "depends_on": [
+        "tracksmith-corpus-001-vocal-quantization",
+        "tracksmith-corpus-002-level-balancing-eq",
+        "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+        "tracksmith-corpus-004-reverb-delay",
+        "tracksmith-corpus-005-automation",
+        "tracksmith-corpus-006-saturation-transient-shaping",
+        "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+        "tracksmith-corpus-008-editing-layering",
+        "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+        "tracksmith-corpus-010-flex-time-manual-timing",
+        "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+        "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+        "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+        "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform"
+      ],
+      "logic_procedure_status": "candidate_unverified_on_installed_logic",
+      "package_id": "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+      "package_manifest_sha256": "60f3d680c08016a0b68687da1ce7c0a5cb4feb7e95d2e17e5154970908bf9503",
+      "package_number": 15,
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+      "review_state": "candidate_not_yet_human_reviewed",
+      "runtime_contract_reconciliation": {
+        "evaluation_test_only_sha256": "e070eecfd2ecf000e37e1b431d37bca95a810cab200190573d00f2569934fd77",
+        "incoming_runtime_projection": {
+          "forbidden_categories": [
+            "procedures",
+            "Logic navigation instructions",
+            "evaluations",
+            "multi-turn scenarios",
+            "SQLite databases",
+            "test fixtures"
+          ],
+          "generated_by": "tools/import_to_tracksmith.py",
+          "purity_validation": "recursive key and text scan plus full validator",
+          "record_count": 720,
+          "source": "corpus/canonical_qa.jsonl"
+        },
+        "integration_contract": "tracksmith-corpus-package",
+        "integration_contract_version": "1.0",
+        "integration_manifest_sha256": "950c92991fb533ef665a577935d6036217daab8e470daa883f363e40a8287abb",
+        "observed_status_contract": {
+          "logic_verification_status": [
+            "candidate_unverified_on_installed_logic",
+            "not_applicable_to_source"
+          ],
+          "native_review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice"
+          ],
+          "original_review_state": [
+            "candidate_discovery_only",
+            "candidate_procedure_synthesis",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice",
+            "community_and_professional_disagreement",
+            "derived_myth_correction",
+            "derived_synthesis",
+            "owner_supplied_example_language",
+            "synthetic_exact_retrieval_fixture"
+          ],
+          "original_verification_status": [
+            "candidate_generated_from_registered_sources",
+            "deterministic_fixture_alias",
+            "literal_user_example_preserved",
+            "source_metadata_registered",
+            "source_span_or_documentary_metadata_registered"
+          ],
+          "review_state": [
+            "candidate_discovery_only",
+            "candidate_not_yet_human_reviewed",
+            "candidate_reviewed_documentary",
+            "candidate_reviewed_professional_practice"
+          ],
+          "runtime_eligibility": [
+            "excluded_from_runtime",
+            "retrieval_candidate",
+            "source_reference_only",
+            "test_only"
+          ]
+        },
+        "repository_adapter": "tracksmith-corpus-package/1.0",
+        "runtime_resource_sha256": "8863addad520d02489e0f133b7683c5b52487c5d51c449adc0a8a6a253b40faf",
+        "shipping_canonical_count": 720,
+        "shipping_runtime_projection": "canonical-only",
+        "shipping_schema_version": "2.0"
+      }
+    },
+    {
+      "contract_version": "1.0",
+      "immutableBaselineCanonical": 6134,
+      "logic_procedure_status": "not_applicable_no_new_procedures",
+      "migration_adapter": "package16-integration-reconciliation/1.0",
+      "overlayCanonicalDelta": 78,
+      "package_id": "tracksmith-corpus-016-integration-retrieval-quality-control",
+      "package_manifest_sha256": "5c02ef373e6d2aa82260083ed4c697af4a5bcb51461bd135f19851eb56506637",
+      "package_number": 16,
+      "package_type": "integration_framework",
+      "package_version": "1.0.0",
+      "path": "research/community_knowledge/packages/tracksmith-corpus-016-integration-retrieval-quality-control",
+      "review_state": "infrastructure_review_required",
+      "runtime_resource": "none",
+      "selectedCurrentCanonical": 6212,
+      "synthesized_fields_labeled": true
+    }
+  ],
+  "version": "1.0"
+}

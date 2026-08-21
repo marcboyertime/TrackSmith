@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrackSmith user utterance",
+  "type": "object",
+  "required": [
+    "utterance_id",
+    "canonical_id",
+    "domain",
+    "text",
+    "intent"
+  ],
+  "properties": {
+    "utterance_id": {
+      "type": "string"
+    },
+    "canonical_id": {
+      "type": "string"
+    },
+    "domain": {
+      "enum": [
+        "vocal_production",
+        "quantization_and_timing"
+      ]
+    },
+    "category": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 5
+    },
+    "intent": {
+      "const": "production_tutor_question"
+    },
+    "source": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string"
+    },
+    "expected_action": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrackSmith source registry entry",
+  "type": "object",
+  "required": [
+    "source_id",
+    "title",
+    "publisher",
+    "url",
+    "source_type",
+    "evidence_tier",
+    "access_status",
+    "topics",
+    "limitations"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "evidence_tier": {
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "access_status": {
+      "type": "string"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

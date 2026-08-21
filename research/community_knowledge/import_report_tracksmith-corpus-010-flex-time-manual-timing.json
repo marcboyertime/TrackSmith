@@ -1,0 +1,65 @@
+{
+  "dependency_resolution": {
+    "tracksmith-corpus-001-vocal-quantization": "community-vocal-quantization-v1",
+    "tracksmith-corpus-002-level-balancing-eq": "community-level-balancing-eq-v1",
+    "tracksmith-corpus-003-compression-arrangement-frequency-allocation": "community-compression-arrangement-frequency-allocation-v1",
+    "tracksmith-corpus-004-reverb-delay": "community-reverb-delay-v1",
+    "tracksmith-corpus-005-automation": "tracksmith-corpus-005-automation",
+    "tracksmith-corpus-006-saturation-transient-shaping": "tracksmith-corpus-006-saturation-transient-shaping",
+    "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+    "tracksmith-corpus-008-editing-layering": "tracksmith-corpus-008-editing-layering",
+    "tracksmith-corpus-009-gain-staging-bus-processing-loudness": "tracksmith-corpus-009-gain-staging-bus-processing-loudness"
+  },
+  "force_semantics": false,
+  "incoming_importer_executed": false,
+  "package_id": "tracksmith-corpus-010-flex-time-manual-timing",
+  "package_manifest_sha256": "6f56095b16c1ae9560e322623b48f10135001716628467e3db3b68113e42814b",
+  "package_version": "1.0.0",
+  "record_counts": {
+    "canonical_qa": 450,
+    "claim_candidates": 450,
+    "contradictions": 48,
+    "logic_procedure_candidates": 450,
+    "multiturn_scenarios": 1350,
+    "myths_and_antipatterns": 56,
+    "provenance": 450,
+    "retrieval_evaluations": 2250,
+    "sources": 81,
+    "strategy_candidates": 450,
+    "user_utterances": 10350
+  },
+  "runtime_contract_reconciliation": {
+    "evaluation_test_only_sha256": "b20b83fd55352d67449e17578b9fb22b8760ce69976667f0a9ae19037d81541c",
+    "incoming_runtime_projection": {
+      "declared_runtime_files": [
+        "generated:research/community_knowledge/runtime/pkg010_flex_time_manual_timing.runtime.jsonl"
+      ],
+      "forbidden_categories": [
+        "procedures",
+        "Logic navigation instructions",
+        "evaluations",
+        "multi-turn scenarios",
+        "SQLite databases",
+        "test fixtures"
+      ],
+      "projection": "bounded-jsonl-projection-v1",
+      "purity_validation": "recursive key and text scan plus full validator",
+      "record_count": 450,
+      "source": "corpus/canonical_qa.jsonl"
+    },
+    "integration_contract": "tracksmith-corpus-integration-manifest",
+    "integration_contract_version": "1.0",
+    "integration_manifest_sha256": "f72f5cbe2290087e93ffc5acd4f50b5b3a2035528248be6ce41077c5f040b310",
+    "repository_adapter": "tracksmith-corpus-integration-manifest/1.0",
+    "runtime_resource_sha256": "da8c0cb4cf44b192fde0cb64c6063ed81d0106395bff9f7dfb6487bb9b3cf49b",
+    "shipping_canonical_count": 450,
+    "shipping_runtime_projection": "canonical-only",
+    "shipping_schema_version": "2.0"
+  },
+  "staged_tree": {
+    "fileCount": 47,
+    "sha256": "907e98c7194fa3de483be18f11aa7582cf41707dbd4b329625f0f966d6dd391e"
+  },
+  "staging_authority": "repository_owned_no_follow_copy",
+  "status": "staged"
+}

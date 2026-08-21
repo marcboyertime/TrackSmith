@@ -1,0 +1,322 @@
+{
+  "fixtures" : [
+    {
+      "detail" : "Exact WAV identity and decode reach the named production provider.",
+      "id" : "null-identity",
+      "passed" : true,
+      "providerAssertions" : [
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "capture-bound-exact-wav",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-local-observations",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-task-measurement",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        }
+      ],
+      "task" : "identity",
+      "wavSHA256" : "199d3685156eaae15b95249e67212ced0526e58420e3b2ca888716eeb58400e4"
+    },
+    {
+      "detail" : "Named provider emits bounded local WAV measurements for gain\/loudness fixture.",
+      "id" : "gain-loudness",
+      "passed" : true,
+      "providerAssertions" : [
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "capture-bound-exact-wav",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-local-observations",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-task-measurement",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        }
+      ],
+      "task" : "gainLoudness",
+      "wavSHA256" : "0660222321581c2eea3154b80676aeff816e49045afc5c9e6009fcbdd6ec73be"
+    },
+    {
+      "detail" : "Named provider emits bounded local WAV measurements for tonal fixture.",
+      "id" : "tonal-tilt",
+      "passed" : true,
+      "providerAssertions" : [
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "capture-bound-exact-wav",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-local-observations",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-task-measurement",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        }
+      ],
+      "task" : "tonalTilt",
+      "wavSHA256" : "044402af7d3537fb6f2c69358bbeed366effa98426ebf46f542d50d8c0e27168"
+    },
+    {
+      "detail" : "Named provider emits bounded local WAV measurements for dynamics fixture.",
+      "id" : "dynamics",
+      "passed" : true,
+      "providerAssertions" : [
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "capture-bound-exact-wav",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-local-observations",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-task-measurement",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        }
+      ],
+      "task" : "dynamics",
+      "wavSHA256" : "784434ccacfff2469a49343bed0630c558c4020e4c6253f9d755070a02faa4e4"
+    },
+    {
+      "detail" : "Named provider emits bounded local WAV measurements for stereo fixture.",
+      "id" : "stereo-width-relation",
+      "passed" : true,
+      "providerAssertions" : [
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "capture-bound-exact-wav",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-local-observations",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        },
+        {
+          "bindingStatus" : "captureBoundExactWAV",
+          "name" : "provider-task-measurement",
+          "observedIdentifiers" : [
+            "integrated_loudness_lufs",
+            "level_variability_p90_p10_db",
+            "low_band_side_energy_share",
+            "mix_250_hz_4_khz_energy_ratio",
+            "mix_above_4_khz_energy_ratio",
+            "mix_below_250_hz_energy_ratio",
+            "mix_crest_factor_p90",
+            "mix_spectral_slope_db_per_octave",
+            "mono_sum_energy_ratio",
+            "side_energy_share",
+            "true_peak_dbtp"
+          ],
+          "passed" : true
+        }
+      ],
+      "task" : "stereoRelation",
+      "wavSHA256" : "78d794e0b197a7bc70349a2d55e28ca4eb33ae01416b54dc22d931dd84454013"
+    }
+  ],
+  "schemaVersion" : "1.0",
+  "scope" : "Synthetic WAV fixtures validate deterministic measurement behavior only; they do not validate Tutor decision quality, model listening, Logic runtime, or owner listening.",
+  "suite" : "tracksmith-tutor-audio-intelligence-deterministic-v1"
+}
