@@ -1,0 +1,57 @@
+{
+  "package": "018",
+  "captured_at": "2026-08-21",
+  "evidence_class": "source-and-local-environment baseline; not installed, provider, Logic, or listening evidence",
+  "repository": {
+    "starting_branch": "main (confirmed by git reflog checkout at 2026-08-21 07:09:48 -0400)",
+    "implementation_branch": "codex/package-018-runtime-simplification-indexed-retrieval-ci",
+    "cwd": "/Users/marcboyer/LogicAudioAssistant",
+    "branch": "codex/package-018-runtime-simplification-indexed-retrieval-ci",
+    "head": "017ebd1f165efae2d81a9b71b9e672f8d8cae22a",
+    "post_017_commit": "017ebd1f165efae2d81a9b71b9e672f8d8cae22a",
+    "excluded_untracked_paths": [
+      ".codex/",
+      "research/tutor_quality/evaluations/package17-cloud-health-retry.log",
+      "research/tutor_quality/evaluations/package17-cloud-health.log",
+      "research/tutor_quality/evaluations/package17-live-case-144.log",
+      "research/tutor_quality/evaluations/package17-live-offline-evaluation.log"
+    ]
+  },
+  "toolchain": {
+    "swift": "6.3.3",
+    "xcode": "26.6 (17F113)",
+    "python": "3.14.5",
+    "sqlite": "3.51.0",
+    "macos": "26.3 (25D125)"
+  },
+  "prompt": {
+    "source": "packages/TutorConversation/Sources/TutorConversation/OpenAITutorProvider.swift:OpenAITutorProvider.systemInstructions",
+    "method": "Swift multiline-string indentation stripped; no trailing newline",
+    "utf8_bytes": 19117,
+    "sha256": "ecca1b69193034dc05bbc38809ed59ac53ef26ac81279e6c577971a6b0979ddb",
+    "logical_lines": 43,
+    "sixty_percent_reduction_maximum_bytes": 7646
+  },
+  "runtime_candidate_resources": {
+    "directory_at_capture": "packages/ProductionTutor/Sources/ProductionTutor/Resources",
+    "raw_json_file_count": 15,
+    "raw_json_total_bytes": 49723793,
+    "approved_projection": "research/community_knowledge/reconciliations/tracksmith-corpus-016-integration-retrieval-quality-control-runtime-projection-migration.json",
+    "approved_projection_sha256": "96749c77bb5e9ffff51e188eb863b6d6636b52231c935637487fda96b3fa3c9a",
+    "approved_runtime_card_count": 6212,
+    "package_017_runtime_record_count": 0
+  },
+  "baseline_limitations": [
+    "No pre-change performance run is asserted here; its legacy JSON loader can take substantial time and is recorded separately only when measured.",
+    "No installed app, provider, model-listening, Logic, or owner-listening evidence was obtained."
+  ]
+  ,"reconstruction": {
+    "tool_schema_count": 7,
+    "domain_section_count": 12,
+    "representative_provider_request_bytes": "unavailable: no consented provider request is reconstructed from baseline",
+    "baseline_readiness_cold_warm_samples": "unavailable: baseline runtime measurement was not captured; legacy oracle comparison is recorded in the Package 018 report",
+    "baseline_bundle_size": 49723793,
+    "baseline_candidate_counts": {"cards":6212,"packages":15,"utterances":137257,"contradictions":670,"myths":788},
+    "baseline_test_build_evidence": "unavailable: historical command exits were not retained in the immutable commit"
+  }
+}

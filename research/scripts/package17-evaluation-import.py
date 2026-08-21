@@ -118,7 +118,7 @@ def predecessors() -> dict[str, str]:
 def runtime_leak_check() -> None:
     # Evaluation material itself is deliberately excluded from this scan.
     targets = [
-        ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources",
+        ROOT / "research/community_knowledge/runtime_projection/p16",
         ROOT / "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift",
         ROOT / "packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.generated.swift",
         ROOT / "packages/TutorConversation/Sources/TutorConversation",
@@ -165,7 +165,7 @@ def validate(incoming: pathlib.Path, archive: pathlib.Path, sidecar: pathlib.Pat
 
 def baseline() -> dict[str, object]:
     registry = ROOT / "research/community_knowledge/package_registry.json"
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     return {"legacyRegistrySHA256": sha(registry), "runtimeResourceTree": digest(resources), "predecessors": predecessors()}
 
 

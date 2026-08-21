@@ -265,6 +265,9 @@
   allowlist is read-only except for a presentation-only experiment formatter.
   Create/Vocal retain their existing user-controlled mutation paths behind
   **Future / Legacy**, but those APIs are never passed to the Tutor executor.
+- Candidate-corpus retrieval is compact lexical evidence, not semantic authority.
+  It can return unavailable/corrupt/version-mismatch/disabled states, and neither a
+  match nor a retrieval score proves a diagnosis, a procedure, or a heard result.
 - Tutor v1 gate T7 is **CLOSED BOUNDED, NOT PASSED**, not pending. Its partial
   Logic Pro 12.3 exercise covered the signed UI and deterministic step flow but
   did not include the owner's real-lesson/perceptual evidence. Broad-tutor owner

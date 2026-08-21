@@ -13,7 +13,7 @@ import community_corpus_import as trusted
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 COMMUNITY = ROOT / "research/community_knowledge"
 KNOWLEDGE = ROOT / "research/knowledge"
-RESOURCES = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+RESOURCES = ROOT / "research/community_knowledge/runtime_projection/p16"
 EVALUATIONS = ROOT / "tools/TutorConversationTests/Resources"
 DESCRIPTOR = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.generated.swift"
 GENERATED = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift"

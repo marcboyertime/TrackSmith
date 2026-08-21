@@ -1,0 +1,31 @@
+name: Tutor integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  fast-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Python syntax and Package 016-018 integrity
+        run: |
+          python -m py_compile research/scripts/community_corpus_import.py research/scripts/build_candidate_retrieval_index.py research/scripts/package18_audit.py
+          python research/scripts/community_corpus_import.py --check
+          python research/scripts/build_candidate_retrieval_index.py --check
+          # The P17 import archive is intentionally not committed: it is an
+          # evaluation-only intake artifact.  Validate the staged P17 contract
+          # and its runtime=0 boundary instead of invoking the archive importer
+          # without its required trusted inputs.
+          python research/scripts/package17-evaluation.py --check
+          python research/scripts/package18_audit.py
+      - name: Product resource boundary
+        run: |
+          test ! -e packages/ProductionTutor/Sources/ProductionTutor/Resources/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation.json
+          test "$(find packages/ProductionTutor/Sources/ProductionTutor/Resources -name '*.json' | wc -l | tr -d ' ')" = 1
+          ! rg -a -i 'tracksmith-corpus-017|expected_answer|fixture_alias|evaluation_case' packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json
+          git diff --exit-code -- packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json

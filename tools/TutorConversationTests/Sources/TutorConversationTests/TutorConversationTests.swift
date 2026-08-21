@@ -24,10 +24,21 @@ private actor PackageSeventeenCloudConcurrencyProbe {
     func maximum() -> Int { peak }
 }
 
+private actor CandidateRetrieverStub: CandidateRetriever {
+    let state: CandidateRetrievalAvailability
+    let values: [CommunityCandidateCorpusRankedCard]
+    init(_ state: CandidateRetrievalAvailability, _ values: [CommunityCandidateCorpusRankedCard] = []) { self.state = state; self.values = values }
+    func availability() -> CandidateRetrievalAvailability { state }
+    func ranked(query: String, filters: CommunityCandidateCorpusFilters, limit: Int) -> [CommunityCandidateCorpusRankedCard] { values.prefix(limit).map { $0 } }
+}
+
 @main
 @MainActor
 struct TutorConversationTests {
     static func main() async {
+        let projection = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+            .appendingPathComponent("research/community_knowledge/runtime_projection/p16", isDirectory: true).path
+        setenv("TRACKSMITH_LEGACY_TEST_ORACLE_DIRECTORY", projection, 1)
         let suite = Suite()
         if CommandLine.arguments.contains("package6-diagnostics") {
             await suite.runPackageSixDiagnostic()
@@ -65,6 +76,12 @@ struct TutorConversationTests {
             await suite.runPackageSixteenFallback()
         } else if CommandLine.arguments.contains("package17-diagnostics") {
             await suite.runPackageSeventeenDiagnostic()
+        } else if CommandLine.arguments.contains("package18-diagnostics") {
+            await suite.runPackageEighteenDiagnostic()
+        } else if CommandLine.arguments.contains("package18-index-readiness") {
+            await suite.runPackageEighteenIndexReadiness()
+        } else if CommandLine.arguments.contains("package18-legacy-readiness") {
+            await suite.runPackageEighteenLegacyReadiness()
         } else if CommandLine.arguments.contains("package17-performance") {
             await suite.runPackageSeventeenPerformance()
         } else if CommandLine.arguments.contains("package17-live-evaluation") {
@@ -255,6 +272,18 @@ private final class Suite {
         await test("Package 17 provider context remains compact and evaluation-isolated", testPackageSeventeenProviderIsolation)
         await test("Package 17 opt-in audio receipt keeps exact binding and store false", testAudioListening)
         await test("Package 17 offline levels preserve one safe experiment and stream promptly", testPackageSeventeenOfflineLevelsAndPerformance)
+    }
+
+    func runPackageEighteenDiagnostic() async {
+        await test("Package 18 indexed retrieval is lazy, bounded, and fail-soft", testPackageEighteenDiagnostic)
+    }
+
+    func runPackageEighteenIndexReadiness() async {
+        await test("Package 18 immutable index readiness", testPackageEighteenIndexReadiness)
+    }
+
+    func runPackageEighteenLegacyReadiness() async {
+        await test("Package 18 legacy oracle readiness baseline", testPackageEighteenLegacyReadiness)
     }
 
     func runPackageSeventeenPerformance() async {
@@ -1036,7 +1065,7 @@ private final class Suite {
         let fixtureKeys = Set(supplied.compactMap { key($0, $0["classification"] as? String ?? "") })
         let classifications = Dictionary(grouping: evaluation, by: { $0["retrieval_classification"] as? String ?? "" }).mapValues(\.count)
         try expect(descriptor.packageSequence == 12 && descriptor.runtimeCanonicalOnly && descriptor.runtimeStatusFree && corpus.descriptor("tracksmith-corpus-010-flex-time-manual-timing")?.runtimeStatusFree == false && corpus.descriptor("tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping")?.runtimeStatusFree == false && descriptor.canonicalCount == 480 && descriptor.utteranceCount == 11_040 && descriptor.scenarioCount == 1_440 && descriptor.retrievalCaseCount == 2_400 && descriptor.contradictionCount == 52 && descriptor.mythCount == 64, "package-12 descriptor/raw-runtime separation drifted")
-        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/Resources/\(packageID).json")
+        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("research/community_knowledge/runtime_projection/p16/\(packageID).json")
         let runtimeValue = try JSONSerialization.jsonObject(with: Data(contentsOf: runtimeURL))
         func containsRuntimeStatusKey(_ value: Any) -> Bool {
             if let object = value as? [String: Any] {
@@ -1082,7 +1111,7 @@ private final class Suite {
             guard let query = row["query"] as? String, let target = row["canonical_qa_id"] as? String else { return nil }
             return (query, target)
         })
-        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/Resources/\(packageID).json")
+        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("research/community_knowledge/runtime_projection/p16/\(packageID).json")
         let runtimeValue = try JSONSerialization.jsonObject(with: Data(contentsOf: runtimeURL))
         let forbiddenRuntimeFragments = ["review", "status", "verification", "eligibility", "procedure", "navigation", "evaluation", "scenario", "sqlite", "test", "expected", "authority"]
         func excludedRuntimeKeys(_ value: Any) -> [String] {
@@ -1106,8 +1135,8 @@ private final class Suite {
         try expect(Set(suppliedAliases).isSubset(of: diagnosticQueries) && suppliedAliases.allSatisfy { corpus.exactNormalizedCanonicalIDs($0).isEmpty }, "package-13 supplied diagnostic aliases became production exact matches")
         let requiredCategories = ["sends_vs_inserts", "source_send_vs_return_automation", "wet_dry_aux_return", "pre_fader_sends", "post_fader_sends", "post_pan_sends", "multiple_tracks_one_effect", "parallel_compression_send", "bus_aux_signal_path", "track_stack_vs_aux_subgroup", "folder_vs_summing", "vca_vs_aux_subgroup", "group_editing", "headphone_cue_mix"]
         try expect(requiredCategories.allSatisfy { category in cards.filter { $0.category == category }.count == 10 }, "package-13 routing/grouping distinction coverage drifted")
-        let policySource = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/TutorConversation/Sources/TutorConversation/OpenAITutorProvider.swift"))
-        let policyTerms = ["insert processing versus a send", "source send level versus shared return level", "dry/wet blend versus effect-return gain", "pre-fader versus post-fader", "post-fader versus post-pan", "one shared effect versus per-source effects", "parallel processing versus serial source processing", "bus number versus its aux return path", "aux subgroup versus a Summing Stack", "Folder Stack versus a Summing Stack", "VCA control relationship versus aux summing", "Mixer Groups versus a track stack", "edit grouping versus group automation/settings", "performer headphone cue mix versus the main mix", "split or link only the stated stage", "level-match the compared paths", "stop if routing or balance changes unexpectedly", "roll back to the preserved baseline"]
+        let policySource = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/TutorConversation/Sources/TutorConversation/TutorSystemPolicy.swift"))
+        let policyTerms = ["Candidate corpus material is provisional", "one bounded, user-performed, reversible experiment", "stop condition", "undo"]
         try expect(policyTerms.allSatisfy(policySource.contains), "package-13 provider distinction/one-experiment policy drifted")
         let unfilteredCollisions: [(String, Set<String>)] = [
             ("Should this shared reverb be an insert on one vocal or a send for several vocals?", ["reverb", "delay", "sends_buses_auxes_shared_effects"]),
@@ -1141,7 +1170,7 @@ private final class Suite {
         let scenarios = fixture["scenarios"] as? [[String: Any]] ?? []
         let accounting = fixture["retrievalAccounting"] as? [String: Any] ?? [:]
         let cards = corpus.canonicalCards.filter { $0.packageID == packageID }
-        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/Resources/\(packageID).json")
+        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("research/community_knowledge/runtime_projection/p16/\(packageID).json")
         let runtime = try JSONSerialization.jsonObject(with: Data(contentsOf: runtimeURL))
         let forbidden = ["review", "status", "verification", "eligibility", "procedure", "navigation", "evaluation", "scenario", "sqlite", "test", "expected", "authority"]
         func forbiddenKeys(_ value: Any) -> [String] {
@@ -1160,11 +1189,11 @@ private final class Suite {
         try expect(classifications == ["exact_unique": 720, "diagnostic_semantic_only": 720, "diagnostic_multi_intent": 720, "diagnostic_cross_domain_collision": 720, "diagnostic_low_margin": 720] && scenarios.count == 2_160 && accounting["classifiedExpectedTop1Count"] as? Int == 720 && accounting["classifiedDiagnosticOnlyCount"] as? Int == 2_880 && accounting["rawNormalizedUniqueMatchCount"] as? Int == 1_440 && accounting["rawNormalizedNonMatchCount"] as? Int == 2_160 && accounting["runtimeNormalizedUniqueMatchCount"] as? Int == 0 && accounting["runtimeNormalizedNonMatchCount"] as? Int == 3_600, "package-15 accounting drifted")
         let aliases = ["sustain", "instrument gets quieter", "move notes", "bounce", "freeze", "latency", "duplicate region", "delete recording"]
         try expect(aliases.allSatisfy { corpus.exactNormalizedCanonicalIDs($0).isEmpty }, "package-15 aliases became production exact matches")
-        let providerURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/TutorConversation/Sources/TutorConversation/OpenAITutorProvider.swift")
+        let providerURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/TutorConversation/Sources/TutorConversation/TutorSystemPolicy.swift")
         let provider = try String(contentsOf: providerURL)
         let rankerURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.swift")
         let rankerSource = try String(contentsOf: rankerURL)
-        let policy = ["notes versus controller events", "sustain CC64 versus note duration", "CC11 expression versus CC7 volume versus track automation", "pitch-bend data versus note pitch", "region MIDI data versus track or plug-in automation", "relative versus absolute snapping", "Smart Snap versus fixed grid", "dragging versus nudging or numerical position", "project bounce versus Bounce in Place versus track export", "individual tracks versus intentional stems", "Freeze versus Bounce in Place", "CPU overload versus disk overload", "PDC versus monitoring latency or Recording Delay", "Low Latency Mode versus permanent processor bypass", "track versus channel strip", "region versus underlying audio file", "MIDI region versus software instrument", "copied region versus alias or linked object", "nondestructive arrangement edit versus file-level destructive edit", "original project, MIDI region, source file, processing chain, and export"]
+        let policy = ["Candidate corpus material is provisional", "one bounded, user-performed, reversible experiment", "stop condition", "undo"]
         try expect(!rankerSource.contains("exactpkg015qa") && policy.allSatisfy(provider.contains), "package-15 provider policy or decoder boundary drifted")
         let rawURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("research/community_knowledge/packages/\(packageID)/knowledge_candidates/strategies.jsonl")
         let strategies = try String(contentsOf: rawURL).split(separator: "\n").compactMap { try? JSONSerialization.jsonObject(with: Data($0.utf8)) as? [String: Any] }
@@ -1250,7 +1279,9 @@ private final class Suite {
         // a repair loop that could accidentally weaken the firewall.
         var receiptPurityFailures: [String] = []
         if output["candidate_receipt"] != nil { receiptPurityFailures.append("model_receipt_leaked") }
-        if provenance?.policyVersion != "p16-policy-1" {
+        // P16 preserves its projection and receipt boundary while Package 018
+        // replaces only the runtime reader/ranking policy.
+        if provenance?.policyVersion != "package018-bm25-general-rerank/1" {
             receiptPurityFailures.append("policy_version")
         }
         if provenance?.retrievalID?.count != 64 {
@@ -1268,6 +1299,117 @@ private final class Suite {
         try expect(receiptPurityFailures.isEmpty,
                    "P16 receipt or runtime purity boundary drifted: \(receiptPurityFailures.joined(separator: ", "))")
         print("P16_RECEIPT_OK contextBytes=\(result.outputJSON.utf8.count) matches=\(matches.count) sources=\(sourceIDs.count) retrievalID=\(provenance?.retrievalID ?? "nil") querySHA256=\(provenance?.querySHA256 ?? "nil") outputHash=\(provenance?.resultSHA256 ?? "nil")")
+    }
+
+    private func testPackageEighteenIndexReadiness() async throws {
+        let started = Date()
+        let opened = CandidateRetrievalIndex.openBundled()
+        let milliseconds = Date().timeIntervalSince(started) * 1_000
+        try expect(opened.availability == .ready, "P18 immutable index readiness was \(opened.availability.rawValue)")
+        print("P18_INDEX_READINESS_OK milliseconds=\(String(format: "%.3f", milliseconds))")
+    }
+
+    private func testPackageEighteenLegacyReadiness() async throws {
+        let started = Date()
+        let corpus = try CommunityCandidateCorpus.loadValidated()
+        let milliseconds = Date().timeIntervalSince(started) * 1_000
+        try expect(corpus.canonicalCards.count == 6_212, "P18 legacy baseline card count drifted")
+        print("P18_LEGACY_READINESS_OK milliseconds=\(String(format: "%.3f", milliseconds))")
+    }
+
+    private func testPackageEighteenDiagnostic() async throws {
+        let policyAudit = TutorSystemPolicy.audit()
+        try expect(policyAudit.passes && policyAudit.version == "package018/1" && policyAudit.utf8Bytes == 2_836 && policyAudit.sha256 == "b38c81c7f61cbfc4b205fcc2555cd0f19042bae5f5564dfa981b3f1f001f73da",
+                   "P18 TutorSystemPolicy audit/hash/version drifted")
+        let indexedReadinessStarted = Date()
+        let opened = CandidateRetrievalIndex.openBundled()
+        let indexedReadinessMilliseconds = Date().timeIntervalSince(indexedReadinessStarted) * 1_000
+        guard opened.availability == .ready, let retriever = opened.retriever else {
+            throw TestFailure(description: "P18 bundled index unavailable: \(opened.availability.rawValue)")
+        }
+        // This deliberately invokes the removed live implementation only as a
+        // research/test oracle. It preserves an honest post-017 readiness
+        // comparison without putting raw JSON decode/token construction back
+        // into production.
+        let legacyReadinessStarted = Date()
+        _ = try CommunityCandidateCorpus.loadValidated()
+        let legacyReadinessMilliseconds = Date().timeIntervalSince(legacyReadinessStarted) * 1_000
+        try expect(indexedReadinessMilliseconds * 10 <= legacyReadinessMilliseconds,
+                   "P18 readiness improvement missed indexed=\(Int(indexedReadinessMilliseconds))ms legacy=\(Int(legacyReadinessMilliseconds))ms")
+        let results = await retriever.ranked(query: "my vocal gets muddy when guitars arrive", limit: 4)
+        let decoded = await retriever.lastQueryDecodedPayloadCount()
+        try expect(!results.isEmpty && results.count <= 4 && decoded == results.count && decoded <= 4,
+                   "P18 payload decode was not bounded to selected IDs results=\(results.count) decoded=\(decoded)")
+        let diagnostics = results.first.map { ($0.lexicalOverlap, $0.lexicalCoverage, $0.scoreMargin) }
+        try expect((diagnostics?.0 ?? 0) >= 2 && (diagnostics?.1 ?? 0) <= 1 && (diagnostics?.2 ?? -1) >= 0,
+                   "P18 retrieval diagnostics were not populated")
+
+        let root = temporaryRoot("p18-index-states")
+        defer { try? FileManager.default.removeItem(at: root) }
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        let corruptManifest = root.appendingPathComponent("corrupt.json")
+        try Data("{}".utf8).write(to: corruptManifest)
+        let mismatchManifest = root.appendingPathComponent("mismatch.json")
+        try Data(#"{"schema_version":"wrong","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":""}"#.utf8).write(to: mismatchManifest)
+        try expect(CandidateRetrievalIndex.open(indexURL: nil, manifestURL: nil).availability == .unavailable &&
+                   CandidateRetrievalIndex.open(indexURL: nil, manifestURL: corruptManifest).availability == .corrupt &&
+                   CandidateRetrievalIndex.open(indexURL: nil, manifestURL: mismatchManifest).availability == .versionMismatch &&
+                   CandidateRetrievalIndex.open(indexURL: nil, manifestURL: mismatchManifest, disabled: true).availability == .disabled,
+                   "P18 index failure states drifted")
+
+        // Every structured predicate must be applied before payload decode.
+        let filterMatrix: [(CommunityCandidateCorpusFilters, Bool)] = [
+            (.init(domain: results[0].card.domain), true), (.init(domain: "not-a-domain"), false),
+            (.init(category: results[0].card.category), true), (.init(category: "not-a-category"), false),
+            (.init(evidenceClass: results[0].card.evidenceClass), true), (.init(evidenceClass: "not-evidence"), false),
+            (.init(logicVersion: results[0].card.logicVersion ?? ""), results[0].card.logicVersion != nil), (.init(logicVersion: "not-a-version"), false),
+            (.init(currentContext: results[0].card.currentContext), true), (.init(sourceType: results[0].card.sourceTypes.first ?? ""), !results[0].card.sourceTypes.isEmpty), (.init(sourceType: "not-source"), false),
+            (.init(role: results[0].card.roleFacets?.first ?? ""), !(results[0].card.roleFacets ?? []).isEmpty), (.init(role: "not-role"), false),
+            (.init(section: results[0].card.sectionFacets?.first ?? ""), !(results[0].card.sectionFacets ?? []).isEmpty), (.init(section: "not-section"), false),
+            (.init(packageID: results[0].card.packageID), true), (.init(packageID: "not-package"), false),
+            (.init(packageVersion: results[0].card.version), true), (.init(packageVersion: "not-version"), false),
+        ]
+        for (filters, expected) in filterMatrix {
+            let filtered = await retriever.ranked(query: "my vocal gets muddy when guitars arrive", filters: filters, limit: 4)
+            try expect(!filtered.isEmpty == expected, "P18 structured filter pre-payload result drifted")
+            let filteredDecoded = await retriever.lastQueryDecodedPayloadCount()
+            try expect(filteredDecoded == filtered.count, "P18 filter decoded non-selected payload")
+        }
+
+        let executor = try TutorToolExecutor()
+        let tool = try await executor.execute(TutorToolCall(callID: "p18-diagnostics", name: "search_candidate_corpus", argumentsJSON: #"{"query":"my vocal gets muddy when guitars arrive"}"#), context: TutorRuntimeContext(sourceType: .vocal))
+        let object = try JSONSerialization.jsonObject(with: Data(tool.outputJSON.utf8)) as? [String: Any] ?? [:]
+        let retrieval = object["retrieval_diagnostics"] as? [String: Any] ?? [:]
+        try expect((object["matches"] as? [[String: Any]] ?? []).count <= 4 && retrieval["top_score"] != nil &&
+                   retrieval["lexical_coverage"] != nil && retrieval["top_margin"] != nil &&
+                   !tool.outputJSON.lowercased().contains("sqlite"),
+                   "P18 bounded tool diagnostics or path boundary drifted")
+        for query in ["what is the best plugin ever", "I cannot find the control I need in Logic", "my mix sounds wrong but I have no more detail"] {
+            let abstention = try await executor.execute(TutorToolCall(callID: "p18-abstain-\(query.count)", name: "search_candidate_corpus", argumentsJSON: "{\"query\":\"\(query)\"}"), context: .init(sourceType: .vocal))
+            let abstentionObject = try JSONSerialization.jsonObject(with: Data(abstention.outputJSON.utf8)) as? [String: Any] ?? [:]
+            try expect(abstentionObject["availability"] as? String == "ready" && abstentionObject["match"] is NSNull, "P18 frozen abstention regression drifted")
+        }
+        var ambiguous = results[0]; ambiguous.ambiguity = true
+        let matrix: [(CandidateRetrievalAvailability, [CommunityCandidateCorpusRankedCard], Bool)] = [(.unavailable, [], false), (.corrupt, [results[0]], false), (.versionMismatch, [results[0]], false), (.disabled, [results[0]], false), (.ready, [results[0]], true), (.ready, [], false), (.ready, [ambiguous, results[1]], true)]
+        let knowledge = try GeneralTutorKnowledgeBase.loadValidated(); let procedures = try TutorProcedureCatalog.loadValidated()
+        for level in TutorExperienceLevel.allCases {
+            for (availabilityState, values, hasMatch) in matrix {
+                let stub = CandidateRetrieverStub(availabilityState, values)
+                let injected = TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateRetriever: stub)
+                let toolResult = try await injected.execute(TutorToolCall(callID: "p18-\(level.rawValue)-\(availabilityState.rawValue)-\(values.count)", name: "search_candidate_corpus", argumentsJSON: #"{"query":"my vocal gets muddy when guitars arrive"}"#), context: .init(sourceType: .vocal, experience: .init(persistentLevel: level)))
+                let json = try JSONSerialization.jsonObject(with: Data(toolResult.outputJSON.utf8)) as? [String: Any] ?? [:]
+                try expect(json["availability"] as? String == availabilityState.rawValue && ((json["match"] is NSNull) != hasMatch) && !toolResult.outputJSON.localizedCaseInsensitiveContains("sqlite") && !toolResult.outputJSON.localizedCaseInsensitiveContains("package_id"), "P18 all-level state matrix shape/leak drifted state=\(availabilityState.rawValue) hasMatch=\(hasMatch) output=\(toolResult.outputJSON)")
+                if availabilityState != .ready { try expect(toolResult.evidence.first?.kind == .unavailable, "P18 non-ready stub called ranker") }
+                if availabilityState == .ready && values.first?.ambiguity == true {
+                    let diagnostics = json["retrieval_diagnostics"] as? NSDictionary
+                    try expect(diagnostics?["ambiguous"] as? Bool == true, "P18 ambiguity diagnostic drifted diagnostics=\(String(describing: diagnostics)) output=\(toolResult.outputJSON)")
+                }
+            }
+        }
+        let packageText = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Package.swift"))
+        try expect(!packageText.contains("community-reverb-delay-v1.json") && packageText.contains("CandidateRetrieval.sqlite"),
+                   "P18 raw candidate resources remain in product package declaration")
+        print("P18_INDEX_OK availability=ready selected=\(results.count) decodedPayloads=\(decoded) failureStates=4 diagnostics=bounded bundle=compiled-index-only indexedReadinessMs=\(Int(indexedReadinessMilliseconds)) legacyReadinessMs=\(Int(legacyReadinessMilliseconds))")
     }
 
     private func testPackageSixteenGolden() async throws {
@@ -1290,10 +1432,11 @@ private final class Suite {
                 responseFailures.append("malformed-fixture")
                 continue
             }
-            let packageID = corpus.descriptors.first(where: { $0.packageSequence == sequence })?.packageID
-            guard let packageID else { responseFailures.append("package-\(sequence)-missing"); continue }
-            let candidate = try await executor.execute(TutorToolCall(callID: "p16-golden-\(sequence)", name: "search_candidate_corpus", argumentsJSON: try jsonString(["query": query, "package_id": packageID])), context: TutorRuntimeContext(sourceType: sourceType))
-            if candidate.evidence.first?.candidateCorpusProvenance?.packageID != packageID || candidate.outputJSON.lowercased().contains("package_id") || candidate.outputJSON.lowercased().contains("package_version") || candidate.outputJSON.lowercased().contains("package_sequence") {
+            // Package 018 removes package identity from the live model schema.
+            // Keep P16's evaluation-only conversations as shape/safety tests,
+            // not a package-targeting retrieval contract.
+            let candidate = try await executor.execute(TutorToolCall(callID: "p16-golden-\(sequence)", name: "search_candidate_corpus", argumentsJSON: try jsonString(["query": query])), context: TutorRuntimeContext(sourceType: sourceType))
+            if candidate.evidence.first?.kind != .candidateKnowledge || candidate.outputJSON.lowercased().contains("package_id") || candidate.outputJSON.lowercased().contains("package_version") || candidate.outputJSON.lowercased().contains("package_sequence") {
                 responseFailures.append("candidate-package-\(sequence)")
                 continue
             }
@@ -1409,7 +1552,7 @@ private final class Suite {
             guard let query = row["query"] as? String, let target = row["canonical_qa_id"] as? String else { return nil }
             return (query, target)
         })
-        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/Resources/\(packageID).json")
+        let runtimeURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("research/community_knowledge/runtime_projection/p16/\(packageID).json")
         let runtime = try JSONSerialization.jsonObject(with: Data(contentsOf: runtimeURL))
         let forbidden = ["review", "status", "verification", "eligibility", "procedure", "navigation", "evaluation", "scenario", "sqlite", "test", "expected", "authority"]
         func forbiddenKeys(_ value: Any) -> [String] {
@@ -1426,9 +1569,9 @@ private final class Suite {
         try expect(aliases.allSatisfy { corpus.exactNormalizedCanonicalIDs($0).isEmpty }, "package-14 supplied aliases became production exact matches")
         let distinctions = ["sidechain_concept", "logic_sidechain_input_selection", "track_vs_region_automation", "automation_scope_and_order", "read_mode", "volume_word_ride", "region_vs_note_quantization", "q_strength", "q_swing", "groove_templates", "ahead_behind_beat", "velocity_vs_expression_volume", "velocity_scaling", "velocity_randomization", "midi_transform_overview", "select_by_channel", "transform_undo_and_scope"]
         try expect(distinctions.allSatisfy { topic in cards.filter { $0.category == topic }.count == 10 }, "package-14 frozen 17 distinction coverage drifted")
-        let source = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/TutorConversation/Sources/TutorConversation/OpenAITutorProvider.swift"))
+        let source = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/TutorConversation/Sources/TutorConversation/TutorSystemPolicy.swift"))
         let rankerSource = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.swift"))
-        let policy = ["detector path versus audible routing", "trigger source versus processed target", "track versus region automation", "Read versus Touch/Latch/Write/Trim/Relative", "Q-Strength versus Q-Range/Q-Swing", "swing versus random timing", "velocity versus track volume/expression", "Transform conditions versus operations", "fast batch transforms versus safe manual work", "original region, automation, routing, MIDI, and instrument", "split, sum, or link stage", "level-match where applicable", "stop if feel, routing, balance, ownership, or selected-event scope changes unexpectedly"]
+        let policy = ["Candidate corpus material is provisional", "one bounded, user-performed, reversible experiment", "stop condition", "undo"]
         try expect(!rankerSource.contains("exactpkg014qa") && policy.allSatisfy(source.contains), "package-14 provider 17-row/one-experiment or ranker boundary drifted")
         struct DiagnosticCase { let label: String; let query: String; let allowedDomains: Set<String>; let allowedFamilies: Set<String>; let forbiddenDomains: Set<String> }
         // These are authored independently of all fixtures.  They exercise the
@@ -2115,7 +2258,7 @@ private final class Suite {
             argumentsJSON: #"{"query":"Should I set the fader balance before adding EQ and compression?","domain":"level_balancing"}"#
         ), context: TutorRuntimeContext(sourceType: .fullMix))
         try expect(!levelResult.outputJSON.contains(#""id":"level.foundation.static_mix_first""#) &&
-                   levelResult.outputJSON.contains(#""retrieval_mode":"lexical_structured_provisional""#),
+                   levelResult.outputJSON.contains(#""retrieval_mode":"indexed_bm25_general_rerank_provisional""#),
                    "exact-normalized package-2 retrieval or retrieval-mode disclosure drifted")
         let eqResult = try await executor.execute(TutorToolCall(
             callID: "candidate-eq", name: "search_candidate_corpus",
@@ -2614,6 +2757,12 @@ private final class Suite {
         try expect(TutorExperienceLevel.default == .amateur, "Amateur is not the default")
         let legacy = try JSONDecoder().decode(TutorExperienceSettings.self, from: Data("{}".utf8))
         try expect(legacy.persistentLevel == .amateur, "missing preference did not migrate to Amateur")
+        let current = try JSONDecoder().decode(TutorExperienceSettings.self, from: Data(#"{"version":1,"persistentLevel":"pro"}"#.utf8))
+        try expect(current.version == 1 && current.persistentLevel == .pro, "current P17 preference did not decode")
+        try expect((try? JSONDecoder().decode(TutorExperienceSettings.self, from: Data("not-json".utf8))) == nil,
+                   "corrupt P17 preference did not fail closed")
+        try expect((try? JSONDecoder().decode(TutorExperienceSettings.self, from: Data(#"{"version":2,"persistentLevel":"pro"}"#.utf8))) == nil,
+                   "future P17 preference version did not fail closed")
         try expect(TutorExperienceContext.explicitTemporaryOverride(for: "Please explain more simply") == .noob,
                    "explicit simple directive was not recognized")
         try expect(TutorExperienceContext.explicitTemporaryOverride(for: "Skip basics and go deeper") == .pro,

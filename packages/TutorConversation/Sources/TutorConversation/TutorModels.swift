@@ -47,7 +47,14 @@ public struct TutorExperienceSettings: Codable, Equatable, Sendable {
     private enum CodingKeys: String, CodingKey { case version, persistentLevel }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        version = max(1, try values.decodeIfPresent(Int.self, forKey: .version) ?? Self.currentVersion)
+        // A missing version is the pre-P17 preference shape and deliberately
+        // migrates to Amateur.  A persisted future version is not compatible
+        // data: accepting it could silently reinterpret a newer preference.
+        let decodedVersion = try values.decodeIfPresent(Int.self, forKey: .version) ?? Self.currentVersion
+        guard decodedVersion == Self.currentVersion else {
+            throw DecodingError.dataCorruptedError(forKey: .version, in: values, debugDescription: "Unsupported Tutor experience settings version")
+        }
+        version = decodedVersion
         persistentLevel = try values.decodeIfPresent(TutorExperienceLevel.self, forKey: .persistentLevel) ?? .default
     }
 }
@@ -837,6 +844,8 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
     public var consents: [TutorConsentReceipt]
     /// Additive metadata only; experience level is never an evidence class.
     public var experience: TutorExperienceContext?
+    /// Additive for Package 018; historical receipts decode unchanged.
+    public var systemPolicyVersion: String?
 
     public init(
         id: UUID = UUID(),
@@ -853,7 +862,8 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
         evidence: [TutorEvidenceReference],
         tools: [TutorToolReceipt],
         consents: [TutorConsentReceipt] = [],
-        experience: TutorExperienceContext? = nil
+        experience: TutorExperienceContext? = nil,
+        systemPolicyVersion: String? = nil
     ) {
         self.id = id
         self.version = version
@@ -870,6 +880,7 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
         self.tools = tools
         self.consents = consents
         self.experience = experience
+        self.systemPolicyVersion = systemPolicyVersion
     }
 }
 

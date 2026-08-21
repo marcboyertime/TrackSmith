@@ -65,6 +65,7 @@ requires evidence-honest Heard/Measured/Saw language.
 | `get_logic_procedure` | read-only | one validated Logic 12.3 procedure with stop/undo | invented paths, execution authority |
 | `retrieve_prior_experiments` | read-only | up to ten local experiments/outcomes | generalization to other users |
 | `inspect_logic` | read-only | visible label/value/role or honest unavailable state | window/project titles, screen coordinates, AX actions/setters, clicks, keystrokes, project DOM |
+| `search_candidate_corpus` | read-only, lower authority | up to four provisional primary/alternative candidates with bounded disagreement and retrieval diagnostics | raw corpus JSON, package/record IDs, fixture/evaluation content, candidate procedures, exact Logic navigation, authority |
 | `present_experiment` | presentation-only | one bounded advice card | any computer-side mutation |
 
 The executor rejects every other tool name. It has no reference to the session

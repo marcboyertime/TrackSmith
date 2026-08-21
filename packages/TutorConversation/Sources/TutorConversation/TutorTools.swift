@@ -3,23 +3,29 @@ import Foundation
 import PlanSchema
 import ProductionTutor
 
-/// Shares the lower-authority corpus load between every copy of a live tool
-/// executor. The task intentionally owns its own lifetime: a cancelled caller
-/// must not cancel a warmup another turn may still need.
+/// Shares the lower-authority indexed reader between every live tool executor.
+/// The task intentionally owns its own lifetime: a cancelled caller must not
+/// cancel a warmup another turn may still need.
+private struct CandidateCorpusLoadResult: Sendable {
+    let availability: CandidateRetrievalAvailability
+    let retriever: (any CandidateRetriever)?
+}
+
 private actor CandidateCorpusLoader {
-    private var loadTask: Task<CommunityCandidateCorpus?, Never>?
+    private var loadTask: Task<CandidateCorpusLoadResult, Never>?
 
     func warmup() async {
         _ = await corpus()
     }
 
-    func corpus() async -> CommunityCandidateCorpus? {
+    func corpus() async -> CandidateCorpusLoadResult {
         if let loadTask {
             return await loadTask.value
         }
 
         let task = Task.detached(priority: .utility) {
-            try? CommunityCandidateCorpus.loadValidated()
+            let opened = CandidateRetrievalIndex.openBundled()
+            return CandidateCorpusLoadResult(availability: opened.availability, retriever: opened.retriever)
         }
         loadTask = task
         return await task.value
@@ -38,6 +44,9 @@ public struct TutorToolExecutor: Sendable {
     private let knowledge: GeneralTutorKnowledgeBase
     private let procedures: TutorProcedureCatalog
     private let candidateCorpus: CommunityCandidateCorpus?
+    // Narrow test seam for availability/state matrices. It is never surfaced
+    // through the model schema or production construction path.
+    private let injectedCandidateRetriever: (any CandidateRetriever)?
     private let candidateCorpusLoader: CandidateCorpusLoader?
     private let observeLogic: LogicObservationProvider
     private let priorExperiments: PriorExperimentProvider
@@ -46,12 +55,14 @@ public struct TutorToolExecutor: Sendable {
         knowledge: GeneralTutorKnowledgeBase,
         procedures: TutorProcedureCatalog,
         candidateCorpus: CommunityCandidateCorpus? = nil,
+        candidateRetriever: (any CandidateRetriever)? = nil,
         observeLogic: @escaping LogicObservationProvider = { _ in .unavailable },
         priorExperiments: @escaping PriorExperimentProvider = { [] }
     ) {
         self.knowledge = knowledge
         self.procedures = procedures
         self.candidateCorpus = candidateCorpus
+        self.injectedCandidateRetriever = candidateRetriever
         // Supplying this initializer, including with an explicit nil corpus,
         // remains a deterministic injected-corpus test path. Live construction
         // uses the separate loader-backed initializer below.
@@ -68,9 +79,10 @@ public struct TutorToolExecutor: Sendable {
         self.knowledge = try GeneralTutorKnowledgeBase.loadValidated()
         self.procedures = try TutorProcedureCatalog.loadValidated()
         self.candidateCorpus = nil
-        // Candidate material is strictly lower authority. Its potentially
-        // expensive decode/validation/index build is detached from synchronous
-        // app/session construction, and failure stays fail-soft.
+        self.injectedCandidateRetriever = nil
+        // Candidate material is strictly lower authority. Its compact indexed
+        // reader opens off the construction path; it never decodes or indexes
+        // the full JSON projection at launch or query time.
         self.candidateCorpusLoader = CandidateCorpusLoader()
         self.observeLogic = observeLogic
         self.priorExperiments = priorExperiments
@@ -90,7 +102,7 @@ public struct TutorToolExecutor: Sendable {
         ),
         TutorToolDefinition(
             name: "search_candidate_corpus",
-            description: "Search one unreviewed community-corpus candidate card for query language, hypotheses, and a reversible first experiment. It is not factual or exact Logic authority.",
+            description: "Search bounded unreviewed candidate hypotheses: one primary card plus compact alternatives or disagreements when relevant. It is not factual or exact Logic authority.",
             kind: .readOnly
         ),
         TutorToolDefinition(
@@ -337,8 +349,6 @@ public struct TutorToolExecutor: Sendable {
         let evidenceClass = optionalString("evidence_class", in: arguments)
         let logicVersion = optionalString("logic_version", in: arguments)
         let currentContext = arguments["current_context"] as? Bool
-        let packageID = optionalString("package_id", in: arguments)
-        let packageVersion = optionalString("package_version", in: arguments)
         let role = optionalString("role", in: arguments)
         let section = optionalString("section", in: arguments)
         let goal = optionalString("goal", in: arguments)
@@ -346,41 +356,69 @@ public struct TutorToolExecutor: Sendable {
         let priorExperiment = optionalString("prior_experiment", in: arguments)
         let evidenceHint = optionalString("evidence", in: arguments)
         let loadedCandidateCorpus: CommunityCandidateCorpus?
-        if let candidateCorpus {
+        let indexedRetriever: (any CandidateRetriever)?
+        let availability: CandidateRetrievalAvailability
+        if let candidateRetriever = injectedCandidateRetriever {
+            loadedCandidateCorpus = nil
+            indexedRetriever = candidateRetriever
+            availability = await candidateRetriever.availability()
+        } else if let candidateCorpus {
             loadedCandidateCorpus = candidateCorpus
+            indexedRetriever = nil
+            availability = .ready
         } else if let candidateCorpusLoader {
             if Task.isCancelled { throw TutorConversationError.cancelled }
-            loadedCandidateCorpus = await candidateCorpusLoader.corpus()
+            let loaded = await candidateCorpusLoader.corpus()
+            loadedCandidateCorpus = nil
+            indexedRetriever = loaded.retriever
+            availability = loaded.availability
             if Task.isCancelled { throw TutorConversationError.cancelled }
         } else {
             loadedCandidateCorpus = nil
+            indexedRetriever = nil
+            availability = .unavailable
         }
-        guard let candidateCorpus = loadedCandidateCorpus else {
+        guard availability == .ready, loadedCandidateCorpus != nil || indexedRetriever != nil else {
             return try result(call, object: [
                 "query": query,
                 "match": NSNull(),
+                "availability": availability.rawValue,
                 "coverage_note": "The local candidate corpus is unavailable. Do not substitute exact Logic instructions.",
             ], evidence: [TutorEvidenceReference(
                 kind: .unavailable,
                 label: "Candidate corpus unavailable",
-                detail: "No unreviewed candidate projection is loaded."
+                detail: "Candidate retrieval is \(availability.rawValue)."
             )])
         }
-        let filters = CommunityCandidateCorpusFilters(domain: domain, category: category, sourceType: sourceType, evidenceClass: evidenceClass, logicVersion: logicVersion, currentContext: currentContext, packageID: packageID, packageVersion: packageVersion, role: role, section: section)
+        let filters = CommunityCandidateCorpusFilters(domain: domain, category: category, sourceType: sourceType, evidenceClass: evidenceClass, logicVersion: logicVersion, currentContext: currentContext, role: role, section: section)
         // Context is retrieval evidence only; it does not turn a candidate into
         // reviewed knowledge or a deterministic alias identity.
         let retrievalQuery = [query, goal, object, priorExperiment, evidenceHint].compactMap { $0 }.joined(separator: " ")
-        let rankings = candidateCorpus.ranked(query: retrievalQuery, filters: filters, limit: 4)
+        let rankings: [CommunityCandidateCorpusRankedCard]
+        let retrievalMode: String
+        if let candidateCorpus = loadedCandidateCorpus {
+            // Injection is reserved for tests: legacy JSON/token ranking remains
+            // a migration oracle and is never constructed by the live path.
+            rankings = candidateCorpus.ranked(query: retrievalQuery, filters: filters, limit: 4)
+            retrievalMode = "legacy_test_oracle"
+        } else if let indexedRetriever {
+            rankings = await indexedRetriever.ranked(query: retrievalQuery, filters: filters, limit: 4)
+            retrievalMode = "indexed_bm25_general_rerank_provisional"
+        } else {
+            rankings = []
+            retrievalMode = "unavailable"
+        }
         if Task.isCancelled { throw TutorConversationError.cancelled }
         guard let ranking = rankings.first else {
             return try result(call, object: [
                 "query": query,
                 "match": NSNull(),
+                "availability": availability.rawValue,
                 "coverage_note": "No candidate canonical card matched. Do not invent a candidate procedure or Logic path.",
             ], evidence: [])
         }
         let selected = ranking.card
-        guard let packageDescriptor = candidateCorpus.descriptor(selected.packageID), packageDescriptor.packageSequence > 0 else {
+        guard let packageDescriptor = CommunityCandidateCorpusGenerated.descriptors.first(where: { $0.packageID == selected.packageID }), packageDescriptor.packageSequence > 0 else {
             throw TutorConversationError.invalidToolArguments("candidate corpus descriptor")
         }
         let contradictionPayload: [[String: Any]] = selected.contradictions.prefix(1).map {
@@ -468,11 +506,18 @@ public struct TutorToolExecutor: Sendable {
              "score": candidate.score, "first_experiment": candidate.card.recommendedFirstExperiment]
         }
         let querySHA256 = SHA256.hash(data: Data(retrievalQuery.utf8)).map { String(format: "%02x", $0) }.joined()
-        let retrievalID = SHA256.hash(data: Data(("p16-policy-1|" + querySHA256 + "|" + selectedIDs.joined(separator: ",")).utf8)).map { String(format: "%02x", $0) }.joined()
+        let retrievalID = SHA256.hash(data: Data(("package018-bm25-general-rerank/1|" + querySHA256 + "|" + selectedIDs.joined(separator: ",")).utf8)).map { String(format: "%02x", $0) }.joined()
         let output: [String: Any] = [
-            "query": query, "match": payload, "matches": summaryMatches,
-            "retrieval_mode": "lexical_structured_provisional",
+            "query": query, "availability": availability.rawValue, "match": payload, "matches": summaryMatches,
+            "retrieval_mode": retrievalMode,
             "deduplicated_candidate_count": min(ranking.deduplicatedCandidates, 8),
+            "retrieval_diagnostics": [
+                "top_score": ranking.score,
+                "lexical_overlap": ranking.lexicalOverlap,
+                "lexical_coverage": ranking.lexicalCoverage,
+                "top_margin": ranking.scoreMargin,
+                "ambiguous": ranking.ambiguity,
+            ],
             "coverage_note": "Bounded unreviewed candidate cards, selected by context and diversity. This is lexical structured retrieval, not completed semantic retrieval. Use it for candidate hypotheses and a reversible experiment only; get exact Logic instructions only from get_logic_procedure.",
         ]
         let resultSHA256 = SHA256.hash(data: try JSONSerialization.data(withJSONObject: output, options: [.sortedKeys])).map { String(format: "%02x", $0) }.joined()
@@ -493,7 +538,7 @@ public struct TutorToolExecutor: Sendable {
                 provenance.standardsSourceIDs=standardsSourceIDs.isEmpty ? nil : standardsSourceIDs
                 provenance.reviewState=selected.originalReviewStatus
                 provenance.resultSHA256=resultSHA256
-                provenance.selectedRecordIDs=Array(selectedIDs.prefix(4)); provenance.retrievalID=retrievalID; provenance.corpusVersion="p1-p15-selected-6212"; provenance.policyVersion="p16-policy-1"; provenance.omissions=["exact_fixture_identity", "ambiguous_alias_authority", "candidate_procedures", "development_only_index", "evaluation_data"]
+                provenance.selectedRecordIDs=Array(selectedIDs.prefix(4)); provenance.retrievalID=retrievalID; provenance.corpusVersion="p16-runtime-projection-6212"; provenance.policyVersion="package018-bm25-general-rerank/1"; provenance.omissions=["exact_fixture_identity", "ambiguous_alias_authority", "candidate_procedures", "development_only_index", "evaluation_data"]
                 return provenance
             }()
         )

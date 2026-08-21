@@ -159,7 +159,7 @@ def package_allowlist(incoming: pathlib.Path) -> dict[str, str]:
 
 
 def current_resources() -> dict[str, int]:
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     values: dict[str, int] = {}
     for path in sorted(resources.glob("*.json")):
         data = json_file(path)
@@ -277,7 +277,7 @@ def audit_runtime_projection() -> None:
     intentional no-byte migration explicit instead of recapturing a baseline.
     """
     check_baseline()
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     registry = json_file(REGISTRY)
     sequence = {str(row["package_id"]): int(row["package_number"])
                 for row in registry["packages"] if isinstance(row, dict) and 1 <= row.get("package_number", 0) <= 15}
@@ -334,7 +334,7 @@ def build_development_index(index: pathlib.Path) -> None:
         die("refuses to replace development index cache")
     index.parent.mkdir(parents=True, exist_ok=True)
     temporary = index.with_name(index.name + ".tmp-" + str(os.getpid()))
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     registry = json_file(REGISTRY)
     sequence = {str(row["package_id"]): int(row["package_number"])
                 for row in registry["packages"] if isinstance(row, dict) and 1 <= row.get("package_number", 0) <= 15}

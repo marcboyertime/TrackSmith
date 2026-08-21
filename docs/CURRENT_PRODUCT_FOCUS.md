@@ -13,7 +13,9 @@ and authority boundaries are in
 [`TUTOR_LLM_FIRST_ARCHITECTURE.md`](TUTOR_LLM_FIRST_ARCHITECTURE.md).
 
 The implemented vertical slice streams an OpenAI Responses conversation, executes
-only a six-tool read-only/presentation allowlist, persists real message and
+only a seven-tool read-only/presentation allowlist, including the lower-authority
+`search_candidate_corpus` reader for bounded provisional hypotheses (never factual
+or exact Logic authority), persists real message and
 experiment/outcome state, writes checksummed write-once evidence receipts, grounds
 turns in immutable capture identities and local descriptive measurements, supports
 separately consented/hash-bound audio listening, and falls back automatically to

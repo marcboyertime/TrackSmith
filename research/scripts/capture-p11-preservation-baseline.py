@@ -5,7 +5,7 @@ import argparse, hashlib, json, pathlib
 import community_corpus_import as trusted
 
 ROOT=pathlib.Path(__file__).resolve().parents[2]; COMMUNITY=ROOT/"research/community_knowledge"; KNOWLEDGE=ROOT/"research/knowledge"
-RES=ROOT/"packages/ProductionTutor/Sources/ProductionTutor/Resources"; EVAL=ROOT/"tools/TutorConversationTests/Resources"
+RES=ROOT/"research/community_knowledge/runtime_projection/p16"; EVAL=ROOT/"tools/TutorConversationTests/Resources"
 DESCRIPTOR=ROOT/"packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.generated.swift"
 BASELINE=COMMUNITY/"preservation_baselines/tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping.json"; P10="tracksmith-corpus-010-flex-time-manual-timing"
 def digest(value): return hashlib.sha256(value).hexdigest()

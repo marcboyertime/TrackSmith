@@ -357,6 +357,7 @@ final class TutorConversationSessionModel: ObservableObject {
         switch name {
         case "get_current_capture_context": "Reading capture identity and local measurements"
         case "search_production_knowledge": "Searching reviewed production knowledge"
+        case "search_candidate_corpus": "Searching bounded candidate hypotheses"
         case "get_logic_procedure": "Retrieving a reviewed Logic procedure"
         case "retrieve_prior_experiments": "Reviewing your prior outcomes"
         case "inspect_logic": "Reading visible Logic controls without changing them"

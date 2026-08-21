@@ -126,7 +126,16 @@ public struct CommunityCandidateCorpusFilters: Equatable, Sendable {
         self.domain=domain; self.category=category; self.sourceType=sourceType; self.evidenceClass=evidenceClass; self.logicVersion=logicVersion; self.currentContext=currentContext; self.packageID=packageID; self.packageVersion=packageVersion; self.role=role; self.section=section
     }
 }
-public struct CommunityCandidateCorpusRankedCard: Equatable, Sendable { public var card: CommunityCandidateCard; public var score: Int; public var deduplicatedCandidates: Int }
+public struct CommunityCandidateCorpusRankedCard: Equatable, Sendable {
+    public var card: CommunityCandidateCard
+    /// A relative internal retrieval value, not an authority or confidence claim.
+    public var score: Int
+    public var deduplicatedCandidates: Int
+    public var lexicalOverlap: Int = 0
+    public var lexicalCoverage: Double = 0
+    public var scoreMargin: Double = 0
+    public var ambiguity: Bool = false
+}
 
 public struct CommunityCandidateUtterance: Codable, Equatable, Identifiable, Sendable {
     public var id: String
@@ -231,10 +240,18 @@ public struct CommunityCandidateCorpus: Equatable, Sendable {
         #else
         let bundle = Bundle(for: CommunityCandidateBundleLocator.self)
         #endif
-        guard let url = bundle.url(forResource: base, withExtension: ext) else {
-            throw CommunityCandidateCorpusError.missingResource(name)
+        if let url = bundle.url(forResource: base, withExtension: ext) {
+            return try Data(contentsOf: url)
         }
-        return try Data(contentsOf: url)
+        // Package 018 keeps the JSON ranker as a test oracle only. Production
+        // bundles never contain these resources; a test executable must opt in
+        // with the explicit directory set by its fixture harness.
+        if let directory = ProcessInfo.processInfo.environment["TRACKSMITH_LEGACY_TEST_ORACLE_DIRECTORY"],
+           directory.hasPrefix("/"),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent(name)) {
+            return data
+        }
+        throw CommunityCandidateCorpusError.missingResource(name)
     }
 
     public func rank(query: String, filters: CommunityCandidateCorpusFilters = .init()) -> CommunityCandidateCorpusRankedCard? {

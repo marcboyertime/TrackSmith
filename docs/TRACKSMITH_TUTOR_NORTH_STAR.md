@@ -50,9 +50,11 @@ save, or mutate Logic, the TrackSmith Audio Unit, files, or project state. It ne
 receives `CompanionSessionClient`, graph APIs, AU parameters, Accessibility setters
 or actions, Apple Events, MIDI, keyboard/mouse injection, or filesystem paths.
 
-The model-facing allowlist contains only capture-context read, reviewed-knowledge
-search, reviewed-procedure retrieval, prior-outcome read, visible-Logic read, and a
-presentation-only experiment-card formatter. Unknown tools fail closed.
+The model-facing allowlist contains capture-context read, reviewed-knowledge search,
+reviewed-procedure retrieval, prior-outcome read, visible-Logic read, bounded
+lower-authority candidate-corpus search, and a presentation-only experiment-card
+formatter. Candidate search is provisional evidence only: it never supplies package
+identity, procedures, navigation, or authority. Unknown tools fail closed.
 
 ## Evidence language
 

@@ -12,7 +12,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 K = ROOT / "research/knowledge"
 REGISTRY = K / "general-tutor-source-registry.json"
 QUEUE = K / "general-tutor-review-queue.json"
-RES = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+# P18 keeps the approved raw runtime projection under research/test ownership.
+# The application target receives only CandidateRetrieval.sqlite and its manifest.
+RES = ROOT / "research/community_knowledge/runtime_projection/p16"
 EVAL = ROOT / "tools/TutorConversationTests/Resources"
 DESCRIPTOR = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.generated.swift"
 P6_BASELINE=ROOT/"research/community_knowledge/preservation_baselines/tracksmith-corpus-006-saturation-transient-shaping.json"

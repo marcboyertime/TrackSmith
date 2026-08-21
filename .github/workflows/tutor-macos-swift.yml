@@ -1,0 +1,40 @@
+name: Tutor macOS Swift
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  swift:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release Tutor build and deterministic gates
+        run: |
+          swift build -c release
+          swift run -c release TestRunner
+          swift run -c release TutorConversationTests
+          swift run -c release TutorConversationTests package16-diagnostics
+          swift run -c release TutorConversationTests package16-golden
+          swift run -c release TutorConversationTests package16-performance
+          swift run -c release TutorConversationTests package16-fallback
+          python3 research/scripts/package16-evidence-release.py --audit
+          swift run -c release TutorConversationTests package17-diagnostics
+          swift run -c release TutorConversationTests package17-performance
+          swift run -c release TutorConversationTests package18-diagnostics
+          python3 research/scripts/build_candidate_retrieval_index.py --check
+          python3 research/scripts/package18_audit.py
+      - name: Unsigned app and AU build
+        run: |
+          brew install xcodegen
+          xcodegen generate
+          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package018-derived" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme AssistantAudioUnitExtension -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package018-derived" CODE_SIGNING_ALLOWED=NO build
+          test "$(find "$RUNNER_TEMP/package018-derived" -path '*ProductionTutor.bundle/Contents/Resources/*.json' -type f ! -name 'CandidateRetrieval.manifest.json' | wc -l | tr -d ' ')" = 0
+          ! rg -a -i 'tracksmith-corpus-017|expected_answer|fixture_alias|evaluation_case' "$RUNNER_TEMP/package018-derived/Build/Products/Release"
+      - name: Upload bounded P18 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-018-evidence
+          path: docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json
