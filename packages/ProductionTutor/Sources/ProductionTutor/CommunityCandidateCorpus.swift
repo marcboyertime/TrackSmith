@@ -531,12 +531,6 @@ public struct CommunityCandidateCorpus: Equatable, Sendable {
                 continue
             }
             var structuredFields: [String] = []
-            structuredFields.reserveCapacity(
-                3 + (card.tracksmithDomains?.count ?? 0) + (card.preservationGoals?.count ?? 0)
-                    + (card.nonDSPPossibilities?.count ?? 0) + (card.startingPoints?.count ?? 0)
-                    + (card.commonMistakes?.count ?? 0) + (card.roleFacets?.count ?? 0)
-                    + (card.sectionFacets?.count ?? 0)
-            )
             structuredFields.append(card.subcategory ?? "")
             structuredFields.append(card.rationale)
             structuredFields.append(card.recommendedFirstExperiment)
