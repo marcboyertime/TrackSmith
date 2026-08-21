@@ -1880,11 +1880,17 @@ enum AudioUnitHostProbe {
             throw ProbeFailure.message("could not allocate performance buffer")
         }
         output.frameLength = frameCount
-        let sourceLeft = (0..<Int(frameCount)).map { frame in
-            Float(0.2 * sin(2 * .pi * 220 * Double(frame) / sampleRate))
-        }
-        let sourceRight = (0..<Int(frameCount)).map { frame in
-            Float(0.18 * sin(2 * .pi * 330 * Double(frame) / sampleRate + 0.1))
+        let sourceFrameCount = Int(frameCount)
+        var sourceLeft: [Float] = []
+        var sourceRight: [Float] = []
+        sourceLeft.reserveCapacity(sourceFrameCount)
+        sourceRight.reserveCapacity(sourceFrameCount)
+        for frame in 0..<sourceFrameCount {
+            let sampleIndex = Double(frame)
+            let leftPhase = 2 * Double.pi * 220 * sampleIndex / sampleRate
+            let rightPhase = 2 * Double.pi * 330 * sampleIndex / sampleRate + 0.1
+            sourceLeft.append(Float(0.2 * sin(leftPhase)))
+            sourceRight.append(Float(0.18 * sin(rightPhase)))
         }
         var flags: AudioUnitRenderActionFlags = []
         var timestamp = AudioTimeStamp(
