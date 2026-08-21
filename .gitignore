@@ -38,6 +38,9 @@ fixtures/generated/*
 # Stable TrackSmith package trees are immutable, shipped contract data. This is
 # intentionally narrower than a repository-wide JSONL exception.
 !research/community_knowledge/packages/tracksmith-corpus-*/**/*.jsonl
+# Package 017 is an immutable, evaluation-only package. This narrow exception
+# makes its reproducible test corpus versioned without unignoring other JSONL.
+!research/tutor_quality/packages/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation/**/*.jsonl
 .DS_Store
 tmp/
 __pycache__/

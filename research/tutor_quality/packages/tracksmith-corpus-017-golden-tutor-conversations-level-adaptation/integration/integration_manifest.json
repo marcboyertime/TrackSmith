@@ -1,0 +1,274 @@
+{
+  "audio_evaluation_policy": {
+    "owner_audio_only_for_irreducibly_subjective_judgment": true,
+    "public_and_controlled_before_owner_audio": true,
+    "reuse_package016_assets_first": true
+  },
+  "collision_mappings": [
+    {
+      "collision_type": "turn_override_vs_persistent_level",
+      "normalized_alias": "explain it simply",
+      "resolution": "temporary_override_only_unless_explicitly_persisted"
+    },
+    {
+      "collision_type": "casual_phrase_vs_persistent_level",
+      "normalized_alias": "noob question",
+      "resolution": "do_not_infer_or_persist"
+    },
+    {
+      "collision_type": "turn_override_vs_persistent_level",
+      "normalized_alias": "go deeper",
+      "resolution": "temporary_pro_depth_only"
+    },
+    {
+      "collision_type": "granularity_request_vs_level",
+      "normalized_alias": "give exact clicks",
+      "resolution": "temporary_click_detail_without_persistent_level_change"
+    },
+    {
+      "collision_type": "quality_request_vs_level",
+      "normalized_alias": "professional answer",
+      "resolution": "keep_quality_high_at_all_levels"
+    },
+    {
+      "collision_type": "question_difficulty_vs_level",
+      "normalized_alias": "basic question",
+      "resolution": "do_not_infer"
+    },
+    {
+      "collision_type": "cross_package_topic",
+      "normalized_alias": "muddy vocal",
+      "resolution": "Package_017_evaluates_response_quality_only"
+    },
+    {
+      "collision_type": "cross_package_topic",
+      "normalized_alias": "fader jumps back",
+      "resolution": "Package_017_evaluates_level_adaptation_only"
+    },
+    {
+      "collision_type": "cross_package_topic",
+      "normalized_alias": "flex sounds weird",
+      "resolution": "Package_017_evaluates_level_adaptation_only"
+    },
+    {
+      "collision_type": "cross_package_topic",
+      "normalized_alias": "sidechain not working",
+      "resolution": "Package_017_evaluates_level_adaptation_only"
+    },
+    {
+      "collision_type": "cross_package_topic",
+      "normalized_alias": "quantize without robotic",
+      "resolution": "Package_017_evaluates_level_adaptation_only"
+    },
+    {
+      "collision_type": "navigation_vs_expertise",
+      "normalized_alias": "cannot find control",
+      "resolution": "request_current_version_context_not_level_inference"
+    }
+  ],
+  "compatibility": {
+    "additive_only": true,
+    "does_not_modify_packages_001_016": true,
+    "emits_zero_live_corpus_records": true
+  },
+  "contract": "tracksmith-corpus-package/1.0",
+  "contract_version": "1.0",
+  "counts": {
+    "canonical_qa": 180,
+    "claim_candidates": 180,
+    "contradictions": 36,
+    "logic_procedure_candidates": 0,
+    "multiturn_scenarios": 540,
+    "myths_and_antipatterns": 42,
+    "provenance": 180,
+    "retrieval_evaluations": 900,
+    "sources": 25,
+    "strategy_candidates": 180,
+    "user_utterances": 2340
+  },
+  "development_only_files": [
+    "knowledge_candidates/logic_procedures.jsonl",
+    "tools/build_database.py",
+    "tools/validate_package.py",
+    "tools/query_corpus.py",
+    "tools/inspect_package.py",
+    "tools/import_to_tracksmith.py"
+  ],
+  "evaluation_isolation": {
+    "evaluation_only": true,
+    "expected_answers_hidden_from_generation_path": true,
+    "golden_expected_text_runtime_forbidden": true,
+    "model_assisted_judging_supporting_only": true,
+    "runtime_record_count": 0,
+    "verbatim_similarity_not_primary_metric": true
+  },
+  "exact_fixture_policy": {
+    "diagnostic_classes": [
+      "diagnostic_semantic_only",
+      "diagnostic_multi_intent",
+      "diagnostic_low_margin",
+      "diagnostic_cross_domain_collision"
+    ],
+    "exact_aliases_test_only": true,
+    "expected_top_1_class": "exact_unique",
+    "non_exact_cases_never_count_as_expected_top_1": true
+  },
+  "experience_level_contract": {
+    "contract": "tracksmith-tutor-experience-level/1.0",
+    "default": "amateur",
+    "display_labels": {
+      "amateur": "Amateur",
+      "noob": "Noob",
+      "pro": "Pro"
+    },
+    "explicit_selection_only": true,
+    "field_name": "experience_level",
+    "historical_transcript_is_immutable": true,
+    "inference_allowed": false,
+    "level_change_applies_to_future_turns_only": true,
+    "levels": {
+      "amateur": {
+        "assumed_knowledge": "tracks, regions, inserts, sends, ordinary EQ/compression/automation vocabulary",
+        "must_not": "be generic filler or merely average word counts",
+        "scaffolding": "normal production language; grouped routine steps; practical cause/effect and tradeoff"
+      },
+      "noob": {
+        "assumed_knowledge": "none",
+        "must_not": "patronize, reduce reasoning quality, or dump possibilities",
+        "scaffolding": "plain language; define only the needed term; verified click-by-click steps; short causal explanation and listening cue"
+      },
+      "pro": {
+        "assumed_knowledge": "advanced signal flow, processing, routing, and Logic concepts",
+        "must_not": "be cryptic or omit decisive cue, risk, stop, or rollback",
+        "scaffolding": "concise hypothesis, confounds, discriminating test, edge cases; routine clicks omitted unless requested"
+      }
+    },
+    "provider_context_policy": "Send only effective level ID and compact contract; never send golden expected responses.",
+    "quality_invariants": [
+      "same diagnosis quality",
+      "same evidence threshold",
+      "same safety and privacy",
+      "same tool authority",
+      "same one-experiment discipline",
+      "same stop/undo quality",
+      "same artistic standard",
+      "same willingness to express uncertainty"
+    ],
+    "receipt_policy": "Record persistent level and temporary override used for each completed turn.",
+    "temporary_overrides_do_not_persist": true,
+    "ui_policy": "Persistent three-option selector in Tutor settings; optional compact secondary level pill/menu; exact visible labels Noob, Amateur, Pro; default Amateur."
+  },
+  "file_hashes": {
+    "README.md": "983cf5187f9caa3010099ca4099c2aa575f75a03942d6224ce14e4b35710f406",
+    "corpus/canonical_qa.jsonl": "16ecef7ba932fee282c988e307ce78b6a9cb7499ec1ea74aed34127de60a4330",
+    "corpus/contradictions.jsonl": "40193ab449e4b8f263128fb9fa980abd7f7fd2dd9b46015b754aa4b757a8e7e2",
+    "corpus/multiturn_scenarios.jsonl": "50b783288d7092e32cb56b45abc8998aec3671557d34e172c0cfa5233f6d50df",
+    "corpus/myths_and_antipatterns.jsonl": "47d4de3140baeb9e66813700993f7594dbf3544a26fb1ef414e72f7b0a299ada",
+    "corpus/retrieval_evaluations.jsonl": "b8477281ce5c039e36edfbee8cf0c6bd93351b655d8271f9c51c8bd63721ead8",
+    "corpus/user_utterances.jsonl": "db4a907f4e7f26db51b3a6b48cd8884917c9a325b3545b812e652a8e8e2e967b",
+    "database/corpus.sqlite": "706fab49588584f29b47f85f5a030205177b5ad7f0f81d53b4ee21083e57a339",
+    "database/database_manifest.json": "49c24b0c5aa25c966134216639dcbfa59abc34d56136e5dbc7637a49b41dece5",
+    "examples/example_canonical_record.json": "195dfe8ca0e3f52b1b5762f1d05897f3550891259cf30c1a1f814aa06cc14529",
+    "examples/example_multiturn_scenario.json": "8c288d162099a0b4408b2a96504c502ac60e5c80423b60acc81c2594d7b712cd",
+    "examples/example_queries.md": "4cc3faa6199c219b309968da3b5b438244dc645ee274e431bc3e869522c19b92",
+    "integration/PACKAGE_SEQUENCE.md": "b63fb115b05946120fc3655b6caec7b88ff165245801d5f95ff8e93406466648",
+    "integration/REVIEW_CHECKLIST.md": "e2a2fd41bf7ef8ecb4324b08bcb2bdfbdcc58d2ede43ae0b7c3abe982cfe4f78",
+    "integration/START_HERE_FOR_CODEX.md": "a3bea9475fdf08d9ee4addedfae9f3a126e17959f3db97d7785cf70a06afb358",
+    "integration/TOOL_CONTRACT.md": "c4e4fc47e27e87863d6b3237ca228e91a949776925d152ac3b9093b9b61ec0e7",
+    "integration/TRACKSMITH_IMPORT_PLAN.md": "8e30deb9ef4e650acc84e9f465495940fa0ff9786ac724b2bb56f0466eb25e8a",
+    "knowledge_candidates/claims.jsonl": "bca43f4a488abaf575463a45ea046e8684b377be0b22e465cab3c35b258ed68a",
+    "knowledge_candidates/logic_procedures.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "knowledge_candidates/strategies.jsonl": "540d403bba9c375b890a5548da38267c6ab8dca8497001971d2406c177ebc010",
+    "package_manifest.json": "3c5002c025ee279faa5f92c4f58b5b22a67c404578d0a383f3157078bb85d5d5",
+    "reports/COVERAGE_REPORT.md": "640a9fac1de39d825bda0f3ad9ce041b5c25ca09c696fe54b08c56d1df7d1f8f",
+    "reports/QUALITY_BOUNDARIES.md": "2e6544713805e7f71dd0cd193e9cfa78bea382082d327209ff5a798a2cffd724",
+    "reports/SOURCE_REPORT.md": "3171e7a328799187b6d2a1773112825adab3df526fd9016b2ae5558c34529c81",
+    "reports/VALIDATION_REPORT.md": "d16245f8894b8e004d71465828b3ca27ddcc562984d3a8b5012eefa01a9571fa",
+    "schemas/canonical_qa.schema.json": "b8263f95e75c7eb85dfd9fa8cbe561f87072a17c4c161879abfd93ddeeff9a66",
+    "schemas/claim_candidate.schema.json": "d0322d3b4ed86f185a8a39c337de01cc0c74ce5618853f30a30a41764bec4f65",
+    "schemas/contradiction.schema.json": "2149ee5c19677486616c5894150968473d4e13a71e4c3aa0f5f3a4e8e80780ec",
+    "schemas/logic_procedure_candidate.schema.json": "b8c1453c7f940c8e7150d5cc96a94275d9bace322424441e747b91a687f4d626",
+    "schemas/multiturn_scenario.schema.json": "559fd4a02c6fd8cdea3216e52a29bf0cad59f2ef319f8822cd40ac1830469e57",
+    "schemas/myth.schema.json": "f72261ce9d23c8817e7db06d738eb3c444bc0c221f5818794d423168ae3cd1bc",
+    "schemas/retrieval_evaluation.schema.json": "06244ac381e975e11cc84a54fc0088cae78a96099ab11ad56863b08bbccba7cf",
+    "schemas/strategy_candidate.schema.json": "a2c819d0aeb356e2e8e155b0aa8a85fb2fcb2e115da64f70e1f5b3aaae029c1d",
+    "schemas/user_utterance.schema.json": "7449413d39b64e17a3ece724fe57d9f650fb5505d70c02564f8f41b296c57adf",
+    "sources/provenance_manifest.jsonl": "b742e0cae5c07c3e496cd4563fd500d32f0838efb7cc7741f7852bc751031e54",
+    "sources/source_access_manifest.json": "b0e3f29404a76e75dda1b276c7e1a31272faf1021608870eb8784b661c805a83",
+    "sources/source_registry.jsonl": "2308dd98bee288146bc5cdfd39a2712747f99358f0f68b6ca789877823e871ee",
+    "tests/expected_statistics.json": "765cea03ed566cd09d3a0483861e295e18719ee4e643c7975b9d10773779bc39",
+    "tests/integrity_cases.jsonl": "2f7fa6e3aed194f85aa989f4509a0b5f341f64bed3287574ec4d598cc7543027",
+    "tests/retrieval_cases.jsonl": "e21cd7aa8c6e9d8469b8bf47ca0867f3228b74e4156faef4e17bfdbefbe5f8d7",
+    "tools/build_database.py": "d4ff6a33ffcff15fd167d2b4ef1568660726232017badeeea8274f4edc10e827",
+    "tools/import_to_tracksmith.py": "ea10c656cb58bc24e68bd1da6740762dac55d91787a88d11ae76a8a82ebd6196",
+    "tools/inspect_package.py": "dc9c2b00d36a2e26685bb30204a33da411753a11f64e1a34e06128d13c3f209b",
+    "tools/query_corpus.py": "b940aaed5480722eefc8749a2ce19771bf9cf58c30279d6bfc6fd3eee5d59084",
+    "tools/validate_package.py": "06e2a11b5cffd085823c59f8ebe15651bd1ae69fe5c16a7b8b9f7127ee7dee12"
+  },
+  "generated_at": "2026-08-14",
+  "hash_scope_excludes": [
+    "PACKAGE_SHA256SUMS.txt",
+    "integration/integration_manifest.json"
+  ],
+  "logic_verification_states": [
+    "not_applicable_evaluation_only"
+  ],
+  "namespace": "pkg017",
+  "native_review_states": [
+    "candidate_not_yet_human_reviewed"
+  ],
+  "original_review_states": [
+    "golden_evaluation_synthesis",
+    "instructional_design_synthesis",
+    "deterministic_test_fixture"
+  ],
+  "original_verification_statuses": [
+    "design_contract_and_source_metadata_registered",
+    "level_triplet_generated_from_shared_diagnosis_and_experiment",
+    "exact_alias_generated_and_validated"
+  ],
+  "package_contract": "tracksmith-corpus-package",
+  "package_id": "tracksmith-corpus-017-golden-tutor-conversations-level-adaptation",
+  "package_version": "1.0.0",
+  "prerequisites": [
+    "tracksmith-corpus-001-vocal-quantization",
+    "tracksmith-corpus-002-level-balancing-eq",
+    "tracksmith-corpus-003-compression-arrangement-frequency-allocation",
+    "tracksmith-corpus-004-reverb-delay",
+    "tracksmith-corpus-005-automation",
+    "tracksmith-corpus-006-saturation-transient-shaping",
+    "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+    "tracksmith-corpus-008-editing-layering",
+    "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+    "tracksmith-corpus-010-flex-time-manual-timing",
+    "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+    "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+    "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+    "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+    "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+    "tracksmith-corpus-016-integration-retrieval-quality-control"
+  ],
+  "preserved_status_fields": [
+    "review_state",
+    "native_review_state",
+    "original_review_state",
+    "original_verification_status",
+    "logic_verification_status",
+    "runtime_eligibility"
+  ],
+  "runtime_files": [],
+  "sequence": 17,
+  "test_only_files": [
+    "corpus/canonical_qa.jsonl",
+    "corpus/user_utterances.jsonl",
+    "corpus/multiturn_scenarios.jsonl",
+    "corpus/retrieval_evaluations.jsonl",
+    "corpus/contradictions.jsonl",
+    "corpus/myths_and_antipatterns.jsonl",
+    "knowledge_candidates/claims.jsonl",
+    "knowledge_candidates/strategies.jsonl",
+    "database/corpus.sqlite",
+    "tests/retrieval_cases.jsonl",
+    "tests/integrity_cases.jsonl"
+  ]
+}

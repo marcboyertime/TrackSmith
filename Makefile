@@ -1,5 +1,5 @@
 P9_ARCHIVE ?= /tmp/tracksmith-package9.pwHKlg/package.zip
-.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report p17-diagnostics p17-performance p17-evaluation p17-live-evaluation p17-cloud-evaluation p17-cloud-health p17-public-audio-evaluation native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -18,6 +18,30 @@ p16-performance:
 
 p16-fallback:
 	swift run -c release TutorConversationTests package16-fallback
+
+p17-diagnostics:
+	swift run -c release TutorConversationTests package17-diagnostics
+
+p17-performance:
+	swift run -c release TutorConversationTests package17-performance
+
+p17-evaluation:
+	python3 research/scripts/package17-evaluation.py --check
+
+p17-live-evaluation:
+	swift run -c release TutorConversationTests package17-live-evaluation
+
+p17-cloud-evaluation:
+	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to send 36 P17 text requests' && exit 2)
+	swift run -c release TutorConversationTests package17-cloud-evaluation --cloud-text-consent
+
+p17-cloud-health:
+	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to send one P17 cloud health request' && exit 2)
+	swift run -c release TutorConversationTests package17-cloud-health --cloud-text-consent
+
+p17-public-audio-evaluation:
+	@test "$(CLOUD_AUDIO_CONSENT)" = "YES" || (echo 'set CLOUD_AUDIO_CONSENT=YES to send one bounded P16 public WAV' && exit 2)
+	swift run -c release TutorConversationTests package17-public-audio-evaluation --cloud-audio-consent
 
 p16-evidence-audit:
 	python3 research/scripts/package16-evidence-release.py --audit

@@ -1,0 +1,65 @@
+{
+  "audio_fixture_requirement": {
+    "necessity": "required_or_helpful",
+    "recommended_source": "BabySlakh or a true multitrack/stem mixture from Package 016",
+    "reuse_package016_assets_first": true
+  },
+  "canonical_qa_id": "pkg017.qa.000001",
+  "diagnosis_key": "diag.vocal_masking",
+  "domain": "golden_tutor_conversations",
+  "expected_behaviors": [
+    "Maintains the same diagnosis and experiment across Noob, Amateur, and Pro.",
+    "Adapts scaffolding, vocabulary, click-level detail, and theory depth to the selected level.",
+    "Uses one reversible experiment with listen-for, stop condition, and undo.",
+    "References the exact prior result instead of restarting.",
+    "Keeps evidence classes distinct and does not claim to hear or see unavailable evidence.",
+    "Uses natural ChatGPT-quality language rather than stitched corpus prose."
+  ],
+  "experience_level": "noob",
+  "experience_level_display": "Noob",
+  "experiment_key": "exp.vocal_masking",
+  "forbidden_behaviors": [
+    "Infers or changes the persistent level from vocabulary, grammar, question difficulty, or one user phrase.",
+    "Treats Noob as unintelligent or Pro as immune to explanation.",
+    "Changes diagnosis quality, safety, privacy, tool authority, or artistic standard by level.",
+    "Exposes expected golden text, evaluation labels, or fixture IDs to runtime.",
+    "Gives more than one current experiment.",
+    "Claims a change was performed or improved without user evidence."
+  ],
+  "id": "pkg017.scenario.0000001",
+  "logic_verification_status": "not_applicable_evaluation_only",
+  "messages": [
+    {
+      "role": "user",
+      "text": "My vocal sounds muddy and disappears once the instrumental comes in."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "I think the most likely issue is this: The vocal may be acceptable alone but masked by overlapping accompaniment in the full mix. First, one quick question because it changes the fix: Does the problem remain when the vocal is soloed, or mainly appear in the full mix?\n\n**Try one reversible test**\n1. Save or duplicate the current state so you can return to it.\n2. Open or select the relevant Logic object: vocal and likely masking source in the full mix.\n3. Compare the same chorus in context, then make one small broad reduction on the most obvious competing instrument rather than cutting the vocal first.\n4. Replay the same short section at the same listening level.\n\n**Listen for:** The words become easier to follow while the vocal keeps its body and the accompaniment still feels natural.\n**Stop and undo if:** The competing instrument becomes hollow or the mix only seems better because it became quieter.\n\nWhy this test: it changes one important variable, so the result tells us more than changing several things at once."
+    },
+    {
+      "role": "user",
+      "text": "That helped, but a useful part of the sound or feel also got worse."
+    },
+    {
+      "role": "assistant_expected",
+      "text": "That result is useful. It does not mean the whole idea failed. It means the test changed the right area, but the amount, target, or context needs adjustment. Return to the saved baseline, then repeat the **same** test more gently rather than adding a second fix. Keep listening for: The words become easier to follow while the vocal keeps its body and the accompaniment still feels natural. If the competing instrument becomes hollow or the mix only seems better because it became quieter, stop and restore the original."
+    },
+    {
+      "role": "user",
+      "text": "Why did that happen, and what should I learn from it?"
+    },
+    {
+      "role": "assistant_expected",
+      "text": "The reusable lesson is: **When a source works alone but fails in context, test interaction before permanently reshaping the source.** You do not need to memorize one magic setting. Instead, keep an original version, change one thing, replay the same section, and decide what improved and what was damaged. That is how your ears learn the cause-and-effect relationship."
+    }
+  ],
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "original_review_state": "golden_evaluation_synthesis",
+  "original_verification_status": "level_triplet_generated_from_shared_diagnosis_and_experiment",
+  "package_id": "tracksmith-corpus-017-golden-tutor-conversations-level-adaptation",
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "scenario_type": "initial",
+  "subdomain": "vocal_masking"
+}

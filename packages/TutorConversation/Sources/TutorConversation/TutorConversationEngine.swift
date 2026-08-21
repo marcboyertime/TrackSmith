@@ -205,7 +205,8 @@ public actor TutorConversationEngine {
                         outputSHA256: sha256(Data(tool.outputJSON.utf8))
                     )
                 },
-                consents: consentReceipts(context: context, toolResults: result.toolResults)
+                consents: consentReceipts(context: context, toolResults: result.toolResults),
+                experience: context.experience
             )
             try store.saveReceipt(receipt)
             for experimentID in result.experimentIDs {

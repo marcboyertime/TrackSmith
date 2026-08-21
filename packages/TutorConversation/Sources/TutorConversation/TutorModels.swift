@@ -14,6 +14,129 @@ public enum TutorMessageStatus: String, Codable, CaseIterable, Sendable {
     case failed
 }
 
+/// The musician-selected amount of teaching scaffolding. This deliberately has
+/// no bearing on diagnosis, evidence, safety, tool authority, or artistic bar.
+public enum TutorExperienceLevel: String, Codable, CaseIterable, Sendable {
+    case noob
+    case amateur
+    case pro
+
+    public static let `default`: TutorExperienceLevel = .amateur
+
+    public var label: String {
+        switch self {
+        case .noob: "Noob"
+        case .amateur: "Amateur"
+        case .pro: "Pro"
+        }
+    }
+}
+
+/// Versioned app preference. Custom decoding keeps every pre-P17 preference
+/// payload usable and intentionally defaults it to the neutral Amateur mode.
+public struct TutorExperienceSettings: Codable, Equatable, Sendable {
+    public static let currentVersion = 1
+    public var version: Int
+    public var persistentLevel: TutorExperienceLevel
+
+    public init(version: Int = currentVersion, persistentLevel: TutorExperienceLevel = .default) {
+        self.version = max(1, version)
+        self.persistentLevel = persistentLevel
+    }
+
+    private enum CodingKeys: String, CodingKey { case version, persistentLevel }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        version = max(1, try values.decodeIfPresent(Int.self, forKey: .version) ?? Self.currentVersion)
+        persistentLevel = try values.decodeIfPresent(TutorExperienceLevel.self, forKey: .persistentLevel) ?? .default
+    }
+}
+
+/// A compact per-turn contract. `temporaryOverride` exists only for the current
+/// explicit user directive and is never written back as a preference.
+public struct TutorExperienceContext: Codable, Equatable, Sendable {
+    public var persistentLevel: TutorExperienceLevel
+    public var temporaryOverride: TutorExperienceLevel?
+    public var effectiveLevel: TutorExperienceLevel
+
+    public init(
+        persistentLevel: TutorExperienceLevel = .default,
+        temporaryOverride: TutorExperienceLevel? = nil
+    ) {
+        self.persistentLevel = persistentLevel
+        self.temporaryOverride = temporaryOverride
+        self.effectiveLevel = temporaryOverride ?? persistentLevel
+    }
+
+    private enum CodingKeys: String, CodingKey { case persistentLevel, temporaryOverride, effectiveLevel }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let persistent = try values.decodeIfPresent(TutorExperienceLevel.self, forKey: .persistentLevel) ?? .default
+        self.init(
+            persistentLevel: persistent,
+            temporaryOverride: try values.decodeIfPresent(TutorExperienceLevel.self, forKey: .temporaryOverride)
+        )
+    }
+
+    /// Only stable, explicit current-turn requests can alter presentation.
+    /// Do not add inference from vocabulary, audio quality, or question style.
+    public static func explicitTemporaryOverride(for text: String) -> TutorExperienceLevel? {
+        let normalized = text.lowercased()
+            .replacingOccurrences(of: "’", with: "'")
+            .replacingOccurrences(of: "“", with: "\"")
+            .replacingOccurrences(of: "”", with: "\"")
+        if containsUnnegatedExplicitDirective("explain more simply", in: normalized)
+            || containsUnnegatedExplicitDirective("give exact clicks", in: normalized) {
+            return .noob
+        }
+        if containsUnnegatedExplicitDirective("skip basics", in: normalized)
+            || containsUnnegatedExplicitDirective("go deeper", in: normalized) {
+            return .pro
+        }
+        return nil
+    }
+
+    private static func containsUnnegatedExplicitDirective(_ directive: String, in text: String) -> Bool {
+        var searchStart = text.startIndex
+        while let range = text.range(of: directive, range: searchStart..<text.endIndex) {
+            let before = String(text[..<range.lowerBound])
+            let after = String(text[range.upperBound...])
+            if !isQuotedDirective(before: before, after: after)
+                && !hasNegatedOrExampleContext(before: before, after: after) {
+                return true
+            }
+            searchStart = range.upperBound
+        }
+        return false
+    }
+
+    private static func isQuotedDirective(before: String, after: String) -> Bool {
+        // A quoted phrase is a reference/example, not an instruction. Only
+        // double quotes are normalized above; apostrophes remain available for
+        // contractions such as "don't".
+        let openingQuotes = before.filter { $0 == "\"" }.count
+        return openingQuotes % 2 == 1 && after.contains("\"")
+    }
+
+    private static func hasNegatedOrExampleContext(before: String, after: String) -> Bool {
+        // Negation applies only to the directive's clause. A later explicit
+        // command after a sentence/semicolon boundary remains actionable.
+        let clauseStart = before.lastIndex(where: { ";.!?\n".contains($0) })
+        let clause = clauseStart.map { String(before[before.index(after: $0)...]) } ?? before
+        let beforeWindow = String(clause.suffix(64))
+        let afterWindow = String(after.prefix(64))
+        let words = beforeWindow.split { !$0.isLetter && $0 != "'" }.map(String.init)
+        let negativeWords: Set<String> = ["not", "never", "no", "don't", "dont", "didn't", "didnt", "cannot", "can't", "cant"]
+        if words.suffix(5).contains(where: { negativeWords.contains($0) }) { return true }
+        let referenceWords: Set<String> = ["phrase", "example", "quoted", "quote", "words"]
+        if words.suffix(5).contains(where: { referenceWords.contains($0) }) { return true }
+        let normalizedAfter = afterWindow.trimmingCharacters(in: .whitespacesAndNewlines)
+        return normalizedAfter.hasPrefix("is not my request")
+            || normalizedAfter.hasPrefix("isn't my request")
+            || normalizedAfter.hasPrefix("is not a request")
+    }
+}
+
 public enum TutorEvidenceKind: String, Codable, CaseIterable, Sendable {
     case heardByModel
     case locallyMeasured
@@ -316,6 +439,7 @@ public struct TutorRuntimeContext: Codable, Equatable, Sendable {
     public var logicObservation: TutorLogicObservation?
     public var userReportedContext: [String]
     public var consent: TutorConsentContext
+    public var experience: TutorExperienceContext
 
     public init(
         sourceType: SourceType,
@@ -323,7 +447,8 @@ public struct TutorRuntimeContext: Codable, Equatable, Sendable {
         capture: TutorCaptureSnapshot? = nil,
         logicObservation: TutorLogicObservation? = nil,
         userReportedContext: [String] = [],
-        consent: TutorConsentContext = .init()
+        consent: TutorConsentContext = .init(),
+        experience: TutorExperienceContext = .init()
     ) {
         self.sourceType = sourceType
         self.projectGoal = projectGoal
@@ -331,6 +456,24 @@ public struct TutorRuntimeContext: Codable, Equatable, Sendable {
         self.logicObservation = logicObservation
         self.userReportedContext = Array(userReportedContext.prefix(12))
         self.consent = consent
+        self.experience = experience
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case sourceType, projectGoal, capture, logicObservation, userReportedContext, consent, experience
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            sourceType: try values.decode(SourceType.self, forKey: .sourceType),
+            projectGoal: try values.decodeIfPresent(String.self, forKey: .projectGoal),
+            capture: try values.decodeIfPresent(TutorCaptureSnapshot.self, forKey: .capture),
+            logicObservation: try values.decodeIfPresent(TutorLogicObservation.self, forKey: .logicObservation),
+            userReportedContext: try values.decodeIfPresent([String].self, forKey: .userReportedContext) ?? [],
+            consent: try values.decodeIfPresent(TutorConsentContext.self, forKey: .consent) ?? .init(),
+            experience: try values.decodeIfPresent(TutorExperienceContext.self, forKey: .experience) ?? .init()
+        )
     }
 }
 
@@ -460,9 +603,20 @@ public enum TutorReasoningEffort: String, Codable, CaseIterable, Sendable {
     case none, low, medium, high, xhigh, max
 }
 
+/// A bounded opt-in Responses service tier. This affects scheduling only, never
+/// the selected model or reasoning effort.
+public enum TutorProviderServiceTier: String, Codable, CaseIterable, Sendable {
+    case priority
+    case fast
+}
+
 public struct TutorProviderConfiguration: Codable, Equatable, Sendable {
     public var modelIdentifier: String
     public var reasoningEffort: TutorReasoningEffort
+    /// `priority` is the explicit default for the strongest configured Tutor
+    /// model. Other models omit the request field unless a supported model is
+    /// configured for it in the future.
+    public var serviceTier: TutorProviderServiceTier?
     public var cloudTextConsent: Bool
     public var timeoutSeconds: Double
     public var maximumOutputTokens: Int
@@ -470,15 +624,34 @@ public struct TutorProviderConfiguration: Codable, Equatable, Sendable {
     public init(
         modelIdentifier: String = "gpt-5.6-sol",
         reasoningEffort: TutorReasoningEffort = .high,
+        serviceTier: TutorProviderServiceTier? = nil,
         cloudTextConsent: Bool = false,
         timeoutSeconds: Double = 45,
         maximumOutputTokens: Int = 25_000
     ) {
         self.modelIdentifier = modelIdentifier
         self.reasoningEffort = reasoningEffort
+        self.serviceTier = serviceTier ?? (modelIdentifier == "gpt-5.6-sol" ? .priority : nil)
         self.cloudTextConsent = cloudTextConsent
         self.timeoutSeconds = min(max(timeoutSeconds, 1), 60)
         self.maximumOutputTokens = min(max(maximumOutputTokens, 256), 32_768)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case modelIdentifier, reasoningEffort, serviceTier, cloudTextConsent, timeoutSeconds, maximumOutputTokens
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let modelIdentifier = try values.decodeIfPresent(String.self, forKey: .modelIdentifier) ?? "gpt-5.6-sol"
+        self.init(
+            modelIdentifier: modelIdentifier,
+            reasoningEffort: try values.decodeIfPresent(TutorReasoningEffort.self, forKey: .reasoningEffort) ?? .high,
+            serviceTier: try values.decodeIfPresent(TutorProviderServiceTier.self, forKey: .serviceTier),
+            cloudTextConsent: try values.decodeIfPresent(Bool.self, forKey: .cloudTextConsent) ?? false,
+            timeoutSeconds: try values.decodeIfPresent(Double.self, forKey: .timeoutSeconds) ?? 45,
+            maximumOutputTokens: try values.decodeIfPresent(Int.self, forKey: .maximumOutputTokens) ?? 25_000
+        )
     }
 }
 
@@ -488,19 +661,23 @@ public struct TutorProviderMetadata: Codable, Equatable, Sendable {
     public var providerResponseID: String?
     public var inputTokens: Int?
     public var outputTokens: Int?
+    /// The actual service tier reported by the provider, when present.
+    public var serviceTier: TutorProviderServiceTier?
 
     public init(
         providerIdentifier: String,
         modelIdentifier: String,
         providerResponseID: String? = nil,
         inputTokens: Int? = nil,
-        outputTokens: Int? = nil
+        outputTokens: Int? = nil,
+        serviceTier: TutorProviderServiceTier? = nil
     ) {
         self.providerIdentifier = providerIdentifier
         self.modelIdentifier = modelIdentifier
         self.providerResponseID = providerResponseID
         self.inputTokens = inputTokens
         self.outputTokens = outputTokens
+        self.serviceTier = serviceTier
     }
 }
 
@@ -658,6 +835,8 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
     public var evidence: [TutorEvidenceReference]
     public var tools: [TutorToolReceipt]
     public var consents: [TutorConsentReceipt]
+    /// Additive metadata only; experience level is never an evidence class.
+    public var experience: TutorExperienceContext?
 
     public init(
         id: UUID = UUID(),
@@ -673,7 +852,8 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
         captureSHA256: String?,
         evidence: [TutorEvidenceReference],
         tools: [TutorToolReceipt],
-        consents: [TutorConsentReceipt] = []
+        consents: [TutorConsentReceipt] = [],
+        experience: TutorExperienceContext? = nil
     ) {
         self.id = id
         self.version = version
@@ -689,6 +869,7 @@ public struct TutorEvidenceReceipt: Codable, Equatable, Identifiable, Sendable {
         self.evidence = evidence
         self.tools = tools
         self.consents = consents
+        self.experience = experience
     }
 }
 

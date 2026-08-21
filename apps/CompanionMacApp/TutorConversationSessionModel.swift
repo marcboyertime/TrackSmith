@@ -155,6 +155,10 @@ final class TutorConversationSessionModel: ObservableObject {
                         cloudTextGranted: session.tutorCloudTextConsent,
                         cloudAudioGranted: session.tutorCloudAudioConsent,
                         audioRequested: shouldListen
+                    ),
+                    experience: TutorExperienceContext(
+                        persistentLevel: session.tutorExperienceLevel,
+                        temporaryOverride: TutorExperienceContext.explicitTemporaryOverride(for: text)
                     )
                 )
                 let provider = OpenAITutorProvider(configuration: TutorProviderConfiguration(

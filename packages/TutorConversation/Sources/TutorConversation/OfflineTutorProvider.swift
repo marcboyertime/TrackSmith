@@ -38,7 +38,11 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
                             continuation.finish()
                             return
                         }
-                        let text = Self.render(lesson, captureAvailable: request.context.capture != nil)
+                        let text = Self.render(
+                            lesson,
+                            captureAvailable: request.context.capture != nil,
+                            experience: request.context.experience
+                        )
                         for chunk in Self.chunks(text, approximateCharacters: 36) {
                             if Task.isCancelled { throw TutorConversationError.cancelled }
                             continuation.yield(.textDelta(chunk))
@@ -68,12 +72,19 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
                             analysis: nil,
                             explanationDepth: .simple
                         ))
-                        text = Self.render(outcome.answer, captureAvailable: request.context.capture != nil)
+                        text = Self.render(
+                            outcome.answer,
+                            captureAvailable: request.context.capture != nil,
+                            experience: request.context.experience
+                        )
                     } catch {
                         // Generic/unsupported requests must still leave the
                         // musician with an actionable local next move. This is
                         // deliberately not a diagnosis from DSP metrics.
-                        text = Self.gracefulGenericFallback(captureAvailable: request.context.capture != nil)
+                        text = Self.scaffold(
+                            Self.gracefulGenericFallback(captureAvailable: request.context.capture != nil),
+                            experience: request.context.experience
+                        )
                     }
                     for chunk in Self.chunks(text, approximateCharacters: 36) {
                         if Task.isCancelled { throw TutorConversationError.cancelled }
@@ -99,7 +110,8 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
 
     private static func render(
         _ answer: GeneralTutorAnswerContract,
-        captureAvailable: Bool
+        captureAvailable: Bool,
+        experience: TutorExperienceContext
     ) -> String {
         var paragraphs: [String] = []
         paragraphs.append(answer.directAnswer)
@@ -117,7 +129,10 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
         }
         if let stop = answer.stopConditions.first {
             paragraphs.append("Stop when: \(stop)")
+        } else {
+            paragraphs.append("Stop: pause the comparison if it becomes unclear or the tradeoff worsens.")
         }
+        paragraphs.append("Undo: restore the untouched baseline if the comparison is unclear or the tradeoff worsens.")
         if let principle = answer.teachingPrinciple {
             paragraphs.append("Why this matters: \(principle)")
         }
@@ -125,22 +140,41 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
             ? "Offline fallback used the user's text and reviewed local knowledge. A capture exists, but this fallback did not listen to it and did not use its measurements to author this answer."
             : "Offline fallback used the user's text and reviewed local knowledge. No audio was heard and Logic was not observed."
         paragraphs.append(grounding)
-        return paragraphs.filter { !$0.isEmpty }.joined(separator: "\n\n")
+        paragraphs.append("You perform every Logic edit; TrackSmith has no authority to change the project.")
+        return scaffold(paragraphs.filter { !$0.isEmpty }.joined(separator: "\n\n"), experience: experience)
     }
 
-    private static func render(_ lesson: IssueLesson, captureAvailable: Bool) -> String {
+    private static func render(
+        _ lesson: IssueLesson,
+        captureAvailable: Bool,
+        experience: TutorExperienceContext
+    ) -> String {
         let grounding = captureAvailable
             ? "Offline fallback used the user's description and reviewed local knowledge. A capture and descriptive measurements are attached, but this fallback did not listen to the WAV; measurements alone do not prove the diagnosis."
             : "Offline fallback used the user's description and reviewed local knowledge. No audio was heard and Logic was not observed."
-        return [
+        return scaffold([
             lesson.directAnswer,
             "One controlled test: \(lesson.action)",
             "Listen for: \(lesson.listenFor)",
             "Watch for: \(lesson.risk)",
             "Undo: \(lesson.undo)",
             "Why this test: \(lesson.why)",
+            "You perform every Logic edit; TrackSmith has no authority to change the project.",
             grounding,
-        ].joined(separator: "\n\n")
+        ].joined(separator: "\n\n"), experience: experience)
+    }
+
+    /// Presentation only: the same diagnosis, one experiment, safety language,
+    /// stop/undo boundary, and evidence caveat remain in every level.
+    private static func scaffold(_ text: String, experience: TutorExperienceContext) -> String {
+        switch experience.effectiveLevel {
+        case .noob:
+            return "Plain-language path: start with the small A/B below. You do not need to know the control names before you begin; follow one step, compare, and keep the original as your reset point.\n\n" + text
+        case .amateur:
+            return text
+        case .pro:
+            return "Fast pass: preserve the baseline and run this single level-matched A/B.\n\n" + text
+        }
     }
 
     public static func gracefulGenericFallback(captureAvailable: Bool) -> String {
@@ -151,8 +185,9 @@ public struct OfflineTutorProvider: TutorConversationProvider, Sendable {
             evidence,
             "First, listen in the full musical context and tell me whether the concern is too dark, too bright, too boxy, too thin, or something else.",
             "One reversible Logic test: loop one short representative phrase, open a user-controlled Channel EQ, keep the output level matched, and make one broad 1 dB move only in the direction you name. Toggle bypass against the unchanged signal before deciding.",
+            "Stop if the comparison becomes unclear or the source loses the quality you want to preserve.",
             "Undo the band or bypass the user-added EQ if the comparison is unclear or the source loses what you want to preserve.",
-            "The user performs every edit; TrackSmith made no Logic or Audio Unit change."
+            "The user performs every edit; TrackSmith has no authority to change Logic or any Audio Unit."
         ].joined(separator: "\n\n")
     }
 
