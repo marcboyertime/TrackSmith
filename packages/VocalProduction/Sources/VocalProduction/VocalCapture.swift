@@ -624,7 +624,9 @@ public struct VocalCapturePlanner: Sendable {
             return lhsScore > rhsScore
         }.map(\.element)
 
-        return rankedSpecifications.enumerated().map { index, spec in
+        var interpretations: [VocalCaptureInterpretation] = []
+        interpretations.reserveCapacity(rankedSpecifications.count)
+        for (index, spec) in rankedSpecifications.enumerated() {
             let id = interpretationIDs[index]
             let placement = constrainedPlacement(spec.placement, facts: facts)
             let roomPosition = facts.fixedRoomPosition ? .preserveCurrentPosition : spec.room
@@ -632,7 +634,33 @@ public struct VocalCapturePlanner: Sendable {
             gain.instruction += " Capture path held constant: \(facts.capturePathInstruction)"
             gain.unknownHardwareBoundary = facts.gainBoundary
             let priorityFit = priorityFitExplanation(for: spec.kind, weights: facts.priorityWeights)
-            return VocalCaptureInterpretation(
+            let considerations = uniqueStrings(
+                spec.considerations
+                    + facts.priorityTradeoffs
+                    + facts.preservationChecks
+                    + facts.hardConstraintTradeoffs
+            )
+            let assumptions = uniqueStrings(
+                brief.assumptions
+                    + [
+                        "Desired capture result supplied by the musician: \(facts.desiredResult)",
+                        facts.prioritySummary,
+                        priorityFit,
+                    ]
+                    + facts.equipmentFacts
+                    + facts.patternFacts
+                    + facts.roomNoiseFacts
+                    + facts.hardConstraintFacts
+                    + facts.preservationChecks
+            )
+            let comparison = comparisonProtocol(
+                index: index,
+                interpretationID: id,
+                facts: facts,
+                placement: placement,
+                roomPosition: roomPosition
+            )
+            let interpretation = VocalCaptureInterpretation(
                 id: id,
                 title: spec.title,
                 hypothesis: "\(spec.hypothesis) \(priorityFit)",
@@ -641,37 +669,16 @@ public struct VocalCapturePlanner: Sendable {
                 reflectionRisk: reflectionRisk,
                 gainAndHeadroom: gain,
                 monitoring: monitoringPlan(facts: facts),
-                performanceAndProximityConsiderations: uniqueStrings(
-                    spec.considerations
-                        + facts.priorityTradeoffs
-                        + facts.preservationChecks
-                        + facts.hardConstraintTradeoffs
-                ),
-                comparison: comparisonProtocol(
-                    index: index,
-                    interpretationID: id,
-                    facts: facts,
-                    placement: placement,
-                    roomPosition: roomPosition
-                ),
-                assumptions: uniqueStrings(
-                    brief.assumptions
-                        + [
-                            "Desired capture result supplied by the musician: \(facts.desiredResult)",
-                            facts.prioritySummary,
-                            priorityFit,
-                        ]
-                        + facts.equipmentFacts
-                        + facts.patternFacts
-                        + facts.roomNoiseFacts
-                        + facts.hardConstraintFacts
-                        + facts.preservationChecks
-                ),
+                performanceAndProximityConsiderations: considerations,
+                comparison: comparison,
+                assumptions: assumptions,
                 missingInformation: sharedMissing,
                 uncertainty: sharedUncertainty,
                 provenance: sourceProvenance
             )
+            interpretations.append(interpretation)
         }
+        return interpretations
     }
 
     private func missingInformation(for brief: VocalCaptureBrief) -> [String] {

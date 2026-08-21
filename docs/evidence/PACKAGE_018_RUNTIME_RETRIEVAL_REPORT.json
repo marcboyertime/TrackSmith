@@ -15,6 +15,22 @@
     "policy_omits_evaluation_markers": true
   },
   "evidence_class": "local source/index measurement plus fresh unsigned built-artifact resource audit; no installed, provider, Logic, or listening evidence",
+  "ci_clean_checkout_preservation_repair": {
+    "root_cause": "The historical P001 vocal-quantization preservation hash included an ignored local .DS_Store host artifact.",
+    "historical_nonportable_tree": {
+      "file_count": 33,
+      "sha256": "3f53c15970fd0c1672620d6b70e941b7d06391320bbaa5752b78cbc47b4dc635"
+    },
+    "portable_source_tree": {
+      "file_count": 32,
+      "sha256": "62a04801302256adedb07f489ce06b19712349512d01e150f0c3ee22a49cf57d"
+    },
+    "projection": "git ls-files source-controlled package projection; historical physical fields remain retained beside it",
+    "clean_worktree_reproduction": {
+      "old_committed_importer": "failed with P6 preservation baseline package-tree drift",
+      "corrected_importer": "passed"
+    }
+  },
   "post_fix_primary_verification": {
     "builder_check": "passed",
     "package18_audit": "passed",

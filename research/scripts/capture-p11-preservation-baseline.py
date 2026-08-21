@@ -11,9 +11,8 @@ BASELINE=COMMUNITY/"preservation_baselines/tracksmith-corpus-011-smart-tempo-bpm
 def digest(value): return hashlib.sha256(value).hexdigest()
 def compact(value): return digest(json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode())
 def tree(path):
-    h=hashlib.sha256(); files=sorted(x for x in path.rglob("*") if x.is_file())
-    for x in files: h.update(b"FILE\0"+x.relative_to(path).as_posix().encode()+b"\0"+x.read_bytes())
-    return {"files":len(files),"tree":h.hexdigest()}
+    files,value=trusted.preservation_tree(path)
+    return {"files":files,"tree":value}
 def package_path(pid): return COMMUNITY/"packages"/pid if pid.startswith("tracksmith-corpus") else KNOWLEDGE/pid
 def state():
     registry=json.loads((COMMUNITY/"package_registry.json").read_text()); protected=[x for x in registry["packages"] if x.get("package_number",0)<=10]
@@ -32,8 +31,8 @@ def state():
 def main():
     check=argparse.ArgumentParser(); check.add_argument("--check",action="store_true"); a=check.parse_args(); observed=state()
     if a.check:
-        if not BASELINE.exists() or json.loads(BASELINE.read_text())!=observed: raise SystemExit("P11_BASELINE_CHECK_FAILED: Package 001-010 bytes/state drift")
+        if not BASELINE.exists() or not trusted.preservation_baseline_matches(json.loads(BASELINE.read_text()),observed): raise SystemExit("P11_BASELINE_CHECK_FAILED: Package 001-010 bytes/state drift")
         print("P11_PRESERVATION_BASELINE_OK packages=10 p10Runtime=true p10Evaluation=true")
     else:
-        BASELINE.parent.mkdir(parents=True,exist_ok=True); BASELINE.write_text(json.dumps(observed,indent=2,sort_keys=True)+"\n"); print("P11_PRESERVATION_BASELINE_CAPTURED packages=10 p10Runtime=true p10Evaluation=true")
+        BASELINE.parent.mkdir(parents=True,exist_ok=True); existing=json.loads(BASELINE.read_text()) if BASELINE.exists() else {}; BASELINE.write_text(json.dumps(trusted.preservation_capture_document(existing,observed),indent=2,sort_keys=True)+"\n"); print("P11_PRESERVATION_BASELINE_CAPTURED packages=10 p10Runtime=true p10Evaluation=true")
 if __name__=="__main__": main()

@@ -6,9 +6,28 @@ the package-specific import entry points so either order reconstructs one shared
 registry, review queue, runtime resource store, and evaluation-only fixtures.
 """
 from __future__ import annotations
-import argparse, copy, hashlib, json, pathlib, re, subprocess, sys
+import argparse, copy, hashlib, json, os, pathlib, re, stat, subprocess, sys, tempfile
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
+def lexical_absolute(path):
+    return pathlib.Path(os.path.abspath(os.fspath(path)))
+def assert_unlinked_absolute(path, expect_directory):
+    path=lexical_absolute(path)
+    if not path.is_absolute(): raise ValueError("preservation path is not absolute: "+str(path))
+    current=pathlib.Path(path.anchor)
+    if not stat.S_ISDIR(current.lstat().st_mode): raise ValueError("preservation filesystem root is unsafe: "+str(current))
+    for index,part in enumerate(path.parts[1:]):
+        current=current/part
+        try: mode=current.lstat().st_mode
+        except FileNotFoundError as error: raise ValueError("missing preservation path: "+str(current)) from error
+        if stat.S_ISLNK(mode): raise ValueError("symlinked preservation path: "+str(current))
+        if index < len(path.parts)-2 and not stat.S_ISDIR(mode): raise ValueError("non-directory preservation ancestor: "+str(current))
+    if expect_directory and not stat.S_ISDIR(current.lstat().st_mode): raise ValueError("preservation root is not a directory: "+str(path))
+    if not expect_directory and not stat.S_ISREG(current.lstat().st_mode): raise ValueError("preservation file is not regular: "+str(path))
+    return path
+def lexical_repository_root(script_path):
+    script=assert_unlinked_absolute(script_path,False)
+    return assert_unlinked_absolute(script.parents[2],True)
+ROOT = lexical_repository_root(__file__)
 K = ROOT / "research/knowledge"
 REGISTRY = K / "general-tutor-source-registry.json"
 QUEUE = K / "general-tutor-review-queue.json"
@@ -124,10 +143,73 @@ def assert_runtime_field_exclusions(value, fragments, path="runtime"):
     elif isinstance(value,list):
         for index,item in enumerate(value): assert_runtime_field_exclusions(item,fragments,path+"["+str(index)+"]")
 def canon(v): return json.dumps(v, ensure_ascii=False, indent=1, sort_keys=True)+"\n"
+def unlinked_repository_path(path, expect_directory):
+    """Return a lexical repository path only after no-follow component checks."""
+    assert_unlinked_absolute(ROOT,True)
+    path=lexical_absolute(path)
+    try: relative=path.relative_to(ROOT)
+    except ValueError as error: raise ValueError("preservation package is outside repository: "+str(path)) from error
+    if not relative.parts or any(part in {"", ".", ".."} for part in relative.parts): raise ValueError("unsafe preservation package path: "+str(path))
+    assert_unlinked_absolute(path,expect_directory)
+    return relative.as_posix()
 def preservation_tree(path):
-    h=hashlib.sha256(); files=sorted(x for x in path.rglob("*") if x.is_file())
+    """Hash the repository-tracked projection, never ambient host files."""
+    relative=unlinked_repository_path(path,True)
+    tracked=subprocess.run(["git","-C",str(ROOT),"ls-files","-z","--",relative],capture_output=True)
+    if tracked.returncode: raise ValueError("cannot enumerate tracked preservation files: "+tracked.stderr.decode(errors="replace").strip())
+    files=[ROOT/name.decode() for name in tracked.stdout.split(b"\0") if name]
+    if not files: raise ValueError("tracked preservation package empty: "+relative)
+    for item in files: unlinked_repository_path(item,False)
+    h=hashlib.sha256()
     for item in files: h.update(b"FILE\0"+item.relative_to(path).as_posix().encode()+b"\0"+item.read_bytes())
     return len(files),h.hexdigest()
+def expected_preservation_tree(expected):
+    """Use an additive portable projection when a historical baseline has one."""
+    source_controlled = expected.get("sourceControlledTree", expected)
+    return source_controlled["files"], source_controlled["tree"]
+def preservation_baseline_matches(expected, observed):
+    """Compare capture output while retaining historical host-artifact fields."""
+    expected = json.loads(json.dumps(expected))
+    for package in expected.get("packages", {}).values():
+        source_controlled = package.pop("sourceControlledTree", None)
+        if source_controlled is not None:
+            package["files"] = source_controlled["files"]
+            package["tree"] = source_controlled["tree"]
+    return expected == observed
+def preservation_capture_document(existing, observed):
+    """Add refreshed tracked projections without recapturing legacy tree fields."""
+    output=json.loads(json.dumps(observed))
+    for pid,package in output.get("packages",{}).items():
+        historical=existing.get("packages",{}).get(pid,{})
+        if "files" in historical and "tree" in historical:
+            package["sourceControlledTree"]={"files":package["files"],"tree":package["tree"]}
+            package["files"]=historical["files"]
+            package["tree"]=historical["tree"]
+    return output
+def preservation_self_check():
+    """Reject both symlink roots and symlink ancestors before Git enumeration."""
+    legacy={"packages":{"p1":{"files":33,"tree":"legacy"}}}
+    observed={"packages":{"p1":{"files":32,"tree":"tracked"}}}
+    captured=preservation_capture_document(legacy,observed)
+    expected={"files":33,"tree":"legacy","sourceControlledTree":{"files":32,"tree":"tracked"}}
+    if captured["packages"]["p1"] != expected or not preservation_baseline_matches(captured,observed): raise ValueError("preservation capture merge regression")
+    seeded={"packages":{"p1":{**expected,"sourceControlledTree":{"files":32,"tree":"old-tracked"}}}}
+    updated=preservation_capture_document(seeded,{"packages":{"p1":{"files":31,"tree":"new-tracked"}}})
+    if updated["packages"]["p1"] != {"files":33,"tree":"legacy","sourceControlledTree":{"files":31,"tree":"new-tracked"}}: raise ValueError("preservation capture projection update regression")
+    with tempfile.TemporaryDirectory(dir=ROOT) as temporary:
+        base=pathlib.Path(temporary); target=K/"community-vocal-quantization-v1"
+        os.symlink(target,base/"root-link")
+        (base/"ancestor").mkdir(); os.symlink(target.parent,base/"ancestor"/"linked")
+        os.symlink(target/"README.md",base/"tracked-file-link")
+        for unsafe in (base/"root-link",base/"ancestor"/"linked"/target.name,base/"tracked-file-link"):
+            try: preservation_tree(unsafe)
+            except ValueError: continue
+            raise ValueError("symlinked preservation path accepted: "+str(unsafe))
+        for label, linked_script in (("repository root", base/"linked-repository"/"research/scripts/community_corpus_import.py"), ("repository ancestor", base/"linked-parent"/ROOT.name/"research/scripts/community_corpus_import.py")):
+            if label == "repository root": os.symlink(ROOT, base/"linked-repository")
+            else: os.symlink(ROOT.parent, base/"linked-parent")
+            child=subprocess.run([sys.executable,str(linked_script),"--preservation-self-check"],capture_output=True,text=True)
+            if child.returncode == 0 or "symlinked preservation path" not in (child.stdout+child.stderr): raise ValueError("symlinked "+label+" invocation was not rejected by lexical-path validation")
 def generated_non_p10_projection():
     text=(ROOT/"packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift").read_text(); start,end=text.find('#"""'),text.rfind('"""#')
     if start<0 or end<0: raise ValueError("P10 preservation baseline generated payload unreadable")
@@ -147,7 +229,7 @@ def verify_p6_preservation_baseline():
     for pid, expected in packages.items():
         package=(ROOT/"research/community_knowledge/packages"/pid) if pid.startswith("tracksmith-corpus") else K/pid
         count,value=preservation_tree(package)
-        if (count,value)!=(expected["files"],expected["tree"]): raise ValueError("P6 preservation baseline package-tree drift: "+pid)
+        if (count,value)!=expected_preservation_tree(expected): raise ValueError("P6 preservation baseline package-tree drift: "+pid)
         if digest((RES/(pid+".json")).read_bytes())!=expected["runtime"]: raise ValueError("P6 preservation baseline runtime drift: "+pid)
         if digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"]: raise ValueError("P6 preservation baseline evaluation drift: "+pid)
         sources=[x for x in source_rows if x.get("candidateCorpus")==pid]; queue=[x for x in queue_rows if x.get("candidateCorpus")==pid]
@@ -170,7 +252,7 @@ def verify_p7_preservation_baseline():
     for pid, expected in packages.items():
         package=(ROOT/"research/community_knowledge/packages"/pid) if pid.startswith("tracksmith-corpus") else K/pid
         count,value=preservation_tree(package)
-        if (count,value)!=(expected["files"],expected["tree"]): raise ValueError("P7 preservation baseline package-tree drift: "+pid)
+        if (count,value)!=expected_preservation_tree(expected): raise ValueError("P7 preservation baseline package-tree drift: "+pid)
         if digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"]: raise ValueError("P7 preservation baseline runtime/evaluation drift: "+pid)
         compact=lambda value: digest(json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode())
         if compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"]: raise ValueError("P7 preservation baseline source/queue/review-event drift: "+pid)
@@ -185,7 +267,7 @@ def verify_p8_preservation_baseline():
     for pid,expected in baseline["packages"].items():
         package=(ROOT/"research/community_knowledge/packages"/pid) if pid.startswith("tracksmith-corpus") else K/pid; count,value=preservation_tree(package)
         line=next((x for x in lines if f'packageID: "{pid}"' in x),None); comparable=line[:-2]+"\n" if line and line.endswith(",\n") else line
-        if (count,value)!=(expected["files"],expected["tree"]) or digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"] or compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"] or comparable is None or digest(comparable.encode())!=expected["descriptorLine"]: raise ValueError("P8 preservation baseline drift: "+pid)
+        if (count,value)!=expected_preservation_tree(expected) or digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"] or compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"] or comparable is None or digest(comparable.encode())!=expected["descriptorLine"]: raise ValueError("P8 preservation baseline drift: "+pid)
 def verify_p9_preservation_baseline(baseline_path: pathlib.Path | None = None):
     """Verify P1-P8 bytes, optionally using a disposable baseline fixture."""
     path = pathlib.Path(baseline_path) if baseline_path is not None else P9_BASELINE
@@ -198,7 +280,7 @@ def verify_p9_preservation_baseline(baseline_path: pathlib.Path | None = None):
         package=(ROOT/"research/community_knowledge/packages"/pid) if pid.startswith("tracksmith-corpus") else K/pid
         count,value=preservation_tree(package); manifest=package/("package_manifest.json" if (package/"package_manifest.json").exists() else "manifest.json")
         line=next((x for x in descriptor_lines if f'packageID: "{pid}"' in x),None); comparable=line.rstrip(",\n") if line else None
-        if (count,value)!=(expected["files"],expected["tree"]) or digest(manifest.read_bytes())!=expected["manifest"] or digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"] or compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"] or comparable is None or digest(comparable.encode())!=expected["descriptorLine"]: raise ValueError("P9 preservation baseline drift: "+pid)
+        if (count,value)!=expected_preservation_tree(expected) or digest(manifest.read_bytes())!=expected["manifest"] or digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"] or compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"] or comparable is None or digest(comparable.encode())!=expected["descriptorLine"]: raise ValueError("P9 preservation baseline drift: "+pid)
     # P10's source-only GeneralTutor delta is protected by the stronger P10
     # canonical payload baseline below.  Retain the historical P9 byte check
     # until that successor baseline exists, then avoid treating an additive P10
@@ -217,7 +299,7 @@ def verify_p10_preservation_baseline(enforce_p10_metadata=False):
         package=(ROOT/"research/community_knowledge/packages"/pid) if pid.startswith("tracksmith-corpus") else K/pid
         count,value=preservation_tree(package); manifest=package/("package_manifest.json" if (package/"package_manifest.json").exists() else "manifest.json")
         line=next((x for x in descriptor_lines if f'packageID: "{pid}"' in x),None); comparable=line.rstrip(",\n") if line else None
-        if (count,value)!=(expected["files"],expected["tree"]) or digest(manifest.read_bytes())!=expected["manifest"] or digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"] or compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"] or comparable is None or digest(comparable.encode())!=expected["descriptorLine"]: raise ValueError("P10 preservation baseline drift: "+pid)
+        if (count,value)!=expected_preservation_tree(expected) or digest(manifest.read_bytes())!=expected["manifest"] or digest((RES/(pid+".json")).read_bytes())!=expected["runtime"] or digest((EVAL/(pid+"-evaluation.json")).read_bytes())!=expected["evaluation"] or compact([x for x in source_rows if x.get("candidateCorpus")==pid])!=expected["sourceProjection"] or compact([x for x in queue_rows if x.get("candidateCorpus")==pid])!=expected["queueProjection"] or comparable is None or digest(comparable.encode())!=expected["descriptorLine"]: raise ValueError("P10 preservation baseline drift: "+pid)
     if generated_non_p10_projection()!=baseline["nonP10GeneratedAdviceProjection"]: raise ValueError("P10 preservation baseline generated non-P10 advice drift")
     if enforce_p10_metadata:
         registry,report,repairs=p10_metadata_artifacts()
@@ -1073,10 +1155,14 @@ def descriptor(rows):
         blocks.append(f'CommunityCandidateCorpusPackageDescriptor(packageID: "{pid}", version: "{version}", packageSequence: {sequence}, domains: {json.dumps(runtime["metadata"]["domains"])}, resourceName: "{name}", resourceSHA256: "{digest(data)}", packageManifestSHA256: "{runtime["packageManifestSHA256"]}", canonicalCount: {len(runtime["canonicalCards"])}, utteranceCount: {raw_utterances}, contradictionCount: {raw_contradictions}, mythCount: {raw_myths}, scenarioCount: {len(evals["scenarios"])}, retrievalCaseCount: {len(evals["retrievalCases"])}, evaluationCaseCount: {len(kinds)}, evaluationKindCounts: {swift_kind_counts}, canonicalOriginalStatus: "candidate_not_yet_human_reviewed", utteranceOriginalStatus: {"\"candidate_not_yet_human_reviewed\"" if (p3 or p4 or stable) else ("\"synthetic_retrieval_language\"" if p2 else "nil")}, contradictionOriginalStatus: "candidate_not_yet_human_reviewed", mythOriginalStatus: {"\"candidate_not_yet_human_reviewed\"" if (p2 or p3 or p4 or stable) else "nil"}, claimOriginalStatus: "{cfg["original"]["claim"]}", strategyOriginalStatus: "{cfg["original"]["strategy"]}", procedureOriginalStatus: "{cfg["original"]["procedure"]}"{legacy}{", runtimeCanonicalOnly: true" if canonical_only else ""}{", runtimeStatusFree: true" if status_free else ""})')
     return "// Generated by research/scripts/community_corpus_import.py.\nimport Foundation\n\npublic enum CommunityCandidateCorpusGenerated {\n    public static let descriptors: [CommunityCandidateCorpusPackageDescriptor] = [\n        "+",\n        ".join(blocks)+"\n    ]\n}\n"
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--check",action="store_true"); ap.add_argument("--package",choices=PACKAGES); ap.add_argument("--metadata-repair-self-check",action="store_true"); a=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument("--check",action="store_true"); ap.add_argument("--package",choices=PACKAGES); ap.add_argument("--metadata-repair-self-check",action="store_true"); ap.add_argument("--preservation-self-check",action="store_true"); a=ap.parse_args()
     if a.metadata_repair_self_check:
         metadata_repair_self_check()
         print("COMMUNITY_CORPUS_METADATA_REPAIR_SELF_CHECK_OK")
+        return 0
+    if a.preservation_self_check:
+        preservation_self_check()
+        print("COMMUNITY_CORPUS_PRESERVATION_SELF_CHECK_OK")
         return 0
     verify_review_event_merge()
     global P10_PROVENANCE_REPAIR_COUNT

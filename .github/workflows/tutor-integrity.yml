@@ -15,6 +15,8 @@ jobs:
       - name: Python syntax and Package 016-018 integrity
         run: |
           python -m py_compile research/scripts/community_corpus_import.py research/scripts/build_candidate_retrieval_index.py research/scripts/package18_audit.py
+          python research/scripts/community_corpus_import.py --preservation-self-check
+          python research/scripts/package16-integration.py --preservation-self-check
           python research/scripts/community_corpus_import.py --check
           python research/scripts/build_candidate_retrieval_index.py --check
           # The P17 import archive is intentionally not committed: it is an
