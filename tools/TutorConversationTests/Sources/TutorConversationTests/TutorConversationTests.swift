@@ -11,6 +11,19 @@ private struct TestFailure: Error, CustomStringConvertible {
     let description: String
 }
 
+private actor PackageSeventeenCloudConcurrencyProbe {
+    private var active = 0
+    private var peak = 0
+
+    func begin() {
+        active += 1
+        peak = max(peak, active)
+    }
+
+    func end() { active -= 1 }
+    func maximum() -> Int { peak }
+}
+
 @main
 @MainActor
 struct TutorConversationTests {
@@ -50,6 +63,20 @@ struct TutorConversationTests {
             await suite.runPackageSixteenPerformance()
         } else if CommandLine.arguments.contains("package16-fallback") {
             await suite.runPackageSixteenFallback()
+        } else if CommandLine.arguments.contains("package17-diagnostics") {
+            await suite.runPackageSeventeenDiagnostic()
+        } else if CommandLine.arguments.contains("package17-performance") {
+            await suite.runPackageSeventeenPerformance()
+        } else if CommandLine.arguments.contains("package17-live-evaluation") {
+            await suite.runPackageSeventeenLiveEvaluation()
+        } else if CommandLine.arguments.contains("package17-live-case-144") {
+            await suite.runPackageSeventeenLiveCase144()
+        } else if CommandLine.arguments.contains("package17-cloud-evaluation") {
+            await suite.runPackageSeventeenCloudEvaluation()
+        } else if CommandLine.arguments.contains("package17-cloud-health") {
+            await suite.runPackageSeventeenCloudHealth()
+        } else if CommandLine.arguments.contains("package17-public-audio-evaluation") {
+            await suite.runPackageSeventeenPublicAudioEvaluation()
         } else if CommandLine.arguments.contains("level-hierarchy-diagnostics") {
             await suite.runLevelHierarchyDiagnostic()
         } else if CommandLine.arguments.contains("standards-provenance-diagnostics") {
@@ -67,6 +94,54 @@ struct TutorConversationTests {
 private final class Suite {
     private(set) var total = 0
     private(set) var passed = 0
+
+    private nonisolated static let packageSeventeenCloudMaximumTopicConcurrency = 3
+    private nonisolated static let packageSeventeenCloudMaximumAttempts = 2
+    private nonisolated static let packageSeventeenLevelOrder: [TutorExperienceLevel] = [.noob, .amateur, .pro]
+    private nonisolated static let packageSeventeenTextModel = "gpt-5.6-sol"
+    private nonisolated static let packageSeventeenAudioModel = "gpt-audio-1.5"
+    private nonisolated static let packageSeventeenPublicAudioFixtureSHA256 = "f6f168af94a612185ea4b9338e96776f936dcff2188ba5330cf3702067f11d7b"
+    private nonisolated static let packageSeventeenPublicAudioFixturePathSuffix = "/Library/Caches/TrackSmith/P16/fixtures/generated/p16-controlled-source.wav"
+
+    private struct PackageSeventeenCloudPrompt: Sendable {
+        var order: Int
+        var topic: String
+        var query: String
+    }
+
+    private struct PackageSeventeenCloudRequestOutcome: Sendable {
+        var text: String?
+        var metadata: TutorProviderMetadata?
+        var attempts: Int
+        var terminalStatus: String
+        var safeFailure: String?
+    }
+
+    private struct PackageSeventeenCloudResponse: Sendable {
+        var prompt: PackageSeventeenCloudPrompt
+        var level: TutorExperienceLevel
+        var outcome: PackageSeventeenCloudRequestOutcome
+    }
+
+    private struct PackageSeventeenCloudTopicResult: Sendable {
+        var prompt: PackageSeventeenCloudPrompt
+        var responses: [PackageSeventeenCloudResponse]
+    }
+
+    private struct PackageSeventeenCloudJudgment: Sendable {
+        var prompt: PackageSeventeenCloudPrompt
+        var outcome: PackageSeventeenCloudRequestOutcome?
+        var terminalStatus: String
+        var safeFailure: String?
+        var semanticReferenceProvided: Bool
+    }
+
+    private struct PackageSeventeenSemanticReference: Sendable {
+        var problemSummary: String
+        var recommendedFirstExperiment: String
+        var evidenceRequirements: String
+        var riskAndUndo: String
+    }
 
     func run() async {
         await test("tool registry is mutation-incapable", testToolMutationFirewall)
@@ -102,6 +177,9 @@ private final class Suite {
         await test("Package 16 golden conversations stay bounded and model-independent", testPackageSixteenGolden)
         await test("Package 16 candidate retrieval performance stays bounded", testPackageSixteenPerformance)
         await test("Package 16 candidate and provider failures stay fail-soft", testPackageSixteenFallback)
+        await test("Package 17 experience levels are explicit, persistent-safe, and receipt-bound", testPackageSeventeenExperienceContract)
+        await test("Package 17 provider context remains compact and evaluation-isolated", testPackageSeventeenProviderIsolation)
+        await test("Package 17 offline levels preserve one safe experiment and stream promptly", testPackageSeventeenOfflineLevelsAndPerformance)
     }
 
     func runPackageSixDiagnostic() async {
@@ -170,6 +248,37 @@ private final class Suite {
 
     func runPackageSixteenFallback() async {
         await test("Package 16 candidate and provider failures stay fail-soft", testPackageSixteenFallback)
+    }
+
+    func runPackageSeventeenDiagnostic() async {
+        await test("Package 17 experience levels are explicit, persistent-safe, and receipt-bound", testPackageSeventeenExperienceContract)
+        await test("Package 17 provider context remains compact and evaluation-isolated", testPackageSeventeenProviderIsolation)
+        await test("Package 17 opt-in audio receipt keeps exact binding and store false", testAudioListening)
+        await test("Package 17 offline levels preserve one safe experiment and stream promptly", testPackageSeventeenOfflineLevelsAndPerformance)
+    }
+
+    func runPackageSeventeenPerformance() async {
+        await test("Package 17 offline levels preserve one safe experiment and stream promptly", testPackageSeventeenOfflineLevelsAndPerformance)
+    }
+
+    func runPackageSeventeenLiveEvaluation() async {
+        await test("Package 17 real Offline Tutor evaluation records all level triplets", testPackageSeventeenLiveOfflineEvaluation)
+    }
+
+    func runPackageSeventeenLiveCase144() async {
+        await test("Package 17 live case 144 exposes actual authority boundary", testPackageSeventeenLiveCase144)
+    }
+
+    func runPackageSeventeenCloudEvaluation() async {
+        await test("Package 17 opt-in cloud evaluation has explicit consent and no fallback", testPackageSeventeenCloudEvaluation)
+    }
+
+    func runPackageSeventeenCloudHealth() async {
+        await test("Package 17 one-prompt cloud health has sanitized SSE diagnostics", testPackageSeventeenCloudHealth)
+    }
+
+    func runPackageSeventeenPublicAudioEvaluation() async {
+        await test("Package 17 opt-in public audio evaluation has explicit consent and exact binding", testPackageSeventeenPublicAudioEvaluation)
     }
 
     private func test(_ name: String, _ body: () async throws -> Void) async {
@@ -298,6 +407,9 @@ private final class Suite {
         ]), "experiment contract is incomplete")
         let defaults = TutorProviderConfiguration()
         try expect(defaults.modelIdentifier == "gpt-5.6-sol", "Tutor no longer defaults to the strongest configured reasoning model")
+        try expect(defaults.serviceTier == .priority, "Tutor no longer defaults gpt-5.6-sol requests to priority service tier")
+        let legacyConfiguration = try JSONDecoder().decode(TutorProviderConfiguration.self, from: Data(#"{"modelIdentifier":"gpt-5.6-sol","reasoningEffort":"high","cloudTextConsent":false,"timeoutSeconds":45,"maximumOutputTokens":25000}"#.utf8))
+        try expect(legacyConfiguration.serviceTier == .priority, "legacy Tutor provider configuration did not migrate to priority service tier")
         try expect(defaults.maximumOutputTokens == 25_000, "reasoning/output reserve regressed")
         try expect(TutorAudioListeningConfiguration().modelIdentifier == "gpt-audio-1.5",
                    "audio listener defaulted to a deprecated model")
@@ -308,11 +420,12 @@ private final class Suite {
             data: #"{"type":"response.output_text.delta","delta":"Clearer "}"#
         )
         try expect(delta == [.textDelta("Clearer ")], "text delta was not decoded")
-        let completedJSON = #"{"type":"response.completed","response":{"id":"resp_test","model":"gpt-test","usage":{"input_tokens":12,"output_tokens":7},"output":[{"type":"reasoning","id":"rs_test","summary":[],"encrypted_content":"opaque-test-ciphertext"},{"type":"message","content":[{"type":"output_text","text":"Try one move."}]},{"type":"function_call","call_id":"call_1","name":"search_production_knowledge","arguments":"{\"query\":\"muddy vocal\"}"}]}}"#
+        let completedJSON = #"{"type":"response.completed","response":{"id":"resp_test","model":"gpt-test","service_tier":"priority","usage":{"input_tokens":12,"output_tokens":7},"output":[{"type":"reasoning","id":"rs_test","summary":[],"encrypted_content":"opaque-test-ciphertext"},{"type":"message","content":[{"type":"output_text","text":"Try one move."}]},{"type":"function_call","call_id":"call_1","name":"search_production_knowledge","arguments":"{\"query\":\"muddy vocal\"}"}]}}"#
         let completed = try OpenAITutorSSEEventDecoder.decode(data: completedJSON)
         guard case let .completed(metadata, output) = completed.first else {
             throw TestFailure(description: "completion event missing")
         }
+        try expect(metadata.serviceTier == .priority, "response service tier was not retained in provider metadata")
         try expect(metadata.providerResponseID == "resp_test", "response ID missing")
         try expect(metadata.inputTokens == 12 && metadata.outputTokens == 7, "usage missing")
         try expect(output.contains(.text("Try one move.")), "completed text missing")
@@ -327,11 +440,20 @@ private final class Suite {
             }
             return false
         }), "encrypted stateless reasoning item was discarded")
+        do {
+            _ = try OpenAITutorSSEEventDecoder.decode(data: "not-json")
+            throw TestFailure(description: "invalid SSE unexpectedly decoded")
+        } catch let error as TutorConversationError {
+            try expect(error == .malformedProviderResponse("SSE event diagnostic bytes=8 json=invalid type=unavailable"),
+                       "SSE diagnostic exposed content or lost bounded metadata")
+        }
     }
 
     private func testStreamingProvider() async throws {
         let lines = [
             #"data: {"type":"response.output_text.delta","delta":"Hello "}"#,
+            "",
+            "data:    ",
             "",
             #"data: {"type":"response.completed","response":{"id":"resp_stream","model":"gpt-stream-test","usage":{"input_tokens":4,"output_tokens":2},"output":[{"type":"message","content":[{"type":"output_text","text":"Hello there"}]}]}}"#,
             "",
@@ -379,6 +501,28 @@ private final class Suite {
         try expect(recorded.url == OpenAITutorProvider.endpoint, "wrong provider endpoint")
         try expect(String(decoding: recorded.body, as: UTF8.self).contains("opaque-replay-ciphertext"),
                    "encrypted reasoning continuity was not replayed with the tool output")
+
+        let boundaryTransport = RecordingStreamingTransport(lines: [
+            "event: response.created",
+            #"data: {"type":"response.created","response":{"id":"boundary"}}"#,
+            "event: response.output_text.delta",
+            #"data: {"type":"response.output_text.delta","delta":"Framed "}"#,
+            "event: response.completed",
+            #"data: {"type":"response.completed","response":{"id":"boundary","model":"gpt-stream-test","output":[{"type":"message","content":[{"type":"output_text","text":"Framed completion"}]}]}}"#,
+            "event: done",
+            "data: [DONE]",
+        ])
+        let boundaryProvider = OpenAITutorProvider(
+            configuration: .init(modelIdentifier: "gpt-test", cloudTextConsent: true),
+            credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "test-key-not-secret"]),
+            transport: boundaryTransport
+        )
+        var boundaryEvents: [TutorProviderEvent] = []
+        for try await event in boundaryProvider.stream(TutorProviderRequest(messages: [.init(role: .user, text: "frame test")], context: .init(sourceType: .vocal), tools: [])) {
+            boundaryEvents.append(event)
+        }
+        try expect(boundaryEvents.contains(.textDelta("Framed ")) && boundaryEvents.contains(where: { if case .completed = $0 { true } else { false } }),
+                   "event-field boundaries were not decoded when blank lines were absent")
 
         let longMessages = (0..<80).map { index in
             TutorConversationMessage(role: index.isMultiple(of: 2) ? .user : .assistant,
@@ -2090,6 +2234,7 @@ private final class Suite {
 
         let listened = try await listener.listen(wavData: wavData, capture: capture, musicianQuestion: "Muddy?")
         try expect(listened.status == .listened, "successful audio observation not labeled Heard")
+        try expect(listened.modelIdentifier == "gpt-audio-test", "valid audio response model was not retained")
         try expect(listened.captureSnapshotID == capture.captureSnapshotID, "audio observation lost capture identity")
         try expect(transport.requestCount == 1, "unexpected audio request count")
         guard let request = transport.latestRequest,
@@ -2100,6 +2245,27 @@ private final class Suite {
         let bodyText = String(decoding: request.body, as: UTF8.self)
         try expect(bodyText.contains("input_audio"), "audio modality missing")
         try expect(!bodyText.contains("/Users/"), "local path leaked into audio request")
+
+        for invalidResponse in [
+            #"{"choices":[{"message":{"content":"bounded observation"}}]}"#,
+            #"{"model":"gpt-audio-other","choices":[{"message":{"content":"bounded observation"}}]}"#,
+        ] {
+            let invalidTransport = RecordingHTTPTransport(response: ProviderHTTPResponse(statusCode: 200, body: Data(invalidResponse.utf8)))
+            let invalidListener = OpenAITutorAudioListener(
+                configuration: TutorAudioListeningConfiguration(modelIdentifier: "gpt-audio-test", cloudAudioConsent: true, maximumAudioBytes: 1_024),
+                credentialStore: credential,
+                transport: invalidTransport
+            )
+            do {
+                _ = try await invalidListener.listen(wavData: wavData, capture: capture, musicianQuestion: "Muddy?")
+                throw TestFailure(description: "missing or mismatched audio response model produced a listened receipt")
+            } catch let error as TutorConversationError {
+                guard case .malformedProviderResponse = error else {
+                    throw TestFailure(description: "audio response model drift did not use the bounded malformed-response boundary")
+                }
+            }
+            try expect(invalidTransport.requestCount == 1, "audio model guard did not exercise the completed mock response")
+        }
     }
 
     private func testStatefulVerticalSlice() async throws {
@@ -2438,6 +2604,808 @@ private final class Suite {
                    "bounded primary failure reason was not retained")
         try expect(completedReceipt.tools.contains(where: { $0.name == "present_experiment" }),
                    "offline experiment tool receipt missing")
+    }
+
+    private func testPackageSeventeenExperienceContract() async throws {
+        try expect(TutorExperienceLevel.allCases.map(\.rawValue) == ["noob", "amateur", "pro"],
+                   "experience raw IDs changed")
+        try expect(TutorExperienceLevel.allCases.map(\.label) == ["Noob", "Amateur", "Pro"],
+                   "experience labels changed")
+        try expect(TutorExperienceLevel.default == .amateur, "Amateur is not the default")
+        let legacy = try JSONDecoder().decode(TutorExperienceSettings.self, from: Data("{}".utf8))
+        try expect(legacy.persistentLevel == .amateur, "missing preference did not migrate to Amateur")
+        try expect(TutorExperienceContext.explicitTemporaryOverride(for: "Please explain more simply") == .noob,
+                   "explicit simple directive was not recognized")
+        try expect(TutorExperienceContext.explicitTemporaryOverride(for: "Skip basics and go deeper") == .pro,
+                   "explicit pro directive was not recognized")
+        for nonDirective in ["This is a noob question", "basic question", "my audio is professional", "I use simple words"] {
+            try expect(TutorExperienceContext.explicitTemporaryOverride(for: nonDirective) == nil,
+                       "level was inferred from non-directive text")
+        }
+        for negatedOrQuotedDirective in [
+            "don't skip basics",
+            "do not give exact clicks",
+            "I did not ask for beginner mode",
+            "the phrase \"skip basics\" is not my request",
+        ] {
+            try expect(TutorExperienceContext.explicitTemporaryOverride(for: negatedOrQuotedDirective) == nil,
+                       "negated or quoted directive changed the temporary level")
+        }
+        try expect(TutorExperienceContext.explicitTemporaryOverride(for: "Don't overexplain; skip basics") == .pro,
+                   "a later positive directive was incorrectly negated by a preceding clause")
+        let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let settingsSource = try String(contentsOf: root.appendingPathComponent("apps/CompanionMacApp/SettingsView.swift"), encoding: .utf8)
+        let headerSource = try String(contentsOf: root.appendingPathComponent("apps/CompanionMacApp/TutorConversationView.swift"), encoding: .utf8)
+        let sessionSource = try String(contentsOf: root.appendingPathComponent("apps/CompanionMacApp/CompanionSessionModel.swift"), encoding: .utf8)
+        try expect(settingsSource.contains(".onChange(of: model.tutorExperienceSettings)"), "settings picker has no persistence hook")
+        try expect(headerSource.contains("set: { session.setTutorExperienceLevel($0) }"), "header picker does not save explicitly")
+        try expect(sessionSource.contains("func setTutorExperienceLevel") && sessionSource.contains("persistTutorSettings()"), "header selection does not persist immediately")
+        try expect(!headerSource.contains("state.messages =") && !sessionSource.contains("state.messages ="), "level control rewrites transcript state")
+        let receiptRoot = temporaryRoot("p17-receipt")
+        defer { try? FileManager.default.removeItem(at: receiptRoot) }
+        let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: receiptRoot), tools: try TutorToolExecutor(), fallbackProvider: try OfflineTutorProvider())
+        let context = TutorRuntimeContext(sourceType: .vocal, experience: .init(persistentLevel: .amateur, temporaryOverride: .pro))
+        let events = try await collectTurn(engine, "My vocal is muddy", context, FailingConversationProvider(error: .consentRequired))
+        guard let receipt = events.compactMap({ if case let .completed(_, receipt) = $0 { receipt } else { nil } }).last else {
+            throw TestFailure(description: "P17 completed receipt missing")
+        }
+        try expect(receipt.experience == context.experience, "receipt did not retain persistent/temporary/effective level")
+        try expect(receipt.evidence.allSatisfy { $0.kind != .inference || $0.detail.isEmpty == false },
+                   "experience metadata was misclassified as evidence")
+    }
+
+    private func testPackageSeventeenProviderIsolation() async throws {
+        let lines = [
+            "event: response.completed",
+            #"data: {"type":"response.completed","response":{"id":"p17","model":"gpt-test","output":[{"type":"message","content":[{"type":"output_text","text":"ok"}]}]}}"#,
+            "event: done",
+            "data: [DONE]",
+        ]
+        let transport = RecordingStreamingTransport(lines: lines)
+        let provider = OpenAITutorProvider(
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, cloudTextConsent: true),
+            credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "test-key-not-secret"]),
+            transport: transport
+        )
+        let context = TutorRuntimeContext(sourceType: .vocal, experience: .init(persistentLevel: .noob, temporaryOverride: .pro))
+        for try await _ in provider.stream(.init(messages: [.init(role: .user, text: "go deeper")], context: context, tools: [])) {}
+        guard let body = transport.latestRequest()?.body else { throw TestFailure(description: "P17 request was not recorded") }
+        let text = String(decoding: body, as: UTF8.self)
+        guard let payload = try JSONSerialization.jsonObject(with: body) as? [String: Any],
+              let input = payload["input"] as? [[String: Any]],
+              let contextText = input.first(where: { ($0["content"] as? String)?.contains("CURRENT_CONTEXT_DATA") == true })?["content"] as? String else {
+            throw TestFailure(description: "P17 context envelope was not encoded")
+        }
+        try expect(contextText.contains("\"persistentLevel\":\"noob\"") && contextText.contains("\"effectiveLevel\":\"pro\""),
+                   "compact level context was not sent")
+        try expect(payload["service_tier"] as? String == "priority", "gpt-5.6-sol request omitted its explicit priority service tier")
+        for forbidden in ["pkg017", "golden", "expected_answer", "corpus.sqlite", "canonical_qa"] {
+            try expect(!text.lowercased().contains(forbidden), "evaluation data leaked into provider request: \(forbidden)")
+        }
+        try expect(OpenAITutorProvider.systemInstructions.contains("effective_level changes only terminology"),
+                   "provider lacks level-invariant instruction")
+        try expect(OpenAITutorProvider.systemInstructions.contains("Ask at most one concise decision-changing question")
+                       && OpenAITutorProvider.systemInstructions.contains("Ask questions alone only when no safe experiment exists")
+                       && OpenAITutorProvider.systemInstructions.contains("effective_level must not change the diagnosis, clarification, experiment")
+                       && OpenAITutorProvider.systemInstructions.contains("every level includes that same one bounded, reversible discriminating experiment"),
+                   "provider lacks the clarification-plus-safe-experiment contract")
+        let pinnedConfiguration = TutorProviderConfiguration(modelIdentifier: Self.packageSeventeenTextModel, reasoningEffort: .high, cloudTextConsent: true)
+        try expect(Self.packageSeventeenCloudConfigurationIsPinned(pinnedConfiguration)
+                       && !Self.packageSeventeenCloudConfigurationIsPinned(.init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .medium, cloudTextConsent: true))
+                       && !Self.packageSeventeenCloudConfigurationIsPinned(.init(modelIdentifier: "gpt-other", reasoningEffort: .high, cloudTextConsent: true))
+                       && !Self.packageSeventeenCloudConfigurationIsPinned(.init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .fast, cloudTextConsent: true)),
+                   "P17 cloud model, effort, or service-tier pin did not fail closed")
+        try expect(Self.packageSeventeenCloudMetadataIsPinned(.init(providerIdentifier: "mock", modelIdentifier: "gpt-5.6-sol", serviceTier: .priority))
+                       && !Self.packageSeventeenCloudMetadataIsPinned(.init(providerIdentifier: "mock", modelIdentifier: "gpt-other", serviceTier: .priority))
+                       && !Self.packageSeventeenCloudMetadataIsPinned(.init(providerIdentifier: "mock", modelIdentifier: "gpt-5.6-sol", serviceTier: .fast)),
+                   "P17 cloud returned-metadata pin did not fail closed")
+        let expectedFixture = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Caches/TrackSmith/P16/fixtures/generated/p16-controlled-source.wav")
+        try expect(Self.packageSeventeenPublicAudioFixtureIsPinned(path: expectedFixture, sha256: Self.packageSeventeenPublicAudioFixtureSHA256)
+                       && !Self.packageSeventeenPublicAudioFixtureIsPinned(path: expectedFixture, sha256: String(repeating: "0", count: 64))
+                       && !Self.packageSeventeenPublicAudioFixtureIsPinned(path: URL(fileURLWithPath: "/tmp/Library/Caches/TrackSmith/P16/fixtures/generated/p16-controlled-source.wav"), sha256: Self.packageSeventeenPublicAudioFixtureSHA256),
+                   "P17 exact public-audio fixture guard did not fail closed")
+        let healthFailure = Self.packageSeventeenCloudHealthFailureArtifact(model: "gpt-5.6-sol", effort: .high, safeError: "safe", durationMilliseconds: 1)
+        try expect(healthFailure["requestedModelIdentifier"] as? String == "gpt-5.6-sol"
+                       && healthFailure["requestedReasoningEffort"] as? String == "high"
+                       && healthFailure["requestedServiceTier"] as? String == "priority"
+                       && healthFailure["store"] as? Bool == false
+                       && healthFailure["toolsSent"] as? Int == 0,
+                   "P17 cloud health failure artifact omitted request configuration metadata")
+        let multibyteJudge = String(repeating: "🙂", count: 193)
+        let boundedJudge = Self.boundedEvaluationText(multibyteJudge, maximumUTF8Bytes: 768)
+        try expect(boundedJudge.utf8.count == 768 && boundedJudge.count == 192,
+                   "P17 judge text cap did not use UTF-8 bytes")
+        let boundedReason = Self.boundedJudgeReason("PASS:" + String(repeating: "é", count: 193))
+        try expect(boundedReason.utf8.count == 384 && boundedReason.count == 192,
+                   "P17 judge reason cap did not use UTF-8 bytes")
+
+        let probe = PackageSeventeenCloudConcurrencyProbe()
+        _ = await Self.boundedPackageSeventeenTopicMap(Array(0..<7)) { value in
+            await probe.begin()
+            try? await Task.sleep(for: .milliseconds(15))
+            await probe.end()
+            return value
+        }
+        let peak = await probe.maximum()
+        try expect(Self.packageSeventeenCloudMaximumTopicConcurrency == 3 && peak <= 3,
+                   "P17 cloud harness exceeded its three-topic concurrency cap")
+        let prompts = [
+            PackageSeventeenCloudPrompt(order: 0, topic: "first", query: "first query"),
+            PackageSeventeenCloudPrompt(order: 1, topic: "second", query: "second query"),
+        ]
+        let completed = PackageSeventeenCloudRequestOutcome(text: "safe response", metadata: .init(providerIdentifier: "mock", modelIdentifier: "mock"), attempts: 1, terminalStatus: "completed", safeFailure: nil)
+        let reverseCompletion = [
+            PackageSeventeenCloudTopicResult(prompt: prompts[1], responses: Self.packageSeventeenLevelOrder.reversed().map { .init(prompt: prompts[1], level: $0, outcome: completed) }),
+            PackageSeventeenCloudTopicResult(prompt: prompts[0], responses: Self.packageSeventeenLevelOrder.reversed().map { .init(prompt: prompts[0], level: $0, outcome: completed) }),
+        ]
+        let ordered = Self.orderedPackageSeventeenCloudResponses(reverseCompletion, prompts: prompts)
+        try expect(ordered.map { "\($0.prompt.topic):\($0.level.rawValue)" } == ["first:noob", "first:amateur", "first:pro", "second:noob", "second:amateur", "second:pro"],
+                   "P17 cloud artifacts are not deterministically topic/level ordered")
+        let failed = PackageSeventeenCloudRequestOutcome(text: nil, metadata: nil, attempts: 2, terminalStatus: "failed", safeFailure: "The provider returned HTTP 429.")
+        let failureArtifact = Self.packageSeventeenCloudResponseArtifacts([.init(prompt: prompts[0], level: .noob, outcome: failed)]).first
+        try expect(failureArtifact?["terminalStatus"] as? String == "failed" && failureArtifact?["attempts"] as? Int == 2 && failureArtifact?["safeFailure"] as? String == "The provider returned HTTP 429.",
+                   "P17 cloud failure artifact lost terminal status or attempts")
+        try expect(Self.isTransientCloudEvaluationFailure(TutorConversationError.providerRejected("Provider HTTP 429"))
+                       && !Self.isTransientCloudEvaluationFailure(TutorConversationError.malformedProviderResponse("invalid")),
+                   "P17 cloud retry policy is not bounded to explicit transient failures")
+        let reference = PackageSeventeenSemanticReference(problemSummary: "evaluation-only problem", recommendedFirstExperiment: "evaluation-only experiment", evidenceRequirements: "evaluation-only evidence", riskAndUndo: "evaluation-only rollback")
+        let judgeRequest = Self.packageSeventeenJudgeRequest(prompt: prompts[0], triplet: Self.packageSeventeenLevelOrder.map { .init(prompt: prompts[0], level: $0, outcome: completed) }, reference: reference)
+        try expect(!prompts[0].query.contains("evaluation-only problem") && judgeRequest.contains("evaluation-only problem") && judgeRequest.contains("supplied after generation"),
+                   "P17 generation/judge semantic-reference boundary drifted")
+    }
+
+    private func testPackageSeventeenOfflineLevelsAndPerformance() async throws {
+        var rendered: [TutorExperienceLevel: String] = [:]
+        for level in TutorExperienceLevel.allCases {
+            let root = temporaryRoot("p17-offline-\(level.rawValue)")
+            defer { try? FileManager.default.removeItem(at: root) }
+            let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: root), tools: try TutorToolExecutor(), fallbackProvider: try OfflineTutorProvider())
+            let started = Date()
+            let events = try await collectTurn(
+                engine, "My vocal is muddy", .init(sourceType: .vocal, experience: .init(persistentLevel: level)),
+                FailingConversationProvider(error: .consentRequired)
+            )
+            let elapsed = Date().timeIntervalSince(started)
+            try expect(elapsed < 0.5, "offline first-turn path exceeded 500 ms for \(level.rawValue): \(elapsed)")
+            guard let message = (await engine.snapshot()).messages.last else { throw TestFailure(description: "P17 offline message missing") }
+            rendered[level] = message.text
+            for invariant in ["One controlled test:", "Listen for:", "Watch for:", "Undo:"] {
+                try expect(message.text.contains(invariant), "\(level.rawValue) lost invariant \(invariant)")
+            }
+            try expect(events.contains(where: { if case .completed = $0 { true } else { false } }), "P17 offline turn did not complete")
+        }
+        try expect(rendered[.noob] != rendered[.amateur] && rendered[.pro] != rendered[.amateur],
+                   "levels did not change offline scaffolding")
+        try expect(rendered[.noob]?.contains("Plain-language path") == true, "Noob scaffolding is missing")
+        try expect(rendered[.pro]?.contains("Fast pass") == true, "Pro scaffolding is missing")
+    }
+
+    private func testPackageSeventeenLiveCase144() async throws {
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let canonicalURL = repository.appendingPathComponent("research/tutor_quality/packages/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation/corpus/canonical_qa.jsonl")
+        guard let raw = try String(contentsOf: canonicalURL, encoding: .utf8).split(separator: "\n").first(where: { $0.contains("pkg017.qa.000144") }),
+              let row = try JSONSerialization.jsonObject(with: Data(raw.utf8)) as? [String: Any],
+              let query = row["canonical_question"] as? String else {
+            throw TestFailure(description: "P17 case 144 fixture missing")
+        }
+        let offline = try OfflineTutorProvider()
+        for level in [TutorExperienceLevel.noob, .amateur, .pro] {
+            let root = temporaryRoot("p17-case-144-\(level.rawValue)")
+            defer { try? FileManager.default.removeItem(at: root) }
+            let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: root), tools: try TutorToolExecutor(), fallbackProvider: offline)
+            let events = try await collectTurn(engine, query, .init(sourceType: .vocal, experience: .init(persistentLevel: level)), FailingConversationProvider(error: .consentRequired))
+            guard let receipt = events.compactMap({ if case let .completed(_, value) = $0 { value } else { nil } }).last,
+                  let message = (await engine.snapshot()).messages.last else {
+                throw TestFailure(description: "P17 case 144 receipt missing")
+            }
+            let text = message.text
+            let authority = text.lowercased().contains("no authority to change")
+            let stop = text.lowercased().contains("stop")
+            let rollback = text.lowercased().contains("undo") || text.lowercased().contains("restore")
+            print("P17_CASE144 level=\(level.rawValue) tools=\(receipt.tools.map(\.name).sorted()) evidence=\(receipt.evidence.map(\.kind.rawValue).sorted()) authority=\(authority) stop=\(stop) rollback=\(rollback)")
+            print("P17_CASE144_TEXT_BEGIN \(level.rawValue)\n\(text)\nP17_CASE144_TEXT_END \(level.rawValue)")
+            try expect(text.lowercased().contains("no authority to change"), "case 144 has no explicit authority boundary")
+            try expect(text.lowercased().contains("stop"), "case 144 has no stop boundary")
+            try expect(text.lowercased().contains("undo") || text.lowercased().contains("restore"), "case 144 has no rollback boundary")
+        }
+    }
+
+    private func testPackageSeventeenCloudEvaluation() async throws {
+        guard CommandLine.arguments.contains("--cloud-text-consent") else {
+            throw TestFailure(description: "package17-cloud-evaluation requires --cloud-text-consent; no request was sent")
+        }
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let prompts = try packageSeventeenAcceptancePrompts(repository: repository)
+        let model = UserDefaults.standard.string(forKey: "TrackSmithTutorModelIdentifier") ?? "gpt-5.6-sol"
+        let effort = TutorReasoningEffort(rawValue: UserDefaults.standard.string(forKey: "TrackSmithTutorReasoningEffort") ?? "high") ?? .high
+        let configuration = TutorProviderConfiguration(modelIdentifier: model, reasoningEffort: effort, cloudTextConsent: true)
+        try expect(Self.packageSeventeenCloudConfigurationIsPinned(configuration), "P17 cloud evaluation requires gpt-5.6-sol, high effort, and priority service tier")
+        let provider = OpenAITutorProvider(configuration: configuration)
+        let topicResults = await Self.boundedPackageSeventeenTopicMap(prompts) { prompt in
+            await Self.generatePackageSeventeenCloudTopic(provider: provider, prompt: prompt)
+        }
+        let orderedResponses = Self.orderedPackageSeventeenCloudResponses(topicResults, prompts: prompts)
+        let responses = Self.packageSeventeenCloudResponseArtifacts(orderedResponses)
+        let artifact: [String: Any] = [
+            "schemaVersion": "1.1", "evaluator": ["id": "TutorConversationTests.cloud", "version": "1.1"],
+            "consent": "explicit --cloud-text-consent", "fallback": false, "expectedTextProvidedToGeneration": false,
+            "requestedModelIdentifier": model, "requestedReasoningEffort": effort.rawValue, "requestedServiceTier": "priority",
+            "generationReferenceBoundary": "Generation received only the query, compact runtime context, and no tools; Package 017 semantic references were not read or sent until after each completed triplet.",
+            "concurrency": ["maximumTopicTasks": Self.packageSeventeenCloudMaximumTopicConcurrency, "tripletLevelsSequential": true, "levelOrder": Self.packageSeventeenLevelOrder.map(\.rawValue)],
+            "counts": ["prompts": 12, "levels": 3, "responses": responses.count, "judgments": 12],
+            "responses": responses,
+        ]
+        try writePackageSeventeenArtifact(artifact, named: "package17-cloud-evaluation.json", repository: repository)
+        try expect(orderedResponses.allSatisfy(Self.packageSeventeenCloudResponseIsPinned),
+                   "P17 cloud evaluation received missing or drifted model/service-tier metadata")
+        // Only after generation is complete do supporting judgments load the
+        // evaluation-only semantic reference for that topic. It is never sent
+        // to generation or runtime Tutor requests.
+        let judgments = await Self.cloudTripletJudgments(provider: provider, prompts: prompts, topicResults: topicResults, repository: repository)
+        try writePackageSeventeenArtifact(judgments, named: "package17-cloud-triplet-judgments.json", repository: repository)
+        print("P17_CLOUD_EVALUATION_OK prompts=12 responses=36 judgments=12 fallback=false store=false")
+    }
+
+    private func testPackageSeventeenCloudHealth() async throws {
+        guard CommandLine.arguments.contains("--cloud-text-consent") else {
+            throw TestFailure(description: "package17-cloud-health requires --cloud-text-consent; no request was sent")
+        }
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let model = UserDefaults.standard.string(forKey: "TrackSmithTutorModelIdentifier") ?? "gpt-5.6-sol"
+        let effort = TutorReasoningEffort(rawValue: UserDefaults.standard.string(forKey: "TrackSmithTutorReasoningEffort") ?? "high") ?? .high
+        let configuration = TutorProviderConfiguration(modelIdentifier: model, reasoningEffort: effort, cloudTextConsent: true)
+        let started = Date()
+        do {
+            try expect(Self.packageSeventeenCloudConfigurationIsPinned(configuration), "P17 cloud health requires gpt-5.6-sol, high effort, and priority service tier")
+            let provider = OpenAITutorProvider(configuration: configuration)
+            let generated = try await Self.cloudText(
+                provider: provider,
+                query: "Give one evidence-honest, reversible next step for a vocal that feels muddy in a full mix.",
+                context: .init(sourceType: .vocal, experience: .init(persistentLevel: .amateur))
+            )
+            try expect(Self.packageSeventeenCloudMetadataIsPinned(generated.metadata), "P17 cloud health received missing or drifted model/service-tier metadata")
+            try writePackageSeventeenArtifact([
+                "schemaVersion": "1.0", "status": "completed", "providerIdentifier": generated.metadata.providerIdentifier,
+                "modelIdentifier": generated.metadata.modelIdentifier, "providerResponseID": generated.metadata.providerResponseID ?? NSNull(),
+                "serviceTier": generated.metadata.serviceTier?.rawValue ?? NSNull(),
+                "requestedModelIdentifier": model, "requestedReasoningEffort": effort.rawValue, "requestedServiceTier": "priority",
+                "assistantTextSHA256": Self.sha256String(generated.text), "toolsSent": 0, "store": false,
+                "durationMilliseconds": Int(Date().timeIntervalSince(started) * 1_000),
+            ], named: "package17-cloud-health.json", repository: repository)
+            print("P17_CLOUD_HEALTH_OK status=completed store=false tools=0")
+        } catch {
+            let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "Cloud health request failed safely."
+            try writePackageSeventeenArtifact(Self.packageSeventeenCloudHealthFailureArtifact(
+                model: model,
+                effort: effort,
+                safeError: safe,
+                durationMilliseconds: Int(Date().timeIntervalSince(started) * 1_000)
+            ), named: "package17-cloud-health.json", repository: repository)
+            throw error
+        }
+    }
+
+    private func testPackageSeventeenPublicAudioEvaluation() async throws {
+        guard CommandLine.arguments.contains("--cloud-audio-consent") else {
+            throw TestFailure(description: "package17-public-audio-evaluation requires --cloud-audio-consent; no request was sent")
+        }
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let fixture = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Caches/TrackSmith/P16/fixtures/generated/p16-controlled-source.wav")
+        let wav = try Data(contentsOf: fixture)
+        try expect(!wav.isEmpty && wav.count <= 12 * 1_024 * 1_024, "public P16 fixture is absent or exceeds audio cap")
+        let digest = Self.sha256String(wav)
+        try expect(Self.packageSeventeenPublicAudioFixtureIsPinned(path: fixture, sha256: digest), "P17 public-audio evaluation requires the exact approved P16 fixture SHA-256")
+        let capture = TutorCaptureSnapshot(sourceType: .fullMix, instanceID: UUID(), runtimeEpoch: UUID(), captureSnapshotID: UUID(), sha256: digest, capturedAt: Date(), durationSeconds: 2, scopeDescription: "P16 controlled public fixture", isLive: true, metrics: [], localAnalysisLimitations: ["Evaluation fixture; no project or mix claim."])
+        let model = UserDefaults.standard.string(forKey: "TrackSmithTutorAudioModelIdentifier") ?? "gpt-audio-1.5"
+        try expect(model == Self.packageSeventeenAudioModel, "P17 public-audio evaluation requires gpt-audio-1.5")
+        let listener = OpenAITutorAudioListener(configuration: .init(modelIdentifier: model, cloudAudioConsent: true, maximumAudioBytes: 12 * 1_024 * 1_024))
+        let started = Date()
+        let evidence = try await listener.listen(wavData: wav, capture: capture, musicianQuestion: "Describe only audible characteristics and uncertainty in this bounded public fixture.")
+        try expect(evidence.modelIdentifier == Self.packageSeventeenAudioModel, "P17 public-audio evaluation received a drifted audio model")
+        let artifact: [String: Any] = [
+            "schemaVersion": "1.0", "consent": "explicit --cloud-audio-consent", "fixture": "P16 controlled public WAV",
+            "wavSHA256": digest, "wavBytes": wav.count, "providerIdentifier": evidence.providerIdentifier as Any,
+            "modelIdentifier": evidence.modelIdentifier as Any, "waveformBinding": "captureBoundExactWAV",
+            "heard": evidence.status == .listened, "status": evidence.status.rawValue, "exactHash": true,
+            "durationMilliseconds": Int(Date().timeIntervalSince(started) * 1_000),
+        ]
+        try writePackageSeventeenArtifact(artifact, named: "package17-public-audio-evaluation.json", repository: repository)
+        print("P17_PUBLIC_AUDIO_EVALUATION_OK heard=\(evidence.status == .listened) exactHash=true")
+    }
+
+    private func packageSeventeenAcceptancePrompts(repository: URL) throws -> [PackageSeventeenCloudPrompt] {
+        let path = repository.appendingPathComponent("research/tutor_quality/packages/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation/corpus/canonical_qa.jsonl")
+        let required: Set<String> = ["vocal_masking", "eq_tradeoff", "compression_sibilance", "layering_redundancy", "automation_owner", "flex_artifact", "duplicate_monitoring", "sidechain_trigger", "midi_groove", "bounce_tail", "cannot_find", "uncertain_evidence"]
+        var values: [(String, String)] = []
+        for line in try String(contentsOf: path, encoding: .utf8).split(separator: "\n") {
+            guard let row = try JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any],
+                  let topic = row["topic"] as? String, required.contains(topic), row["variant_kind"] as? String == "initial",
+                  let query = row["canonical_question"] as? String else { continue }
+            values.append((topic, query))
+        }
+        guard values.count == 12, Set(values.map(\.0)).count == 12 else { throw TestFailure(description: "P17 cloud acceptance prompt map drift") }
+        return values.sorted { $0.0 < $1.0 }.enumerated().map {
+            PackageSeventeenCloudPrompt(order: $0.offset, topic: $0.element.0, query: $0.element.1)
+        }
+    }
+
+    private nonisolated static func cloudText(provider: OpenAITutorProvider, query: String, context: TutorRuntimeContext) async throws -> (text: String, metadata: TutorProviderMetadata) {
+        var text = ""; var completed: TutorProviderMetadata?
+        for try await event in provider.stream(.init(messages: [.init(role: .user, text: query)], context: context, tools: [])) {
+            switch event { case let .textDelta(delta): text += delta; case let .completed(metadata, output): completed = metadata; if text.isEmpty { text = output.compactMap { if case let .text(value) = $0 { value } else { nil } }.joined() } }
+        }
+        guard let completed, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw TutorConversationError.malformedProviderResponse("Cloud evaluator completed without text.") }
+        return (text, completed)
+    }
+
+    private nonisolated static func packageSeventeenCloudConfigurationIsPinned(_ configuration: TutorProviderConfiguration) -> Bool {
+        configuration.modelIdentifier == packageSeventeenTextModel
+            && configuration.reasoningEffort == .high
+            && configuration.serviceTier == .priority
+    }
+
+    private nonisolated static func packageSeventeenCloudMetadataIsPinned(_ metadata: TutorProviderMetadata) -> Bool {
+        metadata.modelIdentifier == packageSeventeenTextModel && metadata.serviceTier == .priority
+    }
+
+    private nonisolated static func packageSeventeenCloudResponseIsPinned(_ response: PackageSeventeenCloudResponse) -> Bool {
+        response.outcome.terminalStatus == "completed"
+            && response.outcome.metadata.map(packageSeventeenCloudMetadataIsPinned) == true
+    }
+
+    private nonisolated static func packageSeventeenCloudHealthFailureArtifact(
+        model: String,
+        effort: TutorReasoningEffort,
+        safeError: String,
+        durationMilliseconds: Int
+    ) -> [String: Any] {
+        [
+            "schemaVersion": "1.0",
+            "status": "failed",
+            "safeError": safeError,
+            "requestedModelIdentifier": model,
+            "requestedReasoningEffort": effort.rawValue,
+            "requestedServiceTier": "priority",
+            "store": false,
+            "toolsSent": 0,
+            "durationMilliseconds": durationMilliseconds,
+        ]
+    }
+
+    private nonisolated static func packageSeventeenPublicAudioFixtureIsPinned(path: URL, sha256: String) -> Bool {
+        path.standardizedFileURL == FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(String(packageSeventeenPublicAudioFixturePathSuffix.dropFirst()))
+            .standardizedFileURL
+            && sha256 == packageSeventeenPublicAudioFixtureSHA256
+    }
+
+    private nonisolated static func boundedPackageSeventeenTopicMap<Input: Sendable, Output: Sendable>(
+        _ inputs: [Input],
+        operation: @escaping @Sendable (Input) async -> Output
+    ) async -> [Output] {
+        await withTaskGroup(of: Output.self, returning: [Output].self) { group in
+            var nextIndex = 0
+            while nextIndex < min(inputs.count, packageSeventeenCloudMaximumTopicConcurrency) {
+                let input = inputs[nextIndex]
+                nextIndex += 1
+                group.addTask { await operation(input) }
+            }
+            var outputs: [Output] = []
+            while let output = await group.next() {
+                outputs.append(output)
+                if nextIndex < inputs.count {
+                    let input = inputs[nextIndex]
+                    nextIndex += 1
+                    group.addTask { await operation(input) }
+                }
+            }
+            return outputs
+        }
+    }
+
+    private nonisolated static func generatePackageSeventeenCloudTopic(
+        provider: OpenAITutorProvider,
+        prompt: PackageSeventeenCloudPrompt
+    ) async -> PackageSeventeenCloudTopicResult {
+        var responses: [PackageSeventeenCloudResponse] = []
+        // Keep each topic's triplet logically grouped and sequential. The only
+        // generation inputs are its query and compact selected level context.
+        for level in packageSeventeenLevelOrder {
+            let context = TutorRuntimeContext(sourceType: .vocal, experience: .init(persistentLevel: level))
+            let outcome = await cloudTextWithBoundedRetry(provider: provider, query: prompt.query, context: context)
+            responses.append(PackageSeventeenCloudResponse(prompt: prompt, level: level, outcome: outcome))
+        }
+        return PackageSeventeenCloudTopicResult(prompt: prompt, responses: responses)
+    }
+
+    private nonisolated static func cloudTextWithBoundedRetry(
+        provider: OpenAITutorProvider,
+        query: String,
+        context: TutorRuntimeContext
+    ) async -> PackageSeventeenCloudRequestOutcome {
+        for attempt in 1...packageSeventeenCloudMaximumAttempts {
+            do {
+                let generated = try await cloudText(provider: provider, query: query, context: context)
+                // A completed request is never retried or duplicated.
+                return PackageSeventeenCloudRequestOutcome(text: generated.text, metadata: generated.metadata, attempts: attempt, terminalStatus: "completed", safeFailure: nil)
+            } catch {
+                let transient = isTransientCloudEvaluationFailure(error)
+                if transient, attempt < packageSeventeenCloudMaximumAttempts {
+                    try? await Task.sleep(for: .milliseconds(250))
+                    continue
+                }
+                let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "The cloud evaluator request failed safely."
+                return PackageSeventeenCloudRequestOutcome(text: nil, metadata: nil, attempts: attempt, terminalStatus: "failed", safeFailure: safe)
+            }
+        }
+        return PackageSeventeenCloudRequestOutcome(text: nil, metadata: nil, attempts: packageSeventeenCloudMaximumAttempts, terminalStatus: "failed", safeFailure: "The cloud evaluator request failed safely.")
+    }
+
+    private nonisolated static func isTransientCloudEvaluationFailure(_ error: Error) -> Bool {
+        if case .timedOut = error as? TutorConversationError { return true }
+        guard case let .providerRejected(detail) = error as? TutorConversationError else { return false }
+        let lowercased = detail.lowercased()
+        return lowercased.contains("rate") || ["408", "409", "429", "500", "502", "503", "504"].contains { lowercased.contains($0) }
+    }
+
+    private nonisolated static func orderedPackageSeventeenCloudResponses(
+        _ topicResults: [PackageSeventeenCloudTopicResult],
+        prompts: [PackageSeventeenCloudPrompt]
+    ) -> [PackageSeventeenCloudResponse] {
+        let levelIndex = Dictionary(uniqueKeysWithValues: packageSeventeenLevelOrder.enumerated().map { ($0.element, $0.offset) })
+        let byTopic = Dictionary(uniqueKeysWithValues: topicResults.map { ($0.prompt.topic, $0) })
+        return prompts.flatMap { prompt in
+            (byTopic[prompt.topic]?.responses ?? []).sorted {
+                (levelIndex[$0.level] ?? Int.max) < (levelIndex[$1.level] ?? Int.max)
+            }
+        }
+    }
+
+    private nonisolated static func packageSeventeenCloudResponseArtifacts(_ responses: [PackageSeventeenCloudResponse]) -> [[String: Any]] {
+        let triplets = Dictionary(grouping: responses, by: { $0.prompt.topic })
+        return responses.map { response in
+            let text = response.outcome.text
+            let metadata = response.outcome.metadata
+            let allThreeCompleted = (triplets[response.prompt.topic] ?? []).count == 3
+                && (triplets[response.prompt.topic] ?? []).allSatisfy { $0.outcome.terminalStatus == "completed" && $0.outcome.text != nil }
+            let distinct = allThreeCompleted
+                ? Set((triplets[response.prompt.topic] ?? []).compactMap { $0.outcome.text }.map(sha256String)).count == 3
+                : nil
+            return [
+                "topic": response.prompt.topic,
+                "topicOrder": response.prompt.order,
+                "effectiveLevel": response.level.rawValue,
+                "querySHA256": sha256String(response.prompt.query),
+                "assistantTextSHA256": text.map(sha256String) ?? NSNull(),
+                "assistantText": text ?? NSNull(),
+                "providerIdentifier": metadata?.providerIdentifier ?? NSNull(),
+                "modelIdentifier": metadata?.modelIdentifier ?? NSNull(),
+                "providerResponseID": metadata?.providerResponseID ?? NSNull(),
+                "serviceTier": metadata?.serviceTier?.rawValue ?? NSNull(),
+                "toolsSent": 0,
+                "store": false,
+                "attempts": response.outcome.attempts,
+                "terminalStatus": response.outcome.terminalStatus,
+                "safeFailure": response.outcome.safeFailure ?? NSNull(),
+                "expectedTextProvidedToGeneration": false,
+                "noAuthorityExpansion": text.map { hasNoAuthorityExpansion($0, toolsSent: 0) } ?? NSNull(),
+                "stopRollback": text.map { $0.lowercased().contains("stop") && ($0.lowercased().contains("undo") || $0.lowercased().contains("restore")) } ?? NSNull(),
+                "scaffoldingDiffers": distinct ?? NSNull(),
+            ]
+        }
+    }
+
+    private nonisolated static func cloudTripletJudgments(
+        provider: OpenAITutorProvider,
+        prompts: [PackageSeventeenCloudPrompt],
+        topicResults: [PackageSeventeenCloudTopicResult],
+        repository: URL
+    ) async -> [String: Any] {
+        let byTopic = Dictionary(uniqueKeysWithValues: topicResults.map { ($0.prompt.topic, $0) })
+        let results = await boundedPackageSeventeenTopicMap(prompts) { prompt in
+            let triplet = orderedPackageSeventeenCloudResponses(byTopic[prompt.topic].map { [$0] } ?? [], prompts: [prompt])
+            guard triplet.count == 3, triplet.allSatisfy({ $0.outcome.terminalStatus == "completed" && $0.outcome.text != nil }) else {
+                return packageSeventeenSkippedJudgment(prompt: prompt)
+            }
+            do {
+                // This read happens only after the entire triplet has completed.
+                let reference = try packageSeventeenSemanticReference(repository: repository, topic: prompt.topic)
+                let request = packageSeventeenJudgeRequest(prompt: prompt, triplet: triplet, reference: reference)
+                let outcome = await cloudTextWithBoundedRetry(provider: provider, query: request, context: .init(sourceType: .vocal))
+                return packageSeventeenJudgmentResult(prompt: prompt, outcome: outcome, semanticReferenceProvided: true)
+            } catch {
+                let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "The evaluation-only semantic reference was unavailable."
+                return packageSeventeenFailedJudgment(prompt: prompt, safeFailure: safe)
+            }
+        }
+        let orderedArtifacts = results.sorted { $0.prompt.order < $1.prompt.order }.map(packageSeventeenJudgmentArtifact)
+        return [
+            "schemaVersion": "1.1",
+            "judge": "same opt-in OpenAI provider; model-assisted supporting evidence only",
+            "criteria": "generated text compared post-generation with evaluation-only semantic reference fields",
+            "semanticReferenceBoundary": "Reference fields were read only after each three-level generation triplet completed; they were never sent to generation or runtime Tutor requests.",
+            "concurrency": ["maximumTopicTasks": packageSeventeenCloudMaximumTopicConcurrency, "tripletJudgmentsGrouped": true],
+            "results": orderedArtifacts,
+        ]
+    }
+
+    private nonisolated static func packageSeventeenSemanticReference(
+        repository: URL,
+        topic: String
+    ) throws -> PackageSeventeenSemanticReference {
+        let path = repository.appendingPathComponent("research/tutor_quality/packages/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation/corpus/canonical_qa.jsonl")
+        let rows = try String(contentsOf: path, encoding: .utf8).split(separator: "\n")
+        guard let raw = rows.first(where: { line in
+            guard let row = try? JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any] else { return false }
+            return row["topic"] as? String == topic && row["variant_kind"] as? String == "initial"
+        }),
+        let row = try JSONSerialization.jsonObject(with: Data(raw.utf8)) as? [String: Any],
+        let problem = row["problem_summary"] as? String,
+        let experiment = row["recommended_first_experiment"] as? String,
+        let evidence = row["evidence_needed"],
+        let guidance = row["logic_guidance"] as? [String: Any],
+        let risk = guidance["risk"] as? String,
+        let undo = guidance["undo"] as? String else {
+            throw TutorConversationError.malformedProviderResponse("Package 17 semantic reference shape was unavailable.")
+        }
+        return PackageSeventeenSemanticReference(
+            problemSummary: problem,
+            recommendedFirstExperiment: experiment,
+            evidenceRequirements: packageSeventeenJSONText(evidence),
+            riskAndUndo: "Risk: \(risk) Undo: \(undo)"
+        )
+    }
+
+    private nonisolated static func packageSeventeenJSONText(_ value: Any) -> String {
+        if let string = value as? String { return string }
+        guard JSONSerialization.isValidJSONObject(value),
+              let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) else {
+            return "Unavailable"
+        }
+        return String(decoding: data, as: UTF8.self)
+    }
+
+    private nonisolated static func packageSeventeenJudgeRequest(
+        prompt: PackageSeventeenCloudPrompt,
+        triplet: [PackageSeventeenCloudResponse],
+        reference: PackageSeventeenSemanticReference
+    ) -> String {
+        let rendered = triplet.compactMap { response -> String? in
+            guard let text = response.outcome.text else { return nil }
+            return "[\(response.level.rawValue)] \(text)"
+        }.joined(separator: "\n\n")
+        return """
+        Judge these three completed Tutor responses for the same query. Return only PASS or REVIEW plus one short visible reason; do not reveal hidden reasoning or reproduce the reference.
+
+        Criteria: they should preserve the same diagnosis/problem framing, one reversible first experiment, evidence honesty, safety/read-only authority, and stop+rollback while varying only appropriate scaffolding. Noob must be respectful, Amateur useful, and Pro concise but not cryptic.
+
+        Query: \(prompt.query)
+
+        Evaluation-only semantic reference, supplied after generation: problem summary=\(reference.problemSummary); recommended first experiment=\(reference.recommendedFirstExperiment); evidence requirements=\(reference.evidenceRequirements); \(reference.riskAndUndo)
+
+        Generated responses:\n\(rendered)
+        """
+    }
+
+    private nonisolated static func packageSeventeenSkippedJudgment(prompt: PackageSeventeenCloudPrompt) -> PackageSeventeenCloudJudgment {
+        PackageSeventeenCloudJudgment(
+            prompt: prompt,
+            outcome: nil,
+            terminalStatus: "skipped_incomplete_generation",
+            safeFailure: "One or more generated responses were unavailable; no semantic reference was read or sent to a judge.",
+            semanticReferenceProvided: false
+        )
+    }
+
+    private nonisolated static func packageSeventeenFailedJudgment(prompt: PackageSeventeenCloudPrompt, safeFailure: String) -> PackageSeventeenCloudJudgment {
+        PackageSeventeenCloudJudgment(
+            prompt: prompt,
+            outcome: nil,
+            terminalStatus: "failed",
+            safeFailure: safeFailure,
+            semanticReferenceProvided: false
+        )
+    }
+
+    private nonisolated static func packageSeventeenJudgmentResult(
+        prompt: PackageSeventeenCloudPrompt,
+        outcome: PackageSeventeenCloudRequestOutcome,
+        semanticReferenceProvided: Bool
+    ) -> PackageSeventeenCloudJudgment {
+        PackageSeventeenCloudJudgment(
+            prompt: prompt,
+            outcome: outcome,
+            terminalStatus: outcome.terminalStatus,
+            safeFailure: outcome.safeFailure,
+            semanticReferenceProvided: semanticReferenceProvided
+        )
+    }
+
+    private nonisolated static func packageSeventeenJudgmentArtifact(_ result: PackageSeventeenCloudJudgment) -> [String: Any] {
+        let outcome = result.outcome
+        let boundedJudgment = outcome?.text.map { boundedEvaluationText($0, maximumUTF8Bytes: 768) }
+        let verdict = boundedJudgment?.uppercased().hasPrefix("PASS") == true ? "PASS" : "REVIEW"
+        return [
+            "topic": result.prompt.topic,
+            "topicOrder": result.prompt.order,
+            "judgeProvider": outcome?.metadata?.providerIdentifier ?? NSNull(),
+            "judgeModel": outcome?.metadata?.modelIdentifier ?? NSNull(),
+            "judgeResponseID": outcome?.metadata?.providerResponseID ?? NSNull(),
+            "judgeServiceTier": outcome?.metadata?.serviceTier?.rawValue ?? NSNull(),
+            "judgmentSHA256": outcome?.text.map(sha256String) ?? NSNull(),
+            "judgmentText": boundedJudgment ?? NSNull(),
+            "judgmentReason": boundedJudgment.map(boundedJudgeReason) ?? NSNull(),
+            "verdict": verdict,
+            "terminalStatus": result.terminalStatus,
+            "attempts": outcome?.attempts ?? 0,
+            "safeFailure": result.safeFailure ?? NSNull(),
+            "semanticReferenceProvidedToJudge": result.semanticReferenceProvided,
+            "semanticReferenceReadAfterGeneration": result.semanticReferenceProvided,
+            "goldenTextProvidedToGeneration": false,
+            "hiddenReasoningStored": false,
+        ]
+    }
+
+    private func writePackageSeventeenArtifact(_ value: [String: Any], named: String, repository: URL) throws {
+        let path = repository.appendingPathComponent("research/tutor_quality/evaluations/\(named)")
+        try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys]).write(to: path, options: .atomic)
+    }
+
+    /// This is deliberately a claim-boundary check, not a demand for a
+    /// repetitive literal authority disclaimer in natural Tutor language.
+    private nonisolated static func hasNoAuthorityExpansion(_ text: String, toolsSent: Int) -> Bool {
+        guard toolsSent == 0 else { return false }
+        let normalized = text.lowercased()
+        let performedClaims = [
+            "i performed", "i changed", "i heard", "i observed",
+            "tracksmith performed", "tracksmith changed", "tracksmith heard", "tracksmith observed",
+            "we performed", "we changed", "we heard", "we observed",
+        ]
+        return !performedClaims.contains { normalized.contains($0) }
+    }
+
+    /// Evaluation artifacts may retain a short visible verdict/reason but
+    /// never model chain-of-thought or an unbounded judge response.
+    private nonisolated static func boundedEvaluationText(_ text: String, maximumUTF8Bytes: Int) -> String {
+        let visible = String(text.unicodeScalars.filter { $0.value >= 32 || $0.value == 9 || $0.value == 10 })
+        var result = ""
+        var usedUTF8Bytes = 0
+        for scalar in visible.unicodeScalars {
+            let candidate = usedUTF8Bytes + scalar.utf8.count
+            guard candidate <= maximumUTF8Bytes else { break }
+            result.unicodeScalars.append(scalar)
+            usedUTF8Bytes = candidate
+        }
+        return result.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private nonisolated static func boundedJudgeReason(_ judgment: String) -> String {
+        let collapsed = judgment.split(whereSeparator: { $0.isNewline }).joined(separator: " ")
+        let separator = collapsed.firstIndex(of: ":") ?? collapsed.firstIndex(of: "-")
+        let reason = separator.map { String(collapsed[collapsed.index(after: $0)...]) } ?? collapsed
+        return boundedEvaluationText(reason, maximumUTF8Bytes: 384)
+    }
+
+    private func testPackageSeventeenLiveOfflineEvaluation() async throws {
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let canonicalURL = repository.appendingPathComponent(
+            "research/tutor_quality/packages/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation/corpus/canonical_qa.jsonl"
+        )
+        let rawRows = try String(contentsOf: canonicalURL, encoding: .utf8)
+            .split(separator: "\n").map { Data($0.utf8) }
+        try expect(rawRows.count == 180, "P17 live evaluator requires exactly 180 canonical rows")
+        let levels: [TutorExperienceLevel] = [.noob, .amateur, .pro]
+        let requiredTopics: Set<String> = [
+            "vocal_masking", "eq_tradeoff", "compression_sibilance", "layering_redundancy",
+            "automation_owner", "flex_artifact", "duplicate_monitoring", "sidechain_trigger",
+            "midi_groove", "bounce_tail", "cannot_find", "uncertain_evidence",
+        ]
+        var records: [[String: Any]] = []
+        var acceptance: [String: Set<TutorExperienceLevel>] = [:]
+        var semanticReferenceUnavailable = 0
+        var tripletInvariantFailures: [String] = []
+        let started = Date()
+        let offline = try OfflineTutorProvider()
+        for raw in rawRows {
+            // Generation input is decoded separately. Golden diagnosis/experiment
+            // fields are not inspected until after all three live turns finish.
+            guard let object = try JSONSerialization.jsonObject(with: raw) as? [String: Any],
+                  let identifier = object["id"] as? String,
+                  let query = object["canonical_question"] as? String,
+                  let topic = object["topic"] as? String,
+                  let variant = object["variant_kind"] as? String else {
+                throw TestFailure(description: "P17 canonical generation shape drift")
+            }
+            var triplet: [[String: Any]] = []
+            for level in levels {
+                let root = temporaryRoot("p17-live-\(identifier)-\(level.rawValue)")
+                defer { try? FileManager.default.removeItem(at: root) }
+                let engine = TutorConversationEngine(
+                    store: TutorConversationStore(rootURL: root),
+                    tools: try TutorToolExecutor(),
+                    fallbackProvider: offline
+                )
+                let context = TutorRuntimeContext(sourceType: .vocal, experience: .init(persistentLevel: level))
+                let events = try await collectTurn(engine, query, context, FailingConversationProvider(error: .consentRequired))
+                guard let receipt = events.compactMap({ if case let .completed(_, value) = $0 { value } else { nil } }).last,
+                      let message = (await engine.snapshot()).messages.last else {
+                    throw TestFailure(description: "P17 live response/receipt missing \(identifier)")
+                }
+                let normalized = Self.normalizedOfflinePresentation(message.text)
+                let toolNames = receipt.tools.map(\.name).sorted()
+                let currentExperimentCount = normalized.components(separatedBy: "One controlled test:").count - 1
+                    + normalized.components(separatedBy: "One reversible Logic test:").count - 1
+                let output = [
+                    "caseID": identifier, "topic": topic, "effectiveLevel": level.rawValue,
+                    "querySHA256": Self.sha256String(query), "assistantTextSHA256": receipt.assistantTextSHA256,
+                    "normalizedUnderlyingSHA256": Self.sha256String(normalized), "toolNames": toolNames,
+                    "evidenceKinds": receipt.evidence.map { $0.kind.rawValue }.sorted(),
+                    "authority": normalized.lowercased().contains("no authority to change"),
+                    "stop": normalized.lowercased().contains("stop"),
+                    "rollback": normalized.lowercased().contains("undo") || normalized.lowercased().contains("restore"),
+                    "oneCurrentExperiment": currentExperimentCount == 1,
+                    "receiptExperience": receipt.experience?.effectiveLevel.rawValue ?? "missing",
+                    "expectedTextProvidedToGeneration": false,
+                ] as [String: Any]
+                triplet.append(output)
+                if requiredTopics.contains(topic), variant == "initial" {
+                    acceptance[topic, default: []].insert(level)
+                }
+            }
+            // Only now read evaluator reference keys. They are recorded as
+            // unavailable-to-receipt semantic references, never copied into a pass.
+            let postGeneration = try JSONSerialization.jsonObject(with: raw) as! [String: Any]
+            let diagnosisKey = postGeneration["diagnosis_key"] as? String
+            let experimentKey = postGeneration["experiment_key"] as? String
+            for index in triplet.indices {
+                triplet[index]["postGenerationDiagnosisKey"] = diagnosisKey ?? "missing"
+                triplet[index]["postGenerationExperimentKey"] = experimentKey ?? "missing"
+                triplet[index]["semanticKeyAssertedFromReceipt"] = false
+                semanticReferenceUnavailable += 1
+            }
+            let invariant = Set(triplet.compactMap { $0["normalizedUnderlyingSHA256"] as? String }).count == 1
+                && Set(triplet.compactMap { ($0["toolNames"] as? [String])?.joined(separator: "|") }).count == 1
+                && Set(triplet.compactMap { ($0["evidenceKinds"] as? [String])?.joined(separator: "|") }).count == 1
+                && triplet.allSatisfy({ ($0["authority"] as? Bool) == true && ($0["stop"] as? Bool) == true && ($0["rollback"] as? Bool) == true && ($0["oneCurrentExperiment"] as? Bool) == true })
+            let scaffoldingDiffers = Set(triplet.compactMap { $0["assistantTextSHA256"] as? String }).count == 3
+            if !invariant || !scaffoldingDiffers { tripletInvariantFailures.append(identifier) }
+            for index in triplet.indices {
+                triplet[index]["tripletInvariantPassed"] = invariant
+                triplet[index]["scaffoldingDiffers"] = scaffoldingDiffers
+            }
+            records.append(contentsOf: triplet)
+        }
+        try expect(records.count == 540, "P17 live evaluator did not produce 540 records")
+        try expect(acceptance.count == requiredTopics.count && acceptance.values.allSatisfy { $0 == Set(levels) },
+                   "P17 required 12 acceptance conversations are not all represented at three levels")
+        let artifact: [String: Any] = [
+            "schemaVersion": "1.0", "evaluator": ["id": "TutorConversationTests.live-offline", "version": "1.0"],
+            "evaluationMode": "real OfflineTutorProvider and TutorConversationEngine; expected text hidden during generation",
+            "counts": ["canonical": 180, "levels": 3, "liveRecords": records.count, "acceptance": 36],
+            "durationMilliseconds": Int(Date().timeIntervalSince(started) * 1_000),
+            "semanticReferenceUnavailableFromReceipts": semanticReferenceUnavailable,
+            "tripletInvariantFailures": tripletInvariantFailures,
+            "records": records,
+        ]
+        let destination = repository.appendingPathComponent("research/tutor_quality/evaluations/package17-live-offline-evaluation.json")
+        let data = try JSONSerialization.data(withJSONObject: artifact, options: [.prettyPrinted, .sortedKeys])
+        try data.write(to: destination, options: .atomic)
+        print("P17_LIVE_OFFLINE_EVALUATION_OK canonical=180 levels=3 records=540 acceptance=36 semanticReceiptKeys=unavailable invariantFailures=\(tripletInvariantFailures.count) durationMs=\(artifact["durationMilliseconds"]!)")
+    }
+
+    private static func normalizedOfflinePresentation(_ text: String) -> String {
+        text.replacingOccurrences(of: "Plain-language path: start with the small A/B below. You do not need to know the control names before you begin; follow one step, compare, and keep the original as your reset point.\n\n", with: "")
+            .replacingOccurrences(of: "Fast pass: preserve the baseline and run this single level-matched A/B.\n\n", with: "")
+    }
+
+    private nonisolated static func sha256String(_ value: String) -> String {
+        SHA256.hash(data: Data(value.utf8)).map { String(format: "%02x", $0) }.joined()
+    }
+
+    private nonisolated static func sha256String(_ value: Data) -> String {
+        SHA256.hash(data: value).map { String(format: "%02x", $0) }.joined()
     }
 
     private func testCancellationAndExclusion() async throws {

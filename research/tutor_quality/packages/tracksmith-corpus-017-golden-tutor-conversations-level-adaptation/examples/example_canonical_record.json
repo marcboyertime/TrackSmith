@@ -1,0 +1,106 @@
+{
+  "audio_fixture_requirement": {
+    "necessity": "required_or_helpful",
+    "recommended_source": "BabySlakh or a true multitrack/stem mixture from Package 016",
+    "reuse_package016_assets_first": true
+  },
+  "canonical_question": "My vocal sounds muddy and disappears once the instrumental comes in.",
+  "clarification_questions": [
+    "Does the problem remain when the vocal is soloed, or mainly appear in the full mix?",
+    "What evidence is current: user report, model listening, local measurement, reviewed Logic state, or a prior experiment?"
+  ],
+  "competing_hypotheses": [
+    "The vocal may be acceptable alone but masked by overlapping accompaniment in the full mix.",
+    "The symptom has a different source, context, routing, ownership, or monitoring cause.",
+    "The comparison is biased by level, performance, source scope, or stale project state."
+  ],
+  "diagnosis_key": "diag.vocal_masking",
+  "direct_answer": "The vocal may be acceptable alone but masked by overlapping accompaniment in the full mix.",
+  "domain": "golden_tutor_conversations",
+  "evidence_class": "golden_evaluation_synthesis",
+  "evidence_needed": [
+    "Current source/object and project context",
+    "An untouched baseline",
+    "The same representative passage or state",
+    "User feedback after one reversible test"
+  ],
+  "experiment_key": "exp.vocal_masking",
+  "id": "pkg017.qa.000001",
+  "key_distinction": "Experience level changes scaffolding, vocabulary, and granularity—not the diagnosis, evidence threshold, experiment, safety, or artistic standard.",
+  "logic_guidance": {
+    "listen_for": "The words become easier to follow while the vocal keeps its body and the accompaniment still feels natural.",
+    "location": "Evaluation-only; exact navigation must come from current reviewed Logic procedures.",
+    "risk": "The competing instrument becomes hollow or the mix only seems better because it became quieter.",
+    "steps": [
+      "Do not expose this golden answer to runtime.",
+      "At evaluation time, verify the selected experience level, evidence honesty, one-experiment discipline, stop rule, and undo."
+    ],
+    "undo": "Restore the untouched baseline.",
+    "verification_status": "not_applicable_evaluation_only"
+  },
+  "logic_procedure_status": "not_applicable_no_new_procedure",
+  "logic_verification_status": "not_applicable_evaluation_only",
+  "native_review_state": "candidate_not_yet_human_reviewed",
+  "non_processing_possibilities": [
+    "Performance, arrangement, routing, ownership, monitoring, or source selection may be the actual cause.",
+    "The correct response may be a clarification or observation rather than a processor setting."
+  ],
+  "original_review_state": "golden_evaluation_synthesis",
+  "original_verification_status": "design_contract_and_source_metadata_registered",
+  "package_id": "tracksmith-corpus-017-golden-tutor-conversations-level-adaptation",
+  "package_number": 17,
+  "problem_summary": "The vocal may be acceptable alone but masked by overlapping accompaniment in the full mix.",
+  "recommended_first_experiment": "Compare the same chorus in context, then make one small broad reduction on the most obvious competing instrument rather than cutting the vocal first.",
+  "retrieval_tags": [
+    "acceptable",
+    "accompaniment",
+    "alone",
+    "and",
+    "be",
+    "buried",
+    "but",
+    "by",
+    "clear",
+    "comes",
+    "disappears",
+    "full",
+    "in",
+    "instrumental",
+    "likely",
+    "masked",
+    "masking",
+    "may",
+    "mix",
+    "muddy",
+    "my",
+    "once",
+    "overlapping",
+    "solo",
+    "sounds",
+    "source",
+    "the",
+    "vocal"
+  ],
+  "review_state": "candidate_not_yet_human_reviewed",
+  "runtime_eligibility": "test_only",
+  "source_ids": [
+    "pkg017.source.000017",
+    "pkg017.source.000018",
+    "pkg017.source.000019",
+    "pkg017.source.000020",
+    "pkg017.source.000021",
+    "pkg017.source.000022",
+    "pkg017.source.000001"
+  ],
+  "subdomain": "vocal_masking",
+  "teaching_principle": "When a source works alone but fails in context, test interaction before permanently reshaping the source.",
+  "title": "Vocal clear solo but buried in mix — Direct Symptom",
+  "topic": "vocal_masking",
+  "tradeoffs": [
+    "The competing instrument becomes hollow or the mix only seems better because it became quieter.",
+    "More explanation can help a Noob but burden a Pro; less explanation can help a Pro but strand a Noob.",
+    "The level label must not lower the quality or safety of the underlying judgment."
+  ],
+  "user_intent": "Receive an intelligent, evidence-honest, one-experiment Tutor response at the selected scaffolding level.",
+  "variant_kind": "initial"
+}

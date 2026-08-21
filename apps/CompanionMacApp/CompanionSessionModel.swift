@@ -78,6 +78,7 @@ final class CompanionSessionModel: ObservableObject {
     @Published var tutorAudioModelIdentifier = UserDefaults.standard.string(
         forKey: "TrackSmithTutorAudioModelIdentifier"
     ) ?? "gpt-audio-1.5"
+    @Published var tutorExperienceSettings: TutorExperienceSettings = CompanionSessionModel.loadTutorExperienceSettings()
     @Published var tutorCredentialDraft = ""
     @Published var tutorCredentialStatus = "Checking OpenAI Keychain credential"
     @Published var productionOutcome: ProductionIntelligenceOutcome?
@@ -936,6 +937,30 @@ final class CompanionSessionModel: ObservableObject {
         defaults.set(tutorCloudTextConsent, forKey: "TrackSmithTutorCloudTextConsent")
         defaults.set(tutorCloudAudioConsent, forKey: "TrackSmithTutorCloudAudioConsent")
         defaults.set(tutorAudioModelIdentifier, forKey: "TrackSmithTutorAudioModelIdentifier")
+        if let data = try? JSONEncoder().encode(tutorExperienceSettings) {
+            defaults.set(data, forKey: "TrackSmithTutorExperienceSettings.v1")
+        }
+    }
+
+    var tutorExperienceLevel: TutorExperienceLevel {
+        get { tutorExperienceSettings.persistentLevel }
+        set { tutorExperienceSettings = TutorExperienceSettings(persistentLevel: newValue) }
+    }
+
+    /// Used by compact Tutor controls that are outside SettingsView's Form
+    /// onChange hook. This is an explicit saved selection, never an inference.
+    func setTutorExperienceLevel(_ level: TutorExperienceLevel) {
+        guard tutorExperienceLevel != level else { return }
+        tutorExperienceLevel = level
+        persistTutorSettings()
+    }
+
+    private static func loadTutorExperienceSettings() -> TutorExperienceSettings {
+        guard let data = UserDefaults.standard.data(forKey: "TrackSmithTutorExperienceSettings.v1"),
+              let decoded = try? JSONDecoder().decode(TutorExperienceSettings.self, from: data) else {
+            return .init()
+        }
+        return decoded
     }
 
     func selectAudition(index: Int) {

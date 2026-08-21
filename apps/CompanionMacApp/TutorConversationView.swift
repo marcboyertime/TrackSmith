@@ -34,6 +34,23 @@ struct TutorConversationView: View {
                         .font(Theme.Font.section).foregroundStyle(Theme.Colors.text)
                 }
                 Spacer()
+                Menu {
+                    Picker("Explanation level", selection: Binding(
+                        get: { session.tutorExperienceLevel },
+                        set: { session.setTutorExperienceLevel($0) }
+                    )) {
+                        ForEach(TutorExperienceLevel.allCases, id: \.self) { level in
+                            Text(level.label).tag(level)
+                        }
+                    }
+                } label: {
+                    Text(session.tutorExperienceLevel.label)
+                        .font(Theme.Font.meta.weight(.semibold))
+                        .padding(.horizontal, Theme.Spacing.eight).padding(.vertical, Theme.Spacing.legacy5)
+                        .background(Theme.Colors.control, in: Capsule())
+                }
+                .accessibilityLabel("Tutor explanation level: \(session.tutorExperienceLevel.label)")
+                .accessibilityHint("Changes scaffolding for future responses only")
                 statusPill
                 Menu {
                     Picker("Source", selection: $session.sourceType) {

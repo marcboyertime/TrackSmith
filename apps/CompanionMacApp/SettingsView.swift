@@ -28,6 +28,20 @@ struct SettingsView: View {
                     .foregroundStyle(Theme.Colors.secondaryText)
             }
 
+            Section("Tutor experience") {
+                Picker("Explanation level", selection: $model.tutorExperienceLevel) {
+                    ForEach(TutorExperienceLevel.allCases, id: \.self) { level in
+                        Text(level.label).tag(level)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .accessibilityLabel("Tutor explanation level")
+                .accessibilityHint("Changes future Tutor responses only. Noob, Amateur, and Pro change scaffolding, not intelligence, safety, evidence, or tool authority.")
+                Text("Choose how much scaffolding you want. Diagnosis, evidence standards, safety, artistic quality, and your control over Logic stay the same.")
+                    .font(Theme.Font.meta)
+                    .foregroundStyle(Theme.Colors.secondaryText)
+            }
+
             Section("Optional Tutor Audio Listening") {
                 Toggle(
                     "Allow an exact bounded TrackSmith capture to be sent only when I also enable ‘Let audio model listen next turn’",
@@ -117,5 +131,6 @@ struct SettingsView: View {
         .onChange(of: model.tutorCloudTextConsent) { _, _ in model.persistTutorSettings() }
         .onChange(of: model.tutorCloudAudioConsent) { _, _ in model.persistTutorSettings() }
         .onChange(of: model.tutorAudioModelIdentifier) { _, _ in model.persistTutorSettings() }
+        .onChange(of: model.tutorExperienceSettings) { _, _ in model.persistTutorSettings() }
     }
 }

@@ -169,25 +169,37 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
                     var eventDataLines: [String] = []
                     var eventBytes = 0
                     var emittedCompletion = false
+                    func flushEventData() throws {
+                        guard !eventDataLines.isEmpty else { return }
+                        let payload = eventDataLines.joined(separator: "\n")
+                        eventDataLines.removeAll(keepingCapacity: true)
+                        eventBytes = 0
+                        guard payload != "[DONE]" else { return }
+                        let events = try OpenAITutorSSEEventDecoder.decode(data: payload)
+                        for event in events {
+                            if case .completed = event { emittedCompletion = true }
+                            continuation.yield(event)
+                        }
+                    }
                     for try await line in response.lines {
                         if Task.isCancelled { throw TutorConversationError.cancelled }
                         if line.isEmpty {
-                            if !eventDataLines.isEmpty {
-                                let payload = eventDataLines.joined(separator: "\n")
-                                eventDataLines.removeAll(keepingCapacity: true)
-                                eventBytes = 0
-                                if payload != "[DONE]" {
-                                    let events = try OpenAITutorSSEEventDecoder.decode(data: payload)
-                                    for event in events {
-                                        if case .completed = event { emittedCompletion = true }
-                                        continuation.yield(event)
-                                    }
-                                }
-                            }
+                            try flushEventData()
+                            continue
+                        }
+                        // URLSession.AsyncBytes.lines may omit blank separator
+                        // lines. A new SSE event field is therefore also an
+                        // authoritative boundary for the preceding data frame.
+                        if line.hasPrefix("event:") {
+                            try flushEventData()
                             continue
                         }
                         if line.hasPrefix("data:") {
                             let dataLine = String(line.dropFirst(5)).trimmingCharacters(in: .whitespaces)
+                            // Some Responses SSE streams emit an empty `data:`
+                            // frame between events. It carries no JSON payload
+                            // and must not become a malformed event.
+                            guard !dataLine.isEmpty else { continue }
                             eventBytes += dataLine.utf8.count
                             guard eventBytes <= 1_024 * 1_024 else {
                                 throw TutorConversationError.responseTooLarge
@@ -195,16 +207,7 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
                             eventDataLines.append(dataLine)
                         }
                     }
-                    if !eventDataLines.isEmpty {
-                        let payload = eventDataLines.joined(separator: "\n")
-                        if payload != "[DONE]" {
-                            let events = try OpenAITutorSSEEventDecoder.decode(data: payload)
-                            for event in events {
-                                if case .completed = event { emittedCompletion = true }
-                                continuation.yield(event)
-                            }
-                        }
-                    }
+                    try flushEventData()
                     guard emittedCompletion else {
                         throw TutorConversationError.malformedProviderResponse("The stream ended before response.completed.")
                     }
@@ -224,9 +227,13 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
     public static let systemInstructions = """
     You are TrackSmith Tutor, an excellent Logic Pro-centered music-production tutor. Converse naturally and teach at the musician's level.
 
+    CURRENT_CONTEXT_DATA includes a compact experience contract. Its effective_level changes only terminology, density, granularity, routine click guidance, theory, response length, and scaffolding. Noob is respectful and never patronizing; Amateur is normal; Pro is concise but never cryptic. Do not repeat the level label. At every level preserve identical diagnosis quality, evidence thresholds and honesty, safety/privacy, tool authority, one-experiment discipline, stop/undo conditions, artistic standard, uncertainty, and model/reasoning. Never infer or persist a level from grammar, vocabulary, audio/project quality, question labels, or requests for clicks; a temporary override applies only to this turn.
+
+    Experience-level rendering contract: before phrasing the answer, decide one level-neutral core containing the diagnosis or bounded hypothesis, whether one clarification is needed, and the one experimental variable, baseline, discriminating listen cue, risk, stop condition, and rollback. For the same turn and evidence, effective_level must not change the diagnosis, clarification, experiment, evidence boundary, ownership prerequisite, or safety boundary. Render that same core afterward: Noob may define terms and break routine handling into smaller plain-language steps; Amateur may use normal production vocabulary; Pro may compress familiar theory. Do not let Noob introduce unsupported exact navigation or a different move, and do not let Pro omit a safe experiment or an ownership prerequisite. If an owner/control is unknown, do not prescribe its edit; ask the one question and pair it with the same safe non-mutating discriminating comparison whenever one exists.
+
     Governing loop: HEAR -> SEE -> UNDERSTAND -> ASK IF NECESSARY -> DIAGNOSE -> SHOW ONE EXPERIMENT -> LISTEN AGAIN -> ADAPT -> TEACH.
 
-    Start from the musician's desired result. Ask at most one or two targeted questions only when the missing answer changes the next move. Consider performance, source, recording, arrangement, masking, monitoring, and processing rather than assuming every problem needs a plug-in. Prefer one controlled, reversible experiment. Give an exact Logic location and a reasonable starting range when evidence supports it, then state what to listen for, the main risk, a stop condition, and how to undo it. Explain the reusable principle after the immediate need.
+    Start from the musician's desired result. Ask at most one concise decision-changing question only when the missing answer changes the next move. Whenever any safe test is possible, every level includes that same one bounded, reversible discriminating experiment in the same response. Include what to listen for, the main risk, a stop condition, and rollback. Ask questions alone only when no safe experiment exists. Consider performance, source, recording, arrangement, masking, monitoring, and processing rather than assuming every problem needs a plug-in. Give an exact Logic location and a reasonable starting range only when evidence supports it. Explain the reusable principle after the immediate need.
 
     Evidence honesty is mandatory. Say that you heard audio only when current context explicitly says model_listening_status is listened. Local measurements are not listening. Say that you saw Logic only after inspect_logic returns observed. User statements, reviewed knowledge, local measurements, model audio observations, Logic observations, and inference are distinct. A TrackSmith insert hears only audio arriving at that insert; a vocal capture cannot prove mix masking.
 
@@ -289,7 +296,7 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
             guard responseItemBytes <= 384 * 1_024 else { throw TutorConversationError.responseTooLarge }
             input.append(item)
         }
-        let body: [String: Any] = [
+        var body: [String: Any] = [
             "model": configuration.modelIdentifier,
             "instructions": Self.systemInstructions,
             "input": input,
@@ -305,6 +312,12 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
             ],
             "max_output_tokens": configuration.maximumOutputTokens,
         ]
+        // Fast-mode scheduling is explicit for the strongest configured Tutor
+        // model; it never alters model choice or reasoning effort, and there is
+        // deliberately no automatic downgrade on provider rejection.
+        if configuration.modelIdentifier == "gpt-5.6-sol", let serviceTier = configuration.serviceTier {
+            body["service_tier"] = serviceTier.rawValue
+        }
         let data = try JSONSerialization.data(withJSONObject: body, options: [.sortedKeys])
         guard data.count <= 512 * 1_024 else { throw TutorConversationError.responseTooLarge }
         return data
@@ -432,10 +445,14 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
 
 public enum OpenAITutorSSEEventDecoder {
     public static func decode(data: String) throws -> [TutorProviderEvent] {
-        guard let bytes = data.data(using: .utf8), bytes.count <= 1_024 * 1_024,
-              let object = try? JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              let type = object["type"] as? String else {
-            throw TutorConversationError.malformedProviderResponse("A streaming event could not be decoded.")
+        guard let bytes = data.data(using: .utf8), bytes.count <= 1_024 * 1_024 else {
+            throw TutorConversationError.malformedProviderResponse("SSE event diagnostic bytes=invalid json=unavailable type=unavailable")
+        }
+        guard let object = try? JSONSerialization.jsonObject(with: bytes) as? [String: Any] else {
+            throw TutorConversationError.malformedProviderResponse("SSE event diagnostic bytes=\(bytes.count) json=invalid type=unavailable")
+        }
+        guard let type = object["type"] as? String, !type.isEmpty else {
+            throw TutorConversationError.malformedProviderResponse("SSE event diagnostic bytes=\(bytes.count) json=valid type=missing")
         }
         switch type {
         case "response.output_text.delta":
@@ -450,6 +467,7 @@ public enum OpenAITutorSSEEventDecoder {
             let id = (response["id"] as? String).map { sanitized($0, maximumBytes: 256) }
             let model = sanitized(response["model"] as? String ?? "unknown", maximumBytes: 128)
             let usage = response["usage"] as? [String: Any]
+            let serviceTier = (response["service_tier"] as? String).flatMap(TutorProviderServiceTier.init(rawValue:))
             var output: [TutorProviderOutputItem] = []
             for item in (response["output"] as? [[String: Any]]) ?? [] {
                 if let type = item["type"] as? String,
@@ -489,7 +507,8 @@ public enum OpenAITutorSSEEventDecoder {
                     modelIdentifier: model,
                     providerResponseID: id,
                     inputTokens: usage?["input_tokens"] as? Int,
-                    outputTokens: usage?["output_tokens"] as? Int
+                    outputTokens: usage?["output_tokens"] as? Int,
+                    serviceTier: serviceTier
                 ),
                 output: output
             )]

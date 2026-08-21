@@ -156,6 +156,9 @@ public struct OpenAITutorAudioListener: Sendable {
         }
         guard response.body.count <= 1_024 * 1_024,
               let object = try? JSONSerialization.jsonObject(with: response.body) as? [String: Any],
+              let responseModel = object["model"] as? String,
+              !responseModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              responseModel == configuration.modelIdentifier,
               let choices = object["choices"] as? [[String: Any]],
               let message = choices.first?["message"] as? [String: Any],
               let summary = extractText(message["content"]),
@@ -165,7 +168,7 @@ public struct OpenAITutorAudioListener: Sendable {
         return TutorAudioIntelligenceResult(
             capture: TutorAudioCaptureIdentity(capture),
             providerIdentifier: "openai-chat-completions-audio-v1",
-            modelIdentifier: (object["model"] as? String) ?? configuration.modelIdentifier,
+            modelIdentifier: responseModel,
             receivedOriginalWaveformBytes: true,
             waveformBindingStatus: .captureBoundExactWAV,
             sourceProvenance: "Exact hash-validated WAV bytes were included in this completed provider request.",
