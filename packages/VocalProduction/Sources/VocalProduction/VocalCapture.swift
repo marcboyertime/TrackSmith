@@ -640,19 +640,21 @@ public struct VocalCapturePlanner: Sendable {
                     + facts.preservationChecks
                     + facts.hardConstraintTradeoffs
             )
-            let assumptions = uniqueStrings(
-                brief.assumptions
-                    + [
-                        "Desired capture result supplied by the musician: \(facts.desiredResult)",
-                        facts.prioritySummary,
-                        priorityFit,
-                    ]
-                    + facts.equipmentFacts
-                    + facts.patternFacts
-                    + facts.roomNoiseFacts
-                    + facts.hardConstraintFacts
-                    + facts.preservationChecks
+            var assumptionFields: [String] = []
+            assumptionFields.reserveCapacity(
+                brief.assumptions.count + 3 + facts.equipmentFacts.count + facts.patternFacts.count
+                    + facts.roomNoiseFacts.count + facts.hardConstraintFacts.count + facts.preservationChecks.count
             )
+            assumptionFields.append(contentsOf: brief.assumptions)
+            assumptionFields.append("Desired capture result supplied by the musician: \(facts.desiredResult)")
+            assumptionFields.append(facts.prioritySummary)
+            assumptionFields.append(priorityFit)
+            assumptionFields.append(contentsOf: facts.equipmentFacts)
+            assumptionFields.append(contentsOf: facts.patternFacts)
+            assumptionFields.append(contentsOf: facts.roomNoiseFacts)
+            assumptionFields.append(contentsOf: facts.hardConstraintFacts)
+            assumptionFields.append(contentsOf: facts.preservationChecks)
+            let assumptions = uniqueStrings(assumptionFields)
             let comparison = comparisonProtocol(
                 index: index,
                 interpretationID: id,

@@ -530,9 +530,23 @@ public struct CommunityCandidateCorpus: Equatable, Sendable {
                 cards[card.id] = ([card.id,card.title,card.question,card.category,card.domain] + card.clarificationQuestions + card.competingHypotheses).joined(separator:" ").normalizedCandidateCorpusText.candidateCorpusTokens
                 continue
             }
-            let structuredFields = [card.subcategory ?? "", card.rationale, card.recommendedFirstExperiment]
-                + (card.tracksmithDomains ?? []) + (card.preservationGoals ?? []) + (card.nonDSPPossibilities ?? [])
-                + (card.startingPoints ?? []) + (card.commonMistakes ?? []) + (card.roleFacets ?? []) + (card.sectionFacets ?? [])
+            var structuredFields: [String] = []
+            structuredFields.reserveCapacity(
+                3 + (card.tracksmithDomains?.count ?? 0) + (card.preservationGoals?.count ?? 0)
+                    + (card.nonDSPPossibilities?.count ?? 0) + (card.startingPoints?.count ?? 0)
+                    + (card.commonMistakes?.count ?? 0) + (card.roleFacets?.count ?? 0)
+                    + (card.sectionFacets?.count ?? 0)
+            )
+            structuredFields.append(card.subcategory ?? "")
+            structuredFields.append(card.rationale)
+            structuredFields.append(card.recommendedFirstExperiment)
+            structuredFields.append(contentsOf: card.tracksmithDomains ?? [])
+            structuredFields.append(contentsOf: card.preservationGoals ?? [])
+            structuredFields.append(contentsOf: card.nonDSPPossibilities ?? [])
+            structuredFields.append(contentsOf: card.startingPoints ?? [])
+            structuredFields.append(contentsOf: card.commonMistakes ?? [])
+            structuredFields.append(contentsOf: card.roleFacets ?? [])
+            structuredFields.append(contentsOf: card.sectionFacets ?? [])
             cards[card.id] = ([card.id,card.title,card.question,card.category,card.domain] + card.tags + card.clarificationQuestions + card.competingHypotheses + card.listeningCues + structuredFields).joined(separator:" ").normalizedCandidateCorpusText.candidateCorpusTokens
         }
         let packageByCard=Dictionary(uniqueKeysWithValues: canonicalCards.map { ($0.id,$0.packageID) })
