@@ -151,7 +151,11 @@ struct TutorConversationView: View {
     private func messageBubble(_ message: TutorConversationMessage) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
             Text(message.role == .assistant ? "TRACKSMITH" : "YOU").font(Theme.Font.kicker).foregroundStyle(message.role == .assistant ? Theme.Colors.accentBright : Theme.Colors.mutedText)
-            Text(message.text).font(Theme.Font.body).foregroundStyle(Theme.Colors.text).textSelection(.enabled)
+            if message.role == .assistant {
+                SafeTutorMarkdown(source: message.text)
+            } else {
+                Text(message.text).font(Theme.Font.body).foregroundStyle(Theme.Colors.text).textSelection(.enabled)
+            }
             if !message.evidence.isEmpty {
                 DisclosureGroup("Evidence and limits") { evidenceDetails(message.evidence) }
                     .font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
@@ -179,7 +183,7 @@ struct TutorConversationView: View {
     private var streamingBubble: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
             HStack { ProgressView().controlSize(.small); Text(tutor.activity).font(Theme.Font.meta) }
-            if !tutor.streamingText.isEmpty { Text(tutor.streamingText).font(Theme.Font.body).textSelection(.enabled) }
+            if !tutor.streamingText.isEmpty { SafeTutorMarkdown(source: tutor.streamingText) }
             if let fallback = tutor.fallbackNotice { Label(fallback, systemImage: "wifi.slash").font(Theme.Font.meta).foregroundStyle(.orange) }
         }
         .padding(Theme.Spacing.sixteen).frame(maxWidth: 720, alignment: .leading)
@@ -196,7 +200,9 @@ struct TutorConversationView: View {
             DisclosureGroup("Where, why, risk, and undo", isExpanded: $experimentDetailsExpanded) {
                 VStack(alignment: .leading, spacing: Theme.Spacing.eight) {
                     experimentRow("Where", experiment.draft.logicLocation); experimentRow("Why", experiment.draft.why)
-                    experimentRow("Risk", experiment.draft.risk); experimentRow("Undo", experiment.draft.undo)
+                    experimentRow("Risk", experiment.draft.risk)
+                    if let stop = experiment.draft.stopCondition { experimentRow("Stop", stop) }
+                    experimentRow("Undo", experiment.draft.undo)
                 }.padding(.top, Theme.Spacing.eight)
             }.font(Theme.Font.meta).foregroundStyle(Theme.Colors.secondaryText)
             if experiment.comparisonAuthority != nil, experiment.outcome == nil {

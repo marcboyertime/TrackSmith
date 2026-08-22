@@ -23,18 +23,30 @@ jobs:
           swift run -c release TutorConversationTests package17-diagnostics
           swift run -c release TutorConversationTests package17-performance
           swift run -c release TutorConversationTests package18-diagnostics
+          swift run -c release TutorConversationTests package19-diagnostics
           python3 research/scripts/build_candidate_retrieval_index.py --check
           python3 research/scripts/package18_audit.py
+          python3 research/scripts/package19_quality_suite.py --check --forbidden-resource --scanner-self-test --receipt-self-test
       - name: Unsigned app and AU build
         run: |
           brew install xcodegen
           xcodegen generate
-          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package018-derived" CODE_SIGNING_ALLOWED=NO build
-          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme AssistantAudioUnitExtension -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package018-derived" CODE_SIGNING_ALLOWED=NO build
-          test "$(find "$RUNNER_TEMP/package018-derived" -path '*ProductionTutor.bundle/Contents/Resources/*.json' -type f ! -name 'CandidateRetrieval.manifest.json' | wc -l | tr -d ' ')" = 0
-          ! rg -a -i 'tracksmith-corpus-017|expected_answer|fixture_alias|evaluation_case' "$RUNNER_TEMP/package018-derived/Build/Products/Release"
-      - name: Upload bounded P18 evidence
+          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package019-derived" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme AssistantAudioUnitExtension -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package019-derived" CODE_SIGNING_ALLOWED=NO build
+          python3 research/scripts/package19_quality_suite.py --check --forbidden-resource --installed-bundle "$RUNNER_TEMP/package019-derived/Build/Products/Release/Logic Audio Assistant.app"
+          test "$(find "$RUNNER_TEMP/package019-derived" -path '*ProductionTutor.bundle/Contents/Resources/*.json' -type f ! -name 'CandidateRetrieval.manifest.json' | wc -l | tr -d ' ')" = 0
+          ! rg -a -i 'tracksmith-corpus-017|p19-|expected_answer|fixture_alias|evaluation_case' "$RUNNER_TEMP/package019-derived/Build/Products/Release/Logic Audio Assistant.app/Contents/Resources"
+          # Upload-only CI receipt binds this exact unsigned artifact. It is
+          # intentionally separate from the deterministic tracked receipt.
+          python3 research/scripts/package19_quality_suite.py --generate-validation-receipt --installed-bundle "$RUNNER_TEMP/package019-derived/Build/Products/Release/Logic Audio Assistant.app" --receipt-output "$RUNNER_TEMP/package019-ci-receipt.json"
+          python3 research/scripts/package19_quality_suite.py --generate-validation-receipt
+          python3 research/scripts/package19_quality_suite.py --check --write-reports
+          git diff --exit-code -- docs/evidence/PACKAGE_019_RETRIEVAL_CALIBRATION.json docs/evidence/PACKAGE_019_LONG_CONTEXT_COST.json docs/evidence/PACKAGE_019_EXPERIMENT_COMPLETENESS.json docs/evidence/PACKAGE_019_DETERMINISTIC_END_TO_END.json docs/evidence/PACKAGE_019_VALIDATION_RECEIPT.json docs/evidence/PACKAGE_019_FINAL_REPORT.json docs/evidence/PACKAGE_019_FINAL_REPORT.md
+      - name: Upload bounded P19 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: package-018-evidence
-          path: docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json
+          name: package-019-evidence
+          path: |
+            docs/evidence/PACKAGE_019_*.json
+            docs/evidence/PACKAGE_019_FINAL_REPORT.md
+            ${{ runner.temp }}/package019-ci-receipt.json

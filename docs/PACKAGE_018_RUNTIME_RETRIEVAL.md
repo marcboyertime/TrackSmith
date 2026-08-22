@@ -62,6 +62,9 @@ All commands below exited `0` on the Package 018 host unless explicitly noted.
 
 `make verify` ran all import reconstruction targets successfully, then stopped at the existing Package 005 staged audit because its tracked baseline import report lacks required `force_semantics:false`. That condition is present on immutable baseline and unrelated to Package 018. The remaining verify targets were run manually: general knowledge check/audit, Vocal evaluation (89/89), listening selfcheck, Release build, TestRunner, full Tutor tests, and AudioUnitHostProbe. The selfcheck is not listening evidence; no installed-app, Logic, model-listening, or owner-listening claim is made.
 
+Package 019 later adds additive portable attestations for the historical P005/P006
+omission; it does not alter this Package 018 historical report or its evidence.
+
 ## Final evidence boundary
 
 The machine report records aggregate legacy lexical, indexed FTS-pool, and final

@@ -27,9 +27,13 @@ private actor PackageSeventeenCloudConcurrencyProbe {
 private actor CandidateRetrieverStub: CandidateRetriever {
     let state: CandidateRetrievalAvailability
     let values: [CommunityCandidateCorpusRankedCard]
-    init(_ state: CandidateRetrievalAvailability, _ values: [CommunityCandidateCorpusRankedCard] = []) { self.state = state; self.values = values }
+    let outcome: CandidateRetrievalOutcomeKind?
+    init(_ state: CandidateRetrievalAvailability, _ values: [CommunityCandidateCorpusRankedCard] = [], outcome: CandidateRetrievalOutcomeKind? = nil) { self.state = state; self.values = values; self.outcome = outcome }
     func availability() -> CandidateRetrievalAvailability { state }
     func ranked(query: String, filters: CommunityCandidateCorpusFilters, limit: Int) -> [CommunityCandidateCorpusRankedCard] { values.prefix(limit).map { $0 } }
+    func rankedOutcome(query: String, filters: CommunityCandidateCorpusFilters, limit: Int) -> CandidateRetrievalOutcome {
+        .init(kind: outcome ?? (values.isEmpty ? .noMatch : .matches), cards: values.prefix(limit).map { $0 })
+    }
 }
 
 @main
@@ -74,6 +78,8 @@ struct TutorConversationTests {
             await suite.runPackageSixteenPerformance()
         } else if CommandLine.arguments.contains("package16-fallback") {
             await suite.runPackageSixteenFallback()
+        } else if CommandLine.arguments.contains("tool-schema-diagnostics") {
+            await suite.runToolSchemaDiagnostic()
         } else if CommandLine.arguments.contains("package17-diagnostics") {
             await suite.runPackageSeventeenDiagnostic()
         } else if CommandLine.arguments.contains("package18-diagnostics") {
@@ -82,6 +88,14 @@ struct TutorConversationTests {
             await suite.runPackageEighteenIndexReadiness()
         } else if CommandLine.arguments.contains("package18-legacy-readiness") {
             await suite.runPackageEighteenLegacyReadiness()
+        } else if CommandLine.arguments.contains("package19-diagnostics") {
+            await suite.runPackageNineteenDiagnostic()
+        } else if CommandLine.arguments.contains("package19-cloud-no-tool") {
+            await suite.runPackageNineteenCloud(.noTool)
+        } else if CommandLine.arguments.contains("package19-cloud-full-tool") {
+            await suite.runPackageNineteenCloud(.fullTool)
+        } else if CommandLine.arguments.contains("package19-cloud-repeated-triplets") {
+            await suite.runPackageNineteenCloud(.repeatedTriplets)
         } else if CommandLine.arguments.contains("package17-performance") {
             await suite.runPackageSeventeenPerformance()
         } else if CommandLine.arguments.contains("package17-live-evaluation") {
@@ -119,6 +133,8 @@ private final class Suite {
     private nonisolated static let packageSeventeenAudioModel = "gpt-audio-1.5"
     private nonisolated static let packageSeventeenPublicAudioFixtureSHA256 = "f6f168af94a612185ea4b9338e96776f936dcff2188ba5330cf3702067f11d7b"
     private nonisolated static let packageSeventeenPublicAudioFixturePathSuffix = "/Library/Caches/TrackSmith/P16/fixtures/generated/p16-controlled-source.wav"
+
+    enum PackageNineteenCloudLane { case noTool, fullTool, repeatedTriplets }
 
     private struct PackageSeventeenCloudPrompt: Sendable {
         var order: Int
@@ -267,6 +283,10 @@ private final class Suite {
         await test("Package 16 candidate and provider failures stay fail-soft", testPackageSixteenFallback)
     }
 
+    func runToolSchemaDiagnostic() async {
+        await test("strict OpenAI tool schemas stay bounded", testToolSchemas)
+    }
+
     func runPackageSeventeenDiagnostic() async {
         await test("Package 17 experience levels are explicit, persistent-safe, and receipt-bound", testPackageSeventeenExperienceContract)
         await test("Package 17 provider context remains compact and evaluation-isolated", testPackageSeventeenProviderIsolation)
@@ -284,6 +304,14 @@ private final class Suite {
 
     func runPackageEighteenLegacyReadiness() async {
         await test("Package 18 legacy oracle readiness baseline", testPackageEighteenLegacyReadiness)
+    }
+
+    func runPackageNineteenDiagnostic() async {
+        await test("Package 19 deterministic seven-tool and frozen-suite diagnostic", testPackageNineteenDiagnostic)
+    }
+
+    func runPackageNineteenCloud(_ lane: PackageNineteenCloudLane) async {
+        await test("Package 19 consent-gated cloud \(String(describing: lane)) harness", { try await testPackageNineteenCloud(lane) })
     }
 
     func runPackageSeventeenPerformance() async {
@@ -432,8 +460,12 @@ private final class Suite {
         let required = parameters["required"] as! [String]
         try expect(Set(required) == Set([
             "title", "logic_location", "action", "starting_range", "listen_for",
-            "why", "risk", "undo", "visual_target_query",
+            "why", "risk", "stop_condition", "undo", "visual_target_query",
         ]), "experiment contract is incomplete")
+        let properties = parameters["properties"] as! [String: Any]
+        let stop = properties["stop_condition"] as? [String: Any]
+        try expect(stop?["type"] as? String == "string" && parameters["additionalProperties"] as? Bool == false,
+                   "experiment stop condition schema is not strict")
         let defaults = TutorProviderConfiguration()
         try expect(defaults.modelIdentifier == "gpt-5.6-sol", "Tutor no longer defaults to the strongest configured reasoning model")
         try expect(defaults.serviceTier == .priority, "Tutor no longer defaults gpt-5.6-sol requests to priority service tier")
@@ -1317,6 +1349,269 @@ private final class Suite {
         print("P18_LEGACY_READINESS_OK milliseconds=\(String(format: "%.3f", milliseconds))")
     }
 
+    private func testPackageNineteenDiagnostic() async throws {
+        let suiteURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent("research/tutor_quality/package019_evaluation_suite.json")
+        let rows = try JSONSerialization.jsonObject(with: Data(contentsOf: suiteURL)) as? [[String: Any]] ?? []
+        try expect(rows.count == 240 && Set(rows.compactMap { $0["partition"] as? String }) == Set(["development", "calibration", "held_out"]),
+                   "P19 frozen suite was not available to the evaluation-only diagnostic")
+        let contexts = rows.compactMap { $0["context_matrix"] as? [String: String] }
+        let requiredIndexContexts: Set<String> = ["ready", "missing", "corrupt", "disabled", "version_mismatch", "query_failed", "malformed_selected_payload"]
+        try expect(requiredIndexContexts.isSubset(of: Set(contexts.compactMap { $0["candidate_index"] }))
+                   && Set(["available", "unavailable", "not_requested"]).isSubset(of: Set(contexts.compactMap { $0["model_listening"] }))
+                   && rows.contains { ($0["exact_reviewed_navigation_necessary"] as? Bool == true) && (($0["context_matrix"] as? [String: String])?["reviewed_procedure"] == "absent") }
+                   && rows.contains { !(($0["multi_turn_history"] as? [[String: String]]) ?? []).isEmpty },
+                   "P19 required evaluation-only context coverage drifted")
+        let opened = CandidateRetrievalIndex.openBundled()
+        guard opened.availability == .ready, let retriever = opened.retriever else {
+            throw TestFailure(description: "P19 actual runtime index unavailable: \(opened.availability.rawValue)")
+        }
+        var byPartition: [String: [[String: Any]]] = [:]
+        var typedOutcomes: [String: Int] = [:]
+        for row in rows {
+            guard let query = row["query"] as? String, let partition = row["partition"] as? String else { throw TestFailure(description: "P19 suite row malformed") }
+            let started = Date()
+            let outcome = await retriever.rankedOutcome(query: query, filters: .init(), limit: 4)
+            typedOutcomes[outcome.kind.rawValue, default: 0] += 1
+            byPartition[partition, default: []].append([
+                "expected": row["acceptable_diagnosis_families"] as? [String] ?? [],
+                "abstain": row["ambiguity_expectation"] as? String == "abstain",
+                "domains": outcome.cards.map { $0.card.domain },
+                "topic": row["topic"] as? String ?? "unknown",
+                "kind": row["kind"] as? String ?? "unknown",
+                "latency_ms": Date().timeIntervalSince(started) * 1_000,
+            ])
+        }
+        func metric(_ items: [[String: Any]]) -> [String: Any] {
+            let positives = items.filter { !($0["expected"] as? [String] ?? []).isEmpty }
+            let actualNoMatch = items.filter { $0["abstain"] as? Bool == true }
+            let predictedNoMatch = items.filter { ($0["domains"] as? [String] ?? []).isEmpty }
+            let truePositive = actualNoMatch.filter { ($0["domains"] as? [String] ?? []).isEmpty }.count
+            let top1 = positives.filter { item in
+                guard let first = (item["domains"] as? [String])?.first else { return false }
+                return (item["expected"] as? [String] ?? []).contains(first)
+            }.count
+            let top4 = positives.filter { item in
+                !Set(item["domains"] as? [String] ?? []).isDisjoint(with: Set(item["expected"] as? [String] ?? []))
+            }.count
+            let mrr = positives.reduce(0.0) { partial, item in
+                let expected = item["expected"] as? [String] ?? []
+                let rank = (item["domains"] as? [String] ?? []).firstIndex(where: { expected.contains($0) })
+                return partial + (rank.map { 1.0 / Double($0 + 1) } ?? 0)
+            }
+            func counts(_ selected: [[String: Any]], key: String) -> [String: Int] {
+                Dictionary(grouping: selected, by: { $0[key] as? String ?? "unknown" }).mapValues(\.count)
+            }
+            let top1Misses = positives.filter { item in
+                guard let first = (item["domains"] as? [String])?.first else { return true }
+                return !(item["expected"] as? [String] ?? []).contains(first)
+            }
+            let falseAbstains = predictedNoMatch.filter { !($0["abstain"] as? Bool ?? false) }
+            let missedAbstains = actualNoMatch.filter { !($0["domains"] as? [String] ?? []).isEmpty }
+            let top1Value = positives.isEmpty ? 0 : Double(top1) / Double(positives.count)
+            let top4Value = positives.isEmpty ? 0 : Double(top4) / Double(positives.count)
+            let precisionValue: Any = predictedNoMatch.isEmpty ? NSNull() : Double(truePositive) / Double(predictedNoMatch.count)
+            let recallValue: Any = actualNoMatch.isEmpty ? NSNull() : Double(truePositive) / Double(actualNoMatch.count)
+            let precisionGate = (precisionValue as? Double).map { $0 >= 0.90 } ?? false
+            let recallGate = (recallValue as? Double).map { $0 >= 0.90 } ?? false
+            let meets = top1Value >= 0.80 && top4Value >= 0.95 && precisionGate && recallGate
+            return [
+                "case_count": items.count,
+                "top1_acceptable": top1Value,
+                "top4_recall": top4Value,
+                "mrr": positives.isEmpty ? 0 : mrr / Double(positives.count),
+                "no_match_precision": precisionValue,
+                "no_match_recall": recallValue,
+                "no_match_counts": ["true_positive": truePositive, "predicted_no_match": predictedNoMatch.count, "actual_no_match": actualNoMatch.count],
+                // Timings are exercised for every case, but host scheduling is
+                // deliberately not serialized as a numeric golden artifact.
+                "latency_ms": ["measured": true, "reporting": "runtime latency is measured but not serialized numerically in reproducible evidence"],
+                "quality_targets": ["top1_acceptable": 0.80, "top4_recall": 0.95, "no_match_precision": 0.90, "no_match_recall": 0.90, "ambiguity_balanced_accuracy": "not_applicable_model_withheld", "status": meets ? "met" : "missed"],
+                "failure_taxonomy": ["top1_miss_by_topic": counts(top1Misses, key: "topic"), "top1_miss_by_kind": counts(top1Misses, key: "kind"), "false_abstain_by_topic": counts(falseAbstains, key: "topic"), "missed_abstain_by_topic": counts(missedAbstains, key: "topic")],
+            ]
+        }
+
+        let prior = TutorExperimentRecord(draft: experimentDraft(title: "P19 baseline"), outcome: .noChange)
+        let executor = try TutorToolExecutor(observeLogic: { query in
+            .init(status: .observed, applicationName: "Logic Pro", bundleIdentifier: "com.apple.logic10", windowTitle: "P19 fixture", controls: [.init(role: "AXButton", label: query, value: "off", frame: .init(x: 1, y: 1, width: 1, height: 1))], limitation: "P19 injected read-only state.")
+        }, priorExperiments: { [prior] })
+        let context = TutorRuntimeContext(sourceType: .vocal, capture: sampleCapture(wavData: Data("p19-capture".utf8)), experience: .init(persistentLevel: .amateur, temporaryOverride: .pro))
+        let calls: [(String, String)] = [
+            ("get_current_capture_context", "{}"), ("search_production_knowledge", #"{"query":"muddy vocal low mid"}"#),
+            ("search_candidate_corpus", #"{"query":"my vocal gets muddy when guitars arrive"}"#), ("get_logic_procedure", #"{"query":"Channel EQ vocal low mid"}"#),
+            ("retrieve_prior_experiments", #"{"query":null,"max_results":6}"#), ("inspect_logic", #"{"query":"Channel EQ"}"#),
+            ("present_experiment", experimentArguments(title: "P19 one variable")),
+        ]
+        var outputs: [TutorToolResult] = []
+        for (offset, call) in calls.enumerated() {
+            outputs.append(try await executor.execute(.init(callID: "p19-\(offset)", name: call.0, argumentsJSON: call.1), context: context))
+        }
+        try expect(outputs.count == TutorToolExecutor.defaultDefinitions.count && outputs.allSatisfy { $0.outputJSON.utf8.count <= TutorToolExecutor.maximumToolOutputBytes },
+                   "P19 seven-tool execution or output bound failed")
+        guard let experiment = outputs.last?.experiment else { throw TestFailure(description: "P19 experiment was not receipt-ready") }
+        try expect(!experiment.title.isEmpty && !experiment.startingRange.isEmpty && !experiment.listenFor.isEmpty && !experiment.risk.isEmpty && !(experiment.stopCondition ?? "").isEmpty && !experiment.undo.isEmpty,
+                   "P19 experiment completeness failed")
+        let knowledge = try GeneralTutorKnowledgeBase.loadValidated(); let procedures = try TutorProcedureCatalog.loadValidated()
+        // The suite context matrix is operational, not decorative: every
+        // unavailable/integrity outcome travels through the real tool boundary
+        // and must not be silently rewritten as an ordinary valid no-match.
+        let typedFailureCases: [(CandidateRetrievalAvailability, CandidateRetrievalOutcomeKind)] = [
+            (.unavailable, .unavailable), (.corrupt, .corrupt), (.disabled, .disabled),
+            (.versionMismatch, .versionMismatch), (.schemaDrift, .schemaDrift),
+            (.ready, .malformedSelectedPayload), (.ready, .queryFailed),
+        ]
+        for (offset, typed) in typedFailureCases.enumerated() {
+            let injected = CandidateRetrieverStub(typed.0, outcome: typed.1)
+            let result = try await TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateRetriever: injected).execute(.init(callID: "p19-typed-\(offset)", name: "search_candidate_corpus", argumentsJSON: #"{"query":"muddy vocal guitars"}"#), context: context)
+            try expect(result.outputJSON.contains(typed.1.rawValue) && result.evidence.first?.kind == .unavailable,
+                       "P19 typed outcome \(typed.1.rawValue) collapsed to valid no-match")
+        }
+        let validNoMatch = CandidateRetrieverStub(.ready, outcome: .noMatch)
+        let noMatchResult = try await TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateRetriever: validNoMatch).execute(.init(callID: "p19-valid-no-match", name: "search_candidate_corpus", argumentsJSON: #"{"query":"muddy vocal guitars"}"#), context: context)
+        try expect(noMatchResult.outputJSON.contains("noMatch") && noMatchResult.evidence.first?.kind != .unavailable,
+                   "P19 valid no-match was conflated with a query/integrity failure")
+        let legacyExperiment = try await executor.execute(.init(callID: "p19-stop-missing", name: "present_experiment", argumentsJSON: experimentArguments(title: "P19 missing stop")), context: context)
+        try expect(!(legacyExperiment.experiment?.stopCondition ?? "").isEmpty, "P19 missing stop field lost additive safe default")
+        let explicitStop = "Stop immediately if the vocal becomes thinner than the bypassed baseline."
+        let explicitExperiment = try await executor.execute(.init(callID: "p19-stop-explicit", name: "present_experiment", argumentsJSON: experimentArguments(title: "P19 explicit stop", stopCondition: explicitStop)), context: context)
+        try expect(explicitExperiment.experiment?.stopCondition == explicitStop, "P19 explicit stop field was not retained in receipt")
+        do {
+            _ = try await executor.execute(.init(callID: "p19-stop-oversized", name: "present_experiment", argumentsJSON: experimentArguments(title: "P19 oversized stop", stopCondition: String(repeating: "x", count: 601))), context: context)
+            throw TestFailure(description: "P19 oversized stop condition was accepted")
+        } catch let error as TutorConversationError {
+            try expect(error == .invalidToolArguments("stop_condition"), "P19 oversized stop condition had wrong failure")
+        }
+        // These are behavioural security cases, not source-string checks. The
+        // final assertion catches both sanitizer misses and any Markdown parser
+        // attribute that would otherwise become an interactive transport.
+        let hostileMarkdown = [
+            "[HTTP label](HTTP://Example.test/a_(b)) and [HTTPS label](hTTps://example.test)",
+            "![cover art](https://cdn.example.test/cover.png) plus <img src=\"https://cdn.example.test/x\">",
+            "<HTTPS://example.test/autolink> <mailto:owner@example.test> <file:///private/tmp/a> <custom+scheme://example.test>",
+            "[relative label](../private/file) and [root label](/Contents/Resources/secret)",
+            "**strong** and `inline code` with www.Example.test and MAILTO:owner@example.test",
+            "[nested label](https://example.test/path_(one_(two))) and [malformed](https://example.test/unclosed",
+            "<b>visible HTML text</b> and <script>never load</script>",
+        ]
+        for input in hostileMarkdown {
+            let sanitized = TutorMarkdownSanitizer.sanitize(input)
+            let attributed = TutorMarkdownSanitizer.inertInlineAttributedText(input)
+            try expect(!sanitized.contains("://") && !sanitized.lowercased().contains("mailto:") && !sanitized.lowercased().contains("file:") && !sanitized.lowercased().contains("custom+scheme:"),
+                       "P19 Markdown sanitizer retained a transport target: \(input)")
+            try expect(attributed.runs.allSatisfy { $0.link == nil }, "P19 Markdown parser retained a link attribute: \(input)")
+        }
+        let safeStyled = TutorMarkdownSanitizer.inertInlineAttributedText("## Heading\\n- **emphasis** and `code`")
+        try expect(String(safeStyled.characters).contains("Heading") && String(safeStyled.characters).contains("emphasis") && String(safeStyled.characters).contains("code"),
+                   "P19 Markdown sanitizer discarded readable local content")
+        let markdownURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("apps/CompanionMacApp/SafeTutorMarkdown.swift")
+        let markdownSource = try String(contentsOf: markdownURL)
+        for required in ["hasPrefix(\"# \")", "hasPrefix(\"- \")", "textSelection(.enabled)", "accessibilityElement(children: .contain)", "inertInlineAttributedText"] {
+            try expect(markdownSource.contains(required), "P19 safe Markdown view omitted \(required)")
+        }
+        try expect(!markdownSource.contains("accessibilityLabel(\"Tutor response\")"), "P19 Markdown renderer suppresses response content for VoiceOver")
+        try expect(!markdownSource.contains("WebView") && !markdownSource.contains("Link("), "P19 Markdown renderer introduced remote/interactive content")
+        let longCounts = [10, 25, 50, 80]
+        let longContext: [[String: Any]] = longCounts.map { count in
+            let history = (0..<count).map { TutorConversationMessage(role: $0.isMultiple(of: 2) ? .user : .assistant, text: "topic \($0 % 5) capture \($0 == count - 1 ? "replacement" : "prior")") }
+            return ["messages": count, "bytes": history.reduce(0) { $0 + $1.text.utf8.count }, "topic_change_return": "contract_only_not_engine_measured", "temporary_level": "contract_only_not_engine_measured", "cancellation_retry": "not_measured_in_this_diagnostic", "capture_replacement": "contract_only_not_engine_measured", "relevance_latency_ms": "not_measured_in_this_diagnostic"]
+        }
+        let report: [String: Any] = [
+            "package": "019", "status": "infrastructure_pass_quality_fail", "actual_runtime_current_final": ["per_partition": Dictionary(uniqueKeysWithValues: byPartition.map { ($0.key, metric($0.value)) }), "typed_outcomes": typedOutcomes, "quality_gate": "failed: held-out ranking target missed; no held-out tuning performed"],
+            "tools": ["count": outputs.count, "names": calls.map(\.0), "output_bytes": outputs.map { $0.outputJSON.utf8.count }, "authority": "read-only except presentation-only experiment"],
+            "experiment_completeness": ["status": "pass", "repairs": "not_applicable_no_repair_path_invoked", "max_repairs": 1, "fields": ["baseline_start", "one_variable", "listen_cue", "risk", "stop_condition", "undo"]],
+            "long_context": ["status": "contract_only_partial_measurement", "runs": longContext, "message_limit": TutorConversationEngine.maximumMessageBytes, "tool_output_limit": TutorToolExecutor.maximumToolOutputBytes, "gap": "Engine/store cancellation-retry and relevance latency require a dedicated provider-free conversation harness."],
+            "evidence_boundary": "Injected deterministic capture/Logic state and local runtime index only; no provider, audio upload, installed app, Logic action, or owner listening.",
+        ]
+        let outputURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("docs/evidence/PACKAGE_019_TOOL_DIAGNOSTIC.json")
+        try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]).write(to: outputURL)
+        print("P19_DIAGNOSTIC_OK cases=240 tools=7 typedFailures=7 longContext=10,25,50,80")
+    }
+
+    /// An executable opt-in cloud harness.  It is intentionally not part of
+    /// deterministic verification: without the explicit argument this throws
+    /// before constructing a provider request, and this Package 019 lane never
+    /// invokes it.  When opted in it uses the production provider request path
+    /// (which sets `store:false`) and records only bounded metadata/hashes.
+    private func testPackageNineteenCloud(_ lane: PackageNineteenCloudLane) async throws {
+        guard CommandLine.arguments.contains("--cloud-text-consent") else {
+            throw TestFailure(description: "Package 019 cloud harness requires --cloud-text-consent; zero provider requests were sent")
+        }
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let model = UserDefaults.standard.string(forKey: "TrackSmithTutorModelIdentifier") ?? "gpt-5.6-sol"
+        let effort = TutorReasoningEffort(rawValue: UserDefaults.standard.string(forKey: "TrackSmithTutorReasoningEffort") ?? "high") ?? .high
+        let configuration = TutorProviderConfiguration(modelIdentifier: model, reasoningEffort: effort, cloudTextConsent: true)
+        let provider = OpenAITutorProvider(configuration: configuration)
+        let prompts = try packageSeventeenAcceptancePrompts(repository: repository)
+        // Lane A is the current-policy no-tool 12-prompt level triplet. Lane C
+        // repeats that complete triplet three times.  Lane B uses the same
+        // production prompt breadth but routes each turn through the actual
+        // engine/tool loop rather than merely advertising tool definitions.
+        let levels: [TutorExperienceLevel] = TutorExperienceLevel.allCases
+        let repetitions = lane == .repeatedTriplets ? 3 : 1
+        let offeredTools = lane == .noTool ? [] : TutorToolExecutor.defaultDefinitions
+        var attempts: [[String: Any]] = []
+        for repetition in 0..<repetitions {
+            for prompt in prompts {
+                for level in levels {
+                let started = Date()
+                var text = ""
+                var metadata: TutorProviderMetadata?
+                var functionCalls = 0
+                do {
+                    if lane == .fullTool {
+                        let root = temporaryRoot("p19-cloud-tools")
+                        defer { try? FileManager.default.removeItem(at: root) }
+                        let prior = TutorExperimentRecord(draft: experimentDraft(title: "P19 cloud baseline"), outcome: .noChange)
+                        let executor = try TutorToolExecutor(
+                            observeLogic: { query in .init(status: .observed, applicationName: "Logic Pro", bundleIdentifier: "com.apple.logic10", windowTitle: "P19 cloud injected fixture", controls: [.init(role: "AXButton", label: query, value: "off", frame: .init(x: 1, y: 1, width: 1, height: 1))], limitation: "Injected read-only Package 019 cloud harness state.") },
+                            priorExperiments: { [prior] }
+                        )
+                        let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: root), tools: executor, fallbackProvider: try OfflineTutorProvider())
+                        let context = TutorRuntimeContext(sourceType: .vocal, capture: sampleCapture(wavData: Data("p19-cloud-capture".utf8)), consent: .init(cloudTextGranted: true), experience: .init(persistentLevel: level))
+                        let events = try await collectTurn(engine, prompt.query, context, provider)
+                        guard let receipt = events.compactMap({ if case let .completed(_, receipt) = $0 { return receipt }; return nil }).last else {
+                            throw TutorConversationError.malformedProviderResponse("Cloud tool harness completed without a receipt.")
+                        }
+                        metadata = receipt.provider
+                        functionCalls = receipt.tools.count
+                        text = (await engine.snapshot()).messages.last?.text ?? ""
+                    } else {
+                        let request = TutorProviderRequest(messages: [.init(role: .user, text: prompt.query)], context: .init(sourceType: .vocal, experience: .init(persistentLevel: level)), tools: [])
+                        for try await event in provider.stream(request) {
+                            switch event {
+                            case let .textDelta(delta): text += delta
+                            case let .completed(value, output):
+                                metadata = value
+                                functionCalls += output.reduce(0) { partial, item in
+                                    if case .functionCall = item { return partial + 1 }
+                                    return partial
+                                }
+                            }
+                        }
+                    }
+                    attempts.append([
+                        "repetition": repetition, "topic": prompt.topic, "query_sha256": sha256(Data(prompt.query.utf8)), "level": level.rawValue, "status": "completed",
+                        "provider": metadata?.providerIdentifier ?? "unknown", "model": metadata?.modelIdentifier ?? model,
+                        "service_tier": metadata?.serviceTier?.rawValue ?? NSNull(),
+                        "input_tokens": metadata?.inputTokens ?? NSNull(), "output_tokens": metadata?.outputTokens ?? NSNull(),
+                        "latency_ms": Int(Date().timeIntervalSince(started) * 1_000),
+                        "assistant_text_sha256": sha256(Data(text.utf8)), "tool_calls_requested": functionCalls,
+                    ])
+                } catch {
+                    let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "provider request failed safely"
+                    attempts.append(["repetition": repetition, "topic": prompt.topic, "level": level.rawValue, "status": "failed", "safe_failure": safe, "latency_ms": Int(Date().timeIntervalSince(started) * 1_000)])
+                    let artifact: [String: Any] = ["package": "019", "lane": String(describing: lane), "consent": "explicit --cloud-text-consent", "store": false, "requested_model": model, "reasoning_effort": effort.rawValue, "service_tier": configuration.serviceTier?.rawValue ?? NSNull(), "tools_offered": offeredTools.map(\.name), "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "attempts": attempts, "provider_calls": attempts.count]
+                    try JSONSerialization.data(withJSONObject: artifact, options: [.sortedKeys, .prettyPrinted]).write(to: repository.appendingPathComponent("docs/evidence/PACKAGE_019_CLOUD_\(String(describing: lane)).json"))
+                    throw error
+                }
+                }
+            }
+        }
+        let artifact: [String: Any] = ["package": "019", "lane": String(describing: lane), "consent": "explicit --cloud-text-consent", "store": false, "requested_model": model, "reasoning_effort": effort.rawValue, "service_tier": configuration.serviceTier?.rawValue ?? NSNull(), "tools_offered": offeredTools.map(\.name), "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "attempts": attempts, "provider_calls": attempts.count]
+        try JSONSerialization.data(withJSONObject: artifact, options: [.sortedKeys, .prettyPrinted]).write(to: repository.appendingPathComponent("docs/evidence/PACKAGE_019_CLOUD_\(String(describing: lane)).json"))
+        print("P19_CLOUD_HARNESS_OK lane=\(String(describing: lane)) attempts=\(attempts.count) store=false")
+    }
+
     private func testPackageEighteenDiagnostic() async throws {
         let policyAudit = TutorSystemPolicy.audit()
         try expect(policyAudit.passes && policyAudit.version == "package018/1" && policyAudit.utf8Bytes == 2_836 && policyAudit.sha256 == "b38c81c7f61cbfc4b205fcc2555cd0f19042bae5f5564dfa981b3f1f001f73da",
@@ -1349,10 +1644,13 @@ private final class Suite {
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         let corruptManifest = root.appendingPathComponent("corrupt.json")
         try Data("{}".utf8).write(to: corruptManifest)
+        let schemaDriftManifest = root.appendingPathComponent("schema-drift.json")
+        try Data(#"{"schema_version":"wrong","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":""}"#.utf8).write(to: schemaDriftManifest)
         let mismatchManifest = root.appendingPathComponent("mismatch.json")
-        try Data(#"{"schema_version":"wrong","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":""}"#.utf8).write(to: mismatchManifest)
+        try Data(#"{"schema_version":"package018-candidate-index/1","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":""}"#.utf8).write(to: mismatchManifest)
         try expect(CandidateRetrievalIndex.open(indexURL: nil, manifestURL: nil).availability == .unavailable &&
                    CandidateRetrievalIndex.open(indexURL: nil, manifestURL: corruptManifest).availability == .corrupt &&
+                   CandidateRetrievalIndex.open(indexURL: nil, manifestURL: schemaDriftManifest).availability == .schemaDrift &&
                    CandidateRetrievalIndex.open(indexURL: nil, manifestURL: mismatchManifest).availability == .versionMismatch &&
                    CandidateRetrievalIndex.open(indexURL: nil, manifestURL: mismatchManifest, disabled: true).availability == .disabled,
                    "P18 index failure states drifted")
@@ -1390,7 +1688,7 @@ private final class Suite {
             try expect(abstentionObject["availability"] as? String == "ready" && abstentionObject["match"] is NSNull, "P18 frozen abstention regression drifted")
         }
         var ambiguous = results[0]; ambiguous.ambiguity = true
-        let matrix: [(CandidateRetrievalAvailability, [CommunityCandidateCorpusRankedCard], Bool)] = [(.unavailable, [], false), (.corrupt, [results[0]], false), (.versionMismatch, [results[0]], false), (.disabled, [results[0]], false), (.ready, [results[0]], true), (.ready, [], false), (.ready, [ambiguous, results[1]], true)]
+        let matrix: [(CandidateRetrievalAvailability, [CommunityCandidateCorpusRankedCard], Bool)] = [(.unavailable, [], false), (.corrupt, [results[0]], false), (.schemaDrift, [results[0]], false), (.versionMismatch, [results[0]], false), (.disabled, [results[0]], false), (.ready, [results[0]], true), (.ready, [], false), (.ready, [ambiguous, results[1]], true)]
         let knowledge = try GeneralTutorKnowledgeBase.loadValidated(); let procedures = try TutorProcedureCatalog.loadValidated()
         for level in TutorExperienceLevel.allCases {
             for (availabilityState, values, hasMatch) in matrix {
@@ -1406,10 +1704,16 @@ private final class Suite {
                 }
             }
         }
+        let queryFailure = CandidateRetrieverStub(.ready, outcome: .queryFailed)
+        let queryFailureExecutor = TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateRetriever: queryFailure)
+        let queryFailureResult = try await queryFailureExecutor.execute(TutorToolCall(callID: "p18-query-failure", name: "search_candidate_corpus", argumentsJSON: #"{"query":"my vocal gets muddy when guitars arrive"}"#), context: .init(sourceType: .vocal))
+        let queryFailureJSON = try JSONSerialization.jsonObject(with: Data(queryFailureResult.outputJSON.utf8)) as? [String: Any] ?? [:]
+        try expect(queryFailureJSON["availability"] as? String == "ready" && queryFailureJSON["outcome"] as? String == CandidateRetrievalOutcomeKind.queryFailed.rawValue && queryFailureJSON["match"] is NSNull && queryFailureResult.evidence.first?.kind == .unavailable,
+                   "P19 typed query failure was collapsed into no-match")
         let packageText = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Package.swift"))
         try expect(!packageText.contains("community-reverb-delay-v1.json") && packageText.contains("CandidateRetrieval.sqlite"),
                    "P18 raw candidate resources remain in product package declaration")
-        print("P18_INDEX_OK availability=ready selected=\(results.count) decodedPayloads=\(decoded) failureStates=4 diagnostics=bounded bundle=compiled-index-only indexedReadinessMs=\(Int(indexedReadinessMilliseconds)) legacyReadinessMs=\(Int(legacyReadinessMilliseconds))")
+        print("P18_INDEX_OK availability=ready selected=\(results.count) decodedPayloads=\(decoded) failureStates=5 diagnostics=bounded bundle=compiled-index-only indexedReadinessMs=\(Int(indexedReadinessMilliseconds)) legacyReadinessMs=\(Int(legacyReadinessMilliseconds))")
     }
 
     private func testPackageSixteenGolden() async throws {
@@ -3672,7 +3976,7 @@ private final class Suite {
         )
     }
 
-    private func experimentArguments(title: String) -> String {
+    private func experimentArguments(title: String, stopCondition: String? = nil) -> String {
         let object: [String: Any] = [
             "title": title,
             "logic_location": "Logic Pro 12.3 > Audio FX > Channel EQ",
@@ -3681,6 +3985,7 @@ private final class Suite {
             "listen_for": "Clarity without loss of body.",
             "why": "A controlled comparison tests the low-mid hypothesis.",
             "risk": "Too much can sound thin; stop before body recedes.",
+            "stop_condition": stopCondition ?? NSNull(),
             "undo": "Reset the band or bypass the user-added EQ.",
             "visual_target_query": "EQ",
         ]

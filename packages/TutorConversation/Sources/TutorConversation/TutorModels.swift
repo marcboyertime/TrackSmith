@@ -509,6 +509,9 @@ public struct TutorExperimentDraft: Codable, Equatable, Identifiable, Sendable {
     public var listenFor: String
     public var why: String
     public var risk: String
+    /// Additive P19 stop rule. Optional decoding preserves persisted P17/P18
+    /// experiments; newly presented experiments receive a bounded value.
+    public var stopCondition: String?
     public var undo: String
     public var visualTargetQuery: String?
 
@@ -521,6 +524,7 @@ public struct TutorExperimentDraft: Codable, Equatable, Identifiable, Sendable {
         listenFor: String,
         why: String,
         risk: String,
+        stopCondition: String? = nil,
         undo: String,
         visualTargetQuery: String? = nil
     ) {
@@ -532,6 +536,7 @@ public struct TutorExperimentDraft: Codable, Equatable, Identifiable, Sendable {
         self.listenFor = listenFor
         self.why = why
         self.risk = risk
+        self.stopCondition = stopCondition
         self.undo = undo
         self.visualTargetQuery = visualTargetQuery
     }

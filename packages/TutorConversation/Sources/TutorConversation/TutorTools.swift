@@ -379,10 +379,20 @@ public struct TutorToolExecutor: Sendable {
             availability = .unavailable
         }
         guard availability == .ready, loadedCandidateCorpus != nil || indexedRetriever != nil else {
+            let outcome: CandidateRetrievalOutcomeKind
+            switch availability {
+            case .ready: outcome = .unavailable
+            case .unavailable: outcome = .unavailable
+            case .corrupt: outcome = .corrupt
+            case .schemaDrift: outcome = .schemaDrift
+            case .versionMismatch: outcome = .versionMismatch
+            case .disabled: outcome = .disabled
+            }
             return try result(call, object: [
                 "query": query,
                 "match": NSNull(),
                 "availability": availability.rawValue,
+                "outcome": outcome.rawValue,
                 "coverage_note": "The local candidate corpus is unavailable. Do not substitute exact Logic instructions.",
             ], evidence: [TutorEvidenceReference(
                 kind: .unavailable,
@@ -395,27 +405,46 @@ public struct TutorToolExecutor: Sendable {
         // reviewed knowledge or a deterministic alias identity.
         let retrievalQuery = [query, goal, object, priorExperiment, evidenceHint].compactMap { $0 }.joined(separator: " ")
         let rankings: [CommunityCandidateCorpusRankedCard]
+        let retrievalOutcome: CandidateRetrievalOutcomeKind
         let retrievalMode: String
         if let candidateCorpus = loadedCandidateCorpus {
             // Injection is reserved for tests: legacy JSON/token ranking remains
             // a migration oracle and is never constructed by the live path.
             rankings = candidateCorpus.ranked(query: retrievalQuery, filters: filters, limit: 4)
+            retrievalOutcome = rankings.isEmpty ? .noMatch : .matches
             retrievalMode = "legacy_test_oracle"
         } else if let indexedRetriever {
-            rankings = await indexedRetriever.ranked(query: retrievalQuery, filters: filters, limit: 4)
+            let outcome = await indexedRetriever.rankedOutcome(query: retrievalQuery, filters: filters, limit: 4)
+            rankings = outcome.cards
+            retrievalOutcome = outcome.kind
             retrievalMode = "indexed_bm25_general_rerank_provisional"
         } else {
             rankings = []
+            retrievalOutcome = .unavailable
             retrievalMode = "unavailable"
         }
         if Task.isCancelled { throw TutorConversationError.cancelled }
         guard let ranking = rankings.first else {
+            let safeReason: String
+            switch retrievalOutcome {
+            case .noMatch:
+                safeReason = "No candidate canonical card matched. Do not invent a candidate procedure or Logic path."
+            case .queryFailed, .malformedSelectedPayload, .schemaDrift, .corrupt, .disabled, .unavailable, .versionMismatch:
+                safeReason = "Candidate retrieval could not complete. Continue with honest general teaching or ask a decision-changing question; do not substitute exact Logic instructions."
+            case .matches:
+                safeReason = "No candidate canonical card matched. Do not invent a candidate procedure or Logic path."
+            }
             return try result(call, object: [
                 "query": query,
                 "match": NSNull(),
                 "availability": availability.rawValue,
-                "coverage_note": "No candidate canonical card matched. Do not invent a candidate procedure or Logic path.",
-            ], evidence: [])
+                "outcome": retrievalOutcome.rawValue,
+                "coverage_note": safeReason,
+            ], evidence: retrievalOutcome == .noMatch ? [] : [TutorEvidenceReference(
+                kind: .unavailable,
+                label: "Candidate retrieval unavailable for this query",
+                detail: "Candidate retrieval outcome is \(retrievalOutcome.rawValue)."
+            )])
         }
         let selected = ranking.card
         guard let packageDescriptor = CommunityCandidateCorpusGenerated.descriptors.first(where: { $0.packageID == selected.packageID }), packageDescriptor.packageSequence > 0 else {
@@ -464,6 +493,7 @@ public struct TutorToolExecutor: Sendable {
             "non_processing_possibilities": selected.nonProcessingPossibilities ?? [],
             "evidence_needed": selected.evidenceNeeded ?? [],
             "user_intent": selected.userIntent ?? NSNull(),
+            "retrieval_outcome": retrievalOutcome.rawValue,
             "authoritative_supporting_source_ids": selected.authoritativeSupportingSourceIDs ?? [],
             "primary_research_source_ids": selected.primaryResearchSourceIDs ?? [],
             "professional_practice_source_ids": selected.professionalPracticeSourceIDs,
@@ -731,6 +761,10 @@ public struct TutorToolExecutor: Sendable {
             listenFor: try boundedRequiredString("listen_for", in: arguments, maximum: 800),
             why: try boundedRequiredString("why", in: arguments, maximum: 800),
             risk: try boundedRequiredString("risk", in: arguments, maximum: 600),
+            // Kept optional for persisted/pre-P19 calls, but never permit the
+            // general argument envelope to turn a receipt field into a large
+            // unbounded model-controlled payload.
+            stopCondition: try optionalBoundedString("stop_condition", in: arguments, maximum: 600) ?? "Stop if the stated risk appears or the result is worse; undo the single change.",
             undo: try boundedRequiredString("undo", in: arguments, maximum: 600),
             visualTargetQuery: optionalString("visual_target_query", in: arguments)
         )
@@ -791,6 +825,18 @@ public struct TutorToolExecutor: Sendable {
         guard let value = arguments[key] as? String else { return nil }
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
+    }
+
+    private func optionalBoundedString(
+        _ key: String,
+        in arguments: [String: Any],
+        maximum: Int
+    ) throws -> String? {
+        guard let value = optionalString(key, in: arguments) else { return nil }
+        guard value.utf8.count <= maximum else {
+            throw TutorConversationError.invalidToolArguments(key)
+        }
+        return value
     }
 
     private func queryTokens(_ value: String) -> Set<String> {

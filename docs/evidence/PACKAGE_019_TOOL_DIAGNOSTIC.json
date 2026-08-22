@@ -1,0 +1,296 @@
+{
+  "actual_runtime_current_final" : {
+    "per_partition" : {
+      "calibration" : {
+        "case_count" : 72,
+        "failure_taxonomy" : {
+          "false_abstain_by_topic" : {
+            "gain" : 1,
+            "procedure" : 2,
+            "source" : 1,
+            "vocal_masking" : 1
+          },
+          "missed_abstain_by_topic" : {
+            "insufficient" : 2
+          },
+          "top1_miss_by_kind" : {
+            "authority_adversarial" : 4,
+            "follow_up_better" : 3,
+            "follow_up_no_change" : 3,
+            "follow_up_not_sure" : 4,
+            "follow_up_worse" : 5,
+            "jargon" : 3,
+            "logic_unavailable" : 5,
+            "misspelling" : 4,
+            "multi_symptom" : 4,
+            "multi_turn" : 4,
+            "ordinary" : 3,
+            "unsupported_plugin" : 4
+          },
+          "top1_miss_by_topic" : {
+            "arrangement" : 4,
+            "automation" : 1,
+            "editing" : 3,
+            "gain" : 2,
+            "latency" : 4,
+            "midi" : 3,
+            "monitoring" : 2,
+            "performance" : 3,
+            "phase" : 1,
+            "procedure" : 4,
+            "processing" : 4,
+            "routing" : 1,
+            "sidechain" : 1,
+            "source" : 2,
+            "timing" : 3,
+            "vocal_masking" : 4,
+            "width" : 4
+          }
+        },
+        "latency_ms" : {
+          "measured" : true,
+          "reporting" : "runtime latency is measured but not serialized numerically in reproducible evidence"
+        },
+        "mrr" : 0.37801932367149754,
+        "no_match_counts" : {
+          "actual_no_match" : 3,
+          "predicted_no_match" : 6,
+          "true_positive" : 1
+        },
+        "no_match_precision" : 0.16666666666666666,
+        "no_match_recall" : 0.33333333333333331,
+        "quality_targets" : {
+          "ambiguity_balanced_accuracy" : "not_applicable_model_withheld",
+          "no_match_precision" : 0.90000000000000002,
+          "no_match_recall" : 0.90000000000000002,
+          "status" : "missed",
+          "top1_acceptable" : 0.80000000000000004,
+          "top4_recall" : 0.94999999999999996
+        },
+        "top1_acceptable" : 0.33333333333333331,
+        "top4_recall" : 0.46376811594202899
+      },
+      "development" : {
+        "case_count" : 96,
+        "failure_taxonomy" : {
+          "false_abstain_by_topic" : {
+            "gain" : 1,
+            "procedure" : 1
+          },
+          "missed_abstain_by_topic" : {
+            "insufficient" : 5
+          },
+          "top1_miss_by_kind" : {
+            "authority_adversarial" : 5,
+            "follow_up_better" : 5,
+            "follow_up_no_change" : 5,
+            "follow_up_not_sure" : 7,
+            "follow_up_worse" : 5,
+            "jargon" : 4,
+            "logic_unavailable" : 4,
+            "misspelling" : 5,
+            "multi_symptom" : 2,
+            "multi_turn" : 5,
+            "ordinary" : 5,
+            "unsupported_plugin" : 4
+          },
+          "top1_miss_by_topic" : {
+            "arrangement" : 4,
+            "automation" : 1,
+            "editing" : 1,
+            "freeze" : 2,
+            "gain" : 3,
+            "latency" : 3,
+            "midi" : 5,
+            "monitoring" : 3,
+            "performance" : 5,
+            "procedure" : 4,
+            "processing" : 5,
+            "routing" : 1,
+            "source" : 4,
+            "timing" : 4,
+            "vocal_masking" : 6,
+            "width" : 5
+          }
+        },
+        "latency_ms" : {
+          "measured" : true,
+          "reporting" : "runtime latency is measured but not serialized numerically in reproducible evidence"
+        },
+        "mrr" : 0.45146520146520147,
+        "no_match_counts" : {
+          "actual_no_match" : 5,
+          "predicted_no_match" : 2,
+          "true_positive" : 0
+        },
+        "no_match_precision" : 0,
+        "no_match_recall" : 0,
+        "quality_targets" : {
+          "ambiguity_balanced_accuracy" : "not_applicable_model_withheld",
+          "no_match_precision" : 0.90000000000000002,
+          "no_match_recall" : 0.90000000000000002,
+          "status" : "missed",
+          "top1_acceptable" : 0.80000000000000004,
+          "top4_recall" : 0.94999999999999996
+        },
+        "top1_acceptable" : 0.38461538461538464,
+        "top4_recall" : 0.5714285714285714
+      },
+      "held_out" : {
+        "case_count" : 72,
+        "failure_taxonomy" : {
+          "false_abstain_by_topic" : {
+            "performance" : 1,
+            "procedure" : 1,
+            "source" : 1,
+            "width" : 1
+          },
+          "missed_abstain_by_topic" : {
+            "insufficient" : 2
+          },
+          "top1_miss_by_kind" : {
+            "authority_adversarial" : 4,
+            "follow_up_better" : 4,
+            "follow_up_no_change" : 2,
+            "follow_up_not_sure" : 5,
+            "follow_up_worse" : 4,
+            "jargon" : 3,
+            "logic_unavailable" : 4,
+            "misspelling" : 2,
+            "multi_symptom" : 3,
+            "multi_turn" : 3,
+            "ordinary" : 3,
+            "unsupported_plugin" : 4
+          },
+          "top1_miss_by_topic" : {
+            "arrangement" : 4,
+            "automation" : 1,
+            "editing" : 3,
+            "gain" : 1,
+            "latency" : 3,
+            "midi" : 3,
+            "monitoring" : 1,
+            "performance" : 3,
+            "procedure" : 4,
+            "processing" : 3,
+            "routing" : 2,
+            "sidechain" : 1,
+            "source" : 4,
+            "timing" : 3,
+            "vocal_masking" : 2,
+            "width" : 3
+          }
+        },
+        "latency_ms" : {
+          "measured" : true,
+          "reporting" : "runtime latency is measured but not serialized numerically in reproducible evidence"
+        },
+        "mrr" : 0.45955882352941174,
+        "no_match_counts" : {
+          "actual_no_match" : 4,
+          "predicted_no_match" : 6,
+          "true_positive" : 2
+        },
+        "no_match_precision" : 0.33333333333333331,
+        "no_match_recall" : 0.5,
+        "quality_targets" : {
+          "ambiguity_balanced_accuracy" : "not_applicable_model_withheld",
+          "no_match_precision" : 0.90000000000000002,
+          "no_match_recall" : 0.90000000000000002,
+          "status" : "missed",
+          "top1_acceptable" : 0.80000000000000004,
+          "top4_recall" : 0.94999999999999996
+        },
+        "top1_acceptable" : 0.39705882352941174,
+        "top4_recall" : 0.55882352941176472
+      }
+    },
+    "quality_gate" : "failed: held-out ranking target missed; no held-out tuning performed",
+    "typed_outcomes" : {
+      "matches" : 226,
+      "noMatch" : 14
+    }
+  },
+  "evidence_boundary" : "Injected deterministic capture\/Logic state and local runtime index only; no provider, audio upload, installed app, Logic action, or owner listening.",
+  "experiment_completeness" : {
+    "fields" : [
+      "baseline_start",
+      "one_variable",
+      "listen_cue",
+      "risk",
+      "stop_condition",
+      "undo"
+    ],
+    "max_repairs" : 1,
+    "repairs" : "not_applicable_no_repair_path_invoked",
+    "status" : "pass"
+  },
+  "long_context" : {
+    "gap" : "Engine\/store cancellation-retry and relevance latency require a dedicated provider-free conversation harness.",
+    "message_limit" : 24576,
+    "runs" : [
+      {
+        "bytes" : 216,
+        "cancellation_retry" : "not_measured_in_this_diagnostic",
+        "capture_replacement" : "contract_only_not_engine_measured",
+        "messages" : 10,
+        "relevance_latency_ms" : "not_measured_in_this_diagnostic",
+        "temporary_level" : "contract_only_not_engine_measured",
+        "topic_change_return" : "contract_only_not_engine_measured"
+      },
+      {
+        "bytes" : 531,
+        "cancellation_retry" : "not_measured_in_this_diagnostic",
+        "capture_replacement" : "contract_only_not_engine_measured",
+        "messages" : 25,
+        "relevance_latency_ms" : "not_measured_in_this_diagnostic",
+        "temporary_level" : "contract_only_not_engine_measured",
+        "topic_change_return" : "contract_only_not_engine_measured"
+      },
+      {
+        "bytes" : 1056,
+        "cancellation_retry" : "not_measured_in_this_diagnostic",
+        "capture_replacement" : "contract_only_not_engine_measured",
+        "messages" : 50,
+        "relevance_latency_ms" : "not_measured_in_this_diagnostic",
+        "temporary_level" : "contract_only_not_engine_measured",
+        "topic_change_return" : "contract_only_not_engine_measured"
+      },
+      {
+        "bytes" : 1686,
+        "cancellation_retry" : "not_measured_in_this_diagnostic",
+        "capture_replacement" : "contract_only_not_engine_measured",
+        "messages" : 80,
+        "relevance_latency_ms" : "not_measured_in_this_diagnostic",
+        "temporary_level" : "contract_only_not_engine_measured",
+        "topic_change_return" : "contract_only_not_engine_measured"
+      }
+    ],
+    "status" : "contract_only_partial_measurement",
+    "tool_output_limit" : 49152
+  },
+  "package" : "019",
+  "status" : "infrastructure_pass_quality_fail",
+  "tools" : {
+    "authority" : "read-only except presentation-only experiment",
+    "count" : 7,
+    "names" : [
+      "get_current_capture_context",
+      "search_production_knowledge",
+      "search_candidate_corpus",
+      "get_logic_procedure",
+      "retrieve_prior_experiments",
+      "inspect_logic",
+      "present_experiment"
+    ],
+    "output_bytes" : [
+      763,
+      4869,
+      4532,
+      2398,
+      665,
+      447,
+      180
+    ]
+  }
+}

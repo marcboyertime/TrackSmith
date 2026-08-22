@@ -12,9 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - name: Python syntax and Package 016-018 integrity
+      - name: Python syntax and Package 016-019 integrity
         run: |
-          python -m py_compile research/scripts/community_corpus_import.py research/scripts/build_candidate_retrieval_index.py research/scripts/package18_audit.py
+          python -m py_compile research/scripts/community_corpus_import.py research/scripts/build_candidate_retrieval_index.py research/scripts/package18_audit.py research/scripts/package19_quality_suite.py
           python research/scripts/community_corpus_import.py --preservation-self-check
           python research/scripts/package16-integration.py --preservation-self-check
           python research/scripts/community_corpus_import.py --check
@@ -25,9 +25,15 @@ jobs:
           # without its required trusted inputs.
           python research/scripts/package17-evaluation.py --check
           python research/scripts/package18_audit.py
+          # Swift produces the authoritative current-final baseline in the
+          # macOS lane.  Linux verifies only frozen inputs/resources, so it
+          # does not overwrite evidence with a missing Swift diagnostic.
+          python research/scripts/package19_quality_suite.py --check --forbidden-resource
+          python research/scripts/package19_quality_suite.py --scanner-self-test --receipt-self-test
       - name: Product resource boundary
         run: |
           test ! -e packages/ProductionTutor/Sources/ProductionTutor/Resources/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation.json
           test "$(find packages/ProductionTutor/Sources/ProductionTutor/Resources -name '*.json' | wc -l | tr -d ' ')" = 1
           ! rg -a -i 'tracksmith-corpus-017|expected_answer|fixture_alias|evaluation_case' packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json
           git diff --exit-code -- packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json
+          ! rg -i 'p19-|acceptable_diagnosis_families|expected_answer|fixture_alias|evaluation_case' packages/TutorConversation/Sources packages/ProductionTutor/Sources

@@ -4,6 +4,10 @@ from __future__ import annotations
 import argparse, hashlib, json, os, pathlib, shutil, stat, subprocess, sys, tempfile
 import community_corpus_import as trusted
 ROOT=pathlib.Path(__file__).resolve().parents[2]; COMMUNITY=ROOT/"research/community_knowledge"
+PACKAGE019_FORCE_SEMANTICS_ATTESTATIONS={
+    "tracksmith-corpus-005-automation": ROOT/"research/tutor_quality/package019_package005_force_semantics_attestation.json",
+    "tracksmith-corpus-006-saturation-transient-shaping": ROOT/"research/tutor_quality/package019_package006_force_semantics_attestation.json",
+}
 EXCLUDED_ROOTS={".git",".build","DerivedData","__pycache__",".claude",".codex"}
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def fail(message): raise SystemExit("CAS_STAGE_ERROR: "+message)
@@ -54,7 +58,18 @@ def audit(external):
     expected_map=trusted.STABLE_CONTRACT_SPECS.get(pid,{}).get("disagreementSHA256")
     if expected_map is not None and sha(mapping)!=expected_map: fail("disagreement-map pin drift")
     report_value=json.loads(report.read_text())
-    if report_value.get("force_semantics") is not False: fail("force semantics detected")
+    force_semantics=report_value.get("force_semantics")
+    if force_semantics is None and pid in PACKAGE019_FORCE_SEMANTICS_ATTESTATIONS:
+        # These immutable historical reports predate this explicit field.
+        # Read a separately pinned portable projection instead of mutating a
+        # report or treating omission as a semantic opt-in.
+        attestation_path=PACKAGE019_FORCE_SEMANTICS_ATTESTATIONS[pid]
+        if not attestation_path.is_file() or attestation_path.is_symlink(): fail("portable force-semantics attestation missing for "+pid)
+        attestation=json.loads(attestation_path.read_text())
+        if attestation.get("package_id") != pid or attestation.get("historical_report_sha256") != sha(report) or attestation.get("portable_projection",{}).get("force_semantics") is not False:
+            fail("portable force-semantics attestation drift for "+pid)
+        force_semantics=False
+    if force_semantics is not False: fail("force semantics detected")
     if trusted.STABLE_CONTRACT_SPECS.get(pid,{}).get("integrationManifestReconciliation"):
         try: reconciliation=trusted.integration_contract_reconciliation(pid,destination)
         except (OSError, ValueError, json.JSONDecodeError) as error: fail(str(error))

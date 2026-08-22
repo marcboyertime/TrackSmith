@@ -1,5 +1,5 @@
 P9_ARCHIVE ?= /tmp/tracksmith-package9.pwHKlg/package.zip
-.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report p17-diagnostics p17-performance p17-evaluation p17-live-evaluation p17-cloud-evaluation p17-cloud-health p17-public-audio-evaluation p18-index-check p18-audit p18-diagnostics native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report p17-diagnostics p17-performance p17-evaluation p17-live-evaluation p17-cloud-evaluation p17-cloud-health p17-public-audio-evaluation p18-index-check p18-audit p18-diagnostics p19-suite-freeze p19-suite-check p19-diagnostics p19-deterministic p19-retrieval-calibration p19-experiment-completeness p19-long-context p19-forbidden-resource p19-built-resource-scan p19-scanner-self-test p19-receipt-self-test p19-receipt p19-cloud-no-tool p19-cloud-full-tool p19-cloud-repeated-triplets p19-ci native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -51,6 +51,50 @@ p18-audit: p18-index-check
 
 p18-diagnostics:
 	swift run -c release TutorConversationTests package18-diagnostics
+
+p19-suite-freeze:
+	python3 research/scripts/package19_quality_suite.py --freeze
+
+p19-suite-check:
+	python3 research/scripts/package19_quality_suite.py --check
+
+p19-diagnostics:
+	swift run -c release TutorConversationTests package19-diagnostics
+
+p19-deterministic p19-retrieval-calibration p19-experiment-completeness p19-long-context:
+	python3 research/scripts/package19_quality_suite.py --check --write-reports
+
+p19-forbidden-resource:
+	python3 research/scripts/package19_quality_suite.py --check --forbidden-resource
+
+p19-built-resource-scan:
+	@test -n "$(BUNDLE)" || (echo 'usage: make p19-built-resource-scan BUNDLE="/path/to/TrackSmith.app"' && exit 2)
+	python3 research/scripts/package19_quality_suite.py --check --forbidden-resource --installed-bundle "$(BUNDLE)"
+
+p19-scanner-self-test:
+	python3 research/scripts/package19_quality_suite.py --scanner-self-test
+
+p19-receipt-self-test:
+	python3 research/scripts/package19_quality_suite.py --receipt-self-test
+
+p19-receipt:
+	python3 research/scripts/package19_quality_suite.py --generate-validation-receipt
+
+p19-cloud-no-tool:
+	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to run the no-tool cloud harness' && exit 2)
+	swift run -c release TutorConversationTests package19-cloud-no-tool --cloud-text-consent
+
+p19-cloud-full-tool:
+	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to run the seven-tool cloud harness' && exit 2)
+	swift run -c release TutorConversationTests package19-cloud-full-tool --cloud-text-consent
+
+p19-cloud-repeated-triplets:
+	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to run repeated level triplets' && exit 2)
+	swift run -c release TutorConversationTests package19-cloud-repeated-triplets --cloud-text-consent
+
+p19-ci: p19-suite-check p19-forbidden-resource p19-scanner-self-test p19-receipt-self-test p19-receipt
+	python3 research/scripts/package19_quality_suite.py --check --write-reports
+	git diff --exit-code -- docs/evidence/PACKAGE_019_RETRIEVAL_CALIBRATION.json docs/evidence/PACKAGE_019_LONG_CONTEXT_COST.json docs/evidence/PACKAGE_019_EXPERIMENT_COMPLETENESS.json docs/evidence/PACKAGE_019_DETERMINISTIC_END_TO_END.json docs/evidence/PACKAGE_019_VALIDATION_RECEIPT.json docs/evidence/PACKAGE_019_FINAL_REPORT.json docs/evidence/PACKAGE_019_FINAL_REPORT.md
 
 p16-evidence-audit:
 	python3 research/scripts/package16-evidence-release.py --audit
@@ -184,4 +228,4 @@ native-verify: native-build au-host-probe realtime-heap-probe
 native-install:
 	./scripts/install-development-build.sh
 
-verify: project production-language-knowledge-check tutor-procedure-knowledge-check community-corpus-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test tutor-conversation-test au-host-probe
+verify: project production-language-knowledge-check tutor-procedure-knowledge-check community-corpus-check general-tutor-knowledge-check general-tutor-knowledge-audit vocal-evaluation vocal-listening-selfcheck build test tutor-conversation-test p19-ci au-host-probe
