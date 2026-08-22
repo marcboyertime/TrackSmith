@@ -24,6 +24,7 @@ CASES_DATA: list[dict] = []
 STOP = {"a", "an", "and", "are", "best", "but", "cannot", "control", "detail", "do", "find", "for", "from", "get", "how", "i", "if", "in", "is", "it", "like", "logic", "make", "mix", "my", "need", "not", "of", "or", "should", "so", "the", "this", "to", "too", "what", "when", "why", "with", "wrong"}
 STABLE_REPORT_KEYS = ("prompt", "index", "natural_retrieval", "retrieval_stage_comparison", "abstention_label_contract", "authority_boundary", "quality_gate", "p17_level_invariance_reference")
 PRESERVED_REPORT_FIELDS = ("evidence_class", "ci_clean_checkout_preservation_repair", "post_fix_primary_verification")
+STABLE_FLOAT_DECIMALS = 12
 
 def sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
 def canonical(word: str) -> str | None:
@@ -99,9 +100,15 @@ def parity(con: sqlite3.Connection) -> dict:
     indexed_cards = con.execute("SELECT id,payload_json FROM cards ORDER BY id").fetchall()
     return {"source_card_count": len(source), "indexed_card_count": len(indexed_cards), "exact_payload_parity": source == indexed_cards, "source_payload_sha256": sha(json.dumps(source, ensure_ascii=False, separators=(",", ":")).encode()), "indexed_payload_sha256": sha(json.dumps(indexed_cards, ensure_ascii=False, separators=(",", ":")).encode())}
 def p95(values: list[float]) -> float: return sorted(values)[int(.95 * (len(values) - 1))]
+def stable_value(value: object) -> object:
+    """Normalize only last-bit cross-toolchain float noise for stable drift checks."""
+    if isinstance(value, float): return round(value, STABLE_FLOAT_DECIMALS)
+    if isinstance(value, list): return [stable_value(item) for item in value]
+    if isinstance(value, dict): return {key: stable_value(item) for key, item in value.items()}
+    return value
 def stable_projection(report: dict[str, object]) -> dict[str, object]:
-    """Fields derived from checked-in policy, corpus, index, and fixed cases only."""
-    return {key: report.get(key) for key in STABLE_REPORT_KEYS}
+    """Stable source/index contract, with floats rounded to 12 decimals only."""
+    return {key: stable_value(report.get(key)) for key in STABLE_REPORT_KEYS}
 
 def main() -> int:
     parser = argparse.ArgumentParser(); parser.add_argument("--write-report", action="store_true", help="write hardware-sensitive local evidence"); parser.add_argument("--indexed-readiness-samples-ms", type=float, nargs="+", help="raw Swift immutable-index readiness samples"); parser.add_argument("--legacy-readiness-samples-ms", type=float, nargs="+", help="raw legacy JSON/token-oracle readiness samples"); parser.add_argument("--indexed-peak-rss-bytes", type=int, nargs="+", help="raw /usr/bin/time -l index peak RSS samples"); parser.add_argument("--legacy-peak-rss-bytes", type=int, nargs="+", help="raw /usr/bin/time -l legacy peak RSS samples"); args = parser.parse_args()

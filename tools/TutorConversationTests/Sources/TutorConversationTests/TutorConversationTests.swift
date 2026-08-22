@@ -3246,7 +3246,7 @@ private final class Suite {
         }
     }
 
-    private nonisolated static func cloudTripletJudgments(
+    private static func cloudTripletJudgments(
         provider: OpenAITutorProvider,
         prompts: [PackageSeventeenCloudPrompt],
         topicResults: [PackageSeventeenCloudTopicResult],
