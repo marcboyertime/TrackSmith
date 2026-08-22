@@ -5,6 +5,7 @@ import argparse, hashlib, json, os, pathlib, plistlib, re, sqlite3, stat, subpro
 
 ROOT=pathlib.Path(__file__).resolve().parents[2]; Q=ROOT/'research/tutor_quality'; E=ROOT/'docs/evidence'
 SUITE=Q/'package019_evaluation_suite.json'; MANIFEST=Q/'package019_evaluation_manifest.json'; INDEX=ROOT/'packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite'; IM=ROOT/'packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json'; POLICY=ROOT/'packages/TutorConversation/Sources/TutorConversation/TutorSystemPolicy.swift'; TOOLS=ROOT/'packages/TutorConversation/Sources/TutorConversation/TutorTools.swift'; PARTS=('development','calibration','held_out')
+PRE_ORDERED6_SWIFT_BASELINE={'source_commit':'bc49c8e2e2e16bc88e58c9edbe7f437d6b7874d8','authority':'authoritative Swift CandidateRetrievalIndex runtime diagnostic before the ordered-six/domain-diverse policy','per_partition':{'development':{'top1_acceptable':0.38461538461538464,'top4_recall':0.5714285714285714,'no_match_precision':0.0,'no_match_recall':0.0},'calibration':{'top1_acceptable':0.3333333333333333,'top4_recall':0.463768115942029,'no_match_precision':0.16666666666666666,'no_match_recall':0.3333333333333333},'held_out':{'top1_acceptable':0.39705882352941174,'top4_recall':0.5588235294117647,'no_match_precision':0.3333333333333333,'no_match_recall':0.5}}}
 def sh(b): return hashlib.sha256(b).hexdigest()
 def put(p,v): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=False)+'\n')
 TOPICS=[
@@ -45,13 +46,32 @@ def check():
  if not {'available','unavailable'} <= {x['capture'] for x in contexts} or not {'available','unavailable','not_requested'} <= {x['model_listening'] for x in contexts} or not {'present','absent'} <= {x['reviewed_procedure'] for x in contexts} or set(INDEX_STATES) != {x['candidate_index'] for x in contexts} or not any(x['multi_turn_history'] for x in rows) or not any(x['exact_reviewed_navigation_necessary'] and x['context_matrix']['reviewed_procedure']=='absent' for x in rows):fail.append('required_context_coverage')
  if fail:raise SystemExit('P19 suite drift: '+','.join(fail))
  return {'case_count':len(rows),'suite_sha256':m['suite_sha256'],'partitions':m['partitions'],'stratified':True,'context_coverage':{'capture':['available','unavailable'],'model_listening':list(LISTENING_STATES),'reviewed_procedure':['present','absent'],'candidate_index':list(INDEX_STATES),'multi_turn':True}}
-def toks(s):return sorted({x for x in re.findall(r'[a-z0-9]+',s.lower()) if len(x)>2 and x not in {'the','and','with','this','that','when','then','after','before','what','where','into','for','but','from','have','does','did','are','was','not','you','your','my'}})
-def pool(con,q):
- ts=toks(q)[:12]
+QUERY_STOP_TERMS={'a','an','and','are','best','but','cannot','control','detail','do','find','for','from','get','how','i','if','in','is','it','like','logic','make','mix','my','need','not','of','or','should','so','the','this','to','too','what','when','why','with','wrong'}
+def toks(s):
+ out=[];seen=set()
+ for value in re.findall(r'[a-z0-9]+',s.lower().replace('_',' ')):
+  if len(value)<=1 or value in QUERY_STOP_TERMS:continue
+  if value.endswith('ing') and len(value)>5:value=value[:-3]
+  elif value.endswith('s') and len(value)>3:value=value[:-1]
+  skeleton=re.sub(r'[aeiou]','',value)
+  value=skeleton if len(value)>=5 and len(skeleton)>=3 else value
+  if value not in seen:
+   seen.add(value);out.append(value)
+   if len(out)==6:break
+ return out
+def pool(con,q,production=False):
+ ts=toks(q)
  if len(ts)<2:return []
- try:r=con.execute('SELECT c.id,c.domain,c.question_key,c.primary_terms,c.facet_terms,c.context_terms,bm25(cards_fts,5,2,.5) FROM cards_fts JOIN cards c ON c.rowid=cards_fts.rowid WHERE cards_fts MATCH ? ORDER BY bm25(cards_fts,5,2,.5) LIMIT 256',(' OR '.join(f'"{x}"*' for x in ts),)).fetchall()
- except sqlite3.Error:return []
- q=set(ts);return [{'id':x[0],'domain':x[1],'key':x[2],'raw':max(0,-float(x[6])),'p':len(set(x[3].split())&q),'f':len(set(x[4].split())&q),'c':len(set(x[5].split())&q)} for x in r]
+ def fetch(conjunction):
+  try:r=con.execute('SELECT c.id,c.package_id,c.domain,c.question_key,c.primary_terms,c.facet_terms,c.context_terms,bm25(cards_fts,5,2,.5) FROM cards_fts JOIN cards c ON c.rowid=cards_fts.rowid WHERE cards_fts MATCH ? ORDER BY bm25(cards_fts,5,2,.5) LIMIT 256',((' AND ' if conjunction else ' OR ').join(f'"{x}"*' for x in ts),)).fetchall()
+  except sqlite3.Error:return None
+  terms=set(ts);return [{'id':x[0],'package':x[1],'domain':x[2],'key':x[3],'raw':max(0,-float(x[7])),'p':len(set(x[4].split())&terms),'f':len(set(x[5].split())&terms),'c':len(set(x[6].split())&terms),'o':len((set(x[4].split())|set(x[5].split())|set(x[6].split()))&terms)} for x in r]
+ if production:
+  conjunction=fetch(True)
+  if conjunction is None:return []
+  if len(conjunction)>=2 and len({x['domain'] for x in conjunction})>=3:return conjunction
+ fallback=fetch(False);return fallback if fallback is not None else []
+ return fetch(False) or []
 def rank(items,mode):
  score=lambda x:x['p']*8+x['f']*12+x['c']*2+min(32,x['raw']) if mode!='fusion' else x['p']*6+x['f']*8+x['c']+x['raw']
  if mode=='raw':score=lambda x:x['raw']
@@ -60,15 +80,20 @@ def rank(items,mode):
   for x in items:
    if x['domain'] not in best or score(x)>score(best[x['domain']]):best[x['domain']]=x
   items=list(best.values())
- out=[];seen=set()
+ out=[];seen=set();domains=set();packages={}
  for x in sorted(items,key=lambda x:(-score(x),x['id'])):
-  if x['key'] not in seen:seen.add(x['key']);out.append(x)
+  if x['key'] in seen:continue
+  seen.add(x['key'])
+  if mode=='final_ordered6_domain_diverse' and x['domain'] in domains:continue
+  if mode=='final_ordered6_domain_diverse' and packages.get(x['package'],0)>=2:continue
+  out.append(x)
+  if mode=='final_ordered6_domain_diverse':domains.add(x['domain']);packages[x['package']]=packages.get(x['package'],0)+1
   if len(out)==4:break
  return out,score
 def case(con,row,stage):
- st=time.perf_counter_ns();items=pool(con,row['query']);mode={'raw_fts_current_abstention':'raw','raw_fts_separate_abstention':'raw','domain_aggregation':'domain','field_score_fusion':'fusion'}.get(stage,'final');picked,score=rank(items,mode) if stage!='candidate_disabled' else ([],lambda x:0)
+ st=time.perf_counter_ns();mode={'python_mirror_package019_ordered6_domain_diverse':'final_ordered6_domain_diverse','raw_fts_current_abstention':'raw','raw_fts_separate_abstention':'raw','domain_aggregation':'domain','field_score_fusion':'fusion'}.get(stage,'final_ordered6_domain_diverse');items=pool(con,row['query'],production=mode=='final_ordered6_domain_diverse');picked,score=rank(items,mode) if stage!='candidate_disabled' else ([],lambda x:0)
  if picked:
-  top=score(picked[0]);overlap=picked[0]['p']+picked[0]['f']+picked[0]['c'];floor=1.2 if stage=='raw_fts_separate_abstention' else 26 if stage not in {'candidate_disabled'} else 999
+  top=score(picked[0]);overlap=picked[0]['o'];floor=1.2 if stage=='raw_fts_separate_abstention' else 26 if stage not in {'candidate_disabled'} else 999
   if top<floor or overlap<2:picked=[]
  margin=score(picked[0])-(score(picked[1]) if len(picked)>1 else 0) if picked else 0;amb=bool(picked and margin<max(4,score(picked[0])*.12));return {'case':row,'domains':[x['domain'] for x in picked],'ambiguous':amb,'latency_ms':(time.perf_counter_ns()-st)/1e6,'failure':None}
 def metrics(vals,p):
@@ -76,17 +101,17 @@ def metrics(vals,p):
  ranks=[next((i+1 for i,d in enumerate(x['domains']) if d in x['case']['acceptable_diagnosis_families']),None) for x in pos]
  tp=sum(not x['domains'] for x in absn);return {'case_count':len(v),'top1_acceptable':avg([bool(x['domains']) and x['domains'][0] in x['case']['acceptable_diagnosis_families'] for x in pos]),'top4_recall':avg([bool(set(x['domains'])&set(x['case']['acceptable_diagnosis_families'])) for x in pos]),'mrr':avg([0 if r is None else 1/r for r in ranks]),'no_match_precision':None if not pred else tp/len(pred),'no_match_recall':None if not absn else tp/len(absn),'no_match_counts':{'true_positive':tp,'predicted_no_match':len(pred),'actual_no_match':len(absn)},'ambiguity_balanced_accuracy':None if not clear or not amb else (avg([not x['ambiguous'] for x in clear])+avg([x['ambiguous'] for x in amb]))/2,'latency_ms':{'measured':True,'reporting':'runtime latency is measured but not serialized numerically in reproducible evidence'},'failures':sum(x['failure'] is not None for x in v),'taxonomy':sorted({x['case']['topic'] for x in v})}
 def measure():
- info=check();rows=json.loads(SUITE.read_text());con=sqlite3.connect(f'file:{INDEX}?mode=ro',uri=True);stages=['python_mirror_final_reranker','raw_fts_current_abstention','raw_fts_separate_abstention','domain_aggregation','field_score_fusion','ambiguity_on','alternatives_primary_only','candidate_disabled'];out={}
+ info=check();rows=json.loads(SUITE.read_text());con=sqlite3.connect(f'file:{INDEX}?mode=ro',uri=True);stages=['python_mirror_package019_ordered6_domain_diverse','raw_fts_current_abstention','raw_fts_separate_abstention','domain_aggregation','field_score_fusion','ambiguity_on','alternatives_primary_only','candidate_disabled'];out={}
  try:
   for s in stages:
-   actual='python_mirror_final_reranker' if s in {'ambiguity_on','alternatives_primary_only'} else s;vals=[case(con,x,actual) for x in rows]
+   actual='python_mirror_package019_ordered6_domain_diverse' if s in {'ambiguity_on','alternatives_primary_only'} else s;vals=[case(con,x,actual) for x in rows]
    if s=='alternatives_primary_only':
     for x in vals:x['domains']=x['domains'][:1]
    if s!='ambiguity_on':
     for x in vals:x['ambiguous']=False
    out[s]={'per_partition':{p:metrics(vals,p) for p in PARTS},'ranking_and_abstention_separate':True,'raw_case_count':len(vals)}
  finally:con.close()
- held=out['ambiguity_on']['per_partition']['held_out']['ambiguity_balanced_accuracy'];return {'package':'019','report_kind':'retrieval_calibration_ablation','suite':info,'tuning_partitions':['development','calibration'],'held_out_tuned':False,'stages':out,'python_mirror_boundary':'Python stages are evaluation mirrors, not the authoritative Swift current-final implementation. The actual Swift current-final baseline is exported by package19-diagnostics.','ambiguity_model_projection':'withheld' if held is None or held<.75 else 'eligible_after_review','model_query_reformulation':{'status':'not_run_no_cloud_consent','provider_calls':0},'index_manifest':json.loads(IM.read_text())}
+ held=out['ambiguity_on']['per_partition']['held_out']['ambiguity_balanced_accuracy'];return {'package':'019','report_kind':'retrieval_calibration_ablation','suite':info,'tuning_partitions':['development','calibration'],'held_out_tuned':False,'stages':out,'python_mirror_boundary':'Python stages mirror the Package 019 ordered-six-term, one-card-per-domain final policy; they are not the authoritative Swift current-final implementation. The actual Swift current-final baseline is exported by package19-diagnostics.','ambiguity_model_projection':'withheld' if held is None or held<.75 else 'eligible_after_review','model_query_reformulation':{'status':'not_run_no_cloud_consent','provider_calls':0},'index_manifest':json.loads(IM.read_text())}
 def policy():
  t=POLICY.read_text();a=t.index('public static let instructions = """')+len('public static let instructions = """\n');b=t.index('    """',a);prompt='\n'.join(x[4:] if x.startswith('    ') else x for x in t[a:b].splitlines());return {'version':re.search(r'version = "([^"]+)',t).group(1),'utf8_bytes':len(prompt.encode()),'sha256':sh(prompt.encode())}
 NEEDLES=('p19-','acceptable_diagnosis_families','expected_answer','fixture_alias','evaluation_case')
@@ -317,18 +342,48 @@ def receipt_self_test():
   except ValueError:pass
   else:raise AssertionError('unsafe bundle symlink accepted')
  return {'status':'pass','cases':['untracked_local_state_excluded','unstaged_tracked_change_excluded','staged_candidate_change_changes_fingerprint','temporary_index_restored','unstaged_artifact_edit_excluded','staged_artifact_edit_changes_hash','missing_staged_artifact_rejected','missing_receipt_fails_closed','validation_subset_unknown_nonpass_rejected','matching_receipt_validates','fingerprint_mismatch_fails_closed','resource_symlink_hidden_payload_rejected','bundle_root_symlink_rejected','bundle_inventory_pkginfo_mode_symlink_sensitive','write_reports_unverified_without_receipt']}
+
+def measured_long_context(value):
+ if not isinstance(value,dict):return False
+ runs=value.get('runs')
+ required={'topic_change_and_return','decisive_prior_experiment_outcome','temporary_experience_override','capture_identity','request_bytes','estimated_input_tokens','output_tokens','tool_rounds','tool_calls','boundedness','latency_ms'}
+ return value.get('status')=='provider_free_measured' and isinstance(runs,list) and {x.get('retained_messages') for x in runs if isinstance(x,dict)}=={10,25,50,80} and len(runs)==4 and all(isinstance(x,dict) and required<=set(x) and x.get('provider_request_rounds',0)>=2 and x.get('tool_rounds',0)>=1 and x.get('tool_calls',0)>=2 and x.get('boundedness',{}).get('asserted') is True and x.get('latency_ms',{}).get('measured') is True for x in runs) and value.get('capture_replacement')=='measured_receipt_identity' and value.get('cancellation_retry')=='measured_cancelled_then_complete_without_stale_result'
+
+def metric_view(value):
+ return {key:value.get(key) for key in ('top1_acceptable','top4_recall','no_match_precision','no_match_recall')}
+
+def metric_text(value):
+ return 'not measured' if not isinstance(value,(int,float)) else f'{value:.4f}'
+
 def reports(bundle=None):
  r=measure();tool=json.loads((E/'PACKAGE_019_TOOL_DIAGNOSTIC.json').read_text()) if (E/'PACKAGE_019_TOOL_DIAGNOSTIC.json').exists() else {'status':'not_run','reason':'run package19-diagnostics'};r['actual_swift_current_final']=tool.get('actual_runtime_current_final',{'status':'not_run'});put(E/'PACKAGE_019_RETRIEVAL_CALIBRATION.json',r);put(E/'PACKAGE_019_DETERMINISTIC_END_TO_END.json',tool);put(E/'PACKAGE_019_EXPERIMENT_COMPLETENESS.json',tool.get('experiment_completeness',{'status':'not_run'}));put(E/'PACKAGE_019_LONG_CONTEXT_COST.json',tool.get('long_context',{'status':'not_run'}))
  receipt=valid_receipt(bundle=bundle);commands=report_commands(receipt)
  swift_metrics=tool.get('actual_runtime_current_final',{}).get('per_partition',{});held=swift_metrics.get('held_out',{});quality_gate={'targets':{'top1_acceptable':.80,'top4_recall':.95,'no_match_precision':.90,'no_match_recall':.90,'ambiguity_balanced_accuracy':'not_applicable_model_withheld'},'held_out_observed':{'top1_acceptable':held.get('top1_acceptable'),'top4_recall':held.get('top4_recall'),'no_match_precision':held.get('no_match_precision'),'no_match_recall':held.get('no_match_recall')},'status':'missed' if held and held.get('quality_targets',{}).get('status')=='missed' else 'not_measured'}
  lanes={'cloud_no_tool':'not_run_no_explicit_cloud_text_consent','cloud_full_tools':'not_run_no_explicit_cloud_text_consent','cloud_repeated_triplets':'not_run_no_explicit_cloud_text_consent','audio':'not_run_no_explicit_cloud_audio_consent','Logic':'not_run_no_authorized_Logic_session','owner_listening':'not_run_no_owner_listening','signed_install':'not_run_not_receipted','installed_AU_registration_auval':'not_run_not_receipted','unsigned_CompanionMacApp_build':commands['unsigned_Release_CompanionMacApp_build'],'unsigned_AU_source_build':commands['unsigned_Release_AssistantAudioUnitExtension_build'],'AudioUnitHostProbe':commands['AudioUnitHostProbe']}
- unmet=['held-out top-1, top-4, no-match precision, and no-match recall targets missed','ambiguity is model-withheld because its held-out calibration is below 0.75','long-context topic/cancellation/relevance are contract-only rather than measured','signed/install/AU registration/auval, Logic, audio, cloud, model-assisted, and owner lanes not run','remote CI pending']+([] if receipt else ['machine validation receipt missing or mismatched; command outcomes are unverified'])
- final={'package':'019','status':'infrastructure_receipt_valid_quality_gates_failed_external_lanes_not_run' if receipt else 'infrastructure_command_outcomes_unverified_quality_gates_failed_external_lanes_not_run','starting_baseline':{'branch':'codex/package-019-end-to-end-tutor-quality-calibration','commit':'8ac588e5f8e5ef543db80ef31a0b9487c5b27004','policy':policy(),'index_cards':6212,'p17_runtime_records':0},'generation_reproducibility':{'host_git_branch_head_tree':'intentionally omitted from generated evidence','host_toolchain':'intentionally omitted from generated evidence','reason':'A frozen report must reproduce in dirty worktrees, detached CI, and clean checkouts.'},'validation_receipt':{'path':str(RECEIPT.relative_to(ROOT)),'status':'valid' if receipt else 'missing_or_mismatched','candidate_fingerprint':receipt.get('candidate_fingerprint') if receipt else None,'artifact_hashes':receipt.get('artifact_hashes') if receipt else None},'suite':check(),'p17_p18_preservation':{'status':'preserved','boundary':'Package 017/018 historical JSON, cloud receipts, raw logs, and baseline records were not rewritten.'},'retrieval':{'authoritative_current_final':'Swift CandidateRetrievalIndex.rankedOutcome in PACKAGE_019_TOOL_DIAGNOSTIC.json','actual_swift_baseline':tool.get('actual_runtime_current_final',{}),'mirror_ablation_report':'PACKAGE_019_RETRIEVAL_CALIBRATION.json','stages':list(r['stages']),'ranking_and_abstention_separate':True,'held_out_not_tuned':True,'ambiguity_projection':r['ambiguity_model_projection'],'quality_gate':quality_gate,'failure_taxonomy':['noMatch','queryFailed','malformedSelectedPayload','schemaDrift','corrupt','disabled','unavailable','versionMismatch']},'deterministic_tool_path':tool,'experiment_completeness':tool.get('experiment_completeness',{}),'long_context':tool.get('long_context',{}),'provider':{'store':False,'calls':0,'tokens':0,'latency_ms':None,'cost':None,'model':None,'reason':'no explicit consent; opt-in executable harnesses exist but were not invoked'},'lanes':lanes,'commands':commands,'required_remote_CI_checks':['Tutor integrity / fast-integrity','Tutor macOS Swift / swift','fresh Package 019 validation receipt, evidence upload, and drift check'],'files_and_architecture':{'retrieval':'CandidateRetrievalIndex staged typed outcomes; TutorTools sanitizes them','evaluation':'package19_quality_suite.py plus frozen suite/manifest and validation receipt','harness':'TutorConversationTests package19-diagnostics and consent-gated cloud commands','UI':'SafeTutorMarkdown local bounded selectable projection'},'unmet_gates':unmet,'limitations':['Actual held-out retrieval quality misses the stated quality targets; no held-out tuning was performed.','Python ablations are mirrors, not the Swift current-final implementation.','Long-context topic/cancellation/relevance dimensions are explicitly contract-only/not measured by this diagnostic.','Only receipt-executed commands are marked pass; all other outcomes are unverified rather than inferred.'],'recommended_next_step':'Run the receipt generator after the required deterministic and unsigned-build checks, then regenerate reports; improve only with development/calibration evidence before one held-out rerun.'};put(E/'PACKAGE_019_FINAL_REPORT.json',final)
+ long_context=tool.get('long_context',{});long_context_complete=measured_long_context(long_context);before_after={part:{'before':PRE_ORDERED6_SWIFT_BASELINE['per_partition'][part],'after':metric_view(swift_metrics.get(part,{}))} for part in PARTS}
+ unmet=['held-out top-1, top-4, no-match precision, and no-match recall targets missed','ambiguity is model-withheld because its held-out calibration is below 0.75']+([] if long_context_complete else ['long-context engine/store/tool coverage is not fully measured by the current provider-free diagnostic'])+['signed/install/AU registration/auval, Logic, audio, cloud, model-assisted, and owner lanes not run','remote CI pending']+([] if receipt else ['machine validation receipt missing or mismatched; command outcomes are unverified'])
+ limitations=['Actual held-out retrieval quality misses the stated quality targets; no held-out tuning was performed.','Python ablations are mirrors, not the Swift current-final implementation.']+([] if long_context_complete else ['Long-context engine/store/tool coverage is not fully measured by the current provider-free diagnostic.'])+['The provider-free long-context harness proves local engine/store/context/tool mechanics only; it does not measure cloud latency/cost, semantic model quality, or musician usefulness.','Only receipt-executed commands are marked pass; all other outcomes are unverified rather than inferred.']
+ architecture={'policy_version':'package019-bm25-ordered6-domain-diverse/1','query_projection':'first six unique normalized terms in source order drive FTS pool generation, score, lexical coverage, and retrieval receipts','score_and_abstention':'existing field/BM25 score, confidence floor 26, and minimum two unique overlaps; ranking and abstention remain separate','selection':'one selected card per domain, question-key dedupe, bounded package/source behavior','ambiguity':'withheld from model-facing output because held-out ambiguity balanced accuracy is below 0.75'}
+ final={'package':'019','status':'infrastructure_receipt_valid_quality_gates_failed_external_lanes_not_run' if receipt else 'infrastructure_command_outcomes_unverified_quality_gates_failed_external_lanes_not_run','starting_baseline':{'branch':'codex/package-019-end-to-end-tutor-quality-calibration','commit':'8ac588e5f8e5ef543db80ef31a0b9487c5b27004','policy':policy(),'index_cards':6212,'p17_runtime_records':0},'generation_reproducibility':{'host_git_branch_head_tree':'intentionally omitted from generated evidence','host_toolchain':'intentionally omitted from generated evidence','reason':'A frozen report must reproduce in dirty worktrees, detached CI, and clean checkouts.'},'validation_receipt':{'path':str(RECEIPT.relative_to(ROOT)),'status':'valid' if receipt else 'missing_or_mismatched','candidate_fingerprint':receipt.get('candidate_fingerprint') if receipt else None,'artifact_hashes':receipt.get('artifact_hashes') if receipt else None},'suite':check(),'p17_p18_preservation':{'status':'preserved','boundary':'Package 017/018 historical JSON, cloud receipts, raw logs, and baseline records were not rewritten.'},'retrieval':{'authoritative_pre_ordered6_swift_baseline':PRE_ORDERED6_SWIFT_BASELINE,'authoritative_current_final':'Swift CandidateRetrievalIndex.rankedOutcome in PACKAGE_019_TOOL_DIAGNOSTIC.json','actual_swift_baseline':tool.get('actual_runtime_current_final',{}),'authoritative_current_final_metrics':swift_metrics,'authoritative_before_after':before_after,'final_architecture':architecture,'mirror_ablation_report':'PACKAGE_019_RETRIEVAL_CALIBRATION.json','stages':list(r['stages']),'ranking_and_abstention_separate':True,'held_out_not_tuned':True,'ambiguity_projection':r['ambiguity_model_projection'],'quality_gate':quality_gate,'failure_taxonomy':['noMatch','queryFailed','malformedSelectedPayload','schemaDrift','corrupt','disabled','unavailable','versionMismatch']},'deterministic_tool_path':tool,'experiment_completeness':tool.get('experiment_completeness',{}),'long_context':long_context,'long_context_provider_free_measured':long_context_complete,'provider':{'store':False,'calls':0,'tokens':0,'latency_ms':None,'cost':None,'model':None,'reason':'no explicit consent; opt-in executable harnesses exist but were not invoked'},'lanes':lanes,'commands':commands,'required_remote_CI_checks':['Tutor integrity / fast-integrity','Tutor macOS Swift / swift','fresh Package 019 validation receipt, evidence upload, and drift check'],'files_and_architecture':{'retrieval':'CandidateRetrievalIndex staged typed outcomes; TutorTools sanitizes them','evaluation':'package19_quality_suite.py plus frozen suite/manifest and validation receipt','harness':'TutorConversationTests package19-diagnostics and consent-gated cloud commands','UI':'SafeTutorMarkdown local bounded selectable projection'},'unmet_gates':unmet,'limitations':limitations,'recommended_next_step':'With separate explicit cloud-text consent, run the full live seven-tool cloud triplet evaluation with no-tool comparison and repeated stability runs; local infrastructure alone does not establish model quality.'};put(E/'PACKAGE_019_FINAL_REPORT.json',final)
  md=f'''# Package 019 Tutor quality report
 
 ## Deterministic result
 
-The frozen evaluation-only suite contains {check()['case_count']} cases ({check()['partitions']}). This report omits live Git, worktree, and host-toolchain fields. Package 017/018 historical evidence remains preserved, with 6,212 runtime Package 001-016 cards and zero P17 runtime records. Receipt status: **{'valid' if receipt else 'missing or mismatched; command outcomes unverified'}**. Held-out top-1/top-4/no-match precision/no-match recall miss the 0.80/0.95/0.90/0.90 gates; ambiguity is model-withheld.
+The frozen evaluation-only suite contains {check()['case_count']} cases ({check()['partitions']}). This report omits live Git, worktree, and host-toolchain fields. Package 017/018 historical evidence remains preserved, with 6,212 runtime Package 001-016 cards and zero P17 runtime records. Receipt status: **{'valid' if receipt else 'missing or mismatched; command outcomes unverified'}**. Current held-out top-1/top-4/no-match precision/no-match recall are **{metric_text(held.get('top1_acceptable'))}/{metric_text(held.get('top4_recall'))}/{metric_text(held.get('no_match_precision'))}/{metric_text(held.get('no_match_recall'))}**; they miss the 0.80/0.95/0.90/0.90 gates. Ambiguity is model-withheld.
+
+## Authoritative Swift retrieval comparison
+
+The pre-ordered6 Swift baseline is preserved from commit `{PRE_ORDERED6_SWIFT_BASELINE['source_commit']}`. Current-final values are read from `PACKAGE_019_TOOL_DIAGNOSTIC.json`, not embedded in this report generator.
+
+| Partition | Before top-1/top-4/P/R | Current top-1/top-4/P/R |
+| --- | --- | --- |
+{chr(10).join(f"| {part} | {metric_text(before_after[part]['before']['top1_acceptable'])}/{metric_text(before_after[part]['before']['top4_recall'])}/{metric_text(before_after[part]['before']['no_match_precision'])}/{metric_text(before_after[part]['before']['no_match_recall'])} | {metric_text(before_after[part]['after']['top1_acceptable'])}/{metric_text(before_after[part]['after']['top4_recall'])}/{metric_text(before_after[part]['after']['no_match_precision'])}/{metric_text(before_after[part]['after']['no_match_recall'])} |" for part in PARTS)}
+
+The final policy is `{architecture['policy_version']}`: first six unique normalized terms in their original order drive pool generation, scoring, and coverage; the existing score/confidence-26/two-overlap abstention gate remains separate from ranking; selection keeps one card per domain with bounded dedupe/package/source behavior. Ambiguity remains withheld.
+
+## Provider-free long context
+
+{'The local harness measured 10/25/50/80-message engine/store/tool runs, topic return, a decisive prior experiment, temporary level propagation, cancellation/retry, capture replacement, request bytes, estimated tokens, fixture output tokens, and bounded tool rounds.' if long_context_complete else 'The current diagnostic does not yet prove the complete provider-free long-context contract.'} It uses an in-process recording transport and proves local mechanics only—not semantic model quality, cloud latency/cost, or musician usefulness.
 
 ## Receipt and boundaries
 
@@ -336,7 +391,9 @@ The frozen evaluation-only suite contains {check()['case_count']} cases ({check(
 
 ## Commands and next step
 
-Command results are machine-readable in the JSON report; unreceipted outcomes are `not_run_unverified`, not passes. Remote CI remains pending. Required checks: Tutor integrity / fast-integrity; Tutor macOS Swift / swift; fresh Package 019 validation receipt, evidence upload, and drift check. Run `python3 research/scripts/package19_quality_suite.py --generate-validation-receipt` after deterministic revalidation, then `python3 research/scripts/package19_quality_suite.py --check --write-reports`.
+Command results are machine-readable in the JSON report; unreceipted outcomes are `not_run_unverified`, not passes. Remote CI remains pending. Signing/install, AU registration/`auval`, Logic, audio, cloud/model-assisted evaluation, and owner listening are not run. Required checks: Tutor integrity / fast-integrity; Tutor macOS Swift / swift; fresh Package 019 validation receipt, evidence upload, and drift check.
+
+The highest-value next step is, with separate explicit cloud-text consent, the full live seven-tool cloud triplet evaluation, including a no-tool comparison and repeated stability runs. The local evidence does not substitute for that model-quality measurement.
 '''
  (E/'PACKAGE_019_FINAL_REPORT.md').write_text(md)
 def main():

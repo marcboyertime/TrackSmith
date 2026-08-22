@@ -1313,7 +1313,7 @@ private final class Suite {
         if output["candidate_receipt"] != nil { receiptPurityFailures.append("model_receipt_leaked") }
         // P16 preserves its projection and receipt boundary while Package 018
         // replaces only the runtime reader/ranking policy.
-        if provenance?.policyVersion != "package018-bm25-general-rerank/1" {
+        if provenance?.policyVersion != "package019-bm25-ordered6-domain-diverse/1" {
             receiptPurityFailures.append("policy_version")
         }
         if provenance?.retrievalID?.count != 64 {
@@ -1510,21 +1510,244 @@ private final class Suite {
         }
         try expect(!markdownSource.contains("accessibilityLabel(\"Tutor response\")"), "P19 Markdown renderer suppresses response content for VoiceOver")
         try expect(!markdownSource.contains("WebView") && !markdownSource.contains("Link("), "P19 Markdown renderer introduced remote/interactive content")
-        let longCounts = [10, 25, 50, 80]
-        let longContext: [[String: Any]] = longCounts.map { count in
-            let history = (0..<count).map { TutorConversationMessage(role: $0.isMultiple(of: 2) ? .user : .assistant, text: "topic \($0 % 5) capture \($0 == count - 1 ? "replacement" : "prior")") }
-            return ["messages": count, "bytes": history.reduce(0) { $0 + $1.text.utf8.count }, "topic_change_return": "contract_only_not_engine_measured", "temporary_level": "contract_only_not_engine_measured", "cancellation_retry": "not_measured_in_this_diagnostic", "capture_replacement": "contract_only_not_engine_measured", "relevance_latency_ms": "not_measured_in_this_diagnostic"]
-        }
+        let longContext = try await packageNineteenMeasuredLongContextHarness()
         let report: [String: Any] = [
             "package": "019", "status": "infrastructure_pass_quality_fail", "actual_runtime_current_final": ["per_partition": Dictionary(uniqueKeysWithValues: byPartition.map { ($0.key, metric($0.value)) }), "typed_outcomes": typedOutcomes, "quality_gate": "failed: held-out ranking target missed; no held-out tuning performed"],
             "tools": ["count": outputs.count, "names": calls.map(\.0), "output_bytes": outputs.map { $0.outputJSON.utf8.count }, "authority": "read-only except presentation-only experiment"],
             "experiment_completeness": ["status": "pass", "repairs": "not_applicable_no_repair_path_invoked", "max_repairs": 1, "fields": ["baseline_start", "one_variable", "listen_cue", "risk", "stop_condition", "undo"]],
-            "long_context": ["status": "contract_only_partial_measurement", "runs": longContext, "message_limit": TutorConversationEngine.maximumMessageBytes, "tool_output_limit": TutorToolExecutor.maximumToolOutputBytes, "gap": "Engine/store cancellation-retry and relevance latency require a dedicated provider-free conversation harness."],
-            "evidence_boundary": "Injected deterministic capture/Logic state and local runtime index only; no provider, audio upload, installed app, Logic action, or owner listening.",
+            "long_context": longContext,
+            "evidence_boundary": "Injected deterministic capture/Logic state, local runtime index, and a recording loopback transport only. OpenAI request serialization was exercised with store:false, but the transport cannot reach the network; no cloud provider, audio upload, installed app, Logic action, or owner listening occurred.",
         ]
         let outputURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("docs/evidence/PACKAGE_019_TOOL_DIAGNOSTIC.json")
         try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]).write(to: outputURL)
-        print("P19_DIAGNOSTIC_OK cases=240 tools=7 typedFailures=7 longContext=10,25,50,80")
+        print("P19_LONG_CONTEXT_HARNESS_OK messages=10,25,50,80 provider=loopback-only tools=candidate,procedure,capture,history cancellation=retry capture=replaced")
+        print("P19_DIAGNOSTIC_OK cases=240 tools=7 typedFailures=7 longContext=measured-10,25,50,80")
+    }
+
+    /// A provider-free end-to-end harness. It deliberately uses the public
+    /// Responses request serializer with a recording in-process transport, so
+    /// it proves bounded engine/store/context mechanics without a network call
+    /// or a claim about cloud model quality, latency, cost, or musician value.
+    private func packageNineteenMeasuredLongContextHarness() async throws -> [String: Any] {
+        let counts = [10, 25, 50, 80]
+        let decisiveExperiment = packageNineteenPriorExperiment()
+        let captureA = packageNineteenCapture("00000000-0000-0000-0000-000000000019")
+        let captureB = packageNineteenCapture("00000000-0000-0000-0000-000000000029")
+        let context = TutorRuntimeContext(
+            sourceType: .vocal,
+            capture: captureA,
+            consent: .init(cloudTextGranted: false),
+            experience: .init(persistentLevel: .amateur, temporaryOverride: .pro)
+        )
+        var runs: [[String: Any]] = []
+
+        for count in counts {
+            let history = (0..<(count - 1)).map { index -> TutorConversationMessage in
+                let text: String
+                switch index {
+                case count - 3:
+                    text = "Decisive prior experiment: the baseline low-mid comparison was better; preserve that outcome."
+                case count - 2:
+                    text = "Temporary topic change: the drum bus is distracting, but do not replace the vocal baseline."
+                default:
+                    text = "History \(index): topic \(index % 4) remains bounded local conversation context."
+                }
+                return TutorConversationMessage(
+                    id: UUID(uuidString: String(format: "00000000-0000-0000-0000-%012d", index + 1))!,
+                    role: index.isMultiple(of: 2) ? .user : .assistant,
+                    text: text,
+                    createdAt: Date(timeIntervalSince1970: 1_786_300_000 + Double(index))
+                )
+            }
+            let root = temporaryRoot("p19-long-\(count)")
+            defer { try? FileManager.default.removeItem(at: root) }
+            let store = TutorConversationStore(rootURL: root)
+            let executor = try TutorToolExecutor(priorExperiments: { [decisiveExperiment] })
+            let engine = TutorConversationEngine(
+                state: TutorConversationState(
+                    id: UUID(uuidString: String(format: "10000000-0000-0000-0000-%012d", count))!,
+                    createdAt: Date(timeIntervalSince1970: 1_786_300_000),
+                    updatedAt: Date(timeIntervalSince1970: 1_786_300_000),
+                    messages: history,
+                    experiments: [decisiveExperiment]
+                ),
+                store: store,
+                tools: executor,
+                fallbackProvider: try OfflineTutorProvider()
+            )
+            let transport = PackageNineteenLoopbackStreamingTransport()
+            let provider = packageNineteenLoopbackProvider(transport: transport)
+            let started = Date()
+            let events = try await collectTurn(
+                engine,
+                "Return to the vocal masking problem. Keep the decisive baseline outcome and do not repeat the temporary drum topic.",
+                context,
+                provider
+            )
+            _ = Date().timeIntervalSince(started) // exercised, intentionally non-golden
+            guard let completed = events.compactMap({ event -> TutorEvidenceReceipt? in
+                if case let .completed(_, receipt) = event { return receipt }
+                return nil
+            }).last else {
+                throw TestFailure(description: "P19 long context \(count) did not complete")
+            }
+            let bodies = transport.requestBodies()
+            try expect(bodies.count == 2 && bodies.allSatisfy { $0.count <= 512 * 1_024 },
+                       "P19 long context \(count) did not use a bounded two-round local tool loop")
+            guard let first = try packageNineteenRequestBody(bodies[0]),
+                  let firstInput = first["input"] as? [[String: Any]],
+                  let developer = firstInput.first?["content"] as? String else {
+                throw TestFailure(description: "P19 long context \(count) did not serialize local provider context")
+            }
+            let retained = Array(firstInput.dropFirst())
+            let retainedText = retained.compactMap { $0["content"] as? String }
+            try expect(retained.count == count &&
+                       retainedText.contains(where: { $0.contains("Decisive prior experiment") }) &&
+                       retainedText.contains(where: { $0.contains("Temporary topic change") }) &&
+                       retainedText.last?.contains("Return to the vocal masking") == true &&
+                       developer.contains("\"temporaryOverride\":\"pro\"") &&
+                       developer.contains(captureA.captureSnapshotID.uuidString) &&
+                       first["store"] as? Bool == false,
+                       "P19 long context \(count) lost retained relevance, temporary level, capture identity, or store:false")
+            let continuationOutputs = (try packageNineteenRequestBody(bodies[1]))?["input"] as? [[String: Any]] ?? []
+            let toolOutputs = continuationOutputs.filter { ($0["type"] as? String) == "function_call_output" }
+            try expect(toolOutputs.count == 4 && toolOutputs.allSatisfy { ($0["output"] as? String ?? "").utf8.count <= TutorToolExecutor.maximumToolOutputBytes },
+                       "P19 long context \(count) did not preserve bounded real tool outputs")
+            let names = Set(completed.tools.map(\.name))
+            try expect(names.isSuperset(of: ["get_current_capture_context", "search_candidate_corpus", "get_logic_procedure", "retrieve_prior_experiments"]) &&
+                       completed.provider.outputTokens == PackageNineteenLoopbackStreamingTransport.fixtureOutputTokens &&
+                       completed.captureSnapshotID == captureA.captureSnapshotID,
+                       "P19 long context \(count) missed real capture/candidate/procedure/history tool participation")
+            let requestBytes = bodies.map(\.count)
+            let estimatedTokens = requestBytes.map { ($0 + 3) / 4 }
+            let latency: [String: Any] = ["measured": true, "reporting": "wall-clock latency exercised but omitted from deterministic evidence"]
+            let boundedness: [String: Any] = ["request_max_bytes": 512 * 1_024, "tool_output_max_bytes": TutorToolExecutor.maximumToolOutputBytes, "asserted": true]
+            let run: [String: Any] = [
+                "retained_messages": count,
+                "provider_request_rounds": bodies.count,
+                "tool_rounds": 1,
+                "tool_calls": completed.tools.count,
+                "request_bytes": requestBytes,
+                "estimated_input_tokens": estimatedTokens,
+                "output_tokens": completed.provider.outputTokens ?? NSNull(),
+                "topic_change_and_return": "asserted_from_serialized_retained_history",
+                "decisive_prior_experiment_outcome": "asserted_from_real_prior_experiment_tool",
+                "temporary_experience_override": "pro_asserted_from_serialized_context",
+                "capture_identity": "asserted_from_serialized_context_and_receipt",
+                "latency_ms": latency,
+                "boundedness": boundedness,
+            ]
+            runs.append(run)
+        }
+
+        let captureRoot = temporaryRoot("p19-capture-replacement")
+        defer { try? FileManager.default.removeItem(at: captureRoot) }
+        let captureStore = TutorConversationStore(rootURL: captureRoot)
+        let captureEngine = TutorConversationEngine(
+            store: captureStore,
+            tools: try TutorToolExecutor(priorExperiments: { [decisiveExperiment] }),
+            fallbackProvider: try OfflineTutorProvider()
+        )
+        let captureTransport = PackageNineteenLoopbackStreamingTransport()
+        let captureProvider = packageNineteenLoopbackProvider(transport: captureTransport)
+        let firstCaptureEvents = try await collectTurn(captureEngine, "Use the first local capture only.", context, captureProvider)
+        var replacementContext = context
+        replacementContext.capture = captureB
+        let replacementEvents = try await collectTurn(captureEngine, "Replace the capture and keep the same local-only boundary.", replacementContext, captureProvider)
+        guard let firstReceipt = firstCaptureEvents.compactMap({ if case let .completed(_, receipt) = $0 { return receipt }; return nil }).last,
+              let replacementReceipt = replacementEvents.compactMap({ if case let .completed(_, receipt) = $0 { return receipt }; return nil }).last else {
+            throw TestFailure(description: "P19 capture replacement receipts were absent")
+        }
+        let persistedFirstReceipt = try captureStore.loadReceipt(firstReceipt.id)
+        let persistedReplacementReceipt = try captureStore.loadReceipt(replacementReceipt.id)
+        try expect(firstReceipt.captureSnapshotID == captureA.captureSnapshotID &&
+                   replacementReceipt.captureSnapshotID == captureB.captureSnapshotID &&
+                   persistedFirstReceipt.captureSnapshotID == captureA.captureSnapshotID &&
+                   persistedReplacementReceipt.captureSnapshotID == captureB.captureSnapshotID,
+                   "P19 capture replacement identity was not persisted per turn")
+
+        let cancellationRoot = temporaryRoot("p19-cancellation-retry")
+        defer { try? FileManager.default.removeItem(at: cancellationRoot) }
+        let cancellationEngine = TutorConversationEngine(
+            store: TutorConversationStore(rootURL: cancellationRoot),
+            tools: try TutorToolExecutor(priorExperiments: { [decisiveExperiment] }),
+            fallbackProvider: try OfflineTutorProvider()
+        )
+        let pending = try await cancellationEngine.streamTurn(text: "Begin a cancellable local turn.", context: context, provider: SlowConversationProvider())
+        let consumer = Task { for try await _ in pending {} }
+        try await Task.sleep(for: .milliseconds(40))
+        consumer.cancel()
+        _ = await consumer.result
+        try await Task.sleep(for: .milliseconds(20))
+        let retryTransport = PackageNineteenLoopbackStreamingTransport()
+        let retryEvents = try await collectTurn(cancellationEngine, "Retry after cancellation with the current capture.", context, packageNineteenLoopbackProvider(transport: retryTransport))
+        let retryState = await cancellationEngine.snapshot()
+        try expect(retryEvents.contains(where: { if case .completed = $0 { return true }; return false }) &&
+                   retryState.messages.contains(where: { $0.status == .cancelled }) &&
+                   retryState.messages.last?.status == .complete &&
+                   !retryState.messages.contains(where: { $0.status == .complete && $0.text.contains("Partial explanation completed") }),
+                   "P19 cancellation/retry left a stale provider result or failed to recover")
+
+        return [
+            "status": "provider_free_measured",
+            "runs": runs,
+            "message_limit": TutorConversationEngine.maximumMessageBytes,
+            "tool_output_limit": TutorToolExecutor.maximumToolOutputBytes,
+            "capture_replacement": "measured_receipt_identity",
+            "cancellation_retry": "measured_cancelled_then_complete_without_stale_result",
+            "boundary": "Local-only loopback transport exercised OpenAI request serialization and engine/store/tool mechanics. It made zero network calls and does not measure cloud latency/cost, semantic model quality, or musician usefulness.",
+        ]
+    }
+
+    private func packageNineteenLoopbackProvider(transport: PackageNineteenLoopbackStreamingTransport) -> OpenAITutorProvider {
+        OpenAITutorProvider(
+            configuration: .init(modelIdentifier: "gpt-test", cloudTextConsent: true),
+            credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]),
+            transport: transport
+        )
+    }
+
+    private func packageNineteenRequestBody(_ data: Data) throws -> [String: Any]? {
+        try JSONSerialization.jsonObject(with: data) as? [String: Any]
+    }
+
+    private func packageNineteenPriorExperiment() -> TutorExperimentRecord {
+        TutorExperimentRecord(
+            draft: TutorExperimentDraft(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000039")!,
+                title: "Decisive baseline low-mid comparison",
+                logicLocation: "User-selected vocal channel",
+                action: "Keep the successful baseline available for comparison.",
+                startingRange: "No new setting during this retained-context check.",
+                listenFor: "Whether the prior better result remains the stated baseline.",
+                why: "The harness verifies retrieval of the user-recorded outcome, not a causal conclusion.",
+                risk: "Replacing the baseline would weaken the comparison.",
+                stopCondition: "Stop if the baseline identity is no longer clear.",
+                undo: "Return to the saved baseline.",
+                visualTargetQuery: nil
+            ),
+            createdAt: Date(timeIntervalSince1970: 1_786_300_000),
+            outcome: .better,
+            userNote: "Decisive user-reported better outcome."
+        )
+    }
+
+    private func packageNineteenCapture(_ identifier: String) -> TutorCaptureSnapshot {
+        let id = UUID(uuidString: identifier)!
+        return TutorCaptureSnapshot(
+            sourceType: .vocal,
+            instanceID: UUID(uuidString: "00000000-0000-0000-0000-000000000049")!,
+            runtimeEpoch: UUID(uuidString: "00000000-0000-0000-0000-000000000059")!,
+            captureSnapshotID: id,
+            sha256: String(repeating: identifier.hasSuffix("29") ? "b" : "a", count: 64),
+            capturedAt: Date(timeIntervalSince1970: 1_786_300_000),
+            durationSeconds: 8,
+            scopeDescription: "Deterministic local-only P19 capture fixture.",
+            formatDescription: "48000 Hz mono WAV",
+            isLive: true,
+            metrics: [TutorMetricEvidence(identifier: "p19_local_fixture_metric", value: 0.2, unit: "ratio", confidence: 0.8, interpretationBoundary: "Local fixture measurement; not model listening.")],
+            localAnalysisLimitations: ["No audio bytes are uploaded in the provider-free harness."]
+        )
     }
 
     /// An executable opt-in cloud harness.  It is intentionally not part of
@@ -4031,6 +4254,46 @@ private final class RecordingStreamingTransport: TutorStreamingHTTPTransport, @u
     }
 
     func latestRequest() -> TutorStreamingHTTPRequest? { lock.withLock { requests.last } }
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// This transport is intentionally in-process: it captures the exact request
+/// bytes produced by `OpenAITutorProvider` and returns fixed SSE fixtures. It
+/// has no URLSession, socket, or credential side effect, so Package 019 can
+/// exercise the real engine/tool loop without sending any data to a provider.
+private final class PackageNineteenLoopbackStreamingTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    static let fixtureOutputTokens = 17
+
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        lock.withLock { requests.append(request) }
+        let hasFunctionOutput = String(decoding: request.body, as: UTF8.self).contains(#""type":"function_call_output""#)
+        return TutorStreamingHTTPResponse(statusCode: 200, lines: Self.lines(hasFunctionOutput ? Self.finalLines : Self.toolLines))
+    }
+
+    func requestBodies() -> [Data] { lock.withLock { requests.map(\.body) } }
+
+    private static let toolLines = [
+        #"data: {"type":"response.completed","response":{"id":"p19-local-tools","model":"p19-local-loopback","usage":{"input_tokens":0,"output_tokens":0},"output":[{"type":"function_call","call_id":"p19-capture","name":"get_current_capture_context","arguments":"{}"},{"type":"function_call","call_id":"p19-candidate","name":"search_candidate_corpus","arguments":"{\"query\":\"muddy vocal guitars\"}"},{"type":"function_call","call_id":"p19-procedure","name":"get_logic_procedure","arguments":"{\"procedure_id\":null,\"query\":\"Channel EQ vocal low mid\"}"},{"type":"function_call","call_id":"p19-history","name":"retrieve_prior_experiments","arguments":"{\"query\":null,\"max_results\":6}"}]}}"#,
+        "",
+        "data: [DONE]",
+        "",
+    ]
+
+    private static let finalLines = [
+        #"data: {"type":"response.completed","response":{"id":"p19-local-final","model":"p19-local-loopback","usage":{"input_tokens":0,"output_tokens":17},"output":[{"type":"message","content":[{"type":"output_text","text":"Local loopback fixture completed one bounded reversible next step."}]}]}}"#,
+        "",
+        "data: [DONE]",
+        "",
+    ]
 
     private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in

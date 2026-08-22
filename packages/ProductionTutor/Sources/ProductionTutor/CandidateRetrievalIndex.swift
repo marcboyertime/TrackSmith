@@ -54,16 +54,11 @@ private struct CandidateRankMetadata { let id, packageID, questionKey, domain, c
 /// payload JSON is fetched and decoded only for final bounded IDs.
 public actor CandidateRetrievalIndex: CandidateRetriever {
     public static let schemaVersion = "package018-candidate-index/1"
-    public static let policyVersion = "package018-bm25-general-rerank/1"
+    public static let policyVersion = "package019-bm25-ordered6-domain-diverse/1"
     // The frozen natural suite separates ordinary low-evidence requests below
     // 16 from valid thin-context reports above 27; 26 is the documented
     // general confidence floor, paired with unique-term coverage below.
     private static let minimumConfidence = 26.0
-    // Long conversational queries include prior-experiment context. Require
-    // two unique matches, then use 20% coverage so that useful context does
-    // not erase a well-supported terse diagnosis; short low-evidence requests
-    // still fail the same two-term floor.
-    private static let minimumCoverage = 0.20
     private let handle: CandidateRetrievalDatabaseHandle
     private let manifest: CandidateRetrievalManifest
     private var lastDecodedPayloadCount = 0
@@ -118,24 +113,24 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
         } else {
             return .init(kind: .queryFailed)
         }
-        let queryTerms = Set(terms), minimumOverlap = max(2, Int(ceil(Double(terms.count) * Self.minimumCoverage)))
-        let ordered = candidates.filter { Self.overlap($0, queryTerms) >= minimumOverlap }.sorted { Self.score($0, queryTerms) == Self.score($1, queryTerms) ? $0.id < $1.id : Self.score($0, queryTerms) > Self.score($1, queryTerms) }
-        guard let best = ordered.first, Self.score(best, queryTerms) >= Self.minimumConfidence else { return .init(kind: .noMatch) }
-        let bestScore = Self.score(best, queryTerms)
-        let nextScore = ordered.dropFirst().first.map { Self.score($0, queryTerms) } ?? 0
+        let minimumOverlap = 2
+        let ordered = candidates.filter { Self.overlap($0, terms) >= minimumOverlap }.sorted { Self.score($0, terms) == Self.score($1, terms) ? $0.id < $1.id : Self.score($0, terms) > Self.score($1, terms) }
+        guard let best = ordered.first, Self.score(best, terms) >= Self.minimumConfidence else { return .init(kind: .noMatch) }
+        let bestScore = Self.score(best, terms)
+        let nextScore = ordered.dropFirst().first.map { Self.score($0, terms) } ?? 0
         let margin = bestScore - nextScore
         let ambiguity = margin < max(4, bestScore * 0.12)
-        var seenQuestions = Set<String>(), domainCounts: [String: Int] = [:], packageCounts: [String: Int] = [:], selected: [CandidateRankMetadata] = []
+        var seenQuestions = Set<String>(), seenDomains = Set<String>(), packageCounts: [String: Int] = [:], selected: [CandidateRankMetadata] = []
         for item in ordered where seenQuestions.insert(item.questionKey).inserted {
-            guard domainCounts[item.domain, default: 0] < 2, packageCounts[item.packageID, default: 0] < 2 else { continue }
-            domainCounts[item.domain, default: 0] += 1; packageCounts[item.packageID, default: 0] += 1; selected.append(item)
+            guard seenDomains.insert(item.domain).inserted, packageCounts[item.packageID, default: 0] < 2 else { continue }
+            packageCounts[item.packageID, default: 0] += 1; selected.append(item)
             if selected.count == limit { break }
         }
         guard let details = loadDetails(ids: selected.map(\.id)) else { return .init(kind: .queryFailed) }
         let results: [CommunityCandidateCorpusRankedCard] = selected.compactMap { item in
             guard let card = details[item.id] else { return nil }
-            let score = Self.score(item, queryTerms)
-            return .init(card: card, score: Int((score * 100).rounded()), deduplicatedCandidates: ordered.filter { $0.questionKey == item.questionKey }.count, lexicalOverlap: Self.overlap(item, queryTerms), lexicalCoverage: Double(Self.overlap(item, queryTerms)) / Double(queryTerms.count), scoreMargin: item.id == best.id ? margin : 0, ambiguity: item.id == best.id && ambiguity)
+            let score = Self.score(item, terms)
+            return .init(card: card, score: Int((score * 100).rounded()), deduplicatedCandidates: ordered.filter { $0.questionKey == item.questionKey }.count, lexicalOverlap: Self.overlap(item, terms), lexicalCoverage: Double(Self.overlap(item, terms)) / Double(terms.count), scoreMargin: item.id == best.id ? margin : 0, ambiguity: item.id == best.id && ambiguity)
         }
         // A chosen ID without a decodable payload is not an abstention.  It is
         // a bounded, sanitized integrity failure that must remain visible to
@@ -145,7 +140,7 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
     }
 
     private func fetchPool(terms: [String], filters: CommunityCandidateCorpusFilters, conjunction: Bool) -> [CandidateRankMetadata]? {
-        let expression = terms.prefix(12).map { "\"\($0)\"*" }.joined(separator: conjunction ? " AND " : " OR ")
+        let expression = terms.map { "\"\($0)\"*" }.joined(separator: conjunction ? " AND " : " OR ")
         var clauses = ["cards_fts MATCH ?"], bindings = [expression]
         if let value = filters.domain { clauses.append("c.domain = ?"); bindings.append(value) }
         if let value = filters.category { clauses.append("c.category = ?"); bindings.append(value) }
@@ -191,27 +186,32 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
         }
         return output
     }
-    private static func score(_ item: CandidateRankMetadata, _ query: Set<String>) -> Double {
-        let primary = item.primaryTerms.intersection(query).count * 8
-        let facets = item.facetTerms.intersection(query).count * 12
-        let context = item.contextTerms.intersection(query).count * 2
+    private static func score(_ item: CandidateRankMetadata, _ query: [String]) -> Double {
+        let uniqueQuery = Set(query)
+        let primary = item.primaryTerms.intersection(uniqueQuery).count * 8
+        let facets = item.facetTerms.intersection(uniqueQuery).count * 12
+        let context = item.contextTerms.intersection(uniqueQuery).count * 2
         let bm25 = min(32, max(0, -item.bm25))
         return Double(primary + facets + context) + bm25
     }
-    private static func overlap(_ item: CandidateRankMetadata, _ query: Set<String>) -> Int {
-        item.primaryTerms.union(item.facetTerms).union(item.contextTerms).intersection(query).count
+    private static func overlap(_ item: CandidateRankMetadata, _ query: [String]) -> Int {
+        item.primaryTerms.union(item.facetTerms).union(item.contextTerms).intersection(Set(query)).count
     }
     private static func terms(_ text: String) -> [String] {
         let words = text.lowercased().replacingOccurrences(of: "_", with: " ").split { !$0.isLetter && !$0.isNumber }.map(String.init)
-        return Set(words.compactMap { word -> String? in
-            guard word.count > 1, !stopTerms.contains(word) else { return nil }
+        var result: [String] = [], seen = Set<String>()
+        for word in words {
+            guard word.count > 1, !stopTerms.contains(word) else { continue }
             let stem: String
             if word.hasSuffix("ing"), word.count > 5 { stem = String(word.dropLast(3)) }
             else if word.hasSuffix("s"), word.count > 3 { stem = String(word.dropLast()) }
             else { stem = word }
             let skeleton = stem.filter { !"aeiou".contains($0) }
-            return stem.count >= 5 && skeleton.count >= 3 ? skeleton : stem
-        }).sorted()
+            let normalized = stem.count >= 5 && skeleton.count >= 3 ? skeleton : stem
+            if seen.insert(normalized).inserted { result.append(normalized) }
+            if result.count == 6 { break }
+        }
+        return result
     }
     // Broad host-navigation and vague-status words cannot identify a candidate
     // hypothesis by themselves; reviewed procedures/general teaching handle them.

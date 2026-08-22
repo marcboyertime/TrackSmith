@@ -538,7 +538,7 @@ public struct TutorToolExecutor: Sendable {
              "score": candidate.score, "first_experiment": candidate.card.recommendedFirstExperiment]
         }
         let querySHA256 = SHA256.hash(data: Data(retrievalQuery.utf8)).map { String(format: "%02x", $0) }.joined()
-        let retrievalID = SHA256.hash(data: Data(("package018-bm25-general-rerank/1|" + querySHA256 + "|" + selectedIDs.joined(separator: ",")).utf8)).map { String(format: "%02x", $0) }.joined()
+        let retrievalID = SHA256.hash(data: Data(("package019-bm25-ordered6-domain-diverse/1|" + querySHA256 + "|" + selectedIDs.joined(separator: ",")).utf8)).map { String(format: "%02x", $0) }.joined()
         let output: [String: Any] = [
             "query": query, "availability": availability.rawValue, "match": payload, "matches": summaryMatches,
             "retrieval_mode": retrievalMode,
@@ -570,7 +570,7 @@ public struct TutorToolExecutor: Sendable {
                 provenance.standardsSourceIDs=standardsSourceIDs.isEmpty ? nil : standardsSourceIDs
                 provenance.reviewState=selected.originalReviewStatus
                 provenance.resultSHA256=resultSHA256
-                provenance.selectedRecordIDs=Array(selectedIDs.prefix(4)); provenance.retrievalID=retrievalID; provenance.corpusVersion="p16-runtime-projection-6212"; provenance.policyVersion="package018-bm25-general-rerank/1"; provenance.omissions=["exact_fixture_identity", "ambiguous_alias_authority", "candidate_procedures", "development_only_index", "evaluation_data"]
+                provenance.selectedRecordIDs=Array(selectedIDs.prefix(4)); provenance.retrievalID=retrievalID; provenance.corpusVersion="p16-runtime-projection-6212"; provenance.policyVersion="package019-bm25-ordered6-domain-diverse/1"; provenance.omissions=["exact_fixture_identity", "ambiguous_alias_authority", "candidate_procedures", "development_only_index", "evaluation_data"]
                 return provenance
             }()
         )
