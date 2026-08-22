@@ -14,9 +14,11 @@
     "policy_has_untrusted_data_boundary": true,
     "policy_omits_evaluation_markers": true
   },
-  "evidence_class": "local source/index measurement plus fresh unsigned built-artifact resource audit; no installed, provider, Logic, or listening evidence",
   "ci_clean_checkout_preservation_repair": {
-    "root_cause": "The historical P001 vocal-quantization preservation hash included an ignored local .DS_Store host artifact.",
+    "clean_worktree_reproduction": {
+      "corrected_importer": "passed",
+      "old_committed_importer": "failed with P6 preservation baseline package-tree drift"
+    },
     "historical_nonportable_tree": {
       "file_count": 33,
       "sha256": "3f53c15970fd0c1672620d6b70e941b7d06391320bbaa5752b78cbc47b4dc635"
@@ -26,62 +28,25 @@
       "sha256": "62a04801302256adedb07f489ce06b19712349512d01e150f0c3ee22a49cf57d"
     },
     "projection": "git ls-files source-controlled package projection; historical physical fields remain retained beside it",
-    "clean_worktree_reproduction": {
-      "old_committed_importer": "failed with P6 preservation baseline package-tree drift",
-      "corrected_importer": "passed"
-    }
+    "root_cause": "The historical P001 vocal-quantization preservation hash included an ignored local .DS_Store host artifact."
   },
-  "post_fix_primary_verification": {
-    "builder_check": "passed",
-    "package18_audit": "passed",
-    "swift_release_build": "passed",
-    "p18_diagnostic": {
-      "passed": true,
-      "tests": "1/1",
-      "indexed_readiness_ms_approx": 2,
-      "legacy_oracle_readiness_ms_approx": 26295
-    },
-    "tutor_conversation_tests": "36/36 passed",
-    "unsigned_release_build": {
-      "derived_data": "/tmp/tracksmith-p18-final-derived.VuG2NQ",
-      "companion_app_kb": 65856,
-      "assistant_audio_unit_kb": 1612,
-      "production_tutor_bundle_kb": 40168,
-      "built_products": [
-        "CompanionMacApp",
-        "AssistantAudioUnitExtension"
-      ]
-    },
-    "production_tutor_bundle": {
-      "allowed_files": [
-        "Info.plist",
-        "CandidateRetrieval.sqlite",
-        "CandidateRetrieval.manifest.json"
-      ],
-      "candidate_resources_only": true,
-      "sqlite_bytes": 41119744,
-      "sqlite_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935",
-      "manifest_sha256": "b208b04db65bf9182ea052269531d7aba6eebec2a1d7cf811b494e9689fde306",
-      "source_hashes_match": true,
-      "forbidden_marker_scan_clean": true
-    }
-  },
+  "evidence_class": "local source/index measurement plus fresh unsigned built-artifact resource audit; no installed, provider, Logic, or listening evidence",
   "index": {
     "database_bytes": 41119744,
-    "database_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935",
+    "database_sha256": "c1a30348728ed8831e097d3029aa42e82bf56cf99a1278c25159e074187e816b",
     "manifest": {
-      "builder_version": "package018-index-builder/1",
+      "builder_version": "package019-index-builder/1",
       "card_count": 6212,
       "corpus_version": "p16-runtime-projection-6212",
       "database": "CandidateRetrieval.sqlite",
       "database_bytes": 41119744,
       "database_header_sha256": "e680244dec3891b277274098ff95c8765b969e397898a0fbbaaff870a4410dfc",
-      "database_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935",
+      "database_sha256": "c1a30348728ed8831e097d3029aa42e82bf56cf99a1278c25159e074187e816b",
       "determinism": "byte-identical on the same SQLite toolchain with fixed insertion order and pragmas",
-      "logical_content_sha256": "a5c14cc7bcb8e02e42b95faa54ea62cb44eae09a73b6f263972e53ce4b731203",
+      "logical_content_sha256": "e0e3a662768335d19366f529ba696be1c0b4cde49c6093bb96e56e58fcc44cfc",
       "package_017_runtime_count": 0,
       "package_count": 15,
-      "retrieval_policy_version": "package018-bm25-general-rerank/1",
+      "retrieval_policy_version": "package019-bm25-ordered6-domain-diverse/1",
       "schema_version": "package018-candidate-index/1",
       "source_projection": "research/community_knowledge/reconciliations/tracksmith-corpus-016-integration-retrieval-quality-control-runtime-projection-migration.json",
       "source_projection_sha256": "96749c77bb5e9ffff51e188eb863b6d6636b52231c935637487fda96b3fa3c9a",
@@ -579,13 +544,13 @@
     "diversity_rate": 1.0,
     "method": "fixed evaluation-only cases; legacy lexical oracle versus metadata-only weighted FTS pool versus live-equivalent final rerank; details decoded only after selection",
     "minimum_confidence": 26.0,
-    "minimum_coverage": 0.2,
-    "mrr": 0.7619047619047619,
+    "minimum_overlap": 2,
+    "mrr": 0.8095238095238095,
     "no_match_precision": 1.0,
     "no_match_recall": 1.0,
     "output_bytes": {
-      "max": 1275,
-      "median": 1038,
+      "max": 1259,
+      "median": 1035,
       "min": 0
     },
     "question_key_dedupe_rate": 1.0,
@@ -602,9 +567,9 @@
         "diverse": true,
         "final_domains": [
           "vocal_production",
-          "vocal_production",
           "frequency_allocation",
-          "frequency_allocation"
+          "transient_shaping",
+          "equalization"
         ],
         "id": "p18-natural-001",
         "indexed_pool_domains": [
@@ -620,8 +585,8 @@
           "compression",
           "equalization"
         ],
-        "margin": 4.839112609000793,
-        "output_bytes": 982,
+        "margin": 4.839112609000786,
+        "output_bytes": 1004,
         "question_key_deduplicated": true,
         "top_score": 50.854835013151806
       },
@@ -638,7 +603,7 @@
         "final_domains": [
           "vocal_production",
           "arrangement",
-          "arrangement",
+          "compression",
           "automation"
         ],
         "id": "p18-natural-002",
@@ -656,7 +621,7 @@
           "automation"
         ],
         "margin": 3.2857519145563465,
-        "output_bytes": 972,
+        "output_bytes": 950,
         "question_key_deduplicated": true,
         "top_score": 28.46579100038831
       },
@@ -671,9 +636,9 @@
         "diverse": true,
         "final_domains": [
           "volume_pan_plugin_automation",
-          "volume_pan_plugin_automation",
           "compression",
-          "level_balancing"
+          "level_balancing",
+          "reverb"
         ],
         "id": "p18-natural-003",
         "indexed_pool_domains": [
@@ -690,7 +655,7 @@
           "automation"
         ],
         "margin": 0.01262664677288683,
-        "output_bytes": 1066,
+        "output_bytes": 1011,
         "question_key_deduplicated": true,
         "top_score": 79.25502661699838
       },
@@ -704,9 +669,9 @@
         "diverse": true,
         "final_domains": [
           "delay",
-          "delay",
+          "reverb",
           "vocal_production",
-          "vocal_production"
+          "stereo_imaging"
         ],
         "id": "p18-natural-004",
         "indexed_pool_domains": [
@@ -723,7 +688,7 @@
           "vocal_production"
         ],
         "margin": 2.9130158996879914,
-        "output_bytes": 885,
+        "output_bytes": 900,
         "question_key_deduplicated": true,
         "top_score": 49.569970482046834
       },
@@ -738,9 +703,9 @@
         "diverse": true,
         "final_domains": [
           "layering",
-          "layering",
           "arrangement",
-          "vocal_production"
+          "vocal_production",
+          "automation"
         ],
         "id": "p18-natural-005",
         "indexed_pool_domains": [
@@ -757,7 +722,7 @@
           "arrangement"
         ],
         "margin": 10.079987626436491,
-        "output_bytes": 1001,
+        "output_bytes": 989,
         "question_key_deduplicated": true,
         "top_score": 85.59858555300568
       },
@@ -772,9 +737,9 @@
         "diverse": true,
         "final_domains": [
           "automation_modes_troubleshooting",
-          "automation_modes_troubleshooting",
           "automation",
-          "automation"
+          "level_balancing",
+          "piano_roll_precise_editing"
         ],
         "id": "p18-natural-006",
         "indexed_pool_domains": [
@@ -791,7 +756,7 @@
           "automation"
         ],
         "margin": 0.010136846210130557,
-        "output_bytes": 1002,
+        "output_bytes": 1088,
         "question_key_deduplicated": true,
         "top_score": 59.66027989228719
       },
@@ -806,9 +771,9 @@
         "diverse": true,
         "final_domains": [
           "flex_time_manual_timing",
-          "flex_time_manual_timing",
           "vocal_production",
-          "editing"
+          "editing",
+          "quantization_and_timing"
         ],
         "id": "p18-natural-007",
         "indexed_pool_domains": [
@@ -825,7 +790,7 @@
           "flex_time_manual_timing"
         ],
         "margin": 0.029048655202743134,
-        "output_bytes": 1121,
+        "output_bytes": 1040,
         "question_key_deduplicated": true,
         "top_score": 63.33314294457252
       },
@@ -839,9 +804,9 @@
         "diverse": true,
         "final_domains": [
           "input_monitoring_record_enable_signal_flow",
-          "input_monitoring_record_enable_signal_flow",
+          "recording_latency_monitoring_delay",
           "vocal_production",
-          "vocal_production"
+          "compression"
         ],
         "id": "p18-natural-008",
         "indexed_pool_domains": [
@@ -858,7 +823,7 @@
           "vocal_production"
         ],
         "margin": 0.0,
-        "output_bytes": 1070,
+        "output_bytes": 1064,
         "question_key_deduplicated": true,
         "top_score": 66.72252911616587
       },
@@ -872,9 +837,9 @@
         "diverse": true,
         "final_domains": [
           "sidechain_routing_ducking",
-          "sidechain_routing_ducking",
           "compression",
-          "compression"
+          "sends_buses_auxes_shared_effects",
+          "automation"
         ],
         "id": "p18-natural-009",
         "indexed_pool_domains": [
@@ -891,7 +856,7 @@
           "sidechain_routing_ducking"
         ],
         "margin": 0.0,
-        "output_bytes": 1086,
+        "output_bytes": 1067,
         "question_key_deduplicated": true,
         "top_score": 76.23129235494794
       },
@@ -902,10 +867,9 @@
         ],
         "ambiguous": true,
         "coverage": 0.6666666666666666,
-        "decoded_payload_count": 4,
+        "decoded_payload_count": 3,
         "diverse": true,
         "final_domains": [
-          "midi_quantization_groove",
           "midi_quantization_groove",
           "flex_time_manual_timing",
           "editing"
@@ -925,7 +889,7 @@
           "midi_quantization_groove"
         ],
         "margin": 0.002554932557799816,
-        "output_bytes": 1240,
+        "output_bytes": 942,
         "question_key_deduplicated": true,
         "top_score": 41.3065142707964
       },
@@ -941,8 +905,8 @@
         "final_domains": [
           "sends_buses_auxes_shared_effects",
           "bounce_export_stems",
-          "bounce_export_stems",
-          "sends_buses_auxes_shared_effects"
+          "volume_pan_plugin_automation",
+          "automation"
         ],
         "id": "p18-natural-011",
         "indexed_pool_domains": [
@@ -959,7 +923,7 @@
           "bounce_export_stems"
         ],
         "margin": 21.3625293711669,
-        "output_bytes": 1058,
+        "output_bytes": 993,
         "question_key_deduplicated": true,
         "top_score": 85.33695566162345
       },
@@ -973,9 +937,9 @@
         "diverse": true,
         "final_domains": [
           "phase_polarity",
-          "phase_polarity",
           "input_monitoring_record_enable_signal_flow",
-          "input_monitoring_record_enable_signal_flow"
+          "panning",
+          "transient_shaping"
         ],
         "id": "p18-natural-012",
         "indexed_pool_domains": [
@@ -992,7 +956,7 @@
           "phase_polarity"
         ],
         "margin": 1.8083859019759174,
-        "output_bytes": 1038,
+        "output_bytes": 1035,
         "question_key_deduplicated": true,
         "top_score": 43.31070140050936
       },
@@ -1064,9 +1028,9 @@
         "diverse": true,
         "final_domains": [
           "gain_staging",
-          "gain_staging",
           "freeze_cpu_management",
-          "freeze_cpu_management"
+          "bounce_export_stems",
+          "recording_latency_monitoring_delay"
         ],
         "id": "p18-natural-015",
         "indexed_pool_domains": [
@@ -1083,7 +1047,7 @@
           "gain_staging"
         ],
         "margin": 0.0004700498017982113,
-        "output_bytes": 1204,
+        "output_bytes": 1151,
         "question_key_deduplicated": true,
         "top_score": 59.68044778711364
       },
@@ -1098,9 +1062,9 @@
         "diverse": true,
         "final_domains": [
           "sidechain_routing_ducking",
-          "sidechain_routing_ducking",
           "flex_time_manual_timing",
-          "flex_time_manual_timing"
+          "layering",
+          "phase_polarity"
         ],
         "id": "p18-natural-016",
         "indexed_pool_domains": [
@@ -1117,7 +1081,7 @@
           "delay"
         ],
         "margin": 7.964160292073885,
-        "output_bytes": 1275,
+        "output_bytes": 1114,
         "question_key_deduplicated": true,
         "top_score": 65.40926054742745
       },
@@ -1132,9 +1096,9 @@
         "diverse": true,
         "final_domains": [
           "layering",
-          "layering",
           "panning",
-          "panning"
+          "saturation_harmonic_distortion",
+          "track_stacks_groups_submixes"
         ],
         "id": "p18-natural-017",
         "indexed_pool_domains": [
@@ -1150,8 +1114,8 @@
           "reverb",
           "arrangement"
         ],
-        "margin": 11.80961894635157,
-        "output_bytes": 939,
+        "margin": 11.809618946351577,
+        "output_bytes": 1065,
         "question_key_deduplicated": true,
         "top_score": 67.50748449804529
       },
@@ -1161,19 +1125,19 @@
           "smart_tempo_bpm_detection_tempo_mapping"
         ],
         "ambiguous": false,
-        "coverage": 0.625,
+        "coverage": 0.6666666666666666,
         "decoded_payload_count": 4,
         "diverse": true,
         "final_domains": [
           "editing",
+          "flex_time_manual_timing",
           "smart_tempo_bpm_detection_tempo_mapping",
-          "smart_tempo_bpm_detection_tempo_mapping",
-          "sidechain_routing_ducking"
+          "vocal_production"
         ],
         "id": "p18-natural-018",
         "indexed_pool_domains": [
-          "automation",
           "flex_time_manual_timing",
+          "automation",
           "flex_time_manual_timing",
           "flex_time_manual_timing"
         ],
@@ -1184,10 +1148,10 @@
           "flex_time_manual_timing",
           "midi_quantization_groove"
         ],
-        "margin": 14.100954154035847,
-        "output_bytes": 1140,
+        "margin": 15.608628262027764,
+        "output_bytes": 1259,
         "question_key_deduplicated": true,
-        "top_score": 66.31338156653995
+        "top_score": 55.65979474431998
       },
       {
         "acceptable_domains": [
@@ -1202,8 +1166,8 @@
         "final_domains": [
           "vocal_production",
           "frequency_allocation",
-          "vocal_production",
-          "equalization"
+          "bus_processing",
+          "transient_shaping"
         ],
         "id": "p18-natural-019",
         "indexed_pool_domains": [
@@ -1219,10 +1183,10 @@
           "vocal_production",
           "equalization"
         ],
-        "margin": 0.460793282691526,
-        "output_bytes": 997,
+        "margin": 0.0474761296138837,
+        "output_bytes": 1122,
         "question_key_deduplicated": true,
-        "top_score": 52.599586885663356
+        "top_score": 44.8127692127836
       },
       {
         "acceptable_domains": [
@@ -1235,9 +1199,9 @@
         "diverse": true,
         "final_domains": [
           "midi_quantization_groove",
-          "midi_quantization_groove",
           "take_folders_comping_multiple_performances",
-          "take_folders_comping_multiple_performances"
+          "cycle_punch_replace_recording",
+          "quantization_and_timing"
         ],
         "id": "p18-natural-020",
         "indexed_pool_domains": [
@@ -1254,7 +1218,7 @@
           "take_folders_comping_multiple_performances"
         ],
         "margin": 0.0,
-        "output_bytes": 1065,
+        "output_bytes": 1080,
         "question_key_deduplicated": true,
         "top_score": 44.02272783323361
       },
@@ -1269,9 +1233,9 @@
         "diverse": true,
         "final_domains": [
           "bounce_export_stems",
-          "bounce_export_stems",
           "sends_buses_auxes_shared_effects",
-          "sends_buses_auxes_shared_effects"
+          "volume_pan_plugin_automation",
+          "reverb"
         ],
         "id": "p18-natural-021",
         "indexed_pool_domains": [
@@ -1288,7 +1252,7 @@
           "sends_buses_auxes_shared_effects"
         ],
         "margin": 0.01616640337445574,
-        "output_bytes": 1027,
+        "output_bytes": 1026,
         "question_key_deduplicated": true,
         "top_score": 78.77661301958281
       },
@@ -1323,14 +1287,14 @@
       {
         "acceptable_domains": [],
         "ambiguous": false,
-        "coverage": 0.625,
+        "coverage": 0.5,
         "decoded_payload_count": 4,
         "diverse": true,
         "final_domains": [
-          "level_balancing",
           "smart_tempo_bpm_detection_tempo_mapping",
           "phase_polarity",
-          "saturation_harmonic_distortion"
+          "reverb",
+          "level_balancing"
         ],
         "id": "p18-natural-023",
         "indexed_pool_domains": [
@@ -1346,10 +1310,10 @@
           "smart_tempo_bpm_detection_tempo_mapping",
           "saturation_harmonic_distortion"
         ],
-        "margin": 8.138879999031822,
-        "output_bytes": 1173,
+        "margin": 6.653304477741649,
+        "output_bytes": 1058,
         "question_key_deduplicated": true,
-        "top_score": 54.90886167827042
+        "top_score": 44.769980309300294
       },
       {
         "acceptable_domains": [
@@ -1361,9 +1325,9 @@
         "diverse": true,
         "final_domains": [
           "phase_polarity",
-          "phase_polarity",
           "flex_time_manual_timing",
-          "reverb"
+          "reverb",
+          "sends_buses_auxes_shared_effects"
         ],
         "id": "p18-natural-024",
         "indexed_pool_domains": [
@@ -1380,7 +1344,7 @@
           "editing"
         ],
         "margin": 8.19274925395787,
-        "output_bytes": 1029,
+        "output_bytes": 1017,
         "question_key_deduplicated": true,
         "top_score": 57.94221741932887
       },
@@ -1397,7 +1361,7 @@
           "compression",
           "input_monitoring_record_enable_signal_flow",
           "transient_shaping",
-          "compression"
+          "vocal_production"
         ],
         "id": "p18-natural-025",
         "indexed_pool_domains": [
@@ -1414,7 +1378,7 @@
           "vocal_production"
         ],
         "margin": 3.3858530143843097,
-        "output_bytes": 1053,
+        "output_bytes": 1075,
         "question_key_deduplicated": true,
         "top_score": 43.41618640106768
       },
@@ -1462,7 +1426,7 @@
       }
     ],
     "top1_acceptable": 0.6666666666666666,
-    "top4_recall": 0.9047619047619048,
+    "top4_recall": 0.9523809523809523,
     "weights": {
       "context": 2,
       "primary": 5,
@@ -1475,6 +1439,73 @@
     "status": "retrieval input and results have no level field; P17 remains evaluation-only"
   },
   "package": "018",
+  "package019_policy_compatibility": {
+    "comparison_boundary": "Frozen Package 018 natural cases compare the former P18 final policy with the current P19 runtime-mirror policy; this is a compatibility regression check, not Package 019 held-out tuning.",
+    "current_package019": {
+      "mrr": 0.8095238095238095,
+      "no_match_precision": 1.0,
+      "no_match_recall": 1.0,
+      "policy_version": "package019-bm25-ordered6-domain-diverse/1",
+      "top1_acceptable": 0.6666666666666666,
+      "top4_recall": 0.9523809523809523
+    },
+    "mrr_delta": 0.04761904761904767,
+    "no_match_precision_non_regression": true,
+    "no_match_recall_non_regression": true,
+    "pre_package019": {
+      "mrr": 0.7619047619047619,
+      "no_match_precision": 1.0,
+      "no_match_recall": 1.0,
+      "policy_version": "package018-bm25-general-rerank/1",
+      "top1_acceptable": 0.6666666666666666,
+      "top4_recall": 0.9047619047619048
+    },
+    "top1_non_regression": true,
+    "top4_delta": 0.04761904761904756
+  },
+  "performance_observation": {
+    "acceptance_targets": {
+      "cold_p95_at_most_500ms": true,
+      "readiness_at_least_90_percent_faster": true,
+      "warm_p95_at_most_100ms": true
+    },
+    "evidence_class": "hardware-sensitive local observation; excluded from deterministic report-drift comparison and CI acceptance"
+  },
+  "post_fix_primary_verification": {
+    "builder_check": "passed",
+    "p18_diagnostic": {
+      "indexed_readiness_ms_approx": 2,
+      "legacy_oracle_readiness_ms_approx": 26295,
+      "passed": true,
+      "tests": "1/1"
+    },
+    "package18_audit": "passed",
+    "production_tutor_bundle": {
+      "allowed_files": [
+        "Info.plist",
+        "CandidateRetrieval.sqlite",
+        "CandidateRetrieval.manifest.json"
+      ],
+      "candidate_resources_only": true,
+      "forbidden_marker_scan_clean": true,
+      "manifest_sha256": "b208b04db65bf9182ea052269531d7aba6eebec2a1d7cf811b494e9689fde306",
+      "source_hashes_match": true,
+      "sqlite_bytes": 41119744,
+      "sqlite_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935"
+    },
+    "swift_release_build": "passed",
+    "tutor_conversation_tests": "36/36 passed",
+    "unsigned_release_build": {
+      "assistant_audio_unit_kb": 1612,
+      "built_products": [
+        "CompanionMacApp",
+        "AssistantAudioUnitExtension"
+      ],
+      "companion_app_kb": 65856,
+      "derived_data": "/tmp/tracksmith-p18-final-derived.VuG2NQ",
+      "production_tutor_bundle_kb": 40168
+    }
+  },
   "prompt": {
     "baseline_utf8_bytes": 19117,
     "forbidden_markers": {
@@ -1507,14 +1538,6 @@
     "no_match_recall_at_least_0_75": true,
     "top1_at_least_0_50": true,
     "top4_at_least_0_75": true
-  },
-  "performance_observation": {
-    "acceptance_targets": {
-      "cold_p95_at_most_500ms": true,
-      "readiness_at_least_90_percent_faster": true,
-      "warm_p95_at_most_100ms": true
-    },
-    "evidence_class": "hardware-sensitive local observation; excluded from deterministic report-drift comparison and CI acceptance"
   },
   "readiness_ms": {
     "improvement_percent": 99.978,
@@ -1549,15 +1572,15 @@
   },
   "retrieval_stage_comparison": {
     "indexed_final_rerank": {
-      "mrr": 0.7619047619047619,
+      "mrr": 0.8095238095238095,
       "no_match_abstention_recall": 1.0,
       "top1_acceptable": 0.6666666666666666,
-      "top4_recall": 0.9047619047619048
+      "top4_recall": 0.9523809523809523
     },
     "indexed_fts_pool": {
-      "mrr": 0.8015873015873015,
+      "mrr": 0.8253968253968254,
       "no_match_abstention_recall": 0.3333333333333333,
-      "top1_acceptable": 0.7142857142857143,
+      "top1_acceptable": 0.7619047619047619,
       "top4_recall": 0.9047619047619048
     },
     "legacy_lexical": {
