@@ -18,9 +18,45 @@ import re
 import shutil
 import sqlite3
 import stat
+import subprocess
+import sys
 import tempfile
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
+def die(message: str) -> None:
+    raise SystemExit("P16_INTEGRATION_ERROR: " + message)
+
+def lexical_absolute(path: pathlib.Path | str) -> pathlib.Path:
+    return pathlib.Path(os.path.abspath(os.fspath(path)))
+
+
+def assert_unlinked_absolute(path: pathlib.Path | str, expect_directory: bool) -> pathlib.Path:
+    path = lexical_absolute(path)
+    current = pathlib.Path(path.anchor)
+    if not stat.S_ISDIR(current.lstat().st_mode):
+        die("P16 preservation filesystem root is unsafe: " + str(current))
+    for index, part in enumerate(path.parts[1:]):
+        current = current / part
+        try:
+            mode = current.lstat().st_mode
+        except FileNotFoundError as error:
+            die("P16 preservation path missing: " + str(error))
+        if stat.S_ISLNK(mode):
+            die("P16 preservation path is symlinked: " + str(current))
+        if index < len(path.parts) - 2 and not stat.S_ISDIR(mode):
+            die("P16 preservation ancestor is not a directory: " + str(current))
+    if expect_directory and not stat.S_ISDIR(current.lstat().st_mode):
+        die("P16 preservation root is not a directory: " + str(path))
+    if not expect_directory and not stat.S_ISREG(current.lstat().st_mode):
+        die("P16 preservation file is not regular: " + str(path))
+    return path
+
+
+def lexical_repository_root(script_path: pathlib.Path | str) -> pathlib.Path:
+    script = assert_unlinked_absolute(script_path, False)
+    return assert_unlinked_absolute(script.parents[2], True)
+
+
+ROOT = lexical_repository_root(__file__)
 COMMUNITY = ROOT / "research/community_knowledge"
 PID = "tracksmith-corpus-016-integration-retrieval-quality-control"
 ARCHIVE_SHA256 = "07d391c61e7ead04d5a9f29c128146e8715d38d9d46cbd59c3bbb7917e145aad"
@@ -54,10 +90,6 @@ P2_P3_CURRENT = {
         "baselineCanonical": 320, "currentCanonical": 350,
     },
 }
-
-
-def die(message: str) -> None:
-    raise SystemExit("P16_INTEGRATION_ERROR: " + message)
 
 
 def sha(path: pathlib.Path) -> str:
@@ -131,6 +163,69 @@ def tree_digest(root: pathlib.Path) -> dict[str, object]:
     return {"fileCount": len(files), "sha256": digest.hexdigest()}
 
 
+def unlinked_repository_path(path: pathlib.Path, expect_directory: bool) -> str:
+    """Return a lexical repository path after validating every component."""
+    assert_unlinked_absolute(ROOT, True)
+    path = lexical_absolute(path)
+    try:
+        relative = path.relative_to(ROOT)
+    except ValueError as error:
+        die("P16 tracked preservation tree outside repository: " + str(error))
+    if not relative.parts or any(part in {"", ".", ".."} for part in relative.parts):
+        die("P16 unsafe tracked preservation path: " + str(path))
+    assert_unlinked_absolute(path, expect_directory)
+    return relative.as_posix()
+
+
+def source_controlled_tree_digest(root: pathlib.Path) -> dict[str, object]:
+    """Hash only Git-tracked repository package files for preservation gates."""
+    relative_root = unlinked_repository_path(root, True)
+    result = subprocess.run(["git", "-C", str(ROOT), "ls-files", "-z", "--", relative_root], capture_output=True)
+    if result.returncode:
+        die("P16 cannot enumerate tracked preservation files: " + result.stderr.decode(errors="replace").strip())
+    files: dict[str, pathlib.Path] = {}
+    for raw in result.stdout.split(b"\0"):
+        if not raw:
+            continue
+        path = ROOT / raw.decode()
+        unlinked_repository_path(path, False)
+        files[path.relative_to(root).as_posix()] = path
+    if not files:
+        die("P16 tracked preservation tree empty: " + relative_root)
+    digest = hashlib.sha256()
+    for relative, path in sorted(files.items()):
+        digest.update(b"FILE\0" + relative.encode() + b"\0" + path.read_bytes())
+    return {"fileCount": len(files), "sha256": digest.hexdigest()}
+
+
+def preservation_self_check() -> None:
+    with tempfile.TemporaryDirectory(dir=ROOT) as temporary:
+        base = pathlib.Path(temporary)
+        target = ROOT / "research/knowledge/community-vocal-quantization-v1"
+        os.symlink(target, base / "root-link")
+        (base / "ancestor").mkdir()
+        os.symlink(target.parent, base / "ancestor" / "linked")
+        os.symlink(target / "README.md", base / "tracked-file-link")
+        for unsafe in (base / "root-link", base / "ancestor" / "linked" / target.name, base / "tracked-file-link"):
+            try:
+                source_controlled_tree_digest(unsafe)
+            except SystemExit:
+                continue
+            die("P16 symlinked preservation path accepted: " + str(unsafe))
+        child_scripts = (
+            ("repository root", base / "linked-repository" / "research/scripts/package16-integration.py"),
+            ("repository ancestor", base / "linked-parent" / ROOT.name / "research/scripts/package16-integration.py"),
+        )
+        for label, child_script in child_scripts:
+            if label == "repository root":
+                os.symlink(ROOT, base / "linked-repository")
+            else:
+                os.symlink(ROOT.parent, base / "linked-parent")
+            child = subprocess.run([sys.executable, str(child_script), "--preservation-self-check"], capture_output=True, text=True)
+            if child.returncode == 0 or "symlinked" not in (child.stdout + child.stderr):
+                die("P16 symlinked " + label + " invocation was not rejected by lexical-path validation")
+
+
 def package_allowlist(incoming: pathlib.Path) -> dict[str, str]:
     sums = incoming / "PACKAGE_SHA256SUMS.txt"
     if sha(sums) != CHECKSUM_SHA256:
@@ -159,7 +254,7 @@ def package_allowlist(incoming: pathlib.Path) -> dict[str, str]:
 
 
 def current_resources() -> dict[str, int]:
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     values: dict[str, int] = {}
     for path in sorted(resources.glob("*.json")):
         data = json_file(path)
@@ -252,7 +347,7 @@ def state_fingerprint() -> dict[str, object]:
     package_trees: dict[str, object] = {}
     for row in protected:
         path = ROOT / str(row["path"])
-        package_trees[str(row["package_id"])] = tree_digest(path)
+        package_trees[str(row["package_id"])] = source_controlled_tree_digest(path)
     registry_projection = hashlib.sha256(json.dumps(protected, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     return {"schemaVersion": "1.0", "protectedPackageCount": 15,
             "registryProjectionSHA256": registry_projection,
@@ -264,7 +359,14 @@ def state_fingerprint() -> dict[str, object]:
 def check_baseline() -> None:
     if not BASELINE.is_file() or BASELINE.is_symlink():
         die("P16 preservation baseline missing")
-    if json_file(BASELINE) != state_fingerprint():
+    expected = json_file(BASELINE)
+    observed = state_fingerprint()
+    for tree in expected.get("packageTrees", {}).values():
+        source_controlled = tree.pop("sourceControlledTree", None)
+        if source_controlled is not None:
+            tree["fileCount"] = source_controlled["fileCount"]
+            tree["sha256"] = source_controlled["sha256"]
+    if expected != observed:
         die("P16 preservation check failed: P1-P15 state drift")
 
 
@@ -277,7 +379,7 @@ def audit_runtime_projection() -> None:
     intentional no-byte migration explicit instead of recapturing a baseline.
     """
     check_baseline()
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     registry = json_file(REGISTRY)
     sequence = {str(row["package_id"]): int(row["package_number"])
                 for row in registry["packages"] if isinstance(row, dict) and 1 <= row.get("package_number", 0) <= 15}
@@ -334,7 +436,7 @@ def build_development_index(index: pathlib.Path) -> None:
         die("refuses to replace development index cache")
     index.parent.mkdir(parents=True, exist_ok=True)
     temporary = index.with_name(index.name + ".tmp-" + str(os.getpid()))
-    resources = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+    resources = ROOT / "research/community_knowledge/runtime_projection/p16"
     registry = json_file(REGISTRY)
     sequence = {str(row["package_id"]): int(row["package_number"])
                 for row in registry["packages"] if isinstance(row, dict) and 1 <= row.get("package_number", 0) <= 15}
@@ -527,9 +629,9 @@ def stage(incoming: pathlib.Path, evidence: dict[str, object], dry_run: bool) ->
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--incoming", type=pathlib.Path, required=True)
-    parser.add_argument("--archive", type=pathlib.Path, required=True)
-    parser.add_argument("--sidecar", type=pathlib.Path, required=True)
+    parser.add_argument("--incoming", type=pathlib.Path)
+    parser.add_argument("--archive", type=pathlib.Path)
+    parser.add_argument("--sidecar", type=pathlib.Path)
     parser.add_argument("--preflight", action="store_true")
     parser.add_argument("--supplied-claim-only", action="store_true")
     parser.add_argument("--capture-baseline", action="store_true")
@@ -539,7 +641,14 @@ def main() -> None:
     parser.add_argument("--audit-runtime-projection", action="store_true")
     parser.add_argument("--build-development-index", type=pathlib.Path)
     parser.add_argument("--check-development-index", type=pathlib.Path)
+    parser.add_argument("--preservation-self-check", action="store_true")
     args = parser.parse_args()
+    if args.preservation_self_check:
+        preservation_self_check()
+        print("P16_PRESERVATION_SELF_CHECK_OK")
+        return
+    if args.incoming is None or args.archive is None or args.sidecar is None:
+        parser.error("--incoming, --archive, and --sidecar are required unless --preservation-self-check is used")
     if sum((args.preflight, args.supplied_claim_only, args.capture_baseline, args.check_preservation, args.dry_run, args.stage, args.audit_runtime_projection, args.build_development_index is not None, args.check_development_index is not None)) != 1:
         die("select exactly one action")
     incoming = args.incoming.resolve()

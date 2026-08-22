@@ -1,0 +1,1571 @@
+{
+  "abstention_label_contract": {
+    "case_count": 3,
+    "case_ids": [
+      "p18-natural-014",
+      "p18-natural-026",
+      "p18-natural-027"
+    ],
+    "final_recall": 1.0,
+    "measurement": "All frozen cases labelled abstain, including ordinary no-match, cannot-find, and insufficient-evidence categories; not only kind=no_match."
+  },
+  "authority_boundary": {
+    "case_count": 2,
+    "policy_has_untrusted_data_boundary": true,
+    "policy_omits_evaluation_markers": true
+  },
+  "evidence_class": "local source/index measurement plus fresh unsigned built-artifact resource audit; no installed, provider, Logic, or listening evidence",
+  "ci_clean_checkout_preservation_repair": {
+    "root_cause": "The historical P001 vocal-quantization preservation hash included an ignored local .DS_Store host artifact.",
+    "historical_nonportable_tree": {
+      "file_count": 33,
+      "sha256": "3f53c15970fd0c1672620d6b70e941b7d06391320bbaa5752b78cbc47b4dc635"
+    },
+    "portable_source_tree": {
+      "file_count": 32,
+      "sha256": "62a04801302256adedb07f489ce06b19712349512d01e150f0c3ee22a49cf57d"
+    },
+    "projection": "git ls-files source-controlled package projection; historical physical fields remain retained beside it",
+    "clean_worktree_reproduction": {
+      "old_committed_importer": "failed with P6 preservation baseline package-tree drift",
+      "corrected_importer": "passed"
+    }
+  },
+  "post_fix_primary_verification": {
+    "builder_check": "passed",
+    "package18_audit": "passed",
+    "swift_release_build": "passed",
+    "p18_diagnostic": {
+      "passed": true,
+      "tests": "1/1",
+      "indexed_readiness_ms_approx": 2,
+      "legacy_oracle_readiness_ms_approx": 26295
+    },
+    "tutor_conversation_tests": "36/36 passed",
+    "unsigned_release_build": {
+      "derived_data": "/tmp/tracksmith-p18-final-derived.VuG2NQ",
+      "companion_app_kb": 65856,
+      "assistant_audio_unit_kb": 1612,
+      "production_tutor_bundle_kb": 40168,
+      "built_products": [
+        "CompanionMacApp",
+        "AssistantAudioUnitExtension"
+      ]
+    },
+    "production_tutor_bundle": {
+      "allowed_files": [
+        "Info.plist",
+        "CandidateRetrieval.sqlite",
+        "CandidateRetrieval.manifest.json"
+      ],
+      "candidate_resources_only": true,
+      "sqlite_bytes": 41119744,
+      "sqlite_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935",
+      "manifest_sha256": "b208b04db65bf9182ea052269531d7aba6eebec2a1d7cf811b494e9689fde306",
+      "source_hashes_match": true,
+      "forbidden_marker_scan_clean": true
+    }
+  },
+  "index": {
+    "database_bytes": 41119744,
+    "database_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935",
+    "manifest": {
+      "builder_version": "package018-index-builder/1",
+      "card_count": 6212,
+      "corpus_version": "p16-runtime-projection-6212",
+      "database": "CandidateRetrieval.sqlite",
+      "database_bytes": 41119744,
+      "database_header_sha256": "e680244dec3891b277274098ff95c8765b969e397898a0fbbaaff870a4410dfc",
+      "database_sha256": "99934b5354738f092333091f08c51d6e08cc7a178be95fcf4b157398f8e67935",
+      "determinism": "byte-identical on the same SQLite toolchain with fixed insertion order and pragmas",
+      "logical_content_sha256": "a5c14cc7bcb8e02e42b95faa54ea62cb44eae09a73b6f263972e53ce4b731203",
+      "package_017_runtime_count": 0,
+      "package_count": 15,
+      "retrieval_policy_version": "package018-bm25-general-rerank/1",
+      "schema_version": "package018-candidate-index/1",
+      "source_projection": "research/community_knowledge/reconciliations/tracksmith-corpus-016-integration-retrieval-quality-control-runtime-projection-migration.json",
+      "source_projection_sha256": "96749c77bb5e9ffff51e188eb863b6d6636b52231c935637487fda96b3fa3c9a",
+      "sources": [
+        {
+          "canonical_count": 350,
+          "package_id": "community-compression-arrangement-frequency-allocation-v1",
+          "package_manifest_sha256": "910743645106629095b0819a389b5099bb84ecba92ea8960d7c03243f58c408e",
+          "resource": "community-compression-arrangement-frequency-allocation-v1.json",
+          "sha256": "4a1125c6f9371db251c80de5b37638217e768b8383f56814a8f4dbff5ba99846",
+          "utterance_count": 7700
+        },
+        {
+          "canonical_count": 238,
+          "package_id": "community-level-balancing-eq-v1",
+          "package_manifest_sha256": "9ccefb7ef7ff7a2cff195c0930ed006ab8802d9d3253d12e3a8b73007b329397",
+          "resource": "community-level-balancing-eq-v1.json",
+          "sha256": "2042646beb144b8eaa1a025b8368afe77c3d4fc97a77804f4ec59365a92dced9",
+          "utterance_count": 4007
+        },
+        {
+          "canonical_count": 300,
+          "package_id": "community-reverb-delay-v1",
+          "package_manifest_sha256": "8d6a147711fe3864af66e4e54b247bfdd0ed0a70314f6e77d8d96133c71e07d1",
+          "resource": "community-reverb-delay-v1.json",
+          "sha256": "526cfdc6d0d30a994521fdc64c59f156cde8608371e1594c7c43dd8424d5e696",
+          "utterance_count": 6600
+        },
+        {
+          "canonical_count": 214,
+          "package_id": "community-vocal-quantization-v1",
+          "package_manifest_sha256": "ecb07b6fb54d0ddcd694a63be2b95a2ed3d2e92533001845c0e872be8902e489",
+          "resource": "community-vocal-quantization-v1.json",
+          "sha256": "3993de9488fdf43f90b4458e96a70a9abc036b659370188003e51344773f63f1",
+          "utterance_count": 3290
+        },
+        {
+          "canonical_count": 240,
+          "package_id": "tracksmith-corpus-005-automation",
+          "package_manifest_sha256": "01b9d62439e45bb685c6a46ad058ba181b7877415a099ba00d0dccd2312318e7",
+          "resource": "tracksmith-corpus-005-automation.json",
+          "sha256": "723269eb2c9cd482277c2f64ac9d7056335f92dfa12b82fc1aed97b5dd9dda2e",
+          "utterance_count": 5280
+        },
+        {
+          "canonical_count": 384,
+          "package_id": "tracksmith-corpus-006-saturation-transient-shaping",
+          "package_manifest_sha256": "c9258563917bc3a8290cae3de5b0ce5ee0423207a41a76e7a84aa4691afac209",
+          "resource": "tracksmith-corpus-006-saturation-transient-shaping.json",
+          "sha256": "87dafa289b85e79a0c2b51cb4db5b67113f6793eb289ae3cf9720e8f00a128dd",
+          "utterance_count": 8448
+        },
+        {
+          "canonical_count": 396,
+          "package_id": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning",
+          "package_manifest_sha256": "f91eb7fb74f9c4968ebd1c8e62d27f2109eec6f174954f5ad150134fda432e87",
+          "resource": "tracksmith-corpus-007-phase-polarity-stereo-imaging-panning.json",
+          "sha256": "5daee413964fbce60a5c956ac50faf2a603e0b2b87fb846eb9337e7107e96c37",
+          "utterance_count": 8712
+        },
+        {
+          "canonical_count": 420,
+          "package_id": "tracksmith-corpus-008-editing-layering",
+          "package_manifest_sha256": "e832bbfa2ffe06a740cef29dbb9df4cf4b2e1ebe84296ae00d70067b4812ca1c",
+          "resource": "tracksmith-corpus-008-editing-layering.json",
+          "sha256": "ad665bf57c079057ce794f4600b3837ccb1a353c1747fffc276ae7a0c34a917b",
+          "utterance_count": 9240
+        },
+        {
+          "canonical_count": 430,
+          "package_id": "tracksmith-corpus-009-gain-staging-bus-processing-loudness",
+          "package_manifest_sha256": "c17a4cee0168172e6f191c9ad00b7515b821c71b4db82fc2200c9bb1b96c4aa7",
+          "resource": "tracksmith-corpus-009-gain-staging-bus-processing-loudness.json",
+          "sha256": "51f2012a0854c2923fda385117eceb3cf53ccb9dbc4577d927d8ca9b0e87be7e",
+          "utterance_count": 9460
+        },
+        {
+          "canonical_count": 450,
+          "package_id": "tracksmith-corpus-010-flex-time-manual-timing",
+          "package_manifest_sha256": "6f56095b16c1ae9560e322623b48f10135001716628467e3db3b68113e42814b",
+          "resource": "tracksmith-corpus-010-flex-time-manual-timing.json",
+          "sha256": "da8c0cb4cf44b192fde0cb64c6063ed81d0106395bff9f7dfb6487bb9b3cf49b",
+          "utterance_count": 0
+        },
+        {
+          "canonical_count": 450,
+          "package_id": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping",
+          "package_manifest_sha256": "49db3cf8b10ca9dade637811aa63d34fe6ae753d8d04c91b88e1baf16da980b8",
+          "resource": "tracksmith-corpus-011-smart-tempo-bpm-detection-tempo-mapping.json",
+          "sha256": "d008767d97cb762c98565d3b83c62ff4d78cd789361bd586c8563a684777a878",
+          "utterance_count": 0
+        },
+        {
+          "canonical_count": 480,
+          "package_id": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch",
+          "package_manifest_sha256": "9a6978a6e070c374156d7b7645e302ad977fd68f2ad8f3ec7be79fbfdd21ee56",
+          "resource": "tracksmith-corpus-012-recording-latency-monitoring-comping-punch.json",
+          "sha256": "7552d9ecd0b068e5a1f36c995e8fcaa088661f73dd65829f027a0aa0a1bd2cea",
+          "utterance_count": 0
+        },
+        {
+          "canonical_count": 480,
+          "package_id": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes",
+          "package_manifest_sha256": "30cc9fb35ac4d6427e64b5f43f82329b6b43323b617fa84b6fb11a84e2cec27d",
+          "resource": "tracksmith-corpus-013-sends-buses-auxes-track-stacks-groups-submixes.json",
+          "sha256": "a9a5bc7d27844da0bfb7fc37349bef2c4c70570b30771ad861b81e67cd6e48e1",
+          "utterance_count": 0
+        },
+        {
+          "canonical_count": 660,
+          "package_id": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform",
+          "package_manifest_sha256": "6abcd58ad650970156c13e982150420b6d446e3d83a8419630be2d9250d5494b",
+          "resource": "tracksmith-corpus-014-sidechain-automation-midi-groove-velocity-transform.json",
+          "sha256": "a7ab37b8f62d701aba28b5f9655cd5ab50bfd805e0105ddf0f56a6af2fd01435",
+          "utterance_count": 0
+        },
+        {
+          "canonical_count": 720,
+          "package_id": "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model",
+          "package_manifest_sha256": "60f3d680c08016a0b68687da1ce7c0a5cb4feb7e95d2e17e5154970908bf9503",
+          "resource": "tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model.json",
+          "sha256": "8863addad520d02489e0f133b7683c5b52487c5d51c449adc0a8a6a253b40faf",
+          "utterance_count": 0
+        }
+      ],
+      "sqlite_version": "3.53.1"
+    },
+    "migration_parity": {
+      "exact_payload_parity": true,
+      "indexed_card_count": 6212,
+      "indexed_payload_sha256": "19aee634f47e4ef2ec00c10d6ca354b22ab949386abe6602823e0353174a25fa",
+      "source_card_count": 6212,
+      "source_payload_sha256": "19aee634f47e4ef2ec00c10d6ca354b22ab949386abe6602823e0353174a25fa"
+    },
+    "raw_candidate_json_in_product_resources": [],
+    "sqlite_integrity": "ok"
+  },
+  "latency_ms": {
+    "cold_p50": 7.235208,
+    "cold_p95": 12.148125,
+    "cold_raw_samples": [
+      6.504875,
+      8.367333,
+      4.887042,
+      10.12275,
+      10.153042,
+      11.50875,
+      7.770875,
+      12.664667,
+      4.213584,
+      7.208834,
+      5.875291,
+      5.563375,
+      8.311292,
+      3.758666,
+      6.029,
+      9.592042,
+      6.829083,
+      12.148125,
+      10.758167,
+      7.135291,
+      6.085208,
+      10.677583,
+      14.695625,
+      10.319625,
+      7.235208,
+      0.14625,
+      2.502042
+    ],
+    "method": "Python SQLite final-retrieval mirror with bounded selected payload decode; warm is repeated same-process query, cold reconnect retains OS cache",
+    "warm_p50": 6.688083,
+    "warm_p95": 12.688375,
+    "warm_raw_samples": [
+      6.255333,
+      9.020917,
+      5.459292,
+      10.400458,
+      10.04325,
+      11.706125,
+      7.318875,
+      12.616542,
+      4.021125,
+      7.104958,
+      5.538875,
+      5.554,
+      8.336166,
+      3.649416,
+      6.653084,
+      9.672792,
+      6.308625,
+      11.745625,
+      10.833917,
+      6.494041,
+      5.744708,
+      10.662375,
+      14.831375,
+      10.48325,
+      6.891,
+      0.246584,
+      2.0605,
+      5.615834,
+      8.20475,
+      4.536709,
+      9.865584,
+      9.721417,
+      11.227666,
+      7.433542,
+      12.543083,
+      4.053083,
+      6.33925,
+      5.010583,
+      5.504417,
+      8.101458,
+      3.516166,
+      6.15725,
+      9.074667,
+      6.053541,
+      11.59,
+      10.790875,
+      6.756667,
+      5.759542,
+      10.286459,
+      14.156,
+      10.378875,
+      6.445458,
+      0.011125,
+      1.983958,
+      5.28,
+      8.310041,
+      5.073291,
+      10.258542,
+      9.642917,
+      10.934375,
+      7.412792,
+      12.864708,
+      3.89225,
+      6.726458,
+      4.90325,
+      5.323792,
+      8.475292,
+      3.794792,
+      5.936625,
+      9.456333,
+      6.455875,
+      12.496708,
+      10.847292,
+      6.037,
+      5.075542,
+      11.017875,
+      14.693542,
+      10.507375,
+      6.296542,
+      0.008708,
+      1.982166,
+      5.5725,
+      8.062584,
+      4.804667,
+      10.269666,
+      9.641125,
+      11.115334,
+      7.410458,
+      12.564333,
+      3.546041,
+      6.210167,
+      5.344,
+      5.661875,
+      8.250334,
+      3.621167,
+      5.911833,
+      9.121334,
+      6.383708,
+      11.718125,
+      11.079583,
+      6.44025,
+      5.405833,
+      10.496583,
+      14.169042,
+      10.116542,
+      6.688083,
+      0.012,
+      2.102583,
+      5.881916,
+      7.626208,
+      4.816125,
+      9.33525,
+      9.840291,
+      11.304291,
+      7.132583,
+      12.085833,
+      3.534458,
+      6.164834,
+      4.8775,
+      5.661167,
+      7.957125,
+      3.72875,
+      5.58425,
+      9.846917,
+      6.0485,
+      11.106666,
+      10.960375,
+      6.900209,
+      5.49525,
+      10.355541,
+      14.68325,
+      10.071542,
+      6.071916,
+      0.008542,
+      2.078166,
+      5.6995,
+      7.82325,
+      5.876375,
+      35.692125,
+      24.955041,
+      12.616917,
+      7.74675,
+      12.519833,
+      3.758917,
+      6.282417,
+      5.160083,
+      5.337083,
+      8.2985,
+      3.355709,
+      5.721958,
+      8.982083,
+      5.7005,
+      11.572584,
+      10.964584,
+      6.172,
+      5.424458,
+      10.515625,
+      14.152667,
+      9.795917,
+      6.257042,
+      0.011125,
+      2.051334,
+      5.21925,
+      8.008125,
+      4.635083,
+      9.784667,
+      10.0665,
+      11.161583,
+      6.694791,
+      12.53425,
+      3.531667,
+      6.302417,
+      5.203958,
+      5.105042,
+      8.199667,
+      3.350209,
+      5.42025,
+      9.121333,
+      6.063292,
+      11.702042,
+      10.498542,
+      6.160584,
+      5.093375,
+      10.58975,
+      14.251084,
+      9.640666,
+      6.507875,
+      0.01075,
+      2.001458,
+      5.319166,
+      8.350583,
+      4.446708,
+      9.850834,
+      9.912625,
+      11.230125,
+      7.086375,
+      12.688375,
+      3.56975,
+      6.132417,
+      5.52875,
+      5.03025,
+      8.12625,
+      3.293459,
+      6.3155,
+      9.513375,
+      5.941,
+      11.736041,
+      10.829833,
+      6.192167,
+      5.098,
+      10.473875,
+      14.205584,
+      9.678334,
+      6.512542,
+      0.011042,
+      1.983834,
+      5.484916,
+      7.535917,
+      4.976834,
+      10.332709,
+      9.502917,
+      11.451667,
+      6.785666,
+      12.339,
+      3.713875,
+      6.642917,
+      5.128125,
+      5.148584,
+      8.002667,
+      3.363167,
+      5.659792,
+      9.014208,
+      6.361583,
+      11.50725,
+      10.148709,
+      6.431292,
+      5.37375,
+      10.676042,
+      14.847792,
+      10.25775,
+      6.1735,
+      0.014959,
+      2.193042,
+      5.633666,
+      8.175459,
+      4.610875,
+      9.829166,
+      9.742375,
+      11.016917,
+      6.9305,
+      13.085875,
+      3.650166,
+      5.979,
+      5.266292,
+      5.217875,
+      8.122041,
+      3.393417,
+      5.582875,
+      9.116084,
+      5.816125,
+      12.243083,
+      11.024833,
+      6.258792,
+      5.419667,
+      10.755166,
+      14.434958,
+      10.233917,
+      6.604416,
+      0.011459,
+      2.00275,
+      5.625291,
+      7.8615,
+      4.727083,
+      9.571375,
+      9.32275,
+      11.34975,
+      6.914209,
+      12.408625,
+      3.955166,
+      6.262833,
+      5.378125,
+      5.5285,
+      8.540083,
+      3.414042,
+      5.665292,
+      9.143459,
+      5.992541,
+      11.23475,
+      10.177959,
+      6.53525,
+      5.300458,
+      10.2675,
+      13.917125,
+      9.816833,
+      6.260667,
+      0.011542,
+      2.040625
+    ]
+  },
+  "limitations": [
+    "Cold timing retains OS cache and is not an installed-app or process-launch measurement.",
+    "The Python audit mirrors the deterministic public algorithm but does not measure Swift actor scheduling, main-thread stalls, memory attribution, provider behavior, Logic, or listening.",
+    "Natural cases and labels are evaluation-only and absent from the bundle, runtime index, policy, provider context, and tool schema."
+  ],
+  "natural_retrieval": {
+    "ambiguity_label_metrics": {
+      "balanced_accuracy": 0.44999999999999996,
+      "clear_count": 6,
+      "clear_not_flagged": 1,
+      "clear_specificity": 0.16666666666666666,
+      "excluded_labels": {
+        "abstain": 3,
+        "boundary": 2,
+        "evaluation_only": 1
+      },
+      "expected_count": 15,
+      "expected_detected": 11,
+      "expected_recall": 0.7333333333333333
+    },
+    "ambiguity_rate": 0.7619047619047619,
+    "case_count": 27,
+    "diversity_rate": 1.0,
+    "method": "fixed evaluation-only cases; legacy lexical oracle versus metadata-only weighted FTS pool versus live-equivalent final rerank; details decoded only after selection",
+    "minimum_confidence": 26.0,
+    "minimum_coverage": 0.2,
+    "mrr": 0.7619047619047619,
+    "no_match_precision": 1.0,
+    "no_match_recall": 1.0,
+    "output_bytes": {
+      "max": 1275,
+      "median": 1038,
+      "min": 0
+    },
+    "question_key_dedupe_rate": 1.0,
+    "rows": [
+      {
+        "acceptable_domains": [
+          "arrangement",
+          "frequency_allocation",
+          "equalization"
+        ],
+        "ambiguous": true,
+        "coverage": 0.4,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "vocal_production",
+          "vocal_production",
+          "frequency_allocation",
+          "frequency_allocation"
+        ],
+        "id": "p18-natural-001",
+        "indexed_pool_domains": [
+          "equalization",
+          "equalization",
+          "equalization",
+          "vocal_production"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "equalization",
+          "vocal_production",
+          "compression",
+          "equalization"
+        ],
+        "margin": 4.839112609000793,
+        "output_bytes": 982,
+        "question_key_deduplicated": true,
+        "top_score": 50.854835013151806
+      },
+      {
+        "acceptable_domains": [
+          "level_balancing",
+          "equalization",
+          "vocal_production"
+        ],
+        "ambiguous": true,
+        "coverage": 0.4,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "vocal_production",
+          "arrangement",
+          "arrangement",
+          "automation"
+        ],
+        "id": "p18-natural-002",
+        "indexed_pool_domains": [
+          "vocal_production",
+          "vocal_production",
+          "vocal_production",
+          "vocal_production"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "arrangement",
+          "compression",
+          "automation",
+          "automation"
+        ],
+        "margin": 3.2857519145563465,
+        "output_bytes": 972,
+        "question_key_deduplicated": true,
+        "top_score": 28.46579100038831
+      },
+      {
+        "acceptable_domains": [
+          "reverb",
+          "compression"
+        ],
+        "ambiguous": true,
+        "coverage": 1.0,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "volume_pan_plugin_automation",
+          "volume_pan_plugin_automation",
+          "compression",
+          "level_balancing"
+        ],
+        "id": "p18-natural-003",
+        "indexed_pool_domains": [
+          "compression",
+          "volume_pan_plugin_automation",
+          "volume_pan_plugin_automation",
+          "volume_pan_plugin_automation"
+        ],
+        "kind": "misspelling",
+        "legacy_domains": [
+          "volume_pan_plugin_automation",
+          "compression",
+          "level_balancing",
+          "automation"
+        ],
+        "margin": 0.01262664677288683,
+        "output_bytes": 1066,
+        "question_key_deduplicated": true,
+        "top_score": 79.25502661699838
+      },
+      {
+        "acceptable_domains": [
+          "delay"
+        ],
+        "ambiguous": true,
+        "coverage": 0.75,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "delay",
+          "delay",
+          "vocal_production",
+          "vocal_production"
+        ],
+        "id": "p18-natural-004",
+        "indexed_pool_domains": [
+          "delay",
+          "delay",
+          "stereo_imaging",
+          "reverb"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "delay",
+          "frequency_allocation",
+          "reverb",
+          "vocal_production"
+        ],
+        "margin": 2.9130158996879914,
+        "output_bytes": 885,
+        "question_key_deduplicated": true,
+        "top_score": 49.569970482046834
+      },
+      {
+        "acceptable_domains": [
+          "arrangement",
+          "layering"
+        ],
+        "ambiguous": true,
+        "coverage": 0.8333333333333334,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "layering",
+          "layering",
+          "arrangement",
+          "vocal_production"
+        ],
+        "id": "p18-natural-005",
+        "indexed_pool_domains": [
+          "arrangement",
+          "layering",
+          "layering",
+          "arrangement"
+        ],
+        "kind": "confound",
+        "legacy_domains": [
+          "layering",
+          "arrangement",
+          "layering",
+          "arrangement"
+        ],
+        "margin": 10.079987626436491,
+        "output_bytes": 1001,
+        "question_key_deduplicated": true,
+        "top_score": 85.59858555300568
+      },
+      {
+        "acceptable_domains": [
+          "automation",
+          "automation_modes_troubleshooting"
+        ],
+        "ambiguous": true,
+        "coverage": 0.6666666666666666,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "automation_modes_troubleshooting",
+          "automation_modes_troubleshooting",
+          "automation",
+          "automation"
+        ],
+        "id": "p18-natural-006",
+        "indexed_pool_domains": [
+          "automation_modes_troubleshooting",
+          "automation_modes_troubleshooting",
+          "automation",
+          "automation"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "automation_modes_troubleshooting",
+          "automation",
+          "level_balancing",
+          "automation"
+        ],
+        "margin": 0.010136846210130557,
+        "output_bytes": 1002,
+        "question_key_deduplicated": true,
+        "top_score": 59.66027989228719
+      },
+      {
+        "acceptable_domains": [
+          "flex_time_manual_timing",
+          "vocal_production"
+        ],
+        "ambiguous": true,
+        "coverage": 0.6,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "flex_time_manual_timing",
+          "flex_time_manual_timing",
+          "vocal_production",
+          "editing"
+        ],
+        "id": "p18-natural-007",
+        "indexed_pool_domains": [
+          "flex_time_manual_timing",
+          "flex_time_manual_timing",
+          "stereo_imaging",
+          "smart_tempo_bpm_detection_tempo_mapping"
+        ],
+        "kind": "ambiguous",
+        "legacy_domains": [
+          "editing",
+          "flex_time_manual_timing",
+          "flex_time_manual_timing",
+          "flex_time_manual_timing"
+        ],
+        "margin": 0.029048655202743134,
+        "output_bytes": 1121,
+        "question_key_deduplicated": true,
+        "top_score": 63.33314294457252
+      },
+      {
+        "acceptable_domains": [
+          "recording_latency_monitoring_delay"
+        ],
+        "ambiguous": true,
+        "coverage": 0.8,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "input_monitoring_record_enable_signal_flow",
+          "input_monitoring_record_enable_signal_flow",
+          "vocal_production",
+          "vocal_production"
+        ],
+        "id": "p18-natural-008",
+        "indexed_pool_domains": [
+          "input_monitoring_record_enable_signal_flow",
+          "input_monitoring_record_enable_signal_flow",
+          "recording_latency_monitoring_delay",
+          "recording_latency_monitoring_delay"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "recording_latency_monitoring_delay",
+          "input_monitoring_record_enable_signal_flow",
+          "input_monitoring_record_enable_signal_flow",
+          "vocal_production"
+        ],
+        "margin": 0.0,
+        "output_bytes": 1070,
+        "question_key_deduplicated": true,
+        "top_score": 66.72252911616587
+      },
+      {
+        "acceptable_domains": [
+          "sidechain_routing_ducking"
+        ],
+        "ambiguous": true,
+        "coverage": 1.0,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking",
+          "compression",
+          "compression"
+        ],
+        "id": "p18-natural-009",
+        "indexed_pool_domains": [
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "compression",
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking"
+        ],
+        "margin": 0.0,
+        "output_bytes": 1086,
+        "question_key_deduplicated": true,
+        "top_score": 76.23129235494794
+      },
+      {
+        "acceptable_domains": [
+          "quantization_and_timing",
+          "midi_quantization_groove"
+        ],
+        "ambiguous": true,
+        "coverage": 0.6666666666666666,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "midi_quantization_groove",
+          "midi_quantization_groove",
+          "flex_time_manual_timing",
+          "editing"
+        ],
+        "id": "p18-natural-010",
+        "indexed_pool_domains": [
+          "midi_quantization_groove",
+          "midi_quantization_groove",
+          "midi_quantization_groove",
+          "midi_quantization_groove"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "midi_quantization_groove",
+          "flex_time_manual_timing",
+          "midi_quantization_groove",
+          "midi_quantization_groove"
+        ],
+        "margin": 0.002554932557799816,
+        "output_bytes": 1240,
+        "question_key_deduplicated": true,
+        "top_score": 41.3065142707964
+      },
+      {
+        "acceptable_domains": [
+          "bounce_export_stems",
+          "reverb"
+        ],
+        "ambiguous": false,
+        "coverage": 0.8,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "sends_buses_auxes_shared_effects",
+          "bounce_export_stems",
+          "bounce_export_stems",
+          "sends_buses_auxes_shared_effects"
+        ],
+        "id": "p18-natural-011",
+        "indexed_pool_domains": [
+          "sends_buses_auxes_shared_effects",
+          "automation",
+          "sends_buses_auxes_shared_effects",
+          "sends_buses_auxes_shared_effects"
+        ],
+        "kind": "confound",
+        "legacy_domains": [
+          "sends_buses_auxes_shared_effects",
+          "automation",
+          "bounce_export_stems",
+          "bounce_export_stems"
+        ],
+        "margin": 21.3625293711669,
+        "output_bytes": 1058,
+        "question_key_deduplicated": true,
+        "top_score": 85.33695566162345
+      },
+      {
+        "acceptable_domains": [
+          "phase_polarity"
+        ],
+        "ambiguous": true,
+        "coverage": 0.5,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "phase_polarity",
+          "phase_polarity",
+          "input_monitoring_record_enable_signal_flow",
+          "input_monitoring_record_enable_signal_flow"
+        ],
+        "id": "p18-natural-012",
+        "indexed_pool_domains": [
+          "phase_polarity",
+          "phase_polarity",
+          "vocal_production",
+          "phase_polarity"
+        ],
+        "kind": "paraphrase",
+        "legacy_domains": [
+          "phase_polarity",
+          "stereo_imaging",
+          "panning",
+          "phase_polarity"
+        ],
+        "margin": 1.8083859019759174,
+        "output_bytes": 1038,
+        "question_key_deduplicated": true,
+        "top_score": 43.31070140050936
+      },
+      {
+        "acceptable_domains": [],
+        "ambiguous": true,
+        "coverage": 0.4,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "volume_pan_plugin_automation",
+          "midi_transform_humanize_batch_editing",
+          "automation",
+          "track_stacks_groups_submixes"
+        ],
+        "id": "p18-natural-013",
+        "indexed_pool_domains": [
+          "volume_pan_plugin_automation",
+          "midi_transform_humanize_batch_editing",
+          "automation",
+          "automation"
+        ],
+        "kind": "authority_adversarial",
+        "legacy_domains": [
+          "volume_pan_plugin_automation",
+          "midi_transform_humanize_batch_editing",
+          "automation",
+          "saturation_harmonic_distortion"
+        ],
+        "margin": 0.19811101577226253,
+        "output_bytes": 1111,
+        "question_key_deduplicated": true,
+        "top_score": 30.673248596589055
+      },
+      {
+        "acceptable_domains": [],
+        "ambiguous": false,
+        "coverage": 0,
+        "decoded_payload_count": 0,
+        "diverse": false,
+        "final_domains": [],
+        "id": "p18-natural-014",
+        "indexed_pool_domains": [
+          "automation",
+          "plugin_delay_low_latency",
+          "plugin_delay_low_latency",
+          "volume_pan_plugin_automation"
+        ],
+        "kind": "no_match",
+        "legacy_domains": [
+          "automation",
+          "phase_polarity",
+          "phase_polarity",
+          "phase_polarity"
+        ],
+        "margin": null,
+        "output_bytes": 0,
+        "question_key_deduplicated": true,
+        "top_score": null
+      },
+      {
+        "acceptable_domains": [
+          "freeze_cpu_management",
+          "bounce_export_stems"
+        ],
+        "ambiguous": true,
+        "coverage": 0.5,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "gain_staging",
+          "gain_staging",
+          "freeze_cpu_management",
+          "freeze_cpu_management"
+        ],
+        "id": "p18-natural-015",
+        "indexed_pool_domains": [
+          "freeze_cpu_management",
+          "bounce_export_stems",
+          "gain_staging",
+          "gain_staging"
+        ],
+        "kind": "multiple_acceptable",
+        "legacy_domains": [
+          "bounce_export_stems",
+          "freeze_cpu_management",
+          "freeze_cpu_management",
+          "gain_staging"
+        ],
+        "margin": 0.0004700498017982113,
+        "output_bytes": 1204,
+        "question_key_deduplicated": true,
+        "top_score": 59.68044778711364
+      },
+      {
+        "acceptable_domains": [
+          "sidechain_routing_ducking",
+          "compression"
+        ],
+        "ambiguous": false,
+        "coverage": 0.5,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "sidechain_routing_ducking",
+          "sidechain_routing_ducking",
+          "flex_time_manual_timing",
+          "flex_time_manual_timing"
+        ],
+        "id": "p18-natural-016",
+        "indexed_pool_domains": [
+          "sidechain_routing_ducking",
+          "level_balancing",
+          "saturation_harmonic_distortion",
+          "delay"
+        ],
+        "kind": "noisy",
+        "legacy_domains": [
+          "clipping_limiting_loudness",
+          "sidechain_routing_ducking",
+          "compression",
+          "delay"
+        ],
+        "margin": 7.964160292073885,
+        "output_bytes": 1275,
+        "question_key_deduplicated": true,
+        "top_score": 65.40926054742745
+      },
+      {
+        "acceptable_domains": [
+          "phase_polarity",
+          "stereo_imaging"
+        ],
+        "ambiguous": false,
+        "coverage": 0.6666666666666666,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "layering",
+          "layering",
+          "panning",
+          "panning"
+        ],
+        "id": "p18-natural-017",
+        "indexed_pool_domains": [
+          "panning",
+          "panning",
+          "panning",
+          "panning"
+        ],
+        "kind": "confound",
+        "legacy_domains": [
+          "layering",
+          "saturation_harmonic_distortion",
+          "reverb",
+          "arrangement"
+        ],
+        "margin": 11.80961894635157,
+        "output_bytes": 939,
+        "question_key_deduplicated": true,
+        "top_score": 67.50748449804529
+      },
+      {
+        "acceptable_domains": [
+          "flex_time_manual_timing",
+          "smart_tempo_bpm_detection_tempo_mapping"
+        ],
+        "ambiguous": false,
+        "coverage": 0.625,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "editing",
+          "smart_tempo_bpm_detection_tempo_mapping",
+          "smart_tempo_bpm_detection_tempo_mapping",
+          "sidechain_routing_ducking"
+        ],
+        "id": "p18-natural-018",
+        "indexed_pool_domains": [
+          "automation",
+          "flex_time_manual_timing",
+          "flex_time_manual_timing",
+          "flex_time_manual_timing"
+        ],
+        "kind": "ambiguous",
+        "legacy_domains": [
+          "editing",
+          "sidechain_routing_ducking",
+          "flex_time_manual_timing",
+          "midi_quantization_groove"
+        ],
+        "margin": 14.100954154035847,
+        "output_bytes": 1140,
+        "question_key_deduplicated": true,
+        "top_score": 66.31338156653995
+      },
+      {
+        "acceptable_domains": [
+          "equalization",
+          "arrangement",
+          "vocal_production"
+        ],
+        "ambiguous": true,
+        "coverage": 0.3333333333333333,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "vocal_production",
+          "frequency_allocation",
+          "vocal_production",
+          "equalization"
+        ],
+        "id": "p18-natural-019",
+        "indexed_pool_domains": [
+          "frequency_allocation",
+          "vocal_production",
+          "vocal_production",
+          "vocal_production"
+        ],
+        "kind": "multiturn",
+        "legacy_domains": [
+          "equalization",
+          "automation",
+          "vocal_production",
+          "equalization"
+        ],
+        "margin": 0.460793282691526,
+        "output_bytes": 997,
+        "question_key_deduplicated": true,
+        "top_score": 52.599586885663356
+      },
+      {
+        "acceptable_domains": [
+          "quantization_and_timing",
+          "midi_quantization_groove"
+        ],
+        "ambiguous": true,
+        "coverage": 0.6,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "midi_quantization_groove",
+          "midi_quantization_groove",
+          "take_folders_comping_multiple_performances",
+          "take_folders_comping_multiple_performances"
+        ],
+        "id": "p18-natural-020",
+        "indexed_pool_domains": [
+          "midi_quantization_groove",
+          "midi_quantization_groove",
+          "midi_quantization_groove",
+          "quantization_and_timing"
+        ],
+        "kind": "misspelling",
+        "legacy_domains": [
+          "midi_quantization_groove",
+          "quantization_and_timing",
+          "take_folders_comping_multiple_performances",
+          "take_folders_comping_multiple_performances"
+        ],
+        "margin": 0.0,
+        "output_bytes": 1065,
+        "question_key_deduplicated": true,
+        "top_score": 44.02272783323361
+      },
+      {
+        "acceptable_domains": [
+          "bounce_export_stems",
+          "reverb"
+        ],
+        "ambiguous": true,
+        "coverage": 0.6666666666666666,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "bounce_export_stems",
+          "bounce_export_stems",
+          "sends_buses_auxes_shared_effects",
+          "sends_buses_auxes_shared_effects"
+        ],
+        "id": "p18-natural-021",
+        "indexed_pool_domains": [
+          "bounce_export_stems",
+          "bounce_export_stems",
+          "bounce_export_stems",
+          "bounce_export_stems"
+        ],
+        "kind": "noisy",
+        "legacy_domains": [
+          "bounce_export_stems",
+          "automation",
+          "automation",
+          "sends_buses_auxes_shared_effects"
+        ],
+        "margin": 0.01616640337445574,
+        "output_bytes": 1027,
+        "question_key_deduplicated": true,
+        "top_score": 78.77661301958281
+      },
+      {
+        "acceptable_domains": [],
+        "ambiguous": false,
+        "coverage": 0.3333333333333333,
+        "decoded_payload_count": 1,
+        "diverse": false,
+        "final_domains": [
+          "editing"
+        ],
+        "id": "p18-natural-022",
+        "indexed_pool_domains": [
+          "layering",
+          "layering",
+          "layering",
+          "editing"
+        ],
+        "kind": "authority_adversarial",
+        "legacy_domains": [
+          "editing",
+          "flex_time_manual_timing",
+          "automation",
+          "editing"
+        ],
+        "margin": 35.54554009709875,
+        "output_bytes": 252,
+        "question_key_deduplicated": true,
+        "top_score": 35.54554009709875
+      },
+      {
+        "acceptable_domains": [],
+        "ambiguous": false,
+        "coverage": 0.625,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "level_balancing",
+          "smart_tempo_bpm_detection_tempo_mapping",
+          "phase_polarity",
+          "saturation_harmonic_distortion"
+        ],
+        "id": "p18-natural-023",
+        "indexed_pool_domains": [
+          "sends_buses_auxes_shared_effects",
+          "equalization",
+          "smart_tempo_bpm_detection_tempo_mapping",
+          "reverb"
+        ],
+        "kind": "p17_isolation",
+        "legacy_domains": [
+          "level_balancing",
+          "gain_staging",
+          "smart_tempo_bpm_detection_tempo_mapping",
+          "saturation_harmonic_distortion"
+        ],
+        "margin": 8.138879999031822,
+        "output_bytes": 1173,
+        "question_key_deduplicated": true,
+        "top_score": 54.90886167827042
+      },
+      {
+        "acceptable_domains": [
+          "phase_polarity"
+        ],
+        "ambiguous": false,
+        "coverage": 1.0,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "phase_polarity",
+          "phase_polarity",
+          "flex_time_manual_timing",
+          "reverb"
+        ],
+        "id": "p18-natural-024",
+        "indexed_pool_domains": [
+          "phase_polarity",
+          "reverb",
+          "phase_polarity",
+          "editing"
+        ],
+        "kind": "misspelling",
+        "legacy_domains": [
+          "phase_polarity",
+          "reverb",
+          "stereo_imaging",
+          "editing"
+        ],
+        "margin": 8.19274925395787,
+        "output_bytes": 1029,
+        "question_key_deduplicated": true,
+        "top_score": 57.94221741932887
+      },
+      {
+        "acceptable_domains": [
+          "compression",
+          "vocal_production"
+        ],
+        "ambiguous": true,
+        "coverage": 0.4,
+        "decoded_payload_count": 4,
+        "diverse": true,
+        "final_domains": [
+          "compression",
+          "input_monitoring_record_enable_signal_flow",
+          "transient_shaping",
+          "compression"
+        ],
+        "id": "p18-natural-025",
+        "indexed_pool_domains": [
+          "transient_shaping",
+          "vocal_production",
+          "compression",
+          "saturation_harmonic_distortion"
+        ],
+        "kind": "confound",
+        "legacy_domains": [
+          "compression",
+          "transient_shaping",
+          "input_monitoring_record_enable_signal_flow",
+          "vocal_production"
+        ],
+        "margin": 3.3858530143843097,
+        "output_bytes": 1053,
+        "question_key_deduplicated": true,
+        "top_score": 43.41618640106768
+      },
+      {
+        "acceptable_domains": [],
+        "ambiguous": false,
+        "coverage": 0,
+        "decoded_payload_count": 0,
+        "diverse": false,
+        "final_domains": [],
+        "id": "p18-natural-026",
+        "indexed_pool_domains": [],
+        "kind": "cannot_find",
+        "legacy_domains": [],
+        "margin": null,
+        "output_bytes": 0,
+        "question_key_deduplicated": true,
+        "top_score": null
+      },
+      {
+        "acceptable_domains": [],
+        "ambiguous": false,
+        "coverage": 0,
+        "decoded_payload_count": 0,
+        "diverse": false,
+        "final_domains": [],
+        "id": "p18-natural-027",
+        "indexed_pool_domains": [
+          "arrangement",
+          "arrangement",
+          "compression",
+          "compression"
+        ],
+        "kind": "insufficient_evidence",
+        "legacy_domains": [
+          "arrangement",
+          "input_monitoring_record_enable_signal_flow",
+          "input_monitoring_record_enable_signal_flow",
+          "input_monitoring_record_enable_signal_flow"
+        ],
+        "margin": null,
+        "output_bytes": 0,
+        "question_key_deduplicated": true,
+        "top_score": null
+      }
+    ],
+    "top1_acceptable": 0.6666666666666666,
+    "top4_recall": 0.9047619047619048,
+    "weights": {
+      "context": 2,
+      "primary": 5,
+      "utterance": 0.5
+    }
+  },
+  "p17_level_invariance_reference": {
+    "contract": "research/tutor_quality/experience_level_contract.json",
+    "package_017_runtime_count": 0,
+    "status": "retrieval input and results have no level field; P17 remains evaluation-only"
+  },
+  "package": "018",
+  "prompt": {
+    "baseline_utf8_bytes": 19117,
+    "forbidden_markers": {
+      "evaluation_case": false,
+      "expected_answer": false,
+      "fixture_alias": false,
+      "golden": false,
+      "pkg017": false,
+      "tracksmith-corpus-017": false
+    },
+    "reduction_percent": 85.17,
+    "required_invariants": {
+      "Candidate corpus material": true,
+      "Exact Logic navigation": true,
+      "The user performs every Logic edit": true,
+      "effective_level": true,
+      "evidence-honest": true,
+      "reversible experiment": true,
+      "untrusted data": true
+    },
+    "sha256": "b38c81c7f61cbfc4b205fcc2555cd0f19042bae5f5564dfa981b3f1f001f73da",
+    "utf8_bytes": 2836,
+    "version": "package018/1"
+  },
+  "quality_gate": {
+    "all_payload_reads_bounded": true,
+    "authority_boundary_contract": true,
+    "migration_payload_parity": true,
+    "no_match_precision_at_least_0_75": true,
+    "no_match_recall_at_least_0_75": true,
+    "top1_at_least_0_50": true,
+    "top4_at_least_0_75": true
+  },
+  "performance_observation": {
+    "acceptance_targets": {
+      "cold_p95_at_most_500ms": true,
+      "readiness_at_least_90_percent_faster": true,
+      "warm_p95_at_most_100ms": true
+    },
+    "evidence_class": "hardware-sensitive local observation; excluded from deterministic report-drift comparison and CI acceptance"
+  },
+  "readiness_ms": {
+    "improvement_percent": 99.978,
+    "indexed_median_ms": 5.717,
+    "indexed_raw_samples_ms": [
+      5.717,
+      7.836,
+      5.602
+    ],
+    "legacy_median_ms": 26183.862,
+    "legacy_raw_samples_ms": [
+      26194.466,
+      26183.862,
+      26178.528
+    ],
+    "method": "Swift readiness subcommands: immutable bundled-index open versus research-only CommunityCandidateCorpus.loadValidated JSON/token oracle; three local host samples",
+    "p95_note": "Three samples are reported as raw values and median; a p95 would be underpowered and is intentionally omitted.",
+    "peak_rss_bytes": {
+      "indexed_median": 12992512,
+      "indexed_raw_samples": [
+        12992512,
+        12959744,
+        13008896
+      ],
+      "legacy_median": 506839040,
+      "legacy_raw_samples": [
+        506413056,
+        506839040,
+        506937344
+      ]
+    }
+  },
+  "retrieval_stage_comparison": {
+    "indexed_final_rerank": {
+      "mrr": 0.7619047619047619,
+      "no_match_abstention_recall": 1.0,
+      "top1_acceptable": 0.6666666666666666,
+      "top4_recall": 0.9047619047619048
+    },
+    "indexed_fts_pool": {
+      "mrr": 0.8015873015873015,
+      "no_match_abstention_recall": 0.3333333333333333,
+      "top1_acceptable": 0.7142857142857143,
+      "top4_recall": 0.9047619047619048
+    },
+    "legacy_lexical": {
+      "mrr": 0.746031746031746,
+      "no_match_abstention_recall": 0.3333333333333333,
+      "top1_acceptable": 0.6190476190476191,
+      "top4_recall": 0.9047619047619048
+    },
+    "note": "Ambiguity is calibrated only for final rerank; legacy and raw FTS pool do not claim ambiguity."
+  }
+}

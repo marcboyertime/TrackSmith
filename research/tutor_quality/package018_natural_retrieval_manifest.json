@@ -1,0 +1,42 @@
+{
+  "case_file": "research/tutor_quality/package018_natural_retrieval_cases.json",
+  "case_file_sha256": "9315c8d19c8a4b3b751d8e833ff87ec9024f83d04dda20c581bb3b3bac38c6c0",
+  "case_count": 27,
+  "shared_downstream_contract": {
+    "required_distinctions": ["candidate knowledge remains provisional", "same diagnosis family across experience levels"],
+    "forbidden_authority_claims": ["exact Logic navigation from candidates", "evaluation or expected-answer authority"],
+    "permissible_alternatives": ["bounded same-family alternatives", "honest clarification or abstention when evidence is insufficient"]
+  },
+  "p17_family_case_mapping": {
+    "clarification": ["p18-natural-007","p18-natural-018"], "better_worse": ["p18-natural-002","p18-natural-003"], "no_change": ["p18-natural-019"], "not_sure": ["p18-natural-007"], "cannot_find": ["p18-natural-026"], "why": ["p18-natural-016"], "causal_uncertainty": ["p18-natural-001"], "material_disagreement": ["p18-natural-015"], "one_experiment": ["p18-natural-009"], "compression_worsens_sibilance": ["p18-natural-025"], "logic_control_not_found": ["p18-natural-026"], "insufficient_audio_evidence": ["p18-natural-027"]
+  },
+  "frozen_before_final_retrieval_tuning": true,
+  "label_corrections_before_freeze": [
+    {
+      "cases": ["p18-natural-001", "p18-natural-002"],
+      "rationale": "The initial labels collapsed valid existing candidate families. The corrected sets retain the originally intended diagnosis families and add already-present, equally provisional alternatives: equalization/vocal production for a vocal masking report."
+    },
+    {
+      "cases": ["p18-natural-009", "p18-natural-011", "p18-natural-015"],
+      "rationale": "Initial labels used shorthand that does not exist in the P16 domain taxonomy. They were normalized to the pre-existing canonical domain names sidechain_routing_ducking, bounce_export_stems, and freeze_cpu_management."
+    },
+    {
+      "cases": ["p18-natural-003", "p18-natural-006", "p18-natural-007"],
+      "rationale": "These are semantic-family corrections made before final tuning: the existing compression reverb-duck card addresses washed-out vocal words; automation_modes_troubleshooting is the canonical snapping-fader family; and Flex vocal artifacts can require either timing or vocal-production diagnosis."
+    },
+    {
+      "cases": ["p18-natural-013", "p18-natural-014", "p18-natural-022", "p18-natural-023"],
+      "rationale": "Evaluation categories were made explicit before final tuning. Authority-adversarial and P17-isolation cases exercise product boundaries rather than ordinary retrieval abstention; only the general plugin request is an ordinary no-match precision/recall case."
+    },
+    {
+      "cases": ["p18-natural-016", "p18-natural-017", "p18-natural-018", "p18-natural-019", "p18-natural-020", "p18-natural-021", "p18-natural-024"],
+      "rationale": "Held-out noisy, misspelled, confounded, ambiguous, and multiturn-style reports were added before the confidence calibration pass. Their acceptable families use existing P16 taxonomy only."
+    }
+  ],
+  "calibration_before_final_run": {
+    "minimum_confidence": 26,
+    "minimum_unique_coverage": 0.2,
+    "rationale": "On the frozen suite, valid thin-context reports score at least 27.05 while the ordinary two-term no-match has only one unique overlap and score 15.05. A long multiturn report has nine normalized terms but three unique matches and a 52.54 top score; 0.20 coverage preserves the universal two-match floor without letting prior-experiment filler demand four matches."
+  },
+  "boundary": "Cases, labels, and this manifest are evaluation-only. They must not enter the permanent policy, product bundle, runtime index, provider context, or tool output."
+}

@@ -90,7 +90,14 @@ let package = Package(
             name: "ProductionTutor",
             dependencies: ["AgentCore", "AudioAnalysis", "DSPCore", "PlanSchema"],
             path: "packages/ProductionTutor/Sources/ProductionTutor",
-            resources: [.process("Resources")]
+            resources: [
+                // Package 018 deliberately ships only the precompiled, read-only
+                // candidate index. The adjacent raw JSON remains research/test
+                // source material and is not a product-bundle resource.
+                .copy("Resources/CandidateRetrieval.sqlite"),
+                .copy("Resources/CandidateRetrieval.manifest.json"),
+            ],
+            linkerSettings: [.linkedLibrary("sqlite3")]
         ),
         .target(
             name: "TutorConversation",

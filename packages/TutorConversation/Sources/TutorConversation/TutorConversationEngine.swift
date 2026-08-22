@@ -206,7 +206,8 @@ public actor TutorConversationEngine {
                     )
                 },
                 consents: consentReceipts(context: context, toolResults: result.toolResults),
-                experience: context.experience
+                experience: context.experience,
+                systemPolicyVersion: TutorSystemPolicy.version
             )
             try store.saveReceipt(receipt)
             for experimentID in result.experimentIDs {

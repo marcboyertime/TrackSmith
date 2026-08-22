@@ -13,7 +13,7 @@ import community_corpus_import as trusted
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 COMMUNITY = ROOT / "research/community_knowledge"
 KNOWLEDGE = ROOT / "research/knowledge"
-RESOURCES = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+RESOURCES = ROOT / "research/community_knowledge/runtime_projection/p16"
 EVALUATIONS = ROOT / "tools/TutorConversationTests/Resources"
 DESCRIPTOR = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.generated.swift"
 GENERATED = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/GeneralTutorKnowledge.generated.swift"
@@ -31,11 +31,8 @@ def compact(value: object) -> str:
 
 
 def tree(path: pathlib.Path) -> dict[str, object]:
-    value = hashlib.sha256()
-    files = sorted(item for item in path.rglob("*") if item.is_file())
-    for item in files:
-        value.update(b"FILE\0" + item.relative_to(path).as_posix().encode() + b"\0" + item.read_bytes())
-    return {"files": len(files), "tree": value.hexdigest()}
+    files, value = trusted.preservation_tree(path)
+    return {"files": files, "tree": value}
 
 
 def package_path(pid: str) -> pathlib.Path:
@@ -103,12 +100,13 @@ def main() -> None:
     args = parser.parse_args()
     observed = state()
     if args.check:
-        if not BASELINE.exists() or json.loads(BASELINE.read_text(encoding="utf-8")) != observed:
+        if not BASELINE.exists() or not trusted.preservation_baseline_matches(json.loads(BASELINE.read_text(encoding="utf-8")), observed):
             raise SystemExit("P12_BASELINE_CHECK_FAILED: Package 001-011 bytes/state drift")
         print("P12_PRESERVATION_BASELINE_OK packages=11 p10P11Reconciliations=true")
     else:
         BASELINE.parent.mkdir(parents=True, exist_ok=True)
-        BASELINE.write_text(json.dumps(observed, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        existing = json.loads(BASELINE.read_text(encoding="utf-8")) if BASELINE.exists() else {}
+        BASELINE.write_text(json.dumps(trusted.preservation_capture_document(existing, observed), indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print("P12_PRESERVATION_BASELINE_CAPTURED packages=11 p10P11Reconciliations=true")
 
 

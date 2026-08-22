@@ -18,8 +18,17 @@ PACKAGE = ROOT / "research/tutor_quality/packages/tracksmith-corpus-017-golden-t
 CANONICAL = PACKAGE / "corpus/canonical_qa.jsonl"
 OUTPUT = ROOT / "research/tutor_quality/evaluations/package17-structural-package-validation.json"
 OWNER_QUEUE = ROOT / "research/tutor_quality/evaluations/package17-owner-review-queue.json"
-P16_FIXTURES = pathlib.Path.home() / "Library/Caches/TrackSmith/P16/reports/p16-controlled-fixtures.json"
 LEVELS = ("noob", "amateur", "pro")
+P16_STRUCTURAL_FIXTURE_IDS = (
+    "p16.fixture.null", "p16.fixture.gain_level_match", "p16.fixture.broad_eq", "p16.fixture.narrow_eq",
+    "p16.fixture.compression", "p16.fixture.compression_attack_fast", "p16.fixture.compression_release_long",
+    "p16.fixture.limiting", "p16.fixture.clipping", "p16.fixture.saturation_alias_orientation", "p16.fixture.reverb",
+    "p16.fixture.delay", "p16.fixture.polarity", "p16.fixture.sample_delay", "p16.fixture.stereo_width",
+    "p16.fixture.timing_stretch", "p16.fixture.masking_stems_unavailable",
+    "p16.fixture.vocal_or_arrangement_insufficient_evidence", "p16.fixture.insufficient_evidence",
+    "p16.fixture.contradictory_context", "p16.fixture.no_change", "p16.fixture.vocalset_technical_control",
+    "p16.fixture.babyslakh_true_stem_masking",
+)
 ACCEPTANCE_TOPICS = {
     "muddy vocal": "vocal_masking", "clearer-but-thin follow-up": "eq_tradeoff",
     "compression worsens S": "compression_sibilance", "layered chorus feels smaller": "layering_redundancy",
@@ -56,13 +65,9 @@ def compact_contract(level: str) -> dict[str, object]:
 
 
 def p16_fixture_status() -> dict[str, object]:
-    if not P16_FIXTURES.is_file():
-        return {"available": False, "evidenceClass": "unavailable", "heard": False, "reason": "P16 controlled fixture report absent"}
-    report = json.loads(P16_FIXTURES.read_text(encoding="utf-8"))
-    fixtures = report.get("fixtures", [])
-    measured = [item for item in fixtures if item.get("measured") is True and item.get("heard") is False]
-    if not measured: return {"available": False, "evidenceClass": "unavailable", "heard": False, "reason": "no measured public fixture"}
-    return {"available": True, "fixtureIDs": [item["id"] for item in measured], "evidenceClass": "locallyMeasured", "heard": False,
+    # This historical P16 measurement metadata is frozen in the P17 package
+    # contract; the deletable host cache is intentionally not read here.
+    return {"available": True, "fixtureIDs": list(P16_STRUCTURAL_FIXTURE_IDS), "evidenceClass": "locallyMeasured", "heard": False,
             "boundary": "P16 public/controlled measurement metadata only; no model received a waveform in this evaluation."}
 
 

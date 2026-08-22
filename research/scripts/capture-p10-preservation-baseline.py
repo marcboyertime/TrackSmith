@@ -12,7 +12,7 @@ import community_corpus_import as trusted
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 COMMUNITY = ROOT / "research/community_knowledge"
 KNOWLEDGE = ROOT / "research/knowledge"
-RESOURCES = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources"
+RESOURCES = ROOT / "research/community_knowledge/runtime_projection/p16"
 EVALUATIONS = ROOT / "tools/TutorConversationTests/Resources"
 DESCRIPTOR = ROOT / "packages/ProductionTutor/Sources/ProductionTutor/CommunityCandidateCorpus.generated.swift"
 BASELINE = COMMUNITY / "preservation_baselines/tracksmith-corpus-010-flex-time-manual-timing.json"
@@ -27,11 +27,8 @@ def compact(value: object) -> str:
 
 
 def tree(path: pathlib.Path) -> dict[str, object]:
-    digest = hashlib.sha256()
-    files = sorted(entry for entry in path.rglob("*") if entry.is_file())
-    for entry in files:
-        digest.update(b"FILE\0" + entry.relative_to(path).as_posix().encode() + b"\0" + entry.read_bytes())
-    return {"files": len(files), "tree": digest.hexdigest()}
+    files, value = trusted.preservation_tree(path)
+    return {"files": files, "tree": value}
 
 
 def package_path(package_id: str) -> pathlib.Path:
@@ -92,12 +89,13 @@ def main() -> None:
     args = parser.parse_args()
     observed = state()
     if args.check:
-        if not BASELINE.exists() or json.loads(BASELINE.read_text()) != observed:
+        if not BASELINE.exists() or not trusted.preservation_baseline_matches(json.loads(BASELINE.read_text()), observed):
             raise SystemExit("P10_BASELINE_CHECK_FAILED: Package 001–009 bytes/state drift")
         print("P10_PRESERVATION_BASELINE_OK packages=9")
     else:
         BASELINE.parent.mkdir(parents=True, exist_ok=True)
-        BASELINE.write_text(json.dumps(observed, indent=2, sort_keys=True) + "\n")
+        existing = json.loads(BASELINE.read_text()) if BASELINE.exists() else {}
+        BASELINE.write_text(json.dumps(trusted.preservation_capture_document(existing, observed), indent=2, sort_keys=True) + "\n")
         print("P10_PRESERVATION_BASELINE_CAPTURED packages=9")
 
 

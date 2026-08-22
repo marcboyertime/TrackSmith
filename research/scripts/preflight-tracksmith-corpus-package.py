@@ -793,7 +793,7 @@ def validate(incoming: pathlib.Path, dependency_map: pathlib.Path, disagreement_
     existing_source_ids = {row.get("id") for row in load_json(SOURCE).get("sources", []) if row.get("id")}
     existing_queue_ids = {row.get("id") for row in load_json(QUEUE).get("candidates", []) if row.get("id")}
     runtime_ids: set[str] = set()
-    for resource in (ROOT / "packages/ProductionTutor/Sources/ProductionTutor/Resources").glob("*.json"):
+    for resource in (ROOT / "research/community_knowledge/runtime_projection/p16").glob("*.json"):
         value = load_json(resource)
         if isinstance(value, dict):
             runtime_ids |= {row.get("id") for row in value.get("canonicalCards", []) if isinstance(row, dict) and row.get("id")}
