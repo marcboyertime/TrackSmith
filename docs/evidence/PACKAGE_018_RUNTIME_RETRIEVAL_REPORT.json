@@ -1502,14 +1502,19 @@
   "quality_gate": {
     "all_payload_reads_bounded": true,
     "authority_boundary_contract": true,
-    "cold_p95_at_most_500ms": true,
     "migration_payload_parity": true,
     "no_match_precision_at_least_0_75": true,
     "no_match_recall_at_least_0_75": true,
-    "readiness_at_least_90_percent_faster": true,
     "top1_at_least_0_50": true,
-    "top4_at_least_0_75": true,
-    "warm_p95_at_most_100ms": true
+    "top4_at_least_0_75": true
+  },
+  "performance_observation": {
+    "acceptance_targets": {
+      "cold_p95_at_most_500ms": true,
+      "readiness_at_least_90_percent_faster": true,
+      "warm_p95_at_most_100ms": true
+    },
+    "evidence_class": "hardware-sensitive local observation; excluded from deterministic report-drift comparison and CI acceptance"
   },
   "readiness_ms": {
     "improvement_percent": 99.978,

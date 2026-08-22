@@ -489,10 +489,12 @@ public struct TutorToolExecutor: Sendable {
         let selectedIDs = rankings.map(\.card.id)
         var sourceIDs: [String] = []
         for candidate in rankings {
-            let values = (candidate.card.authoritativeSupportingSourceIDs ?? []) +
-                (candidate.card.primaryResearchSourceIDs ?? []) +
-                candidate.card.professionalPracticeSourceIDs + candidate.card.discoveryLanguageSourceIDs +
-                (candidate.card.standardsSourceIDs ?? [])
+            var values: [String] = []
+            values.append(contentsOf: candidate.card.authoritativeSupportingSourceIDs ?? [])
+            values.append(contentsOf: candidate.card.primaryResearchSourceIDs ?? [])
+            values.append(contentsOf: candidate.card.professionalPracticeSourceIDs)
+            values.append(contentsOf: candidate.card.discoveryLanguageSourceIDs)
+            values.append(contentsOf: candidate.card.standardsSourceIDs ?? [])
             for value in values where !sourceIDs.contains(value) && sourceIDs.count < 6 { sourceIDs.append(value) }
         }
         // Candidate source provenance is useful context, but model-facing

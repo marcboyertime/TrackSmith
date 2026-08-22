@@ -22,6 +22,8 @@ REPORT = ROOT / "docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json"
 BASELINE, WEIGHTS, MINIMUM_CONFIDENCE, MINIMUM_COVERAGE = 19117, (5.0, 2.0, 0.5), 26.0, 0.20
 CASES_DATA: list[dict] = []
 STOP = {"a", "an", "and", "are", "best", "but", "cannot", "control", "detail", "do", "find", "for", "from", "get", "how", "i", "if", "in", "is", "it", "like", "logic", "make", "mix", "my", "need", "not", "of", "or", "should", "so", "the", "this", "to", "too", "what", "when", "why", "with", "wrong"}
+STABLE_REPORT_KEYS = ("prompt", "index", "natural_retrieval", "retrieval_stage_comparison", "abstention_label_contract", "authority_boundary", "quality_gate", "p17_level_invariance_reference")
+PRESERVED_REPORT_FIELDS = ("evidence_class", "ci_clean_checkout_preservation_repair", "post_fix_primary_verification")
 
 def sha(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
 def canonical(word: str) -> str | None:
@@ -97,6 +99,9 @@ def parity(con: sqlite3.Connection) -> dict:
     indexed_cards = con.execute("SELECT id,payload_json FROM cards ORDER BY id").fetchall()
     return {"source_card_count": len(source), "indexed_card_count": len(indexed_cards), "exact_payload_parity": source == indexed_cards, "source_payload_sha256": sha(json.dumps(source, ensure_ascii=False, separators=(",", ":")).encode()), "indexed_payload_sha256": sha(json.dumps(indexed_cards, ensure_ascii=False, separators=(",", ":")).encode())}
 def p95(values: list[float]) -> float: return sorted(values)[int(.95 * (len(values) - 1))]
+def stable_projection(report: dict[str, object]) -> dict[str, object]:
+    """Fields derived from checked-in policy, corpus, index, and fixed cases only."""
+    return {key: report.get(key) for key in STABLE_REPORT_KEYS}
 
 def main() -> int:
     parser = argparse.ArgumentParser(); parser.add_argument("--write-report", action="store_true", help="write hardware-sensitive local evidence"); parser.add_argument("--indexed-readiness-samples-ms", type=float, nargs="+", help="raw Swift immutable-index readiness samples"); parser.add_argument("--legacy-readiness-samples-ms", type=float, nargs="+", help="raw legacy JSON/token-oracle readiness samples"); parser.add_argument("--indexed-peak-rss-bytes", type=int, nargs="+", help="raw /usr/bin/time -l index peak RSS samples"); parser.add_argument("--legacy-peak-rss-bytes", type=int, nargs="+", help="raw /usr/bin/time -l legacy peak RSS samples"); args = parser.parse_args()
@@ -135,14 +140,18 @@ def main() -> int:
     report["retrieval_stage_comparison"] = {"legacy_lexical": stage_metrics(rows, "legacy_domains"), "indexed_fts_pool": stage_metrics(rows, "indexed_pool_domains"), "indexed_final_rerank": stage_metrics(rows, "final_domains"), "note": "Ambiguity is calibrated only for final rerank; legacy and raw FTS pool do not claim ambiguity."}
     report["abstention_label_contract"] = {"case_ids": [c["id"] for c in cases if c["ambiguity"] == "abstain"], "case_count": sum(c["ambiguity"] == "abstain" for c in cases), "final_recall": natural["no_match_recall"], "measurement": "All frozen cases labelled abstain, including ordinary no-match, cannot-find, and insufficient-evidence categories; not only kind=no_match."}
     report["authority_boundary"] = {"case_count": sum(c["kind"] == "authority_adversarial" for c in cases), "policy_has_untrusted_data_boundary": "untrusted data" in prompt, "policy_omits_evaluation_markers": not any(report["prompt"]["forbidden_markers"].values())}
-    report["quality_gate"] = {"top1_at_least_0_50": natural["top1_acceptable"] >= .50, "top4_at_least_0_75": natural["top4_recall"] >= .75, "no_match_precision_at_least_0_75": (natural["no_match_precision"] or 0) >= .75, "no_match_recall_at_least_0_75": (natural["no_match_recall"] or 0) >= .75, "authority_boundary_contract": all(report["authority_boundary"].values()), "all_payload_reads_bounded": all(r["decoded_payload_count"] <= 4 and r["decoded_payload_count"] == len(r["final_domains"]) for r in rows), "migration_payload_parity": payload_parity["exact_payload_parity"], "readiness_at_least_90_percent_faster": readiness["improvement_percent"] is None or readiness["improvement_percent"] >= 90, "warm_p95_at_most_100ms": report["latency_ms"]["warm_p95"] <= 100, "cold_p95_at_most_500ms": report["latency_ms"]["cold_p95"] <= 500}
-    stable_keys = ("prompt", "index", "natural_retrieval", "retrieval_stage_comparison", "abstention_label_contract", "authority_boundary", "quality_gate", "p17_level_invariance_reference")
+    report["quality_gate"] = {"top1_at_least_0_50": natural["top1_acceptable"] >= .50, "top4_at_least_0_75": natural["top4_recall"] >= .75, "no_match_precision_at_least_0_75": (natural["no_match_precision"] or 0) >= .75, "no_match_recall_at_least_0_75": (natural["no_match_recall"] or 0) >= .75, "authority_boundary_contract": all(report["authority_boundary"].values()), "all_payload_reads_bounded": all(r["decoded_payload_count"] <= 4 and r["decoded_payload_count"] == len(r["final_domains"]) for r in rows), "migration_payload_parity": payload_parity["exact_payload_parity"]}
+    report["performance_observation"] = {"evidence_class": "hardware-sensitive local observation; excluded from deterministic report-drift comparison and CI acceptance", "acceptance_targets": {"readiness_at_least_90_percent_faster": readiness["improvement_percent"] is None or readiness["improvement_percent"] >= 90, "warm_p95_at_most_100ms": report["latency_ms"]["warm_p95"] <= 100, "cold_p95_at_most_500ms": report["latency_ms"]["cold_p95"] <= 500}}
     stable_report_matches = True
     if args.write_report:
+        if REPORT.exists():
+            stored = json.loads(REPORT.read_text())
+            for key in PRESERVED_REPORT_FIELDS:
+                if key in stored: report[key] = stored[key]
         REPORT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     elif REPORT.exists():
         stored = json.loads(REPORT.read_text())
-        stable_report_matches = all(stored.get(key) == report.get(key) for key in stable_keys)
+        stable_report_matches = stable_projection(stored) == stable_projection(report)
         if not stable_report_matches:
             raise SystemExit("Package 018 stable report drift: rerun --write-report after reviewing deterministic changes")
     print(json.dumps({"prompt_bytes": report["prompt"]["utf8_bytes"], "index_bytes": len(data), "top1": natural["top1_acceptable"], "top4": natural["top4_recall"], "no_match_recall": natural["no_match_recall"], "warm_p95_ms": report["latency_ms"]["warm_p95"]}, sort_keys=True))
