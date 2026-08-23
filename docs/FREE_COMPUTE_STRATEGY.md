@@ -38,7 +38,7 @@ bash scripts/ci/run-manual-heavy.sh retrieval_stress
 python3 scripts/ci/audit-free-compute.py --self-test
 ```
 
-For a future Codex/package change, first assign deterministic Python/corpus/index/report work to one existing Linux lane; assign Swift tests to `macos_swift_core` or `macos_tutor`; and assign unsigned Xcode resource checks to the combined Xcode lane. Add a manifest row before adding a job. Keep provider, cloud, private audio, signing/install, Logic, and listening work owner-controlled and absent from Actions. Update the audit only with a precise reviewed exception (exact workflow, job, rule, reason, owner, review date, and expiry; wildcards fail). Do not add caches until a measured benefit justifies their documented budget.
+For a future Codex/package change, first assign deterministic Python/corpus/index/report work to one existing Linux lane; assign Swift tests to `macos_swift_core` or `macos_tutor`; and assign unsigned Xcode resource checks to the combined Xcode lane. Add a manifest row before adding a job. Keep provider, cloud, private audio, signing/install, Logic, and listening work owner-controlled and absent from Actions. The fail-closed audit parses every workflow and scans each manifest-referenced `scripts/ci/` entry point for hidden secret, provider/cloud/model, signing/install, Logic, and private-audio surfaces. Update the audit only with a precise reviewed exception (exact workflow, job, rule, reason, owner, review date, and expiry; wildcards fail). Do not add caches until a measured benefit justifies their documented budget.
 
 ### Durable future-Codex protocol
 

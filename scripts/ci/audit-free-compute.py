@@ -38,6 +38,18 @@ DISALLOWED_RUNNER = re.compile(r"self-hosted|larger|gpu|large|xlarge|windows|ubu
 SECRET_REF = re.compile(r"\bsecrets\s*\.", re.I)
 FORBIDDEN_COMMAND = re.compile(r"\b(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud|cloud[-_ ]?(?:eval|harness|text|audio)|model[-_ ]?eval)\b", re.I)
 UNSAFE_ARTIFACT = re.compile(r"(?:^|/)(?:\.build|DerivedData|Applications|Library/Audio/Plug-Ins)(?:/|$)|\.(?:app|appex|sqlite|db|wav|aiff|mp3|flac)(?:$|\s)", re.I)
+ENTRYPOINT_COMMAND = re.compile(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh)(?: <choice>)?$")
+SCRIPT_CLOUD_MODEL = re.compile(
+    r"(?:https?://[^\s'\"]*(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud)[^\s'\"]*|"
+    r"(?<![./\w-])(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud|cloud[-_ ]?(?:eval|harness|text|audio)|model[-_ ]?eval)\b)",
+    re.I,
+)
+SCRIPT_OWNER_SURFACE = re.compile(
+    r"\b(?:codesign|productbuild|pkgbuild|installer|auval|pluginkit|afplay|ffmpeg|sox)\b|"
+    r"\bLogic\s+Pro\b|\bCODE_SIGNING_ALLOWED\s*=\s*(?!NO\b)\S+|"
+    r"(?:^|[\s'\"])(?:/Applications|Library/Audio/Plug-Ins)(?:/|\b)",
+    re.I,
+)
 
 
 def parse_yaml(path: pathlib.Path) -> dict[str, Any]:
@@ -51,6 +63,23 @@ def parse_yaml(path: pathlib.Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise RuntimeError("workflow must parse to a mapping")
     return value
+
+
+def entrypoint_path(command: Any, repo_root: pathlib.Path) -> pathlib.Path | None:
+    if not isinstance(command, str):
+        return None
+    match = ENTRYPOINT_COMMAND.fullmatch(command)
+    if not match:
+        return None
+    candidate = repo_root / match.group(1)
+    try:
+        resolved = candidate.resolve(strict=True)
+        resolved.relative_to((repo_root / "scripts/ci").resolve(strict=True))
+    except (OSError, ValueError):
+        return None
+    if candidate.is_symlink() or not resolved.is_file() or resolved.parent != (repo_root / "scripts/ci").resolve():
+        return None
+    return resolved
 
 
 def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
@@ -78,13 +107,10 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
                 errors.append(f"manifest:{lane_id}: required Actions lane needs required=true and positive timeout")
             if any(lane[key] for key in ("requires_secrets", "requires_logic", "requires_signing_or_install")):
                 errors.append(f"manifest:{lane_id}: required Actions lane must be no-secret, no-Logic, no-sign/install")
-            command = lane["command"]
-            match = re.fullmatch(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh)", command)
-            if not match or not (repo_root / (match.group(1) if match else "")).is_file():
+            if " <choice>" in lane["command"] or entrypoint_path(lane["command"], repo_root) is None:
                 errors.append(f"manifest:{lane_id}: command must name an existing stable scripts/ci shell entry point")
         elif lane_id == "manual_heavy":
-            match = re.fullmatch(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh) <choice>", lane["command"])
-            if not match or not (repo_root / (match.group(1) if match else "")).is_file():
+            if not lane["command"].endswith(" <choice>") or entrypoint_path(lane["command"], repo_root) is None:
                 errors.append("manifest:manual_heavy: local command must name an existing choice entry point")
         elif lane_id == "local_apple_logic_owner":
             if lane["runner_label"] != "not an Actions lane" or lane["timeout_minutes"] != 0:
@@ -119,14 +145,45 @@ def reject(errors: list[str], manifest: dict[str, Any], workflow: str, job: str,
         errors.append(f"{workflow}:{job}: {rule}: {detail}")
 
 
-def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path) -> list[str]:
+def executable_lines(path: pathlib.Path) -> str:
+    if path.stat().st_size > 1_000_000:
+        raise RuntimeError(f"manifest entry point exceeds the 1 MiB audit bound: {path}")
+    try:
+        return "\n".join(line for line in path.read_text(encoding="utf-8").splitlines() if not line.lstrip().startswith("#"))
+    except UnicodeDecodeError as error:
+        raise RuntimeError(f"manifest entry point is not UTF-8 shell text: {path}: {error}") from error
+
+
+def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path, errors: list[str]) -> None:
+    for lane in manifest["lanes"]:
+        lane_id = lane["id"]
+        path = entrypoint_path(lane["command"], repo_root)
+        if path is None:
+            # manifest_errors already reports this contract failure.
+            continue
+        try:
+            content = executable_lines(path)
+        except (OSError, RuntimeError) as error:
+            errors.append(f"manifest-entrypoint:{lane_id}: entrypoint: {error}")
+            continue
+        if SECRET_REF.search(content):
+            reject(errors, manifest, "manifest-entrypoint", lane_id, "secrets", f"secret reference in {path.relative_to(repo_root)}")
+        if SCRIPT_CLOUD_MODEL.search(content):
+            reject(errors, manifest, "manifest-entrypoint", lane_id, "cloud_model", f"provider/cloud/model surface in {path.relative_to(repo_root)}")
+        if SCRIPT_OWNER_SURFACE.search(content):
+            reject(errors, manifest, "manifest-entrypoint", lane_id, "owner_surface", f"sign/install/Logic/private-audio surface in {path.relative_to(repo_root)}")
+
+
+def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
+    repo_root = repo_root.resolve()
     try:
         manifest = json.loads(manifest_path.read_text())
     except (OSError, json.JSONDecodeError) as error:
         return [f"manifest: unreadable or invalid JSON: {error}"]
-    errors = manifest_errors(manifest, ROOT)
+    errors = manifest_errors(manifest, repo_root)
     if errors:
         return errors
+    audit_manifest_entrypoints(manifest, repo_root, errors)
     for path in sorted((*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml"))):
         doc = parse_yaml(path)
         workflow, raw = path.name, path.read_text()
@@ -176,10 +233,16 @@ def self_test() -> None:
     manifest_data = json.loads((ROOT / "ci/tracksmith_compute_lanes.json").read_text())
     good = """name: safe\non: [pull_request]\npermissions:\n  contents: read\njobs:\n  check:\n    runs-on: ubuntu-24.04\n    timeout-minutes: 5\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1\n"""
     with tempfile.TemporaryDirectory() as temp:
-        root = pathlib.Path(temp); workflows = root / "workflows"; workflows.mkdir(); manifest = root / "lanes.json"
+        root = pathlib.Path(temp); repo = root / "repo"; repo.mkdir(); workflows = root / "workflows"; workflows.mkdir(); manifest = root / "lanes.json"
         def write_manifest(data: dict[str, Any]) -> None: manifest.write_text(json.dumps(data))
-        write_manifest(manifest_data); (workflows / "safe.yml").write_text(good)
-        if audit(workflows, manifest): raise AssertionError("valid fixture was rejected")
+        def write_entrypoints(data: dict[str, Any]) -> None:
+            for lane in data.get("lanes", []):
+                match = ENTRYPOINT_COMMAND.fullmatch(lane.get("command", "")) if isinstance(lane, dict) else None
+                if match:
+                    path = repo / match.group(1); path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf 'safe entrypoint\\n'\n")
+        write_manifest(manifest_data); write_entrypoints(manifest_data); (workflows / "safe.yml").write_text(good)
+        if audit(workflows, manifest, repo): raise AssertionError("valid fixture was rejected")
         cases: list[tuple[str, str, dict[str, Any]]] = [
             ("paid-runner", good.replace("ubuntu-24.04", "ubuntu-latest"), manifest_data),
             ("missing-timeout", good.replace("    timeout-minutes: 5\n", ""), manifest_data),
@@ -204,11 +267,23 @@ def self_test() -> None:
             ("applications-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: /Applications/TrackSmith.app\n          retention-days: 3\n", manifest_data),
             ("plugin-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: Library/Audio/Plug-Ins/Components/TrackSmith.component\n          retention-days: 3\n", manifest_data)
         ])
+        external_entrypoint = json.loads(json.dumps(manifest_data)); external_entrypoint["lanes"][0]["command"] = "bash /tmp/not-allowed.sh"
+        cases.append(("external-entrypoint", good, external_entrypoint))
         for name, text, data in cases:
             for file in workflows.glob("*.yml"): file.unlink()
-            write_manifest(data); (workflows / f"{name}.yml").write_text(text)
-            if not audit(workflows, manifest): raise AssertionError(f"negative fixture was accepted: {name}")
-    print("audit-free-compute self-test: 16 rejection classes passed")
+            write_manifest(data); write_entrypoints(data); (workflows / f"{name}.yml").write_text(text)
+            if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
+        for name, content in (
+            ("hidden-script-secret", "printf '${{ secrets.TOKEN }}'\n"),
+            ("hidden-script-cloud", "curl https://api.openai.com/v1/responses\n"),
+            ("hidden-script-owner-surface", "codesign --force unsafe.app\n"),
+        ):
+            for file in workflows.glob("*.yml"): file.unlink()
+            write_manifest(manifest_data); write_entrypoints(manifest_data)
+            (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + content)
+            (workflows / f"{name}.yml").write_text(good)
+            if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
+    print("audit-free-compute self-test: 20 rejection classes passed")
 
 
 def main() -> int:
