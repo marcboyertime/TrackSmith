@@ -16,9 +16,9 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 ALLOWED_RUNNERS = {"ubuntu-24.04", "macos-15"}
 APPROVED_ACTIONS = {
-    "actions/checkout": "11d5960a326750d5838078e36cf38b85af677262",
-    "actions/setup-python": "a26af69be951a213d495a4c3e4e4022e16d87065",
-    "actions/upload-artifact": "ea165f8d65b6e75b540449e92b4886f43607fa02",
+    "actions/checkout": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+    "actions/setup-python": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+    "actions/upload-artifact": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
 }
 LANE_IDS = (
     "linux_integrity", "linux_retrieval", "linux_evaluation", "linux_docs_policy_security",
@@ -174,7 +174,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path) -> list[str]:
 
 def self_test() -> None:
     manifest_data = json.loads((ROOT / "ci/tracksmith_compute_lanes.json").read_text())
-    good = """name: safe\non: [pull_request]\npermissions:\n  contents: read\njobs:\n  check:\n    runs-on: ubuntu-24.04\n    timeout-minutes: 5\n    steps:\n      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262\n"""
+    good = """name: safe\non: [pull_request]\npermissions:\n  contents: read\njobs:\n  check:\n    runs-on: ubuntu-24.04\n    timeout-minutes: 5\n    steps:\n      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1\n"""
     with tempfile.TemporaryDirectory() as temp:
         root = pathlib.Path(temp); workflows = root / "workflows"; workflows.mkdir(); manifest = root / "lanes.json"
         def write_manifest(data: dict[str, Any]) -> None: manifest.write_text(json.dumps(data))
@@ -184,13 +184,13 @@ def self_test() -> None:
             ("paid-runner", good.replace("ubuntu-24.04", "ubuntu-latest"), manifest_data),
             ("missing-timeout", good.replace("    timeout-minutes: 5\n", ""), manifest_data),
             ("secret", good + "      - run: echo ${{ secrets.TOKEN }}\n", manifest_data),
-            ("unpinned", good.replace("@11d5960a326750d5838078e36cf38b85af677262", "@v4"), manifest_data),
+            ("unpinned", good.replace("@3d3c42e5aac5ba805825da76410c181273ba90b1", "@v7"), manifest_data),
             ("target", good.replace("on: [pull_request]", "on: [pull_request_target]"), manifest_data),
             ("cloud", good + "      - run: cloud-eval\n", manifest_data),
-            ("artifact", good + "      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02\n        with:\n          path: ${{ runner.temp }}/DerivedData\n          retention-days: 90\n", manifest_data),
-            ("unreviewed-action", good.replace("actions/checkout@11d5960a326750d5838078e36cf38b85af677262", "actions/cache@11d5960a326750d5838078e36cf38b85af677262"), manifest_data),
+            ("artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: ${{ runner.temp }}/DerivedData\n          retention-days: 90\n", manifest_data),
+            ("unreviewed-action", good.replace("actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1", "actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1"), manifest_data),
         ]
-        cache = good + "      - uses: actions/cache@11d5960a326750d5838078e36cf38b85af677262\n"
+        cache = good + "      - uses: actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1\n"
         malformed = json.loads(json.dumps(manifest_data)); malformed["lanes"].pop()
         expired = json.loads(json.dumps(manifest_data)); expired["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-01","expires_on":"2026-08-02"}]
         bad_exception = json.loads(json.dumps(manifest_data)); bad_exception["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-23"}]
@@ -200,9 +200,9 @@ def self_test() -> None:
             ("expired-exception", good, expired),
             ("malformed-exception", good, bad_exception),
             ("timeout-too-large", good.replace("timeout-minutes: 5", "timeout-minutes: 121"), manifest_data),
-            ("retention-zero", good + "      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02\n        with:\n          path: ${{ runner.temp }}/safe.json\n          retention-days: 0\n", manifest_data),
-            ("applications-artifact", good + "      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02\n        with:\n          path: /Applications/TrackSmith.app\n          retention-days: 3\n", manifest_data),
-            ("plugin-artifact", good + "      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02\n        with:\n          path: Library/Audio/Plug-Ins/Components/TrackSmith.component\n          retention-days: 3\n", manifest_data)
+            ("retention-zero", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: ${{ runner.temp }}/safe.json\n          retention-days: 0\n", manifest_data),
+            ("applications-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: /Applications/TrackSmith.app\n          retention-days: 3\n", manifest_data),
+            ("plugin-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: Library/Audio/Plug-Ins/Components/TrackSmith.component\n          retention-days: 3\n", manifest_data)
         ])
         for name, text, data in cases:
             for file in workflows.glob("*.yml"): file.unlink()
