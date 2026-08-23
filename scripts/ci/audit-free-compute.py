@@ -35,14 +35,16 @@ LANE_FIELDS = {
 EXCEPTION_FIELDS = {"workflow", "job", "rule", "reason", "owner", "reviewed_on", "expires_on"}
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 DISALLOWED_RUNNER = re.compile(r"self-hosted|larger|gpu|large|xlarge|windows|ubuntu-latest|macos-latest", re.I)
-SECRET_REF = re.compile(r"\bsecrets\s*(?:\.\s*[A-Za-z_][A-Za-z0-9_]*|\[\s*['\"][^'\"]+['\"]\s*\])", re.I)
+SECRET_REF = re.compile(r"\bsecrets\s*(?:\.\s*[A-Za-z_][A-Za-z0-9_]*|\[\s*[^\]\r\n]+\s*\])", re.I)
 FORBIDDEN_COMMAND = re.compile(r"\b(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud|cloud[-_ ]?(?:eval|harness|text|audio)|model[-_ ]?eval)\b", re.I)
-UNSAFE_ARTIFACT = re.compile(r"(?:^|/)(?:\.build|DerivedData|Applications|Library/Audio/Plug-Ins)(?:/|$)|\.(?:app|appex|sqlite|db|wav|aiff|mp3|flac)(?:$|\s)", re.I)
+UNSAFE_ARTIFACT = re.compile(r"(?:^|/)(?:\.build|DerivedData|Applications|Library/Audio/Plug-Ins)(?:/|$)|\.(?:app|appex|sqlite|db|wav|aiff|mp3|flac)(?:$|\s)|(?:^|[\s/])(?:credential(?:s)?|secret(?:s)?|token(?:s)?|api[-_]?key(?:s)?|provider[-_]?response(?:s)?)(?:[._/-]|$)", re.I)
 ENTRYPOINT_COMMAND = re.compile(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh)(?: <choice>)?$")
 SCRIPT_RELATIVE_PATH = re.compile(r"scripts/ci/[A-Za-z0-9_.-]+\.sh$")
 LITERAL_SCRIPT_TOKEN = re.compile(r"(?<![A-Za-z0-9_.\-/])(scripts/ci/[A-Za-z0-9_.-]+\.sh)(?![A-Za-z0-9_.\-/])")
 SCRIPT_CI_PATH_ATTEMPT = re.compile(r"scripts/ci/[^\s'\";|&()]*\.sh\b")
 SHELL_DEPENDENCY_INVOKER = re.compile(r"^(?:(?:env|command)(?:\s+[-A-Za-z0-9_=]+)*\s+)?(?:bash|sh|source)\b|^\.\s+")
+SHELL_CONTROL_PREFIX = re.compile(r"^(?:(?:if|then|do|while|until)\s+|!\s*|\(\s*)")
+SHELL_ASSIGNMENT_PREFIX = re.compile(r"^(?:[A-Za-z_][A-Za-z0-9_]*=(?:[^\s]+|\"[^\"]*\"|'[^']*')\s+)+")
 STANDARD_LIB_SOURCE = re.compile(r'^source "\$\(cd -- "\$\(dirname -- "\$\{BASH_SOURCE\[0\]\}"\)" && pwd -P\)/lib\.sh"$')
 MAX_SCRIPT_CLOSURE_FILES = 32
 MAX_SCRIPT_CLOSURE_BYTES = 1_000_000
@@ -205,6 +207,17 @@ def shell_segments(command: str) -> list[str]:
     return [segment.strip() for segment in re.split(r"(?:&&|\|\||;|\|)", command) if segment.strip()]
 
 
+def has_shell_dependency_invoker(segment: str) -> bool:
+    remaining = segment.strip()
+    for _ in range(8):
+        stripped = SHELL_CONTROL_PREFIX.sub("", remaining, count=1)
+        stripped = SHELL_ASSIGNMENT_PREFIX.sub("", stripped, count=1)
+        if stripped == remaining:
+            break
+        remaining = stripped.strip()
+    return bool(SHELL_DEPENDENCY_INVOKER.search(remaining))
+
+
 def script_closure(entrypoint: pathlib.Path, repo_root: pathlib.Path) -> list[tuple[pathlib.Path, list[tuple[int, str]]]]:
     closure: list[tuple[pathlib.Path, list[tuple[int, str]]]] = []
     visited: set[pathlib.Path] = set()
@@ -217,7 +230,7 @@ def script_closure(entrypoint: pathlib.Path, repo_root: pathlib.Path) -> list[tu
             raise RuntimeError(f"script dependency cycle: {path.relative_to(repo_root)}")
         if path in visited:
             return
-        if len(visited) >= MAX_SCRIPT_CLOSURE_FILES:
+        if len(visited | active) >= MAX_SCRIPT_CLOSURE_FILES:
             raise RuntimeError(f"script dependency closure exceeds {MAX_SCRIPT_CLOSURE_FILES} files")
         size = path.stat().st_size
         total_bytes += size
@@ -239,7 +252,7 @@ def script_closure(entrypoint: pathlib.Path, repo_root: pathlib.Path) -> list[tu
                 raise RuntimeError(f"dynamic, constructed, or traversal script dependency: {path.relative_to(repo_root)}:{line_number}")
             for segment in shell_segments(command):
                 segment_paths = {match.group(1) for match in LITERAL_SCRIPT_TOKEN.finditer(segment)}
-                if SHELL_DEPENDENCY_INVOKER.search(segment) and not segment_paths:
+                if has_shell_dependency_invoker(segment) and not segment_paths:
                     raise RuntimeError(f"dynamic, external, or unresolvable shell dependency: {path.relative_to(repo_root)}:{line_number}")
             for relative in literal_paths:
                 dependency = script_path(relative, repo_root)
@@ -353,6 +366,7 @@ def self_test() -> None:
             ("paid-runner", good.replace("ubuntu-24.04", "ubuntu-latest"), manifest_data),
             ("missing-timeout", good.replace("    timeout-minutes: 5\n", ""), manifest_data),
             ("secret", good + "      - run: echo ${{ secrets.TOKEN }}\n", manifest_data),
+            ("computed-secret", good + "      - run: echo ${{ secrets[env.SECRET_NAME] }}\n", manifest_data),
             ("unpinned", good.replace("@3d3c42e5aac5ba805825da76410c181273ba90b1", "@v7"), manifest_data),
             ("target", good.replace("on: [pull_request]", "on: [pull_request_target]"), manifest_data),
             ("cloud", good + "      - run: cloud-eval\n", manifest_data),
@@ -373,6 +387,14 @@ def self_test() -> None:
             ("applications-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: /Applications/TrackSmith.app\n          retention-days: 3\n", manifest_data),
             ("plugin-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: Library/Audio/Plug-Ins/Components/TrackSmith.component\n          retention-days: 3\n", manifest_data)
         ])
+        for name, artifact_path in (
+            ("credentials-artifact", "${{ runner.temp }}/credentials.json"),
+            ("secret-artifact", "reports/secret.txt"),
+            ("token-artifact", "reports/token.txt"),
+            ("api-key-artifact", "reports/api-key.txt"),
+            ("provider-response-artifact", "reports/provider-response.json"),
+        ):
+            cases.append((name, good + f"      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: {artifact_path}\n          retention-days: 3\n", manifest_data))
         external_entrypoint = json.loads(json.dumps(manifest_data)); external_entrypoint["lanes"][0]["command"] = "bash /tmp/not-allowed.sh"
         cases.append(("external-entrypoint", good, external_entrypoint))
         for name, text, data in cases:
@@ -423,9 +445,24 @@ def self_test() -> None:
             ("hidden-script-symlink", "bash scripts/ci/opaque-check.sh\n", "unused\n", True),
             ("hidden-script-dynamic", "bash \"scripts/ci/$CHECK.sh\"\n", None, False),
             ("hidden-script-cycle", "bash scripts/ci/opaque-check.sh\n", "bash scripts/ci/run-linux-integrity.sh\n", False),
+            ("hidden-script-if-dynamic", "if bash \"$helper\"; then printf safe; fi\n", None, False),
+            ("hidden-script-negated-external", "! bash /tmp/helper.sh\n", None, False),
+            ("hidden-script-grouped-external", "( bash /tmp/helper.sh )\n", None, False),
+            ("hidden-script-assignment-external", "FOO=bar bash /tmp/helper.sh\n", None, False),
         ):
             reject_entrypoint(name, content, helper, symlink_helper)
-    print("audit-free-compute self-test: 37 rejection classes passed")
+        def closure_chain(total_files: int) -> list[str]:
+            reset_safe_fixture()
+            names = [f"chain-{index:02}.sh" for index in range(total_files - 1)]
+            entrypoint = repo / "scripts/ci/run-linux-integrity.sh"
+            entrypoint.write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + (f"bash scripts/ci/{names[0]}\n" if names else "printf safe\n"))
+            for index, name in enumerate(names):
+                next_command = f"bash scripts/ci/{names[index + 1]}\n" if index + 1 < len(names) else "printf safe\n"
+                (repo / "scripts/ci" / name).write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + next_command)
+            return audit(workflows, manifest, repo)
+        if closure_chain(32): raise AssertionError("32-file closure was rejected")
+        if not closure_chain(33): raise AssertionError("33-file closure was accepted")
+    print("audit-free-compute self-test: 48 rejection classes passed")
 
 
 def main() -> int:

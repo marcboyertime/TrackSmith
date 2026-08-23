@@ -68,7 +68,7 @@ def check(resources: pathlib.Path, source_roots: list[pathlib.Path]) -> None:
     forbidden_golden = resources / "tracksmith-corpus-017-golden-tutor-conversations-level-adaptation.json"
     if forbidden_golden.exists() or forbidden_golden.is_symlink():
         fail(f"forbidden golden corpus is present: {forbidden_golden}")
-    json_files = sorted(path for path in all_entries if path.is_file() and path.suffix == ".json")
+    json_files = sorted(path for path in all_entries if path.is_file() and path.suffix.lower() == ".json")
     expected_manifest = resources / "CandidateRetrieval.manifest.json"
     if json_files != [expected_manifest]:
         fail("resources must contain exactly CandidateRetrieval.manifest.json as their only JSON file")
@@ -111,6 +111,9 @@ def self_test() -> None:
         nested = resources / "nested"; nested.mkdir()
         (nested / "unexpected.json").write_text("{}")
         cases.append(("nested-json", resources, roots))
+        resources, roots = fixture("uppercase-json")
+        (resources / "unexpected.JSON").write_text("{}")
+        cases.append(("uppercase-json", resources, roots))
         resources, roots = fixture("json-symlink")
         (resources / "CandidateRetrieval.link.json").symlink_to("CandidateRetrieval.manifest.json")
         cases.append(("json-symlink", resources, roots))
@@ -126,7 +129,7 @@ def self_test() -> None:
             except RuntimeError:
                 continue
             raise AssertionError(f"negative fixture was accepted: {name}")
-    print("product-resource-policy self-test: both scans and 7 negative fixtures passed")
+    print("product-resource-policy self-test: both scans and 8 negative fixtures passed")
 
 
 def main() -> int:
