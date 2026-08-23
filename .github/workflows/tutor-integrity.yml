@@ -4,36 +4,99 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('tutor-integrity-pr-{0}', github.event.pull_request.number) || format('tutor-integrity-{0}-{1}', github.ref_name, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  fast-integrity:
-    runs-on: ubuntu-latest
+  linux_integrity:
+    name: Linux integrity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
-      - name: Python syntax and Package 016-019 integrity
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      # actions/setup-python v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run locally reproducible integrity lane
+        run: bash scripts/ci/run-linux-integrity.sh
+
+  linux_retrieval:
+    name: Linux retrieval
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+    steps:
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      # actions/setup-python v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run locally reproducible retrieval lane
+        run: bash scripts/ci/run-linux-retrieval.sh
+
+  linux_evaluation:
+    name: Linux evaluation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+    steps:
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      # actions/setup-python v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run locally reproducible evaluation lane
+        run: bash scripts/ci/run-linux-evaluation.sh
+
+  linux_docs_policy_security:
+    name: Linux docs policy security
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+    steps:
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      # actions/setup-python v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run locally reproducible policy lane
+        run: bash scripts/ci/run-linux-docs-policy-security.sh
+
+  fast-integrity:
+    name: fast-integrity
+    if: ${{ always() }}
+    needs: [linux_integrity, linux_retrieval, linux_evaluation, linux_docs_policy_security]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Report required lane results
         run: |
-          python -m py_compile research/scripts/community_corpus_import.py research/scripts/build_candidate_retrieval_index.py research/scripts/package18_audit.py research/scripts/package19_quality_suite.py
-          python research/scripts/community_corpus_import.py --preservation-self-check
-          python research/scripts/package16-integration.py --preservation-self-check
-          python research/scripts/community_corpus_import.py --check
-          python research/scripts/build_candidate_retrieval_index.py --check
-          # The P17 import archive is intentionally not committed: it is an
-          # evaluation-only intake artifact.  Validate the staged P17 contract
-          # and its runtime=0 boundary instead of invoking the archive importer
-          # without its required trusted inputs.
-          python research/scripts/package17-evaluation.py --check
-          python research/scripts/package18_audit.py
-          # Swift produces the authoritative current-final baseline in the
-          # macOS lane.  Linux verifies only frozen inputs/resources, so it
-          # does not overwrite evidence with a missing Swift diagnostic.
-          python research/scripts/package19_quality_suite.py --check --forbidden-resource
-          python research/scripts/package19_quality_suite.py --scanner-self-test --receipt-self-test
-      - name: Product resource boundary
-        run: |
-          test ! -e packages/ProductionTutor/Sources/ProductionTutor/Resources/tracksmith-corpus-017-golden-tutor-conversations-level-adaptation.json
-          test "$(find packages/ProductionTutor/Sources/ProductionTutor/Resources -name '*.json' | wc -l | tr -d ' ')" = 1
-          ! rg -a -i 'tracksmith-corpus-017|expected_answer|fixture_alias|evaluation_case' packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json
-          git diff --exit-code -- packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json
-          ! rg -i 'p19-|acceptable_diagnosis_families|expected_answer|fixture_alias|evaluation_case' packages/TutorConversation/Sources packages/ProductionTutor/Sources
+          {
+            echo '## Tutor integrity aggregate'
+            echo '| Lane | Result |'
+            echo '| --- | --- |'
+            echo '| linux_integrity | ${{ needs.linux_integrity.result }} |'
+            echo '| linux_retrieval | ${{ needs.linux_retrieval.result }} |'
+            echo '| linux_evaluation | ${{ needs.linux_evaluation.result }} |'
+            echo '| linux_docs_policy_security | ${{ needs.linux_docs_policy_security.result }} |'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test '${{ needs.linux_integrity.result }}' = success
+          test '${{ needs.linux_retrieval.result }}' = success
+          test '${{ needs.linux_evaluation.result }}' = success
+          test '${{ needs.linux_docs_policy_security.result }}' = success

@@ -1,0 +1,69 @@
+name: TrackSmith heavy validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: Deterministic no-key validation lane
+        required: true
+        default: all_deterministic
+        type: choice
+        options:
+          - all_deterministic
+          - retrieval_stress
+          - swift_full
+          - xcode_products
+          - package019_end_to_end_no_key
+          - performance_observation
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ format('tracksmith-heavy-{0}-{1}', inputs.lane, github.run_id) }}
+  cancel-in-progress: false
+
+jobs:
+  linux_heavy:
+    if: ${{ inputs.lane == 'all_deterministic' || inputs.lane == 'retrieval_stress' || inputs.lane == 'package019_end_to_end_no_key' || inputs.lane == 'performance_observation' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      # actions/setup-python v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run selected Linux no-key lane
+        run: |
+          case '${{ inputs.lane }}' in
+            all_deterministic) bash scripts/ci/run-linux-integrity.sh; bash scripts/ci/run-linux-retrieval.sh; bash scripts/ci/run-linux-evaluation.sh; bash scripts/ci/run-linux-docs-policy-security.sh ;;
+            retrieval_stress|performance_observation) bash scripts/ci/run-linux-retrieval.sh ;;
+            package019_end_to_end_no_key) bash scripts/ci/run-linux-evaluation.sh ;;
+          esac
+      - name: State observation boundary
+        if: ${{ inputs.lane == 'performance_observation' }}
+        run: echo 'Performance output is hardware-sensitive observation, not a merge gate.' >> "$GITHUB_STEP_SUMMARY"
+
+  swift_heavy:
+    if: ${{ inputs.lane == 'all_deterministic' || inputs.lane == 'swift_full' || inputs.lane == 'package019_end_to_end_no_key' }}
+    runs-on: macos-15
+    timeout-minutes: 70
+    steps:
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Run selected Swift no-key lane
+        run: |
+          bash scripts/ci/run-macos-swift-core.sh
+          bash scripts/ci/run-macos-tutor.sh
+
+  xcode_products:
+    if: ${{ inputs.lane == 'all_deterministic' || inputs.lane == 'xcode_products' }}
+    runs-on: macos-15
+    timeout-minutes: 50
+    steps:
+      # actions/checkout v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Run unsigned Xcode products
+        run: bash scripts/ci/run-macos-xcode-products.sh
