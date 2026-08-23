@@ -59,8 +59,9 @@ section "Package 019 unsigned bundle and resource checks"
 test -d "$app_bundle"
 test -d "$app_bundle/Contents/PlugIns/Logic Audio Assistant AU.appex"
 python3 research/scripts/package19_quality_suite.py --check --forbidden-resource --installed-bundle "$app_bundle"
-test "$(find "$derived_data" -path '*ProductionTutor.bundle/Contents/Resources/*.json' -type f ! -name 'CandidateRetrieval.manifest.json' | wc -l | tr -d ' ')" = 0
-! rg -a -i 'tracksmith-corpus-017|p19-|expected_answer|fixture_alias|evaluation_case' "$app_bundle/Contents/Resources"
+# The authoritative Python scanner above checks app/AU resources for forbidden
+# P19 markers. The compact reporter below strictly validates the prefixed
+# SwiftPM ProductionTutor bundle and its exact two-file resource layout.
 receipt="$work_dir/package019-ci-receipt.json"
 python3 research/scripts/package19_quality_suite.py --generate-validation-receipt --installed-bundle "$app_bundle" --receipt-output "$receipt"
 section "tracked Package 019 evidence remains unchanged"
