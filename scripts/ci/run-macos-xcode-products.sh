@@ -6,6 +6,7 @@ tool_versions
 require_command curl
 require_command shasum
 require_command xcodebuild
+require_command rsync
 
 work_dir="${RUNNER_TEMP:-$(mktemp -d)}/tracksmith-xcode-products"
 tool_root="$work_dir/xcodegen"
@@ -27,14 +28,32 @@ unzip -o -q "$archive" -d "$work_dir"
 xcodegen_binary="$tool_root/bin/xcodegen"
 test -x "$xcodegen_binary"
 "$xcodegen_binary" version | grep -F 'Version: 2.46.0'
+section "stage current source tree outside the checkout"
+source_checkout="$PWD"
+source_root="$work_dir/source"
+# --delete is deliberately bounded to this lane's fresh temporary source tree.
+# It makes a same-RUNNER_TEMP rerun reflect removed/renamed working-tree files
+# while preserving the original checkout and omitting generated/tool state.
+rsync -a --delete \
+  --exclude '.git/' \
+  --exclude '.build/' \
+  --exclude 'DerivedData/' \
+  --exclude 'LogicAudioAssistant.xcodeproj/' \
+  --exclude '.codex/' \
+  --exclude '.claude/' \
+  --exclude 'tmp/' \
+  "$source_checkout/" "$source_root/"
+test -f "$source_root/Package.swift"
+test -f "$source_root/project.yml"
 section "generate and build unsigned products with shared DerivedData"
-project_output_dir="$work_dir/project-output"
-project="$project_output_dir/LogicAudioAssistant.xcodeproj"
-mkdir -p "$project_output_dir"
-PATH="$tool_root/bin:$PATH" "$xcodegen_binary" generate --spec "$PWD/project.yml" --project "$project_output_dir" --project-root "$PWD"
+project="$source_root/LogicAudioAssistant.xcodeproj"
+PATH="$tool_root/bin:$PATH" "$xcodegen_binary" generate --spec "$source_root/project.yml" --project "$source_root" --project-root "$source_root"
 test -d "$project"
-xcodebuild -project "$project" -scheme CompanionMacApp -configuration Release -destination 'platform=macOS' -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
-xcodebuild -project "$project" -scheme AssistantAudioUnitExtension -configuration Release -destination 'platform=macOS' -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+(
+  cd "$source_root"
+  xcodebuild -project "$project" -scheme CompanionMacApp -configuration Release -destination 'platform=macOS' -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+  xcodebuild -project "$project" -scheme AssistantAudioUnitExtension -configuration Release -destination 'platform=macOS' -derivedDataPath "$derived_data" CODE_SIGNING_ALLOWED=NO build
+)
 app_bundle="$derived_data/Build/Products/Release/Logic Audio Assistant.app"
 section "Package 019 unsigned bundle and resource checks"
 test -d "$app_bundle"
