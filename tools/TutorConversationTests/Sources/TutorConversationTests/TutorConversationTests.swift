@@ -130,6 +130,8 @@ private final class Suite {
     private nonisolated static let packageSeventeenCloudMaximumAttempts = 2
     private nonisolated static let packageSeventeenLevelOrder: [TutorExperienceLevel] = [.noob, .amateur, .pro]
     private nonisolated static let packageSeventeenTextModel = "gpt-5.6-sol"
+    private nonisolated static let packageNineteenCloudPromptSuiteSHA256 = "22753465ef6b3aa1e3d53485c89b167028491b3ecf33cc32ce9c104e3eb2fba2"
+    private nonisolated static let packageNineteenOrderedCloudPromptSHA256 = "1125a004c80a2977692c11abd5f3fc9f6114d63cb920bcf3623cc32d90ca57bb"
     private nonisolated static let packageSeventeenAudioModel = "gpt-audio-1.5"
     private nonisolated static let packageSeventeenPublicAudioFixtureSHA256 = "f6f168af94a612185ea4b9338e96776f936dcff2188ba5330cf3702067f11d7b"
     private nonisolated static let packageSeventeenPublicAudioFixturePathSuffix = "/Library/Caches/TrackSmith/P16/fixtures/generated/p16-controlled-source.wav"
@@ -174,6 +176,29 @@ private final class Suite {
         var recommendedFirstExperiment: String
         var evidenceRequirements: String
         var riskAndUndo: String
+    }
+
+    /// Evaluation-only run record. The artifact is built from the actual
+    /// provider envelopes and engine receipt, never from advertised tools.
+    private struct PackageNineteenCloudGeneration {
+        var artifact: [String: Any]
+        var response: PackageSeventeenCloudResponse
+        var providerRequestCalls: Int
+    }
+
+    private struct PackageNineteenRetryResult {
+        var outcome: PackageSeventeenCloudRequestOutcome
+        var failureHistory: [[String: Any]]
+        var providerRequestCalls: Int
+        var durableCompletionWarning: String?
+    }
+
+    private struct PackageNineteenTopicFixture: Sendable {
+        var sourceType: SourceType
+        var capture: TutorCaptureSnapshot
+        var logicControl: String
+        var limitation: String
+        var identity: [String: String]
     }
 
     func run() async {
@@ -1350,7 +1375,12 @@ private final class Suite {
     }
 
     private func testPackageNineteenDiagnostic() async throws {
-        let suiteURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let promptOnly = try packageNineteenCloudPrompts(repository: repository)
+        let canonicalPrompts = try packageSeventeenAcceptancePrompts(repository: repository)
+        try expect(promptOnly.map { "\($0.topic)|\($0.query)" } == canonicalPrompts.map { "\($0.topic)|\($0.query)" },
+                   "P19 prompt-only generation suite no longer matches the evaluation-only canonical prompt projection")
+        let suiteURL = repository
             .appendingPathComponent("research/tutor_quality/package019_evaluation_suite.json")
         let rows = try JSONSerialization.jsonObject(with: Data(contentsOf: suiteURL)) as? [[String: Any]] ?? []
         try expect(rows.count == 240 && Set(rows.compactMap { $0["partition"] as? String }) == Set(["development", "calibration", "held_out"]),
@@ -1431,16 +1461,16 @@ private final class Suite {
             ]
         }
 
-        let prior = TutorExperimentRecord(draft: experimentDraft(title: "P19 baseline"), outcome: .noChange)
+        let prior = TutorExperimentRecord(draft: experimentDraft(title: "Baseline comparison"), outcome: .noChange)
         let executor = try TutorToolExecutor(observeLogic: { query in
-            .init(status: .observed, applicationName: "Logic Pro", bundleIdentifier: "com.apple.logic10", windowTitle: "P19 fixture", controls: [.init(role: "AXButton", label: query, value: "off", frame: .init(x: 1, y: 1, width: 1, height: 1))], limitation: "P19 injected read-only state.")
+            .init(status: .observed, applicationName: "Logic Pro", bundleIdentifier: "com.apple.logic10", windowTitle: "Current channel inspector", controls: [.init(role: "AXButton", label: query, value: "off", frame: .init(x: 1, y: 1, width: 1, height: 1))], limitation: "Read-only local state; not a live Logic observation.")
         }, priorExperiments: { [prior] })
         let context = TutorRuntimeContext(sourceType: .vocal, capture: sampleCapture(wavData: Data("p19-capture".utf8)), experience: .init(persistentLevel: .amateur, temporaryOverride: .pro))
         let calls: [(String, String)] = [
             ("get_current_capture_context", "{}"), ("search_production_knowledge", #"{"query":"muddy vocal low mid"}"#),
             ("search_candidate_corpus", #"{"query":"my vocal gets muddy when guitars arrive"}"#), ("get_logic_procedure", #"{"query":"Channel EQ vocal low mid"}"#),
             ("retrieve_prior_experiments", #"{"query":null,"max_results":6}"#), ("inspect_logic", #"{"query":"Channel EQ"}"#),
-            ("present_experiment", experimentArguments(title: "P19 one variable")),
+            ("present_experiment", experimentArguments(title: "One-variable comparison")),
         ]
         var outputs: [TutorToolResult] = []
         for (offset, call) in calls.enumerated() {
@@ -1511,6 +1541,7 @@ private final class Suite {
         try expect(!markdownSource.contains("accessibilityLabel(\"Tutor response\")"), "P19 Markdown renderer suppresses response content for VoiceOver")
         try expect(!markdownSource.contains("WebView") && !markdownSource.contains("Link("), "P19 Markdown renderer introduced remote/interactive content")
         let longContext = try await packageNineteenMeasuredLongContextHarness()
+        try await packageNineteenCloudHarnessContract()
         let report: [String: Any] = [
             "package": "019", "status": "infrastructure_pass_quality_fail", "actual_runtime_current_final": ["per_partition": Dictionary(uniqueKeysWithValues: byPartition.map { ($0.key, metric($0.value)) }), "typed_outcomes": typedOutcomes, "quality_gate": "failed: held-out ranking target missed; no held-out tuning performed"],
             "tools": ["count": outputs.count, "names": calls.map(\.0), "output_bytes": outputs.map { $0.outputJSON.utf8.count }, "authority": "read-only except presentation-only experiment"],
@@ -1518,8 +1549,10 @@ private final class Suite {
             "long_context": longContext,
             "evidence_boundary": "Injected deterministic capture/Logic state, local runtime index, and a recording loopback transport only. OpenAI request serialization was exercised with store:false, but the transport cannot reach the network; no cloud provider, audio upload, installed app, Logic action, or owner listening occurred.",
         ]
-        let outputURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("docs/evidence/PACKAGE_019_TOOL_DIAGNOSTIC.json")
-        try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]).write(to: outputURL)
+        if ProcessInfo.processInfo.environment["TRACKSMITH_P19_DIAGNOSTIC_NO_WRITE"] != "1" {
+            let outputURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("docs/evidence/PACKAGE_019_TOOL_DIAGNOSTIC.json")
+            try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]).write(to: outputURL)
+        }
         print("P19_LONG_CONTEXT_HARNESS_OK messages=10,25,50,80 provider=loopback-only tools=candidate,procedure,capture,history cancellation=retry capture=replaced")
         print("P19_DIAGNOSTIC_OK cases=240 tools=7 typedFailures=7 longContext=measured-10,25,50,80")
     }
@@ -1699,6 +1732,314 @@ private final class Suite {
         ]
     }
 
+    /// Provider-free contract coverage for the opt-in harness. This exercises
+    /// the same serializer, engine tool loop, receipt, telemetry projection,
+    /// firewall predicate, and transient retry policy with transports that are
+    /// physically incapable of reaching a network.
+    private func packageNineteenCloudHarnessContract() async throws {
+        try expect(packageNineteenLaneName(.noTool) == "no_tool" && packageNineteenLaneName(.fullTool) == "full_tool" && packageNineteenLaneName(.repeatedTriplets) == "repeated_triplets",
+                   "P19 cloud lane routing labels drifted")
+        let root = temporaryRoot("p19-cloud-contract"); defer { try? FileManager.default.removeItem(at: root) }
+        let transport = PackageNineteenLoopbackStreamingTransport()
+        let provider = packageNineteenLoopbackProvider(transport: transport)
+        let prior = packageNineteenPriorExperiment()
+        let executor = try TutorToolExecutor(priorExperiments: { [prior] })
+        let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: root), tools: executor, fallbackProvider: try OfflineTutorProvider())
+        let context = TutorRuntimeContext(sourceType: .vocal, capture: packageNineteenCapture("00000000-0000-0000-0000-000000000069"), consent: .init(cloudTextGranted: false), experience: .init(persistentLevel: .amateur))
+        let events = try await collectTurn(engine, "Compare one reversible adjustment with the current capture.", context, provider)
+        guard let receipt = events.compactMap({ if case let .completed(_, value) = $0 { return value }; return nil }).last else {
+            throw TestFailure(description: "P19 cloud contract engine path did not persist a receipt")
+        }
+        let bodies = transport.requestBodies(); let telemetry = try packageNineteenEnvelopeTelemetry(bodies)
+        let sent = telemetry["tools_sent"] as? [String] ?? []
+        let schemaHashes = telemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:]
+        let calls = telemetry["tool_calls"] as? [[String: Any]] ?? []
+        let results = telemetry["tool_results"] as? [[String: Any]] ?? []
+        let envelopeSchemas = telemetry["tool_schema_envelopes"] as? [[String: String]] ?? []
+        let envelopeEntryCounts = telemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? []
+        let envelopeDuplicateNames = telemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? []
+        try expect(bodies.count == 2 && Set(sent) == Set(TutorToolExecutor.defaultDefinitions.map(\.name)) && packageNineteenExactSerializedToolSchemas(actual: schemaHashes, envelopes: envelopeSchemas, envelopeEntryCounts: envelopeEntryCounts, envelopeDuplicateNames: envelopeDuplicateNames, toolsEnabled: true) && calls.count == receipt.tools.count && results.count == calls.count && bodies.allSatisfy { $0.count <= 512 * 1_024 },
+                   "P19 cloud contract did not report only actually serialized tools/calls/results")
+        try expect(packageNineteenReceiptMatchesTelemetry(receipt: receipt, telemetry: telemetry),
+                   "P19 cloud contract receipt did not bind observed tool call IDs, arguments, and outputs")
+        var mutatedSchemas = schemaHashes
+        mutatedSchemas["search_candidate_corpus"] = "0" + String(repeating: "1", count: 63)
+        try expect(!packageNineteenExactSerializedToolSchemas(actual: mutatedSchemas, envelopes: envelopeSchemas, envelopeEntryCounts: envelopeEntryCounts, envelopeDuplicateNames: envelopeDuplicateNames, toolsEnabled: true),
+                   "P19 cloud schema contract accepted a mutated serialized parameter or description")
+        let canonicalTool = OpenAITutorProvider.toolSchema(TutorToolExecutor.defaultDefinitions[0])
+        let canonicalTools = TutorToolExecutor.defaultDefinitions.map(OpenAITutorProvider.toolSchema)
+        let repeatedCanonicalTelemetry = try packageNineteenEnvelopeTelemetry([
+            JSONSerialization.data(withJSONObject: ["tools": canonicalTools]),
+            JSONSerialization.data(withJSONObject: ["tools": canonicalTools]),
+        ])
+        try expect(repeatedCanonicalTelemetry["tool_schema_conflict"] as? Bool == false && packageNineteenExactSerializedToolSchemas(actual: repeatedCanonicalTelemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: repeatedCanonicalTelemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: repeatedCanonicalTelemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: repeatedCanonicalTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], conflict: false, toolsEnabled: true),
+                   "P19 cloud schema contract rejected identical repeated serialized schemas")
+        var conflictingTool = canonicalTool
+        conflictingTool["description"] = "mutated test-only description"
+        let conflictingTelemetry = try packageNineteenEnvelopeTelemetry([
+            JSONSerialization.data(withJSONObject: ["tools": [canonicalTool]]),
+            JSONSerialization.data(withJSONObject: ["tools": [conflictingTool]]),
+        ])
+        try expect(conflictingTelemetry["tool_schema_conflict"] as? Bool == true && !packageNineteenExactSerializedToolSchemas(actual: conflictingTelemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: conflictingTelemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: conflictingTelemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: conflictingTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], conflict: conflictingTelemetry["tool_schema_conflict"] as? Bool ?? false, toolsEnabled: true),
+                   "P19 cloud schema contract accepted conflicting repeated schemas for one tool name")
+        let omittedEnvelopeTelemetry = try packageNineteenEnvelopeTelemetry([JSONSerialization.data(withJSONObject: ["tools": canonicalTools]), JSONSerialization.data(withJSONObject: ["tools": Array(canonicalTools.dropLast())])])
+        try expect(!packageNineteenExactSerializedToolSchemas(actual: omittedEnvelopeTelemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: omittedEnvelopeTelemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: omittedEnvelopeTelemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: omittedEnvelopeTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], toolsEnabled: true),
+                   "P19 cloud schema contract accepted a later envelope that omitted a tool")
+        let duplicateCanonicalEnvelopeTelemetry = try packageNineteenEnvelopeTelemetry([JSONSerialization.data(withJSONObject: ["tools": canonicalTools + [canonicalTool]])])
+        try expect(duplicateCanonicalEnvelopeTelemetry["tool_schema_conflict"] as? Bool == false && duplicateCanonicalEnvelopeTelemetry["tool_schema_envelope_entry_counts"] as? [Int] == [canonicalTools.count + 1] && duplicateCanonicalEnvelopeTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] == [true] && !packageNineteenExactSerializedToolSchemas(actual: duplicateCanonicalEnvelopeTelemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: duplicateCanonicalEnvelopeTelemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: duplicateCanonicalEnvelopeTelemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: duplicateCanonicalEnvelopeTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], toolsEnabled: true),
+                   "P19 cloud schema contract accepted a duplicate canonical schema in one full envelope")
+        let unnamedEnvelopeTelemetry = try packageNineteenEnvelopeTelemetry([JSONSerialization.data(withJSONObject: ["tools": [["type": "function"]]])])
+        try expect((unnamedEnvelopeTelemetry["invalid_tool_schema_entry"] as? Bool) == true && !packageNineteenExactSerializedToolSchemas(actual: unnamedEnvelopeTelemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: unnamedEnvelopeTelemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: unnamedEnvelopeTelemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: unnamedEnvelopeTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], invalid: unnamedEnvelopeTelemetry["invalid_tool_schema_entry"] as? Bool ?? false, toolsEnabled: true),
+                   "P19 cloud schema contract accepted unnamed or malformed serialized tools")
+        try expect((unnamedEnvelopeTelemetry["tools_sent"] as? [String] ?? []).isEmpty && !packageNineteenExactSerializedToolSchemas(actual: unnamedEnvelopeTelemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: unnamedEnvelopeTelemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: unnamedEnvelopeTelemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: unnamedEnvelopeTelemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], invalid: unnamedEnvelopeTelemetry["invalid_tool_schema_entry"] as? Bool ?? false, toolsEnabled: false),
+                   "P19 no-tool schema contract accepted malformed nonempty tools entries")
+        let multiRoundBodies = try [
+            JSONSerialization.data(withJSONObject: ["input": [["type": "function_call", "call_id": "a", "name": "get_current_capture_context", "arguments": "{}"], ["type": "function_call", "call_id": "b", "name": "search_candidate_corpus", "arguments": #"{"query":"vocal"}"#]]]),
+            JSONSerialization.data(withJSONObject: ["input": [["type": "function_call", "call_id": "a", "name": "get_current_capture_context", "arguments": "{}"], ["type": "function_call", "call_id": "b", "name": "search_candidate_corpus", "arguments": #"{"query":"vocal"}"#], ["type": "function_call", "call_id": "c", "name": "get_logic_procedure", "arguments": #"{"query":"Channel EQ"}"#], ["type": "function_call_output", "call_id": "a", "output": #"{"status":"ok"}"#], ["type": "function_call_output", "call_id": "b", "output": #"{"status":"ok"}"#]]]),
+            JSONSerialization.data(withJSONObject: ["input": [["type": "function_call_output", "call_id": "c", "output": #"{"status":"ok"}"#]]]),
+        ]
+        let multiRound = try packageNineteenEnvelopeTelemetry(multiRoundBodies)
+        let multiCalls = multiRound["tool_calls"] as? [[String: Any]] ?? []
+        let multiResults = multiRound["tool_results"] as? [[String: Any]] ?? []
+        try expect(multiCalls.map { $0["call_id"] as? String } == ["a", "b", "c"] && multiResults.map { $0["call_id"] as? String } == ["a", "b", "c"] && multiResults.allSatisfy { ($0["output_sha256"] as? String)?.count == 64 } && (multiRound["tool_call_conflict"] as? Bool) == false && (multiRound["tool_output_conflict"] as? Bool) == false,
+                   "P19 cloud telemetry duplicated cumulative tool calls or lost call-ID output binding")
+        let callConflictTelemetry = try packageNineteenEnvelopeTelemetry([JSONSerialization.data(withJSONObject: ["input": [["type": "function_call", "call_id": "same", "name": "search_candidate_corpus", "arguments": "{\\\"query\\\":\\\"a\\\"}"], ["type": "function_call", "call_id": "same", "name": "search_candidate_corpus", "arguments": "{\\\"query\\\":\\\"b\\\"}"]]])])
+        let outputConflictTelemetry = try packageNineteenEnvelopeTelemetry([JSONSerialization.data(withJSONObject: ["input": [["type": "function_call_output", "call_id": "same", "output": "{\\\"status\\\":\\\"a\\\"}"], ["type": "function_call_output", "call_id": "same", "output": "{\\\"status\\\":\\\"b\\\"}"]]])])
+        try expect((callConflictTelemetry["tool_call_conflict"] as? Bool) == true && (outputConflictTelemetry["tool_output_conflict"] as? Bool) == true,
+                   "P19 cloud telemetry accepted conflicting cumulative call or output payloads")
+        let noToolTransport = PackageNineteenLoopbackStreamingTransport(toolLoop: false)
+        let noToolProvider = packageNineteenLoopbackProvider(transport: noToolTransport)
+        let noToolRun = await packageNineteenCloudTextWithRetry(provider: noToolProvider, query: "Compare one reversible adjustment.", context: .init(sourceType: .vocal, experience: .init(persistentLevel: .amateur)), requestCount: { noToolTransport.requestBodies().count })
+        let noToolEnvelope = String(decoding: noToolTransport.requestBodies().joined(), as: UTF8.self)
+        let toolEnvelope = String(decoding: bodies.joined(), as: UTF8.self)
+        let noToolHasCapture = noToolEnvelope.contains("00000000-0000-0000-0000-000000000069")
+        let noToolHasGoal = noToolEnvelope.contains("Assess one reversible change for the current source")
+        let toolHasCapture = toolEnvelope.contains("00000000-0000-0000-0000-000000000069")
+        try expect(noToolRun.outcome.terminalStatus == "completed" && !noToolHasCapture && !noToolHasGoal && toolHasCapture,
+                   "P19 Lane A no-tool context drifted from the historical P17 sourceType+level baseline completed=\(noToolRun.outcome.terminalStatus) capture=\(noToolHasCapture) goal=\(noToolHasGoal) toolCapture=\(toolHasCapture)")
+        let state = await engine.snapshot()
+        let artifact = packageNineteenGenerationArtifact(
+            prompt: .init(order: 0, topic: "contract", query: "Compare one reversible adjustment with the current capture."), level: .amateur, repetition: 0, attempt: 1,
+            terminalStatus: "completed", text: state.messages.last?.text ?? "", metadata: receipt.provider,
+            telemetry: telemetry, receipt: receipt, experiment: state.experiments.last, persistedExperimentCount: state.experiments.count, latencyMeasured: 0, toolsEnabled: true, safeFailure: nil
+        )
+        try expect((artifact["assistant_text"] as? String ?? "").utf8.count <= 4096 && ((artifact["deterministic_authority_structure"] as? [String: Any])?["no_hidden_reasoning_stored"] as? Bool) == true && ((artifact["tool_results"] as? [[String: Any]]) ?? []).allSatisfy { (($0["output_bytes"] as? Int) ?? 0) <= TutorToolExecutor.maximumToolOutputBytes },
+                   "P19 cloud contract artifact exceeded bounds or retained hidden reasoning")
+        let deterministic = artifact["deterministic_evaluation"] as? [String: Any]
+        let proseFlags = deterministic?["final_prose_flags"] as? [String: Any]
+        try expect(deterministic?["exact_procedure_necessity"] != nil && deterministic?["evidence_honesty"] != nil && deterministic?["authority"] != nil && deterministic?["overall_deterministic_completeness"] != nil && deterministic?["usefulness_structural"] != nil && proseFlags?["has_changed_variable_or_action"] != nil && proseFlags?["has_listen_cue"] != nil && proseFlags?["has_risk"] != nil && proseFlags?["has_stop"] != nil && proseFlags?["has_undo_or_rollback"] != nil && (artifact["serialized_tool_definitions_exact"] as? Bool) == true,
+                   "P19 cloud contract deterministic evaluator or exact seven-tool assertion drifted")
+        let noToolArtifact = packageNineteenGenerationArtifact(prompt: .init(order: 1, topic: "no-tool", query: "q"), level: .noob, repetition: 0, attempt: 1, terminalStatus: "completed", text: "Change one setting, then listen for the risk; stop and undo if it worsens.", metadata: receipt.provider, telemetry: ["tools_sent": [String](), "tool_schema_sha256_by_name": [String: String](), "tool_schema_envelopes": [[String: String]()], "tool_schema_envelope_entry_counts": [0], "tool_schema_envelope_duplicate_names": [false], "provider_request_calls": 1, "tool_rounds": 0, "tool_calls": [[String: Any]](), "tool_results": [[String: Any]]()], receipt: nil, experiment: nil, persistedExperimentCount: 0, latencyMeasured: 0, toolsEnabled: false, safeFailure: nil)
+        try expect((noToolArtifact["serialized_tool_definitions_exact"] as? Bool) == true && ((noToolArtifact["tools_sent"] as? [String]) ?? []).isEmpty,
+                   "P19 no-tool routing advertised a tool definition")
+        let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let fixturePrompts = try packageNineteenCloudPrompts(repository: repository)
+        let hashes = try packageNineteenEvaluationHashes(repository, prompts: fixturePrompts)
+        let cloudSuite = hashes["cloud_prompt_suite"] as? [String: Any]
+        try expect((cloudSuite?["exact_prompt_count"] as? Int) == 12 && cloudSuite?["ordered_prompt_suite_sha256"] as? String == Self.packageNineteenOrderedCloudPromptSHA256 && cloudSuite?["prompt_only_file_sha256"] as? String == Self.packageNineteenCloudPromptSuiteSHA256,
+                   "P19 cloud artifact hash contract omitted the exact ordered 12-prompt suite")
+        let lexicalPrompt = fixturePrompts[0]
+        let lexicalResponses = [TutorExperienceLevel.noob, .amateur, .pro].map { level in
+            PackageSeventeenCloudResponse(prompt: lexicalPrompt, level: level, outcome: .init(text: "A short bounded answer.", metadata: nil, attempts: 1, terminalStatus: "completed", safeFailure: nil))
+        }
+        let lexical = try packageNineteenDeterministicSemanticEvaluation(repository: repository, prompt: lexicalPrompt, triplet: lexicalResponses)
+        try expect(lexical["status"] as? String == "diagnostic_only_nonsemantic_lexical_signal" && lexical["overall_status"] as? String == "indeterminate_requires_blinded_judge" && lexical["all_acceptable_family_matches"] == nil,
+                   "P19 lexical diagnostic retained an authoritative acceptable-family claim")
+        let fixtureA = packageNineteenTopicFixture(.init(order: 0, topic: "vocal_masking", query: "q"))
+        let fixtureB = packageNineteenTopicFixture(.init(order: 7, topic: "sidechain_trigger", query: "q"))
+        try expect(fixtureA.sourceType != fixtureB.sourceType && fixtureA.capture.captureSnapshotID != fixtureB.capture.captureSnapshotID && fixtureA.logicControl != fixtureB.logicControl,
+                   "P19 cloud topic fixtures are not deterministically distinct")
+        let allProviderContextValues = fixturePrompts.flatMap { prompt -> [String] in
+            let fixture = packageNineteenTopicFixture(prompt)
+            return [String(describing: fixture.capture), fixture.logicControl, fixture.limitation]
+        }
+        try expect(fixturePrompts.count == 12 && packageNineteenProviderFacingBoundaryIsClean(bodies: bodies, additionalValues: allProviderContextValues),
+                   "P19 cloud contract leaked evaluator labels or fixture aliases into a provider-facing envelope/tool value")
+        try expect(!packageNineteenProviderFacingBoundaryIsClean(bodies: [], additionalValues: ["Package 019 case-12 evaluation fixture", "sidechain_trigger"]),
+                   "P19 cloud contract leak detector accepted a package/topic/case alias")
+        let completed = PackageNineteenCloudGeneration(artifact: artifact, response: .init(prompt: .init(order: 0, topic: "contract", query: "q"), level: .amateur, outcome: .init(text: "a", metadata: receipt.provider, attempts: 1, terminalStatus: "completed", safeFailure: nil)), providerRequestCalls: bodies.count)
+        let incomplete = PackageNineteenCloudGeneration(artifact: ["terminal_status": "failed"], response: completed.response, providerRequestCalls: 0)
+        try expect(packageNineteenTripletIsGenerationComplete([completed, completed, completed]) && !packageNineteenTripletIsGenerationComplete([completed, completed, incomplete]),
+                   "P19 reference firewall completion predicate drifted")
+        func atLevel(_ level: TutorExperienceLevel) -> PackageNineteenCloudGeneration {
+            var copied = artifact; copied["level"] = level.rawValue
+            return .init(artifact: copied, response: .init(prompt: completed.response.prompt, level: level, outcome: completed.response.outcome), providerRequestCalls: bodies.count)
+        }
+        let orderedSummary = packageNineteenTripletSummary([atLevel(.pro), atLevel(.noob), atLevel(.amateur)], topic: "contract", repetition: 0, semanticEvaluation: ["status": "provider_free_contract_reference_not_read", "reference_read": false])
+        try expect((orderedSummary["levels"] as? [String]) == [TutorExperienceLevel.noob, .amateur, .pro].map(\.rawValue),
+                   "P19 triplet summary level ordering drifted")
+        let fullFlags = deterministic?["final_prose_flags"] as? [String: Any]
+        let noToolFlags = (noToolArtifact["deterministic_evaluation"] as? [String: Any])?["final_prose_flags"] as? [String: Any]
+        try expect(fullFlags?["one_experiment_where_applicable"] as? Bool == false && noToolFlags?["one_experiment_where_applicable"] as? Bool == true && orderedSummary["deterministic_completeness_pass"] != nil,
+                   "P19 completeness contract did not distinguish prose-only and exactly-one-persisted-experiment paths")
+        let retryTransport = PackageNineteenRetryLoopbackStreamingTransport()
+        let retryProvider = OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: retryTransport)
+        let retry = await packageNineteenCloudTextWithRetry(provider: retryProvider, query: "provider-free transient retry", context: .init(sourceType: .vocal), requestCount: { retryTransport.requestCount })
+        try expect(retry.outcome.terminalStatus == "completed" && retry.outcome.attempts == 2 && retry.providerRequestCalls == retryTransport.requestCount && retryTransport.requestCount == 2 && retry.failureHistory.count == 1 && retry.failureHistory.first?["safe_category"] as? String == "timeout",
+                   "P19 cloud retry contract did not retain recovered transient history or bound duplicate calls")
+        let postValidationTransport = PackageNineteenRetryThenUnpinnedMetadataTransport()
+        let postValidationGeneration = try await packageNineteenCloudGeneration(
+            prompt: .init(order: 0, topic: "contract", query: "Provider-free retry accounting."), level: .amateur, repetition: 0,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), toolsEnabled: false,
+            transportFactory: { PackageNineteenRecordingForwardingTransport(base: postValidationTransport) },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let postValidationArtifact = postValidationGeneration.artifact
+        let postValidationHistory = postValidationArtifact["retry_history"] as? [[String: Any]] ?? []
+        try expect(postValidationGeneration.providerRequestCalls == 2 && postValidationTransport.requestCount == 2 && postValidationArtifact["provider_request_calls"] as? Int == 2 && postValidationArtifact["attempts"] as? Int == 2 && postValidationHistory.count == 2 && postValidationHistory.map { $0["attempt"] as? Int } == [1, 2] && postValidationHistory.map { $0["provider_request_calls"] as? Int } == [1, 0] && postValidationHistory.map { $0["safe_category"] as? String } == ["timeout", "provider_rejected"],
+                   "P19 post-response validation rejection misreported the recovered retry attempt or duplicated provider accounting")
+        let fullToolPostValidationTransport = PackageNineteenFullToolThenUnpinnedMetadataTransport()
+        let fullToolPostValidation = try await packageNineteenCloudGeneration(
+            prompt: .init(order: 0, topic: "contract", query: "Provider-free full-tool accounting."), level: .amateur, repetition: 0,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), toolsEnabled: true,
+            transportFactory: { PackageNineteenRecordingForwardingTransport(base: fullToolPostValidationTransport) },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let fullToolPostValidationArtifact = fullToolPostValidation.artifact
+        let fullToolPostValidationHistory = fullToolPostValidationArtifact["retry_history"] as? [[String: Any]] ?? []
+        let fullToolCalls = fullToolPostValidationArtifact["tool_calls"] as? [[String: Any]] ?? []
+        let fullToolResults = fullToolPostValidationArtifact["tool_results"] as? [[String: Any]] ?? []
+        let fullToolReceipts = fullToolPostValidationArtifact["tool_receipts"] as? [[String: Any]] ?? []
+        try expect(fullToolPostValidationTransport.requestCount == 2 && fullToolPostValidation.providerRequestCalls == 2 && fullToolPostValidationArtifact["terminal_status"] as? String == "failed" && fullToolPostValidationArtifact["serialized_tool_definitions_exact"] as? Bool == true && Set(fullToolPostValidationArtifact["tools_sent"] as? [String] ?? []) == Set(TutorToolExecutor.defaultDefinitions.map(\.name)) && fullToolCalls.count == 4 && fullToolResults.count == 4 && fullToolReceipts.count == 4 && fullToolPostValidationHistory.count == 1 && fullToolPostValidationHistory.first?["attempt"] as? Int == 1 && fullToolPostValidationHistory.first?["provider_request_calls"] as? Int == 0 && fullToolPostValidationHistory.first?["safe_category"] as? String == "provider_rejected",
+                   "P19 full-tool post-response rejection discarded observed schemas, calls, results, or receipt telemetry")
+        let preReceiptFullToolTransport = PackageNineteenPreReceiptFailureTransport()
+        let preReceiptFullTool = try await packageNineteenCloudGeneration(
+            prompt: .init(order: 0, topic: "contract", query: "Provider-free pre-receipt full-tool failure."), level: .amateur, repetition: 0,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), toolsEnabled: true,
+            transportFactory: { PackageNineteenRecordingForwardingTransport(base: preReceiptFullToolTransport) },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let preReceiptFullToolArtifact = preReceiptFullTool.artifact
+        let preReceiptFullToolDiagnostics = preReceiptFullToolArtifact["serialized_request_diagnostics"] as? [String: Any] ?? [:]
+        try expect(preReceiptFullToolTransport.requestCount == 1 && preReceiptFullTool.providerRequestCalls == 1 && preReceiptFullToolArtifact["terminal_status"] as? String == "failed" && preReceiptFullToolArtifact["provider"] is NSNull && preReceiptFullToolArtifact["receipt_id"] is NSNull && Set(preReceiptFullToolArtifact["tools_sent"] as? [String] ?? []) == Set(TutorToolExecutor.defaultDefinitions.map(\.name)) && preReceiptFullToolArtifact["serialized_tool_definitions_exact"] as? Bool == true && (preReceiptFullToolArtifact["tool_calls"] as? [[String: Any]] ?? []).isEmpty && (preReceiptFullToolArtifact["tool_results"] as? [[String: Any]] ?? []).isEmpty && (preReceiptFullToolArtifact["tool_receipts"] as? [[String: Any]] ?? []).isEmpty && preReceiptFullToolDiagnostics["request_envelopes_exact"] as? Bool == true && preReceiptFullToolDiagnostics["tool_definitions_exact"] as? Bool == true && preReceiptFullToolDiagnostics["store_false"] as? Bool == true && preReceiptFullToolDiagnostics["model_pinned"] as? Bool == true && preReceiptFullToolDiagnostics["reasoning_effort_high"] as? Bool == true && preReceiptFullToolDiagnostics["service_tier_priority"] as? Bool == true,
+                   "P19 pre-receipt full-tool failure fabricated empty request telemetry or provider/receipt metadata")
+        let preReceiptNoToolTransport = PackageNineteenPreReceiptFailureTransport()
+        let preReceiptNoTool = try await packageNineteenCloudGeneration(
+            prompt: .init(order: 0, topic: "contract", query: "Provider-free pre-receipt no-tool failure."), level: .amateur, repetition: 0,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), toolsEnabled: false,
+            transportFactory: { PackageNineteenRecordingForwardingTransport(base: preReceiptNoToolTransport) },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let preReceiptNoToolArtifact = preReceiptNoTool.artifact
+        let preReceiptNoToolDiagnostics = preReceiptNoToolArtifact["serialized_request_diagnostics"] as? [String: Any] ?? [:]
+        try expect(preReceiptNoToolTransport.requestCount == 1 && preReceiptNoTool.providerRequestCalls == 1 && preReceiptNoToolArtifact["terminal_status"] as? String == "failed" && preReceiptNoToolArtifact["provider"] is NSNull && preReceiptNoToolArtifact["receipt_id"] is NSNull && (preReceiptNoToolArtifact["tools_sent"] as? [String] ?? []).isEmpty && preReceiptNoToolArtifact["serialized_tool_definitions_exact"] as? Bool == true && preReceiptNoToolDiagnostics["request_envelopes_exact"] as? Bool == true && preReceiptNoToolDiagnostics["no_tools_exact"] as? Bool == true && preReceiptNoToolDiagnostics["store_false"] as? Bool == true && preReceiptNoToolDiagnostics["model_pinned"] as? Bool == true && preReceiptNoToolDiagnostics["reasoning_effort_high"] as? Bool == true && preReceiptNoToolDiagnostics["service_tier_priority"] as? Bool == true,
+                   "P19 pre-receipt no-tool failure discarded observed envelope diagnostics or fabricated metadata")
+        let mutatedGenerationTransport = PackageNineteenRetryThenPinnedJudgeTransport()
+        let mutatedGeneration = try await packageNineteenCloudGeneration(
+            prompt: .init(order: 0, topic: "contract", query: "Provider-free generated-envelope policy."), level: .amateur, repetition: 0,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), toolsEnabled: false,
+            transportFactory: {
+                PackageNineteenRecordingForwardingTransport(base: mutatedGenerationTransport, requestMutation: { request in
+                    guard let object = try? JSONSerialization.jsonObject(with: request.body), var envelope = object as? [String: Any] else { return }
+                    envelope["store"] = true
+                    var reasoning = envelope["reasoning"] as? [String: Any] ?? [:]
+                    reasoning["effort"] = TutorReasoningEffort.low.rawValue
+                    envelope["reasoning"] = reasoning
+                    if let mutated = try? JSONSerialization.data(withJSONObject: envelope, options: [.sortedKeys]) { request.body = mutated }
+                })
+            },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let mutatedGenerationArtifact = mutatedGeneration.artifact
+        let mutatedGenerationHistory = mutatedGenerationArtifact["retry_history"] as? [[String: Any]] ?? []
+        let mutatedGenerationDiagnostics = mutatedGenerationArtifact["serialized_request_diagnostics"] as? [String: Any] ?? [:]
+        try expect(mutatedGenerationTransport.requestCount == 2 && mutatedGeneration.providerRequestCalls == 2 && mutatedGenerationArtifact["terminal_status"] as? String == "failed" && mutatedGenerationArtifact["attempts"] as? Int == 2 && mutatedGenerationHistory.count == 2 && mutatedGenerationHistory.map { $0["attempt"] as? Int } == [1, 2] && mutatedGenerationHistory.map { $0["provider_request_calls"] as? Int } == [1, 0] && mutatedGenerationHistory.map { $0["safe_category"] as? String } == ["timeout", "provider_rejected"] && mutatedGenerationDiagnostics["request_envelopes_exact"] as? Bool == false && mutatedGenerationDiagnostics["no_tools_exact"] as? Bool == true && mutatedGenerationDiagnostics["store_false"] as? Bool == false && mutatedGenerationDiagnostics["model_pinned"] as? Bool == true && mutatedGenerationDiagnostics["reasoning_effort_high"] as? Bool == false && mutatedGenerationDiagnostics["service_tier_priority"] as? Bool == true,
+                   "P19 generation accepted a mutated store/reasoning serialized request envelope or lost its actual diagnostics")
+        let postValidationJudgeTransport = PackageNineteenRetryThenUnpinnedJudgeMetadataTransport()
+        let postValidationJudge = try await packageNineteenSupportingJudgment(
+            repository: repository, prompt: lexicalPrompt, triplet: lexicalResponses,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), repetition: 0,
+            transportFactory: { PackageNineteenRecordingForwardingTransport(base: postValidationJudgeTransport) },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let postValidationJudgeHistory = postValidationJudge["retry_history"] as? [[String: Any]] ?? []
+        let postValidationJudgeDimensions = postValidationJudge["dimensions"] as? [String: Bool] ?? [:]
+        let postValidationJudgeRequestDiagnostics = postValidationJudge["serialized_request_diagnostics"] as? [String: Any] ?? [:]
+        try expect(postValidationJudgeTransport.requestCount == 2 && postValidationJudge["provider_request_calls"] as? Int == 2 && postValidationJudge["attempts"] as? Int == 2 && postValidationJudgeHistory.count == 2 && postValidationJudgeHistory.map { $0["attempt"] as? Int } == [1, 2] && postValidationJudgeHistory.map { $0["provider_request_calls"] as? Int } == [1, 0] && postValidationJudgeHistory.map { $0["safe_category"] as? String } == ["timeout", "provider_rejected"] && postValidationJudgeDimensions.count == 5 && postValidationJudgeRequestDiagnostics["request_envelopes_exact"] as? Bool == true && postValidationJudgeRequestDiagnostics["no_tools_exact"] as? Bool == true && postValidationJudgeRequestDiagnostics["store_false"] as? Bool == true && postValidationJudgeRequestDiagnostics["model_pinned"] as? Bool == true && postValidationJudgeRequestDiagnostics["reasoning_effort_high"] as? Bool == true && postValidationJudgeRequestDiagnostics["service_tier_priority"] as? Bool == true && postValidationJudge["terminal_status"] as? String == "failed" && postValidationJudge["judge_result_status"] as? String == "invalid_unpinned_provider_metadata" && postValidationJudge["safe_category"] as? String == "provider_rejected" && postValidationJudge["safe_failure"] as? String != nil,
+                   "P19 supporting-judge post-response rejection misreported parsed JSON as terminal acceptance or malformed JSON")
+        let mutatedJudgeTransport = PackageNineteenRetryThenPinnedJudgeTransport()
+        let mutatedEnvelopeJudge = try await packageNineteenSupportingJudgment(
+            repository: repository, prompt: lexicalPrompt, triplet: lexicalResponses,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), repetition: 0,
+            transportFactory: {
+                PackageNineteenRecordingForwardingTransport(base: mutatedJudgeTransport, requestMutation: { request in
+                    guard let object = try? JSONSerialization.jsonObject(with: request.body), var envelope = object as? [String: Any] else { return }
+                    envelope["store"] = true
+                    if let mutated = try? JSONSerialization.data(withJSONObject: envelope, options: [.sortedKeys]) { request.body = mutated }
+                })
+            },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let mutatedEnvelopeHistory = mutatedEnvelopeJudge["retry_history"] as? [[String: Any]] ?? []
+        let mutatedEnvelopeDiagnostics = mutatedEnvelopeJudge["serialized_request_diagnostics"] as? [String: Any] ?? [:]
+        try expect(mutatedJudgeTransport.requestCount == 2 && mutatedEnvelopeJudge["provider_request_calls"] as? Int == 2 && mutatedEnvelopeJudge["attempts"] as? Int == 2 && mutatedEnvelopeHistory.count == 2 && mutatedEnvelopeHistory.map { $0["attempt"] as? Int } == [1, 2] && mutatedEnvelopeHistory.map { $0["provider_request_calls"] as? Int } == [1, 0] && mutatedEnvelopeHistory.map { $0["safe_category"] as? String } == ["timeout", "provider_rejected"] && mutatedEnvelopeJudge["terminal_status"] as? String == "failed" && mutatedEnvelopeJudge["judge_result_status"] as? String == "invalid_request_envelope" && mutatedEnvelopeDiagnostics["request_envelopes_exact"] as? Bool == false && mutatedEnvelopeDiagnostics["no_tools_exact"] as? Bool == true && mutatedEnvelopeDiagnostics["store_false"] as? Bool == false && mutatedEnvelopeDiagnostics["model_pinned"] as? Bool == true && mutatedEnvelopeDiagnostics["reasoning_effort_high"] as? Bool == true && mutatedEnvelopeDiagnostics["service_tier_priority"] as? Bool == true,
+                   "P19 supporting judge accepted a mutated serialized request envelope or misreported its retry accounting")
+        let extraFieldJudgeTransport = PackageNineteenExtraFieldJudgeTransport()
+        let extraFieldJudgeArtifact = try await packageNineteenSupportingJudgment(
+            repository: repository, prompt: lexicalPrompt, triplet: lexicalResponses,
+            configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), repetition: 0,
+            transportFactory: { PackageNineteenRecordingForwardingTransport(base: extraFieldJudgeTransport) },
+            providerFactory: { transport in
+                OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+            }
+        )
+        let extraFieldJudgeHistory = extraFieldJudgeArtifact["retry_history"] as? [[String: Any]] ?? []
+        let extraFieldJudgeArtifactText = String(describing: extraFieldJudgeArtifact)
+        try expect(extraFieldJudgeTransport.requestCount == 1 && extraFieldJudgeArtifact["provider_request_calls"] as? Int == 1 && extraFieldJudgeArtifact["attempts"] as? Int == 1 && extraFieldJudgeArtifact["terminal_status"] as? String == "failed" && extraFieldJudgeArtifact["judge_result_status"] as? String == "invalid_extra_fields" && extraFieldJudgeArtifact["safe_category"] as? String == "malformed_provider_response" && extraFieldJudgeArtifact["safe_failure"] as? String != nil && extraFieldJudgeHistory.count == 1 && extraFieldJudgeHistory.first?["attempt"] as? Int == 1 && extraFieldJudgeHistory.first?["provider_request_calls"] as? Int == 0 && extraFieldJudgeHistory.first?["safe_category"] as? String == "malformed_provider_response" && (extraFieldJudgeArtifact["dimensions"] as? [String: Bool] ?? [:]).isEmpty && extraFieldJudgeArtifact["judge_text"] == nil && (extraFieldJudgeArtifact["judge_text_sha256"] as? String)?.count == 64 && (extraFieldJudgeArtifact["judge_text_bytes"] as? Int ?? 0) > 0 && extraFieldJudgeArtifact["hidden_reasoning_stored"] as? Bool == false && !extraFieldJudgeArtifactText.contains("reference-derived explanation"),
+                   "P19 supporting judge accepted or retained an extra-field rationale/reference response")
+        let completedThenErrorTransport = PackageNineteenCompletedThenErrorTransport()
+        let completedThenErrorProvider = OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: completedThenErrorTransport)
+        let completedThenError = await packageNineteenCloudTextWithRetry(provider: completedThenErrorProvider, query: "provider-free completion boundary", context: .init(sourceType: .vocal), requestCount: { completedThenErrorTransport.requestCount })
+        try expect(completedThenError.outcome.terminalStatus == "completed" && completedThenError.outcome.attempts == 1 && completedThenErrorTransport.requestCount == 1 && completedThenError.durableCompletionWarning != nil,
+                   "P19 cloud retry contract retried a stream that had already completed")
+        let fallbackTransport = PackageNineteenEngineTimeoutTransport()
+        let fallbackProvider = OpenAITutorProvider(configuration: .init(modelIdentifier: "gpt-test", cloudTextConsent: true), credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: fallbackTransport)
+        let fallbackRoot = temporaryRoot("p19-engine-fallback-contract"); defer { try? FileManager.default.removeItem(at: fallbackRoot) }
+        let fallbackEngine = TutorConversationEngine(store: TutorConversationStore(rootURL: fallbackRoot), tools: try TutorToolExecutor(), fallbackProvider: try OfflineTutorProvider())
+        let fallbackEvents = try await collectTurn(fallbackEngine, "Compare one reversible adjustment.", .init(sourceType: .vocal, consent: .init(cloudTextGranted: true)), fallbackProvider)
+        guard let fallbackReceipt = fallbackEvents.compactMap({ if case let .completed(_, receipt) = $0 { return receipt }; return nil }).last,
+              let fallbackReason = fallbackReceipt.fallbackReason else {
+            throw TestFailure(description: "P19 engine fallback contract did not persist a durable fallback receipt")
+        }
+        let fallbackHistory = packageNineteenEngineFallbackHistory(attempt: 1, fallbackReason: fallbackReason, providerRequestCalls: fallbackTransport.requestCount, latencyMilliseconds: 0)
+        let fallbackEvent: [String: Any] = fallbackHistory.first ?? [:]
+        let fallbackCategory = fallbackEvent["safe_category"] as? String
+        let fallbackRetried = fallbackEvent["retry_performed"] as? Bool
+        let fallbackDurable = fallbackEvent["durable_fallback_completed"] as? Bool
+        try expect(fallbackTransport.requestCount == 1 && fallbackHistory.count == 1 && fallbackCategory == "timeout" && fallbackRetried == false && fallbackDurable == true,
+                   "P19 engine fallback contract retried or failed to retain the primary timed-out provider attempt")
+        let validJudge = packageNineteenParseSupportingJudgeJSON(#"{"usefulness":true,"evidence_honesty":true,"strict_level_invariance":false,"experiment_completeness":true,"exact_procedure_necessity":false}"#)
+        let invalidJudge = packageNineteenParseSupportingJudgeJSON(#"{"usefulness":true}"#)
+        let extraFieldJudge = packageNineteenParseSupportingJudgeJSON(#"{"usefulness":true,"evidence_honesty":true,"strict_level_invariance":false,"experiment_completeness":true,"exact_procedure_necessity":false,"rationale":"reference-derived explanation"}"#)
+        let numericJudge = packageNineteenParseSupportingJudgeJSON(#"{"usefulness":1,"evidence_honesty":true,"strict_level_invariance":false,"experiment_completeness":true,"exact_procedure_necessity":false}"#)
+        try expect(validJudge.status == "valid" && validJudge.dimensions.count == 5 && invalidJudge.status == "invalid_missing_or_nonboolean_dimensions" && extraFieldJudge.status == "invalid_extra_fields" && numericJudge.status == "invalid_missing_or_nonboolean_dimensions",
+                   "P19 supporting-judge JSON contract accepted extra, non-boolean, or incomplete dimensions")
+        let pinnedMetadata = TutorProviderMetadata(providerIdentifier: OpenAITutorProvider().providerIdentifier, modelIdentifier: "gpt-5.6-sol", serviceTier: .priority)
+        try expect(Self.packageNineteenCloudMetadataIsPinned(pinnedMetadata) && !Self.packageNineteenCloudMetadataIsPinned(.init(providerIdentifier: "other", modelIdentifier: "gpt-5.6-sol", serviceTier: .priority)) && !Self.packageNineteenCloudMetadataIsPinned(.init(providerIdentifier: OpenAITutorProvider().providerIdentifier, modelIdentifier: "gpt-other", serviceTier: .priority)) && !Self.packageNineteenCloudMetadataIsPinned(.init(providerIdentifier: OpenAITutorProvider().providerIdentifier, modelIdentifier: "gpt-5.6-sol", serviceTier: .fast)),
+                   "P19 provider/model/priority metadata gate did not fail closed")
+        let unavailableResult: [[String: Any]] = [["name": "get_logic_procedure", "reviewed_or_procedure_found": false, "reviewed_or_procedure_status": "unavailable"]]
+        let procedureWithDisclosure = packageNineteenDeterministicEvaluation(text: "The exact reviewed procedure or navigation is unavailable and not verified.", experiment: nil, persistedExperimentCount: 0, toolCalls: [["name": "get_logic_procedure"]], toolResults: unavailableResult, receiptBinding: true, permittedToolAuthority: true, topic: "cannot_find", toolsEnabled: true)
+        let procedureWithoutDisclosure = packageNineteenDeterministicEvaluation(text: "The microphone is unavailable, so try the next setting.", experiment: nil, persistedExperimentCount: 0, toolCalls: [["name": "get_logic_procedure"], ["name": "inspect_logic"]], toolResults: unavailableResult, receiptBinding: true, permittedToolAuthority: true, topic: "cannot_find", toolsEnabled: true)
+        let withProcedure = procedureWithDisclosure["exact_procedure_necessity"] as? [String: Any]
+        let withoutProcedure = procedureWithoutDisclosure["exact_procedure_necessity"] as? [String: Any]
+        try expect(withProcedure?["status"] as? String == "satisfied" && withProcedure?["tool_result_unavailable"] as? Bool == true && withProcedure?["prose_unavailable_disclosure"] as? Bool == true && withoutProcedure?["status"] as? String == "missing" && withoutProcedure?["prose_unavailable_disclosure"] as? Bool == false,
+                   "P19 cannot-find procedure contract accepted unavailable tooling without honest prose disclosure with=\(withProcedure ?? [:]) without=\(withoutProcedure ?? [:])")
+    }
+
     private func packageNineteenLoopbackProvider(transport: PackageNineteenLoopbackStreamingTransport) -> OpenAITutorProvider {
         OpenAITutorProvider(
             configuration: .init(modelIdentifier: "gpt-test", cloudTextConsent: true),
@@ -1742,97 +2083,972 @@ private final class Suite {
             sha256: String(repeating: identifier.hasSuffix("29") ? "b" : "a", count: 64),
             capturedAt: Date(timeIntervalSince1970: 1_786_300_000),
             durationSeconds: 8,
-            scopeDescription: "Deterministic local-only P19 capture fixture.",
+            scopeDescription: "Deterministic local capture context.",
             formatDescription: "48000 Hz mono WAV",
             isLive: true,
-            metrics: [TutorMetricEvidence(identifier: "p19_local_fixture_metric", value: 0.2, unit: "ratio", confidence: 0.8, interpretationBoundary: "Local fixture measurement; not model listening.")],
+            metrics: [TutorMetricEvidence(identifier: "local_capture_context_metric", value: 0.2, unit: "ratio", confidence: 0.8, interpretationBoundary: "Local measurement; not model listening.")],
             localAnalysisLimitations: ["No audio bytes are uploaded in the provider-free harness."]
         )
     }
 
-    /// An executable opt-in cloud harness.  It is intentionally not part of
-    /// deterministic verification: without the explicit argument this throws
-    /// before constructing a provider request, and this Package 019 lane never
-    /// invokes it.  When opted in it uses the production provider request path
-    /// (which sets `store:false`) and records only bounded metadata/hashes.
+    /// Topic-specific injected state is evaluation-only. It gives each cloud
+    /// case a deterministic source/capture/control identity without claiming a
+    /// real Logic observation or uploading any audio.
+    private func packageNineteenTopicFixture(_ prompt: PackageSeventeenCloudPrompt) -> PackageNineteenTopicFixture {
+        let source: SourceType
+        let control: String
+        switch prompt.topic {
+        case "midi_groove": source = .keyboard; control = "Quantize controls"
+        case "flex_artifact": source = .vocal; control = "Flex Time controls"
+        case "sidechain_trigger": source = .drumBus; control = "Side Chain input"
+        case "bounce_tail": source = .fullMix; control = "Bounce tail setting"
+        case "layering_redundancy": source = .vocalBus; control = "Track Stack disclosure"
+        case "automation_owner": source = .vocal; control = "Automation mode"
+        case "duplicate_monitoring": source = .vocal; control = "Input Monitoring"
+        case "compression_sibilance": source = .vocal; control = "De-esser threshold"
+        case "eq_tradeoff", "vocal_masking": source = .vocal; control = "Channel EQ"
+        default: source = .vocal; control = "Exact-control lookup"
+        }
+        let suffix = String(format: "%012d", prompt.order + 700)
+        let captureID = UUID(uuidString: "00000000-0000-0000-0000-\(suffix)")!
+        let marker = String(UnicodeScalar(97 + (prompt.order % 20))!)
+        // This information is deliberately natural and label-free because it
+        // crosses the provider/tool boundary. The topic identity is retained
+        // only in the post-generation artifact below.
+        let limitation = "Read-only local context; it is not a Logic observation or an audio-listening claim."
+        let capture = TutorCaptureSnapshot(
+            sourceType: source, instanceID: UUID(uuidString: "00000000-0000-0000-0000-000000000149")!, runtimeEpoch: UUID(uuidString: "00000000-0000-0000-0000-000000000159")!, captureSnapshotID: captureID,
+            sha256: String(repeating: marker, count: 64), capturedAt: Date(timeIntervalSince1970: 1_786_300_000), durationSeconds: 8,
+            scopeDescription: "Current source capture context", formatDescription: "48000 Hz mono local context", isLive: true,
+            metrics: [.init(identifier: "local_source_balance_metric", value: Double(prompt.order + 1) / 100, unit: "ratio", confidence: 0.8, interpretationBoundary: limitation)],
+            localAnalysisLimitations: [limitation]
+        )
+        return .init(sourceType: source, capture: capture, logicControl: control, limitation: limitation, identity: ["topic": prompt.topic, "source_type": source.rawValue, "capture_snapshot_id": captureID.uuidString, "capture_sha256": capture.sha256, "logic_control": control, "limitation": limitation])
+    }
+
+    /// Executable opt-in cloud harness. It stays outside deterministic runs:
+    /// without the exact consent flag it fails before any provider/transport is
+    /// constructed. Full-tool and repeated-triplet lanes share the real engine
+    /// path; artifacts derive from sent envelopes and durable receipts.
     private func testPackageNineteenCloud(_ lane: PackageNineteenCloudLane) async throws {
         guard CommandLine.arguments.contains("--cloud-text-consent") else {
             throw TestFailure(description: "Package 019 cloud harness requires --cloud-text-consent; zero provider requests were sent")
         }
         let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
-        let model = UserDefaults.standard.string(forKey: "TrackSmithTutorModelIdentifier") ?? "gpt-5.6-sol"
-        let effort = TutorReasoningEffort(rawValue: UserDefaults.standard.string(forKey: "TrackSmithTutorReasoningEffort") ?? "high") ?? .high
-        let configuration = TutorProviderConfiguration(modelIdentifier: model, reasoningEffort: effort, cloudTextConsent: true)
-        let provider = OpenAITutorProvider(configuration: configuration)
-        let prompts = try packageSeventeenAcceptancePrompts(repository: repository)
-        // Lane A is the current-policy no-tool 12-prompt level triplet. Lane C
-        // repeats that complete triplet three times.  Lane B uses the same
-        // production prompt breadth but routes each turn through the actual
-        // engine/tool loop rather than merely advertising tool definitions.
-        let levels: [TutorExperienceLevel] = TutorExperienceLevel.allCases
+        let configuration = TutorProviderConfiguration(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true)
+        try expect(Self.packageSeventeenCloudConfigurationIsPinned(configuration), "P19 cloud harness requires gpt-5.6-sol, high effort, and priority service tier")
+        let prompts = try packageNineteenCloudPrompts(repository: repository)
+        let levels: [TutorExperienceLevel] = [.noob, .amateur, .pro]
         let repetitions = lane == .repeatedTriplets ? 3 : 1
-        let offeredTools = lane == .noTool ? [] : TutorToolExecutor.defaultDefinitions
-        var attempts: [[String: Any]] = []
+        let toolsEnabled = lane != .noTool
+        var generations: [PackageNineteenCloudGeneration] = []
+        var triplets: [[String: Any]] = []
+        var supportingJudgments: [[String: Any]] = []
+
         for repetition in 0..<repetitions {
             for prompt in prompts {
+                var topicTriplet: [PackageNineteenCloudGeneration] = []
                 for level in levels {
-                let started = Date()
-                var text = ""
-                var metadata: TutorProviderMetadata?
-                var functionCalls = 0
-                do {
-                    if lane == .fullTool {
-                        let root = temporaryRoot("p19-cloud-tools")
-                        defer { try? FileManager.default.removeItem(at: root) }
-                        let prior = TutorExperimentRecord(draft: experimentDraft(title: "P19 cloud baseline"), outcome: .noChange)
-                        let executor = try TutorToolExecutor(
-                            observeLogic: { query in .init(status: .observed, applicationName: "Logic Pro", bundleIdentifier: "com.apple.logic10", windowTitle: "P19 cloud injected fixture", controls: [.init(role: "AXButton", label: query, value: "off", frame: .init(x: 1, y: 1, width: 1, height: 1))], limitation: "Injected read-only Package 019 cloud harness state.") },
-                            priorExperiments: { [prior] }
-                        )
-                        let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: root), tools: executor, fallbackProvider: try OfflineTutorProvider())
-                        let context = TutorRuntimeContext(sourceType: .vocal, capture: sampleCapture(wavData: Data("p19-cloud-capture".utf8)), consent: .init(cloudTextGranted: true), experience: .init(persistentLevel: level))
-                        let events = try await collectTurn(engine, prompt.query, context, provider)
-                        guard let receipt = events.compactMap({ if case let .completed(_, receipt) = $0 { return receipt }; return nil }).last else {
-                            throw TutorConversationError.malformedProviderResponse("Cloud tool harness completed without a receipt.")
-                        }
-                        metadata = receipt.provider
-                        functionCalls = receipt.tools.count
-                        text = (await engine.snapshot()).messages.last?.text ?? ""
-                    } else {
-                        let request = TutorProviderRequest(messages: [.init(role: .user, text: prompt.query)], context: .init(sourceType: .vocal, experience: .init(persistentLevel: level)), tools: [])
-                        for try await event in provider.stream(request) {
-                            switch event {
-                            case let .textDelta(delta): text += delta
-                            case let .completed(value, output):
-                                metadata = value
-                                functionCalls += output.reduce(0) { partial, item in
-                                    if case .functionCall = item { return partial + 1 }
-                                    return partial
-                                }
-                            }
-                        }
-                    }
-                    attempts.append([
-                        "repetition": repetition, "topic": prompt.topic, "query_sha256": sha256(Data(prompt.query.utf8)), "level": level.rawValue, "status": "completed",
-                        "provider": metadata?.providerIdentifier ?? "unknown", "model": metadata?.modelIdentifier ?? model,
-                        "service_tier": metadata?.serviceTier?.rawValue ?? NSNull(),
-                        "input_tokens": metadata?.inputTokens ?? NSNull(), "output_tokens": metadata?.outputTokens ?? NSNull(),
-                        "latency_ms": Int(Date().timeIntervalSince(started) * 1_000),
-                        "assistant_text_sha256": sha256(Data(text.utf8)), "tool_calls_requested": functionCalls,
-                    ])
-                } catch {
-                    let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "provider request failed safely"
-                    attempts.append(["repetition": repetition, "topic": prompt.topic, "level": level.rawValue, "status": "failed", "safe_failure": safe, "latency_ms": Int(Date().timeIntervalSince(started) * 1_000)])
-                    let artifact: [String: Any] = ["package": "019", "lane": String(describing: lane), "consent": "explicit --cloud-text-consent", "store": false, "requested_model": model, "reasoning_effort": effort.rawValue, "service_tier": configuration.serviceTier?.rawValue ?? NSNull(), "tools_offered": offeredTools.map(\.name), "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "attempts": attempts, "provider_calls": attempts.count]
-                    try JSONSerialization.data(withJSONObject: artifact, options: [.sortedKeys, .prettyPrinted]).write(to: repository.appendingPathComponent("docs/evidence/PACKAGE_019_CLOUD_\(String(describing: lane)).json"))
-                    throw error
+                    let generation = try await packageNineteenCloudGeneration(
+                        prompt: prompt, level: level, repetition: repetition,
+                        configuration: configuration, toolsEnabled: toolsEnabled
+                    )
+                    topicTriplet.append(generation); generations.append(generation)
                 }
+                // Evaluation-only references remain unopened unless the three
+                // original samples for this topic/repetition all completed.
+                let generationComplete = packageNineteenTripletIsGenerationComplete(topicTriplet)
+                let semanticEvaluation: [String: Any]
+                if generationComplete {
+                    do { semanticEvaluation = try packageNineteenDeterministicSemanticEvaluation(repository: repository, prompt: prompt, triplet: topicTriplet.map(\.response)) }
+                    catch { semanticEvaluation = ["status": "reference_unavailable_after_generation", "reference_read": false, "safe_failure": "Evaluation-only semantic reference was unavailable after generation."] }
+                } else {
+                    semanticEvaluation = ["status": "not_run_incomplete_generation", "reference_read": false]
+                }
+                triplets.append(packageNineteenTripletSummary(topicTriplet, topic: prompt.topic, repetition: repetition, semanticEvaluation: semanticEvaluation))
+                if generationComplete {
+                    do {
+                        let judgment = try await packageNineteenSupportingJudgment(
+                            repository: repository, prompt: prompt,
+                            triplet: topicTriplet.map(\.response), configuration: configuration,
+                            repetition: repetition
+                        )
+                        supportingJudgments.append(judgment)
+                    } catch {
+                        let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "The post-generation supporting judgment failed safely."
+                        supportingJudgments.append(["topic": prompt.topic, "repetition": repetition, "status": "failed", "semantic_reference_read": false, "provider_request_calls": 0, "safe_failure": Self.boundedEvaluationText(safe, maximumUTF8Bytes: 768), "hidden_reasoning_stored": false])
+                    }
+                } else {
+                    supportingJudgments.append([
+                        "topic": prompt.topic, "repetition": repetition,
+                        "status": "skipped_incomplete_generation",
+                        "semantic_reference_read": false,
+                        "boundary": "No reference was read or sent because the original generation triplet was incomplete.",
+                    ])
                 }
             }
         }
-        let artifact: [String: Any] = ["package": "019", "lane": String(describing: lane), "consent": "explicit --cloud-text-consent", "store": false, "requested_model": model, "reasoning_effort": effort.rawValue, "service_tier": configuration.serviceTier?.rawValue ?? NSNull(), "tools_offered": offeredTools.map(\.name), "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "attempts": attempts, "provider_calls": attempts.count]
-        try JSONSerialization.data(withJSONObject: artifact, options: [.sortedKeys, .prettyPrinted]).write(to: repository.appendingPathComponent("docs/evidence/PACKAGE_019_CLOUD_\(String(describing: lane)).json"))
-        print("P19_CLOUD_HARNESS_OK lane=\(String(describing: lane)) attempts=\(attempts.count) store=false")
+        let attempts = generations.map(\.artifact)
+        let failures = attempts.filter { ($0["terminal_status"] as? String) != "completed" }
+        let judgmentFailures = supportingJudgments.filter { ($0["terminal_status"] as? String) == "failed" || ($0["status"] as? String) == "failed" }
+        let generationFailureHistory = attempts.flatMap { $0["retry_history"] as? [[String: Any]] ?? [] }
+        let judgmentFailureHistory = supportingJudgments.flatMap { $0["retry_history"] as? [[String: Any]] ?? [] }
+        let allFailureHistory = generationFailureHistory + judgmentFailureHistory
+        let completedFailureHistory = attempts.filter { ($0["terminal_status"] as? String) == "completed" }.flatMap { $0["retry_history"] as? [[String: Any]] ?? [] }
+            + supportingJudgments.filter { ($0["terminal_status"] as? String) == "completed" }.flatMap { $0["retry_history"] as? [[String: Any]] ?? [] }
+        let timeoutAttemptCount = allFailureHistory.filter { ($0["safe_category"] as? String) == "timeout" }.count
+        let recoveredRetryTimeoutCount = completedFailureHistory.filter { ($0["safe_category"] as? String) == "timeout" }.count
+        let terminalTimeoutAttemptCount = timeoutAttemptCount - recoveredRetryTimeoutCount
+        func terminalTimeout(_ item: [String: Any]) -> Bool {
+            let status = item["terminal_status"] as? String ?? item["status"] as? String ?? ""
+            let safe = item["safe_failure"] as? String ?? ""
+            return status != "completed" && (safe.localizedCaseInsensitiveContains("timed out") || safe.localizedCaseInsensitiveContains("timeout"))
+        }
+        let terminalTimeoutSampleCount = attempts.filter(terminalTimeout).count + supportingJudgments.filter(terminalTimeout).count
+        let providerRequestCalls = generations.reduce(0) { $0 + $1.providerRequestCalls }
+            + supportingJudgments.reduce(0) { $0 + (($1["provider_request_calls"] as? Int) ?? 0) }
+        let artifact: [String: Any] = [
+            "schema_version": "package019-cloud-evaluation/2",
+            "package": "019",
+            "lane": packageNineteenLaneName(lane),
+            "lane_semantics": toolsEnabled ? "real TutorConversationEngine + all seven production tools; repeated lane independently repeats this exact path" : "current-policy provider-only comparison with no tools sent",
+            "source_identity": packageNineteenSourceIdentity(repository),
+            "evaluation_hashes": try packageNineteenEvaluationHashes(repository, prompts: prompts),
+            "configuration": ["provider": OpenAITutorProvider().providerIdentifier, "model": configuration.modelIdentifier, "reasoning_effort": configuration.reasoningEffort.rawValue, "service_tier": packageNineteenJSONOrNull(configuration.serviceTier?.rawValue), "store": false, "cloud_text_consent": "explicit --cloud-text-consent", "audio_present": false, "logic_context": toolsEnabled ? "deterministic injected read-only context" : "historical_p17_no_tool_context_source_vocal_plus_level_only"],
+            "counts": ["exact_prompt_count": prompts.count, "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "level_count": levels.count, "repetitions": repetitions, "generation_samples": attempts.count, "provider_request_calls": providerRequestCalls, "tool_enabled_samples": attempts.filter { (($0["tools_sent"] as? [String]) ?? []).isEmpty == false }.count, "supporting_judgments": supportingJudgments.count],
+            "retry_policy": [
+                "by_lane": [
+                    "full_tool": ["maximum_turn_attempts": 1, "durable_fallback_retried": false],
+                    "repeated_triplets": ["maximum_turn_attempts": 1, "durable_fallback_retried": false],
+                    "no_tool": ["maximum_attempts": 2, "retry_only_typed_transient": true, "completed_after_error_retained": true],
+                    "supporting_judge": ["maximum_attempts": 2, "retry_only_typed_transient": true, "completed_after_error_retained": true],
+                ],
+                "completed_requests_retried": 0,
+                "recovered_or_terminal_failure_history": allFailureHistory,
+            ],
+            "tokens": ["input": "per-attempt provider metadata", "output": "per-attempt provider metadata"],
+            "latency_ms": ["first_token": NSNull(), "total_turn": "per-attempt measured value"], "cost": NSNull(),
+            "attempts": attempts,
+            "deterministic_triplet_summaries": triplets,
+            "supporting_model_assisted_judgments": supportingJudgments,
+            "owner_artistic_or_usability_judgment": "not_run_no_owner_review",
+            "failure_count": allFailureHistory.count,
+            "terminal_failure_sample_count": failures.count + judgmentFailures.count,
+            "recovered_retry_timeout_count": recoveredRetryTimeoutCount,
+            "terminal_timeout_attempt_count": terminalTimeoutAttemptCount,
+            "terminal_timeout_sample_count": terminalTimeoutSampleCount,
+            "timeout_count": timeoutAttemptCount,
+            "partial_failure_honesty": "Artifact is atomically written after all attempted samples; failed/incomplete samples remain explicit and are never reused as completed responses.",
+            "generation_reference_firewall": "No evaluation-only semantic reference is read or sent until all three original level responses for that topic/repetition complete. Hidden reasoning is never stored.",
+        ]
+        try packageNineteenWriteCloudArtifact(artifact, lane: lane, repository: repository)
+        guard failures.isEmpty && judgmentFailures.isEmpty else {
+            throw TestFailure(description: "Package 019 cloud harness wrote an honest partial artifact with \(failures.count) failed or fallback-excluded generation samples and \(judgmentFailures.count) failed or invalid supporting judgments")
+        }
+        print("P19_CLOUD_HARNESS_OK lane=\(packageNineteenLaneName(lane)) samples=\(attempts.count) providerRequests=\(providerRequestCalls) store=false")
+    }
+
+    private func packageNineteenCloudGeneration(
+        prompt: PackageSeventeenCloudPrompt,
+        level: TutorExperienceLevel,
+        repetition: Int,
+        configuration: TutorProviderConfiguration,
+        toolsEnabled: Bool,
+        transportFactory: (() -> PackageNineteenRecordingForwardingTransport)? = nil,
+        providerFactory: ((PackageNineteenRecordingForwardingTransport) -> OpenAITutorProvider)? = nil
+    ) async throws -> PackageNineteenCloudGeneration {
+        var totalRequests = 0
+        var retryHistory: [[String: Any]] = []
+        let fixture = toolsEnabled ? packageNineteenTopicFixture(prompt) : nil
+        // The engine owns durable fallback for a tool turn. It is therefore
+        // one turn only: retrying a completed/fallback receipt would duplicate
+        // a user-visible turn. Direct provider-only/judge paths may retry once.
+        for attempt in 1...1 {
+            let transport = transportFactory?() ?? PackageNineteenRecordingForwardingTransport()
+            let provider = providerFactory?(transport) ?? OpenAITutorProvider(configuration: configuration, transport: transport)
+            let started = Date()
+            var attemptRequestsCounted = false
+            var terminalAttemptCount = attempt
+            var observedTelemetry: [String: Any]?
+            var observedRequestDiagnostics: [String: Any]?
+            var observedReceipt: TutorEvidenceReceipt?
+            var observedMetadata: TutorProviderMetadata?
+            var observedText = ""
+            var observedExperiment: TutorExperimentRecord?
+            var observedPersistedExperimentCount = 0
+            do {
+                if toolsEnabled {
+                    let root = temporaryRoot("p19-cloud-\(repetition)-\(prompt.order)-\(level.rawValue)-\(attempt)")
+                    defer { try? FileManager.default.removeItem(at: root) }
+                    let prior = TutorExperimentRecord(draft: experimentDraft(title: "Saved baseline comparison"), outcome: .noChange)
+                    let executor = try TutorToolExecutor(
+                        observeLogic: { _ in .init(status: .observed, applicationName: "Logic Pro", bundleIdentifier: "com.apple.logic10", windowTitle: "Current channel inspector", controls: [.init(role: "AXButton", label: fixture?.logicControl ?? "Current control", value: "available", frame: .init(x: 1, y: 1, width: 1, height: 1))], limitation: fixture?.limitation ?? "Read-only local context.") },
+                        priorExperiments: { [prior] }
+                    )
+                    let engine = TutorConversationEngine(store: TutorConversationStore(rootURL: root), tools: executor, fallbackProvider: try OfflineTutorProvider())
+                    let context = TutorRuntimeContext(sourceType: fixture?.sourceType ?? .vocal, projectGoal: "Assess one reversible change for the current source without assuming the cause.", capture: fixture?.capture, consent: .init(cloudTextGranted: true), experience: .init(persistentLevel: level))
+                    let events = try await collectTurn(engine, prompt.query, context, provider)
+                    guard let receipt = events.compactMap({ if case let .completed(_, receipt) = $0 { return receipt }; return nil }).last else {
+                        throw TutorConversationError.malformedProviderResponse("Cloud tool harness completed without a receipt.")
+                    }
+                    let state = await engine.snapshot()
+                    let text = state.messages.last?.text ?? ""
+                    let telemetry = packageNineteenObservedEnvelopeTelemetry(transport.requestBodies())
+                    let requestDiagnostics = packageNineteenRequestDiagnostics(transport.requestBodies(), toolsEnabled: true)
+                    observedTelemetry = telemetry
+                    observedRequestDiagnostics = requestDiagnostics
+                    observedReceipt = receipt
+                    observedMetadata = receipt.provider
+                    observedText = text
+                    observedExperiment = state.experiments.last
+                    observedPersistedExperimentCount = state.experiments.count
+                    let sent = telemetry["tools_sent"] as? [String] ?? []
+                    guard Set(sent) == Set(TutorToolExecutor.defaultDefinitions.map(\.name)), sent.count == TutorToolExecutor.defaultDefinitions.count,
+                          packageNineteenExactSerializedToolSchemas(actual: telemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: telemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: telemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: telemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], conflict: telemetry["tool_schema_conflict"] as? Bool ?? true, invalid: telemetry["invalid_tool_schema_entry"] as? Bool ?? true, callConflict: telemetry["tool_call_conflict"] as? Bool ?? true, outputConflict: telemetry["tool_output_conflict"] as? Bool ?? true, invalidCallOrOutput: telemetry["invalid_tool_call_or_output"] as? Bool ?? true, toolsEnabled: true) else {
+                        throw TutorConversationError.malformedProviderResponse("Cloud full-tool harness did not serialize exactly the seven production tool definitions.")
+                    }
+                    guard requestDiagnostics["request_envelopes_exact"] as? Bool == true else {
+                        throw TutorConversationError.providerRejected("Cloud full-tool harness rejected its serialized request envelope.")
+                    }
+                    guard packageNineteenProviderFacingBoundaryIsClean(bodies: transport.requestBodies()) else {
+                        throw TutorConversationError.malformedProviderResponse("Cloud full-tool harness blocked evaluator-label leakage into a provider request or tool output.")
+                    }
+                    totalRequests += transport.requestCount
+                    attemptRequestsCounted = true
+                    let terminalStatus = receipt.fallbackReason == nil ? "completed" : "completed_with_fallback_excluded"
+                    if terminalStatus == "completed", !Self.packageNineteenCloudMetadataIsPinned(receipt.provider) {
+                        throw TutorConversationError.providerRejected("Cloud tool harness rejected unpinned completed provider metadata.")
+                    }
+                    if let fallback = receipt.fallbackReason {
+                        retryHistory.append(contentsOf: packageNineteenEngineFallbackHistory(attempt: attempt, fallbackReason: fallback, providerRequestCalls: transport.requestCount, latencyMilliseconds: Date().timeIntervalSince(started) * 1_000))
+                    }
+                    var artifact = packageNineteenGenerationArtifact(
+                        prompt: prompt, level: level, repetition: repetition, attempt: attempt,
+                        terminalStatus: terminalStatus, text: text, metadata: receipt.provider,
+                        telemetry: telemetry, receipt: receipt, experiment: state.experiments.last, persistedExperimentCount: state.experiments.count,
+                        latencyMeasured: Date().timeIntervalSince(started) * 1_000,
+                        toolsEnabled: true, safeFailure: receipt.fallbackReason, fixtureIdentity: fixture?.identity ?? [:], laneContext: "topic_specific_tool_context", retryHistory: retryHistory, requestDiagnostics: requestDiagnostics
+                    )
+                    artifact["provider_request_calls"] = totalRequests
+                    // The engine produced a durable completion (even if it had
+                    // to fall back); never duplicate it by retrying.
+                    let outcome = PackageSeventeenCloudRequestOutcome(text: terminalStatus == "completed" ? text : nil, metadata: receipt.provider, attempts: attempt, terminalStatus: terminalStatus, safeFailure: receipt.fallbackReason)
+                    return .init(artifact: artifact, response: .init(prompt: prompt, level: level, outcome: outcome), providerRequestCalls: totalRequests)
+                }
+
+                // Lane A intentionally mirrors the historical P17 no-tool
+                // baseline: only vocal source type and selected level cross
+                // the provider boundary; no capture/project/topic fixture does.
+                let direct = await packageNineteenCloudTextWithRetry(provider: provider, query: prompt.query, context: .init(sourceType: .vocal, experience: .init(persistentLevel: level)), requestCount: { transport.requestCount })
+                totalRequests += direct.providerRequestCalls
+                attemptRequestsCounted = true
+                terminalAttemptCount = direct.outcome.attempts
+                retryHistory.append(contentsOf: direct.failureHistory)
+                let telemetry = packageNineteenObservedEnvelopeTelemetry(transport.requestBodies())
+                let requestDiagnostics = packageNineteenRequestDiagnostics(transport.requestBodies(), toolsEnabled: false)
+                observedTelemetry = telemetry
+                observedRequestDiagnostics = requestDiagnostics
+                observedMetadata = direct.outcome.metadata
+                observedText = direct.outcome.text ?? ""
+                guard direct.outcome.terminalStatus == "completed", let generatedText = direct.outcome.text, let generatedMetadata = direct.outcome.metadata else {
+                    let safe = direct.outcome.safeFailure ?? "The cloud evaluator request failed safely."
+                    var artifact = packageNineteenGenerationArtifact(
+                        prompt: prompt, level: level, repetition: repetition, attempt: direct.outcome.attempts,
+                        terminalStatus: "failed", text: observedText, metadata: observedMetadata,
+                        telemetry: telemetry, receipt: nil, experiment: nil, persistedExperimentCount: 0,
+                        latencyMeasured: Date().timeIntervalSince(started) * 1_000,
+                        toolsEnabled: false, safeFailure: safe, fixtureIdentity: [:], laneContext: "historical_p17_no_tool_context_source_vocal_plus_level_only", retryHistory: retryHistory, requestDiagnostics: requestDiagnostics
+                    )
+                    artifact["provider_request_calls"] = totalRequests
+                    return .init(artifact: artifact, response: .init(prompt: prompt, level: level, outcome: direct.outcome), providerRequestCalls: totalRequests)
+                }
+                guard packageNineteenExactSerializedToolSchemas(actual: telemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:], envelopes: telemetry["tool_schema_envelopes"] as? [[String: String]] ?? [], envelopeEntryCounts: telemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [], envelopeDuplicateNames: telemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [], conflict: telemetry["tool_schema_conflict"] as? Bool ?? true, invalid: telemetry["invalid_tool_schema_entry"] as? Bool ?? true, callConflict: telemetry["tool_call_conflict"] as? Bool ?? true, outputConflict: telemetry["tool_output_conflict"] as? Bool ?? true, invalidCallOrOutput: telemetry["invalid_tool_call_or_output"] as? Bool ?? true, toolsEnabled: false) else {
+                    throw TutorConversationError.malformedProviderResponse("Cloud no-tool harness serialized malformed or nonempty tool definitions.")
+                }
+                guard requestDiagnostics["request_envelopes_exact"] as? Bool == true else {
+                    throw TutorConversationError.providerRejected("Cloud no-tool harness rejected its serialized request envelope.")
+                }
+                guard packageNineteenProviderFacingBoundaryIsClean(bodies: transport.requestBodies()) else {
+                    throw TutorConversationError.malformedProviderResponse("Cloud no-tool harness blocked evaluator-label leakage into a provider request.")
+                }
+                guard Self.packageNineteenCloudMetadataIsPinned(generatedMetadata) else {
+                    throw TutorConversationError.providerRejected("Cloud no-tool harness rejected unpinned completed provider metadata.")
+                }
+                var artifact = packageNineteenGenerationArtifact(
+                    prompt: prompt, level: level, repetition: repetition, attempt: direct.outcome.attempts,
+                    terminalStatus: "completed", text: generatedText, metadata: generatedMetadata,
+                    telemetry: telemetry, receipt: nil, experiment: nil, persistedExperimentCount: 0,
+                    latencyMeasured: Date().timeIntervalSince(started) * 1_000,
+                    toolsEnabled: false, safeFailure: direct.durableCompletionWarning, fixtureIdentity: [:], laneContext: "historical_p17_no_tool_context_source_vocal_plus_level_only", retryHistory: retryHistory, requestDiagnostics: requestDiagnostics
+                )
+                artifact["provider_request_calls"] = totalRequests
+                let outcome = PackageSeventeenCloudRequestOutcome(text: generatedText, metadata: generatedMetadata, attempts: direct.outcome.attempts, terminalStatus: "completed", safeFailure: nil)
+                return .init(artifact: artifact, response: .init(prompt: prompt, level: level, outcome: outcome), providerRequestCalls: totalRequests)
+            } catch {
+                let failureRequestCalls = attemptRequestsCounted ? 0 : transport.requestCount
+                if !attemptRequestsCounted { totalRequests += failureRequestCalls }
+                let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "The Package 019 cloud evaluator request failed safely."
+                let transient = Self.isTransientCloudEvaluationFailure(error)
+                let failure = packageNineteenRetryFailureArtifact(attempt: terminalAttemptCount, error: error, safeFailure: safe, providerRequestCalls: failureRequestCalls, latencyMilliseconds: Date().timeIntervalSince(started) * 1_000)
+                retryHistory.append(failure)
+                if !toolsEnabled, transient, attempt < 2 {
+                    try? await Task.sleep(for: .milliseconds(250)); continue
+                }
+                let failureTelemetry = observedTelemetry ?? packageNineteenObservedEnvelopeTelemetry(transport.requestBodies())
+                let failureRequestDiagnostics = observedRequestDiagnostics ?? packageNineteenRequestDiagnostics(transport.requestBodies(), toolsEnabled: toolsEnabled)
+                var artifact = packageNineteenGenerationArtifact(
+                    prompt: prompt, level: level, repetition: repetition, attempt: terminalAttemptCount,
+                    terminalStatus: "failed", text: observedText, metadata: observedMetadata,
+                    telemetry: failureTelemetry, receipt: observedReceipt, experiment: observedExperiment, persistedExperimentCount: observedPersistedExperimentCount,
+                    latencyMeasured: Date().timeIntervalSince(started) * 1_000,
+                    toolsEnabled: toolsEnabled, safeFailure: safe, fixtureIdentity: fixture?.identity ?? [:], laneContext: toolsEnabled ? "topic_specific_tool_context" : "historical_p17_no_tool_context_source_vocal_plus_level_only", retryHistory: retryHistory, requestDiagnostics: failureRequestDiagnostics
+                )
+                artifact["provider_request_calls"] = totalRequests
+                let outcome = PackageSeventeenCloudRequestOutcome(text: nil, metadata: nil, attempts: terminalAttemptCount, terminalStatus: "failed", safeFailure: safe)
+                return .init(artifact: artifact, response: .init(prompt: prompt, level: level, outcome: outcome), providerRequestCalls: totalRequests)
+            }
+        }
+        throw TutorConversationError.providerRejected("Package 019 cloud retry loop exhausted unexpectedly.")
+    }
+
+    /// The P19 artifact retains every failed transient attempt even when the
+    /// second bounded attempt succeeds. This is separate from the historical
+    /// P17 outcome type, whose persisted records remain unchanged.
+    private func packageNineteenCloudTextWithRetry(
+        provider: OpenAITutorProvider,
+        query: String,
+        context: TutorRuntimeContext,
+        requestCount: @escaping () -> Int
+    ) async -> PackageNineteenRetryResult {
+        var history: [[String: Any]] = []
+        var providerRequestCalls = 0
+        for attempt in 1...2 {
+            let started = Date()
+            let requestsBefore = requestCount()
+            do {
+                var text = ""; var completed: TutorProviderMetadata?
+                do {
+                    for try await event in provider.stream(.init(messages: [.init(role: .user, text: query)], context: context, tools: [])) {
+                        switch event {
+                        case let .textDelta(delta): text += delta
+                        case let .completed(metadata, output):
+                            completed = metadata
+                            if text.isEmpty { text = output.compactMap { if case let .text(value) = $0 { value } else { nil } }.joined() }
+                        }
+                    }
+                } catch {
+                    let callsForAttempt = max(0, requestCount() - requestsBefore)
+                    if let completed, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        providerRequestCalls += callsForAttempt
+                        return .init(outcome: .init(text: text, metadata: completed, attempts: attempt, terminalStatus: "completed", safeFailure: nil), failureHistory: history, providerRequestCalls: providerRequestCalls, durableCompletionWarning: "Provider stream ended after completed metadata; durable completion retained and not retried.")
+                    }
+                    throw error
+                }
+                guard let completed, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    throw TutorConversationError.malformedProviderResponse("Cloud evaluator completed without text.")
+                }
+                providerRequestCalls += max(0, requestCount() - requestsBefore)
+                return .init(outcome: .init(text: text, metadata: completed, attempts: attempt, terminalStatus: "completed", safeFailure: nil), failureHistory: history, providerRequestCalls: providerRequestCalls, durableCompletionWarning: nil)
+            } catch {
+                let callsForAttempt = max(0, requestCount() - requestsBefore)
+                providerRequestCalls += callsForAttempt
+                let safe = (error as? TutorConversationError)?.safeFailureDescription ?? "The cloud evaluator request failed safely."
+                let transient = Self.isTransientCloudEvaluationFailure(error)
+                history.append(packageNineteenRetryFailureArtifact(attempt: attempt, error: error, safeFailure: safe, providerRequestCalls: callsForAttempt, latencyMilliseconds: Date().timeIntervalSince(started) * 1_000))
+                if transient && attempt < 2 {
+                    try? await Task.sleep(for: .milliseconds(250))
+                    continue
+                }
+                return .init(outcome: .init(text: nil, metadata: nil, attempts: attempt, terminalStatus: "failed", safeFailure: safe), failureHistory: history, providerRequestCalls: providerRequestCalls, durableCompletionWarning: nil)
+            }
+        }
+        return .init(outcome: .init(text: nil, metadata: nil, attempts: 2, terminalStatus: "failed", safeFailure: "The cloud evaluator request failed safely."), failureHistory: history, providerRequestCalls: providerRequestCalls, durableCompletionWarning: nil)
+    }
+
+    private func packageNineteenRetryFailureArtifact(attempt: Int, error: Error, safeFailure: String, providerRequestCalls: Int, latencyMilliseconds: Double) -> [String: Any] {
+        [
+            "attempt": attempt,
+            "status": "failed_attempt",
+            "safe_category": packageNineteenFailureCategory(error),
+            "safe_failure": Self.boundedEvaluationText(safeFailure, maximumUTF8Bytes: 768),
+            "provider_request_calls": providerRequestCalls,
+            "latency_ms": Int(latencyMilliseconds),
+        ]
+    }
+
+    /// A tool turn is durably completed by the engine's offline fallback. The
+    /// original provider attempt is still a failed evaluation sample, but must
+    /// never be retried because doing so would duplicate the persisted turn.
+    private func packageNineteenEngineFallbackHistory(attempt: Int, fallbackReason: String, providerRequestCalls: Int, latencyMilliseconds: Double) -> [[String: Any]] {
+        let bounded = Self.boundedEvaluationText(fallbackReason, maximumUTF8Bytes: 768)
+        let lower = bounded.lowercased()
+        return [[
+            "attempt": attempt,
+            "status": "failed_primary_provider_attempt",
+            "safe_category": (lower.contains("timed out") || lower.contains("timeout")) ? "timeout" : "engine_primary_failure",
+            "safe_failure": bounded,
+            "provider_request_calls": providerRequestCalls,
+            "latency_ms": Int(latencyMilliseconds),
+            "retry_performed": false,
+            "durable_fallback_completed": true,
+        ]]
+    }
+
+    private func packageNineteenFailureCategory(_ error: Error) -> String {
+        if case .timedOut = error as? TutorConversationError { return "timeout" }
+        if Self.isTransientCloudEvaluationFailure(error) { return "transient_provider_failure" }
+        if case .malformedProviderResponse = error as? TutorConversationError { return "malformed_provider_response" }
+        if case .providerRejected = error as? TutorConversationError { return "provider_rejected" }
+        return "nontransient_failure"
+    }
+
+    private func packageNineteenGenerationArtifact(
+        prompt: PackageSeventeenCloudPrompt, level: TutorExperienceLevel, repetition: Int, attempt: Int,
+        terminalStatus: String, text: String, metadata: TutorProviderMetadata?,
+        telemetry: [String: Any], receipt: TutorEvidenceReceipt?, experiment: TutorExperimentRecord?, persistedExperimentCount: Int,
+        latencyMeasured: Double, toolsEnabled: Bool, safeFailure: String?, fixtureIdentity: [String: String] = [:], laneContext: String = "provider_free_contract", retryHistory: [[String: Any]] = [], requestDiagnostics: [String: Any] = [:]
+    ) -> [String: Any] {
+        let renderedExperiment = experiment.map(packageNineteenExperimentArtifact) ?? NSNull()
+        let requiredExperimentFields = experiment.map { draft in
+            [draft.draft.title, draft.draft.startingRange, draft.draft.listenFor, draft.draft.risk, draft.draft.stopCondition ?? "", draft.draft.undo].allSatisfy { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        } ?? false
+        let tools = receipt?.tools.map { ["name": $0.name, "call_id": $0.callID, "arguments_sha256": $0.argumentsSHA256, "output_sha256": $0.outputSHA256] } ?? []
+        let evidenceKinds = receipt?.evidence.map { $0.kind.rawValue } ?? []
+        let sentTools = telemetry["tools_sent"] as? [String] ?? []
+        let actualSchemaHashes = telemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:]
+        let schemaConflict = telemetry["tool_schema_conflict"] as? Bool ?? false
+        let schemaEnvelopes = telemetry["tool_schema_envelopes"] as? [[String: String]] ?? []
+        let schemaEnvelopeEntryCounts = telemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? []
+        let schemaEnvelopeDuplicateNames = telemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? []
+        let invalidToolSchemaEntry = telemetry["invalid_tool_schema_entry"] as? Bool ?? false
+        let callConflict = telemetry["tool_call_conflict"] as? Bool ?? false
+        let outputConflict = telemetry["tool_output_conflict"] as? Bool ?? false
+        let invalidCallOrOutput = telemetry["invalid_tool_call_or_output"] as? Bool ?? false
+        let exactToolDefinitions = packageNineteenExactSerializedToolSchemas(actual: actualSchemaHashes, envelopes: schemaEnvelopes, envelopeEntryCounts: schemaEnvelopeEntryCounts, envelopeDuplicateNames: schemaEnvelopeDuplicateNames, conflict: schemaConflict, invalid: invalidToolSchemaEntry, callConflict: callConflict, outputConflict: outputConflict, invalidCallOrOutput: invalidCallOrOutput, toolsEnabled: toolsEnabled)
+        let canonicalSchemaHashes = packageNineteenCanonicalToolSchemaHashes()
+        let schemaEnvelopeExact: [Bool]
+        if schemaEnvelopes.count == schemaEnvelopeEntryCounts.count, schemaEnvelopes.count == schemaEnvelopeDuplicateNames.count {
+            schemaEnvelopeExact = zip(schemaEnvelopes, zip(schemaEnvelopeEntryCounts, schemaEnvelopeDuplicateNames)).map { envelope, metadata in
+                envelope == canonicalSchemaHashes && metadata.0 == canonicalSchemaHashes.count && !metadata.1
+            }
+        } else {
+            schemaEnvelopeExact = Array(repeating: false, count: schemaEnvelopes.count)
+        }
+        let receiptBinding = packageNineteenReceiptMatchesTelemetry(receipt: receipt, telemetry: telemetry)
+        let permittedToolNames = Set(TutorToolExecutor.defaultDefinitions.map(\.name))
+        let permittedToolAuthority = receipt?.tools.allSatisfy { permittedToolNames.contains($0.name) } ?? !toolsEnabled
+        let deterministic = packageNineteenDeterministicEvaluation(text: text, experiment: experiment, persistedExperimentCount: persistedExperimentCount, toolCalls: telemetry["tool_calls"] as? [[String: Any]] ?? [], toolResults: telemetry["tool_results"] as? [[String: Any]] ?? [], receiptBinding: receiptBinding, permittedToolAuthority: permittedToolAuthority, topic: prompt.topic, toolsEnabled: toolsEnabled)
+        let fallbackStatus = receipt?.fallbackReason ?? (metadata == nil ? "not_observed_no_receipt" : "not_applicable_provider_direct")
+        return [
+            "repetition": repetition, "topic": prompt.topic, "topic_order": prompt.order, "level": level.rawValue,
+            "query_sha256": sha256(Data(prompt.query.utf8)), "attempts": attempt, "terminal_status": terminalStatus,
+            "safe_failure": packageNineteenJSONOrNull(safeFailure.map { Self.boundedEvaluationText($0, maximumUTF8Bytes: 768) }),
+            "provider": metadata?.providerIdentifier ?? NSNull(), "model": metadata?.modelIdentifier ?? NSNull(),
+            "provider_response_id": packageNineteenJSONOrNull(metadata?.providerResponseID), "service_tier": packageNineteenJSONOrNull(metadata?.serviceTier?.rawValue),
+            "tokens": ["input": packageNineteenJSONOrNull(metadata?.inputTokens), "output": packageNineteenJSONOrNull(metadata?.outputTokens)],
+            "latency_ms": ["first_token": NSNull(), "total_turn": Int(latencyMeasured)],
+            "cost": NSNull(), "tools_enabled": toolsEnabled,
+            "fixture_identity": fixtureIdentity,
+            "lane_context": laneContext, "retry_history": retryHistory,
+            "tools_sent": sentTools, "serialized_tool_schema_sha256_by_name": actualSchemaHashes, "serialized_tool_schema_envelopes": Array(schemaEnvelopes.prefix(16)), "serialized_tool_schema_envelope_entry_counts": Array(schemaEnvelopeEntryCounts.prefix(16)), "serialized_tool_schema_envelope_duplicate_names": Array(schemaEnvelopeDuplicateNames.prefix(16)), "serialized_tool_schema_envelope_exact": Array(schemaEnvelopeExact.prefix(16)), "serialized_tool_schema_conflict": schemaConflict, "serialized_tool_schema_invalid_entry": invalidToolSchemaEntry, "tool_call_conflict": callConflict, "tool_output_conflict": outputConflict, "invalid_tool_call_or_output": invalidCallOrOutput, "serialized_tool_definitions_exact": exactToolDefinitions, "serialized_request_diagnostics": requestDiagnostics, "provider_request_calls": telemetry["provider_request_calls"] ?? 0,
+            "tool_rounds": telemetry["tool_rounds"] ?? 0, "tool_calls": telemetry["tool_calls"] ?? [], "tool_results": telemetry["tool_results"] ?? [],
+            "tool_receipts": tools, "evidence_kinds": evidenceKinds,
+            "receipt_id": receipt?.id.uuidString ?? NSNull(), "capture_snapshot_id": receipt?.captureSnapshotID?.uuidString ?? NSNull(),
+            "experience": receipt?.experience.map(packageNineteenCodableArtifact) ?? NSNull(),
+            "fallback_status": fallbackStatus,
+            "present_experiment": renderedExperiment,
+            "experiment_completeness": ["present": experiment != nil, "persisted_count": persistedExperimentCount, "exactly_one_persisted_experiment": persistedExperimentCount == 1, "all_required_fields": requiredExperimentFields, "repair_count": 0, "max_repairs": 1, "overall_deterministic_completeness": deterministic["overall_deterministic_completeness"] ?? false],
+            "assistant_text": Self.boundedEvaluationText(text, maximumUTF8Bytes: 4096), "assistant_text_sha256": sha256(Data(text.utf8)), "assistant_text_bytes": text.utf8.count,
+            "deterministic_evaluation": deterministic,
+            "deterministic_authority_structure": ["read_only_or_presentation_only_tools": permittedToolAuthority, "tool_receipts_match_observed_calls": receiptBinding, "no_hidden_reasoning_stored": true],
+        ]
+    }
+
+    private func packageNineteenCanonicalToolSchemaHashes() -> [String: String] {
+        Dictionary(uniqueKeysWithValues: TutorToolExecutor.defaultDefinitions.compactMap { definition -> (String, String)? in
+            guard let data = try? JSONSerialization.data(withJSONObject: OpenAITutorProvider.toolSchema(definition), options: [.sortedKeys]) else { return nil }
+            return (definition.name, sha256(data))
+        })
+    }
+
+    private func packageNineteenExactSerializedToolSchemas(actual: [String: String], envelopes: [[String: String]], envelopeEntryCounts: [Int], envelopeDuplicateNames: [Bool], conflict: Bool = false, invalid: Bool = false, callConflict: Bool = false, outputConflict: Bool = false, invalidCallOrOutput: Bool = false, toolsEnabled: Bool) -> Bool {
+        guard !conflict, !invalid, !callConflict, !outputConflict, !invalidCallOrOutput else { return false }
+        guard envelopes.count == envelopeEntryCounts.count, envelopes.count == envelopeDuplicateNames.count,
+              !envelopeDuplicateNames.contains(true) else { return false }
+        let canonical = packageNineteenCanonicalToolSchemaHashes()
+        if toolsEnabled {
+            return actual == canonical && !envelopes.isEmpty && zip(envelopes, envelopeEntryCounts).allSatisfy { envelope, count in
+                envelope == canonical && count == canonical.count
+            }
+        }
+        return actual.isEmpty && !envelopes.isEmpty && zip(envelopes, envelopeEntryCounts).allSatisfy { envelope, count in
+            envelope.isEmpty && count == 0
+        }
+    }
+
+    private func packageNineteenReceiptMatchesTelemetry(receipt: TutorEvidenceReceipt?, telemetry: [String: Any]) -> Bool {
+        guard !(telemetry["tool_schema_conflict"] as? Bool ?? false),
+              !(telemetry["invalid_tool_schema_entry"] as? Bool ?? false),
+              !(telemetry["tool_call_conflict"] as? Bool ?? false),
+              !(telemetry["tool_output_conflict"] as? Bool ?? false),
+              !(telemetry["invalid_tool_call_or_output"] as? Bool ?? false) else { return false }
+        guard let receipt else { return (telemetry["tool_calls"] as? [[String: Any]] ?? []).isEmpty }
+        let calls = Dictionary(uniqueKeysWithValues: (telemetry["tool_calls"] as? [[String: Any]] ?? []).compactMap { call -> (String, [String: Any])? in
+            guard let id = call["call_id"] as? String else { return nil }; return (id, call)
+        })
+        let results = Dictionary(uniqueKeysWithValues: (telemetry["tool_results"] as? [[String: Any]] ?? []).compactMap { result -> (String, [String: Any])? in
+            guard let id = result["call_id"] as? String else { return nil }; return (id, result)
+        })
+        return receipt.tools.count == calls.count && receipt.tools.allSatisfy { tool in
+            guard let call = calls[tool.callID], let result = results[tool.callID] else { return false }
+            return call["name"] as? String == tool.name && call["arguments_sha256"] as? String == tool.argumentsSHA256 && result["output_sha256"] as? String == tool.outputSHA256
+        }
+    }
+
+    private func packageNineteenDeterministicEvaluation(text: String, experiment: TutorExperimentRecord?, persistedExperimentCount: Int, toolCalls: [[String: Any]], toolResults: [[String: Any]], receiptBinding: Bool, permittedToolAuthority: Bool, topic: String, toolsEnabled: Bool) -> [String: Any] {
+        let lower = text.lowercased()
+        let claims = ["i performed", "i changed", "i heard", "i observed", "tracksmith performed", "tracksmith changed", "tracksmith heard", "tracksmith observed"]
+        let names = Set(toolCalls.compactMap { $0["name"] as? String })
+        let procedureNecessary = topic == "cannot_find"
+        let procedureResult = toolResults.first { $0["name"] as? String == "get_logic_procedure" }
+        let procedureFoundFlag = procedureResult?["reviewed_or_procedure_found"] as? Bool
+        let procedureFound = procedureFoundFlag == true || ((procedureResult?["reviewed_or_procedure_match_count"] as? Int) ?? 0) > 0
+        let procedureStatus = procedureResult?["reviewed_or_procedure_status"] as? String ?? "not_observed"
+        let toolResultUnavailable = procedureFoundFlag == false || ["unavailable", "not_found", "no_match", "absent"].contains(procedureStatus)
+        let procedureSubject = ["procedure", "navigation", "control"].contains { lower.contains($0) }
+        let unavailablePredicate = ["unavailable", "not verified", "cannot verify", "could not verify"].contains { lower.contains($0) }
+        let proseUnavailableDisclosure = procedureSubject && unavailablePredicate
+        let procedureSatisfied = names.contains("get_logic_procedure") && (procedureFound || (toolResultUnavailable && proseUnavailableDisclosure))
+        let changedVariableOrAction = ["change", "adjust", "move", "lower", "raise", "set ", "toggle", "bypass", "reduce", "increase", "compare", "try "].contains { lower.contains($0) }
+        let listenCue = lower.contains("listen")
+        let risk = lower.contains("risk") || lower.contains("worse") || lower.contains("harsh") || lower.contains("muddy")
+        let stop = lower.contains("stop") || lower.contains("if it worsens")
+        let undo = lower.contains("undo") || lower.contains("rollback") || lower.contains("restore") || lower.contains("revert")
+        let proseExperimentComplete = changedVariableOrAction && listenCue && risk && stop && undo
+        // All twelve evaluated prompts are actionable. In the tool lane, a
+        // complete answer additionally needs exactly one durable experiment;
+        // provider-only comparison answers are assessed from their prose.
+        let exactlyOnePersistedExperiment = persistedExperimentCount == 1 && experiment != nil
+        let oneExperimentWhereApplicable = toolsEnabled ? exactlyOnePersistedExperiment : proseExperimentComplete
+        let overallCompleteness = proseExperimentComplete && oneExperimentWhereApplicable
+        return [
+            "final_prose_flags": [
+                "has_changed_variable_or_action": changedVariableOrAction,
+                "has_listen_cue": listenCue, "has_risk": risk,
+                "has_stop": stop, "has_undo_or_rollback": undo,
+                "one_experiment_where_applicable": oneExperimentWhereApplicable,
+                "exactly_one_persisted_experiment": toolsEnabled ? exactlyOnePersistedExperiment : false,
+            ],
+            "overall_deterministic_completeness": overallCompleteness,
+            "overall_deterministic_completeness_status": overallCompleteness ? "pass" : "fail",
+            "exact_procedure_necessity": ["necessary": procedureNecessary, "get_logic_procedure_called": names.contains("get_logic_procedure"), "reviewed_procedure_found": procedureFound, "tool_result_unavailable": toolResultUnavailable, "prose_unavailable_disclosure": proseUnavailableDisclosure, "status": procedureNecessary ? (procedureSatisfied ? "satisfied" : "missing") : "not_required_by_topic_fixture"],
+            "evidence_honesty": ["no_unearned_hearing_or_mutation_claim": !claims.contains { lower.contains($0) }, "capture_or_logic_is_labeled_fixture": toolsEnabled],
+            "authority": ["read_only_or_presentation_only_tools": permittedToolAuthority, "no_mutation_claim": !claims.contains { lower.contains($0) }, "receipt_binding": receiptBinding],
+            "usefulness_structural": ["nonempty_bounded_prose": !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && text.utf8.count <= 4096, "separate_from_level_invariance": true],
+        ]
+    }
+
+    private func packageNineteenEnvelopeTelemetry(_ bodies: [Data]) throws -> [String: Any] {
+        var toolsSent = Set<String>(), toolSchemaHashes: [String: String] = [:], schemaEnvelopes: [[String: String]] = [], schemaEnvelopeEntryCounts: [Int] = [], schemaEnvelopeDuplicateNames: [Bool] = [], toolSchemaConflict = false, invalidToolSchemaEntry = false
+        var calls: [[String: Any]] = [], callSignatures: [String: (name: String, argumentsSHA256: String)] = [:], outputs: [String: String] = [:]
+        var toolCallConflict = false, toolOutputConflict = false, invalidToolCallOrOutput = false, toolRounds = 0
+        func visit(_ value: Any) {
+            if let list = value as? [Any] { list.forEach(visit); return }
+            guard let object = value as? [String: Any] else { return }
+            if object["type"] as? String == "function_call" {
+                guard let name = object["name"] as? String, !name.isEmpty,
+                      let callID = object["call_id"] as? String, !callID.isEmpty,
+                      let arguments = object["arguments"] as? String else { invalidToolCallOrOutput = true; object.values.forEach(visit); return }
+                let digest = sha256(Data(arguments.utf8))
+                if let existing = callSignatures[callID] {
+                    if existing.name != name || existing.argumentsSHA256 != digest { toolCallConflict = true }
+                } else {
+                    callSignatures[callID] = (name, digest)
+                    calls.append(["name": name, "call_id": callID, "arguments": packageNineteenArgumentArtifact(arguments), "arguments_sha256": digest])
+                }
+            }
+            if object["type"] as? String == "function_call_output" {
+                guard let callID = object["call_id"] as? String, !callID.isEmpty,
+                      let output = object["output"] as? String else { invalidToolCallOrOutput = true; object.values.forEach(visit); return }
+                if let existing = outputs[callID], existing != output { toolOutputConflict = true }
+                else if outputs[callID] == nil { outputs[callID] = output }
+            }
+            object.values.forEach(visit)
+        }
+        for body in bodies {
+            guard let root = try JSONSerialization.jsonObject(with: body) as? [String: Any] else {
+                throw TutorConversationError.malformedProviderResponse("Cloud harness could not inspect its own serialized request.")
+            }
+            var envelope: [String: String] = [:]
+            guard let rawTools = root["tools"] else {
+                schemaEnvelopes.append(envelope); schemaEnvelopeEntryCounts.append(0); schemaEnvelopeDuplicateNames.append(false); visit(root)
+                if String(decoding: body, as: UTF8.self).contains(#""type":"function_call_output""#) { toolRounds += 1 }
+                continue
+            }
+            guard let tools = rawTools as? [Any] else { invalidToolSchemaEntry = true; schemaEnvelopes.append(envelope); schemaEnvelopeEntryCounts.append(0); schemaEnvelopeDuplicateNames.append(false); visit(root); continue }
+            var duplicateName = false
+            for rawTool in tools {
+                guard let tool = rawTool as? [String: Any], let name = tool["name"] as? String, !name.isEmpty,
+                      let data = try? JSONSerialization.data(withJSONObject: tool, options: [.sortedKeys]) else { invalidToolSchemaEntry = true; continue }
+                let digest = sha256(data)
+                if let existing = envelope[name] {
+                    duplicateName = true
+                    if existing != digest { toolSchemaConflict = true }
+                } else { envelope[name] = digest }
+                toolsSent.insert(name)
+                if let existing = toolSchemaHashes[name], existing != digest { toolSchemaConflict = true }
+                else if toolSchemaHashes[name] == nil { toolSchemaHashes[name] = digest }
+            }
+            schemaEnvelopes.append(envelope); schemaEnvelopeEntryCounts.append(tools.count); schemaEnvelopeDuplicateNames.append(duplicateName)
+            visit(root)
+            if String(decoding: body, as: UTF8.self).contains(#""type":"function_call_output""#) { toolRounds += 1 }
+        }
+        if outputs.keys.contains(where: { callSignatures[$0] == nil }) { invalidToolCallOrOutput = true }
+        let boundedCalls = Array(calls.prefix(64))
+        let results = boundedCalls.map { call -> [String: Any] in
+            let callID = call["call_id"] as? String ?? "unknown"
+            let name = call["name"] as? String ?? "unknown"
+            return packageNineteenToolResultArtifact(name: name, callID: callID, output: outputs[callID])
+        }
+        return ["tools_sent": toolsSent.sorted(), "tool_schema_sha256_by_name": toolSchemaHashes, "tool_schema_envelopes": schemaEnvelopes, "tool_schema_envelope_entry_counts": schemaEnvelopeEntryCounts, "tool_schema_envelope_duplicate_names": schemaEnvelopeDuplicateNames, "tool_schema_conflict": toolSchemaConflict, "invalid_tool_schema_entry": invalidToolSchemaEntry, "tool_call_conflict": toolCallConflict, "tool_output_conflict": toolOutputConflict, "invalid_tool_call_or_output": invalidToolCallOrOutput, "provider_request_calls": bodies.count, "tool_rounds": toolRounds, "tool_calls": boundedCalls, "tool_results": results]
+    }
+
+    /// Provider requests and tool outputs must be blind to evaluator-only case
+    /// labels. This is deliberately an exact serialized-envelope assertion:
+    /// it covers both the initial request context and later function outputs.
+    private func packageNineteenProviderFacingBoundaryIsClean(bodies: [Data], additionalValues: [String] = []) -> Bool {
+        let forbidden = [
+            "vocal_masking", "eq_tradeoff", "compression_sibilance", "layering_redundancy",
+            "automation_owner", "flex_artifact", "duplicate_monitoring", "sidechain_trigger",
+            "midi_groove", "bounce_tail", "cannot_find", "uncertain_evidence",
+            "package 019", "package019", "package_019", "p19", "evaluation fixture", "p18-natural-", "case-", "case_", "evaluation_case", "fixture_alias",
+        ]
+        let values = bodies.map { String(decoding: $0, as: UTF8.self) } + additionalValues
+        return values.allSatisfy { value in
+            let lowered = value.lowercased()
+            return !forbidden.contains(where: lowered.contains)
+        }
+    }
+
+    private func packageNineteenArgumentArtifact(_ text: String) -> [String: Any] {
+        guard let object = try? JSONSerialization.jsonObject(with: Data(text.utf8)) as? [String: Any] else {
+            return ["shape": "malformed", "sha256": sha256(Data(text.utf8)), "bytes": text.utf8.count]
+        }
+        let allowed = ["query", "domain", "category", "source_type", "evidence_class", "logic_version", "current_context", "role", "section", "procedure_id", "max_results"]
+        var fields: [String: Any] = [:]
+        for key in allowed where object[key] != nil {
+            if let value = object[key] as? String { fields[key] = Self.boundedEvaluationText(value, maximumUTF8Bytes: 600) }
+            else if let value = object[key] as? NSNumber { fields[key] = value }
+        }
+        return ["shape": "object", "fields": fields, "sha256": sha256(Data(text.utf8)), "bytes": text.utf8.count]
+    }
+
+    private func packageNineteenToolResultArtifact(name: String, callID: String, output: String?) -> [String: Any] {
+        guard let output else { return ["name": name, "call_id": callID, "status": "no_function_output_observed"] }
+        var summary: [String: Any] = ["name": name, "call_id": callID, "output_sha256": sha256(Data(output.utf8)), "output_bytes": output.utf8.count]
+        guard let object = try? JSONSerialization.jsonObject(with: Data(output.utf8)) as? [String: Any] else {
+            summary["status"] = "non_json_bounded_output"; return summary
+        }
+        if let availability = object["availability"] as? String { summary["retrieval_availability"] = availability }
+        if let found = object["found"] as? Bool { summary["reviewed_or_procedure_found"] = found }
+        if let matches = object["matches"] as? [Any] { summary["reviewed_or_procedure_match_count"] = matches.count }
+        if let status = object["status"] as? String { summary["reviewed_or_procedure_status"] = status }
+        var domains = Set<String>()
+        func domainsIn(_ value: Any) {
+            if let list = value as? [Any] { list.forEach(domainsIn); return }
+            guard let dict = value as? [String: Any] else { return }
+            if let domain = dict["domain"] as? String { domains.insert(domain) }
+            dict.values.forEach(domainsIn)
+        }
+        domainsIn(object)
+        if !domains.isEmpty { summary["selected_domains"] = Array(domains.sorted().prefix(4)) }
+        return summary
+    }
+
+    private func packageNineteenExperimentArtifact(_ record: TutorExperimentRecord) -> Any {
+        packageNineteenCodableArtifact(record.draft)
+    }
+
+    private func packageNineteenCodableArtifact<T: Encodable>(_ value: T) -> Any {
+        guard let data = try? JSONEncoder().encode(value), let object = try? JSONSerialization.jsonObject(with: data) else { return NSNull() }
+        return object
+    }
+
+    private func packageNineteenJSONOrNull(_ value: Any?) -> Any { value ?? NSNull() }
+
+    private func packageNineteenTripletSummary(_ triplet: [PackageNineteenCloudGeneration], topic: String, repetition: Int, semanticEvaluation: [String: Any]) -> [String: Any] {
+        let levelOrder: [TutorExperienceLevel: Int] = [.noob: 0, .amateur: 1, .pro: 2]
+        let ordered = triplet.sorted { (levelOrder[$0.response.level] ?? .max) < (levelOrder[$1.response.level] ?? .max) }
+        let artifacts = ordered.map(\.artifact)
+        let completed = packageNineteenTripletIsGenerationComplete(triplet)
+        return [
+            "topic": topic, "repetition": repetition, "levels": artifacts.map { $0["level"] ?? "unknown" },
+            "generation_complete_before_reference": completed,
+            "deterministic_authority_pass": artifacts.allSatisfy {
+                let authority = ($0["deterministic_evaluation"] as? [String: Any])?["authority"] as? [String: Any]
+                let honesty = ($0["deterministic_evaluation"] as? [String: Any])?["evidence_honesty"] as? [String: Any]
+                return authority?["read_only_or_presentation_only_tools"] as? Bool == true
+                    && authority?["receipt_binding"] as? Bool == true
+                    && authority?["no_mutation_claim"] as? Bool == true
+                    && honesty?["no_unearned_hearing_or_mutation_claim"] as? Bool == true
+            },
+            "deterministic_completeness_pass": artifacts.allSatisfy { (($0["deterministic_evaluation"] as? [String: Any])?["overall_deterministic_completeness"] as? Bool) == true },
+            "experiment_completeness_pass": artifacts.allSatisfy { (($0["experiment_completeness"] as? [String: Any])?["overall_deterministic_completeness"] as? Bool) == true },
+            "usefulness": artifacts.map { ($0["deterministic_evaluation"] as? [String: Any])?["usefulness_structural"] ?? NSNull() },
+            "strict_level_invariance": ["status": "deterministic_structure_only", "prose_hashes": artifacts.map { $0["assistant_text_sha256"] ?? NSNull() }, "separate_from_usefulness": true],
+            "semantic_key_acceptable_family_check": semanticEvaluation,
+        ]
+    }
+
+    private func packageNineteenTripletIsGenerationComplete(_ triplet: [PackageNineteenCloudGeneration]) -> Bool {
+        triplet.count == 3 && triplet.allSatisfy { ($0.artifact["terminal_status"] as? String) == "completed" }
+    }
+
+    private func packageNineteenDeterministicSemanticEvaluation(repository: URL, prompt: PackageSeventeenCloudPrompt, triplet: [PackageSeventeenCloudResponse]) throws -> [String: Any] {
+        guard triplet.count == 3, triplet.allSatisfy({ $0.outcome.text != nil && $0.outcome.terminalStatus == "completed" }) else {
+            throw TutorConversationError.malformedProviderResponse("P19 deterministic semantic evaluation requires a completed generation triplet.")
+        }
+        // This is evaluation-only and intentionally happens after all three
+        // generated answers exist. It checks family/key overlap, never a
+        // literal golden-response match, and stores only a reference hash.
+        let reference = try Self.packageSeventeenSemanticReference(repository: repository, topic: prompt.topic)
+        let referenceText = [reference.problemSummary, reference.recommendedFirstExperiment, reference.evidenceRequirements, reference.riskAndUndo].joined(separator: " ")
+        let excluded = Set(["about", "after", "before", "change", "evidence", "experiment", "listen", "music", "risk", "rollback", "safe", "safely", "small", "sound", "stop", "this", "track", "undo", "with", "worse", "your"])
+        func keys(_ value: String) -> Set<String> {
+            Set(value.lowercased().split { !$0.isLetter && !$0.isNumber }.map(String.init).filter { $0.count > 3 && !excluded.contains($0) })
+        }
+        let problemKeys = keys([reference.problemSummary, reference.evidenceRequirements].joined(separator: " "))
+        let experimentKeys = keys(reference.recommendedFirstExperiment)
+        let evaluations: [[String: Any]] = triplet.map { response in
+            let answer = response.outcome.text ?? ""
+            let answerKeys = keys(answer)
+            let problemOverlap = problemKeys.intersection(answerKeys).count
+            let experimentOverlap = experimentKeys.intersection(answerKeys).count
+            return ["level": response.level.rawValue, "problem_lexical_overlap_count": problemOverlap, "experiment_lexical_overlap_count": experimentOverlap, "status": "diagnostic_only_nonsemantic_lexical_signal", "verbatim_golden_overlap_not_required": true]
+        }
+        return ["status": "diagnostic_only_nonsemantic_lexical_signal", "reference_read": true, "reference_sha256": sha256(Data(referenceText.utf8)), "problem_reference_key_count": problemKeys.count, "experiment_reference_key_count": experimentKeys.count, "evaluation": evaluations, "overall_status": "indeterminate_requires_blinded_judge", "synonyms_or_verbatim_judged": false, "verbatim_golden_overlap_not_required": true]
+    }
+
+    private func packageNineteenSupportingJudgment(
+        repository: URL, prompt: PackageSeventeenCloudPrompt, triplet: [PackageSeventeenCloudResponse],
+        configuration: TutorProviderConfiguration, repetition: Int,
+        transportFactory: (() -> PackageNineteenRecordingForwardingTransport)? = nil,
+        providerFactory: ((PackageNineteenRecordingForwardingTransport) -> OpenAITutorProvider)? = nil
+    ) async throws -> [String: Any] {
+        guard triplet.count == 3, triplet.allSatisfy({ $0.outcome.terminalStatus == "completed" && $0.outcome.text != nil }) else {
+            throw TutorConversationError.malformedProviderResponse("P19 semantic reference firewall rejected an incomplete triplet.")
+        }
+        // This follows the deterministic post-triplet semantic check. It is
+        // still unreachable from generation and runtime tool requests.
+        let reference = try Self.packageSeventeenSemanticReference(repository: repository, topic: prompt.topic)
+        let labels = ["A", "B", "C"]
+        let blinded = triplet.sorted {
+            sha256(Data("\(prompt.topic)|\(repetition)|\($0.level.rawValue)".utf8)) < sha256(Data("\(prompt.topic)|\(repetition)|\($1.level.rawValue)".utf8))
+        }
+        let mapping = Dictionary(uniqueKeysWithValues: zip(labels, blinded.map { $0.level.rawValue }))
+        let rendered = zip(labels, blinded).compactMap { label, response in
+            response.outcome.text.map { "[\(label)] \(Self.boundedEvaluationText($0, maximumUTF8Bytes: 4096))" }
+        }.joined(separator: "\n\n")
+        let request = """
+        Blinded supporting evaluation only. The labels A/B/C are deliberately pseudonymous; do not infer or discuss experience level. Return a compact JSON object with these boolean keys: usefulness, evidence_honesty, strict_level_invariance, experiment_completeness, exact_procedure_necessity. Artistic preference is excluded. Do not reveal hidden reasoning or reproduce the reference.
+
+        Query: \(prompt.query)
+
+        Evaluation-only semantic reference, supplied only after all three generation samples completed: problem=\(reference.problemSummary); first_experiment=\(reference.recommendedFirstExperiment); evidence=\(reference.evidenceRequirements); \(reference.riskAndUndo)
+
+        Blinded responses:\n\(rendered)
+        """
+        let transport = transportFactory?() ?? PackageNineteenRecordingForwardingTransport()
+        let provider = providerFactory?(transport) ?? OpenAITutorProvider(configuration: configuration, transport: transport)
+        let retry = await packageNineteenCloudTextWithRetry(provider: provider, query: request, context: .init(sourceType: .vocal), requestCount: { transport.requestCount })
+        let outcome = retry.outcome
+        let parsed = packageNineteenParseSupportingJudgeJSON(outcome.text)
+        let metadataPinned = outcome.metadata.map(Self.packageNineteenCloudMetadataIsPinned) == true
+        let requestDiagnostics = packageNineteenRequestDiagnostics(transport.requestBodies(), toolsEnabled: false)
+        let requestEnvelopesExact = requestDiagnostics["request_envelopes_exact"] as? Bool == true
+        let responseCompleted = outcome.terminalStatus == "completed"
+        let terminalValidationError: TutorConversationError?
+        if responseCompleted, !requestEnvelopesExact {
+            terminalValidationError = .providerRejected("Supporting judge rejected its serialized request envelope.")
+        } else if responseCompleted, !metadataPinned {
+            terminalValidationError = .providerRejected("Supporting judge rejected unpinned completed provider metadata.")
+        } else if responseCompleted, parsed.status != "valid" {
+            terminalValidationError = .malformedProviderResponse("Supporting judge returned malformed or incomplete JSON.")
+        } else {
+            terminalValidationError = nil
+        }
+        let valid = responseCompleted && terminalValidationError == nil
+        var retryHistory = retry.failureHistory
+        if let terminalValidationError {
+            retryHistory.append(packageNineteenRetryFailureArtifact(attempt: outcome.attempts, error: terminalValidationError, safeFailure: terminalValidationError.safeFailureDescription, providerRequestCalls: 0, latencyMilliseconds: 0))
+        }
+        let judgeResultStatus: String
+        if valid {
+            judgeResultStatus = "valid"
+        } else if responseCompleted, !requestEnvelopesExact {
+            judgeResultStatus = "invalid_request_envelope"
+        } else if responseCompleted, !metadataPinned {
+            judgeResultStatus = "invalid_unpinned_provider_metadata"
+        } else if responseCompleted {
+            judgeResultStatus = parsed.status
+        } else {
+            judgeResultStatus = "invalid_terminal_provider_response"
+        }
+        let safeCategory: Any = valid ? NSNull() : terminalValidationError.map { packageNineteenFailureCategory($0) } ?? retryHistory.last?["safe_category"] ?? "nontransient_failure"
+        let safeFailure: Any = valid ? NSNull() : terminalValidationError?.safeFailureDescription ?? outcome.safeFailure ?? "Supporting judge did not produce an accepted response."
+        return [
+            "topic": prompt.topic, "repetition": repetition, "phase": "post_generation_model_assisted_supporting_evidence",
+            "semantic_reference_read": true, "generation_reference_access": false,
+            "terminal_status": valid ? "completed" : "failed",
+            "judge_result_status": judgeResultStatus,
+            "attempts": outcome.attempts, "retry_history": retryHistory,
+            "provider_request_calls": retry.providerRequestCalls,
+            "durable_completion_warning": retry.durableCompletionWarning ?? NSNull(),
+            "judge_text_sha256": outcome.text.map { sha256(Data($0.utf8)) } ?? NSNull(), "judge_text_bytes": outcome.text.map { $0.utf8.count } ?? NSNull(),
+            "provider_metadata": outcome.metadata.map { ["provider": $0.providerIdentifier, "model": $0.modelIdentifier, "service_tier": $0.serviceTier?.rawValue ?? "missing"] } ?? NSNull(),
+            "provider_metadata_pinned": metadataPinned,
+            "serialized_request_diagnostics": requestDiagnostics,
+            "safe_category": safeCategory, "safe_failure": safeFailure, "hidden_reasoning_stored": false,
+            "blinded_mapping_for_analysis_outside_judge_prompt": mapping,
+            "dimensions": parsed.dimensions,
+            "artistic_preference": "excluded_not_owner_evidence",
+            "owner_artistic_or_usability_judgment": "not_run_no_owner_review",
+        ]
+    }
+
+    private func packageNineteenObservedEnvelopeTelemetry(_ bodies: [Data]) -> [String: Any] {
+        (try? packageNineteenEnvelopeTelemetry(bodies)) ?? [
+            "tools_sent": [String](), "tool_schema_sha256_by_name": [String: String](), "tool_schema_envelopes": [[String: String]](),
+            "tool_schema_envelope_entry_counts": [Int](), "tool_schema_envelope_duplicate_names": [Bool](),
+            "tool_schema_conflict": false, "invalid_tool_schema_entry": true, "tool_call_conflict": false,
+            "tool_output_conflict": false, "invalid_tool_call_or_output": false,
+            "provider_request_calls": bodies.count, "tool_rounds": 0, "tool_calls": [[String: Any]](), "tool_results": [[String: Any]](),
+        ]
+    }
+
+    /// Bounded, provider-free projection of exact provider envelopes. It stores configuration values and schema telemetry,
+    /// never request text, references, credentials, or raw bodies.
+    private func packageNineteenRequestDiagnostics(_ bodies: [Data], toolsEnabled: Bool) -> [String: Any] {
+        let telemetry = packageNineteenObservedEnvelopeTelemetry(bodies)
+        let exactToolDefinitions = packageNineteenExactSerializedToolSchemas(
+            actual: telemetry["tool_schema_sha256_by_name"] as? [String: String] ?? [:],
+            envelopes: telemetry["tool_schema_envelopes"] as? [[String: String]] ?? [],
+            envelopeEntryCounts: telemetry["tool_schema_envelope_entry_counts"] as? [Int] ?? [],
+            envelopeDuplicateNames: telemetry["tool_schema_envelope_duplicate_names"] as? [Bool] ?? [],
+            conflict: telemetry["tool_schema_conflict"] as? Bool ?? true,
+            invalid: telemetry["invalid_tool_schema_entry"] as? Bool ?? true,
+            callConflict: telemetry["tool_call_conflict"] as? Bool ?? true,
+            outputConflict: telemetry["tool_output_conflict"] as? Bool ?? true,
+            invalidCallOrOutput: telemetry["invalid_tool_call_or_output"] as? Bool ?? true,
+            toolsEnabled: toolsEnabled
+        )
+        var malformedEnvelope = false
+        var storesFalse = !bodies.isEmpty, modelsPinned = !bodies.isEmpty, effortsHigh = !bodies.isEmpty, tiersPriority = !bodies.isEmpty
+        var models = Set<String>(), efforts = Set<String>(), tiers = Set<String>()
+        for body in bodies {
+            guard let root = try? JSONSerialization.jsonObject(with: body) as? [String: Any] else {
+                malformedEnvelope = true; storesFalse = false; modelsPinned = false; effortsHigh = false; tiersPriority = false
+                continue
+            }
+            let model = root["model"] as? String ?? "missing"
+            let effort = (root["reasoning"] as? [String: Any])?["effort"] as? String ?? "missing"
+            let tier = root["service_tier"] as? String ?? "missing"
+            models.insert(model); efforts.insert(effort); tiers.insert(tier)
+            storesFalse = storesFalse && root["store"] as? Bool == false
+            modelsPinned = modelsPinned && model == "gpt-5.6-sol"
+            effortsHigh = effortsHigh && effort == TutorReasoningEffort.high.rawValue
+            tiersPriority = tiersPriority && tier == TutorProviderServiceTier.priority.rawValue
+        }
+        let requestEnvelopesExact = !malformedEnvelope && exactToolDefinitions && storesFalse && modelsPinned && effortsHigh && tiersPriority
+        return [
+            "request_count": bodies.count,
+            "request_envelopes_exact": requestEnvelopesExact,
+            "tools_enabled_expected": toolsEnabled,
+            "tool_definitions_exact": exactToolDefinitions,
+            "no_tools_exact": !toolsEnabled && exactToolDefinitions,
+            "store_false": storesFalse,
+            "model_pinned": modelsPinned,
+            "reasoning_effort_high": effortsHigh,
+            "service_tier_priority": tiersPriority,
+            "malformed_envelope": malformedEnvelope,
+            "models": models.sorted(), "reasoning_efforts": efforts.sorted(), "service_tiers": tiers.sorted(),
+            "tools_sent": telemetry["tools_sent"] ?? [],
+            "tool_schema_envelope_entry_counts": telemetry["tool_schema_envelope_entry_counts"] ?? [],
+            "tool_schema_envelope_duplicate_names": telemetry["tool_schema_envelope_duplicate_names"] ?? [],
+            "invalid_tool_schema_entry": telemetry["invalid_tool_schema_entry"] ?? true,
+        ]
+    }
+
+    private func packageNineteenParseSupportingJudgeJSON(_ text: String?) -> (status: String, dimensions: [String: Bool]) {
+        let required = ["usefulness", "evidence_honesty", "strict_level_invariance", "experiment_completeness", "exact_procedure_necessity"]
+        guard let text,
+              let object = try? JSONSerialization.jsonObject(with: Data(text.utf8)) as? [String: Any] else {
+            return ("invalid_malformed_json", [:])
+        }
+        let requiredKeys = Set(required)
+        let keys = Set(object.keys)
+        guard keys.subtracting(requiredKeys).isEmpty else { return ("invalid_extra_fields", [:]) }
+        guard keys == requiredKeys else { return ("invalid_missing_or_nonboolean_dimensions", [:]) }
+        var dimensions: [String: Bool] = [:]
+        for key in required {
+            guard let value = object[key] as? NSNumber, CFGetTypeID(value) == CFBooleanGetTypeID() else {
+                return ("invalid_missing_or_nonboolean_dimensions", [:])
+            }
+            dimensions[key] = value.boolValue
+        }
+        return ("valid", dimensions)
+    }
+
+    private func packageNineteenLaneName(_ lane: PackageNineteenCloudLane) -> String {
+        switch lane { case .noTool: return "no_tool"; case .fullTool: return "full_tool"; case .repeatedTriplets: return "repeated_triplets" }
+    }
+
+    private nonisolated static func packageNineteenCloudMetadataIsPinned(_ metadata: TutorProviderMetadata) -> Bool {
+        metadata.providerIdentifier == OpenAITutorProvider().providerIdentifier
+            && metadata.modelIdentifier == packageSeventeenTextModel
+            && metadata.serviceTier == .priority
+    }
+
+    private func packageNineteenSourceIdentity(_ repository: URL) -> [String: Any] {
+        ["commit": packageNineteenGit(repository, ["rev-parse", "HEAD"]) ?? "unavailable", "index_tree": packageNineteenGit(repository, ["write-tree"]) ?? "unavailable", "worktree_patch_sha256": packageNineteenGit(repository, ["diff", "--no-ext-diff", "--binary", "HEAD"]).map { sha256(Data($0.utf8)) } ?? "unavailable", "boundary": "Commit, staged-tree, and worktree-patch fingerprints disambiguate dirty local state without recording host paths or untracked names."]
+    }
+
+    private func packageNineteenGit(_ repository: URL, _ arguments: [String]) -> String? {
+        let process = Process(); process.executableURL = URL(fileURLWithPath: "/usr/bin/git"); process.arguments = arguments; process.currentDirectoryURL = repository
+        let output = Pipe(); process.standardOutput = output; process.standardError = Pipe()
+        guard (try? process.run()) != nil else { return nil }; process.waitUntilExit()
+        guard process.terminationStatus == 0 else { return nil }
+        return String(decoding: output.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func packageNineteenEvaluationHashes(_ repository: URL, prompts: [PackageSeventeenCloudPrompt]? = nil) throws -> [String: Any] {
+        func digest(_ relative: String) throws -> String { try sha256(Data(contentsOf: repository.appendingPathComponent(relative))) }
+        let definitionMetadataData = try JSONEncoder().encode(TutorToolExecutor.defaultDefinitions)
+        let canonicalToolSchemas = TutorToolExecutor.defaultDefinitions.map(OpenAITutorProvider.toolSchema)
+        let toolData = try JSONSerialization.data(withJSONObject: canonicalToolSchemas, options: [.sortedKeys])
+        let policy = TutorSystemPolicy.audit()
+        let cloudPrompts = try prompts ?? packageNineteenCloudPrompts(repository: repository)
+        let orderedPromptBytes = Data(cloudPrompts.sorted { $0.order < $1.order }.map { "\($0.order)|\($0.topic)|\($0.query)\n" }.joined().utf8)
+        return [
+            "suite_sha256": try digest("research/tutor_quality/package019_evaluation_suite.json"),
+            "suite_manifest_sha256": try digest("research/tutor_quality/package019_evaluation_manifest.json"),
+            "policy": ["version": policy.version, "utf8_bytes": policy.utf8Bytes, "sha256": policy.sha256],
+            "tool_schema_sha256": sha256(toolData),
+            "tool_definition_metadata_sha256": sha256(definitionMetadataData),
+            "candidate_index_sha256": try digest("packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.sqlite"),
+            "candidate_index_manifest_sha256": try digest("packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json"),
+            "retrieval_policy_version": CandidateRetrievalIndex.policyVersion,
+            "cloud_prompt_suite": [
+                "exact_prompt_count": cloudPrompts.count,
+                "ordered_prompt_suite_sha256": sha256(orderedPromptBytes),
+                "prompt_only_file_sha256": try digest("research/tutor_quality/package019_cloud_prompt_suite.json"),
+            ],
+        ]
+    }
+
+    private func packageNineteenWriteCloudArtifact(_ artifact: [String: Any], lane: PackageNineteenCloudLane, repository: URL) throws {
+        let output = repository.appendingPathComponent("research/tutor_quality/evaluations/PACKAGE_019_CLOUD_\(packageNineteenLaneName(lane)).json")
+        try JSONSerialization.data(withJSONObject: artifact, options: [.sortedKeys, .prettyPrinted]).write(to: output, options: .atomic)
     }
 
     private func testPackageEighteenDiagnostic() async throws {
@@ -1934,7 +3150,7 @@ private final class Suite {
         try expect(queryFailureJSON["availability"] as? String == "ready" && queryFailureJSON["outcome"] as? String == CandidateRetrievalOutcomeKind.queryFailed.rawValue && queryFailureJSON["match"] is NSNull && queryFailureResult.evidence.first?.kind == .unavailable,
                    "P19 typed query failure was collapsed into no-match")
         let packageText = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Package.swift"))
-        try expect(!packageText.contains("community-reverb-delay-v1.json") && packageText.contains("CandidateRetrieval.sqlite"),
+        try expect(!packageText.contains("community-reverb-delay-v1.json") && !packageText.contains("package019_cloud_prompt_suite.json") && packageText.contains("CandidateRetrieval.sqlite"),
                    "P18 raw candidate resources remain in product package declaration")
         print("P18_INDEX_OK availability=ready selected=\(results.count) decodedPayloads=\(decoded) failureStates=5 diagnostics=bounded bundle=compiled-index-only indexedReadinessMs=\(Int(indexedReadinessMilliseconds)) legacyReadinessMs=\(Int(legacyReadinessMilliseconds))")
     }
@@ -3607,6 +4823,30 @@ private final class Suite {
         }
     }
 
+    /// Generation reads this prompt-only artifact, never canonical_qa.jsonl.
+    /// Reference answers remain behind the completed-triplet semantic firewall.
+    private func packageNineteenCloudPrompts(repository: URL) throws -> [PackageSeventeenCloudPrompt] {
+        let relative = "research/tutor_quality/package019_cloud_prompt_suite.json"
+        let data = try Data(contentsOf: repository.appendingPathComponent(relative))
+        guard sha256(data) == Self.packageNineteenCloudPromptSuiteSHA256,
+              let rows = try JSONSerialization.jsonObject(with: data) as? [[String: Any]], rows.count == 12 else {
+            throw TestFailure(description: "P19 prompt-only cloud suite hash/count drifted")
+        }
+        let prompts = try rows.enumerated().map { index, row -> PackageSeventeenCloudPrompt in
+            guard let topic = row["topic"] as? String, let query = row["canonical_question"] as? String,
+                  !topic.isEmpty, !query.isEmpty else {
+                throw TestFailure(description: "P19 prompt-only cloud suite row malformed")
+            }
+            return .init(order: index, topic: topic, query: query)
+        }
+        let ordered = prompts.map { "\($0.order)|\($0.topic)|\($0.query)\n" }.joined()
+        guard sha256(Data(ordered.utf8)) == Self.packageNineteenOrderedCloudPromptSHA256,
+              Set(prompts.map(\.topic)).count == 12 else {
+            throw TestFailure(description: "P19 prompt-only ordered cloud suite drifted")
+        }
+        return prompts
+    }
+
     private nonisolated static func cloudText(provider: OpenAITutorProvider, query: String, context: TutorRuntimeContext) async throws -> (text: String, metadata: TutorProviderMetadata) {
         var text = ""; var completed: TutorProviderMetadata?
         for try await event in provider.stream(.init(messages: [.init(role: .user, text: query)], context: context, tools: [])) {
@@ -4271,10 +5511,14 @@ private final class PackageNineteenLoopbackStreamingTransport: TutorStreamingHTT
     static let fixtureOutputTokens = 17
 
     private let lock = NSLock()
+    private let toolLoop: Bool
     private var requests: [TutorStreamingHTTPRequest] = []
+
+    init(toolLoop: Bool = true) { self.toolLoop = toolLoop }
 
     func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
         lock.withLock { requests.append(request) }
+        if !toolLoop { return TutorStreamingHTTPResponse(statusCode: 200, lines: Self.lines(Self.finalLines)) }
         let hasFunctionOutput = String(decoding: request.body, as: UTF8.self).contains(#""type":"function_call_output""#)
         return TutorStreamingHTTPResponse(statusCode: 200, lines: Self.lines(hasFunctionOutput ? Self.finalLines : Self.toolLines))
     }
@@ -4282,14 +5526,14 @@ private final class PackageNineteenLoopbackStreamingTransport: TutorStreamingHTT
     func requestBodies() -> [Data] { lock.withLock { requests.map(\.body) } }
 
     private static let toolLines = [
-        #"data: {"type":"response.completed","response":{"id":"p19-local-tools","model":"p19-local-loopback","usage":{"input_tokens":0,"output_tokens":0},"output":[{"type":"function_call","call_id":"p19-capture","name":"get_current_capture_context","arguments":"{}"},{"type":"function_call","call_id":"p19-candidate","name":"search_candidate_corpus","arguments":"{\"query\":\"muddy vocal guitars\"}"},{"type":"function_call","call_id":"p19-procedure","name":"get_logic_procedure","arguments":"{\"procedure_id\":null,\"query\":\"Channel EQ vocal low mid\"}"},{"type":"function_call","call_id":"p19-history","name":"retrieve_prior_experiments","arguments":"{\"query\":null,\"max_results\":6}"}]}}"#,
+        #"data: {"type":"response.completed","response":{"id":"local-tools","model":"local-loopback","usage":{"input_tokens":0,"output_tokens":0},"output":[{"type":"function_call","call_id":"tool-capture","name":"get_current_capture_context","arguments":"{}"},{"type":"function_call","call_id":"tool-candidate","name":"search_candidate_corpus","arguments":"{\"query\":\"muddy vocal guitars\"}"},{"type":"function_call","call_id":"tool-procedure","name":"get_logic_procedure","arguments":"{\"procedure_id\":null,\"query\":\"Channel EQ vocal low mid\"}"},{"type":"function_call","call_id":"tool-history","name":"retrieve_prior_experiments","arguments":"{\"query\":null,\"max_results\":6}"}]}}"#,
         "",
         "data: [DONE]",
         "",
     ]
 
     private static let finalLines = [
-        #"data: {"type":"response.completed","response":{"id":"p19-local-final","model":"p19-local-loopback","usage":{"input_tokens":0,"output_tokens":17},"output":[{"type":"message","content":[{"type":"output_text","text":"Local loopback fixture completed one bounded reversible next step."}]}]}}"#,
+        #"data: {"type":"response.completed","response":{"id":"local-final","model":"local-loopback","usage":{"input_tokens":0,"output_tokens":17},"output":[{"type":"message","content":[{"type":"output_text","text":"Change one setting, then listen for the risk; stop and undo if it worsens."}]}]}}"#,
         "",
         "data: [DONE]",
         "",
@@ -4301,6 +5545,238 @@ private final class PackageNineteenLoopbackStreamingTransport: TutorStreamingHTT
             continuation.finish()
         }
     }
+}
+
+/// Network-incapable full-tool fixture that completes its tool round before
+/// returning intentionally unpinned final metadata for terminal accounting.
+private final class PackageNineteenFullToolThenUnpinnedMetadataTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        let count = lock.withLock { requests.append(request); return requests.count }
+        return .init(statusCode: 200, lines: Self.lines(count == 1 ? Self.toolLines : Self.finalLines))
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+
+    private static let toolLines = [
+        #"data: {"type":"response.completed","response":{"id":"p19-full-tools","model":"gpt-5.6-sol","service_tier":"priority","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"function_call","call_id":"tool-capture","name":"get_current_capture_context","arguments":"{}"},{"type":"function_call","call_id":"tool-candidate","name":"search_candidate_corpus","arguments":"{\"query\":\"muddy vocal guitars\"}"},{"type":"function_call","call_id":"tool-procedure","name":"get_logic_procedure","arguments":"{\"procedure_id\":null,\"query\":\"Channel EQ vocal low mid\"}"},{"type":"function_call","call_id":"tool-history","name":"retrieve_prior_experiments","arguments":"{\"query\":null,\"max_results\":6}"}]}}"#,
+        "", "data: [DONE]", "",
+    ]
+
+    private static let finalLines = [
+        #"data: {"type":"response.completed","response":{"id":"p19-full-unpinned","model":"gpt-5.6-sol","service_tier":"fast","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"Provider-free full-tool completion with intentionally unpinned metadata."}]}]}}"#,
+        "", "data: [DONE]", "",
+    ]
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// Test-only forwarding recorder for an explicitly consented Package 019 run.
+/// It observes serialized request envelopes only; production provider/tool
+/// authority is unchanged and the wrapped transport remains responsible for
+/// every network operation. The deterministic diagnostic instead uses the
+/// loopback transport above, so this type makes zero calls unless an opt-in
+/// cloud command constructs it.
+private final class PackageNineteenRecordingForwardingTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let base: any TutorStreamingHTTPTransport
+    private let requestMutation: ((inout TutorStreamingHTTPRequest) -> Void)?
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    init(base: any TutorStreamingHTTPTransport = URLSessionTutorStreamingTransport(), requestMutation: ((inout TutorStreamingHTTPRequest) -> Void)? = nil) {
+        self.base = base
+        self.requestMutation = requestMutation
+    }
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        var forwarded = request
+        requestMutation?(&forwarded)
+        lock.withLock { requests.append(forwarded) }
+        return try await base.stream(forwarded)
+    }
+
+    func requestBodies() -> [Data] { lock.withLock { requests.map(\.body) } }
+    var requestCount: Int { lock.withLock { requests.count } }
+}
+
+/// Deterministic two-attempt transport for the Package 019 retry contract.
+/// It never contains a URL session or any route to the network.
+private final class PackageNineteenRetryLoopbackStreamingTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        let count = lock.withLock { requests.append(request); return requests.count }
+        if count == 1 {
+            throw TutorConversationError.timedOut
+        }
+        return .init(statusCode: 200, lines: Self.lines([
+            #"data: {"type":"response.completed","response":{"id":"p19-retry","model":"gpt-5.6-sol","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"Provider-free retry completed."}]}]}}"#,
+            "", "data: [DONE]", "",
+        ]))
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// Provider-free retry fixture whose completed second response intentionally
+/// fails the harness's pinned-metadata validation after both requests exist.
+private final class PackageNineteenRetryThenUnpinnedMetadataTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        let count = lock.withLock { requests.append(request); return requests.count }
+        if count == 1 { throw TutorConversationError.timedOut }
+        return .init(statusCode: 200, lines: Self.lines([
+            #"data: {"type":"response.completed","response":{"id":"p19-retry-unpinned","model":"gpt-5.6-sol","service_tier":"fast","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"Provider-free retry completed with intentionally unpinned metadata."}]}]}}"#,
+            "", "data: [DONE]", "",
+        ]))
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// Provider-free supporting-judge fixture: the retry succeeds with valid
+/// structured JSON, but its metadata is intentionally outside the pin.
+private final class PackageNineteenRetryThenUnpinnedJudgeMetadataTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        let count = lock.withLock { requests.append(request); return requests.count }
+        if count == 1 { throw TutorConversationError.timedOut }
+        return .init(statusCode: 200, lines: Self.lines([
+            #"data: {"type":"response.completed","response":{"id":"p19-judge-retry-unpinned","model":"gpt-5.6-sol","service_tier":"fast","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"{\"usefulness\":true,\"evidence_honesty\":true,\"strict_level_invariance\":false,\"experiment_completeness\":true,\"exact_procedure_necessity\":false}"}]}]}}"#,
+            "", "data: [DONE]", "",
+        ]))
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// Provider-free supporting-judge fixture with a valid, pinned completion
+/// after one typed transient failure; request-envelope mutation tests use it.
+private final class PackageNineteenRetryThenPinnedJudgeTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        let count = lock.withLock { requests.append(request); return requests.count }
+        if count == 1 { throw TutorConversationError.timedOut }
+        return .init(statusCode: 200, lines: Self.lines([
+            #"data: {"type":"response.completed","response":{"id":"p19-judge-retry-pinned","model":"gpt-5.6-sol","service_tier":"priority","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"{\"usefulness\":true,\"evidence_honesty\":true,\"strict_level_invariance\":false,\"experiment_completeness\":true,\"exact_procedure_necessity\":false}"}]}]}}"#,
+            "", "data: [DONE]", "",
+        ]))
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// Provider-free judge fixture with the five required booleans plus forbidden
+/// explanatory output, used to prove strict output/privacy rejection.
+private final class PackageNineteenExtraFieldJudgeTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        lock.withLock { requests.append(request) }
+        return .init(statusCode: 200, lines: Self.lines([
+            #"data: {"type":"response.completed","response":{"id":"p19-judge-extra","model":"gpt-5.6-sol","service_tier":"priority","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"{\"usefulness\":true,\"evidence_honesty\":true,\"strict_level_invariance\":false,\"experiment_completeness\":true,\"exact_procedure_necessity\":false,\"rationale\":\"reference-derived explanation\"}"}]}]}}"#,
+            "", "data: [DONE]", "",
+        ]))
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+
+    private static func lines(_ values: [String]) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            for value in values { continuation.yield(value) }
+            continuation.finish()
+        }
+    }
+}
+
+/// Records a real serialized request, then terminates before any provider
+/// completion so failure artifacts can prove their no-receipt projection.
+private final class PackageNineteenPreReceiptFailureTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        lock.withLock { requests.append(request) }
+        throw TutorConversationError.cancelled
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+}
+
+/// Network-incapable engine transport used to verify that a durable offline
+/// fallback records its single failed primary request without a retry.
+private final class PackageNineteenEngineTimeoutTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        lock.withLock { requests.append(request) }
+        throw TutorConversationError.timedOut
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+}
+
+/// Simulates a transport fault after the provider has already emitted its
+/// completed metadata. The direct retry helper must retain that completion.
+private final class PackageNineteenCompletedThenErrorTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        lock.withLock { requests.append(request) }
+        let lines = AsyncThrowingStream<String, Error> { continuation in
+            continuation.yield(#"data: {"type":"response.completed","response":{"id":"local-after-complete","model":"gpt-5.6-sol","service_tier":"priority","usage":{"input_tokens":1,"output_tokens":1},"output":[{"type":"message","content":[{"type":"output_text","text":"Completed before transport fault."}]}]}}"#)
+            continuation.yield("")
+            continuation.finish(throwing: TutorConversationError.timedOut)
+        }
+        return .init(statusCode: 200, lines: lines)
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
 }
 
 private struct ThrowingStreamingTransport: TutorStreamingHTTPTransport {
