@@ -1,24 +1,76 @@
 {
-  "status": "pending_remote_execution",
+  "status": "complete",
   "implementation_date": "2026-08-23",
-  "scope": "No-secret free GitHub Actions compute architecture only.",
-  "implemented": [
-    "parallel Linux and macOS lanes",
-    "stable local lane scripts",
-    "manual no-key heavy workflow",
-    "fail-closed workflow and manifest audit",
-    "three-day compact artifact policy",
-    "full-SHA approved Actions pins",
-    "macOS Tutor Package 019 same-checkout diagnostic/receipt/report drift proof",
-    "macOS Xcode unsigned-bundle app/AU identity and resource scan with temporary built-bundle receipt"
-  ],
-  "remote_runs": "pending; no cloud/provider work was invoked during implementation",
-  "timings": "pending remote execution",
-  "conclusion": "pending remote execution and parent-owned acceptance",
-  "account_and_billing_boundary": "No branch protection, billing, budget, repository visibility, plan, commit, push, or pull-request setting was changed. Planning assumes the observable public personal repository and Free concurrency limits.",
+  "repository": "marcboyertime/TrackSmith",
+  "implementation_commit": "7af84ee79c0811060f816ffdffdc7a9422f1e825",
+  "scope": "No-secret deterministic GitHub Actions compute architecture; paid Package 019 provider/cloud work remains paused.",
+  "required_checks": ["Tutor integrity / fast-integrity", "Tutor macOS Swift / swift"],
+  "baseline": {
+    "commit": "d962f3585222bf8b95c16b1cb1fac8cd706efa10",
+    "pull_request_runs": {
+      "linux": {"run_id": 32637263229, "workflow_seconds": 224, "job_seconds": 222},
+      "macos": {"run_id": 32637263226, "workflow_seconds": 1399, "job_seconds": 1395}
+    },
+    "critical_path_seconds": 1399,
+    "summed_job_seconds": 1617
+  },
+  "final_pull_request": {
+    "commit": "7af84ee79c0811060f816ffdffdc7a9422f1e825",
+    "created_at": "2026-08-23T13:39:57Z",
+    "completed_at": "2026-08-23T13:56:14Z",
+    "workflow_wall_seconds": 977,
+    "linux": {
+      "run_id": 32643033233,
+      "conclusion": "success",
+      "job_seconds": {"linux_docs_policy_security": 48, "linux_integrity": 180, "linux_retrieval": 99, "linux_evaluation": 33, "fast_integrity": 5}
+    },
+    "macos": {
+      "run_id": 32643033138,
+      "conclusion": "success",
+      "job_seconds": {"macos_tutor": 970, "macos_xcode_products": 407, "macos_swift_core": 170, "swift": 3}
+    },
+    "summed_job_seconds": 1915,
+    "critical_path_reduction_percent": 30.1644,
+    "macos_tutor_job_reduction_percent_against_baseline_macos_job": 30.4659,
+    "summed_job_seconds_delta": 298,
+    "summed_job_seconds_delta_percent": 18.4298,
+    "interpretation": "Parallel critical path fell by 422 seconds. Summed runner job time increased because independent lanes and aggregators are now separately scheduled; this is not represented as a compute-time saving."
+  },
+  "manual_exact_sha_proof": {
+    "linux": {"run_id": 32643063215, "conclusion": "success", "job_seconds": {"linux_integrity": 184, "linux_docs_policy_security": 37, "linux_retrieval": 100, "linux_evaluation": 46, "fast_integrity": 2}},
+    "macos": {"run_id": 32643064294, "conclusion": "success", "workflow_wall_seconds": 1129, "job_seconds": {"macos_xcode_products": 394, "macos_swift_core": 194, "macos_tutor": 977, "swift": 4}, "tutor_queue_seconds": 144, "tutor_created_at": "2026-08-23T13:40:27Z", "tutor_started_at": "2026-08-23T13:42:51Z", "queue_context": "Five macOS jobs were active."}
+  },
+  "parallelism": {"linux_jobs": 4, "observed_macos_jobs": 5, "macos_concurrency_limit_planning_assumption": 5},
+  "artifacts": {"run_id": 32643033138, "artifact_id": 9494201152, "name": "package-019-xcode-evidence", "bytes": 1600, "expires": "2026-08-26", "retention_days": 3, "digest": "sha256:0df9d27067418cb0e4b92918a547631a0151b551bbe7d9760e522cfba1e439c3", "files": {"xcode_products_report_sha256": "2e04b37f1b81f2f10fd68a9aa0e0795fb77fdf173ab5dfaa8ad61521f2364904", "package019_ci_receipt_sha256": "a2d46b1cac300dadf913b535600ce167a7cc65541c65c04050c7c78d3c959a7a"}, "boundary": "The compact artifact proves unsigned app/AU/component/resource identifiers and hashes. It is not signing, installation, AU registration, Logic, provider/model-listening, or owner-listening evidence."},
+  "concurrency_and_repair_evidence": {
+    "pull_request_stale_run_cancellation_examples": [32640929039, 32640929030, 32640756468, 32640756467],
+    "deterministic_repairs_not_transient_retries": [
+      {"run_id": 32640761097, "cause": "XcodeGen archive layout execution path"},
+      {"run_id": 32641065778, "cause": "temporary project output broke local Swift package path"},
+      {"run_id": 32641303851, "cause": "built ProductionTutor bundle discovery/reporting"},
+      {"run_id": 32641960235, "cause": "tracked Package 019 receipt fingerprint drift after CI infrastructure edits"}
+    ],
+    "policy": "These were repaired by source changes and new commits, not treated as same-SHA transient failures eligible for rerun."
+  },
+  "cost_and_account_boundary": {
+    "runners": ["ubuntu-24.04", "macos-15"],
+    "caches": {"enabled": false, "observed_bytes": 0, "soft_future_budget_bytes": 2147483648},
+    "artifact_policy": {"compact_only": true, "retention_days": 3, "maximum_bytes_per_run": 26214400},
+    "branch_protection_observation": "Repository branch-protection lookup was absent (404) at the baseline observation; this implementation did not change it.",
+    "settings_unchanged": ["branch protection", "billing", "metered budget", "repository visibility", "account plan"],
+    "recommendation": "Owner may configure a zero-dollar Actions metered-product budget with stop usage where supported; this implementation did not change any account setting."
+  },
   "evidence_boundaries": [
-    "Actions output is not signing, installation, Logic, provider, model-listening, or owner-listening evidence.",
-    "Hardware-sensitive performance output remains observational and is not a deterministic merge gate.",
-    "Package 019 tracked deterministic diagnostic/receipt/reports are regenerated and drift-checked only after the macOS Tutor diagnostic; the Xcode lane's temporary receipt records unsigned app/AU identities and built retrieval-resource hashes, not a tracked receipt replacement."
+    "All required PR and manual exact-SHA workflow jobs completed successfully.",
+    "Actions results prove recorded source/build/test/resource outcomes only, not signing, installation, AU registration, Logic behavior, provider/model quality, accessibility observation, or owner listening.",
+    "Hardware-sensitive performance remains observational rather than a deterministic merge gate.",
+    "Package 019 provider/cloud work was not run and remains paused."
+  ],
+  "official_references": [
+    "https://docs.github.com/en/actions/reference/runners/github-hosted-runners",
+    "https://docs.github.com/en/actions/reference/limits",
+    "https://docs.github.com/en/billing/reference/actions-runner-pricing",
+    "https://docs.github.com/en/billing/concepts/product-billing/github-actions",
+    "https://docs.github.com/en/billing/how-tos/set-up-budgets"
   ]
 }
