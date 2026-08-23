@@ -35,10 +35,16 @@ LANE_FIELDS = {
 EXCEPTION_FIELDS = {"workflow", "job", "rule", "reason", "owner", "reviewed_on", "expires_on"}
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 DISALLOWED_RUNNER = re.compile(r"self-hosted|larger|gpu|large|xlarge|windows|ubuntu-latest|macos-latest", re.I)
-SECRET_REF = re.compile(r"\bsecrets\s*\.", re.I)
+SECRET_REF = re.compile(r"\bsecrets\s*(?:\.\s*[A-Za-z_][A-Za-z0-9_]*|\[\s*['\"][^'\"]+['\"]\s*\])", re.I)
 FORBIDDEN_COMMAND = re.compile(r"\b(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud|cloud[-_ ]?(?:eval|harness|text|audio)|model[-_ ]?eval)\b", re.I)
 UNSAFE_ARTIFACT = re.compile(r"(?:^|/)(?:\.build|DerivedData|Applications|Library/Audio/Plug-Ins)(?:/|$)|\.(?:app|appex|sqlite|db|wav|aiff|mp3|flac)(?:$|\s)", re.I)
 ENTRYPOINT_COMMAND = re.compile(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh)(?: <choice>)?$")
+SCRIPT_RELATIVE_PATH = re.compile(r"scripts/ci/[A-Za-z0-9_.-]+\.sh$")
+STATIC_SCRIPT_DEPENDENCY = re.compile(r"(?:^|(?:&&|\|\||;|\|)\s*)(?:bash|source|\.)\s+['\"]?(scripts/ci/[A-Za-z0-9_.-]+\.sh)['\"]?(?=\s|$|;|&&|\|\|)")
+SCRIPT_DEPENDENCY_ATTEMPT = re.compile(r"(?:^|(?:&&|\|\||;|\|)\s*)(?:bash|source|\.)\s+")
+STANDARD_LIB_SOURCE = re.compile(r'^source "\$\(cd -- "\$\(dirname -- "\$\{BASH_SOURCE\[0\]\}"\)" && pwd -P\)/lib\.sh"$')
+MAX_SCRIPT_CLOSURE_FILES = 32
+MAX_SCRIPT_CLOSURE_BYTES = 1_000_000
 SCRIPT_CLOUD_MODEL = re.compile(
     r"(?:https?://[^\s'\"]*(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud)[^\s'\"]*|"
     r"(?<![./\w-])(?:openai|anthropic|claude|gemini|bedrock|vertex|azure|aws|gcloud|cloud[-_ ]?(?:eval|harness|text|audio)|model[-_ ]?eval)\b)",
@@ -50,6 +56,10 @@ SCRIPT_OWNER_SURFACE = re.compile(
     r"(?:^|[\s'\"])(?:/Applications|Library/Audio/Plug-Ins)(?:/|\b)",
     re.I,
 )
+XCODEBUILD_BUILD = re.compile(r"\bxcodebuild\b.*\bbuild\b", re.I)
+UNSIGNED_XCODEBUILD = re.compile(r"\bCODE_SIGNING_ALLOWED\s*=\s*NO\b", re.I)
+LOGIC_LAUNCH = re.compile(r"\bopen\s+-a\s+['\"]?Logic(?:\s+Pro)?['\"]?(?=\s|$|;|&&|\|\|)", re.I)
+PRIVATE_AUDIO_PATH = re.compile(r"(?:^|[\s'\"])(?:/|~/)[^\s'\"]+\.(?:wav|aiff|mp3|flac)(?=$|[\s'\";])", re.I)
 
 
 def parse_yaml(path: pathlib.Path) -> dict[str, Any]:
@@ -65,13 +75,10 @@ def parse_yaml(path: pathlib.Path) -> dict[str, Any]:
     return value
 
 
-def entrypoint_path(command: Any, repo_root: pathlib.Path) -> pathlib.Path | None:
-    if not isinstance(command, str):
+def script_path(relative: str, repo_root: pathlib.Path) -> pathlib.Path | None:
+    if not SCRIPT_RELATIVE_PATH.fullmatch(relative):
         return None
-    match = ENTRYPOINT_COMMAND.fullmatch(command)
-    if not match:
-        return None
-    candidate = repo_root / match.group(1)
+    candidate = repo_root / relative
     try:
         resolved = candidate.resolve(strict=True)
         resolved.relative_to((repo_root / "scripts/ci").resolve(strict=True))
@@ -80,6 +87,13 @@ def entrypoint_path(command: Any, repo_root: pathlib.Path) -> pathlib.Path | Non
     if candidate.is_symlink() or not resolved.is_file() or resolved.parent != (repo_root / "scripts/ci").resolve():
         return None
     return resolved
+
+
+def entrypoint_path(command: Any, repo_root: pathlib.Path) -> pathlib.Path | None:
+    if not isinstance(command, str):
+        return None
+    match = ENTRYPOINT_COMMAND.fullmatch(command)
+    return script_path(match.group(1), repo_root) if match else None
 
 
 def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
@@ -145,13 +159,93 @@ def reject(errors: list[str], manifest: dict[str, Any], workflow: str, job: str,
         errors.append(f"{workflow}:{job}: {rule}: {detail}")
 
 
-def executable_lines(path: pathlib.Path) -> str:
-    if path.stat().st_size > 1_000_000:
-        raise RuntimeError(f"manifest entry point exceeds the 1 MiB audit bound: {path}")
+def strip_shell_comment(line: str) -> str:
+    quote: str | None = None
+    escaped = False
+    for index, character in enumerate(line):
+        if escaped:
+            escaped = False
+        elif character == "\\" and quote != "'":
+            escaped = True
+        elif quote:
+            if character == quote:
+                quote = None
+        elif character in {"'", '"'}:
+            quote = character
+        elif character == "#" and (index == 0 or line[index - 1].isspace()):
+            return line[:index]
+    return line
+
+
+def executable_commands(path: pathlib.Path) -> list[tuple[int, str]]:
     try:
-        return "\n".join(line for line in path.read_text(encoding="utf-8").splitlines() if not line.lstrip().startswith("#"))
+        lines = path.read_text(encoding="utf-8").splitlines()
     except UnicodeDecodeError as error:
         raise RuntimeError(f"manifest entry point is not UTF-8 shell text: {path}: {error}") from error
+    commands: list[tuple[int, str]] = []
+    pending = ""
+    pending_line = 0
+    for line_number, line in enumerate(lines, 1):
+        executable = strip_shell_comment(line).strip()
+        if not executable:
+            continue
+        if not pending:
+            pending_line = line_number
+        pending += executable[:-1].rstrip() + " " if executable.endswith("\\") else executable
+        if not executable.endswith("\\"):
+            commands.append((pending_line, pending))
+            pending = ""
+    if pending:
+        raise RuntimeError(f"unterminated line continuation: {path}:{pending_line}")
+    return commands
+
+
+def shell_segments(command: str) -> list[str]:
+    return [segment.strip() for segment in re.split(r"(?:&&|\|\||;|\|)", command) if segment.strip()]
+
+
+def script_closure(entrypoint: pathlib.Path, repo_root: pathlib.Path) -> list[tuple[pathlib.Path, list[tuple[int, str]]]]:
+    closure: list[tuple[pathlib.Path, list[tuple[int, str]]]] = []
+    visited: set[pathlib.Path] = set()
+    active: set[pathlib.Path] = set()
+    total_bytes = 0
+
+    def visit(path: pathlib.Path) -> None:
+        nonlocal total_bytes
+        if path in active:
+            raise RuntimeError(f"script dependency cycle: {path.relative_to(repo_root)}")
+        if path in visited:
+            return
+        if len(visited) >= MAX_SCRIPT_CLOSURE_FILES:
+            raise RuntimeError(f"script dependency closure exceeds {MAX_SCRIPT_CLOSURE_FILES} files")
+        size = path.stat().st_size
+        total_bytes += size
+        if total_bytes > MAX_SCRIPT_CLOSURE_BYTES:
+            raise RuntimeError(f"script dependency closure exceeds {MAX_SCRIPT_CLOSURE_BYTES} bytes")
+        active.add(path)
+        commands = executable_commands(path)
+        closure.append((path, commands))
+        for line_number, command in commands:
+            if STANDARD_LIB_SOURCE.fullmatch(command):
+                dependency = script_path("scripts/ci/lib.sh", repo_root)
+                if dependency is None:
+                    raise RuntimeError(f"missing standard lib dependency: {path.relative_to(repo_root)}:{line_number}")
+                visit(dependency)
+                continue
+            matches = list(STATIC_SCRIPT_DEPENDENCY.finditer(command))
+            if matches:
+                for match in matches:
+                    dependency = script_path(match.group(1), repo_root)
+                    if dependency is None:
+                        raise RuntimeError(f"invalid script dependency: {path.relative_to(repo_root)}:{line_number}")
+                    visit(dependency)
+            elif SCRIPT_DEPENDENCY_ATTEMPT.search(command):
+                raise RuntimeError(f"dynamic or unresolvable shell dependency: {path.relative_to(repo_root)}:{line_number}")
+        active.remove(path)
+        visited.add(path)
+
+    visit(entrypoint)
+    return closure
 
 
 def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path, errors: list[str]) -> None:
@@ -162,16 +256,23 @@ def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path
             # manifest_errors already reports this contract failure.
             continue
         try:
-            content = executable_lines(path)
+            closure = script_closure(path, repo_root)
         except (OSError, RuntimeError) as error:
             errors.append(f"manifest-entrypoint:{lane_id}: entrypoint: {error}")
             continue
-        if SECRET_REF.search(content):
-            reject(errors, manifest, "manifest-entrypoint", lane_id, "secrets", f"secret reference in {path.relative_to(repo_root)}")
-        if SCRIPT_CLOUD_MODEL.search(content):
-            reject(errors, manifest, "manifest-entrypoint", lane_id, "cloud_model", f"provider/cloud/model surface in {path.relative_to(repo_root)}")
-        if SCRIPT_OWNER_SURFACE.search(content):
-            reject(errors, manifest, "manifest-entrypoint", lane_id, "owner_surface", f"sign/install/Logic/private-audio surface in {path.relative_to(repo_root)}")
+        for script, commands in closure:
+            relative = script.relative_to(repo_root)
+            for line_number, command in commands:
+                detail = f"{relative}:{line_number}"
+                if SECRET_REF.search(command):
+                    reject(errors, manifest, "manifest-entrypoint", lane_id, "secrets", f"secret reference in {detail}")
+                if SCRIPT_CLOUD_MODEL.search(command):
+                    reject(errors, manifest, "manifest-entrypoint", lane_id, "cloud_model", f"provider/cloud/model surface in {detail}")
+                if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
+                    reject(errors, manifest, "manifest-entrypoint", lane_id, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
+                for segment in shell_segments(command):
+                    if XCODEBUILD_BUILD.search(segment) and not UNSIGNED_XCODEBUILD.search(segment):
+                        reject(errors, manifest, "manifest-entrypoint", lane_id, "xcode_signing", f"xcodebuild build lacks CODE_SIGNING_ALLOWED=NO in {detail}")
 
 
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
@@ -273,17 +374,45 @@ def self_test() -> None:
             for file in workflows.glob("*.yml"): file.unlink()
             write_manifest(data); write_entrypoints(data); (workflows / f"{name}.yml").write_text(text)
             if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
-        for name, content in (
-            ("hidden-script-secret", "printf '${{ secrets.TOKEN }}'\n"),
-            ("hidden-script-cloud", "curl https://api.openai.com/v1/responses\n"),
-            ("hidden-script-owner-surface", "codesign --force unsafe.app\n"),
-        ):
+        def reset_safe_fixture() -> None:
             for file in workflows.glob("*.yml"): file.unlink()
             write_manifest(manifest_data); write_entrypoints(manifest_data)
-            (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + content)
-            (workflows / f"{name}.yml").write_text(good)
+            (workflows / "safe.yml").write_text(good)
+
+        reset_safe_fixture()
+        (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\nxcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n")
+        if audit(workflows, manifest, repo): raise AssertionError("explicit unsigned xcodebuild fixture was rejected")
+
+        def reject_entrypoint(name: str, content: str, helper: str | None = None, symlink_helper: bool = False) -> None:
+            reset_safe_fixture()
+            entrypoint = repo / "scripts/ci/run-linux-integrity.sh"
+            entrypoint.write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + content)
+            helper_path = repo / "scripts/ci/opaque-check.sh"
+            if helper_path.exists() or helper_path.is_symlink(): helper_path.unlink()
+            if helper is not None:
+                if symlink_helper:
+                    target = repo / "scripts/ci/safe-helper.sh"; target.write_text("#!/usr/bin/env bash\nprintf safe\\n")
+                    helper_path.symlink_to(target.name)
+                else:
+                    helper_path.write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + helper)
             if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
-    print("audit-free-compute self-test: 20 rejection classes passed")
+
+        for name, content, helper, symlink_helper in (
+            ("hidden-script-secret", "printf '${{ secrets.TOKEN }}'\n", None, False),
+            ("hidden-script-bracket-secret", "printf \"${{ secrets['TOKEN'] }}\"\n", None, False),
+            ("hidden-script-cloud", "curl https://api.openai.com/v1/responses\n", None, False),
+            ("hidden-script-owner-surface", "codesign --force unsafe.app\n", None, False),
+            ("hidden-script-unsigned-xcodebuild", "xcodebuild -project App.xcodeproj build\n", None, False),
+            ("hidden-script-xcodebuild-late-disable", "xcodebuild -project App.xcodeproj build && CODE_SIGNING_ALLOWED=NO true\n", None, False),
+            ("hidden-script-logic-launch", "open -a Logic\n", None, False),
+            ("hidden-script-private-wav", "printf safe /tmp/owner-take.wav\n", None, False),
+            ("hidden-script-helper-indirection", "bash scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-traversal", "bash scripts/ci/../outside.sh\n", None, False),
+            ("hidden-script-symlink", "bash scripts/ci/opaque-check.sh\n", "unused\n", True),
+            ("hidden-script-dynamic", "bash \"scripts/ci/$CHECK.sh\"\n", None, False),
+        ):
+            reject_entrypoint(name, content, helper, symlink_helper)
+    print("audit-free-compute self-test: 29 rejection classes passed")
 
 
 def main() -> int:
