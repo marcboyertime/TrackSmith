@@ -40,8 +40,9 @@ FORBIDDEN_COMMAND = re.compile(r"\b(?:openai|anthropic|claude|gemini|bedrock|ver
 UNSAFE_ARTIFACT = re.compile(r"(?:^|/)(?:\.build|DerivedData|Applications|Library/Audio/Plug-Ins)(?:/|$)|\.(?:app|appex|sqlite|db|wav|aiff|mp3|flac)(?:$|\s)", re.I)
 ENTRYPOINT_COMMAND = re.compile(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh)(?: <choice>)?$")
 SCRIPT_RELATIVE_PATH = re.compile(r"scripts/ci/[A-Za-z0-9_.-]+\.sh$")
-STATIC_SCRIPT_DEPENDENCY = re.compile(r"(?:^|(?:&&|\|\||;|\|)\s*)(?:bash|source|\.)\s+['\"]?(scripts/ci/[A-Za-z0-9_.-]+\.sh)['\"]?(?=\s|$|;|&&|\|\|)")
-SCRIPT_DEPENDENCY_ATTEMPT = re.compile(r"(?:^|(?:&&|\|\||;|\|)\s*)(?:bash|source|\.)\s+")
+LITERAL_SCRIPT_TOKEN = re.compile(r"(?<![A-Za-z0-9_.\-/])(scripts/ci/[A-Za-z0-9_.-]+\.sh)(?![A-Za-z0-9_.\-/])")
+SCRIPT_CI_PATH_ATTEMPT = re.compile(r"scripts/ci/[^\s'\";|&()]*\.sh\b")
+SHELL_DEPENDENCY_INVOKER = re.compile(r"^(?:(?:env|command)(?:\s+[-A-Za-z0-9_=]+)*\s+)?(?:bash|sh|source)\b|^\.\s+")
 STANDARD_LIB_SOURCE = re.compile(r'^source "\$\(cd -- "\$\(dirname -- "\$\{BASH_SOURCE\[0\]\}"\)" && pwd -P\)/lib\.sh"$')
 MAX_SCRIPT_CLOSURE_FILES = 32
 MAX_SCRIPT_CLOSURE_BYTES = 1_000_000
@@ -232,15 +233,19 @@ def script_closure(entrypoint: pathlib.Path, repo_root: pathlib.Path) -> list[tu
                     raise RuntimeError(f"missing standard lib dependency: {path.relative_to(repo_root)}:{line_number}")
                 visit(dependency)
                 continue
-            matches = list(STATIC_SCRIPT_DEPENDENCY.finditer(command))
-            if matches:
-                for match in matches:
-                    dependency = script_path(match.group(1), repo_root)
-                    if dependency is None:
-                        raise RuntimeError(f"invalid script dependency: {path.relative_to(repo_root)}:{line_number}")
-                    visit(dependency)
-            elif SCRIPT_DEPENDENCY_ATTEMPT.search(command):
-                raise RuntimeError(f"dynamic or unresolvable shell dependency: {path.relative_to(repo_root)}:{line_number}")
+            literal_paths = {match.group(1) for match in LITERAL_SCRIPT_TOKEN.finditer(command)}
+            attempted_paths = {match.group(0) for match in SCRIPT_CI_PATH_ATTEMPT.finditer(command)}
+            if attempted_paths != literal_paths or (literal_paths and ("$(" in command or "`" in command)):
+                raise RuntimeError(f"dynamic, constructed, or traversal script dependency: {path.relative_to(repo_root)}:{line_number}")
+            for segment in shell_segments(command):
+                segment_paths = {match.group(1) for match in LITERAL_SCRIPT_TOKEN.finditer(segment)}
+                if SHELL_DEPENDENCY_INVOKER.search(segment) and not segment_paths:
+                    raise RuntimeError(f"dynamic, external, or unresolvable shell dependency: {path.relative_to(repo_root)}:{line_number}")
+            for relative in literal_paths:
+                dependency = script_path(relative, repo_root)
+                if dependency is None:
+                    raise RuntimeError(f"invalid script dependency: {path.relative_to(repo_root)}:{line_number}")
+                visit(dependency)
         active.remove(path)
         visited.add(path)
 
@@ -406,13 +411,21 @@ def self_test() -> None:
             ("hidden-script-xcodebuild-late-disable", "xcodebuild -project App.xcodeproj build && CODE_SIGNING_ALLOWED=NO true\n", None, False),
             ("hidden-script-logic-launch", "open -a Logic\n", None, False),
             ("hidden-script-private-wav", "printf safe /tmp/owner-take.wav\n", None, False),
-            ("hidden-script-helper-indirection", "bash scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-helper-direct", "bash scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-helper-env", "env bash scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-helper-command", "command bash scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-helper-source", "source scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-helper-dot", ". scripts/ci/opaque-check.sh\n", "curl https://api.openai.com/v1/responses\n", False),
+            ("hidden-script-command-substitution", "bash \"$(printf scripts/ci/opaque-check.sh)\"\n", "printf safe\n", False),
+            ("hidden-script-dynamic-construction", "helper=\"scripts/ci/opaque-check.sh\"\nbash \"$helper\"\n", "printf safe\n", False),
+            ("hidden-script-external", "bash /tmp/opaque-check.sh\n", None, False),
             ("hidden-script-traversal", "bash scripts/ci/../outside.sh\n", None, False),
             ("hidden-script-symlink", "bash scripts/ci/opaque-check.sh\n", "unused\n", True),
             ("hidden-script-dynamic", "bash \"scripts/ci/$CHECK.sh\"\n", None, False),
+            ("hidden-script-cycle", "bash scripts/ci/opaque-check.sh\n", "bash scripts/ci/run-linux-integrity.sh\n", False),
         ):
             reject_entrypoint(name, content, helper, symlink_helper)
-    print("audit-free-compute self-test: 29 rejection classes passed")
+    print("audit-free-compute self-test: 37 rejection classes passed")
 
 
 def main() -> int:

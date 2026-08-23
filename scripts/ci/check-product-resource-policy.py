@@ -61,13 +61,17 @@ def source_files(source_roots: list[pathlib.Path]) -> list[pathlib.Path]:
 def check(resources: pathlib.Path, source_roots: list[pathlib.Path]) -> None:
     if not resources.is_dir() or resources.is_symlink():
         fail(f"resources must be a real directory: {resources}")
+    all_entries = sorted(resources.rglob("*"))
+    for path in all_entries:
+        if path.is_symlink():
+            fail(f"resources reject symlinks: {path}")
     forbidden_golden = resources / "tracksmith-corpus-017-golden-tutor-conversations-level-adaptation.json"
     if forbidden_golden.exists() or forbidden_golden.is_symlink():
         fail(f"forbidden golden corpus is present: {forbidden_golden}")
-    json_files = sorted(path for path in resources.glob("*.json") if path.is_file() and not path.is_symlink())
+    json_files = sorted(path for path in all_entries if path.is_file() and path.suffix == ".json")
     expected_manifest = resources / "CandidateRetrieval.manifest.json"
     if json_files != [expected_manifest]:
-        fail("resources must contain exactly CandidateRetrieval.manifest.json as their only top-level JSON file")
+        fail("resources must contain exactly CandidateRetrieval.manifest.json as their only JSON file")
     scan_files(
         "product retrieval resource scan",
         [resources / "CandidateRetrieval.sqlite", expected_manifest],
@@ -103,6 +107,16 @@ def self_test() -> None:
         resources, roots = fixture("unexpected-json")
         (resources / "unexpected.json").write_text("{}")
         cases.append(("unexpected-json", resources, roots))
+        resources, roots = fixture("nested-json")
+        nested = resources / "nested"; nested.mkdir()
+        (nested / "unexpected.json").write_text("{}")
+        cases.append(("nested-json", resources, roots))
+        resources, roots = fixture("json-symlink")
+        (resources / "CandidateRetrieval.link.json").symlink_to("CandidateRetrieval.manifest.json")
+        cases.append(("json-symlink", resources, roots))
+        resources, roots = fixture("nested-symlink-directory")
+        (resources / "linked-resources").symlink_to(resources, target_is_directory=True)
+        cases.append(("nested-symlink-directory", resources, roots))
         resources, roots = fixture("golden-corpus")
         (resources / "tracksmith-corpus-017-golden-tutor-conversations-level-adaptation.json").write_text("{}")
         cases.append(("golden-corpus", resources, roots))
@@ -112,7 +126,7 @@ def self_test() -> None:
             except RuntimeError:
                 continue
             raise AssertionError(f"negative fixture was accepted: {name}")
-    print("product-resource-policy self-test: both scans and 4 negative fixtures passed")
+    print("product-resource-policy self-test: both scans and 7 negative fixtures passed")
 
 
 def main() -> int:

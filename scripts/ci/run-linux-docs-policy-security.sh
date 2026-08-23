@@ -4,6 +4,7 @@ source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)/lib.sh"
 cd "$(tracksmith_repo_root)"
 tool_versions
 section "product resource boundary"
+python3 scripts/ci/check-product-resource-policy.py --self-test
 python3 scripts/ci/check-product-resource-policy.py
 section "workflow safety audit"
 python3 scripts/ci/audit-free-compute.py
