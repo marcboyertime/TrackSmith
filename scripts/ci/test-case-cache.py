@@ -95,7 +95,8 @@ def main() -> None:
         assert with_race("after-entry-open", grow_during_read, lambda: cache.load(root, components)) is None
         cache.store(root, components, result)
         def temporary_for_store(current: Path) -> None:
-            temporary_path = max((item for item in current.iterdir() if cache.TEMPORARY.fullmatch(item.name)), key=lambda item: item.stat().st_mtime_ns)
+            assert cache.RACE_TARGET_NAME is not None and cache.TEMPORARY.fullmatch(cache.RACE_TARGET_NAME)
+            temporary_path = current / cache.RACE_TARGET_NAME
             temporary_path.unlink(); temporary_path.write_text("user temporary sentinel")
         rejected(lambda: with_race("after-store-temp-open", temporary_for_store, lambda: cache.store(root, components, result)), "raced temporary sentinel was accepted")
         temporary_sentinel = next(item for item in root.iterdir() if cache.TEMPORARY.fullmatch(item.name) and item.read_text() == "user temporary sentinel")

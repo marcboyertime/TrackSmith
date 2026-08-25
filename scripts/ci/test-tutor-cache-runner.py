@@ -55,7 +55,9 @@ open(os.environ['TRACKSMITH_TEST_COUNTER'],'a').write(identifier+'\\n')
         aggregate(sorted((temporary / "partial").glob("shard-*.json")), contract=contract)
         changed = {**contract, "policy_hash": digest("changed-policy")}
         assert all(cache.load(cache_root, components(changed, identifier, semantic(changed, identifier, resource, name, case_implementation, shared_evaluator), shared_evaluator)) is None for identifier, (resource, name, case_implementation, shared_evaluator) in listed.items())
-    print("test-tutor-cache-runner: warm hits, one-case miss execution, aggregate equivalence, and policy invalidation passed")
+        changed_shared = {identifier: (resource, name, case_implementation, digest("changed-package-or-resource")) for identifier, (resource, name, case_implementation, _) in listed.items()}
+        assert all(cache.load(cache_root, components(contract, identifier, semantic(contract, identifier, resource, name, case_implementation, shared_evaluator), shared_evaluator)) is None for identifier, (resource, name, case_implementation, shared_evaluator) in changed_shared.items())
+    print("test-tutor-cache-runner: warm hits, one-case miss execution, aggregate equivalence, and policy/shared-dependency invalidation passed")
 
 
 if __name__ == "__main__":

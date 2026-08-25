@@ -26,6 +26,10 @@ INDEX_TEMPORARY = re.compile(r"^\.tracksmith-deterministic-case-cache-index-v1\.
 INDEX_FIELDS = {"schema_version", "entry_keys", "temporary_entries"}
 # Test-only deterministic interleaving point. Production leaves this unset.
 RACE_HOOK: Callable[[str, Path], None] | None = None
+# The hook receives only the root for production-signature stability. Tests can
+# read this ephemeral exact leaf name while a hook is running; this eliminates
+# timestamp/order inference across filesystems.
+RACE_TARGET_NAME: str | None = None
 
 
 def key(components: dict[str, str]) -> str:
@@ -44,8 +48,14 @@ def _index_payload(keys: set[str], temporary_entries: dict[str, tuple[int, int, 
     return json.dumps({"schema_version": SCHEMA, "entry_keys": sorted(keys), "temporary_entries": {name: list(identity) for name, identity in sorted(temporary_entries.items())}}, sort_keys=True, separators=(",", ":")).encode()
 
 
-def _race(point: str, root: Path) -> None:
-    if RACE_HOOK is not None: RACE_HOOK(point, root)
+def _race(point: str, root: Path, target_name: str | None = None) -> None:
+    global RACE_TARGET_NAME
+    previous = RACE_TARGET_NAME
+    RACE_TARGET_NAME = target_name
+    try:
+        if RACE_HOOK is not None: RACE_HOOK(point, root)
+    finally:
+        RACE_TARGET_NAME = previous
 
 
 def _canonical_root(root: Path) -> Path:
@@ -230,7 +240,7 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
         # temporary that cleanup would unlink.
         handle = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=descriptor)
         created_identity = _identity(os.fstat(handle))
-        _race("after-store-temp-open", root)
+        _race("after-store-temp-open", root, temporary)
         current = os.stat(temporary, dir_fd=descriptor, follow_symlinks=False)
         if not stat.S_ISREG(current.st_mode) or _identity(current) != created_identity: raise ValueError("cache temporary changed before ownership recording")
         owned.add(cache_key); temporary_entries[temporary] = created_identity

@@ -546,9 +546,38 @@ private final class Suite {
         for item in ranges.sorted(by: { $0.range.lowerBound > $1.range.lowerBound }) {
             shared.replaceSubrange(item.range, with: "func ordinaryCaseBody { <redacted-ordinary-case-body> }")
         }
-        let sharedHash = sha256(Data(shared.utf8))
+        let sharedHash = executionClosureHash(redactedTutorSource: shared)
         return Dictionary(uniqueKeysWithValues: ranges.map { ($0.id, (sha256(Data($0.body.utf8)), sharedHash)) })
     }()
+
+    private func executionClosureHash(redactedTutorSource: String) -> String {
+        let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let explicit = ["Package.swift", "tools/TutorConversationTests/Resources", "packages", "research/community_knowledge/runtime_projection/p16"]
+        var rows = ["tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift|\(sha256(Data(redactedTutorSource.utf8)))"]
+        for relative in explicit {
+            let url = root.appendingPathComponent(relative)
+            var isDirectory: ObjCBool = false
+            guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) else {
+                rows.append("\(relative)|missing")
+                continue
+            }
+            if !isDirectory.boolValue {
+                rows.append("\(relative)|\((try? Data(contentsOf: url)).map(sha256) ?? "unavailable")")
+                continue
+            }
+            guard let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey, .isSymbolicLinkKey], options: [.skipsHiddenFiles]) else {
+                rows.append("\(relative)|unreadable")
+                continue
+            }
+            for case let file as URL in enumerator {
+                let values = try? file.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey])
+                guard values?.isRegularFile == true, values?.isSymbolicLink != true else { continue }
+                let path = file.path.replacingOccurrences(of: root.path + "/", with: "")
+                rows.append("\(path)|\((try? Data(contentsOf: file)).map(sha256) ?? "unavailable")")
+            }
+        }
+        return sha256(Data(rows.sorted().joined(separator: "\n").utf8))
+    }
 
     private func caseSemanticContext(for item: CaseSpec) -> (caseImplementation: String, sharedEvaluator: String) {
         ordinaryCaseSemanticContexts[item.id] ?? (fileHash("tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift"), fileHash("tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift"))

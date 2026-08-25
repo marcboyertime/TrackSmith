@@ -144,7 +144,7 @@ def main() -> int:
                 (args.output_dir / f"shard-{index}.json").write_bytes(canonical_bytes(report(contract, index, args.shard_count, identifiers, values)) + b"\n")
         if set(cases) != set(contract["case_ids"]):
             raise ValueError("cache execution did not cover the complete contract universe")
-        observation = {"schema_version": "tracksmith-tutor-cache-observation/1", "mode": mode, "hits": len(contract["case_ids"]) - len(misses), "misses": len(misses), "case_ids_executed": misses, "case_ids_reused": sorted(set(contract["case_ids"]) - set(misses))}
+        observation = {"schema_version": "tracksmith-tutor-cache-observation/1", "mode": mode, "hits": len(contract["case_ids"]) - len(misses), "misses": len(misses), "case_ids_executed": misses, "case_ids_reused": sorted(set(contract["case_ids"]) - set(misses)), "binary_sha256_observational": digest(args.binary.read_bytes())}
         (args.output_dir / "cache-observation.json").write_bytes(canonical_bytes(observation) + b"\n")
         print(json.dumps(observation, sort_keys=True))
     except (OSError, ValueError, json.JSONDecodeError) as error:
