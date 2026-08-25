@@ -3493,9 +3493,9 @@ private final class Suite {
         let corruptManifest = root.appendingPathComponent("corrupt.json")
         try Data("{}".utf8).write(to: corruptManifest)
         let schemaDriftManifest = root.appendingPathComponent("schema-drift.json")
-        try Data(#"{"schema_version":"wrong","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":""}"#.utf8).write(to: schemaDriftManifest)
+        try Data(#"{"schema_version":"wrong","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":"","database_sha256":"0000000000000000000000000000000000000000000000000000000000000000","logical_content_sha256":"0000000000000000000000000000000000000000000000000000000000000000"}"#.utf8).write(to: schemaDriftManifest)
         let mismatchManifest = root.appendingPathComponent("mismatch.json")
-        try Data(#"{"schema_version":"package018-candidate-index/1","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":""}"#.utf8).write(to: mismatchManifest)
+        try Data(#"{"schema_version":"package018-candidate-index/1","corpus_version":"p16-runtime-projection-6212","retrieval_policy_version":"wrong","card_count":6212,"package_017_runtime_count":0,"database":"none.sqlite","database_bytes":0,"database_header_sha256":"","database_sha256":"0000000000000000000000000000000000000000000000000000000000000000","logical_content_sha256":"0000000000000000000000000000000000000000000000000000000000000000"}"#.utf8).write(to: mismatchManifest)
         try expect(CandidateRetrievalIndex.open(indexURL: nil, manifestURL: nil).availability == .unavailable &&
                    CandidateRetrievalIndex.open(indexURL: nil, manifestURL: corruptManifest).availability == .corrupt &&
                    CandidateRetrievalIndex.open(indexURL: nil, manifestURL: schemaDriftManifest).availability == .schemaDrift &&
