@@ -3,11 +3,11 @@ from __future__ import annotations
 import argparse, copy, json, math, subprocess, tempfile
 from pathlib import Path
 from aggregate_shards import aggregate
-from shard_protocol import ALGORITHM, FALLBACK, SCHEMA, assign, digest, partition_hash
+from shard_protocol import ALGORITHM, FALLBACK, SCHEMA, assign, digest, load_contract, load_cost_manifest, partition_hash
 
 def report(index: int, count: int, cases: list[str]) -> dict:
     values = [{"id": item, "semantic_input_hash": digest(item), "outcome": "passed", "duration_seconds": 1, "result_hash": digest(f"{item}|passed|{digest(item)}"), "resource_class": "cpu"} for item in cases]
-    return {"schema_version": SCHEMA, "suite_id": "suite", "suite_version": "1", "suite_source_hash": digest("source"), "shard_index": index, "shard_count": count, "assignment_algorithm": ALGORITHM, "assignment_version": "1", "partition_hash": partition_hash(cases), "expected_ids": cases, "executed_ids": cases, "cases": values, "toolchain_identity": "test-toolchain", "toolchain_hash": digest("tool"), "policy_hash": digest("policy"), "index_hash": digest("index"), "commit": "local", "tree_classification": "test", "observation": {"wall_clock_is_observational": True}}
+    return {"schema_version": SCHEMA, "suite_id": "suite", "suite_version": "1", "suite_source_hash": digest("source"), "shard_index": index, "shard_count": count, "assignment_algorithm": ALGORITHM, "assignment_version": "1", "partition_hash": partition_hash(cases), "expected_ids": cases, "executed_ids": cases, "cases": values, "toolchain_identity": "test-toolchain", "toolchain_hash": digest("test-toolchain"), "policy_hash": digest("policy"), "index_hash": digest("index"), "commit": "local", "tree_classification": "local-observational", "observation": {"wall_clock_is_observational": True}}
 
 def rejects(values: list[dict], label: str) -> None:
     with tempfile.TemporaryDirectory() as directory:
@@ -18,6 +18,9 @@ def rejects(values: list[dict], label: str) -> None:
         except ValueError: return
     raise AssertionError(label)
 
+def contract_for(value: dict, ids: list[str]) -> dict:
+    return {"schema_version": "tracksmith-tutor-shard-contract/1", "suite_id": value["suite_id"], "suite_version": value["suite_version"], "suite_source_hash": value["suite_source_hash"], "policy_hash": value["policy_hash"], "index_hash": value["index_hash"], "case_ids": ids, "commit": value["commit"], "tree_classification": value["tree_classification"], "toolchain_identity": value["toolchain_identity"], "toolchain_hash": value["toolchain_hash"]}
+
 def main() -> None:
     case_ids = ["a", "b", "c", "d", "e"]
     bins, algorithm = assign(case_ids, 3, {item: index + 1 for index, item in enumerate(case_ids)})
@@ -25,7 +28,8 @@ def main() -> None:
     equal_bins, _ = assign(["case-b", "case-a", "case-c"], 2, {"case-a": 1, "case-b": 1, "case-c": 1})
     assert equal_bins == [["case-a", "case-c"], ["case-b"]]
     reports = [report(index, 3, cases) for index, cases in enumerate(bins)]
-    assert aggregate([write_temp(item, index) for index, item in enumerate(reports)], case_ids)["case_ids"] == case_ids
+    contract = contract_for(reports[0], case_ids)
+    assert aggregate([write_temp(item, index) for index, item in enumerate(reports)], case_ids, contract)["case_ids"] == case_ids
     rejects(reports[:-1], "missing shard accepted")
     duplicate = copy.deepcopy(reports); duplicate[1]["shard_index"] = 0; rejects(duplicate, "duplicate shard accepted")
     extra_report = copy.deepcopy(reports); extra_report[0]["unexpected"] = True; rejects(extra_report, "extra report field accepted")
@@ -43,6 +47,10 @@ def main() -> None:
         invalid_duration = copy.deepcopy(reports); invalid_duration[0]["cases"][0]["duration_seconds"] = duration; rejects(invalid_duration, f"invalid duration accepted: {duration!r}")
     failed = copy.deepcopy(reports); failed[0]["cases"][0]["outcome"] = "failed"; rejects(failed, "failure accepted")
     changed = copy.deepcopy(reports); changed[0]["assignment_algorithm"] = "future"; rejects(changed, "algorithm change accepted")
+    for field, value in (("commit", "other"), ("tree_classification", "other"), ("toolchain_identity", "other"), ("toolchain_hash", digest("other")), ("index_hash", digest("other")), ("policy_hash", digest("other")), ("suite_id", "other"), ("suite_version", "other"), ("suite_source_hash", digest("other"))):
+        changed_identity = copy.deepcopy(reports); changed_identity[1][field] = value
+        try: aggregate([write_temp(item, index) for index, item in enumerate(changed_identity)], case_ids, contract); raise AssertionError(f"mixed {field} accepted")
+        except ValueError: pass
     rejects([report(0, 1, [])], "inferred empty universe accepted")
     with tempfile.TemporaryDirectory() as directory:
         path = Path(directory) / "empty.json"; path.write_text(json.dumps(report(0, 1, [])))
@@ -52,6 +60,24 @@ def main() -> None:
         try: aggregate(valid_paths, invalid_expected); raise AssertionError("invalid expected IDs accepted")
         except ValueError: pass
     empty, fallback = assign([], 8); assert fallback == FALLBACK and len(empty) == 8
+    root = Path(__file__).resolve().parents[2]
+    manifest_path = root / "ci/tutor_test_costs.json"
+    manifest = load_cost_manifest(manifest_path, root)
+    assert manifest["case_ids"] == json.loads(manifest_path.read_text())["case_ids"]
+    for mutate in (
+        lambda item: item.update({"extra": True}), lambda item: item.pop("index_hash"),
+        lambda item: item.update({"suite_source_hash": digest("wrong")}),
+        lambda item: item["cost_seconds"].pop(item["case_ids"][0]),
+        lambda item: item["cost_seconds"].update({"unexpected": 1}),
+        lambda item: item["cost_seconds"].update({item["case_ids"][0]: True}),
+    ):
+        invalid_manifest = copy.deepcopy(manifest); mutate(invalid_manifest)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "costs.json"; path.write_text(json.dumps(invalid_manifest))
+            try: load_cost_manifest(path, root); raise AssertionError("invalid cost manifest accepted")
+            except ValueError: pass
+    try: load_contract(Path("/definitely/missing.json")); raise AssertionError("missing contract accepted")
+    except (OSError, ValueError): pass
     from cpu_budget import MAX_TUTOR_WORKERS, budget
     assert budget(MAX_TUTOR_WORKERS, 0) <= MAX_TUTOR_WORKERS
     try: budget(MAX_TUTOR_WORKERS + 1, 0); raise AssertionError("over-cap worker budget accepted")
@@ -72,7 +98,7 @@ def main() -> None:
 def binary_golden(binary: Path) -> None:
     root = Path(__file__).resolve().parents[2]
     binary = binary.resolve()
-    costs = json.loads((root / "ci/tutor_test_costs.json").read_text())["cost_seconds"]
+    costs = load_cost_manifest(root / "ci/tutor_test_costs.json", root)["cost_seconds"]
     all_ids = [line.split("\t", 1)[0] for line in subprocess.run([str(binary), "--list-tests"], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()]
     for count in (2, 3):
         expected, algorithm = assign(all_ids, count, costs)

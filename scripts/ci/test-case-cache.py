@@ -67,6 +67,11 @@ def main() -> None:
         rejected(lambda: cache.store(parent_link / "nested", components, result), "symlink cache parent accepted")
         assert not (outside / "nested").exists() and sentinel.read_text() == "outside unchanged"
         parent_link.unlink()
+        for traversal in (root / ".." / outside.name, root / "nested" / ".." / outside.name):
+            assert cache.load(traversal, components) is None
+            rejected(lambda traversal=traversal: cache.store(traversal, components, result), "traversal cache root accepted")
+            rejected(lambda traversal=traversal: cache.prune(traversal, 0, 0), "traversal prune root accepted")
+        assert sentinel.read_text() == "outside unchanged"
         cache.store(root, components, result); entry.unlink(); entry.symlink_to(sentinel)
         rejected(lambda: cache.store(root, components, result), "pre-existing cache entry symlink accepted")
         assert sentinel.read_text() == "outside unchanged" and cache.load(root, components) is None
@@ -87,7 +92,9 @@ def main() -> None:
         rejected(lambda: with_race("before-prune-unlink", leaf_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune symlink accepted")
         assert sentinel.read_text() == "outside unchanged"; entry.unlink()
         temporary = root / f".{cache_key}.json.{'a' * 32}.tmp"; assert cache.TEMPORARY.fullmatch(temporary.name); temporary.write_text("crash leftover")
-        cache.prune(root, 1, cache.MAX_ENTRY_BYTES); assert not temporary.exists()
+        unrelated = root / "user-report.json"; unrelated.write_text("user-owned sentinel")
+        cache.prune(root, 1, cache.MAX_ENTRY_BYTES); assert not temporary.exists() and unrelated.read_text() == "user-owned sentinel"
+        unrelated.unlink()
         cache.store(root, components, result); original: Path | None = None
         def root_for_load(current: Path) -> None:
             nonlocal original

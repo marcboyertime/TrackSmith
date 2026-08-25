@@ -521,13 +521,24 @@ private final class Suite {
         let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("ci/tutor_test_costs.json")
         guard let data = try? Data(contentsOf: url),
               let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let raw = payload["cost_seconds"] as? [String: Any] else { return [:] }
-        return raw.reduce(into: [:]) { result, item in
+              Set(payload.keys) == Set(["schema_version", "suite_id", "suite_version", "suite_source_hash", "policy_hash", "index_hash", "case_ids", "cost_seconds"]),
+              payload["schema_version"] as? String == "tracksmith-tutor-test-costs/2",
+              payload["suite_id"] as? String == Self.suiteID,
+              payload["suite_version"] as? String == Self.suiteVersion,
+              payload["suite_source_hash"] as? String == semanticContext.source,
+              payload["policy_hash"] as? String == semanticContext.policy,
+              payload["index_hash"] as? String == semanticContext.index,
+              let caseIDs = payload["case_ids"] as? [String],
+              caseIDs == Self.ordinaryCases.map(\.id),
+              let raw = payload["cost_seconds"] as? [String: Any],
+              Set(raw.keys) == Set(caseIDs) else { return [:] }
+        let parsed: [String: Double] = raw.reduce(into: [:]) { result, item in
             if let number = item.value as? NSNumber,
                String(cString: number.objCType) != "c", // CFBoolean's Objective-C type encoding
                number.doubleValue.isFinite,
                number.doubleValue > 0 { result[item.key] = number.doubleValue }
         }
+        return parsed.count == caseIDs.count ? parsed : [:]
     }
 
     private func selectedCases() -> (cases: [CaseSpec], algorithm: String) {

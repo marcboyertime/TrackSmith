@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from shard_protocol import ALGORITHM, SCHEMA, digest, partition_hash, read_json
+from shard_protocol import ALGORITHM, SCHEMA, digest, load_contract, partition_hash, read_json, validate_contract
 
 REQUIRED = {"schema_version", "suite_id", "suite_version", "suite_source_hash", "shard_index", "shard_count", "assignment_algorithm", "assignment_version", "partition_hash", "expected_ids", "executed_ids", "cases", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash"}
 REPORT_FIELDS = REQUIRED | {"commit", "tree_classification", "observation"}
@@ -18,17 +18,20 @@ CASE_FIELDS = {"id", "semantic_input_hash", "outcome", "duration_seconds", "resu
 SHA256 = __import__("re").compile(r"^[0-9a-f]{64}$")
 
 
-def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[str, Any]:
+def aggregate(paths: list[Path], expected_ids: list[str] | None = None, contract: dict[str, Any] | None = None) -> dict[str, Any]:
     if not paths:
         raise ValueError("no shard reports supplied")
     if expected_ids is not None and (isinstance(expected_ids, (str, bytes)) or not isinstance(expected_ids, Sequence) or any(not isinstance(item, str) or not item for item in expected_ids) or len(expected_ids) != len(set(expected_ids))):
         raise ValueError("expected IDs must be a unique nonempty string sequence")
     reports = [read_json(path) for path in paths]
+    if contract is not None:
+        contract = validate_contract(contract)
+        expected_ids = contract["case_ids"]
     for report in reports:
         missing = REQUIRED - set(report)
         if missing or set(report) != REPORT_FIELDS or report.get("schema_version") != SCHEMA:
             raise ValueError(f"corrupt shard report: missing {sorted(missing)} or unsupported schema")
-        if any(not isinstance(report[key], str) or not report[key] for key in ("suite_id", "suite_version", "assignment_version", "toolchain_identity", "commit", "tree_classification")) or any(not isinstance(report[key], str) or not SHA256.fullmatch(report[key]) for key in ("suite_source_hash", "partition_hash", "toolchain_hash", "policy_hash", "index_hash")) or report["observation"] != {"wall_clock_is_observational": True}:
+        if any(not isinstance(report[key], str) or not report[key] for key in ("suite_id", "suite_version", "assignment_version", "toolchain_identity", "commit", "tree_classification")) or any(not isinstance(report[key], str) or not SHA256.fullmatch(report[key]) for key in ("suite_source_hash", "partition_hash", "toolchain_hash", "policy_hash", "index_hash")) or (report["commit"] != "local" and not __import__("re").fullmatch(r"[0-9a-f]{40}", report["commit"])) or report["tree_classification"] not in {"local-observational", "github-clean-checkout"} or report["observation"] != {"wall_clock_is_observational": True}:
             raise ValueError("corrupt shard report identity fields")
         if report["assignment_algorithm"] != ALGORITHM:
             raise ValueError("changed or unsupported assignment algorithm")
@@ -43,11 +46,15 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
         if len(case_ids) != len(set(case_ids)) or set(case_ids) != set(report["expected_ids"]) or set(case_ids) != set(report["executed_ids"]):
             raise ValueError("per-report cases do not exactly match expected/executed IDs")
     first = reports[0]
-    invariant = ("suite_id", "suite_version", "suite_source_hash", "shard_count", "assignment_algorithm", "assignment_version", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash")
+    invariant = ("suite_id", "suite_version", "suite_source_hash", "shard_count", "assignment_algorithm", "assignment_version", "commit", "tree_classification", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash")
     for report in reports[1:]:
         if any(report[key] != first[key] for key in invariant):
             raise ValueError("schema, suite, toolchain, policy, or index mismatch")
     count = first["shard_count"]
+    if contract is not None:
+        identity = ("suite_id", "suite_version", "suite_source_hash", "commit", "tree_classification", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash")
+        if any(first[key] != contract[key] for key in identity):
+            raise ValueError("shard report does not match the validated run contract")
     indices = [report["shard_index"] for report in reports]
     if sorted(indices) != list(range(count)):
         raise ValueError("missing, duplicate, or unexpected shard coordinates")
@@ -77,7 +84,7 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
         raise ValueError("missing, duplicate, overlapping, or unexpected completed case")
     case_results = [{key: value for key, value in by_id[item].items() if key != "duration_seconds"} for item in universe]
     durations = {item: by_id[item]["duration_seconds"] for item in universe}
-    merged = {"schema_version": "tracksmith-shard-aggregate/1", "suite_id": first["suite_id"], "suite_version": first["suite_version"], "suite_source_hash": first["suite_source_hash"], "assignment_algorithm": first["assignment_algorithm"], "assignment_version": first["assignment_version"], "case_ids": universe, "case_results": case_results, "policy_hash": first["policy_hash"], "index_hash": first["index_hash"], "toolchain_identity": first["toolchain_identity"], "toolchain_hash": first["toolchain_hash"], "partition_hash": partition_hash(universe), "observation": {"timings_are_observational": True, "case_durations_seconds": durations}}
+    merged = {"schema_version": "tracksmith-shard-aggregate/1", "suite_id": first["suite_id"], "suite_version": first["suite_version"], "suite_source_hash": first["suite_source_hash"], "commit": first["commit"], "tree_classification": first["tree_classification"], "assignment_algorithm": first["assignment_algorithm"], "assignment_version": first["assignment_version"], "case_ids": universe, "case_results": case_results, "policy_hash": first["policy_hash"], "index_hash": first["index_hash"], "toolchain_identity": first["toolchain_identity"], "toolchain_hash": first["toolchain_hash"], "partition_hash": partition_hash(universe), "observation": {"timings_are_observational": True, "case_durations_seconds": durations}}
     return merged
 
 
@@ -85,11 +92,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("reports", nargs="+", type=Path)
     parser.add_argument("--expected", type=Path)
+    parser.add_argument("--contract", type=Path, required=True)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     expected = json.loads(args.expected.read_text()) if args.expected else None
     try:
-        result = aggregate(args.reports, expected)
+        contract = load_contract(args.contract)
+        result = aggregate(args.reports, expected, contract)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"shard aggregation failed: {error}", file=sys.stderr); return 1
     rendered = json.dumps(result, sort_keys=True, separators=(",", ":")) + "\n"

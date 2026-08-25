@@ -19,6 +19,7 @@ COMPONENT_KEYS = {"suite_id", "suite_version", "source_hash", "policy_hash", "in
 RESULT_KEYS = {"case_id", "semantic_input_hash", "outcome", "result_hash"}
 HASH = re.compile(r"^[0-9a-f]{64}$")
 CASE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,191}$")
+ENTRY = re.compile(r"^[0-9a-f]{64}\.json$")
 TEMPORARY = re.compile(r"^\.[0-9a-f]{64}\.json\.[0-9a-f]{32}\.tmp$")
 # Test-only deterministic interleaving point. Production leaves this unset.
 RACE_HOOK: Callable[[str, Path], None] | None = None
@@ -42,6 +43,8 @@ def _race(point: str, root: Path) -> None:
 
 def _canonical_root(root: Path) -> Path:
     """Reject caller-controlled links before resolving stable macOS system aliases."""
+    if ".." in root.parts:
+        raise ValueError("cache root cannot contain traversal components")
     raw = root.absolute()
     if raw.is_symlink(): raise ValueError("cache root cannot be a symlink")
     # /tmp, /var, and /etc are macOS-provided aliases into /private. Permit
@@ -178,7 +181,7 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
                 _verify_root(root, descriptor)
                 os.unlink(name, dir_fd=descriptor)
                 continue
-            if not name.endswith(".json"): continue
+            if not ENTRY.fullmatch(name): continue
             entry = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
             if not stat.S_ISREG(entry.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
             files.append((name, entry))

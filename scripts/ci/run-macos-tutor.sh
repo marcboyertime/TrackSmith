@@ -30,6 +30,22 @@ else
   temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/tracksmith-tutor-shards.XXXXXX")"
   trap 'rm -rf "$temporary_directory"' EXIT
 fi
+"$binary" --list-tests >"$temporary_directory/ordinary-tests.tsv"
+if [[ -n "${GITHUB_SHA:-}" ]]; then
+  shard_commit="$GITHUB_SHA"
+  shard_tree_classification="github-clean-checkout"
+else
+  shard_commit="local"
+  shard_tree_classification="local-observational"
+fi
+python3 scripts/ci/shard_protocol.py \
+  --contract-output "$temporary_directory/contract.json" \
+  --cost-manifest ci/tutor_test_costs.json \
+  --list "$temporary_directory/ordinary-tests.tsv" \
+  --repo-root "$(pwd -P)" \
+  --commit "$shard_commit" \
+  --tree-classification "$shard_tree_classification" \
+  --toolchain-identity "$TRACKSMITH_TUTOR_TOOLCHAIN_ID"
 workers=()
 for ((index = 0; index < shard_count; index++)); do
   "$binary" --shard-index "$index" --shard-count "$shard_count" --output-json "$temporary_directory/shard-$index.json" >"$temporary_directory/shard-$index.log" 2>&1 &
@@ -41,7 +57,7 @@ for worker in "${workers[@]}"; do
 done
 for ((index = 0; index < shard_count; index++)); do cat "$temporary_directory/shard-$index.log"; done
 aggregate_failure=0
-if ! python3 scripts/ci/aggregate_shards.py "$temporary_directory"/shard-*.json --output "$temporary_directory/aggregate.json"; then aggregate_failure=1; fi
+if ! python3 scripts/ci/aggregate_shards.py "$temporary_directory"/shard-*.json --contract "$temporary_directory/contract.json" --output "$temporary_directory/aggregate.json"; then aggregate_failure=1; fi
 if (( shard_failure || aggregate_failure )); then
   echo "error: one or more Tutor shards or the exhaustive aggregate failed" >&2
   exit 1

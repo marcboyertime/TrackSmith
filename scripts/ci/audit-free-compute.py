@@ -26,6 +26,15 @@ LANE_IDS = (
     "manual_heavy", "local_apple_logic_owner",
 )
 ACTION_LANES = set(LANE_IDS[:8])
+WORKFLOW_JOB_BINDINGS = {
+    ("tutor-integrity.yml", "linux_integrity"): ("linux_integrity",),
+    ("tutor-integrity.yml", "linux_retrieval"): ("linux_retrieval",),
+    ("tutor-integrity.yml", "linux_evaluation"): ("linux_evaluation",),
+    ("tutor-integrity.yml", "linux_docs_policy_security"): ("linux_docs_policy_security",),
+    ("tutor-macos-swift.yml", "macos_swift_core"): ("macos_swift_core",),
+    ("tutor-macos-swift.yml", "macos_tutor"): ("macos_tutor",),
+    ("tutor-macos-swift.yml", "macos_xcode_products"): ("macos_xcode_companion", "macos_xcode_au"),
+}
 LANE_FIELDS = {
     "id", "purpose", "operating_system", "architecture", "runner_label", "command",
     "timeout_minutes", "deterministic", "required", "requires_secrets", "requires_logic",
@@ -59,7 +68,8 @@ SCRIPT_OWNER_SURFACE = re.compile(
     r"(?:^|[\s'\"])(?:/Applications|Library/Audio/Plug-Ins)(?:/|\b)",
     re.I,
 )
-XCODEBUILD_BUILD = re.compile(r"(?:\bxcodebuild\b.*\bbuild\b|^\s*xcodebuild\s*$)", re.I)
+XCODEBUILD_REFERENCE = re.compile(r"\b(?:xcodebuild|xcrun\b[^;|&]*\bxcodebuild)\b", re.I)
+XCODEBUILD_SAFE_QUERY = re.compile(r"\bxcodebuild\s+-(?:version|help|list|showsdks|showBuildSettings)\b|\b(?:command\s+-v|require_command)\s+xcodebuild\b", re.I)
 UNSIGNED_XCODEBUILD = re.compile(r"\bCODE_SIGNING_ALLOWED\s*=\s*NO\b", re.I)
 LOGIC_LAUNCH = re.compile(r"\bopen\s+-a\s+['\"]?Logic(?:\s+Pro)?['\"]?(?=\s|$|;|&&|\|\|)", re.I)
 PRIVATE_AUDIO_PATH = re.compile(r"(?:^|[\s'\"])(?:/|~/)[^\s'\"]+\.(?:wav|aiff|mp3|flac)(?=$|[\s'\";])", re.I)
@@ -296,8 +306,14 @@ def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str,
     if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
         reject(errors, manifest, workflow, job, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
     for segment in shell_segments(command):
-        if XCODEBUILD_BUILD.search(segment) and not UNSIGNED_XCODEBUILD.search(segment):
-            reject(errors, manifest, workflow, job, "xcode_signing", f"xcodebuild build lacks CODE_SIGNING_ALLOWED=NO in {detail}")
+        # Every non-query xcodebuild path is a build-like owner surface: the
+        # default action, build, archive, and test all must be unsigned. This
+        # is deliberately lexical so shell variables and command/xcrun wrappers
+        # cannot conceal the executable from the static closure audit.
+        references = len(re.findall(r"\bxcodebuild\b", segment, re.I))
+        queries = len(XCODEBUILD_SAFE_QUERY.findall(segment))
+        if XCODEBUILD_REFERENCE.search(segment) and references > queries and not UNSIGNED_XCODEBUILD.search(segment):
+            reject(errors, manifest, workflow, job, "xcode_signing", f"xcodebuild/xcrun build-like invocation lacks CODE_SIGNING_ALLOWED=NO in {detail}")
 
 
 def audit_script_commands(closure: list[tuple[pathlib.Path, list[tuple[int, str]]]], manifest: dict[str, Any], repo_root: pathlib.Path, workflow: str, job: str, errors: list[str]) -> None:
@@ -364,6 +380,20 @@ def audit_execution_environment(value: Any, manifest: dict[str, Any], workflow: 
 def audit_shell(value: Any, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str) -> None:
     if value is not None and (not isinstance(value, str) or value not in {"bash", "sh"}):
         reject(errors, manifest, workflow, job, "inline_shell", f"{detail} must use the default bash/sh shell")
+
+
+def audit_workflow_job_binding(workflow: str, job: str, body: dict[str, Any], manifest: dict[str, Any], errors: list[str]) -> None:
+    lane_ids = WORKFLOW_JOB_BINDINGS.get((workflow, job))
+    if lane_ids is None: return
+    commands = {lane["id"]: lane["command"] for lane in manifest["lanes"]}
+    allowed = {commands[lane] for lane in lane_ids}
+    runs = [step["run"] for step in body.get("steps", []) if isinstance(step, dict) and isinstance(step.get("run"), str)]
+    executable = {line for run in runs for line in inline_commands(run)}
+    if not allowed.issubset(executable):
+        errors.append(f"{workflow}:{job}: manifest_entrypoint: job must execute its exact stable manifest command(s), not a no-op or substituted lane")
+    invoked = {line for line in executable if ENTRYPOINT_COMMAND.fullmatch(line)}
+    if not invoked.issubset(allowed):
+        errors.append(f"{workflow}:{job}: manifest_entrypoint: job invokes an entrypoint outside its bound manifest lane")
 
 
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
@@ -445,6 +475,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
                     artifact_path = str(config.get("path", ""))
                     if not artifact_path or UNSAFE_ARTIFACT.search(artifact_path):
                         reject(errors, manifest, workflow, job, "artifact_path", "artifact path includes unsafe payload")
+            audit_workflow_job_binding(workflow, job, body, manifest, errors)
         if DISALLOWED_RUNNER.search(raw): errors.append(f"{workflow}:<workflow>: runner_terms: disallowed runner term appears")
     return errors
 
@@ -541,6 +572,22 @@ def self_test() -> None:
         reset_safe_fixture()
         (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\nxcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n")
         if audit(workflows, manifest, repo): raise AssertionError("explicit unsigned xcodebuild fixture was rejected")
+        for name, command in (
+            ("xcrun-default", "xcrun xcodebuild\n"),
+            ("xcrun-archive", "xcrun --sdk macosx xcodebuild archive\n"),
+            ("xcode-test", "xcodebuild test\n"),
+            ("xcode-variable", "builder=xcodebuild; \"$builder\" build\n"),
+            ("xcode-command", "command xcodebuild archive\n"),
+        ):
+            reset_safe_fixture()
+            (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + command)
+            if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
+        reset_safe_fixture()
+        (workflows / "tutor-integrity.yml").write_text(good.replace("  check:\n", "  linux_integrity:\n") + "      - run: true\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("bound lane no-op fixture was accepted")
+        reset_safe_fixture()
+        (workflows / "tutor-integrity.yml").write_text(good.replace("  check:\n", "  linux_integrity:\n") + "      - run: bash scripts/ci/run-linux-evaluation.sh\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("bound lane substitution fixture was accepted")
 
         def reject_entrypoint(name: str, content: str, helper: str | None = None, symlink_helper: bool = False) -> None:
             reset_safe_fixture()
@@ -594,7 +641,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 67 rejection classes passed (65 retained plus bare-xcodebuild and BASH_ENV rejection)")
+    print("audit-free-compute self-test: 74 rejection classes passed (67 retained plus xcode mode/indirection and lane-binding rejection)")
 
 
 def main() -> int:
