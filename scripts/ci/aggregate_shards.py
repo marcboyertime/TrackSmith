@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -23,6 +24,8 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
             raise ValueError(f"corrupt shard report: missing {sorted(missing)} or unsupported schema")
         if report["assignment_algorithm"] != ALGORITHM:
             raise ValueError("changed or unsupported assignment algorithm")
+        if type(report["shard_index"]) is not int or type(report["shard_count"]) is not int or report["shard_count"] < 1 or not 0 <= report["shard_index"] < report["shard_count"]:
+            raise ValueError("invalid shard coordinates")
         if not all(isinstance(report[key], list) and len(report[key]) == len(set(report[key])) and all(isinstance(item, str) and item for item in report[key]) for key in ("expected_ids", "executed_ids")) or not isinstance(report["cases"], list):
             raise ValueError("corrupt shard report collection fields")
         case_ids = []
@@ -58,7 +61,8 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
             if not isinstance(case, dict) or not isinstance(case.get("id"), str) or case["id"] in by_id:
                 raise ValueError("corrupt or duplicate case result")
             semantic, outcome, result_hash = case.get("semantic_input_hash"), case.get("outcome"), case.get("result_hash")
-            if not isinstance(case.get("duration_seconds"), (int, float)) or not isinstance(semantic, str) or outcome != "passed" or result_hash != digest(f"{case['id']}|passed|{semantic}"):
+            duration = case.get("duration_seconds")
+            if type(duration) not in (int, float) or not math.isfinite(duration) or duration < 0 or not isinstance(semantic, str) or outcome != "passed" or result_hash != digest(f"{case['id']}|passed|{semantic}"):
                 raise ValueError("failed, cancelled, or corrupt case result")
             by_id[case["id"]] = case
     if sorted(by_id) != universe:

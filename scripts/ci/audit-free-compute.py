@@ -108,7 +108,7 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
     cache_policy = manifest.get("cache_policy")
     if not isinstance(cache_policy, dict) or not isinstance(cache_policy.get("enabled"), bool):
         errors.append("manifest: cache_policy.enabled must be boolean")
-    elif not isinstance(cache_policy.get("soft_budget_bytes"), int) or not 0 <= cache_policy["soft_budget_bytes"] <= 2 * 1024 * 1024 * 1024:
+    elif type(cache_policy.get("soft_budget_bytes")) is not int or not 0 <= cache_policy["soft_budget_bytes"] <= 2 * 1024 * 1024 * 1024:
         errors.append("manifest: cache_policy soft budget must be an integer no larger than 2 GiB")
     lanes = manifest.get("lanes")
     if not isinstance(lanes, list) or {lane.get("id") for lane in lanes if isinstance(lane, dict)} != set(LANE_IDS) or len(lanes) != len(LANE_IDS):
@@ -122,7 +122,7 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
         if lane_id in ACTION_LANES:
             if lane["runner_label"] not in ALLOWED_RUNNERS:
                 errors.append(f"manifest:{lane_id}: required Actions lane uses a nonstandard runner")
-            if not lane["required"] or not isinstance(lane["timeout_minutes"], int) or lane["timeout_minutes"] <= 0:
+            if not lane["required"] or type(lane["timeout_minutes"]) is not int or lane["timeout_minutes"] <= 0:
                 errors.append(f"manifest:{lane_id}: required Actions lane needs required=true and positive timeout")
             if any(lane[key] for key in ("requires_secrets", "requires_logic", "requires_signing_or_install")):
                 errors.append(f"manifest:{lane_id}: required Actions lane must be no-secret, no-Logic, no-sign/install")
@@ -330,7 +330,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
             if not isinstance(body, dict):
                 errors.append(f"{workflow}:{job}: job: must be a mapping")
                 continue
-            if not isinstance(body.get("timeout-minutes"), int) or not 1 <= body["timeout-minutes"] <= 120:
+            if type(body.get("timeout-minutes")) is not int or not 1 <= body["timeout-minutes"] <= 120:
                 reject(errors, manifest, workflow, job, "timeout", "timeout-minutes must be an integer from 1 through 120")
             runner = body.get("runs-on")
             labels = runner if isinstance(runner, list) else [runner]
@@ -352,7 +352,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
                     reject(errors, manifest, workflow, job, "action_allowlist", f"unreviewed action or SHA: {step['uses']}")
                 if action == "actions/upload-artifact":
                     config = step.get("with", {})
-                    if not isinstance(config, dict) or not isinstance(config.get("retention-days"), int) or not 1 <= config["retention-days"] <= 3:
+                    if not isinstance(config, dict) or type(config.get("retention-days")) is not int or not 1 <= config["retention-days"] <= 3:
                         reject(errors, manifest, workflow, job, "artifact_retention", "artifacts require integer retention-days from 1 through 3")
                     artifact_path = str(config.get("path", ""))
                     if not artifact_path or UNSAFE_ARTIFACT.search(artifact_path):
@@ -397,11 +397,15 @@ def self_test() -> None:
         malformed = json.loads(json.dumps(manifest_data)); malformed["lanes"].pop()
         expired = json.loads(json.dumps(manifest_data)); expired["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-01","expires_on":"2026-08-02"}]
         bad_exception = json.loads(json.dumps(manifest_data)); bad_exception["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-23"}]
+        soft_budget_true = json.loads(json.dumps(manifest_data)); soft_budget_true["cache_policy"]["soft_budget_bytes"] = True
+        soft_budget_false = json.loads(json.dumps(manifest_data)); soft_budget_false["cache_policy"]["soft_budget_bytes"] = False
         cases.extend([
             ("cache-disabled", cache, manifest_data),
             ("missing-lane", good, malformed),
             ("expired-exception", good, expired),
             ("malformed-exception", good, bad_exception),
+            ("soft-budget-true", good, soft_budget_true),
+            ("soft-budget-false", good, soft_budget_false),
             ("timeout-too-large", good.replace("timeout-minutes: 5", "timeout-minutes: 121"), manifest_data),
             ("retention-zero", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: ${{ runner.temp }}/safe.json\n          retention-days: 0\n", manifest_data),
             ("applications-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: /Applications/TrackSmith.app\n          retention-days: 3\n", manifest_data),
@@ -482,7 +486,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 52 rejection classes passed (48 retained plus matrix, list recursive, scalar recursive, and scalar scheduled rejection)")
+    print("audit-free-compute self-test: 54 rejection classes passed (52 retained plus Boolean soft-budget true/false rejection)")
 
 
 def main() -> int:

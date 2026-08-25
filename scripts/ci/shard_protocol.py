@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -21,12 +22,12 @@ def partition_hash(case_ids: list[str]) -> str:
 
 
 def assign(case_ids: list[str], shard_count: int, costs: dict[str, float] | None = None) -> tuple[list[list[str]], str]:
-    if shard_count < 1:
+    if type(shard_count) is not int or shard_count < 1:
         raise ValueError("shard_count must be positive")
     identifiers = sorted(set(case_ids))
     if len(identifiers) != len(case_ids) or any(not item for item in identifiers):
         raise ValueError("case IDs must be unique and nonempty")
-    if identifiers and costs and all(item in costs and costs[item] > 0 for item in identifiers):
+    if identifiers and costs and all(item in costs and type(costs[item]) in (int, float) and math.isfinite(costs[item]) and costs[item] > 0 for item in identifiers):
         bins: list[tuple[float, list[str]]] = [(0.0, []) for _ in range(shard_count)]
         for item in sorted(identifiers, key=lambda candidate: (-costs[candidate], candidate)):
             index = min(range(shard_count), key=lambda candidate: (bins[candidate][0], candidate))

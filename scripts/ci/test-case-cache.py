@@ -28,11 +28,14 @@ def main() -> None:
         try: store(symlink_root, components, result); raise AssertionError("symlink cache root accepted")
         except ValueError: pass
         symlink_root.unlink()
-        store(root, components, result); cache_entry = path_for(root, __import__("deterministic_case_cache").key(components)); cache_entry.unlink(); cache_entry.symlink_to(root / "missing-target")
+        store(root, components, result); cache_entry = path_for(root, __import__("deterministic_case_cache").key(components)); cache_entry.unlink(); external_target = root / "external-target"; external_target.write_text("unchanged"); cache_entry.symlink_to(external_target)
+        try: store(root, components, result); raise AssertionError("pre-existing cache entry symlink accepted")
+        except ValueError: pass
+        assert external_target.read_text() == "unchanged"
         assert load(root, components) is None
         try: prune(root, 1, 1024); raise AssertionError("symlink cache entry accepted")
         except ValueError: pass
-        cache_entry.unlink()
+        cache_entry.unlink(); external_target.unlink()
         store(root, components, result); prune(root, 0, 0); assert not list(root.iterdir())
     print("test-case-cache: schema, corruption, stale/toolchain, failure, oversized, and byte/count pruning passed")
 if __name__ == "__main__": main()

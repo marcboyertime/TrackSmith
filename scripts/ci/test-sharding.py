@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, copy, json, subprocess, tempfile
+import argparse, copy, json, math, subprocess, tempfile
 from pathlib import Path
 from aggregate_shards import aggregate
 from shard_protocol import ALGORITHM, FALLBACK, SCHEMA, assign, digest, partition_hash
@@ -28,6 +28,8 @@ def main() -> None:
     assert aggregate([write_temp(item, index) for index, item in enumerate(reports)], case_ids)["case_ids"] == case_ids
     rejects(reports[:-1], "missing shard accepted")
     duplicate = copy.deepcopy(reports); duplicate[1]["shard_index"] = 0; rejects(duplicate, "duplicate shard accepted")
+    for coordinate, value in (("shard_index", True), ("shard_index", False), ("shard_count", True), ("shard_count", False)):
+        invalid_coordinate = copy.deepcopy(reports); invalid_coordinate[0][coordinate] = value; rejects(invalid_coordinate, f"Boolean {coordinate} accepted")
     overlap = copy.deepcopy(reports); overlap[1]["expected_ids"].append(overlap[0]["expected_ids"][0]); overlap[1]["executed_ids"].append(overlap[0]["expected_ids"][0]); rejects(overlap, "overlap accepted")
     swapped = copy.deepcopy(reports); swapped[0]["cases"], swapped[1]["cases"] = swapped[1]["cases"], swapped[0]["cases"]; rejects(swapped, "cross-shard swapped cases accepted")
     string_executed = copy.deepcopy(reports); string_executed[0]["executed_ids"] = "not-a-list"; rejects(string_executed, "string executed IDs accepted")
@@ -35,6 +37,8 @@ def main() -> None:
     unexpected_case = copy.deepcopy(reports); unexpected_case[0]["cases"][0]["id"] = "unexpected"; rejects(unexpected_case, "per-report unexpected case accepted")
     duplicate_case = copy.deepcopy(reports); duplicate_case[0]["cases"].append(copy.deepcopy(duplicate_case[0]["cases"][0])); rejects(duplicate_case, "per-report duplicate case accepted")
     corrupt = copy.deepcopy(reports); corrupt[0]["cases"][0]["result_hash"] = "bad"; rejects(corrupt, "corrupt accepted")
+    for duration in (True, False, math.nan, math.inf, -1):
+        invalid_duration = copy.deepcopy(reports); invalid_duration[0]["cases"][0]["duration_seconds"] = duration; rejects(invalid_duration, f"invalid duration accepted: {duration!r}")
     failed = copy.deepcopy(reports); failed[0]["cases"][0]["outcome"] = "failed"; rejects(failed, "failure accepted")
     changed = copy.deepcopy(reports); changed[0]["assignment_algorithm"] = "future"; rejects(changed, "algorithm change accepted")
     rejects([report(0, 1, [])], "inferred empty universe accepted")
@@ -47,6 +51,11 @@ def main() -> None:
     try: budget(MAX_TUTOR_WORKERS + 1, 0); raise AssertionError("over-cap worker budget accepted")
     except ValueError: pass
     try: budget(1, -1); raise AssertionError("negative reserve accepted")
+    except ValueError: pass
+    for cap, reserve in ((True, 0), (False, 0), (1, True), (1, False)):
+        try: budget(cap, reserve); raise AssertionError("Boolean CPU budget accepted")
+        except ValueError: pass
+    try: assign(case_ids, True); raise AssertionError("Boolean shard count accepted")
     except ValueError: pass
     logical = __import__("os").cpu_count() or 1
     if logical > 1: assert budget(MAX_TUTOR_WORKERS, max(1, logical - 2)) < budget(MAX_TUTOR_WORKERS, 0)

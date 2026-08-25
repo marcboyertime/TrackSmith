@@ -5,7 +5,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -51,7 +53,20 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     if len(encoded) > MAX_ENTRY_BYTES: raise ValueError("cache entry exceeds serialized-byte cap")
     root.mkdir(parents=True, exist_ok=True)
-    path_for(root, key(components)).write_bytes(encoded)
+    if root.is_symlink(): raise ValueError("cache root cannot be a symlink")
+    target = path_for(root, key(components))
+    if target.is_symlink(): raise ValueError("cache entry cannot be a symlink")
+    temporary: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="wb", dir=root, prefix=f".{target.name}.", suffix=".tmp", delete=False) as handle:
+            temporary = Path(handle.name)
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        # os.replace replaces a raced-in symlink itself; it never follows its target.
+        os.replace(temporary, target)
+    finally:
+        if temporary is not None: temporary.unlink(missing_ok=True)
 
 
 def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
