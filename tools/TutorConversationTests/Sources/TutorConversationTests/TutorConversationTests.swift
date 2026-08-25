@@ -2317,6 +2317,29 @@ private final class Suite {
         let preReceiptNoToolDiagnostics = preReceiptNoToolArtifact["serialized_request_diagnostics"] as? [String: Any] ?? [:]
         try expect(preReceiptNoToolTransport.requestCount == 1 && preReceiptNoTool.providerRequestCalls == 1 && preReceiptNoToolArtifact["terminal_status"] as? String == "failed" && preReceiptNoToolArtifact["provider"] is NSNull && preReceiptNoToolArtifact["receipt_id"] is NSNull && (preReceiptNoToolArtifact["tools_sent"] as? [String] ?? []).isEmpty && preReceiptNoToolArtifact["serialized_tool_definitions_exact"] as? Bool == true && preReceiptNoToolDiagnostics["request_envelopes_exact"] as? Bool == true && preReceiptNoToolDiagnostics["no_tools_exact"] as? Bool == true && preReceiptNoToolDiagnostics["store_false"] as? Bool == true && preReceiptNoToolDiagnostics["model_pinned"] as? Bool == true && preReceiptNoToolDiagnostics["reasoning_effort_high"] as? Bool == true && preReceiptNoToolDiagnostics["service_tier_priority"] as? Bool == true,
                    "P19 pre-receipt no-tool failure discarded observed envelope diagnostics or fabricated metadata")
+        let globalProviderRejectionTransport = PackageNineteenProviderRejectedTransport()
+        let globalFailureConfiguration = TutorProviderConfiguration(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true)
+        var globalFailureTriplet: [PackageNineteenCloudGeneration] = []
+        for level in [TutorExperienceLevel.noob, .amateur, .pro] {
+            globalFailureTriplet.append(try await packageNineteenCloudGeneration(
+                prompt: .init(order: 0, topic: "contract", query: "Provider-free precompletion rejection."), level: level, repetition: 0,
+                configuration: globalFailureConfiguration, toolsEnabled: false,
+                transportFactory: { PackageNineteenRecordingForwardingTransport(base: globalProviderRejectionTransport) },
+                providerFactory: { transport in
+                    OpenAITutorProvider(configuration: globalFailureConfiguration, credentialStore: InMemoryProviderCredentialStore(values: [.openAI: "p19-local-only-fixture"]), transport: transport)
+                }
+            ))
+        }
+        let globalFailureSummary = packageNineteenTripletSummary(globalFailureTriplet, topic: "contract", repetition: 0, semanticEvaluation: ["status": "not_run_incomplete_generation", "reference_read": false])
+        let skippedGlobalFailureJudge = packageNineteenSkippedSupportingJudgment(prompt: .init(order: 0, topic: "contract", query: "Provider-free precompletion rejection."), repetition: 0)
+        try expect(globalProviderRejectionTransport.requestCount == 3 && globalFailureTriplet.reduce(0) { $0 + $1.providerRequestCalls } == 3 && packageNineteenShouldFailFastAfterTriplet(globalFailureTriplet) && globalFailureTriplet.allSatisfy { ($0.artifact["terminal_status"] as? String) == "failed" && ($0.artifact["assistant_text_bytes"] as? Int) == 0 && $0.artifact["provider_response_id"] is NSNull && (($0.artifact["retry_history"] as? [[String: Any]])?.last?["safe_category"] as? String) == "provider_rejected" } && globalFailureSummary["generation_complete_before_reference"] as? Bool == false && skippedGlobalFailureJudge["semantic_reference_read"] as? Bool == false && skippedGlobalFailureJudge["provider_request_calls"] as? Int == 0,
+                   "P19 three-level precompletion provider rejection did not stop at exactly three generation requests with an honest no-reference/no-judge partial record")
+        var mixedFailureTriplet = globalFailureTriplet
+        mixedFailureTriplet[1].artifact["retry_history"] = [["safe_category": "transient_provider_failure"]]
+        var contentSpecificFailureTriplet = globalFailureTriplet
+        contentSpecificFailureTriplet[2].artifact["retry_history"] = [["safe_category": "nontransient_failure"]]
+        try expect(!packageNineteenShouldFailFastAfterTriplet(mixedFailureTriplet) && !packageNineteenShouldFailFastAfterTriplet(contentSpecificFailureTriplet),
+                   "P19 fail-fast incorrectly promoted mixed, transient, or content-specific failures to a global provider/configuration failure")
         let mutatedGenerationTransport = PackageNineteenRetryThenPinnedJudgeTransport()
         let mutatedGeneration = try await packageNineteenCloudGeneration(
             prompt: .init(order: 0, topic: "contract", query: "Provider-free generated-envelope policy."), level: .amateur, repetition: 0,
@@ -2540,11 +2563,6 @@ private final class Suite {
                         configuration: configuration, toolsEnabled: toolsEnabled
                     )
                     topicTriplet.append(generation); generations.append(generation)
-                    let failures = generation.artifact["retry_history"] as? [[String: Any]] ?? []
-                    if failures.contains(where: { ["cloud_budget_failure", "credential_failure", "provider_auth_failure", "configuration_failure"].contains($0["safe_category"] as? String ?? "") }) {
-                        globalBudgetFailure = true
-                        break
-                    }
                 }
                 // Evaluation-only references remain unopened unless the three
                 // original samples for this topic/repetition all completed.
@@ -2570,12 +2588,14 @@ private final class Suite {
                         supportingJudgments.append(["topic": prompt.topic, "repetition": repetition, "status": "failed", "semantic_reference_read": false, "provider_request_calls": 0, "safe_failure": Self.boundedEvaluationText(safe, maximumUTF8Bytes: 768), "hidden_reasoning_stored": false])
                     }
                 } else {
-                    supportingJudgments.append([
-                        "topic": prompt.topic, "repetition": repetition,
-                        "status": "skipped_incomplete_generation",
-                        "semantic_reference_read": false,
-                        "boundary": "No reference was read or sent because the original generation triplet was incomplete.",
-                    ])
+                    supportingJudgments.append(packageNineteenSkippedSupportingJudgment(prompt: prompt, repetition: repetition))
+                }
+                // A single refusal, timeout, or content-specific failure is
+                // not a global condition. Stop only after the complete
+                // three-level generation triplet proves the same precompletion
+                // provider/configuration failure at every level.
+                if packageNineteenShouldFailFastAfterTriplet(topicTriplet) {
+                    globalBudgetFailure = true
                 }
                 if globalBudgetFailure { break cloudRun }
             }
@@ -2632,6 +2652,7 @@ private final class Suite {
             "timeout_count": timeoutAttemptCount,
             "partial_failure_honesty": "Artifact is atomically written after all attempted samples; failed/incomplete samples remain explicit and are never reused as completed responses.",
             "global_budget_failure_fail_fast": globalBudgetFailure,
+            "global_precompletion_failure_fail_fast": globalBudgetFailure,
             "generation_reference_firewall": "No evaluation-only semantic reference is read or sent until all three original level responses for that topic/repetition complete. Hidden reasoning is never stored.",
         ]
         try packageNineteenWriteCloudArtifact(artifact, lane: lane, repository: repository)
@@ -3202,6 +3223,38 @@ private final class Suite {
 
     private func packageNineteenTripletIsGenerationComplete(_ triplet: [PackageNineteenCloudGeneration]) -> Bool {
         triplet.count == 3 && triplet.allSatisfy { ($0.artifact["terminal_status"] as? String) == "completed" }
+    }
+
+    /// A global stop is deliberately narrower than an ordinary failed sample:
+    /// it requires all three levels to fail before completion, with no usable
+    /// text or metadata, and the same provider/configuration category.
+    private func packageNineteenShouldFailFastAfterTriplet(_ triplet: [PackageNineteenCloudGeneration]) -> Bool {
+        let globalCategories: Set<String> = ["provider_rejected", "credential_failure", "provider_auth_failure", "configuration_failure", "cloud_budget_failure"]
+        func absent(_ value: Any?) -> Bool { value == nil || value is NSNull }
+        let categories = triplet.compactMap { generation -> String? in
+            let artifact = generation.artifact
+            guard artifact["terminal_status"] as? String == "failed",
+                  (artifact["assistant_text_bytes"] as? Int) == 0,
+                  (artifact["assistant_text"] as? String ?? "").isEmpty,
+                  absent(artifact["provider_response_id"]),
+                  absent(artifact["provider"]),
+                  absent(artifact["model"]),
+                  absent(artifact["service_tier"]),
+                  let category = (artifact["retry_history"] as? [[String: Any]])?.last?["safe_category"] as? String,
+                  globalCategories.contains(category) else { return nil }
+            return category
+        }
+        return triplet.count == 3 && categories.count == 3 && Set(categories).count == 1
+    }
+
+    private func packageNineteenSkippedSupportingJudgment(prompt: PackageSeventeenCloudPrompt, repetition: Int) -> [String: Any] {
+        [
+            "topic": prompt.topic, "repetition": repetition,
+            "status": "skipped_incomplete_generation",
+            "semantic_reference_read": false,
+            "provider_request_calls": 0,
+            "boundary": "No reference was read or sent because the original generation triplet was incomplete.",
+        ]
     }
 
     private func packageNineteenDeterministicSemanticEvaluation(repository: URL, prompt: PackageSeventeenCloudPrompt, triplet: [PackageSeventeenCloudResponse]) throws -> [String: Any] {
@@ -6154,6 +6207,20 @@ private final class PackageNineteenPreReceiptFailureTransport: TutorStreamingHTT
     func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
         lock.withLock { requests.append(request) }
         throw TutorConversationError.cancelled
+    }
+
+    var requestCount: Int { lock.withLock { requests.count } }
+}
+
+/// Provider-free precompletion rejection fixture. It records every serialized
+/// request but cannot emit text, metadata, or a supporting-judge request.
+private final class PackageNineteenProviderRejectedTransport: TutorStreamingHTTPTransport, @unchecked Sendable {
+    private let lock = NSLock()
+    private var requests: [TutorStreamingHTTPRequest] = []
+
+    func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
+        lock.withLock { requests.append(request) }
+        throw TutorConversationError.providerRejected("Provider-free test rejection.")
     }
 
     var requestCount: Int { lock.withLock { requests.count } }
