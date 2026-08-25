@@ -30,10 +30,11 @@ def path_for(root: Path, cache_key: str) -> Path: return root / f"{cache_key}.js
 def load(root: Path, components: dict[str, str]) -> dict[str, Any] | None:
     if root.is_symlink(): return None
     target = path_for(root, key(components))
+    if target.is_symlink(): return None
     try:
         value = json.loads(target.read_text())
     except (OSError, json.JSONDecodeError): return None
-    if target.is_symlink() or not isinstance(value, dict) or set(value) != {"schema_version", "components", "result", "result_hash", "created_epoch"} or value.get("schema_version") != SCHEMA or value.get("components") != components:
+    if not isinstance(value, dict) or set(value) != {"schema_version", "components", "result", "result_hash", "created_epoch"} or value.get("schema_version") != SCHEMA or value.get("components") != components or not isinstance(value.get("created_epoch"), int) or value["created_epoch"] < 0:
         return None
     result = value.get("result")
     if not isinstance(result, dict) or set(result) != RESULT_KEYS or result.get("outcome") != "passed" or result.get("case_id") != components["case_id"] or result.get("semantic_input_hash") != components["semantic_input_hash"] or not isinstance(result.get("result_hash"), str) or result["result_hash"] != hashlib.sha256(f"{result['case_id']}|passed|{result['semantic_input_hash']}".encode()).hexdigest():
@@ -55,7 +56,10 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
 
 def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
     if maximum_entries < 0 or maximum_bytes < 0: raise ValueError("cache budgets must be nonnegative")
-    files = sorted((item for item in root.glob("*.json") if item.is_file()), key=lambda item: item.stat().st_mtime, reverse=True) if root.exists() else []
+    if root.is_symlink(): raise ValueError("cache root cannot be a symlink")
+    candidates = list(root.glob("*.json")) if root.exists() else []
+    if any(item.is_symlink() for item in candidates): raise ValueError("cache entry cannot be a symlink")
+    files = sorted((item for item in candidates if item.is_file()), key=lambda item: item.stat().st_mtime, reverse=True)
     total = 0
     for index, item in enumerate(files):
         size = item.stat().st_size
