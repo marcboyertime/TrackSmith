@@ -18,5 +18,6 @@
     "observed_shard_case_seconds": {"0": 197, "1": 169, "2": 189},
     "primary_session_accelerated_full_lane": {"command": "TRACKSMITH_TUTOR_SHARDS=3 TRACKSMITH_P19_DIAGNOSTIC_NO_WRITE=1 bash scripts/ci/run-macos-tutor.sh", "real_seconds": 258.81, "user_seconds": 615.22, "system_seconds": 4.76, "aggregate_cases": "36/36", "partition_hash": "8697845180c403acd3e38a8151508b803f9950e3064454edc3b3fe8d4c649695", "assignment_algorithm": "lpt-cost-v1", "focused_diagnostics": "Package 016, 018, and 019 passed", "baseline_full_plus_diagnostics_seconds": 629.70, "reduction_seconds": 370.89, "reduction_percent": 58.8995, "speedup": 2.4331, "classification": "observational local timing; not a hosted-run, signing, Logic, or listening claim"}
   },
+  "hosted_repair_note": {"run_id": 32794158127, "outcome": "failed after all 36 sharded cases and focused diagnostics passed", "cause": "fail-closed tracked Package 019 receipt fingerprint drift from 620f to 77c924 after Phase 2 source changes", "repair": "regenerated authoritative source/receipt artifacts and proved an immediate second regeneration byte-stable; not a same-SHA retry", "classification": "failed hosted run is not final hosted success"},
   "boundaries": ["No signing/install", "No Logic or Accessibility", "No private audio", "No credentials or provider/model execution", "No listening claim"]
 }
