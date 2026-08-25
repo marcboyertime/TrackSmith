@@ -20,6 +20,7 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
     static let schema = "tracksmith-cloud-evaluation-budget/v1"
     static let pricingSource = "openai-gpt-5.6-sol-fast-2026-08-25"
     static let maximumCapMicroUSD = 50_000_000
+    static let incidentUnknownHoldMicroUSD = 9_888_608
     static let canonicalURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/TrackSmith/Evaluations/package019-cloud-budget-v1.json")
     private let url: URL
     private let capMicroUSD: Int
@@ -51,10 +52,14 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         if let supplied = environment["CLOUD_BUDGET_LEDGER"], URL(fileURLWithPath: supplied).standardizedFileURL != canonical {
             throw CloudEvaluationBudgetError.invalid("CLOUD_BUDGET_LEDGER must equal the canonical Package 019 ledger path")
         }
-        let rawHold = environment["CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD"] ?? "0"
-        guard rawHold.range(of: "^[0-9]+$", options: .regularExpression) != nil, let hold = Int(rawHold) else { throw CloudEvaluationBudgetError.invalid("external unknown hold must be a nonnegative exact integer") }
+        let rawHold = environment["CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD"]
+        guard !create || rawHold == String(incidentUnknownHoldMicroUSD) else { throw CloudEvaluationBudgetError.invalid("first live initialization requires the exact incident unknown hold") }
+        let hold = rawHold.flatMap(Int.init) ?? 0
+        guard rawHold == nil || (rawHold?.range(of: "^[0-9]+$", options: .regularExpression) != nil && hold >= 0) else { throw CloudEvaluationBudgetError.invalid("external unknown hold must be a nonnegative exact integer") }
         try validateCanonicalParent(create: create)
-        return try .init(url: canonical, capMicroUSD: cap, create: create, externalUnknownHoldMicroUSD: hold)
+        let ledger = try CloudEvaluationBudgetLedger(url: canonical, capMicroUSD: cap, create: create, externalUnknownHoldMicroUSD: create ? hold : 0)
+        guard (try ledger.snapshotArtifact())["external_unknown_hold_microusd"] as? Int == incidentUnknownHoldMicroUSD else { throw CloudEvaluationBudgetError.invalid("live ledger is missing the immutable incident hold") }
+        return ledger
     }
 
     func reserve(request: TutorStreamingHTTPRequest) throws -> CloudBudgetReservation {
@@ -77,12 +82,14 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
     /// reduce a reservation. Any other outcome deliberately keeps it.
     func settle(_ reservation: CloudBudgetReservation, completedResponse: [String: Any]) throws {
         guard let model = completedResponse["model"] as? String, model == "gpt-5.6-sol",
-              let tier = completedResponse["service_tier"] as? String, ["priority", "default"].contains(tier),
+              let tier = completedResponse["service_tier"] as? String, tier == "priority",
               let usage = completedResponse["usage"] as? [String: Any],
               let input = exactInt(usage["input_tokens"]), let output = exactInt(usage["output_tokens"]),
               input >= 0, output >= 0 else { try poison(); return }
         let long = input > 272_000
-        let actual = try cost(input: input, output: output, long: long, tier: tier)
+        let actual: Int
+        do { actual = try cost(input: input, output: output, long: long, tier: tier) }
+        catch { try poison(); return }
         guard actual <= reservation.microUSD else { try poison(); return }
         try withLock {
             var ledger = try read()
@@ -114,7 +121,6 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         let rates: (Int, Int)
         switch tier {
         case "priority": rates = long ? (16, 60) : (8, 40) // Fast pricing.
-        case "default": rates = long ? (8, 30) : (4, 20)
         default: throw CloudEvaluationBudgetError.invalid("unsupported completed service tier")
         }
         let (inputRate, outputRate) = rates
@@ -265,9 +271,9 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         guard counter.count == 1 else { throw CloudEvaluationBudgetError.invalid("reservation over cap reached forwarding transport") }
         let settledLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("settled.json"), capMicroUSD: 300_000, create: true)
         let settled = try settledLedger.reserve(request: request)
-        try settledLedger.settle(settled, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "default", "usage": ["input_tokens": 1, "output_tokens": 1]])
+        try settledLedger.settle(settled, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": ["input_tokens": 1, "output_tokens": 1]])
         let settledSnapshot = try settledLedger.snapshotArtifact()
-        guard settledSnapshot["spent_microusd"] as? Int == 24, settledSnapshot["reserved_microusd"] as? Int == 0 else { throw CloudEvaluationBudgetError.invalid("documented default-tier settlement did not reduce reservation") }
+        guard settledSnapshot["spent_microusd"] as? Int == 48, settledSnapshot["reserved_microusd"] as? Int == 0 else { throw CloudEvaluationBudgetError.invalid("priority settlement did not reduce reservation") }
         let retained = try settledLedger.reserve(request: request)
         try settledLedger.settle(retained, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "unsupported", "usage": ["input_tokens": 1, "output_tokens": 1]])
         guard (try settledLedger.snapshotArtifact())["reserved_microusd"] as? Int == retained.microUSD else { throw CloudEvaluationBudgetError.invalid("untrusted usage released reservation") }
@@ -278,6 +284,13 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         do { _ = try await CloudBudgetedTutorTransport(base: poisonedCounter, ledger: poisonLedger).stream(request); throw CloudEvaluationBudgetError.invalid("poisoned ledger forwarded") }
         catch is CloudEvaluationBudgetError {}
         guard poisonedCounter.count == 0, (try poisonLedger.snapshotArtifact())["poisoned"] as? Bool == true else { throw CloudEvaluationBudgetError.invalid("poisoned ledger allowed a later forward") }
+        let overflowLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("overflow.json"), capMicroUSD: 300_000, create: true)
+        let overflowReservation = try overflowLedger.reserve(request: request)
+        try overflowLedger.settle(overflowReservation, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": ["input_tokens": Int.max, "output_tokens": Int.max]])
+        let overflowCounter = CloudBudgetCountingTransport()
+        do { _ = try await CloudBudgetedTutorTransport(base: overflowCounter, ledger: overflowLedger).stream(request); throw CloudEvaluationBudgetError.invalid("overflow-poisoned ledger forwarded") }
+        catch is CloudEvaluationBudgetError {}
+        guard overflowCounter.count == 0 else { throw CloudEvaluationBudgetError.invalid("cost overflow allowed a later forward") }
         let concurrentLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("concurrent.json"), capMicroUSD: 300_000, create: true)
         let concurrentCounter = CloudBudgetCountingTransport()
         let concurrentGuard = CloudBudgetedTutorTransport(base: concurrentCounter, ledger: concurrentLedger)

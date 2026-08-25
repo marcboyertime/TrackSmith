@@ -83,7 +83,7 @@ p19-receipt:
 p19-cloud-budget-init:
 	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" || (echo 'set CLOUD_BUDGET_CAP_USD=50' && exit 2)
 	@test -z "$(CLOUD_BUDGET_LEDGER)" || test "$(CLOUD_BUDGET_LEDGER)" = "$(HOME)/Library/Application Support/TrackSmith/Evaluations/package019-cloud-budget-v1.json" || (echo 'CLOUD_BUDGET_LEDGER may only assert the canonical private Package 019 path' && exit 2)
-	@test -z "$(CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD)" || test "$(CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD)" = "9888608" || (echo 'external unknown hold must be the incident reservation 9888608' && exit 2)
+	@test "$(CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD)" = "9888608" || (echo 'set CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD=9888608 for first initialization' && exit 2)
 	swift run -c release TutorConversationTests package19-cloud-budget-init
 
 p19-cloud-budget-self-test:
