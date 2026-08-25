@@ -50,6 +50,9 @@ def main() -> None:
         assert unowned_hex.read_text() == "user sentinel" and not (unowned / cache.INDEX).exists()
         unowned_hex.unlink(); unowned.rmdir()
         assert cache.load(root, components) is None
+        entry.write_text("unindexed user entry")
+        rejected(lambda: cache.store(root, components, result), "unindexed regular cache entry was overwritten")
+        assert entry.read_text() == "unindexed user entry"; entry.unlink()
         cache.store(root, components, result); assert cache.load(root, components) == result
         assert cache.load(root, {**components, "toolchain_hash": h("changed")}) is None
         entry.write_text("{"); assert cache.load(root, components) is None
@@ -90,6 +93,12 @@ def main() -> None:
             with entry.open("ab") as handle: handle.write(b"x" * cache.MAX_ENTRY_BYTES)
         assert with_race("after-entry-open", grow_during_read, lambda: cache.load(root, components)) is None
         cache.store(root, components, result)
+        def temporary_for_store(current: Path) -> None:
+            temporary_path = next(item for item in current.iterdir() if cache.TEMPORARY.fullmatch(item.name))
+            temporary_path.unlink(); temporary_path.write_text("user temporary sentinel")
+        rejected(lambda: with_race("after-store-temp-open", temporary_for_store, lambda: cache.store(root, components, result)), "raced temporary sentinel was accepted")
+        temporary_sentinel = next(item for item in root.iterdir() if cache.TEMPORARY.fullmatch(item.name))
+        assert temporary_sentinel.read_text() == "user temporary sentinel"; temporary_sentinel.unlink()
         def leaf_for_store(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
         with_race("before-store-replace", leaf_for_store, lambda: cache.store(root, components, result))
         assert sentinel.read_text() == "outside unchanged" and cache.load(root, components) == result
@@ -101,6 +110,10 @@ def main() -> None:
         rejected(lambda: with_race("before-prune-unlink", regular_replacement_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune regular replacement accepted")
         assert entry.read_text() == "user-owned replacement"; entry.unlink()
         cache.store(root, components, result)
+        def post_verify_replacement_for_prune(_: Path) -> None: entry.unlink(); entry.write_text("post-verify user replacement")
+        rejected(lambda: with_race("after-prune-verify", post_verify_replacement_for_prune, lambda: cache.prune(root, 0, 0)), "post-verify prune regular replacement accepted")
+        assert entry.read_text() == "post-verify user replacement"; entry.unlink()
+        cache.store(root, components, result)
         temporary = root / f".{cache_key}.json.{'a' * 32}.tmp"; assert cache.TEMPORARY.fullmatch(temporary.name); temporary.write_text("crash leftover")
         unrelated = root / "user-report.json"; unrelated.write_text("user-owned sentinel")
         hex_sentinel = root / ("b" * 64 + ".json"); hex_sentinel.write_text("not a cache entry")
@@ -109,9 +122,9 @@ def main() -> None:
         assert temporary.read_text() == "crash leftover" and unrelated.read_text() == "user-owned sentinel" and hex_sentinel.read_text() == "not a cache entry" and temp_sentinel.read_text() == "not an owned cache temporary"
         descriptor = cache._open_root(cache._canonical_root(root), create=False)
         try:
-            owned, temporary_names = cache._read_index(root, descriptor) or (set(), set())
-            temporary_names.add(temporary.name)
-            cache._write_index(descriptor, owned, temporary_names)
+            owned, temporary_entries = cache._read_index(root, descriptor) or (set(), {})
+            temporary_entries[temporary.name] = cache._identity(temporary.stat())
+            cache._write_index(descriptor, owned, temporary_entries)
         finally: __import__("os").close(descriptor)
         cache.prune(root, 1, cache.MAX_ENTRY_BYTES)
         assert not temporary.exists()

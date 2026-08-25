@@ -4,13 +4,17 @@ from __future__ import annotations
 
 import argparse
 import ast
+import hashlib
 import json
+import os
 import pathlib
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
+import stat
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -92,6 +96,7 @@ COMMAND_RESOLUTION_MUTATION = re.compile(
     re.I,
 )
 GITHUB_PATH_MUTATION = re.compile(r"\$(?:\{GITHUB_PATH\}|GITHUB_PATH)\b|\b(?:PATH|BASH_ENV|ENV|GITHUB_PATH)\s*\+?=.*\$(?:\{GITHUB_ENV\}|GITHUB_ENV)\b|\$(?:\{GITHUB_ENV\}|GITHUB_ENV)\b.*\b(?:PATH|BASH_ENV|ENV|GITHUB_PATH)\s*\+?=", re.I)
+COMMAND_RESOLUTION_INDIRECTION = re.compile(r"\$\{![^}]+\}|\b[A-Za-z_][A-Za-z0-9_]*\s*=\s*['\"]?(?:\$?\{?GITHUB_(?:ENV|PATH)\}?|GITHUB_(?:ENV|PATH))\b", re.I)
 
 
 def parse_yaml(path: pathlib.Path) -> dict[str, Any]:
@@ -405,9 +410,13 @@ def audit_python_helper(path: pathlib.Path, manifest: dict[str, Any], repo_root:
             if "scripts/" in rendered or "research/" in rendered or "./" in rendered:
                 raise RuntimeError(f"dynamic local helper execution in {path.relative_to(repo_root)}:{node.lineno}")
             continue
-        # Python helper source is parsed for every nested repo-local execution;
-        # its non-local subprocess arguments are not executed by this closure
-        # walker and are governed by their owning lane/tool boundary.
+        # A statically rendered Python subprocess is an execution surface, not
+        # merely a route to another local helper.  Apply the same no-secret,
+        # unsigned-Xcode, and no-background policy before recursing.
+        detail = f"{path.relative_to(repo_root)}:{node.lineno}"
+        audit_command_surface(command, manifest, workflow, job, errors, detail, include_nonexecution_surfaces=False)
+        if BACKGROUND_PROCESS.search(command):
+            reject(errors, manifest, workflow, job, "background_process", f"Python helper cannot launch a background process: {detail}")
         for child in local_python_paths(command, repo_root):
             audit_python_helper(child, manifest, repo_root, workflow, job, errors, seen_python, seen_shell)
         for child in local_children:
@@ -416,12 +425,17 @@ def audit_python_helper(path: pathlib.Path, manifest: dict[str, Any], repo_root:
             audit_shell_helper(child, manifest, repo_root, workflow, job, errors, seen_python, seen_shell)
 
 
-def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str) -> None:
-    if SECRET_REF.search(command): reject(errors, manifest, workflow, job, "secrets", f"secret reference in {detail}")
-    if SCRIPT_CLOUD_MODEL.search(command): reject(errors, manifest, workflow, job, "cloud_model", f"provider/cloud/model surface in {detail}")
-    if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
-        reject(errors, manifest, workflow, job, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
-    if COMMAND_RESOLUTION_MUTATION.search(command) or GITHUB_PATH_MUTATION.search(command):
+def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str, include_nonexecution_surfaces: bool = True) -> None:
+    # Python helper AST coverage is intentionally execution-oriented: a static
+    # source listing can contain consent-gated/audio-only branches that are not
+    # reached by the CI invocation.  Its rendered subprocess command still
+    # receives the signing, resolution, and process-lifecycle checks below.
+    if include_nonexecution_surfaces:
+        if SECRET_REF.search(command): reject(errors, manifest, workflow, job, "secrets", f"secret reference in {detail}")
+        if SCRIPT_CLOUD_MODEL.search(command): reject(errors, manifest, workflow, job, "cloud_model", f"provider/cloud/model surface in {detail}")
+        if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
+            reject(errors, manifest, workflow, job, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
+    if COMMAND_RESOLUTION_MUTATION.search(command) or GITHUB_PATH_MUTATION.search(command) or COMMAND_RESOLUTION_INDIRECTION.search(command):
         reject(errors, manifest, workflow, job, "command_resolution", f"PATH or shell command-resolution mutation is forbidden in {detail}")
     if re.search(r"\bpython(?:3)?\s+-c\b", command):
         reject(errors, manifest, workflow, job, "background_process", f"opaque inline process launch is forbidden in {detail}")
@@ -433,10 +447,16 @@ def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str,
         # Shell quotes concatenate words.  Treat `xcode"build"` exactly like
         # xcodebuild, but reject the obfuscated spelling outright: it defeats
         # simple token parsers and offers no approved CI value.
-        unquoted = re.sub(r"['\"]", "", segment)
-        references = len(re.findall(r"\bxcodebuild\b", unquoted, re.I))
-        queries = len(XCODEBUILD_SAFE_QUERY.findall(unquoted))
-        assignment_values = re.findall(r"\bCODE_SIGNING_ALLOWED\s*=\s*([^\s;|&]+)", unquoted, re.I)
+        # Quotes and backslashes can concatenate shell words; parameter
+        # expansion can do the same dynamically.  Normalize only enough to
+        # identify that construction, then reject it unless the original text
+        # contained the literal approved executable/assignment token.
+        shell_resolved = re.sub(r"\$\{[^}]*\}|\$[A-Za-z_][A-Za-z0-9_]*", "", segment)
+        shell_resolved = re.sub(r"\\(.)", r"\1", shell_resolved)
+        shell_resolved = re.sub(r"['\"]", "", shell_resolved)
+        references = len(re.findall(r"\bxcodebuild\b", shell_resolved, re.I))
+        queries = len(XCODEBUILD_SAFE_QUERY.findall(shell_resolved))
+        assignment_values = re.findall(r"\bCODE_SIGNING_ALLOWED\s*=\s*([^\s;|&]+)", shell_resolved, re.I)
         literal_safe_assignments = re.findall(r"(?<!\S)CODE_SIGNING_ALLOWED=NO(?!\S)", segment, re.I)
         if assignment_values and (any(value != "NO" for value in assignment_values) or len(assignment_values) != len(literal_safe_assignments)):
             reject(errors, manifest, workflow, job, "xcode_signing", f"CODE_SIGNING_ALLOWED must be a literal standalone NO assignment in {detail}")
@@ -579,12 +599,26 @@ def audit_artifact_upload(workflow: str, job: str, steps: list[Any], index: int,
 
 def audit_artifact_guard_script(repo_root: pathlib.Path, errors: list[str]) -> None:
     path = repo_root / "scripts/ci/check-artifact-budget.py"
-    try: source = path.read_text(encoding="utf-8")
-    except OSError as error:
-        errors.append(f"artifact-budget: guard is unreadable: {error}"); return
-    required = ("MAXIMUM_BYTES = 25 * 1024 * 1024", "os.lstat", "stat.S_ISLNK", "stat.S_ISREG", "os.O_NOFOLLOW", "zipfile.ZipFile", "os.replace")
-    if any(token not in source for token in required):
-        errors.append("artifact-budget: guard must use lstat regular-file checks and a 25 MB cumulative bound")
+    if not path.is_file() or path.is_symlink():
+        errors.append("artifact-budget: guard must be a regular non-symlink Python file"); return
+    with tempfile.TemporaryDirectory() as directory:
+        root = pathlib.Path(directory)
+        receipt, report, output = root / "package019-ci-receipt.json", root / "xcode-products-report.json", root / "xcode-evidence.zip"
+        receipt.write_bytes(b'{"receipt":"deterministic"}\n'); report.write_bytes(b'{"report":"deterministic"}\n')
+        result = subprocess.run([sys.executable, str(path), "--seal-output", str(output), str(receipt), str(report)], capture_output=True, text=True)
+        if result.returncode:
+            errors.append(f"artifact-budget: guard rejected its deterministic probe: {result.stderr.strip() or result.stdout.strip()}"); return
+        try:
+            entry = os.lstat(output)
+            if stat.S_ISLNK(entry.st_mode) or not stat.S_ISREG(entry.st_mode) or entry.st_size > 25 * 1024 * 1024 or not zipfile.is_zipfile(output): raise ValueError("output is not a bounded regular ZIP")
+            with zipfile.ZipFile(output) as archive:
+                expected = {receipt.name: receipt.read_bytes(), report.name: report.read_bytes()}
+                if set(archive.namelist()) != {*expected, "artifact-manifest.json"}: raise ValueError("ZIP members are not exact")
+                manifest = json.loads(archive.read("artifact-manifest.json"))
+                expected_manifest = {"schema_version": "tracksmith-compact-artifact/1", "files": [{"name": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()} for name, data in expected.items()]}
+                if manifest != expected_manifest or any(archive.read(name) != data for name, data in expected.items()): raise ValueError("ZIP content or internal manifest hash mismatch")
+        except (OSError, ValueError, KeyError, zipfile.BadZipFile, json.JSONDecodeError) as error:
+            errors.append(f"artifact-budget: guard did not produce the required sealed ZIP snapshot: {error}")
 
 
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
@@ -690,7 +724,7 @@ def self_test() -> None:
                         (repo / "scripts/ci/cpu_budget.py").write_text("#!/usr/bin/env python3\nprint(1)\n")
                     else:
                         path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf 'safe entrypoint\\n'\n")
-            (repo / "scripts/ci/check-artifact-budget.py").write_text("#!/usr/bin/env python3\nMAXIMUM_BYTES = 25 * 1024 * 1024\nimport os, stat, zipfile\nos.lstat('safe')\nstat.S_ISLNK(0); stat.S_ISREG(0); os.O_NOFOLLOW\nzipfile.ZipFile('safe'); os.replace('a', 'b')\n")
+            (repo / "scripts/ci/check-artifact-budget.py").write_text((ROOT / "scripts/ci/check-artifact-budget.py").read_text())
         write_manifest(manifest_data); write_entrypoints(manifest_data); (workflows / "safe.yml").write_text(good)
         if audit(workflows, manifest, repo): raise AssertionError("valid fixture was rejected")
         cases: list[tuple[str, str, dict[str, Any]]] = [
@@ -748,6 +782,7 @@ def self_test() -> None:
             ("github-path-shadow", good + "      - run: echo '${{ github.workspace }}' >> \"$GITHUB_PATH\"\n", manifest_data),
             ("github-env-path-shadow", good + "      - run: echo 'PATH=${{ github.workspace }}:$PATH' >> \"$GITHUB_ENV\"\n", manifest_data),
             ("github-env-bash-shadow", good + "      - run: echo 'BASH_ENV=${{ github.workspace }}/bash' >> \"$GITHUB_ENV\"\n", manifest_data),
+            ("github-env-indirect-shadow", good + "      - run: target=GITHUB_ENV; echo 'PATH=${{ github.workspace }}:$PATH' >> \"${!target}\"\n", manifest_data),
             ("inline-path-shadow", good + "      - run: PATH=${{ github.workspace }}:$PATH bash scripts/ci/run-linux-integrity.sh\n", manifest_data),
             ("inline-shell-function-shadow", good + "      - run: bash() { exit 0; }; bash scripts/ci/run-linux-integrity.sh\n", manifest_data),
             ("inline-background", good + "      - run: bash scripts/ci/run-linux-integrity.sh &\n", manifest_data),
@@ -772,6 +807,10 @@ def self_test() -> None:
             (workflows / "safe.yml").write_text(good)
 
         reset_safe_fixture()
+        (repo / "scripts/ci/check-artifact-budget.py").write_text("#!/usr/bin/env python3\n# MAXIMUM_BYTES = 25 * 1024 * 1024; os.lstat; stat.S_ISLNK; stat.S_ISREG; os.O_NOFOLLOW; zipfile.ZipFile; os.replace\nfrom pathlib import Path\nimport sys\nPath(sys.argv[2]).write_bytes(b'not-a-zip-artifact')\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("token-comment fake artifact guard was accepted")
+
+        reset_safe_fixture()
         (repo / "scripts/ci/opaque-check.sh").write_text("#!/usr/bin/env bash\ncodesign --force unsafe.app\n")
         (workflows / "inline-helper-owner.yml").write_text(good + "      - run: bash scripts/ci/opaque-check.sh\n")
         if not audit(workflows, manifest, repo): raise AssertionError("negative fixture was accepted: inline-helper-owner")
@@ -786,6 +825,9 @@ def self_test() -> None:
             ("xcode-command", "command xcodebuild archive\n"),
             ("xcode-quoted", "xcode\"build\" -project App.xcodeproj build\n"),
             ("xcrun-quoted", "xcrun xcode\"build\" archive\n"),
+            ("xcode-backslash", "xcode\\build -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n"),
+            ("xcode-expansion", "xco${EMPTY}debuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n"),
+            ("xcode-backslash-signing-override", "xcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO CO\\DE_SIGNING_ALLOWED=YES build\n"),
             ("xcode-split-signing-override", "signing='CO''DE_SIGNING_ALLOWED=YES'\nxcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO \"$signing\" build\n"),
         ):
             reset_safe_fixture()
@@ -817,6 +859,10 @@ def self_test() -> None:
         (repo / "scripts/ci/unsafe.sh").write_text("#!/usr/bin/env bash\ncodesign --force unsafe.app\n")
         (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\npython3 research/scripts/unsafe-helper.py\n")
         if not audit(workflows, manifest, repo): raise AssertionError("Python keyword shell helper fixture was accepted")
+        reset_safe_fixture()
+        helper.write_text("import os, subprocess\nsubprocess.run(['xcodebuild', 'CODE_SIGNING_ALLOWED=YES', 'build'], check=True)\nos.system('sleep 1 &')\n")
+        (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\npython3 research/scripts/unsafe-helper.py\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("Python subprocess policy-surface fixture was accepted")
         artifact_job = """name: safe
 on: [pull_request]
 permissions:
@@ -907,7 +953,7 @@ jobs:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 96 rejection classes passed (81 retained plus command-resolution, quoted-Xcode, Python-shell closure, and sealed-artifact rejection)")
+    print("audit-free-compute self-test: 102 rejection classes passed (81 retained plus command-resolution, shell-resolved Xcode, Python execution-surface, and behavioral sealed-artifact rejection)")
 
 
 def main() -> int:
