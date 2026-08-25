@@ -7,6 +7,14 @@ from plan_work import plan
 def main() -> None:
     data = json.loads((Path(__file__).resolve().parents[2] / "ci/semantic_dependencies.json").read_text())
     assert plan(["tools/TutorConversationTests/x.swift"], data)["mode"] == "targeted-local"
+    assert plan(["packages/TutorConversation/Sources/TutorConversation/TutorSystemPolicy.swift"], data)["required_lanes"] == ["macos_swift_core", "macos_tutor"]
+    assert plan(["research/community_knowledge/packages/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model/knowledge_candidates/strategies.jsonl"], data)["required_lanes"] == ["linux_integrity", "macos_tutor"]
+    assert plan(["research/community_knowledge/runtime_projection/p16/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model.json"], data)["required_lanes"] == ["linux_integrity", "macos_tutor"]
+    assert plan(["apps/CompanionMacApp/TutorConversationView.swift"], data)["required_lanes"] == ["macos_tutor", "macos_xcode_companion"]
+    assert plan(["plugins/AudioUnit/AudioUnitExtension/Info.plist"], data)["required_lanes"] == ["macos_tutor", "macos_xcode_au"]
+    assert plan(["tools/TutorConversationTests/Resources/example.json"], data)["required_lanes"] == ["macos_tutor"]
+    assert plan(["Package.swift"], data)["mode"] == "full"
+    assert plan(["project.yml"], data)["mode"] == "full"
     assert plan(["ci/new.json"], data)["mode"] == "full"
     assert plan(["unexpected/path"], data)["mode"] == "full"
     assert plan([], data)["mode"] == "full"
