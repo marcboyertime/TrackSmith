@@ -10,6 +10,7 @@ section "build TutorConversationTests once"
 swift build -c release --product TutorConversationTests
 binary="$(pwd -P)/.build/release/TutorConversationTests"
 [[ -x "$binary" ]] || { echo "error: TutorConversationTests release binary is missing" >&2; exit 1; }
+python3 scripts/ci/test-sharding.py --binary "$binary"
 requested_shards="${TRACKSMITH_TUTOR_SHARDS:-0}"
 configured_cap="${TRACKSMITH_MAX_TUTOR_SHARDS:-3}"
 [[ "$configured_cap" =~ ^[1-9][0-9]*$ ]] && (( configured_cap <= 3 )) || { echo "error: TRACKSMITH_MAX_TUTOR_SHARDS must be an integer from 1 through 3" >&2; exit 64; }

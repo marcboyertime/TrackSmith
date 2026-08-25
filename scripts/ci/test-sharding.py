@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import copy, json, tempfile
+import argparse, copy, json, subprocess, tempfile
 from pathlib import Path
 from aggregate_shards import aggregate
 from shard_protocol import ALGORITHM, FALLBACK, SCHEMA, assign, digest, partition_hash
@@ -24,8 +24,6 @@ def main() -> None:
     assert algorithm == ALGORITHM and sorted(item for bucket in bins for item in bucket) == case_ids
     equal_bins, _ = assign(["case-b", "case-a", "case-c"], 2, {"case-a": 1, "case-b": 1, "case-c": 1})
     assert equal_bins == [["case-a", "case-c"], ["case-b"]]
-    swift = (Path(__file__).resolve().parents[2] / "tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift").read_text()
-    assert "costs[$0.id]! == costs[$1.id]! ? $0.id < $1.id" in swift
     reports = [report(index, 3, cases) for index, cases in enumerate(bins)]
     assert aggregate([write_temp(item, index) for index, item in enumerate(reports)], case_ids)["case_ids"] == case_ids
     rejects(reports[:-1], "missing shard accepted")
@@ -39,9 +37,25 @@ def main() -> None:
         path = Path(directory) / "empty.json"; path.write_text(json.dumps(report(0, 1, [])))
         assert aggregate([path], [])["case_ids"] == []
     empty, fallback = assign([], 8); assert fallback == FALLBACK and len(empty) == 8
-    print("test-sharding: cross-language LPT tie golden plus missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
+    print("test-sharding: LPT tie golden plus missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
+
+def binary_golden(binary: Path) -> None:
+    root = Path(__file__).resolve().parents[2]
+    costs = json.loads((root / "ci/tutor_test_costs.json").read_text())["cost_seconds"]
+    all_ids = [line.split("\t", 1)[0] for line in subprocess.run([str(binary), "--list-tests"], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()]
+    for count in (2, 3):
+        expected, algorithm = assign(all_ids, count, costs)
+        assert algorithm == ALGORITHM
+        for index in range(count):
+            output = subprocess.run([str(binary), "--list-tests", "--shard-index", str(index), "--shard-count", str(count)], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()
+            actual = [line.split("\t", 1)[0] for line in output]
+            assert actual == expected[index], f"Swift/Python assignment mismatch for {index}/{count}"
+    print("test-sharding: release-binary Swift/Python assignment golden passed")
 
 _TEMPS: list[tempfile.TemporaryDirectory] = []
 def write_temp(value: dict, index: int) -> Path:
     temp = tempfile.TemporaryDirectory(); _TEMPS.append(temp); path = Path(temp.name) / f"{index}.json"; path.write_text(json.dumps(value)); return path
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(); parser.add_argument("--binary", type=Path); args = parser.parse_args()
+    main()
+    if args.binary: binary_golden(args.binary)

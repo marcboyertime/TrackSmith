@@ -70,8 +70,8 @@ struct TutorConversationTests {
             Darwin.exit(64)
         }
         let suite = Suite(selection: selection)
-        if !selection.includes.isEmpty && !suite.hasMatchingInclude() {
-            fputs("error: --include did not match an ordinary test ID\n", stderr)
+        if !selection.includes.isEmpty && !suite.allIncludesMatch() {
+            fputs("error: every --include selector must match at least one ordinary test ID\n", stderr)
             Darwin.exit(64)
         }
         if selection.listOnly {
@@ -544,8 +544,8 @@ private final class Suite {
         return fixedSelection.cases.contains { $0.id == item.id }
     }
 
-    func hasMatchingInclude() -> Bool {
-        selection.includes.contains { pattern in Self.ordinaryCases.contains { matches($0.id, pattern) } }
+    func allIncludesMatch() -> Bool {
+        selection.includes.allSatisfy { pattern in Self.ordinaryCases.contains { matches($0.id, pattern) } }
     }
 
     func writeReportIfRequested() throws {
