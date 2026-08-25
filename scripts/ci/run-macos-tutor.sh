@@ -80,6 +80,7 @@ if (( shard_failure || aggregate_failure )); then
   exit 1
 fi
 section "focused package diagnostics not represented by the full-suite dispatch contract"
+"$binary" package19-cloud-budget-self-test
 "$binary" package16-diagnostics
 "$binary" package18-diagnostics
 if [[ "${TRACKSMITH_P19_DIAGNOSTIC_NO_WRITE:-}" == "1" ]]; then

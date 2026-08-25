@@ -64,6 +64,7 @@ struct TutorConversationTests {
             Darwin.exit(64)
         }
         let textConsentModes = Set(["package17-cloud-evaluation", "package17-cloud-health", "package19-cloud-no-tool", "package19-cloud-full-tool", "package19-cloud-repeated-triplets"])
+        let budgetedPackageNineteenModes = Set(["package19-cloud-no-tool", "package19-cloud-full-tool", "package19-cloud-repeated-triplets"])
         let audioConsentModes = Set(["package17-public-audio-evaluation"])
         let suppliedConsentFlags = Set(arguments.filter { consentFlags.contains($0) })
         if !suppliedConsentFlags.isEmpty {
@@ -101,7 +102,7 @@ struct TutorConversationTests {
             catch { fputs("error: \(error)\n", stderr); Darwin.exit(1) }
             return
         }
-        if positionalModes.contains(where: { textConsentModes.contains($0) }) {
+        if positionalModes.contains(where: { budgetedPackageNineteenModes.contains($0) }) {
             do { _ = try CloudEvaluationBudgetLedger.fromEnvironment() }
             catch { fputs("error: \(error)\n", stderr); Darwin.exit(64) }
         }
@@ -2496,8 +2497,9 @@ private final class Suite {
         var generations: [PackageNineteenCloudGeneration] = []
         var triplets: [[String: Any]] = []
         var supportingJudgments: [[String: Any]] = []
+        var globalBudgetFailure = false
 
-        for repetition in 0..<repetitions {
+        cloudRun: for repetition in 0..<repetitions {
             for prompt in prompts {
                 var topicTriplet: [PackageNineteenCloudGeneration] = []
                 for level in levels {
@@ -2506,6 +2508,11 @@ private final class Suite {
                         configuration: configuration, toolsEnabled: toolsEnabled
                     )
                     topicTriplet.append(generation); generations.append(generation)
+                    let failures = generation.artifact["retry_history"] as? [[String: Any]] ?? []
+                    if failures.contains(where: { ["cloud_budget_failure", "credential_failure", "provider_auth_failure", "configuration_failure"].contains($0["safe_category"] as? String ?? "") }) {
+                        globalBudgetFailure = true
+                        break
+                    }
                 }
                 // Evaluation-only references remain unopened unless the three
                 // original samples for this topic/repetition all completed.
@@ -2538,6 +2545,7 @@ private final class Suite {
                         "boundary": "No reference was read or sent because the original generation triplet was incomplete.",
                     ])
                 }
+                if globalBudgetFailure { break cloudRun }
             }
         }
         let attempts = generations.map(\.artifact)
@@ -2591,6 +2599,7 @@ private final class Suite {
             "terminal_timeout_sample_count": terminalTimeoutSampleCount,
             "timeout_count": timeoutAttemptCount,
             "partial_failure_honesty": "Artifact is atomically written after all attempted samples; failed/incomplete samples remain explicit and are never reused as completed responses.",
+            "global_budget_failure_fail_fast": globalBudgetFailure,
             "generation_reference_firewall": "No evaluation-only semantic reference is read or sent until all three original level responses for that topic/repetition complete. Hidden reasoning is never stored.",
         ]
         try packageNineteenWriteCloudArtifact(artifact, lane: lane, repository: repository)
@@ -2848,10 +2857,16 @@ private final class Suite {
     }
 
     private func packageNineteenFailureCategory(_ error: Error) -> String {
+        if error is CloudEvaluationBudgetError { return "cloud_budget_failure" }
         if case .timedOut = error as? TutorConversationError { return "timeout" }
+        if case .credentialMissing = error as? TutorConversationError { return "credential_failure" }
+        if case .credentialUnavailable = error as? TutorConversationError { return "credential_failure" }
+        if case .invalidModel = error as? TutorConversationError { return "configuration_failure" }
         if Self.isTransientCloudEvaluationFailure(error) { return "transient_provider_failure" }
         if case .malformedProviderResponse = error as? TutorConversationError { return "malformed_provider_response" }
-        if case .providerRejected = error as? TutorConversationError { return "provider_rejected" }
+        if case let .providerRejected(detail) = error as? TutorConversationError {
+            return detail.localizedCaseInsensitiveContains("credential") || detail.localizedCaseInsensitiveContains("401") || detail.localizedCaseInsensitiveContains("unauthor") ? "provider_auth_failure" : "provider_rejected"
+        }
         return "nontransient_failure"
     }
 
@@ -3402,7 +3417,15 @@ private final class Suite {
 
     private func packageNineteenWriteCloudArtifact(_ artifact: [String: Any], lane: PackageNineteenCloudLane, repository: URL) throws {
         let output = repository.appendingPathComponent("research/tutor_quality/evaluations/PACKAGE_019_CLOUD_\(packageNineteenLaneName(lane)).json")
-        try JSONSerialization.data(withJSONObject: artifact, options: [.sortedKeys, .prettyPrinted]).write(to: output, options: .atomic)
+        var recorded = artifact
+        // A live P19 command has already required the ledger before any
+        // provider construction. Fixtures retain their provider-free shape.
+        if ProcessInfo.processInfo.environment["CLOUD_BUDGET_LEDGER"] != nil || ProcessInfo.processInfo.environment["CLOUD_BUDGET_CAP_USD"] != nil {
+            recorded["cost"] = try CloudEvaluationBudgetLedger.fromEnvironment().snapshotArtifact()
+        } else if recorded["cost"] == nil {
+            recorded["cost"] = ["status": "no_live_budget_ledger"]
+        }
+        try JSONSerialization.data(withJSONObject: recorded, options: [.sortedKeys, .prettyPrinted]).write(to: output, options: .atomic)
     }
 
     private func testPackageEighteenDiagnostic() async throws {

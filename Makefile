@@ -82,7 +82,8 @@ p19-receipt:
 
 p19-cloud-budget-init:
 	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" || (echo 'set CLOUD_BUDGET_CAP_USD=50' && exit 2)
-	@test -n "$(CLOUD_BUDGET_LEDGER)" || (echo 'set CLOUD_BUDGET_LEDGER=/secure/local/p19-budget.json' && exit 2)
+	@test -z "$(CLOUD_BUDGET_LEDGER)" || test "$(CLOUD_BUDGET_LEDGER)" = "$(HOME)/Library/Application Support/TrackSmith/Evaluations/package019-cloud-budget-v1.json" || (echo 'CLOUD_BUDGET_LEDGER may only assert the canonical private Package 019 path' && exit 2)
+	@test -z "$(CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD)" || test "$(CLOUD_BUDGET_EXTERNAL_UNKNOWN_HOLD_MICROUSD)" = "9888608" || (echo 'external unknown hold must be the incident reservation 9888608' && exit 2)
 	swift run -c release TutorConversationTests package19-cloud-budget-init
 
 p19-cloud-budget-self-test:
@@ -90,20 +91,20 @@ p19-cloud-budget-self-test:
 
 p19-cloud-no-tool:
 	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to run the no-tool cloud harness' && exit 2)
-	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" && test -n "$(CLOUD_BUDGET_LEDGER)" || (echo 'set CLOUD_BUDGET_CAP_USD=50 and CLOUD_BUDGET_LEDGER=/secure/local/p19-budget.json' && exit 2)
+	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" || (echo 'set CLOUD_BUDGET_CAP_USD=50 and initialize the canonical ledger first' && exit 2)
 	swift run -c release TutorConversationTests package19-cloud-no-tool --cloud-text-consent
 
 p19-cloud-full-tool:
 	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to run the seven-tool cloud harness' && exit 2)
-	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" && test -n "$(CLOUD_BUDGET_LEDGER)" || (echo 'set CLOUD_BUDGET_CAP_USD=50 and CLOUD_BUDGET_LEDGER=/secure/local/p19-budget.json' && exit 2)
+	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" || (echo 'set CLOUD_BUDGET_CAP_USD=50 and initialize the canonical ledger first' && exit 2)
 	swift run -c release TutorConversationTests package19-cloud-full-tool --cloud-text-consent
 
 p19-cloud-repeated-triplets:
 	@test "$(CLOUD_TEXT_CONSENT)" = "YES" || (echo 'set CLOUD_TEXT_CONSENT=YES to run repeated level triplets' && exit 2)
-	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" && test -n "$(CLOUD_BUDGET_LEDGER)" || (echo 'set CLOUD_BUDGET_CAP_USD=50 and CLOUD_BUDGET_LEDGER=/secure/local/p19-budget.json' && exit 2)
+	@test "$(CLOUD_BUDGET_CAP_USD)" = "50" || (echo 'set CLOUD_BUDGET_CAP_USD=50 and initialize the canonical ledger first' && exit 2)
 	swift run -c release TutorConversationTests package19-cloud-repeated-triplets --cloud-text-consent
 
-p19-ci: p19-suite-check p19-forbidden-resource p19-scanner-self-test p19-receipt-self-test p19-receipt
+p19-ci: p19-suite-check p19-forbidden-resource p19-scanner-self-test p19-receipt-self-test p19-cloud-budget-self-test p19-receipt
 	python3 research/scripts/package19_quality_suite.py --check --write-reports
 	git diff --exit-code -- docs/evidence/PACKAGE_019_RETRIEVAL_CALIBRATION.json docs/evidence/PACKAGE_019_LONG_CONTEXT_COST.json docs/evidence/PACKAGE_019_EXPERIMENT_COMPLETENESS.json docs/evidence/PACKAGE_019_DETERMINISTIC_END_TO_END.json docs/evidence/PACKAGE_019_VALIDATION_RECEIPT.json docs/evidence/PACKAGE_019_FINAL_REPORT.json docs/evidence/PACKAGE_019_FINAL_REPORT.md
 
