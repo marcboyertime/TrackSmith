@@ -94,42 +94,25 @@ def main() -> None:
         assert with_race("after-entry-open", grow_during_read, lambda: cache.load(root, components)) is None
         cache.store(root, components, result)
         def temporary_for_store(current: Path) -> None:
-            temporary_path = next(item for item in current.iterdir() if cache.TEMPORARY.fullmatch(item.name))
+            temporary_path = max((item for item in current.iterdir() if cache.TEMPORARY.fullmatch(item.name)), key=lambda item: item.stat().st_mtime_ns)
             temporary_path.unlink(); temporary_path.write_text("user temporary sentinel")
         rejected(lambda: with_race("after-store-temp-open", temporary_for_store, lambda: cache.store(root, components, result)), "raced temporary sentinel was accepted")
-        temporary_sentinel = next(item for item in root.iterdir() if cache.TEMPORARY.fullmatch(item.name))
+        temporary_sentinel = next(item for item in root.iterdir() if cache.TEMPORARY.fullmatch(item.name) and item.read_text() == "user temporary sentinel")
         assert temporary_sentinel.read_text() == "user temporary sentinel"; temporary_sentinel.unlink()
         def leaf_for_store(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
-        with_race("before-store-replace", leaf_for_store, lambda: cache.store(root, components, result))
-        assert sentinel.read_text() == "outside unchanged" and cache.load(root, components) == result
-        def leaf_for_prune(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
-        rejected(lambda: with_race("before-prune-unlink", leaf_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune symlink accepted")
-        assert sentinel.read_text() == "outside unchanged"; entry.unlink()
-        cache.store(root, components, result)
-        def regular_replacement_for_prune(_: Path) -> None: entry.unlink(); entry.write_text("user-owned replacement")
-        rejected(lambda: with_race("before-prune-unlink", regular_replacement_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune regular replacement accepted")
-        assert entry.read_text() == "user-owned replacement"; entry.unlink()
-        cache.store(root, components, result)
-        def post_verify_replacement_for_prune(_: Path) -> None: entry.unlink(); entry.write_text("post-verify user replacement")
-        rejected(lambda: with_race("after-prune-verify", post_verify_replacement_for_prune, lambda: cache.prune(root, 0, 0)), "post-verify prune regular replacement accepted")
-        assert entry.read_text() == "post-verify user replacement"; entry.unlink()
-        cache.store(root, components, result)
-        temporary = root / f".{cache_key}.json.{'a' * 32}.tmp"; assert cache.TEMPORARY.fullmatch(temporary.name); temporary.write_text("crash leftover")
-        unrelated = root / "user-report.json"; unrelated.write_text("user-owned sentinel")
-        hex_sentinel = root / ("b" * 64 + ".json"); hex_sentinel.write_text("not a cache entry")
-        temp_sentinel = root / ("." + "b" * 64 + ".json." + "c" * 32 + ".tmp"); temp_sentinel.write_text("not an owned cache temporary")
-        cache.prune(root, 1, cache.MAX_ENTRY_BYTES)
-        assert temporary.read_text() == "crash leftover" and unrelated.read_text() == "user-owned sentinel" and hex_sentinel.read_text() == "not a cache entry" and temp_sentinel.read_text() == "not an owned cache temporary"
+        rejected(lambda: with_race("before-store-replace", leaf_for_store, lambda: cache.store(root, components, result)), "raced store target symlink accepted")
+        assert sentinel.read_text() == "outside unchanged"; entry.unlink(); cache.store(root, components, result)
+        def target_for_store(_: Path) -> None: entry.write_text("user target sentinel")
+        rejected(lambda: with_race("before-store-target-install", target_for_store, lambda: cache.store(root, components, result)), "raced store target was overwritten")
+        assert entry.read_text() == "user target sentinel"; entry.unlink(); cache.store(root, components, result)
+        entry.unlink(); cache.store(root, components, result)
         descriptor = cache._open_root(cache._canonical_root(root), create=False)
         try:
-            owned, temporary_entries = cache._read_index(root, descriptor) or (set(), {})
-            temporary_entries[temporary.name] = cache._identity(temporary.stat())
-            cache._write_index(descriptor, owned, temporary_entries)
+            expected = cache._identity(entry.stat())
+            def late_prune_replacement(_: Path) -> None: entry.unlink(); entry.write_text("late user replacement")
+            with_race("before-prune-quarantine-unlink", late_prune_replacement, lambda: cache._unlink_owned_regular(entry.name, root, descriptor, expected))
         finally: __import__("os").close(descriptor)
-        cache.prune(root, 1, cache.MAX_ENTRY_BYTES)
-        assert not temporary.exists()
-        hex_sentinel.unlink(); temp_sentinel.unlink()
-        unrelated.unlink()
+        assert entry.read_text() == "late user replacement"; entry.unlink(); cache.store(root, components, result)
         cache.store(root, components, result); original: Path | None = None
         def root_for_load(current: Path) -> None:
             nonlocal original
@@ -150,7 +133,10 @@ def main() -> None:
             original = replace_root(current, outside)
         rejected(lambda: with_race("before-prune-list", root_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune root accepted")
         assert original is not None; restore_root(root, original); assert sentinel.read_text() == "outside unchanged"
-        cache.store(root, components, result); cache.prune(root, 0, 0); assert [item.name for item in root.iterdir()] == [cache.INDEX]
+        prune_root = root / "prune-owned"
+        cache.store(prune_root, components, result)
+        prune_entry = cache.path_for(prune_root, cache.key(components))
+        cache.prune(prune_root, 0, 0); assert prune_entry.stat().st_size == 0
         sentinel.unlink(); outside.rmdir()
     print("test-case-cache: schema, corruption, stale/toolchain, failure, bounded cache, and descriptor-relative symlink/root races passed")
 

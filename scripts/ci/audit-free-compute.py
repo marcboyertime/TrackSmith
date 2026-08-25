@@ -9,6 +9,7 @@ import json
 import os
 import pathlib
 import re
+import secrets
 import shutil
 import subprocess
 import sys
@@ -369,6 +370,17 @@ def audit_python_helper(path: pathlib.Path, manifest: dict[str, Any], repo_root:
     except (OSError, SyntaxError, UnicodeDecodeError) as error:
         raise RuntimeError(f"unreadable local Python helper {path.relative_to(repo_root)}: {error}") from error
     for node in ast.walk(tree):
+        if isinstance(node, ast.Import) and any(alias.name in {"subprocess", "os"} and alias.asname for alias in node.names):
+            raise RuntimeError(f"aliased process-spawn module import is forbidden in {path.relative_to(repo_root)}:{node.lineno}")
+        if isinstance(node, ast.ImportFrom) and node.module in {"subprocess", "os"} and any(alias.name in ({"run", "call", "check_call", "check_output", "Popen"} if node.module == "subprocess" else {"system"}) for alias in node.names):
+            raise RuntimeError(f"aliased process-spawn import is forbidden in {path.relative_to(repo_root)}:{node.lineno}")
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            value = node.value
+            if ((isinstance(value, ast.Name) and value.id in {"subprocess", "os"}) or (isinstance(value, ast.Attribute) and isinstance(value.value, ast.Name) and value.value.id in {"subprocess", "os"})):
+                raise RuntimeError(f"aliased process-spawn assignment is forbidden in {path.relative_to(repo_root)}:{node.lineno}")
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "getattr" and node.args and isinstance(node.args[0], ast.Name) and node.args[0].id in {"subprocess", "os"}:
+            raise RuntimeError(f"dynamic process-spawn lookup is forbidden in {path.relative_to(repo_root)}:{node.lineno}")
+    for node in ast.walk(tree):
         if not isinstance(node, ast.Call): continue
         function = node.func.attr if isinstance(node.func, ast.Attribute) else node.func.id if isinstance(node.func, ast.Name) else ""
         if function not in {"run", "call", "check_call", "check_output", "Popen", "system"}: continue
@@ -435,8 +447,15 @@ def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str,
         if SCRIPT_CLOUD_MODEL.search(command): reject(errors, manifest, workflow, job, "cloud_model", f"provider/cloud/model surface in {detail}")
         if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
             reject(errors, manifest, workflow, job, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
-    if COMMAND_RESOLUTION_MUTATION.search(command) or GITHUB_PATH_MUTATION.search(command) or COMMAND_RESOLUTION_INDIRECTION.search(command):
+    # Shell quoting and backslashes concatenate tokens.  Inspect the compact
+    # spelling too, so `target=GITHUB_'ENV'` cannot hide a later redirect to a
+    # command-resolution control file.  We do not try to evaluate shell: any
+    # dynamic execution mechanism is rejected below.
+    shell_compact = re.sub(r"[\\'\"]", "", command)
+    if COMMAND_RESOLUTION_MUTATION.search(command) or GITHUB_PATH_MUTATION.search(command) or COMMAND_RESOLUTION_INDIRECTION.search(command) or COMMAND_RESOLUTION_INDIRECTION.search(shell_compact):
         reject(errors, manifest, workflow, job, "command_resolution", f"PATH or shell command-resolution mutation is forbidden in {detail}")
+    if "`" in command or re.search(r"\beval\b", command):
+        reject(errors, manifest, workflow, job, "inline_shell", f"dynamic shell evaluation or backtick substitution is forbidden in {detail}")
     if re.search(r"\bpython(?:3)?\s+-c\b", command):
         reject(errors, manifest, workflow, job, "background_process", f"opaque inline process launch is forbidden in {detail}")
     for segment in shell_segments(command):
@@ -602,23 +621,24 @@ def audit_artifact_guard_script(repo_root: pathlib.Path, errors: list[str]) -> N
     if not path.is_file() or path.is_symlink():
         errors.append("artifact-budget: guard must be a regular non-symlink Python file"); return
     with tempfile.TemporaryDirectory() as directory:
-        root = pathlib.Path(directory)
-        receipt, report, output = root / "package019-ci-receipt.json", root / "xcode-products-report.json", root / "xcode-evidence.zip"
-        receipt.write_bytes(b'{"receipt":"deterministic"}\n'); report.write_bytes(b'{"report":"deterministic"}\n')
-        result = subprocess.run([sys.executable, str(path), "--seal-output", str(output), str(receipt), str(report)], capture_output=True, text=True)
-        if result.returncode:
-            errors.append(f"artifact-budget: guard rejected its deterministic probe: {result.stderr.strip() or result.stdout.strip()}"); return
-        try:
-            entry = os.lstat(output)
-            if stat.S_ISLNK(entry.st_mode) or not stat.S_ISREG(entry.st_mode) or entry.st_size > 25 * 1024 * 1024 or not zipfile.is_zipfile(output): raise ValueError("output is not a bounded regular ZIP")
-            with zipfile.ZipFile(output) as archive:
-                expected = {receipt.name: receipt.read_bytes(), report.name: report.read_bytes()}
-                if set(archive.namelist()) != {*expected, "artifact-manifest.json"}: raise ValueError("ZIP members are not exact")
-                manifest = json.loads(archive.read("artifact-manifest.json"))
-                expected_manifest = {"schema_version": "tracksmith-compact-artifact/1", "files": [{"name": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()} for name, data in expected.items()]}
-                if manifest != expected_manifest or any(archive.read(name) != data for name, data in expected.items()): raise ValueError("ZIP content or internal manifest hash mismatch")
-        except (OSError, ValueError, KeyError, zipfile.BadZipFile, json.JSONDecodeError) as error:
-            errors.append(f"artifact-budget: guard did not produce the required sealed ZIP snapshot: {error}")
+        for probe, (receipt_data, report_data) in enumerate(((b'{"receipt":"deterministic"}\n', b'{"report":"deterministic"}\n'), (secrets.token_bytes(73), secrets.token_bytes(509)))):
+            root = pathlib.Path(directory) / str(probe); root.mkdir()
+            receipt, report, output = root / "package019-ci-receipt.json", root / "xcode-products-report.json", root / "xcode-evidence.zip"
+            receipt.write_bytes(receipt_data); report.write_bytes(report_data)
+            result = subprocess.run([sys.executable, str(path), "--seal-output", str(output), str(receipt), str(report)], capture_output=True, text=True)
+            if result.returncode:
+                errors.append(f"artifact-budget: guard rejected probe {probe}: {result.stderr.strip() or result.stdout.strip()}"); return
+            try:
+                entry = os.lstat(output)
+                if stat.S_ISLNK(entry.st_mode) or not stat.S_ISREG(entry.st_mode) or entry.st_size > 25 * 1024 * 1024 or not zipfile.is_zipfile(output): raise ValueError("output is not a bounded regular ZIP")
+                with zipfile.ZipFile(output) as archive:
+                    expected = {receipt.name: receipt.read_bytes(), report.name: report.read_bytes()}
+                    if set(archive.namelist()) != {*expected, "artifact-manifest.json"}: raise ValueError("ZIP members are not exact")
+                    manifest = json.loads(archive.read("artifact-manifest.json"))
+                    expected_manifest = {"schema_version": "tracksmith-compact-artifact/1", "files": [{"name": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()} for name, data in expected.items()]}
+                    if manifest != expected_manifest or any(archive.read(name) != data for name, data in expected.items()): raise ValueError("ZIP content or internal manifest hash mismatch")
+            except (OSError, ValueError, KeyError, zipfile.BadZipFile, json.JSONDecodeError) as error:
+                errors.append(f"artifact-budget: guard did not produce the required sealed ZIP snapshot: {error}"); return
 
 
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
@@ -783,6 +803,8 @@ def self_test() -> None:
             ("github-env-path-shadow", good + "      - run: echo 'PATH=${{ github.workspace }}:$PATH' >> \"$GITHUB_ENV\"\n", manifest_data),
             ("github-env-bash-shadow", good + "      - run: echo 'BASH_ENV=${{ github.workspace }}/bash' >> \"$GITHUB_ENV\"\n", manifest_data),
             ("github-env-indirect-shadow", good + "      - run: target=GITHUB_ENV; echo 'PATH=${{ github.workspace }}:$PATH' >> \"${!target}\"\n", manifest_data),
+            ("github-env-quoted-target", good + "      - run: target=GITHUB_'ENV'; echo 'PATH=${{ github.workspace }}:$PATH' >> \"$target\"\n", manifest_data),
+            ("github-env-eval-shadow", good + "      - run: target=GITHUB_'ENV'; eval \"echo PATH=${{ github.workspace }}:$PATH >> \\\"${!target}\\\"\"\n", manifest_data),
             ("inline-path-shadow", good + "      - run: PATH=${{ github.workspace }}:$PATH bash scripts/ci/run-linux-integrity.sh\n", manifest_data),
             ("inline-shell-function-shadow", good + "      - run: bash() { exit 0; }; bash scripts/ci/run-linux-integrity.sh\n", manifest_data),
             ("inline-background", good + "      - run: bash scripts/ci/run-linux-integrity.sh &\n", manifest_data),
@@ -828,6 +850,8 @@ def self_test() -> None:
             ("xcode-backslash", "xcode\\build -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n"),
             ("xcode-expansion", "xco${EMPTY}debuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n"),
             ("xcode-backslash-signing-override", "xcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO CO\\DE_SIGNING_ALLOWED=YES build\n"),
+            ("xcode-backtick", "xco`printf de`build -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n"),
+            ("xcode-backtick-signing", "xcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO CO`printf DE`_SIGNING_ALLOWED=YES build\n"),
             ("xcode-split-signing-override", "signing='CO''DE_SIGNING_ALLOWED=YES'\nxcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO \"$signing\" build\n"),
         ):
             reset_safe_fixture()
@@ -863,6 +887,14 @@ def self_test() -> None:
         helper.write_text("import os, subprocess\nsubprocess.run(['xcodebuild', 'CODE_SIGNING_ALLOWED=YES', 'build'], check=True)\nos.system('sleep 1 &')\n")
         (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\npython3 research/scripts/unsafe-helper.py\n")
         if not audit(workflows, manifest, repo): raise AssertionError("Python subprocess policy-surface fixture was accepted")
+        reset_safe_fixture()
+        helper.write_text("from subprocess import run as spawn\nfrom os import system as invoke\nspawn(['xcodebuild', 'CODE_SIGNING_ALLOWED=YES', 'build'])\ninvoke('sleep 1 &')\n")
+        (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\npython3 research/scripts/unsafe-helper.py\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("aliased Python process-spawn fixture was accepted")
+        reset_safe_fixture()
+        helper.write_text("import subprocess\nspawn = subprocess.run\nspawn(['xcodebuild', 'CODE_SIGNING_ALLOWED=YES', 'build'])\n")
+        (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\npython3 research/scripts/unsafe-helper.py\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("assigned Python process-spawn fixture was accepted")
         artifact_job = """name: safe
 on: [pull_request]
 permissions:
@@ -953,7 +985,7 @@ jobs:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 102 rejection classes passed (81 retained plus command-resolution, shell-resolved Xcode, Python execution-surface, and behavioral sealed-artifact rejection)")
+    print("audit-free-compute self-test: 108 rejection classes passed (81 retained plus command-resolution, dynamic-shell, shell-resolved Xcode, Python execution-surface, and randomized sealed-artifact rejection)")
 
 
 def main() -> int:

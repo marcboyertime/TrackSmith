@@ -154,32 +154,21 @@ def _identity(entry: os.stat_result) -> tuple[int, int, int, int]:
 def _unlink_owned_regular(name: str, root: Path, descriptor: int, expected: tuple[int, int, int, int]) -> None:
     """Delete only the inode we inspected, never a raced replacement.
 
-    POSIX has no unlink-if-inode primitive.  Move the pathname first to a
-    private random quarantine name, verify the moved inode, and only then
-    unlink it.  A replacement that wins before the move is restored (or left
-    intact in quarantine if a second racer occupies the original name); it is
-    never deleted as a cache entry.
+    POSIX has no unlink-if-inode primitive.  Retire cache bytes through a held
+    no-follow descriptor instead of unlinking a pathname: a later rename or
+    replacement cannot redirect ftruncate to a user file.  The zero-byte,
+    now-unowned name is harmless and is deliberately never name-deleted.
     """
     _race("before-prune-unlink", root)
     _verify_root(root, descriptor)
-    current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
-    if not stat.S_ISREG(current.st_mode) or _identity(current) != expected:
-        raise ValueError("cache entry changed while pruning")
-    _race("after-prune-verify", root)
-    quarantine = f".{name}.{secrets.token_hex(16)}.prune"
-    os.rename(name, quarantine, src_dir_fd=descriptor, dst_dir_fd=descriptor)
-    moved = os.stat(quarantine, dir_fd=descriptor, follow_symlinks=False)
-    if not stat.S_ISREG(moved.st_mode) or _identity(moved) != expected:
-        # Restore without replacement: if a later writer has occupied `name`,
-        # leave the raced content under its explicit quarantine filename and
-        # fail closed rather than overwriting or deleting either file.
-        try:
-            os.link(quarantine, name, src_dir_fd=descriptor, dst_dir_fd=descriptor, follow_symlinks=False)
-            os.unlink(quarantine, dir_fd=descriptor)
-        except FileExistsError:
-            pass
-        raise ValueError("cache entry changed while pruning")
-    os.unlink(quarantine, dir_fd=descriptor)
+    handle = os.open(name, os.O_RDWR | os.O_NOFOLLOW, dir_fd=descriptor)
+    try:
+        current = os.fstat(handle)
+        if not stat.S_ISREG(current.st_mode) or _identity(current) != expected: raise ValueError("cache entry changed while pruning")
+        _race("after-prune-verify", root)
+        _race("before-prune-quarantine-unlink", root)
+        os.ftruncate(handle, 0); os.fsync(handle)
+    finally: os.close(handle)
 
 
 def _valid_payload(value: Any, expected_key: str | None = None) -> dict[str, Any] | None:
@@ -263,13 +252,39 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
         _verify_root(root, descriptor)
         current = os.stat(temporary, dir_fd=descriptor, follow_symlinks=False)
         if not stat.S_ISREG(current.st_mode) or _identity(current) != completed_identity: raise ValueError("cache temporary changed before replacement")
-        # os.replace is descriptor-relative and replaces a raced-in symlink itself; it never follows its target.
-        completed_temporary = temporary
-        os.replace(temporary, name, src_dir_fd=descriptor, dst_dir_fd=descriptor)
+        retired_handle: int | None = None
+        if existing is not None:
+            expected_existing = _identity(existing)
+            retired = f".{name}.{secrets.token_hex(16)}.retired"
+            os.rename(name, retired, src_dir_fd=descriptor, dst_dir_fd=descriptor)
+            try: retired_handle = os.open(retired, os.O_RDWR | os.O_NOFOLLOW, dir_fd=descriptor)
+            except OSError as error:
+                try: os.link(retired, name, src_dir_fd=descriptor, dst_dir_fd=descriptor, follow_symlinks=False)
+                except FileExistsError: pass
+                raise ValueError("cache target changed before replacement") from error
+            moved = os.fstat(retired_handle)
+            if not stat.S_ISREG(moved.st_mode) or _identity(moved) != expected_existing:
+                try: os.link(retired, name, src_dir_fd=descriptor, dst_dir_fd=descriptor, follow_symlinks=False)
+                except FileExistsError: pass
+                os.close(retired_handle); retired_handle = None
+                raise ValueError("cache target changed before replacement")
+        try:
+            # Link is atomic no-replace.  A new user target makes store fail
+            # rather than being overwritten; leave the verified temp indexed
+            # for a later descriptor-safe retirement.
+            _race("before-store-target-install", root)
+            try: os.link(temporary, name, src_dir_fd=descriptor, dst_dir_fd=descriptor, follow_symlinks=False)
+            except FileExistsError as error: raise ValueError("cache target appeared before replacement") from error
+        finally:
+            if retired_handle is not None:
+                os.ftruncate(retired_handle, 0); os.fsync(retired_handle); os.close(retired_handle)
+        # The installed entry and its original temporary name are hard links to
+        # the same verified inode.  The temporary is no longer independently
+        # pruneable: retaining it in the index would let prune zero the live
+        # entry before its own identity check.  Forget, but never name-unlink,
+        # the leftover temporary.
+        temporary_entries.pop(temporary, None)
         temporary = None
-        # Remove the exact recorded temporary after its rename.  Do not infer
-        # ownership from the cache key: there can be unrelated lookalikes.
-        temporary_entries.pop(completed_temporary, None)
         _verify_root(root, descriptor)
         _write_index(descriptor, owned, temporary_entries)
     finally:
