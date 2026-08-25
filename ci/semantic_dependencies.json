@@ -1,0 +1,14 @@
+{
+  "schema_version": "tracksmith-semantic-dependencies/1",
+  "shared_prefixes": [".github/", "ci/", "scripts/ci/", "Package.swift", "project.yml"],
+  "lanes": {
+    "linux_integrity": ["research/scripts/", "research/community_knowledge/", "packages/ProductionTutor/Sources/ProductionTutor/Resources/"],
+    "linux_retrieval": ["packages/ProductionTutor/", "docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json"],
+    "linux_evaluation": ["research/tutor_quality/"],
+    "linux_docs_policy_security": ["docs/FREE_COMPUTE_STRATEGY.md", "docs/evidence/FREE_COMPUTE_"],
+    "macos_swift_core": ["packages/", "tests/TestRunner/"],
+    "macos_tutor": ["packages/TutorConversation/", "tools/TutorConversationTests/", "research/tutor_quality/"],
+    "macos_xcode_companion": ["apps/CompanionApp/"],
+    "macos_xcode_au": ["plugins/AudioUnit/AudioUnitExtension/"]
+  }
+}

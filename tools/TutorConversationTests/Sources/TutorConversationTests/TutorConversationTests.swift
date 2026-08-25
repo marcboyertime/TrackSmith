@@ -43,7 +43,37 @@ struct TutorConversationTests {
         let projection = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
             .appendingPathComponent("research/community_knowledge/runtime_projection/p16", isDirectory: true).path
         setenv("TRACKSMITH_LEGACY_TEST_ORACLE_DIRECTORY", projection, 1)
-        let suite = Suite()
+        let arguments = Array(CommandLine.arguments.dropFirst())
+        let ordinaryFlags = Set(["--list-tests", "--shard-index", "--shard-count", "--include", "--exclude", "--output-json"])
+        let ordinaryFlagsWithValues = Set(["--shard-index", "--shard-count", "--include", "--exclude", "--output-json"])
+        let hasOrdinarySelection = arguments.contains { ordinaryFlags.contains($0) }
+        var positionalModes: [String] = []
+        var argumentIndex = 0
+        while argumentIndex < arguments.count {
+            let argument = arguments[argumentIndex]
+            if ordinaryFlagsWithValues.contains(argument) {
+                argumentIndex += 2
+            } else {
+                if !argument.hasPrefix("--") { positionalModes.append(argument) }
+                argumentIndex += 1
+            }
+        }
+        if !positionalModes.isEmpty && hasOrdinarySelection {
+            fputs("error: ordinary-suite sharding and JSON flags are incompatible with named diagnostics\n", stderr)
+            Darwin.exit(64)
+        }
+        let selection: Suite.Selection
+        do {
+            selection = try Suite.Selection(arguments: arguments)
+        } catch {
+            fputs("error: \(error)\n", stderr)
+            Darwin.exit(64)
+        }
+        if selection.listOnly {
+            Suite.printOrdinaryTestList()
+            return
+        }
+        let suite = Suite(selection: selection)
         if CommandLine.arguments.contains("package6-diagnostics") {
             await suite.runPackageSixDiagnostic()
         } else if CommandLine.arguments.contains("candidate-corpus-diagnostics") {
@@ -115,6 +145,12 @@ struct TutorConversationTests {
         } else {
             await suite.run()
         }
+        do {
+            try suite.writeReportIfRequested()
+        } catch {
+            fputs("error: could not write TutorConversationTests JSON report: \(error)\n", stderr)
+            Darwin.exit(65)
+        }
         print("TutorConversationTests: \(suite.passed)/\(suite.total) passed")
         fflush(stdout)
         if suite.passed != suite.total { Darwin.exit(1) }
@@ -125,6 +161,98 @@ struct TutorConversationTests {
 private final class Suite {
     private(set) var total = 0
     private(set) var passed = 0
+    private let selection: Selection
+    private lazy var fixedSelection = selectedCases()
+    private lazy var semanticContext = (source: fileHash("tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift"), policy: fileHash("ci/tracksmith_compute_lanes.json"), index: fileHash("packages/ProductionTutor/Sources/ProductionTutor/Resources/CandidateRetrieval.manifest.json"))
+    private var results: [[String: Any]] = []
+
+    struct Selection {
+        let listOnly: Bool
+        let includes: [String]
+        let excludes: [String]
+        let shardIndex: Int
+        let shardCount: Int
+        let outputURL: URL?
+
+        init(arguments: [String]) throws {
+            var includeValues: [String] = []
+            var excludeValues: [String] = []
+            var index = 0
+            var count = 1
+            var output: URL?
+            var list = false
+            var cursor = 0
+            while cursor < arguments.count {
+                let value = arguments[cursor]
+                func nextValue() throws -> String {
+                    guard cursor + 1 < arguments.count else { throw TestFailure(description: "missing value for \(value)") }
+                    cursor += 1; return arguments[cursor]
+                }
+                switch value {
+                case "--list-tests": list = true
+                case "--include": includeValues.append(try nextValue())
+                case "--exclude": excludeValues.append(try nextValue())
+                case "--shard-index": guard let parsed = Int(try nextValue()), parsed >= 0 else { throw TestFailure(description: "--shard-index must be a nonnegative integer") }; index = parsed
+                case "--shard-count": guard let parsed = Int(try nextValue()), parsed > 0 else { throw TestFailure(description: "--shard-count must be positive") }; count = parsed
+                case "--output-json": output = URL(fileURLWithPath: try nextValue())
+                default:
+                    if value.hasPrefix("--") { throw TestFailure(description: "unknown ordinary-suite option \(value)") }
+                }
+                cursor += 1
+            }
+            guard index < count else { throw TestFailure(description: "--shard-index must be smaller than --shard-count") }
+            self.listOnly = list; self.includes = includeValues; self.excludes = excludeValues
+            self.shardIndex = index; self.shardCount = count; self.outputURL = output
+        }
+    }
+
+    private struct CaseSpec { let id: String; let name: String; let resourceClass: String }
+    private static let suiteID = "tracksmith.tutor-conversation"
+    private static let suiteVersion = "2"
+    private static let ordinaryCases: [CaseSpec] = [
+        ("tutor-conversation/01-tool-firewall", "tool registry is mutation-incapable", "cpu"),
+        ("tutor-conversation/02-legacy-boundary", "legacy identifiers and Create/Vocal boundary are preserved", "cpu"),
+        ("tutor-conversation/03-streaming-ui", "Tutor streaming UI batches text with stable eager transcript layout", "cpu"),
+        ("tutor-conversation/04-tool-schema", "strict OpenAI tool schemas stay bounded", "cpu"),
+        ("tutor-conversation/05-sse-decoder", "SSE decoder reconstructs deltas, text, calls, and metadata", "cpu"),
+        ("tutor-conversation/06-streaming-provider", "streaming provider emits SSE and sends store false", "cpu"),
+        ("tutor-conversation/07-streaming-timeout", "streaming timeout is typed and sanitized", "cpu"),
+        ("tutor-conversation/08-tool-execution", "reviewed knowledge, procedures, capture, Logic, and experiment tools execute", "cpu"),
+        ("tutor-conversation/09-candidate-corpus", "candidate corpus stays provisional, collapsed, and structurally complete", "io"),
+        ("tutor-conversation/10-store-receipts", "conversation store is checksummed, redacted, bounded, and receipt write-once", "io"),
+        ("tutor-conversation/11-audio-consent", "audio listening requires separate consent and exact live hash", "cpu"),
+        ("tutor-conversation/12-audio-truth", "audio intelligence evidence keeps exact waveform and calibration truth separate", "cpu"),
+        ("tutor-conversation/13-local-waveform", "local waveform provider emits capture-bound exact-WAV observations", "cpu"),
+        ("tutor-conversation/14-live-like-wave", "live-like Float WAV local evidence is finite, encodable, and cannot abort a tool turn", "cpu"),
+        ("tutor-conversation/15-attached-double-failure", "double provider failure leaves an honest attached-capture assistant status", "cpu"),
+        ("tutor-conversation/16-attached-fallback", "attached generic offline fallback gives one honest reversible tonal next step", "cpu"),
+        ("tutor-conversation/17-comparison-authority", "comparison authority rejects hash-only follow-ups and accepts guarded continuity", "cpu"),
+        ("tutor-conversation/18-pending-isolation", "two pending experiment confirmations cannot cross-authorize comparisons", "cpu"),
+        ("tutor-conversation/19-legacy-experiment", "legacy experiment records decode with Phase 2 fields absent", "cpu"),
+        ("tutor-conversation/20-dialogue-quality", "not sure and clearer-but-thin dialogue remain useful without listening claims", "cpu"),
+        ("tutor-conversation/21-stateful-vertical", "muddy to thin stateful conversation retains turns, tools, experiment, and outcome", "cpu"),
+        ("tutor-conversation/22-offline-fallback", "cloud failure activates deterministic offline fallback", "cpu"),
+        ("tutor-conversation/23-cancellation", "cancellation persists an honest partial turn and blocks concurrent turns", "cpu"),
+        ("tutor-conversation/24-package9", "Package 9 gain, bus, clipping, limiting, loudness migration integrity", "io"),
+        ("tutor-conversation/25-package10", "Package 10 Flex Time/manual timing canonical-only migration integrity", "io"),
+        ("tutor-conversation/26-package11", "Package 11 Smart Tempo canonical-only migration integrity", "io"),
+        ("tutor-conversation/27-package12", "Package 12 recording/monitoring/comping/punch exact-subset migration integrity", "io"),
+        ("tutor-conversation/28-package13", "Package 13 sends/buses/auxes/stacks/groups exact-subset migration integrity", "io"),
+        ("tutor-conversation/29-package14", "Package 14 sidechain/automation/MIDI exact-subset migration integrity", "io"),
+        ("tutor-conversation/30-package15", "Package 15 MIDI/Piano Roll/bounce/freeze/PDC exact-subset migration integrity", "io"),
+        ("tutor-conversation/31-package16-golden", "Package 16 golden conversations stay bounded and model-independent", "cpu"),
+        ("tutor-conversation/32-package16-performance", "Package 16 candidate retrieval performance stays bounded", "io"),
+        ("tutor-conversation/33-package16-fallback", "Package 16 candidate and provider failures stay fail-soft", "cpu"),
+        ("tutor-conversation/34-package17-contract", "Package 17 experience levels are explicit, persistent-safe, and receipt-bound", "cpu"),
+        ("tutor-conversation/35-package17-isolation", "Package 17 provider context remains compact and evaluation-isolated", "cpu"),
+        ("tutor-conversation/36-package17-offline", "Package 17 offline levels preserve one safe experiment and stream promptly", "cpu"),
+    ].map { CaseSpec(id: $0.0, name: $0.1, resourceClass: $0.2) }
+
+    init(selection: Selection = try! Selection(arguments: [])) { self.selection = selection }
+
+    static func printOrdinaryTestList() {
+        for item in ordinaryCases { print("\(item.id)\t\(item.resourceClass)\t\(item.name)") }
+    }
 
     private nonisolated static let packageSeventeenCloudMaximumTopicConcurrency = 3
     private nonisolated static let packageSeventeenCloudMaximumAttempts = 2
@@ -363,15 +491,112 @@ private final class Suite {
         await test("Package 17 opt-in public audio evaluation has explicit consent and exact binding", testPackageSeventeenPublicAudioEvaluation)
     }
 
+    private func caseSpec(_ name: String) -> CaseSpec? { Self.ordinaryCases.first { $0.name == name } }
+
+    private func matches(_ identifier: String, _ pattern: String) -> Bool {
+        pattern.hasSuffix("*") ? identifier.hasPrefix(String(pattern.dropLast())) : identifier == pattern
+    }
+
+    private func fileHash(_ relative: String) -> String {
+        let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(relative)
+        return (try? Data(contentsOf: url)).map(sha256) ?? "unavailable"
+    }
+
+    private func costSeconds() -> [String: Double] {
+        let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("ci/tutor_test_costs.json")
+        guard let data = try? Data(contentsOf: url),
+              let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let raw = payload["cost_seconds"] as? [String: Any] else { return [:] }
+        return raw.reduce(into: [:]) { result, item in
+            if let number = item.value as? NSNumber, number.doubleValue > 0 { result[item.key] = number.doubleValue }
+        }
+    }
+
+    private func selectedCases() -> (cases: [CaseSpec], algorithm: String) {
+        var candidates = Self.ordinaryCases.filter { item in
+            (selection.includes.isEmpty || selection.includes.contains { matches(item.id, $0) }) &&
+            !selection.excludes.contains { matches(item.id, $0) }
+        }
+        let costs = costSeconds()
+        let useCosts = candidates.allSatisfy { costs[$0.id] != nil }
+        if useCosts {
+            candidates.sort { (costs[$0.id]!, $0.id) > (costs[$1.id]!, $1.id) }
+            var bins = Array(repeating: (load: 0.0, items: [CaseSpec]()), count: selection.shardCount)
+            for item in candidates {
+                let target = bins.indices.min { left, right in
+                    bins[left].load == bins[right].load ? left < right : bins[left].load < bins[right].load
+                }!
+                bins[target].items.append(item); bins[target].load += costs[item.id]!
+            }
+            return (bins[selection.shardIndex].items.sorted { $0.id < $1.id }, "lpt-cost-v1")
+        }
+        let assigned = candidates.filter { item in
+            let prefix = sha256(Data(item.id.utf8)).prefix(16)
+            return Int(UInt64(prefix, radix: 16) ?? 0) % selection.shardCount == selection.shardIndex
+        }.sorted { $0.id < $1.id }
+        return (assigned, "sha256-modulo-v1")
+    }
+
+    private func shouldRun(_ name: String) -> Bool {
+        guard let item = caseSpec(name) else { return true }
+        return fixedSelection.cases.contains { $0.id == item.id }
+    }
+
+    func writeReportIfRequested() throws {
+        guard let outputURL = selection.outputURL else { return }
+        let selected = fixedSelection
+        let expected = selected.cases.map(\.id).sorted()
+        let partition = sha256(Data(expected.joined(separator: "\n").utf8))
+        let payload: [String: Any] = [
+            "schema_version": "tracksmith-shard-report/1",
+            "suite_id": Self.suiteID,
+            "suite_version": Self.suiteVersion,
+            "suite_source_hash": semanticContext.source,
+            "commit": ProcessInfo.processInfo.environment["GITHUB_SHA"] ?? "local",
+            "tree_classification": ProcessInfo.processInfo.environment["GITHUB_SHA"] == nil ? "local-observational" : "github-clean-checkout",
+            "shard_index": selection.shardIndex,
+            "shard_count": selection.shardCount,
+            "assignment_algorithm": selected.algorithm,
+            "assignment_version": "1",
+            "partition_hash": partition,
+            "expected_ids": expected,
+            "executed_ids": results.compactMap { $0["id"] as? String }.sorted(),
+            "cases": results.sorted { ($0["id"] as? String ?? "") < ($1["id"] as? String ?? "") },
+            "toolchain_identity": ProcessInfo.processInfo.environment["TRACKSMITH_TUTOR_TOOLCHAIN_ID"] ?? "local-toolchain-identity-not-exported",
+            "toolchain_hash": sha256(Data((ProcessInfo.processInfo.environment["TRACKSMITH_TUTOR_TOOLCHAIN_ID"] ?? "local-toolchain-identity-not-exported").utf8)),
+            "policy_hash": semanticContext.policy,
+            "index_hash": semanticContext.index,
+            "observation": ["wall_clock_is_observational": true]
+        ]
+        let data = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])
+        try FileManager.default.createDirectory(at: outputURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try data.write(to: outputURL, options: .atomic)
+    }
+
     private func test(_ name: String, _ body: () async throws -> Void) async {
+        guard shouldRun(name) else { return }
         total += 1
+        let started = ContinuousClock.now
+        let item = caseSpec(name)
         do {
             try await body()
             passed += 1
             print("PASS \(name)")
+            if let item {
+                let semantic = semanticHash(for: item)
+                results.append(["id": item.id, "semantic_input_hash": semantic, "outcome": "passed", "duration_seconds": started.duration(to: .now).components.seconds, "result_hash": sha256(Data("\(item.id)|passed|\(semantic)".utf8)), "resource_class": item.resourceClass])
+            }
         } catch {
             print("FAIL \(name): \(error)")
+            if let item {
+                let semantic = semanticHash(for: item)
+                results.append(["id": item.id, "semantic_input_hash": semantic, "outcome": "failed", "duration_seconds": started.duration(to: .now).components.seconds, "result_hash": sha256(Data("\(item.id)|failed|\(semantic)".utf8)), "resource_class": item.resourceClass])
+            }
         }
+    }
+
+    private func semanticHash(for item: CaseSpec) -> String {
+        sha256(Data("\(Self.suiteID)|\(Self.suiteVersion)|\(item.id)|\(item.name)|\(item.resourceClass)|\(semanticContext.source)|\(semanticContext.policy)|\(semanticContext.index)|ordinary-case-schema-v1".utf8))
     }
 
     private func expect(_ condition: @autoclosure () -> Bool, _ message: String) throws {

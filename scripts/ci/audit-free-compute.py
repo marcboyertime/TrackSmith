@@ -108,6 +108,8 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
     cache_policy = manifest.get("cache_policy")
     if not isinstance(cache_policy, dict) or not isinstance(cache_policy.get("enabled"), bool):
         errors.append("manifest: cache_policy.enabled must be boolean")
+    elif not isinstance(cache_policy.get("soft_budget_bytes"), int) or not 0 <= cache_policy["soft_budget_bytes"] <= 2 * 1024 * 1024 * 1024:
+        errors.append("manifest: cache_policy soft budget must be an integer no larger than 2 GiB")
     lanes = manifest.get("lanes")
     if not isinstance(lanes, list) or {lane.get("id") for lane in lanes if isinstance(lane, dict)} != set(LANE_IDS) or len(lanes) != len(LANE_IDS):
         errors.append("manifest: lanes must contain exactly the 10 required lane IDs")
@@ -303,6 +305,13 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
     if errors:
         return errors
     audit_manifest_entrypoints(manifest, repo_root, errors)
+    tutor_runner = repo_root / "scripts/ci/run-macos-tutor.sh"
+    if tutor_runner.exists():
+        tutor_text = tutor_runner.read_text(encoding="utf-8")
+        if "cpu_budget.py" not in tutor_text or "TRACKSMITH_MAX_TUTOR_SHARDS:-3" not in tutor_text:
+            errors.append("phase2:macos_tutor: worker cap must use cpu_budget.py and a maximum of three shards")
+        if "swift build -c release --product TutorConversationTests" not in tutor_text or "swift run -c release TutorConversationTests" in tutor_text:
+            errors.append("phase2:macos_tutor: must build once and execute the release binary directly")
     for path in sorted((*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml"))):
         doc = parse_yaml(path)
         workflow, raw = path.name, path.read_text()
@@ -311,6 +320,8 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
         triggers = doc.get("on", doc.get("true", doc.get(True)))
         if triggers == "pull_request_target" or (isinstance(triggers, (list, dict)) and "pull_request_target" in triggers):
             errors.append(f"{workflow}:<workflow>: pull_request_target: forbidden")
+        if isinstance(triggers, (list, dict)) and any(item in triggers for item in ("workflow_run", "repository_dispatch", "schedule")):
+            errors.append(f"{workflow}:<workflow>: recursive or scheduled trigger is forbidden")
         jobs = doc.get("jobs")
         if not isinstance(jobs, dict) or not jobs:
             errors.append(f"{workflow}:<workflow>: jobs: missing jobs mapping")
@@ -326,6 +337,8 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
             if not labels or any(not isinstance(label, str) or label not in ALLOWED_RUNNERS or DISALLOWED_RUNNER.search(label) for label in labels):
                 reject(errors, manifest, workflow, job, "runner", f"runs-on must use only {sorted(ALLOWED_RUNNERS)}")
             serialized = json.dumps(body)
+            if isinstance(body.get("strategy"), dict) and "matrix" in body["strategy"]:
+                reject(errors, manifest, workflow, job, "matrix", "matrix jobs are forbidden until a bounded audited contract is added")
             if SECRET_REF.search(serialized): reject(errors, manifest, workflow, job, "secrets", "secret references are forbidden")
             if FORBIDDEN_COMMAND.search(serialized): reject(errors, manifest, workflow, job, "cloud_model", "cloud/model command is forbidden")
             for step in body.get("steps", []) if isinstance(body.get("steps"), list) else []:
@@ -359,7 +372,10 @@ def self_test() -> None:
                 match = ENTRYPOINT_COMMAND.fullmatch(lane.get("command", "")) if isinstance(lane, dict) else None
                 if match:
                     path = repo / match.group(1); path.parent.mkdir(parents=True, exist_ok=True)
-                    path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf 'safe entrypoint\\n'\n")
+                    if path.name == "run-macos-tutor.sh":
+                        path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nswift build -c release --product TutorConversationTests\npython3 scripts/ci/cpu_budget.py --cap \"${TRACKSMITH_MAX_TUTOR_SHARDS:-3}\" --reserve 1\n")
+                    else:
+                        path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf 'safe entrypoint\\n'\n")
         write_manifest(manifest_data); write_entrypoints(manifest_data); (workflows / "safe.yml").write_text(good)
         if audit(workflows, manifest, repo): raise AssertionError("valid fixture was rejected")
         cases: list[tuple[str, str, dict[str, Any]]] = [
@@ -372,6 +388,8 @@ def self_test() -> None:
             ("cloud", good + "      - run: cloud-eval\n", manifest_data),
             ("artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: ${{ runner.temp }}/DerivedData\n          retention-days: 90\n", manifest_data),
             ("unreviewed-action", good.replace("actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1", "actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1"), manifest_data),
+            ("matrix", good.replace("    steps:\n", "    strategy:\n      matrix: { shard: [1, 2] }\n    steps:\n"), manifest_data),
+            ("recursive-trigger", good.replace("on: [pull_request]", "on: [workflow_run]"), manifest_data),
         ]
         cache = good + "      - uses: actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1\n"
         malformed = json.loads(json.dumps(manifest_data)); malformed["lanes"].pop()
@@ -462,7 +480,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 48 rejection classes passed")
+    print("audit-free-compute self-test: 50 rejection classes passed (48 retained plus matrix and recursive-trigger rejection)")
 
 
 def main() -> int:
