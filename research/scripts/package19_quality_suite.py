@@ -209,6 +209,19 @@ def index_fingerprint(repository=ROOT,excluded=REPORT_FILES):
 
 def candidate_fingerprint():return index_fingerprint()
 
+def report_relative_paths(repository=ROOT):
+ return {str(path.relative_to(repository)) for path in REPORT_FILES if path.is_relative_to(repository)}
+
+def generation_preflight(repository=ROOT):
+ # Whole-index receipts must be generated only after every non-report change is
+ # committed. Otherwise a later commit changes the bound index and makes a
+ # freshly written receipt fail in CI despite deterministic inputs.
+ allowed=report_relative_paths(repository)
+ for label,arguments in (('worktree',['git','diff','--name-only']),('index',['git','diff','--cached','--name-only'])):
+  output=subprocess.run(arguments,cwd=repository,check=True,capture_output=True,text=True).stdout.splitlines()
+  unexpected=sorted(path for path in output if path not in allowed)
+  if unexpected:raise ValueError(f'cannot generate whole-index receipt with non-report {label} changes: {", ".join(unexpected)}')
+
 def bundle_inventory_hash(bundle):
  # Bind every bundle entry, not just the scanner's resource roots. Resource
  # scanning retains its narrower semantics; this inventory also covers helpers,
@@ -404,8 +417,10 @@ def main():
  if a.forbidden_resource:print(json.dumps(scan(a.installed_bundle),sort_keys=True))
  if a.scanner_self_test:print(json.dumps(scanner_self_test(),sort_keys=True))
  if a.receipt_self_test:print(json.dumps(receipt_self_test(),sort_keys=True))
- if a.generate_validation_receipt:print(json.dumps(generate_receipt(a.installed_bundle,a.receipt_audio_unit_host_probe,a.receipt_output),sort_keys=True))
- if a.write_reports:reports();print('PACKAGE019_REPORTS_OK')
+ if a.generate_validation_receipt:
+  generation_preflight();print(json.dumps(generate_receipt(a.installed_bundle,a.receipt_audio_unit_host_probe,a.receipt_output),sort_keys=True))
+ if a.write_reports:
+  generation_preflight();reports();print('PACKAGE019_REPORTS_OK')
  if a.cloud_lane:
   ok=a.cloud_audio_consent if a.cloud_lane=='audio' else a.cloud_text_consent;flag='--cloud-audio-consent' if a.cloud_lane=='audio' else '--cloud-text-consent'
   raise SystemExit(f'P19 {a.cloud_lane}: '+('provider adapter/credentials absent; zero calls' if ok else f'requires {flag}; zero calls'))
