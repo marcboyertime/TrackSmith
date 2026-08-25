@@ -5,20 +5,22 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
-import shutil
+import re
 import time
 from pathlib import Path
 from typing import Any
 
 SCHEMA = "tracksmith-deterministic-case-cache/1"
-FORBIDDEN = ("audio", "credential", "secret", "provider", "prose", "database", "build", "failure")
 MAX_ENTRY_BYTES = 256 * 1024
+COMPONENT_KEYS = {"suite_id", "suite_version", "source_hash", "policy_hash", "index_hash", "toolchain_hash", "case_id", "semantic_input_hash"}
+RESULT_KEYS = {"case_id", "semantic_input_hash", "outcome", "result_hash"}
+HASH = re.compile(r"^[0-9a-f]{64}$")
+CASE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,191}$")
 
 
 def key(components: dict[str, str]) -> str:
-    if not components or any(not isinstance(value, str) or not value for value in components.values()):
-        raise ValueError("semantic components must be nonempty strings")
+    if set(components) != COMPONENT_KEYS or not all(isinstance(value, str) for value in components.values()) or not CASE_ID.fullmatch(components["suite_id"]) or not CASE_ID.fullmatch(components["suite_version"]) or not CASE_ID.fullmatch(components["case_id"]) or any(not HASH.fullmatch(components[name]) for name in COMPONENT_KEYS - {"suite_id", "suite_version", "case_id"}):
+        raise ValueError("components must use the exact compact deterministic schema")
     return hashlib.sha256(json.dumps(components, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
@@ -26,22 +28,24 @@ def path_for(root: Path, cache_key: str) -> Path: return root / f"{cache_key}.js
 
 
 def load(root: Path, components: dict[str, str]) -> dict[str, Any] | None:
+    if root.is_symlink(): return None
     target = path_for(root, key(components))
     try:
         value = json.loads(target.read_text())
     except (OSError, json.JSONDecodeError): return None
-    if not isinstance(value, dict) or value.get("schema_version") != SCHEMA or value.get("components") != components:
+    if target.is_symlink() or not isinstance(value, dict) or set(value) != {"schema_version", "components", "result", "result_hash", "created_epoch"} or value.get("schema_version") != SCHEMA or value.get("components") != components:
         return None
     result = value.get("result")
-    if not isinstance(result, dict) or result.get("outcome") != "passed" or any(term in json.dumps(result).lower() for term in FORBIDDEN):
+    if not isinstance(result, dict) or set(result) != RESULT_KEYS or result.get("outcome") != "passed" or result.get("case_id") != components["case_id"] or result.get("semantic_input_hash") != components["semantic_input_hash"] or not isinstance(result.get("result_hash"), str) or result["result_hash"] != hashlib.sha256(f"{result['case_id']}|passed|{result['semantic_input_hash']}".encode()).hexdigest():
         return None
     if value.get("result_hash") != hashlib.sha256(json.dumps(result, sort_keys=True, separators=(",", ":")).encode()).hexdigest(): return None
     return result
 
 
 def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> None:
-    if result.get("outcome") != "passed" or any(term in json.dumps(result).lower() for term in FORBIDDEN):
-        raise ValueError("only compact successful deterministic results are cacheable")
+    key(components)
+    if root.exists() and root.is_symlink(): raise ValueError("cache root cannot be a symlink")
+    if set(result) != RESULT_KEYS or result.get("outcome") != "passed" or result.get("case_id") != components["case_id"] or result.get("semantic_input_hash") != components["semantic_input_hash"] or result.get("result_hash") != hashlib.sha256(f"{components['case_id']}|passed|{components['semantic_input_hash']}".encode()).hexdigest(): raise ValueError("result must use the exact compact passed-case schema")
     payload = {"schema_version": SCHEMA, "components": components, "result": result, "result_hash": hashlib.sha256(json.dumps(result, sort_keys=True, separators=(",", ":")).encode()).hexdigest(), "created_epoch": int(time.time())}
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     if len(encoded) > MAX_ENTRY_BYTES: raise ValueError("cache entry exceeds serialized-byte cap")

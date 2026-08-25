@@ -23,8 +23,14 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
             raise ValueError(f"corrupt shard report: missing {sorted(missing)} or unsupported schema")
         if report["assignment_algorithm"] != ALGORITHM:
             raise ValueError("changed or unsupported assignment algorithm")
-        if not isinstance(report["expected_ids"], list) or not isinstance(report["cases"], list):
+        if not all(isinstance(report[key], list) and len(report[key]) == len(set(report[key])) and all(isinstance(item, str) and item for item in report[key]) for key in ("expected_ids", "executed_ids")) or not isinstance(report["cases"], list):
             raise ValueError("corrupt shard report collection fields")
+        case_ids = []
+        for case in report["cases"]:
+            if not isinstance(case, dict) or not isinstance(case.get("id"), str) or not case["id"]: raise ValueError("corrupt case object")
+            case_ids.append(case["id"])
+        if len(case_ids) != len(set(case_ids)) or set(case_ids) != set(report["expected_ids"]) or set(case_ids) != set(report["executed_ids"]):
+            raise ValueError("per-report cases do not exactly match expected/executed IDs")
     first = reports[0]
     invariant = ("suite_id", "suite_version", "suite_source_hash", "shard_count", "assignment_algorithm", "assignment_version", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash")
     for report in reports[1:]:
