@@ -34,7 +34,7 @@ def load(root: Path, components: dict[str, str]) -> dict[str, Any] | None:
     try:
         value = json.loads(target.read_text())
     except (OSError, json.JSONDecodeError): return None
-    if not isinstance(value, dict) or set(value) != {"schema_version", "components", "result", "result_hash", "created_epoch"} or value.get("schema_version") != SCHEMA or value.get("components") != components or not isinstance(value.get("created_epoch"), int) or value["created_epoch"] < 0:
+    if not isinstance(value, dict) or set(value) != {"schema_version", "components", "result", "result_hash", "created_epoch"} or value.get("schema_version") != SCHEMA or value.get("components") != components or type(value.get("created_epoch")) is not int or value["created_epoch"] < 0:
         return None
     result = value.get("result")
     if not isinstance(result, dict) or set(result) != RESULT_KEYS or result.get("outcome") != "passed" or result.get("case_id") != components["case_id"] or result.get("semantic_input_hash") != components["semantic_input_hash"] or not isinstance(result.get("result_hash"), str) or result["result_hash"] != hashlib.sha256(f"{result['case_id']}|passed|{result['semantic_input_hash']}".encode()).hexdigest():

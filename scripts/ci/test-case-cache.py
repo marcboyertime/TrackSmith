@@ -13,6 +13,8 @@ def main() -> None:
         corrupt = path_for(root, __import__("deterministic_case_cache").key(components)); corrupt.write_text("{")
         assert load(root, components) is None
         store(root, components, result); payload = json.loads(corrupt.read_text()); payload["components"]["source_hash"] = h("stale"); corrupt.write_text(json.dumps(payload)); assert load(root, components) is None
+        for timestamp in (True, False):
+            store(root, components, result); payload = json.loads(corrupt.read_text()); payload["created_epoch"] = timestamp; corrupt.write_text(json.dumps(payload)); assert load(root, components) is None
         try: store(root, components, {"outcome": "failed"}); raise AssertionError("failure was cached")
         except ValueError: pass
         try: store(root, components, {"outcome": "passed", "value": "x" * 300_000}); raise AssertionError("oversized result was cached")
