@@ -91,6 +91,20 @@ struct TutorConversationTests {
             suite.printSelectedTestList()
             return
         }
+        if CommandLine.arguments.contains("package19-cloud-budget-init") {
+            do { _ = try CloudEvaluationBudgetLedger.fromEnvironment(create: true); print("P19_CLOUD_BUDGET_LEDGER_INITIALIZED") }
+            catch { fputs("error: \(error)\n", stderr); Darwin.exit(64) }
+            return
+        }
+        if CommandLine.arguments.contains("package19-cloud-budget-self-test") {
+            do { try await CloudEvaluationBudgetLedger.selfTest(); print("P19_CLOUD_BUDGET_SELF_TEST_OK") }
+            catch { fputs("error: \(error)\n", stderr); Darwin.exit(1) }
+            return
+        }
+        if positionalModes.contains(where: { textConsentModes.contains($0) }) {
+            do { _ = try CloudEvaluationBudgetLedger.fromEnvironment() }
+            catch { fputs("error: \(error)\n", stderr); Darwin.exit(64) }
+        }
         if CommandLine.arguments.contains("package6-diagnostics") {
             await suite.runPackageSixDiagnostic()
         } else if CommandLine.arguments.contains("candidate-corpus-diagnostics") {
@@ -2473,7 +2487,7 @@ private final class Suite {
             throw TestFailure(description: "Package 019 cloud harness requires --cloud-text-consent; zero provider requests were sent")
         }
         let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
-        let configuration = TutorProviderConfiguration(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true)
+        let configuration = TutorProviderConfiguration(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true, maximumOutputTokens: 5_000)
         try expect(Self.packageSeventeenCloudConfigurationIsPinned(configuration), "P19 cloud harness requires gpt-5.6-sol, high effort, and priority service tier")
         let prompts = try packageNineteenCloudPrompts(repository: repository)
         let levels: [TutorExperienceLevel] = [.noob, .amateur, .pro]
@@ -2552,7 +2566,7 @@ private final class Suite {
             "lane_semantics": toolsEnabled ? "real TutorConversationEngine + all seven production tools; repeated lane independently repeats this exact path" : "current-policy provider-only comparison with no tools sent",
             "source_identity": packageNineteenSourceIdentity(repository),
             "evaluation_hashes": try packageNineteenEvaluationHashes(repository, prompts: prompts),
-            "configuration": ["provider": OpenAITutorProvider().providerIdentifier, "model": configuration.modelIdentifier, "reasoning_effort": configuration.reasoningEffort.rawValue, "service_tier": packageNineteenJSONOrNull(configuration.serviceTier?.rawValue), "store": false, "cloud_text_consent": "explicit --cloud-text-consent", "audio_present": false, "logic_context": toolsEnabled ? "deterministic injected read-only context" : "historical_p17_no_tool_context_source_vocal_plus_level_only"],
+            "configuration": ["provider": OpenAITutorProvider().providerIdentifier, "model": configuration.modelIdentifier, "reasoning_effort": configuration.reasoningEffort.rawValue, "service_tier": packageNineteenJSONOrNull(configuration.serviceTier?.rawValue), "maximum_output_tokens": configuration.maximumOutputTokens, "store": false, "cloud_text_consent": "explicit --cloud-text-consent", "audio_present": false, "logic_context": toolsEnabled ? "deterministic injected read-only context" : "historical_p17_no_tool_context_source_vocal_plus_level_only"],
             "counts": ["exact_prompt_count": prompts.count, "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "level_count": levels.count, "repetitions": repetitions, "generation_samples": attempts.count, "provider_request_calls": providerRequestCalls, "tool_enabled_samples": attempts.filter { (($0["tools_sent"] as? [String]) ?? []).isEmpty == false }.count, "supporting_judgments": supportingJudgments.count],
             "retry_policy": [
                 "by_lane": [
@@ -2602,7 +2616,8 @@ private final class Suite {
         // one turn only: retrying a completed/fallback receipt would duplicate
         // a user-visible turn. Direct provider-only/judge paths may retry once.
         for attempt in 1...1 {
-            let transport = transportFactory?() ?? PackageNineteenRecordingForwardingTransport()
+            let transport: PackageNineteenRecordingForwardingTransport
+            if let transportFactory { transport = transportFactory() } else { transport = try PackageNineteenRecordingForwardingTransport.live() }
             let provider = providerFactory?(transport) ?? OpenAITutorProvider(configuration: configuration, transport: transport)
             let started = Date()
             var attemptRequestsCounted = false
@@ -3196,7 +3211,8 @@ private final class Suite {
 
         Blinded responses:\n\(rendered)
         """
-        let transport = transportFactory?() ?? PackageNineteenRecordingForwardingTransport()
+        let transport: PackageNineteenRecordingForwardingTransport
+        if let transportFactory { transport = transportFactory() } else { transport = try PackageNineteenRecordingForwardingTransport.live() }
         let provider = providerFactory?(transport) ?? OpenAITutorProvider(configuration: configuration, transport: transport)
         let retry = await packageNineteenCloudTextWithRetry(provider: provider, query: request, context: .init(sourceType: .vocal), requestCount: { transport.requestCount })
         let outcome = retry.outcome
@@ -5931,6 +5947,10 @@ private final class PackageNineteenRecordingForwardingTransport: TutorStreamingH
     init(base: any TutorStreamingHTTPTransport = URLSessionTutorStreamingTransport(), requestMutation: ((inout TutorStreamingHTTPRequest) -> Void)? = nil) {
         self.base = base
         self.requestMutation = requestMutation
+    }
+
+    static func live() throws -> PackageNineteenRecordingForwardingTransport {
+        .init(base: CloudBudgetedTutorTransport(ledger: try CloudEvaluationBudgetLedger.fromEnvironment()))
     }
 
     func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
