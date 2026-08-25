@@ -11,6 +11,7 @@ swift build -c release --product TutorConversationTests
 binary="$(pwd -P)/.build/release/TutorConversationTests"
 [[ -x "$binary" ]] || { echo "error: TutorConversationTests release binary is missing" >&2; exit 1; }
 python3 scripts/ci/test-sharding.py --binary "$binary"
+python3 scripts/ci/test-tutor-cache-runner.py --binary "$binary"
 requested_shards="${TRACKSMITH_TUTOR_SHARDS:-0}"
 configured_cap="${TRACKSMITH_MAX_TUTOR_SHARDS:-3}"
 [[ "$configured_cap" =~ ^[1-9][0-9]*$ ]] && (( configured_cap <= 3 )) || { echo "error: TRACKSMITH_MAX_TUTOR_SHARDS must be an integer from 1 through 3" >&2; exit 64; }
@@ -46,16 +47,32 @@ python3 scripts/ci/shard_protocol.py \
   --commit "$shard_commit" \
   --tree-classification "$shard_tree_classification" \
   --toolchain-identity "$TRACKSMITH_TUTOR_TOOLCHAIN_ID"
-workers=()
-for ((index = 0; index < shard_count; index++)); do
-  "$binary" --shard-index "$index" --shard-count "$shard_count" --output-json "$temporary_directory/shard-$index.json" >"$temporary_directory/shard-$index.log" 2>&1 &
-  workers+=("$!")
-done
 shard_failure=0
-for worker in "${workers[@]}"; do
-  if ! wait "$worker"; then shard_failure=1; fi
-done
-for ((index = 0; index < shard_count; index++)); do cat "$temporary_directory/shard-$index.log"; done
+if [[ -n "${TRACKSMITH_TUTOR_CASE_CACHE_DIR:-}" ]]; then
+  section "local deterministic Tutor case cache (no provider cache or artifact transport)"
+  if ! python3 scripts/ci/run_tutor_cached.py \
+    --binary "$binary" \
+    --contract "$temporary_directory/contract.json" \
+    --list "$temporary_directory/ordinary-tests.tsv" \
+    --cache-root "$TRACKSMITH_TUTOR_CASE_CACHE_DIR" \
+    --output-dir "$temporary_directory" \
+    --shard-count "$shard_count" \
+    --cost-manifest ci/tutor_test_costs.json \
+    --repo-root "$(pwd -P)"; then
+    shard_failure=1
+  fi
+  for ((index = 0; index < shard_count; index++)); do [[ -f "$temporary_directory/shard-$index.log" ]] && cat "$temporary_directory/shard-$index.log"; done
+else
+  workers=()
+  for ((index = 0; index < shard_count; index++)); do
+    "$binary" --shard-index "$index" --shard-count "$shard_count" --output-json "$temporary_directory/shard-$index.json" >"$temporary_directory/shard-$index.log" 2>&1 &
+    workers+=("$!")
+  done
+  for worker in "${workers[@]}"; do
+    if ! wait "$worker"; then shard_failure=1; fi
+  done
+  for ((index = 0; index < shard_count; index++)); do cat "$temporary_directory/shard-$index.log"; done
+fi
 aggregate_failure=0
 if ! python3 scripts/ci/aggregate_shards.py "$temporary_directory"/shard-*.json --contract "$temporary_directory/contract.json" --output "$temporary_directory/aggregate.json"; then aggregate_failure=1; fi
 if (( shard_failure || aggregate_failure )); then

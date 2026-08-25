@@ -267,7 +267,12 @@ private final class Suite {
 
     init(selection: Selection = try! Selection(arguments: [])) { self.selection = selection }
 
-    func printSelectedTestList() { for item in fixedSelection.cases { print("\(item.id)\t\(item.resourceClass)\t\(item.name)") } }
+    func printSelectedTestList() {
+        for item in fixedSelection.cases {
+            let context = caseSemanticContext(for: item)
+            print("\(item.id)\t\(item.resourceClass)\t\(item.name)\t\(context.caseImplementation)\t\(context.sharedEvaluator)")
+        }
+    }
 
     private nonisolated static let packageSeventeenCloudMaximumTopicConcurrency = 3
     private nonisolated static let packageSeventeenCloudMaximumAttempts = 2
@@ -517,6 +522,38 @@ private final class Suite {
         return (try? Data(contentsOf: url)).map(sha256) ?? "unavailable"
     }
 
+    private lazy var ordinaryCaseSemanticContexts: [String: (caseImplementation: String, sharedEvaluator: String)] = {
+        let relative = "tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift"
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(relative)), let source = String(data: data, encoding: .utf8) else {
+            return [:]
+        }
+        var ranges: [(id: String, range: Range<String.Index>, body: String)] = []
+        for item in Self.ordinaryCases {
+            let dispatch = "await test(\"\(item.name)\", "
+            guard let dispatchRange = source.range(of: dispatch), let close = source[dispatchRange.upperBound...].firstIndex(of: ")") else { return [:] }
+            let function = source[dispatchRange.upperBound..<close].trimmingCharacters(in: .whitespacesAndNewlines)
+            guard function.range(of: "^[A-Za-z_][A-Za-z0-9_]*$", options: .regularExpression) != nil,
+                  let start = source.range(of: "func \(function)")?.lowerBound else { return [:] }
+            let tail = source[start...]
+            let privateNext = tail.range(of: "\n    private func ")?.lowerBound
+            let publicNext = tail.range(of: "\n    func ")?.lowerBound
+            let end = [privateNext, publicNext].compactMap { $0 }.min() ?? source.endIndex
+            let range = start..<end
+            ranges.append((item.id, range, String(source[range])))
+        }
+        guard Set(ranges.map(\.id)) == Set(Self.ordinaryCases.map(\.id)), Set(ranges.map { $0.range }).count == ranges.count else { return [:] }
+        var shared = source
+        for item in ranges.sorted(by: { $0.range.lowerBound > $1.range.lowerBound }) {
+            shared.replaceSubrange(item.range, with: "func ordinaryCaseBody { <redacted-ordinary-case-body> }")
+        }
+        let sharedHash = sha256(Data(shared.utf8))
+        return Dictionary(uniqueKeysWithValues: ranges.map { ($0.id, (sha256(Data($0.body.utf8)), sharedHash)) })
+    }()
+
+    private func caseSemanticContext(for item: CaseSpec) -> (caseImplementation: String, sharedEvaluator: String) {
+        ordinaryCaseSemanticContexts[item.id] ?? (fileHash("tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift"), fileHash("tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift"))
+    }
+
     private func costSeconds() -> [String: Double] {
         let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent("ci/tutor_test_costs.json")
         guard let data = try? Data(contentsOf: url),
@@ -629,7 +666,8 @@ private final class Suite {
     }
 
     private func semanticHash(for item: CaseSpec) -> String {
-        sha256(Data("\(Self.suiteID)|\(Self.suiteVersion)|\(item.id)|\(item.name)|\(item.resourceClass)|\(semanticContext.source)|\(semanticContext.policy)|\(semanticContext.index)|ordinary-case-schema-v1".utf8))
+        let context = caseSemanticContext(for: item)
+        return sha256(Data("\(Self.suiteID)|\(Self.suiteVersion)|\(item.id)|\(item.name)|\(item.resourceClass)|\(context.caseImplementation)|\(context.sharedEvaluator)|\(semanticContext.policy)|\(semanticContext.index)|ordinary-case-schema-v2".utf8))
     }
 
     private func expect(_ condition: @autoclosure () -> Bool, _ message: String) throws {

@@ -5,7 +5,7 @@
   "cache_policy": {
     "enabled": false,
     "soft_budget_bytes": 2147483648,
-    "reason": "No external SwiftPM dependencies, zero observed cache use, and no measured benefit of at least 20 percent."
+    "reason": "GitHub/distributed cache transport remains disabled: no external SwiftPM dependencies and no measured transport benefit of at least 20 percent. The bounded deterministic case cache is local-only and opt-in through the Tutor runner."
   },
   "artifact_policy": {
     "maximum_bytes_per_run": 26214400,
