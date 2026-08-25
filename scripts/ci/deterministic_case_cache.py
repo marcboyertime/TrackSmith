@@ -279,11 +279,9 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
             if retired_handle is not None:
                 os.ftruncate(retired_handle, 0); os.fsync(retired_handle); os.close(retired_handle)
         # The installed entry and its original temporary name are hard links to
-        # the same verified inode.  The temporary is no longer independently
-        # pruneable: retaining it in the index would let prune zero the live
-        # entry before its own identity check.  Forget, but never name-unlink,
-        # the leftover temporary.
-        temporary_entries.pop(temporary, None)
+        # the same verified inode. Keep that temporary indexed: it is cache
+        # owned, and prune recognises the shared inode before retiring the live
+        # entry. Forgetting it would leave an untracked hardlink behind.
         temporary = None
         _verify_root(root, descriptor)
         _write_index(descriptor, owned, temporary_entries)
@@ -314,7 +312,16 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
             temporary = TEMPORARY.fullmatch(name)
             if temporary and name in temporary_entries:
                 entry = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
-                expected = temporary_entries.pop(name); index_changed = True
+                expected = temporary_entries[name]
+                target_name = _entry_name(temporary.group(1))
+                try: target = os.stat(target_name, dir_fd=descriptor, follow_symlinks=False)
+                except FileNotFoundError: target = None
+                # A just-installed target shares this inode with its indexed
+                # temporary. Retire through the target path below exactly once;
+                # truncating the temporary first would invalidate its identity.
+                if target is not None and stat.S_ISREG(target.st_mode) and _identity(target)[:2] == _identity(entry)[:2]:
+                    continue
+                temporary_entries.pop(name); index_changed = True
                 if stat.S_ISREG(entry.st_mode) and _identity(entry) == expected:
                     _unlink_owned_regular(name, root, descriptor, expected)
                 continue
@@ -332,17 +339,15 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
                 files.append((name, identity))
         files.sort(key=lambda item: item[1][3], reverse=True)
         total = 0
-        removed: set[str] = set()
         for index, (name, identity) in enumerate(files):
             current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
             if not stat.S_ISREG(current.st_mode) or _identity(current) != identity: raise ValueError("cache entry changed while pruning")
             if index >= maximum_entries or total + current.st_size > maximum_bytes:
                 _unlink_owned_regular(name, root, descriptor, identity)
-                removed.add(name[:-5])
             else: total += current.st_size
-        if removed or index_changed:
+        if index_changed:
             _verify_root(root, descriptor)
-            _write_index(descriptor, owned - removed, temporary_entries)
+            _write_index(descriptor, owned, temporary_entries)
     finally:
         os.close(descriptor)
 

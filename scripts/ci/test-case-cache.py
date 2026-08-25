@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 from pathlib import Path
 
@@ -111,7 +112,7 @@ def main() -> None:
             expected = cache._identity(entry.stat())
             def late_prune_replacement(_: Path) -> None: entry.unlink(); entry.write_text("late user replacement")
             with_race("before-prune-quarantine-unlink", late_prune_replacement, lambda: cache._unlink_owned_regular(entry.name, root, descriptor, expected))
-        finally: __import__("os").close(descriptor)
+        finally: os.close(descriptor)
         assert entry.read_text() == "late user replacement"; entry.unlink(); cache.store(root, components, result)
         cache.store(root, components, result); original: Path | None = None
         def root_for_load(current: Path) -> None:
@@ -137,6 +138,7 @@ def main() -> None:
         cache.store(prune_root, components, result)
         prune_entry = cache.path_for(prune_root, cache.key(components))
         cache.prune(prune_root, 0, 0); assert prune_entry.stat().st_size == 0
+        cache.store(prune_root, components, result); assert cache.load(prune_root, components) == result
         sentinel.unlink(); outside.rmdir()
     print("test-case-cache: schema, corruption, stale/toolchain, failure, bounded cache, and descriptor-relative symlink/root races passed")
 

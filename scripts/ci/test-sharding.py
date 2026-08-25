@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, copy, json, math, subprocess, tempfile
+import argparse, copy, json, math, os, subprocess, tempfile
 from pathlib import Path
 from aggregate_shards import aggregate
 from shard_protocol import ALGORITHM, FALLBACK, SCHEMA, assign, digest, load_contract, load_cost_manifest, partition_hash
@@ -91,7 +91,7 @@ def main() -> None:
     except ValueError: pass
     try: assign(["a", 1], 2); raise AssertionError("non-string case ID accepted")
     except ValueError: pass
-    logical = __import__("os").cpu_count() or 1
+    logical = os.cpu_count() or 1
     if logical > 1: assert budget(MAX_TUTOR_WORKERS, max(1, logical - 2)) < budget(MAX_TUTOR_WORKERS, 0)
     print("test-sharding: LPT tie golden plus missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
 

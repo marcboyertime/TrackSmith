@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -15,7 +16,7 @@ from shard_protocol import ALGORITHM, SCHEMA, digest, load_contract, partition_h
 REQUIRED = {"schema_version", "suite_id", "suite_version", "suite_source_hash", "shard_index", "shard_count", "assignment_algorithm", "assignment_version", "partition_hash", "expected_ids", "executed_ids", "cases", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash"}
 REPORT_FIELDS = REQUIRED | {"commit", "tree_classification", "observation"}
 CASE_FIELDS = {"id", "semantic_input_hash", "outcome", "duration_seconds", "result_hash", "resource_class"}
-SHA256 = __import__("re").compile(r"^[0-9a-f]{64}$")
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
 def aggregate(paths: list[Path], expected_ids: list[str] | None = None, contract: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -31,7 +32,7 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None, contract
         missing = REQUIRED - set(report)
         if missing or set(report) != REPORT_FIELDS or report.get("schema_version") != SCHEMA:
             raise ValueError(f"corrupt shard report: missing {sorted(missing)} or unsupported schema")
-        if any(not isinstance(report[key], str) or not report[key] for key in ("suite_id", "suite_version", "assignment_version", "toolchain_identity", "commit", "tree_classification")) or any(not isinstance(report[key], str) or not SHA256.fullmatch(report[key]) for key in ("suite_source_hash", "partition_hash", "toolchain_hash", "policy_hash", "index_hash")) or (report["commit"] != "local" and not __import__("re").fullmatch(r"[0-9a-f]{40}", report["commit"])) or report["tree_classification"] not in {"local-observational", "github-clean-checkout"} or report["observation"] != {"wall_clock_is_observational": True}:
+        if any(not isinstance(report[key], str) or not report[key] for key in ("suite_id", "suite_version", "assignment_version", "toolchain_identity", "commit", "tree_classification")) or any(not isinstance(report[key], str) or not SHA256.fullmatch(report[key]) for key in ("suite_source_hash", "partition_hash", "toolchain_hash", "policy_hash", "index_hash")) or (report["commit"] != "local" and not re.fullmatch(r"[0-9a-f]{40}", report["commit"])) or report["tree_classification"] not in {"local-observational", "github-clean-checkout"} or report["observation"] != {"wall_clock_is_observational": True}:
             raise ValueError("corrupt shard report identity fields")
         if report["assignment_algorithm"] != ALGORITHM:
             raise ValueError("changed or unsupported assignment algorithm")

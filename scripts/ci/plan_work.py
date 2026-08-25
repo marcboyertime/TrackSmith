@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Advisory, fail-closed lane planner. Required remote jobs intentionally still run."""
 from __future__ import annotations
-import argparse, json, subprocess, sys
+import argparse, json, os, subprocess, sys
 from pathlib import Path
 from typing import Any
 
@@ -37,10 +37,10 @@ def main() -> int:
         result = {"mode": "full", "reason": f"planner-error:{error}", "required_lanes": sorted(json.loads((ROOT / "ci/semantic_dependencies.json").read_text())["lanes"])}
     rendered = json.dumps(result, sort_keys=True)
     print(rendered)
-    if output := __import__("os").environ.get("GITHUB_OUTPUT"):
+    if output := os.environ.get("GITHUB_OUTPUT"):
         with Path(output).open("a", encoding="utf-8") as handle:
             handle.write(f"mode={result['mode']}\nplan={rendered}\n")
-    if summary := __import__("os").environ.get("GITHUB_STEP_SUMMARY"):
+    if summary := os.environ.get("GITHUB_STEP_SUMMARY"):
         Path(summary).open("a").write("## Advisory TrackSmith lane plan\n\n`" + rendered + "`\n")
     return 0
 
