@@ -23,7 +23,7 @@ ENTRY = re.compile(r"^[0-9a-f]{64}\.json$")
 TEMPORARY = re.compile(r"^\.([0-9a-f]{64})\.json\.[0-9a-f]{32}\.tmp$")
 INDEX = ".tracksmith-deterministic-case-cache-index-v1.json"
 INDEX_TEMPORARY = re.compile(r"^\.tracksmith-deterministic-case-cache-index-v1\.[0-9a-f]{32}\.tmp$")
-INDEX_FIELDS = {"schema_version", "entry_keys"}
+INDEX_FIELDS = {"schema_version", "entry_keys", "temporary_names"}
 # Test-only deterministic interleaving point. Production leaves this unset.
 RACE_HOOK: Callable[[str, Path], None] | None = None
 
@@ -40,8 +40,8 @@ def path_for(root: Path, cache_key: str) -> Path: return root / f"{cache_key}.js
 def _entry_name(cache_key: str) -> str: return f"{cache_key}.json"
 
 
-def _index_payload(keys: set[str]) -> bytes:
-    return json.dumps({"schema_version": SCHEMA, "entry_keys": sorted(keys)}, sort_keys=True, separators=(",", ":")).encode()
+def _index_payload(keys: set[str], temporary_names: set[str]) -> bytes:
+    return json.dumps({"schema_version": SCHEMA, "entry_keys": sorted(keys), "temporary_names": sorted(temporary_names)}, sort_keys=True, separators=(",", ":")).encode()
 
 
 def _race(point: str, root: Path) -> None:
@@ -108,7 +108,7 @@ def _open_regular(name: str, root: Path, descriptor: int) -> int | None:
     return entry
 
 
-def _read_index(root: Path, descriptor: int) -> set[str] | None:
+def _read_index(root: Path, descriptor: int) -> tuple[set[str], set[str]] | None:
     entry = _open_regular(INDEX, root, descriptor)
     if entry is None: return None
     try:
@@ -118,9 +118,10 @@ def _read_index(root: Path, descriptor: int) -> set[str] | None:
     except (OSError, ValueError, json.JSONDecodeError) as error:
         raise ValueError("cache ownership index is corrupt") from error
     keys = value.get("entry_keys") if isinstance(value, dict) else None
-    if set(value) != INDEX_FIELDS or value.get("schema_version") != SCHEMA or not isinstance(keys, list) or keys != sorted(set(keys)) or any(not isinstance(item, str) or not HASH.fullmatch(item) for item in keys):
+    temporary_names = value.get("temporary_names") if isinstance(value, dict) else None
+    if set(value) != INDEX_FIELDS or value.get("schema_version") != SCHEMA or not isinstance(keys, list) or keys != sorted(set(keys)) or any(not isinstance(item, str) or not HASH.fullmatch(item) for item in keys) or not isinstance(temporary_names, list) or temporary_names != sorted(set(temporary_names)) or any(not isinstance(name, str) or not TEMPORARY.fullmatch(name) or TEMPORARY.fullmatch(name).group(1) not in keys for name in temporary_names):
         raise ValueError("cache ownership index is invalid")
-    return set(keys)
+    return set(keys), set(temporary_names)
 
 
 def _replace_bytes(descriptor: int, name: str, encoded: bytes, prefix: str) -> None:
@@ -142,8 +143,21 @@ def _replace_bytes(descriptor: int, name: str, encoded: bytes, prefix: str) -> N
         raise
 
 
-def _write_index(descriptor: int, keys: set[str]) -> None:
-    _replace_bytes(descriptor, INDEX, _index_payload(keys), "tracksmith-deterministic-case-cache-index-v1")
+def _write_index(descriptor: int, keys: set[str], temporary_names: set[str]) -> None:
+    _replace_bytes(descriptor, INDEX, _index_payload(keys, temporary_names), "tracksmith-deterministic-case-cache-index-v1")
+
+
+def _identity(entry: os.stat_result) -> tuple[int, int, int, int]:
+    return entry.st_dev, entry.st_ino, entry.st_size, entry.st_mtime_ns
+
+
+def _unlink_owned_regular(name: str, root: Path, descriptor: int, expected: tuple[int, int, int, int]) -> None:
+    _race("before-prune-unlink", root)
+    _verify_root(root, descriptor)
+    current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
+    if not stat.S_ISREG(current.st_mode) or _identity(current) != expected:
+        raise ValueError("cache entry changed while pruning")
+    os.unlink(name, dir_fd=descriptor)
 
 
 def _valid_payload(value: Any, expected_key: str | None = None) -> dict[str, Any] | None:
@@ -189,18 +203,19 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
     temporary: str | None = None
     try:
         name = _entry_name(cache_key)
-        owned = _read_index(root, descriptor)
-        if owned is None: owned = set()
-        if cache_key not in owned:
-            owned.add(cache_key)
-            _verify_root(root, descriptor)
-            _write_index(descriptor, owned)
         try: existing = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
         except FileNotFoundError: existing = None
         if existing is not None and not stat.S_ISREG(existing.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
+        index = _read_index(root, descriptor)
+        owned, temporary_names = index if index is not None else (set(), set())
         _race("before-store-write", root)
         _verify_root(root, descriptor)
         temporary = f".{name}.{secrets.token_hex(16)}.tmp"
+        # Record the exact generated temporary name before creating it.  Prune
+        # never infers ownership from a filename alone, so user files that look
+        # like stale cache temporaries are never unlinked.
+        owned.add(cache_key); temporary_names.add(temporary)
+        _write_index(descriptor, owned, temporary_names)
         handle = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=descriptor)
         try:
             remaining = memoryview(encoded)
@@ -214,8 +229,14 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
         _race("before-store-replace", root)
         _verify_root(root, descriptor)
         # os.replace is descriptor-relative and replaces a raced-in symlink itself; it never follows its target.
+        completed_temporary = temporary
         os.replace(temporary, name, src_dir_fd=descriptor, dst_dir_fd=descriptor)
         temporary = None
+        # Remove the exact recorded temporary after its rename.  Do not infer
+        # ownership from the cache key: there can be unrelated lookalikes.
+        temporary_names.discard(completed_temporary)
+        _verify_root(root, descriptor)
+        _write_index(descriptor, owned, temporary_names)
     finally:
         if temporary is not None:
             try: os.unlink(temporary, dir_fd=descriptor)
@@ -231,18 +252,20 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
     try:
         _race("before-prune-list", root)
         _verify_root(root, descriptor)
-        owned = _read_index(root, descriptor)
+        index = _read_index(root, descriptor)
         # Pruning never establishes ownership: an unmarked directory may hold
         # user data that merely resembles a cache filename.
-        if owned is None: return
-        files: list[tuple[str, os.stat_result]] = []
+        if index is None: return
+        owned, temporary_names = index
+        files: list[tuple[str, tuple[int, int, int, int]]] = []
+        index_changed = False
         for name in os.listdir(descriptor):
             temporary = TEMPORARY.fullmatch(name)
-            if temporary and temporary.group(1) in owned:
+            if temporary and name in temporary_names:
                 entry = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
                 if stat.S_ISREG(entry.st_mode):
-                    _verify_root(root, descriptor)
-                    os.unlink(name, dir_fd=descriptor)
+                    _unlink_owned_regular(name, root, descriptor, _identity(entry))
+                temporary_names.discard(name); index_changed = True
                 continue
             if not ENTRY.fullmatch(name) or name[:-5] not in owned: continue
             entry = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
@@ -250,27 +273,25 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
             opened = _open_regular(name, root, descriptor)
             if opened is None: continue
             try:
-                with os.fdopen(opened, "rb") as handle: payload = json.loads(handle.read(MAX_ENTRY_BYTES + 1))
+                with os.fdopen(opened, "rb") as handle:
+                    payload = json.loads(handle.read(MAX_ENTRY_BYTES + 1))
+                    identity = _identity(os.fstat(handle.fileno()))
             except (OSError, ValueError, json.JSONDecodeError): continue
             if _valid_payload(payload, name[:-5]) is not None:
-                files.append((name, entry))
-        files.sort(key=lambda item: item[1].st_mtime, reverse=True)
+                files.append((name, identity))
+        files.sort(key=lambda item: item[1][3], reverse=True)
         total = 0
         removed: set[str] = set()
-        for index, (name, entry) in enumerate(files):
+        for index, (name, identity) in enumerate(files):
             current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
-            if not stat.S_ISREG(current.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
+            if not stat.S_ISREG(current.st_mode) or _identity(current) != identity: raise ValueError("cache entry changed while pruning")
             if index >= maximum_entries or total + current.st_size > maximum_bytes:
-                _race("before-prune-unlink", root)
-                _verify_root(root, descriptor)
-                current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
-                if not stat.S_ISREG(current.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
-                os.unlink(name, dir_fd=descriptor)
+                _unlink_owned_regular(name, root, descriptor, identity)
                 removed.add(name[:-5])
             else: total += current.st_size
-        if removed:
+        if removed or index_changed:
             _verify_root(root, descriptor)
-            _write_index(descriptor, owned - removed)
+            _write_index(descriptor, owned - removed, temporary_names)
     finally:
         os.close(descriptor)
 

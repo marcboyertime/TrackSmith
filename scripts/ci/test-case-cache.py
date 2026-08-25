@@ -96,12 +96,25 @@ def main() -> None:
         def leaf_for_prune(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
         rejected(lambda: with_race("before-prune-unlink", leaf_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune symlink accepted")
         assert sentinel.read_text() == "outside unchanged"; entry.unlink()
+        cache.store(root, components, result)
+        def regular_replacement_for_prune(_: Path) -> None: entry.unlink(); entry.write_text("user-owned replacement")
+        rejected(lambda: with_race("before-prune-unlink", regular_replacement_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune regular replacement accepted")
+        assert entry.read_text() == "user-owned replacement"; entry.unlink()
+        cache.store(root, components, result)
         temporary = root / f".{cache_key}.json.{'a' * 32}.tmp"; assert cache.TEMPORARY.fullmatch(temporary.name); temporary.write_text("crash leftover")
         unrelated = root / "user-report.json"; unrelated.write_text("user-owned sentinel")
         hex_sentinel = root / ("b" * 64 + ".json"); hex_sentinel.write_text("not a cache entry")
         temp_sentinel = root / ("." + "b" * 64 + ".json." + "c" * 32 + ".tmp"); temp_sentinel.write_text("not an owned cache temporary")
         cache.prune(root, 1, cache.MAX_ENTRY_BYTES)
-        assert not temporary.exists() and unrelated.read_text() == "user-owned sentinel" and hex_sentinel.read_text() == "not a cache entry" and temp_sentinel.read_text() == "not an owned cache temporary"
+        assert temporary.read_text() == "crash leftover" and unrelated.read_text() == "user-owned sentinel" and hex_sentinel.read_text() == "not a cache entry" and temp_sentinel.read_text() == "not an owned cache temporary"
+        descriptor = cache._open_root(cache._canonical_root(root), create=False)
+        try:
+            owned, temporary_names = cache._read_index(root, descriptor) or (set(), set())
+            temporary_names.add(temporary.name)
+            cache._write_index(descriptor, owned, temporary_names)
+        finally: __import__("os").close(descriptor)
+        cache.prune(root, 1, cache.MAX_ENTRY_BYTES)
+        assert not temporary.exists()
         hex_sentinel.unlink(); temp_sentinel.unlink()
         unrelated.unlink()
         cache.store(root, components, result); original: Path | None = None

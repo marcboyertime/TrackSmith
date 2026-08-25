@@ -47,7 +47,7 @@ test -f "$source_root/Package.swift"
 test -f "$source_root/project.yml"
 section "generate and build unsigned products with shared DerivedData"
 project="$source_root/LogicAudioAssistant.xcodeproj"
-PATH="$tool_root/bin:$PATH" "$xcodegen_binary" generate --spec "$source_root/project.yml" --project "$source_root" --project-root "$source_root"
+"$xcodegen_binary" generate --spec "$source_root/project.yml" --project "$source_root" --project-root "$source_root"
 test -d "$project"
 (
   cd "$source_root"
