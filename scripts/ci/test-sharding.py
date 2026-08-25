@@ -45,6 +45,10 @@ def main() -> None:
     with tempfile.TemporaryDirectory() as directory:
         path = Path(directory) / "empty.json"; path.write_text(json.dumps(report(0, 1, [])))
         assert aggregate([path], [])["case_ids"] == []
+    valid_paths = [write_temp(item, index) for index, item in enumerate(reports)]
+    for invalid_expected in ("not-a-list", ["a", "a"], ["a", ""]):
+        try: aggregate(valid_paths, invalid_expected); raise AssertionError("invalid expected IDs accepted")
+        except ValueError: pass
     empty, fallback = assign([], 8); assert fallback == FALLBACK and len(empty) == 8
     from cpu_budget import MAX_TUTOR_WORKERS, budget
     assert budget(MAX_TUTOR_WORKERS, 0) <= MAX_TUTOR_WORKERS
@@ -63,6 +67,7 @@ def main() -> None:
 
 def binary_golden(binary: Path) -> None:
     root = Path(__file__).resolve().parents[2]
+    binary = binary.resolve()
     costs = json.loads((root / "ci/tutor_test_costs.json").read_text())["cost_seconds"]
     all_ids = [line.split("\t", 1)[0] for line in subprocess.run([str(binary), "--list-tests"], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()]
     for count in (2, 3):
@@ -72,6 +77,18 @@ def binary_golden(binary: Path) -> None:
             output = subprocess.run([str(binary), "--list-tests", "--shard-index", str(index), "--shard-count", str(count)], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()
             actual = [line.split("\t", 1)[0] for line in output]
             assert actual == expected[index], f"Swift/Python assignment mismatch for {index}/{count}"
+    for invalid_cost in (True, False):
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = Path(directory); (fixture / "ci").mkdir()
+            payload = json.loads((root / "ci/tutor_test_costs.json").read_text())
+            payload["cost_seconds"][all_ids[0]] = invalid_cost
+            (fixture / "ci/tutor_test_costs.json").write_text(json.dumps(payload))
+            expected, algorithm = assign(all_ids, 3, payload["cost_seconds"])
+            assert algorithm == FALLBACK
+            for index in range(3):
+                output = subprocess.run([str(binary), "--list-tests", "--shard-index", str(index), "--shard-count", "3"], cwd=fixture, check=True, capture_output=True, text=True).stdout.splitlines()
+                actual = [line.split("\t", 1)[0] for line in output]
+                assert actual == expected[index], f"Swift/Python Boolean-cost fallback mismatch for {index}/3"
     invalid = subprocess.run([str(binary), "--include", "tutor-conversation/01-tool-firewall", "--include", "typo"], cwd=root, capture_output=True, text=True)
     assert invalid.returncode == 64 and "every --include selector" in invalid.stderr
     print("test-sharding: release-binary Swift/Python assignment golden passed")

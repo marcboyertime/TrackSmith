@@ -6,6 +6,7 @@ import argparse
 import json
 import math
 import sys
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,8 @@ REQUIRED = {"schema_version", "suite_id", "suite_version", "suite_source_hash", 
 def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[str, Any]:
     if not paths:
         raise ValueError("no shard reports supplied")
+    if expected_ids is not None and (isinstance(expected_ids, (str, bytes)) or not isinstance(expected_ids, Sequence) or any(not isinstance(item, str) or not item for item in expected_ids) or len(expected_ids) != len(set(expected_ids))):
+        raise ValueError("expected IDs must be a unique nonempty string sequence")
     reports = [read_json(path) for path in paths]
     for report in reports:
         missing = REQUIRED - set(report)

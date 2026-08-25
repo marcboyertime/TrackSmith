@@ -110,6 +110,12 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
         errors.append("manifest: cache_policy.enabled must be boolean")
     elif type(cache_policy.get("soft_budget_bytes")) is not int or not 0 <= cache_policy["soft_budget_bytes"] <= 2 * 1024 * 1024 * 1024:
         errors.append("manifest: cache_policy soft budget must be an integer no larger than 2 GiB")
+    artifact_policy = manifest.get("artifact_policy")
+    if not isinstance(artifact_policy, dict) or type(artifact_policy.get("maximum_bytes_per_run")) is not int or not 0 <= artifact_policy["maximum_bytes_per_run"] <= 25 * 1024 * 1024 or type(artifact_policy.get("retention_days")) is not int or not 1 <= artifact_policy["retention_days"] <= 3:
+        errors.append("manifest: artifact budget and retention must be exact bounded integers")
+        artifact_limit = 0
+    else:
+        artifact_limit = artifact_policy["maximum_bytes_per_run"]
     lanes = manifest.get("lanes")
     if not isinstance(lanes, list) or {lane.get("id") for lane in lanes if isinstance(lane, dict)} != set(LANE_IDS) or len(lanes) != len(LANE_IDS):
         errors.append("manifest: lanes must contain exactly the 10 required lane IDs")
@@ -119,6 +125,8 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
         if set(lane) != LANE_FIELDS:
             errors.append(f"manifest:{lane_id}: lane fields must exactly match the contract")
             continue
+        if type(lane["expected_maximum_artifact_bytes"]) is not int or not 0 <= lane["expected_maximum_artifact_bytes"] <= artifact_limit or not isinstance(lane["artifact_outputs"], list) or len(lane["artifact_outputs"]) != len(set(lane["artifact_outputs"])) or any(not isinstance(item, str) or not item for item in lane["artifact_outputs"]):
+            errors.append(f"manifest:{lane_id}: artifact outputs and budget must be bounded exact schema values")
         if lane_id in ACTION_LANES:
             if lane["runner_label"] not in ALLOWED_RUNNERS:
                 errors.append(f"manifest:{lane_id}: required Actions lane uses a nonstandard runner")
@@ -129,10 +137,10 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
             if " <choice>" in lane["command"] or entrypoint_path(lane["command"], repo_root) is None:
                 errors.append(f"manifest:{lane_id}: command must name an existing stable scripts/ci shell entry point")
         elif lane_id == "manual_heavy":
-            if not lane["command"].endswith(" <choice>") or entrypoint_path(lane["command"], repo_root) is None:
+            if type(lane["timeout_minutes"]) is not int or lane["timeout_minutes"] <= 0 or not lane["command"].endswith(" <choice>") or entrypoint_path(lane["command"], repo_root) is None:
                 errors.append("manifest:manual_heavy: local command must name an existing choice entry point")
         elif lane_id == "local_apple_logic_owner":
-            if lane["runner_label"] != "not an Actions lane" or lane["timeout_minutes"] != 0:
+            if lane["runner_label"] != "not an Actions lane" or type(lane["timeout_minutes"]) is not int or lane["timeout_minutes"] != 0:
                 errors.append("manifest:local_apple_logic_owner: must remain an owner-only non-Actions lane with timeout 0")
     exceptions = manifest.get("audit_exceptions")
     if not isinstance(exceptions, list):
@@ -268,6 +276,37 @@ def script_closure(entrypoint: pathlib.Path, repo_root: pathlib.Path) -> list[tu
     return closure
 
 
+def inline_commands(value: str) -> list[str]:
+    commands: list[str] = []
+    pending = ""
+    for line in value.splitlines():
+        command = strip_shell_comment(line).strip()
+        if not command: continue
+        pending += command[:-1].rstrip() + " " if command.endswith("\\") else command
+        if not command.endswith("\\"):
+            commands.append(pending)
+            pending = ""
+    if pending: raise RuntimeError("unterminated inline shell continuation")
+    return commands
+
+
+def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str) -> None:
+    if SECRET_REF.search(command): reject(errors, manifest, workflow, job, "secrets", f"secret reference in {detail}")
+    if SCRIPT_CLOUD_MODEL.search(command): reject(errors, manifest, workflow, job, "cloud_model", f"provider/cloud/model surface in {detail}")
+    if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
+        reject(errors, manifest, workflow, job, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
+    for segment in shell_segments(command):
+        if XCODEBUILD_BUILD.search(segment) and not UNSIGNED_XCODEBUILD.search(segment):
+            reject(errors, manifest, workflow, job, "xcode_signing", f"xcodebuild build lacks CODE_SIGNING_ALLOWED=NO in {detail}")
+
+
+def audit_script_commands(closure: list[tuple[pathlib.Path, list[tuple[int, str]]]], manifest: dict[str, Any], repo_root: pathlib.Path, workflow: str, job: str, errors: list[str]) -> None:
+    for script, commands in closure:
+        relative = script.relative_to(repo_root)
+        for line_number, command in commands:
+            audit_command_surface(command, manifest, workflow, job, errors, f"{relative}:{line_number}")
+
+
 def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path, errors: list[str]) -> None:
     for lane in manifest["lanes"]:
         lane_id = lane["id"]
@@ -280,19 +319,32 @@ def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path
         except (OSError, RuntimeError) as error:
             errors.append(f"manifest-entrypoint:{lane_id}: entrypoint: {error}")
             continue
-        for script, commands in closure:
-            relative = script.relative_to(repo_root)
-            for line_number, command in commands:
-                detail = f"{relative}:{line_number}"
-                if SECRET_REF.search(command):
-                    reject(errors, manifest, "manifest-entrypoint", lane_id, "secrets", f"secret reference in {detail}")
-                if SCRIPT_CLOUD_MODEL.search(command):
-                    reject(errors, manifest, "manifest-entrypoint", lane_id, "cloud_model", f"provider/cloud/model surface in {detail}")
-                if SCRIPT_OWNER_SURFACE.search(command) or LOGIC_LAUNCH.search(command) or PRIVATE_AUDIO_PATH.search(command):
-                    reject(errors, manifest, "manifest-entrypoint", lane_id, "owner_surface", f"sign/install/Logic/private-audio surface in {detail}")
-                for segment in shell_segments(command):
-                    if XCODEBUILD_BUILD.search(segment) and not UNSIGNED_XCODEBUILD.search(segment):
-                        reject(errors, manifest, "manifest-entrypoint", lane_id, "xcode_signing", f"xcodebuild build lacks CODE_SIGNING_ALLOWED=NO in {detail}")
+        audit_script_commands(closure, manifest, repo_root, "manifest-entrypoint", lane_id, errors)
+
+
+def audit_inline_run(command: str, manifest: dict[str, Any], repo_root: pathlib.Path, workflow: str, job: str, errors: list[str]) -> None:
+    for line_number, inline in enumerate(inline_commands(command), 1):
+        detail = f"inline:{line_number}"
+        audit_command_surface(inline, manifest, workflow, job, errors, detail)
+        literal_paths = {match.group(1) for match in LITERAL_SCRIPT_TOKEN.finditer(inline)}
+        attempted_paths = {match.group(0) for match in SCRIPT_CI_PATH_ATTEMPT.finditer(inline)}
+        if attempted_paths != literal_paths or (literal_paths and ("$(" in inline or "`" in inline)):
+            reject(errors, manifest, workflow, job, "inline_shell", f"dynamic, constructed, or traversal script dependency in {detail}")
+            continue
+        for segment in shell_segments(inline):
+            segment_paths = {match.group(1) for match in LITERAL_SCRIPT_TOKEN.finditer(segment)}
+            if has_shell_dependency_invoker(segment) and not segment_paths:
+                reject(errors, manifest, workflow, job, "inline_shell", f"dynamic or external shell dependency in {detail}")
+        for relative in literal_paths:
+            dependency = script_path(relative, repo_root)
+            if dependency is None:
+                reject(errors, manifest, workflow, job, "inline_shell", f"invalid inline script dependency in {detail}")
+                continue
+            try: closure = script_closure(dependency, repo_root)
+            except (OSError, RuntimeError) as error:
+                reject(errors, manifest, workflow, job, "inline_shell", f"unresolvable inline script dependency in {detail}: {error}")
+                continue
+            audit_script_commands(closure, manifest, repo_root, workflow, job, errors)
 
 
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
@@ -342,7 +394,14 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
             if SECRET_REF.search(serialized): reject(errors, manifest, workflow, job, "secrets", "secret references are forbidden")
             if FORBIDDEN_COMMAND.search(serialized): reject(errors, manifest, workflow, job, "cloud_model", "cloud/model command is forbidden")
             for step in body.get("steps", []) if isinstance(body.get("steps"), list) else []:
-                if not isinstance(step, dict) or not isinstance(step.get("uses"), str): continue
+                if not isinstance(step, dict): continue
+                if "run" in step:
+                    if not isinstance(step["run"], str):
+                        reject(errors, manifest, workflow, job, "inline_shell", "inline run must be a string")
+                    else:
+                        try: audit_inline_run(step["run"], manifest, repo_root, workflow, job, errors)
+                        except RuntimeError as error: reject(errors, manifest, workflow, job, "inline_shell", str(error))
+                if not isinstance(step.get("uses"), str): continue
                 action, sep, pin = step["uses"].rpartition("@")
                 if not sep or not FULL_SHA.fullmatch(pin):
                     reject(errors, manifest, workflow, job, "action_pin", f"action must use a full SHA: {step['uses']}")
@@ -399,6 +458,10 @@ def self_test() -> None:
         bad_exception = json.loads(json.dumps(manifest_data)); bad_exception["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-23"}]
         soft_budget_true = json.loads(json.dumps(manifest_data)); soft_budget_true["cache_policy"]["soft_budget_bytes"] = True
         soft_budget_false = json.loads(json.dumps(manifest_data)); soft_budget_false["cache_policy"]["soft_budget_bytes"] = False
+        manual_timeout_false = json.loads(json.dumps(manifest_data)); next(lane for lane in manual_timeout_false["lanes"] if lane["id"] == "manual_heavy")["timeout_minutes"] = False
+        owner_timeout_false = json.loads(json.dumps(manifest_data)); next(lane for lane in owner_timeout_false["lanes"] if lane["id"] == "local_apple_logic_owner")["timeout_minutes"] = False
+        artifact_budget_true = json.loads(json.dumps(manifest_data)); artifact_budget_true["artifact_policy"]["maximum_bytes_per_run"] = True
+        artifact_retention_false = json.loads(json.dumps(manifest_data)); artifact_retention_false["artifact_policy"]["retention_days"] = False
         cases.extend([
             ("cache-disabled", cache, manifest_data),
             ("missing-lane", good, malformed),
@@ -406,10 +469,20 @@ def self_test() -> None:
             ("malformed-exception", good, bad_exception),
             ("soft-budget-true", good, soft_budget_true),
             ("soft-budget-false", good, soft_budget_false),
+            ("manual-timeout-false", good, manual_timeout_false),
+            ("owner-timeout-false", good, owner_timeout_false),
+            ("artifact-budget-true", good, artifact_budget_true),
+            ("artifact-retention-false", good, artifact_retention_false),
             ("timeout-too-large", good.replace("timeout-minutes: 5", "timeout-minutes: 121"), manifest_data),
             ("retention-zero", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: ${{ runner.temp }}/safe.json\n          retention-days: 0\n", manifest_data),
             ("applications-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: /Applications/TrackSmith.app\n          retention-days: 3\n", manifest_data),
-            ("plugin-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: Library/Audio/Plug-Ins/Components/TrackSmith.component\n          retention-days: 3\n", manifest_data)
+            ("plugin-artifact", good + "      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a\n        with:\n          path: Library/Audio/Plug-Ins/Components/TrackSmith.component\n          retention-days: 3\n", manifest_data),
+            ("inline-codesign", good + "      - run: codesign --force unsafe.app\n", manifest_data),
+            ("inline-signed-xcode", good + "      - run: CODE_SIGNING_ALLOWED=YES xcodebuild -project App.xcodeproj build\n", manifest_data),
+            ("inline-unsigned-xcode", good + "      - run: xcodebuild -project App.xcodeproj build\n", manifest_data),
+            ("inline-logic", good + "      - run: open -a Logic\n", manifest_data),
+            ("inline-private-audio", good + "      - run: afplay /tmp/private.wav\n", manifest_data),
+            ("inline-shell-indirection", good + "      - run: bash -c 'codesign --force unsafe.app'\n", manifest_data),
         ])
         for name, artifact_path in (
             ("credentials-artifact", "${{ runner.temp }}/credentials.json"),
@@ -430,6 +503,10 @@ def self_test() -> None:
             write_manifest(manifest_data); write_entrypoints(manifest_data)
             (workflows / "safe.yml").write_text(good)
 
+        reset_safe_fixture()
+        (repo / "scripts/ci/opaque-check.sh").write_text("#!/usr/bin/env bash\ncodesign --force unsafe.app\n")
+        (workflows / "inline-helper-owner.yml").write_text(good + "      - run: bash scripts/ci/opaque-check.sh\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("negative fixture was accepted: inline-helper-owner")
         reset_safe_fixture()
         (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\nxcodebuild -project App.xcodeproj CODE_SIGNING_ALLOWED=NO build\n")
         if audit(workflows, manifest, repo): raise AssertionError("explicit unsigned xcodebuild fixture was rejected")
@@ -486,7 +563,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 54 rejection classes passed (52 retained plus Boolean soft-budget true/false rejection)")
+    print("audit-free-compute self-test: 65 rejection classes passed (54 retained plus numeric-contract and inline owner-surface rejection)")
 
 
 def main() -> int:

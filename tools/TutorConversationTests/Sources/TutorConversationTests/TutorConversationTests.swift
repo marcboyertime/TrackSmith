@@ -510,7 +510,10 @@ private final class Suite {
               let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let raw = payload["cost_seconds"] as? [String: Any] else { return [:] }
         return raw.reduce(into: [:]) { result, item in
-            if let number = item.value as? NSNumber, number.doubleValue > 0 { result[item.key] = number.doubleValue }
+            if let number = item.value as? NSNumber,
+               String(cString: number.objCType) != "c", // CFBoolean's Objective-C type encoding
+               number.doubleValue.isFinite,
+               number.doubleValue > 0 { result[item.key] = number.doubleValue }
         }
     }
 
@@ -534,7 +537,7 @@ private final class Suite {
         }
         let assigned = candidates.filter { item in
             let prefix = sha256(Data(item.id.utf8)).prefix(16)
-            return Int(UInt64(prefix, radix: 16) ?? 0) % selection.shardCount == selection.shardIndex
+            return Int((UInt64(prefix, radix: 16) ?? 0) % UInt64(selection.shardCount)) == selection.shardIndex
         }.sorted { $0.id < $1.id }
         return (assigned, "sha256-modulo-v1")
     }

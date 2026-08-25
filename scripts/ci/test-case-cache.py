@@ -1,41 +1,105 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import hashlib, json, tempfile
+
+import hashlib
+import json
+import tempfile
 from pathlib import Path
-from deterministic_case_cache import load, path_for, prune, store
+
+import deterministic_case_cache as cache
+
+
+def rejected(action, label: str) -> None:
+    try: action()
+    except ValueError: return
+    raise AssertionError(label)
+
+
+def with_race(point: str, callback, action):
+    def hook(actual: str, root: Path) -> None:
+        if actual == point: callback(root)
+    cache.RACE_HOOK = hook
+    try: return action()
+    finally: cache.RACE_HOOK = None
+
+
+def replace_root(root: Path, outside: Path) -> Path:
+    original = root.with_name(root.name + "-opened")
+    root.rename(original)
+    root.symlink_to(outside, target_is_directory=True)
+    return original
+
+
+def restore_root(root: Path, original: Path) -> None:
+    root.unlink()
+    original.rename(root)
+
 
 def main() -> None:
     with tempfile.TemporaryDirectory() as directory:
-        root = Path(directory); h=lambda value: hashlib.sha256(value.encode()).hexdigest(); components = {"suite_id": "suite", "suite_version": "1", "source_hash": h("source"), "policy_hash": h("policy"), "index_hash": h("index"), "toolchain_hash": h("toolchain"), "case_id": "case/1", "semantic_input_hash": h("semantic")}; result = {"case_id": components["case_id"], "semantic_input_hash": components["semantic_input_hash"], "outcome": "passed", "result_hash": h(f"{components['case_id']}|passed|{components['semantic_input_hash']}")}
-        assert load(root, components) is None
-        store(root, components, result); assert load(root, components) == result
-        assert load(root, {**components, "toolchain_hash": h("changed")}) is None
-        corrupt = path_for(root, __import__("deterministic_case_cache").key(components)); corrupt.write_text("{")
-        assert load(root, components) is None
-        store(root, components, result); payload = json.loads(corrupt.read_text()); payload["components"]["source_hash"] = h("stale"); corrupt.write_text(json.dumps(payload)); assert load(root, components) is None
+        root = Path(directory)
+        h = lambda value: hashlib.sha256(value.encode()).hexdigest()
+        components = {"suite_id": "suite", "suite_version": "1", "source_hash": h("source"), "policy_hash": h("policy"), "index_hash": h("index"), "toolchain_hash": h("toolchain"), "case_id": "case/1", "semantic_input_hash": h("semantic")}
+        result = {"case_id": components["case_id"], "semantic_input_hash": components["semantic_input_hash"], "outcome": "passed", "result_hash": h(f"{components['case_id']}|passed|{components['semantic_input_hash']}")}
+        entry = cache.path_for(root, cache.key(components))
+        outside = root.parent / (root.name + "-outside"); outside.mkdir()
+        sentinel = outside / "sentinel"; sentinel.write_text("outside unchanged")
+        assert cache.load(root, components) is None
+        cache.store(root, components, result); assert cache.load(root, components) == result
+        assert cache.load(root, {**components, "toolchain_hash": h("changed")}) is None
+        entry.write_text("{"); assert cache.load(root, components) is None
+        cache.store(root, components, result); payload = json.loads(entry.read_text()); payload["components"]["source_hash"] = h("stale"); entry.write_text(json.dumps(payload)); assert cache.load(root, components) is None
         for timestamp in (True, False):
-            store(root, components, result); payload = json.loads(corrupt.read_text()); payload["created_epoch"] = timestamp; corrupt.write_text(json.dumps(payload)); assert load(root, components) is None
-        try: store(root, components, {"outcome": "failed"}); raise AssertionError("failure was cached")
-        except ValueError: pass
-        try: store(root, components, {"outcome": "passed", "value": "x" * 300_000}); raise AssertionError("oversized result was cached")
-        except ValueError: pass
-        try: store(root, {**components, "provider_response": h("no")}, result); raise AssertionError("unknown/provider-shaped component accepted")
-        except ValueError: pass
+            cache.store(root, components, result); payload = json.loads(entry.read_text()); payload["created_epoch"] = timestamp; entry.write_text(json.dumps(payload)); assert cache.load(root, components) is None
+        rejected(lambda: cache.store(root, components, {"outcome": "failed"}), "failure was cached")
+        rejected(lambda: cache.store(root, components, {"outcome": "passed", "value": "x" * 300_000}), "oversized result was cached")
+        rejected(lambda: cache.store(root, {**components, "provider_response": h("no")}, result), "unknown/provider-shaped component accepted")
         for forbidden_key in ("credential", "audio_blob", "prose", "provider_response"):
-            try: store(root, components, {**result, forbidden_key: {"text": "arbitrary private content"}}); raise AssertionError(f"{forbidden_key} result accepted")
-            except ValueError: pass
-        symlink_root = root / "cache-link"; symlink_root.symlink_to(root, target_is_directory=True)
-        try: store(symlink_root, components, result); raise AssertionError("symlink cache root accepted")
-        except ValueError: pass
+            rejected(lambda key=forbidden_key: cache.store(root, components, {**result, key: {"text": "arbitrary private content"}}), f"{forbidden_key} result accepted")
+        for entries, bytes_ in ((True, 1), (False, 1), (1, True), (1, False)):
+            rejected(lambda entries=entries, bytes_=bytes_: cache.prune(root, entries, bytes_), "Boolean prune budget accepted")
+        symlink_root = root / "cache-link"; symlink_root.symlink_to(outside, target_is_directory=True)
+        rejected(lambda: cache.store(symlink_root, components, result), "symlink cache root accepted")
+        rejected(lambda: cache.prune(symlink_root, 0, 0), "symlink prune root accepted")
         symlink_root.unlink()
-        store(root, components, result); cache_entry = path_for(root, __import__("deterministic_case_cache").key(components)); cache_entry.unlink(); external_target = root / "external-target"; external_target.write_text("unchanged"); cache_entry.symlink_to(external_target)
-        try: store(root, components, result); raise AssertionError("pre-existing cache entry symlink accepted")
-        except ValueError: pass
-        assert external_target.read_text() == "unchanged"
-        assert load(root, components) is None
-        try: prune(root, 1, 1024); raise AssertionError("symlink cache entry accepted")
-        except ValueError: pass
-        cache_entry.unlink(); external_target.unlink()
-        store(root, components, result); prune(root, 0, 0); assert not list(root.iterdir())
-    print("test-case-cache: schema, corruption, stale/toolchain, failure, oversized, and byte/count pruning passed")
+        cache.store(root, components, result); entry.unlink(); entry.symlink_to(sentinel)
+        rejected(lambda: cache.store(root, components, result), "pre-existing cache entry symlink accepted")
+        assert sentinel.read_text() == "outside unchanged" and cache.load(root, components) is None
+        entry.unlink()
+        cache.store(root, components, result)
+        def leaf_for_load(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
+        assert with_race("before-entry-open", leaf_for_load, lambda: cache.load(root, components)) is None
+        assert sentinel.read_text() == "outside unchanged"; entry.unlink()
+        cache.store(root, components, result)
+        def leaf_for_store(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
+        with_race("before-store-replace", leaf_for_store, lambda: cache.store(root, components, result))
+        assert sentinel.read_text() == "outside unchanged" and cache.load(root, components) == result
+        def leaf_for_prune(_: Path) -> None: entry.unlink(); entry.symlink_to(sentinel)
+        rejected(lambda: with_race("before-prune-unlink", leaf_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune symlink accepted")
+        assert sentinel.read_text() == "outside unchanged"; entry.unlink()
+        cache.store(root, components, result); original: Path | None = None
+        def root_for_load(current: Path) -> None:
+            nonlocal original
+            original = replace_root(current, outside)
+        try: assert with_race("before-entry-open", root_for_load, lambda: cache.load(root, components)) is None
+        finally:
+            if original is not None: restore_root(root, original)
+        assert sentinel.read_text() == "outside unchanged"
+        original = None
+        def root_for_store(current: Path) -> None:
+            nonlocal original
+            original = replace_root(current, outside)
+        rejected(lambda: with_race("before-store-write", root_for_store, lambda: cache.store(root, components, result)), "raced store root accepted")
+        assert original is not None; restore_root(root, original); assert sentinel.read_text() == "outside unchanged"
+        cache.store(root, components, result); original = None
+        def root_for_prune(current: Path) -> None:
+            nonlocal original
+            original = replace_root(current, outside)
+        rejected(lambda: with_race("before-prune-list", root_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune root accepted")
+        assert original is not None; restore_root(root, original); assert sentinel.read_text() == "outside unchanged"
+        cache.store(root, components, result); cache.prune(root, 0, 0); assert not list(root.iterdir())
+        sentinel.unlink(); outside.rmdir()
+    print("test-case-cache: schema, corruption, stale/toolchain, failure, bounded cache, and descriptor-relative symlink/root races passed")
+
+
 if __name__ == "__main__": main()
