@@ -3,7 +3,7 @@ import Darwin
 import Foundation
 import PlanSchema
 import ProductionIntelligence
-import ProductionTutor
+@_spi(Package019Testing) import ProductionTutor
 import TutorConversation
 import TutorLogicObserver
 
@@ -1735,7 +1735,12 @@ private final class Suite {
                    "P19 prompt-only generation suite no longer matches the evaluation-only canonical prompt projection")
         let suiteURL = repository
             .appendingPathComponent("research/tutor_quality/package019_evaluation_suite.json")
-        let rows = try JSONSerialization.jsonObject(with: Data(contentsOf: suiteURL)) as? [[String: Any]] ?? []
+        let suiteData = try Data(contentsOf: suiteURL)
+        let rows = try JSONSerialization.jsonObject(with: suiteData) as? [[String: Any]] ?? []
+        let evaluationManifestURL = repository
+            .appendingPathComponent("research/tutor_quality/package019_evaluation_manifest.json")
+        let evaluationManifestData = try Data(contentsOf: evaluationManifestURL)
+        let evaluationManifest = try JSONSerialization.jsonObject(with: evaluationManifestData) as? [String: Any] ?? [:]
         try expect(rows.count == 240 && Set(rows.compactMap { $0["partition"] as? String }) == Set(["development", "calibration", "held_out"]),
                    "P19 frozen suite was not available to the evaluation-only diagnostic")
         let contexts = rows.compactMap { $0["context_matrix"] as? [String: String] }
@@ -1749,6 +1754,20 @@ private final class Suite {
         guard opened.availability == .ready, let retriever = opened.retriever else {
             throw TestFailure(description: "P19 actual runtime index unavailable: \(opened.availability.rawValue)")
         }
+        let runtimeIdentity = await retriever.package019RuntimeIdentity()
+        let declaredIdentity = evaluationManifest["runtime_identity"] as? [String: String] ?? [:]
+        let expectedIdentity: [String: String] = [
+            "provenance_schema": runtimeIdentity.provenanceSchema,
+            "retrieval_policy_version": runtimeIdentity.retrievalPolicyVersion,
+            "selection_contract_version": runtimeIdentity.selectionContractVersion,
+            "candidate_index_manifest_sha256": runtimeIdentity.candidateIndexManifestSHA256,
+            "candidate_index_logical_content_sha256": runtimeIdentity.candidateIndexLogicalContentSHA256,
+            "candidate_index_database_sha256": runtimeIdentity.candidateIndexDatabaseSHA256,
+        ]
+        try expect(evaluationManifest["suite_sha256"] as? String == sha256(suiteData) && declaredIdentity == expectedIdentity,
+                   "P19 evaluation manifest did not match the runtime/index identity")
+        try expect(CandidateRetrievalIndex.package019SelectionContractSelfTest(),
+                   "P19 label-free transactional selection-contract regression failed")
         var byPartition: [String: [[String: Any]]] = [:]
         var typedOutcomes: [String: Int] = [:]
         for row in rows {
@@ -1897,6 +1916,18 @@ private final class Suite {
         try await packageNineteenCloudHarnessContract()
         let report: [String: Any] = [
             "package": "019", "status": "infrastructure_pass_quality_fail", "actual_runtime_current_final": ["per_partition": Dictionary(uniqueKeysWithValues: byPartition.map { ($0.key, metric($0.value)) }), "typed_outcomes": typedOutcomes, "quality_gate": "failed: held-out ranking target missed; no held-out tuning performed"],
+            "runtime_provenance": [
+                "provenance_schema": runtimeIdentity.provenanceSchema,
+                "evaluation_manifest_sha256": sha256(evaluationManifestData),
+                "suite_sha256": sha256(suiteData),
+                "retrieval_policy_version": runtimeIdentity.retrievalPolicyVersion,
+                "selection_contract_version": runtimeIdentity.selectionContractVersion,
+                "candidate_index_manifest_sha256": runtimeIdentity.candidateIndexManifestSHA256,
+                "candidate_index_logical_content_sha256": runtimeIdentity.candidateIndexLogicalContentSHA256,
+                "candidate_index_database_sha256": runtimeIdentity.candidateIndexDatabaseSHA256,
+                "evaluation_manifest_runtime_identity": "matched",
+                "selection_contract_regression": "passed_label_free",
+            ],
             "tools": ["count": outputs.count, "names": calls.map(\.0), "output_bytes": outputs.map { $0.outputJSON.utf8.count }, "authority": "read-only except presentation-only experiment"],
             "experiment_completeness": ["status": "pass", "repairs": "not_applicable_no_repair_path_invoked", "max_repairs": 1, "fields": ["baseline_start", "one_variable", "listen_cue", "risk", "stop_condition", "undo"]],
             "long_context": longContext,
@@ -1907,6 +1938,7 @@ private final class Suite {
             try JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]).write(to: outputURL)
         }
         print("P19_LONG_CONTEXT_HARNESS_OK messages=10,25,50,80 provider=loopback-only tools=candidate,procedure,capture,history cancellation=retry capture=replaced")
+        print("P19_SELECTION_CONTRACT_OK labelFree=true transactional=true")
         print("P19_DIAGNOSTIC_OK cases=240 tools=7 typedFailures=7 longContext=measured-10,25,50,80")
     }
 

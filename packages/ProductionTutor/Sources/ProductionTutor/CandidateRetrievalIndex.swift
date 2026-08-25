@@ -47,23 +47,45 @@ public extension CandidateRetriever {
 }
 public struct CandidateRetrievalOpenResult: Sendable { public let availability: CandidateRetrievalAvailability; public let retriever: CandidateRetrievalIndex? }
 
-private struct CandidateRetrievalManifest: Decodable { let schema_version, corpus_version, retrieval_policy_version: String; let card_count, package_017_runtime_count, database_bytes: Int; let database, database_header_sha256: String }
+private struct CandidateRetrievalManifest: Decodable { let schema_version, corpus_version, retrieval_policy_version: String; let card_count, package_017_runtime_count, database_bytes: Int; let database, database_header_sha256, database_sha256, logical_content_sha256: String }
 private struct CandidateRankMetadata { let id, packageID, questionKey, domain, category, evidenceClass: String; let sourceTypes, roleFacets, sectionFacets, primaryTerms, facetTerms, contextTerms: Set<String>; let currentContext: Bool; let bm25: Double }
+
+@_spi(Package019Testing) public struct CandidateRetrievalRuntimeIdentity: Sendable, Equatable {
+    public let provenanceSchema: String
+    public let retrievalPolicyVersion: String
+    public let selectionContractVersion: String
+    public let candidateIndexManifestSHA256: String
+    public let candidateIndexLogicalContentSHA256: String
+    public let candidateIndexDatabaseSHA256: String
+}
 
 /// Immutable actor-owned SQLite reader. FTS returns compact ranking fields;
 /// payload JSON is fetched and decoded only for final bounded IDs.
 public actor CandidateRetrievalIndex: CandidateRetriever {
     public static let schemaVersion = "package018-candidate-index/1"
     public static let policyVersion = "package019-bm25-ordered6-domain-diverse/1"
+    public static let selectionContractVersion = "package019-transactional-question-domain-package2/1"
     // The frozen natural suite separates ordinary low-evidence requests below
     // 16 from valid thin-context reports above 27; 26 is the documented
     // general confidence floor, paired with unique-term coverage below.
     private static let minimumConfidence = 26.0
     private let handle: CandidateRetrievalDatabaseHandle
     private let manifest: CandidateRetrievalManifest
+    private let runtimeIdentity: CandidateRetrievalRuntimeIdentity
     private var lastDecodedPayloadCount = 0
 
-    private init(database: OpaquePointer, manifest: CandidateRetrievalManifest) { handle = .init(database); self.manifest = manifest }
+    private init(database: OpaquePointer, manifest: CandidateRetrievalManifest, manifestSHA256: String, databaseSHA256: String) {
+        handle = .init(database)
+        self.manifest = manifest
+        runtimeIdentity = .init(
+            provenanceSchema: "package019-runtime-provenance/1",
+            retrievalPolicyVersion: Self.policyVersion,
+            selectionContractVersion: Self.selectionContractVersion,
+            candidateIndexManifestSHA256: manifestSHA256,
+            candidateIndexLogicalContentSHA256: manifest.logical_content_sha256,
+            candidateIndexDatabaseSHA256: databaseSHA256
+        )
+    }
     public static func openBundled(disabled: Bool = false) -> CandidateRetrievalOpenResult {
         #if SWIFT_PACKAGE
         let bundle = Bundle.module
@@ -87,13 +109,33 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
         guard manifest.schema_version == schemaVersion else { return .init(availability: .schemaDrift, retriever: nil) }
         guard manifest.retrieval_policy_version == policyVersion, manifest.corpus_version == "p16-runtime-projection-6212", manifest.card_count == 6_212, manifest.package_017_runtime_count == 0 else { return .init(availability: .versionMismatch, retriever: nil) }
         guard let indexURL, let index = try? Data(contentsOf: indexURL, options: [.mappedIfSafe]), index.count == manifest.database_bytes, SHA256.hash(data: index.prefix(4096)).hexString == manifest.database_header_sha256 else { return .init(availability: .corrupt, retriever: nil) }
+        let databaseSHA256 = SHA256.hash(data: index).hexString
+        guard databaseSHA256 == manifest.database_sha256 else { return .init(availability: .corrupt, retriever: nil) }
         var connection: OpaquePointer?
         guard sqlite3_open_v2(indexURL.absoluteString + "?mode=ro&immutable=1", &connection, SQLITE_OPEN_READONLY | SQLITE_OPEN_URI | SQLITE_OPEN_NOMUTEX, nil) == SQLITE_OK, let connection else { return .init(availability: .corrupt, retriever: nil) }
         sqlite3_busy_timeout(connection, 100)
-        return .init(availability: .ready, retriever: .init(database: connection, manifest: manifest))
+        return .init(availability: .ready, retriever: .init(database: connection, manifest: manifest, manifestSHA256: SHA256.hash(data: data).hexString, databaseSHA256: databaseSHA256))
     }
     public func availability() -> CandidateRetrievalAvailability { .ready }
     public func lastQueryDecodedPayloadCount() -> Int { lastDecodedPayloadCount }
+
+    @_spi(Package019Testing) public func package019RuntimeIdentity() -> CandidateRetrievalRuntimeIdentity { runtimeIdentity }
+
+    @_spi(Package019Testing) public static func package019SelectionContractSelfTest() -> Bool {
+        let fixture = [
+            SelectionContractCandidate(id: "accepted-package-1", packageID: "package-a", questionKey: "question-1", domain: "domain-1"),
+            SelectionContractCandidate(id: "accepted-package-2", packageID: "package-a", questionKey: "question-2", domain: "domain-2"),
+            SelectionContractCandidate(id: "rejected-package-question", packageID: "package-a", questionKey: "reusable-question", domain: "reusable-question-domain"),
+            SelectionContractCandidate(id: "accepted-reusable-question", packageID: "package-b", questionKey: "reusable-question", domain: "domain-3"),
+            SelectionContractCandidate(id: "rejected-package-domain", packageID: "package-a", questionKey: "question-4", domain: "reusable-domain"),
+            SelectionContractCandidate(id: "accepted-reusable-domain", packageID: "package-b", questionKey: "question-5", domain: "reusable-domain"),
+        ]
+        let selected = select(fixture, limit: 4)
+        return selected.map(\.id) == ["accepted-package-1", "accepted-package-2", "accepted-reusable-question", "accepted-reusable-domain"]
+            && Set(selected.map(\.questionKey)).count == selected.count
+            && Set(selected.map(\.domain)).count == selected.count
+            && Dictionary(grouping: selected, by: \.packageID).values.allSatisfy { $0.count <= 2 }
+    }
 
     public func ranked(query: String, filters: CommunityCandidateCorpusFilters = .init(), limit: Int = 4) -> [CommunityCandidateCorpusRankedCard] {
         rankedOutcome(query: query, filters: filters, limit: limit).cards
@@ -120,12 +162,7 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
         let nextScore = ordered.dropFirst().first.map { Self.score($0, terms) } ?? 0
         let margin = bestScore - nextScore
         let ambiguity = margin < max(4, bestScore * 0.12)
-        var seenQuestions = Set<String>(), seenDomains = Set<String>(), packageCounts: [String: Int] = [:], selected: [CandidateRankMetadata] = []
-        for item in ordered where seenQuestions.insert(item.questionKey).inserted {
-            guard seenDomains.insert(item.domain).inserted, packageCounts[item.packageID, default: 0] < 2 else { continue }
-            packageCounts[item.packageID, default: 0] += 1; selected.append(item)
-            if selected.count == limit { break }
-        }
+        let selected = Self.select(ordered, limit: limit)
         guard let details = loadDetails(ids: selected.map(\.id)) else { return .init(kind: .queryFailed) }
         let results: [CommunityCandidateCorpusRankedCard] = selected.compactMap { item in
             guard let card = details[item.id] else { return nil }
@@ -197,6 +234,24 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
     private static func overlap(_ item: CandidateRankMetadata, _ query: [String]) -> Int {
         item.primaryTerms.union(item.facetTerms).union(item.contextTerms).intersection(Set(query)).count
     }
+
+    /// Every constraint is evaluated against the current state before any
+    /// state is changed. A rejected candidate therefore cannot reserve a
+    /// question key, domain, or package quota for a later candidate.
+    private static func select<Item: SelectionContractItem>(_ ordered: [Item], limit: Int) -> [Item] {
+        var seenQuestions = Set<String>(), seenDomains = Set<String>(), packageCounts: [String: Int] = [:], selected: [Item] = []
+        for item in ordered {
+            guard !seenQuestions.contains(item.questionKey),
+                  !seenDomains.contains(item.domain),
+                  packageCounts[item.packageID, default: 0] < 2 else { continue }
+            seenQuestions.insert(item.questionKey)
+            seenDomains.insert(item.domain)
+            packageCounts[item.packageID, default: 0] += 1
+            selected.append(item)
+            if selected.count == limit { break }
+        }
+        return selected
+    }
     private static func terms(_ text: String) -> [String] {
         let words = text.lowercased().replacingOccurrences(of: "_", with: " ").split { !$0.isLetter && !$0.isNumber }.map(String.init)
         var result: [String] = [], seen = Set<String>()
@@ -217,6 +272,9 @@ public actor CandidateRetrievalIndex: CandidateRetriever {
     // hypothesis by themselves; reviewed procedures/general teaching handle them.
     private static let stopTerms: Set<String> = ["a","an","and","are","best","but","cannot","control","detail","do","find","for","from","get","how","i","if","in","is","it","like","logic","make","mix","my","need","not","of","or","should","so","the","this","to","too","what","when","why","with","wrong"]
 }
+private protocol SelectionContractItem { var id: String { get }; var packageID: String { get }; var questionKey: String { get }; var domain: String { get } }
+private struct SelectionContractCandidate: SelectionContractItem { let id, packageID, questionKey, domain: String }
+extension CandidateRankMetadata: SelectionContractItem {}
 private func sqliteString(_ statement: OpaquePointer, _ column: Int32) -> String? { guard let raw = sqlite3_column_text(statement, column) else { return nil }; return String(validatingCString: UnsafeRawPointer(raw).assumingMemoryBound(to: CChar.self)) }
 private let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 private final class CommunityCandidateIndexBundleLocator {}
