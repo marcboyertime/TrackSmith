@@ -2223,6 +2223,30 @@ private final class Suite {
         let cloudSuite = hashes["cloud_prompt_suite"] as? [String: Any]
         try expect((cloudSuite?["exact_prompt_count"] as? Int) == 12 && cloudSuite?["ordered_prompt_suite_sha256"] as? String == Self.packageNineteenOrderedCloudPromptSHA256 && cloudSuite?["prompt_only_file_sha256"] as? String == Self.packageNineteenCloudPromptSuiteSHA256,
                    "P19 cloud artifact hash contract omitted the exact ordered 12-prompt suite")
+        let gitRoot = temporaryRoot("p19-git-provenance")
+        defer { try? FileManager.default.removeItem(at: gitRoot) }
+        try FileManager.default.createDirectory(at: gitRoot, withIntermediateDirectories: true)
+        try expect(packageNineteenGit(gitRoot, ["init"]) != nil && packageNineteenGit(gitRoot, ["config", "user.email", "p19@example.invalid"]) != nil && packageNineteenGit(gitRoot, ["config", "user.name", "P19 Fixture"]) != nil,
+                   "P19 provenance regression could not initialize its local git fixture")
+        func deterministicBinary(seed: UInt64) -> Data {
+            var state = seed; var data = Data(); data.reserveCapacity(320_000)
+            for _ in 0..<320_000 {
+                state = state &* 6_364_136_223_846_793_005 &+ 1
+                data.append(UInt8(truncatingIfNeeded: state >> 32))
+            }
+            return data
+        }
+        let binary = gitRoot.appendingPathComponent("large.bin")
+        try deterministicBinary(seed: 1).write(to: binary)
+        try expect(packageNineteenGit(gitRoot, ["add", "large.bin"]) != nil && packageNineteenGit(gitRoot, ["commit", "-m", "fixture"]) != nil,
+                   "P19 provenance regression could not commit its local fixture")
+        try deterministicBinary(seed: 2).write(to: binary)
+        guard let largeDiff = packageNineteenGit(gitRoot, ["diff", "--no-ext-diff", "--binary", "HEAD"]) else {
+            throw TestFailure(description: "P19 provenance regression could not drain a large git diff")
+        }
+        let gitIdentity = packageNineteenSourceIdentity(gitRoot)
+        try expect(largeDiff.utf8.count > 128 * 1_024 && (gitIdentity["worktree_patch_sha256"] as? String) == sha256(Data(largeDiff.utf8)) && (gitIdentity["commit"] as? String)?.count == 40 && (gitIdentity["index_tree"] as? String)?.count == 40 && !(gitIdentity.values.contains { String(describing: $0).contains(gitRoot.path) }),
+                   "P19 provenance deadlocked, truncated a pipe-capacity git diff, or retained a temporary path")
         let lexicalPrompt = fixturePrompts[0]
         let lexicalResponses = [TutorExperienceLevel.noob, .amateur, .pro].map { level in
             PackageSeventeenCloudResponse(prompt: lexicalPrompt, level: level, outcome: .init(text: "A short bounded answer.", metadata: nil, attempts: 1, terminalStatus: "completed", safeFailure: nil))
@@ -3468,11 +3492,25 @@ private final class Suite {
     }
 
     private func packageNineteenGit(_ repository: URL, _ arguments: [String]) -> String? {
+        let manager = FileManager.default
+        let temporary = manager.temporaryDirectory.appendingPathComponent("TrackSmithTutorGit-\(UUID().uuidString)", isDirectory: true)
+        let stdoutURL = temporary.appendingPathComponent("stdout")
+        let stderrURL = temporary.appendingPathComponent("stderr")
+        guard (try? manager.createDirectory(at: temporary, withIntermediateDirectories: true)) != nil,
+              manager.createFile(atPath: stdoutURL.path, contents: nil),
+              manager.createFile(atPath: stderrURL.path, contents: nil),
+              let stdout = try? FileHandle(forWritingTo: stdoutURL),
+              let stderr = try? FileHandle(forWritingTo: stderrURL) else { return nil }
+        defer { try? stdout.close(); try? stderr.close(); try? manager.removeItem(at: temporary) }
         let process = Process(); process.executableURL = URL(fileURLWithPath: "/usr/bin/git"); process.arguments = arguments; process.currentDirectoryURL = repository
-        let output = Pipe(); process.standardOutput = output; process.standardError = Pipe()
-        guard (try? process.run()) != nil else { return nil }; process.waitUntilExit()
-        guard process.terminationStatus == 0 else { return nil }
-        return String(decoding: output.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+        // Drain to files while git runs. Waiting on a Pipe before reading can
+        // deadlock when a binary diff exceeds the pipe's capacity.
+        process.standardOutput = stdout; process.standardError = stderr
+        guard (try? process.run()) != nil else { return nil }
+        process.waitUntilExit()
+        try? stdout.close(); try? stderr.close()
+        guard process.terminationStatus == 0, let data = try? Data(contentsOf: stdoutURL) else { return nil }
+        return String(decoding: data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func packageNineteenEvaluationHashes(_ repository: URL, prompts: [PackageSeventeenCloudPrompt]? = nil) throws -> [String: Any] {
