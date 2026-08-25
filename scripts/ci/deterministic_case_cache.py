@@ -19,6 +19,7 @@ COMPONENT_KEYS = {"suite_id", "suite_version", "source_hash", "policy_hash", "in
 RESULT_KEYS = {"case_id", "semantic_input_hash", "outcome", "result_hash"}
 HASH = re.compile(r"^[0-9a-f]{64}$")
 CASE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,191}$")
+TEMPORARY = re.compile(r"^\.[0-9a-f]{64}\.json\.[0-9a-f]{32}\.tmp$")
 # Test-only deterministic interleaving point. Production leaves this unset.
 RACE_HOOK: Callable[[str, Path], None] | None = None
 
@@ -39,13 +40,39 @@ def _race(point: str, root: Path) -> None:
     if RACE_HOOK is not None: RACE_HOOK(point, root)
 
 
+def _canonical_root(root: Path) -> Path:
+    """Reject caller-controlled links before resolving stable macOS system aliases."""
+    raw = root.absolute()
+    if raw.is_symlink(): raise ValueError("cache root cannot be a symlink")
+    # /tmp, /var, and /etc are macOS-provided aliases into /private. Permit
+    # only those top-level compatibility aliases; all other parent components
+    # supplied by a cache caller must name directories directly.
+    allowed_aliases = {Path("/tmp"), Path("/var"), Path("/etc")}
+    current = Path(raw.anchor)
+    for component in raw.parts[1:-1]:
+        current /= component
+        if current.is_symlink() and current not in allowed_aliases:
+            raise ValueError("cache root parent components cannot be symlinks")
+    try: return raw.resolve(strict=False)
+    except OSError as error: raise ValueError("cache root parent components are unsafe") from error
+
+
 def _open_root(root: Path, create: bool) -> int:
     if not hasattr(os, "O_NOFOLLOW"): raise ValueError("cache root requires O_NOFOLLOW support")
-    if root.is_symlink(): raise ValueError("cache root cannot be a symlink")
-    if create: root.mkdir(parents=True, exist_ok=True)
     flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | os.O_NOFOLLOW
-    try: descriptor = os.open(root, flags)
-    except OSError as error: raise ValueError("cache root cannot be opened without following links") from error
+    descriptor = os.open(root.anchor, flags)
+    try:
+        for component in root.parts[1:]:
+            try: child = os.open(component, flags, dir_fd=descriptor)
+            except FileNotFoundError:
+                if not create: raise
+                os.mkdir(component, mode=0o700, dir_fd=descriptor)
+                child = os.open(component, flags, dir_fd=descriptor)
+            os.close(descriptor)
+            descriptor = child
+    except OSError as error:
+        os.close(descriptor)
+        raise ValueError("cache root cannot be opened without following links") from error
     if not stat.S_ISDIR(os.fstat(descriptor).st_mode):
         os.close(descriptor); raise ValueError("cache root must be a directory")
     return descriptor
@@ -65,21 +92,25 @@ def _open_regular(name: str, root: Path, descriptor: int) -> int | None:
     try: entry = os.open(name, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW, dir_fd=descriptor)
     except FileNotFoundError: return None
     except OSError: return None
-    if not stat.S_ISREG(os.fstat(entry).st_mode):
+    if not stat.S_ISREG(os.fstat(entry).st_mode) or os.fstat(entry).st_size > MAX_ENTRY_BYTES:
         os.close(entry); return None
+    _race("after-entry-open", root)
     return entry
 
 
 def load(root: Path, components: dict[str, str]) -> dict[str, Any] | None:
     cache_key = key(components)
     try:
+        root = _canonical_root(root)
         descriptor = _open_root(root, create=False)
     except ValueError: return None
     try:
         entry = _open_regular(_entry_name(cache_key), root, descriptor)
         if entry is None: return None
         with os.fdopen(entry, "rb") as handle:
-            value = json.loads(handle.read())
+            encoded = handle.read(MAX_ENTRY_BYTES + 1)
+            if len(encoded) > MAX_ENTRY_BYTES: return None
+            value = json.loads(encoded)
     except (OSError, ValueError, json.JSONDecodeError): return None
     finally:
         os.close(descriptor)
@@ -98,6 +129,7 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
     payload = {"schema_version": SCHEMA, "components": components, "result": result, "result_hash": hashlib.sha256(json.dumps(result, sort_keys=True, separators=(",", ":")).encode()).hexdigest(), "created_epoch": int(time.time())}
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     if len(encoded) > MAX_ENTRY_BYTES: raise ValueError("cache entry exceeds serialized-byte cap")
+    root = _canonical_root(root)
     descriptor = _open_root(root, create=True)
     temporary: str | None = None
     try:
@@ -132,7 +164,7 @@ def store(root: Path, components: dict[str, str], result: dict[str, Any]) -> Non
 
 def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
     if type(maximum_entries) is not int or type(maximum_bytes) is not int or maximum_entries < 0 or maximum_bytes < 0: raise ValueError("cache budgets must be nonnegative integers")
-    if root.is_symlink(): raise ValueError("cache root cannot be a symlink")
+    root = _canonical_root(root)
     if not root.exists(): return
     descriptor = _open_root(root, create=False)
     try:
@@ -140,6 +172,12 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
         _verify_root(root, descriptor)
         files: list[tuple[str, os.stat_result]] = []
         for name in os.listdir(descriptor):
+            if TEMPORARY.fullmatch(name):
+                entry = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
+                if not stat.S_ISREG(entry.st_mode): raise ValueError("cache temporary cannot be a symlink or non-regular file")
+                _verify_root(root, descriptor)
+                os.unlink(name, dir_fd=descriptor)
+                continue
             if not name.endswith(".json"): continue
             entry = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
             if not stat.S_ISREG(entry.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
@@ -147,13 +185,15 @@ def prune(root: Path, maximum_entries: int, maximum_bytes: int) -> None:
         files.sort(key=lambda item: item[1].st_mtime, reverse=True)
         total = 0
         for index, (name, entry) in enumerate(files):
-            if index >= maximum_entries or total + entry.st_size > maximum_bytes:
+            current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
+            if not stat.S_ISREG(current.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
+            if index >= maximum_entries or total + current.st_size > maximum_bytes:
                 _race("before-prune-unlink", root)
                 _verify_root(root, descriptor)
                 current = os.stat(name, dir_fd=descriptor, follow_symlinks=False)
                 if not stat.S_ISREG(current.st_mode): raise ValueError("cache entry cannot be a symlink or non-regular file")
                 os.unlink(name, dir_fd=descriptor)
-            else: total += entry.st_size
+            else: total += current.st_size
     finally:
         os.close(descriptor)
 

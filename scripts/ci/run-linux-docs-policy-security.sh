@@ -7,6 +7,7 @@ section "product resource boundary"
 python3 scripts/ci/check-product-resource-policy.py --self-test
 python3 scripts/ci/check-product-resource-policy.py
 section "workflow safety audit"
+python3 scripts/ci/audit-free-compute.py --self-test
 python3 scripts/ci/audit-free-compute.py
 section "format and document parse checks"
 python3 -m json.tool ci/tracksmith_compute_lanes.json >/dev/null

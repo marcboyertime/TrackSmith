@@ -24,6 +24,10 @@ def partition_hash(case_ids: list[str]) -> str:
 def assign(case_ids: list[str], shard_count: int, costs: dict[str, float] | None = None) -> tuple[list[list[str]], str]:
     if type(shard_count) is not int or shard_count < 1:
         raise ValueError("shard_count must be positive")
+    if not isinstance(case_ids, list) or any(not isinstance(item, str) for item in case_ids):
+        raise ValueError("case IDs must be a string list")
+    if costs is not None and (not isinstance(costs, dict) or any(not isinstance(item, str) for item in costs)):
+        raise ValueError("costs must use string case IDs")
     identifiers = sorted(set(case_ids))
     if len(identifiers) != len(case_ids) or any(not item for item in identifiers):
         raise ValueError("case IDs must be unique and nonempty")

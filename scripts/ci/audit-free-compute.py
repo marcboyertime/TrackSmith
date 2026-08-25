@@ -59,7 +59,7 @@ SCRIPT_OWNER_SURFACE = re.compile(
     r"(?:^|[\s'\"])(?:/Applications|Library/Audio/Plug-Ins)(?:/|\b)",
     re.I,
 )
-XCODEBUILD_BUILD = re.compile(r"\bxcodebuild\b.*\bbuild\b", re.I)
+XCODEBUILD_BUILD = re.compile(r"(?:\bxcodebuild\b.*\bbuild\b|^\s*xcodebuild\s*$)", re.I)
 UNSIGNED_XCODEBUILD = re.compile(r"\bCODE_SIGNING_ALLOWED\s*=\s*NO\b", re.I)
 LOGIC_LAUNCH = re.compile(r"\bopen\s+-a\s+['\"]?Logic(?:\s+Pro)?['\"]?(?=\s|$|;|&&|\|\|)", re.I)
 PRIVATE_AUDIO_PATH = re.compile(r"(?:^|[\s'\"])(?:/|~/)[^\s'\"]+\.(?:wav|aiff|mp3|flac)(?=$|[\s'\";])", re.I)
@@ -347,6 +347,25 @@ def audit_inline_run(command: str, manifest: dict[str, Any], repo_root: pathlib.
             audit_script_commands(closure, manifest, repo_root, workflow, job, errors)
 
 
+def audit_execution_environment(value: Any, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str) -> None:
+    if value is None: return
+    if not isinstance(value, dict):
+        reject(errors, manifest, workflow, job, "inline_shell", f"{detail} must be a mapping")
+        return
+    if "BASH_ENV" in value:
+        reject(errors, manifest, workflow, job, "inline_shell", f"{detail} cannot set BASH_ENV")
+    for key, item in value.items():
+        if not isinstance(key, str) or not isinstance(item, (str, int, float, bool)):
+            reject(errors, manifest, workflow, job, "inline_shell", f"{detail} contains a non-scalar environment value")
+        elif isinstance(item, str):
+            audit_command_surface(item, manifest, workflow, job, errors, f"{detail}.{key}")
+
+
+def audit_shell(value: Any, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str) -> None:
+    if value is not None and (not isinstance(value, str) or value not in {"bash", "sh"}):
+        reject(errors, manifest, workflow, job, "inline_shell", f"{detail} must use the default bash/sh shell")
+
+
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
     repo_root = repo_root.resolve()
     try:
@@ -382,6 +401,14 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
             if not isinstance(body, dict):
                 errors.append(f"{workflow}:{job}: job: must be a mapping")
                 continue
+            audit_execution_environment(doc.get("env"), manifest, workflow, job, errors, "workflow env")
+            audit_execution_environment(body.get("env"), manifest, workflow, job, errors, "job env")
+            defaults = doc.get("defaults")
+            if defaults is not None:
+                audit_shell(defaults.get("run", {}).get("shell") if isinstance(defaults.get("run"), dict) else None, manifest, workflow, job, errors, "workflow defaults.run.shell")
+            job_defaults = body.get("defaults")
+            if job_defaults is not None:
+                audit_shell(job_defaults.get("run", {}).get("shell") if isinstance(job_defaults.get("run"), dict) else None, manifest, workflow, job, errors, "job defaults.run.shell")
             if type(body.get("timeout-minutes")) is not int or not 1 <= body["timeout-minutes"] <= 120:
                 reject(errors, manifest, workflow, job, "timeout", "timeout-minutes must be an integer from 1 through 120")
             runner = body.get("runs-on")
@@ -401,6 +428,8 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
                     else:
                         try: audit_inline_run(step["run"], manifest, repo_root, workflow, job, errors)
                         except RuntimeError as error: reject(errors, manifest, workflow, job, "inline_shell", str(error))
+                audit_shell(step.get("shell"), manifest, workflow, job, errors, "step shell")
+                audit_execution_environment(step.get("env"), manifest, workflow, job, errors, "step env")
                 if not isinstance(step.get("uses"), str): continue
                 action, sep, pin = step["uses"].rpartition("@")
                 if not sep or not FULL_SHA.fullmatch(pin):
@@ -483,6 +512,8 @@ def self_test() -> None:
             ("inline-logic", good + "      - run: open -a Logic\n", manifest_data),
             ("inline-private-audio", good + "      - run: afplay /tmp/private.wav\n", manifest_data),
             ("inline-shell-indirection", good + "      - run: bash -c 'codesign --force unsafe.app'\n", manifest_data),
+            ("inline-bare-xcode", good + "      - run: xcodebuild\n", manifest_data),
+            ("inline-bash-env", good.replace("jobs:\n", "env:\n  BASH_ENV: /tmp/unsafe.sh\njobs:\n"), manifest_data),
         ])
         for name, artifact_path in (
             ("credentials-artifact", "${{ runner.temp }}/credentials.json"),
@@ -563,7 +594,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 65 rejection classes passed (54 retained plus numeric-contract and inline owner-surface rejection)")
+    print("audit-free-compute self-test: 67 rejection classes passed (65 retained plus bare-xcodebuild and BASH_ENV rejection)")
 
 
 def main() -> int:

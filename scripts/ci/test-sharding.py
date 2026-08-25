@@ -6,8 +6,8 @@ from aggregate_shards import aggregate
 from shard_protocol import ALGORITHM, FALLBACK, SCHEMA, assign, digest, partition_hash
 
 def report(index: int, count: int, cases: list[str]) -> dict:
-    values = [{"id": item, "semantic_input_hash": digest(item), "outcome": "passed", "duration_seconds": 1, "result_hash": digest(f"{item}|passed|{digest(item)}")} for item in cases]
-    return {"schema_version": SCHEMA, "suite_id": "suite", "suite_version": "1", "suite_source_hash": "source", "shard_index": index, "shard_count": count, "assignment_algorithm": ALGORITHM, "assignment_version": "1", "partition_hash": partition_hash(cases), "expected_ids": cases, "executed_ids": cases, "cases": values, "toolchain_identity": "test-toolchain", "toolchain_hash": "tool", "policy_hash": "policy", "index_hash": "index"}
+    values = [{"id": item, "semantic_input_hash": digest(item), "outcome": "passed", "duration_seconds": 1, "result_hash": digest(f"{item}|passed|{digest(item)}"), "resource_class": "cpu"} for item in cases]
+    return {"schema_version": SCHEMA, "suite_id": "suite", "suite_version": "1", "suite_source_hash": digest("source"), "shard_index": index, "shard_count": count, "assignment_algorithm": ALGORITHM, "assignment_version": "1", "partition_hash": partition_hash(cases), "expected_ids": cases, "executed_ids": cases, "cases": values, "toolchain_identity": "test-toolchain", "toolchain_hash": digest("tool"), "policy_hash": digest("policy"), "index_hash": digest("index"), "commit": "local", "tree_classification": "test", "observation": {"wall_clock_is_observational": True}}
 
 def rejects(values: list[dict], label: str) -> None:
     with tempfile.TemporaryDirectory() as directory:
@@ -28,6 +28,7 @@ def main() -> None:
     assert aggregate([write_temp(item, index) for index, item in enumerate(reports)], case_ids)["case_ids"] == case_ids
     rejects(reports[:-1], "missing shard accepted")
     duplicate = copy.deepcopy(reports); duplicate[1]["shard_index"] = 0; rejects(duplicate, "duplicate shard accepted")
+    extra_report = copy.deepcopy(reports); extra_report[0]["unexpected"] = True; rejects(extra_report, "extra report field accepted")
     for coordinate, value in (("shard_index", True), ("shard_index", False), ("shard_count", True), ("shard_count", False)):
         invalid_coordinate = copy.deepcopy(reports); invalid_coordinate[0][coordinate] = value; rejects(invalid_coordinate, f"Boolean {coordinate} accepted")
     overlap = copy.deepcopy(reports); overlap[1]["expected_ids"].append(overlap[0]["expected_ids"][0]); overlap[1]["executed_ids"].append(overlap[0]["expected_ids"][0]); rejects(overlap, "overlap accepted")
@@ -36,6 +37,7 @@ def main() -> None:
     missing_case = copy.deepcopy(reports); missing_case[0]["cases"] = missing_case[0]["cases"][1:]; rejects(missing_case, "per-report missing case accepted")
     unexpected_case = copy.deepcopy(reports); unexpected_case[0]["cases"][0]["id"] = "unexpected"; rejects(unexpected_case, "per-report unexpected case accepted")
     duplicate_case = copy.deepcopy(reports); duplicate_case[0]["cases"].append(copy.deepcopy(duplicate_case[0]["cases"][0])); rejects(duplicate_case, "per-report duplicate case accepted")
+    extra_case = copy.deepcopy(reports); extra_case[0]["cases"][0]["unexpected"] = True; rejects(extra_case, "extra case field accepted")
     corrupt = copy.deepcopy(reports); corrupt[0]["cases"][0]["result_hash"] = "bad"; rejects(corrupt, "corrupt accepted")
     for duration in (True, False, math.nan, math.inf, -1):
         invalid_duration = copy.deepcopy(reports); invalid_duration[0]["cases"][0]["duration_seconds"] = duration; rejects(invalid_duration, f"invalid duration accepted: {duration!r}")
@@ -60,6 +62,8 @@ def main() -> None:
         try: budget(cap, reserve); raise AssertionError("Boolean CPU budget accepted")
         except ValueError: pass
     try: assign(case_ids, True); raise AssertionError("Boolean shard count accepted")
+    except ValueError: pass
+    try: assign(["a", 1], 2); raise AssertionError("non-string case ID accepted")
     except ValueError: pass
     logical = __import__("os").cpu_count() or 1
     if logical > 1: assert budget(MAX_TUTOR_WORKERS, max(1, logical - 2)) < budget(MAX_TUTOR_WORKERS, 0)
@@ -89,6 +93,11 @@ def binary_golden(binary: Path) -> None:
                 output = subprocess.run([str(binary), "--list-tests", "--shard-index", str(index), "--shard-count", "3"], cwd=fixture, check=True, capture_output=True, text=True).stdout.splitlines()
                 actual = [line.split("\t", 1)[0] for line in output]
                 assert actual == expected[index], f"Swift/Python Boolean-cost fallback mismatch for {index}/3"
+    empty, algorithm = assign([], 3, costs)
+    assert algorithm == FALLBACK and empty == [[], [], []]
+    for index in range(3):
+        output = subprocess.run([str(binary), "--list-tests", "--exclude", "tutor-conversation/*", "--shard-index", str(index), "--shard-count", "3"], cwd=root, check=True, capture_output=True, text=True).stdout
+        assert output == "", "Swift empty-selection shard is not empty"
     invalid = subprocess.run([str(binary), "--include", "tutor-conversation/01-tool-firewall", "--include", "typo"], cwd=root, capture_output=True, text=True)
     assert invalid.returncode == 64 and "every --include selector" in invalid.stderr
     print("test-sharding: release-binary Swift/Python assignment golden passed")

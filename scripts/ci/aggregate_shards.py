@@ -13,6 +13,9 @@ from typing import Any
 from shard_protocol import ALGORITHM, SCHEMA, digest, partition_hash, read_json
 
 REQUIRED = {"schema_version", "suite_id", "suite_version", "suite_source_hash", "shard_index", "shard_count", "assignment_algorithm", "assignment_version", "partition_hash", "expected_ids", "executed_ids", "cases", "toolchain_identity", "toolchain_hash", "policy_hash", "index_hash"}
+REPORT_FIELDS = REQUIRED | {"commit", "tree_classification", "observation"}
+CASE_FIELDS = {"id", "semantic_input_hash", "outcome", "duration_seconds", "result_hash", "resource_class"}
+SHA256 = __import__("re").compile(r"^[0-9a-f]{64}$")
 
 
 def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[str, Any]:
@@ -23,8 +26,10 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
     reports = [read_json(path) for path in paths]
     for report in reports:
         missing = REQUIRED - set(report)
-        if missing or report.get("schema_version") != SCHEMA:
+        if missing or set(report) != REPORT_FIELDS or report.get("schema_version") != SCHEMA:
             raise ValueError(f"corrupt shard report: missing {sorted(missing)} or unsupported schema")
+        if any(not isinstance(report[key], str) or not report[key] for key in ("suite_id", "suite_version", "assignment_version", "toolchain_identity", "commit", "tree_classification")) or any(not isinstance(report[key], str) or not SHA256.fullmatch(report[key]) for key in ("suite_source_hash", "partition_hash", "toolchain_hash", "policy_hash", "index_hash")) or report["observation"] != {"wall_clock_is_observational": True}:
+            raise ValueError("corrupt shard report identity fields")
         if report["assignment_algorithm"] != ALGORITHM:
             raise ValueError("changed or unsupported assignment algorithm")
         if type(report["shard_index"]) is not int or type(report["shard_count"]) is not int or report["shard_count"] < 1 or not 0 <= report["shard_index"] < report["shard_count"]:
@@ -33,7 +38,7 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
             raise ValueError("corrupt shard report collection fields")
         case_ids = []
         for case in report["cases"]:
-            if not isinstance(case, dict) or not isinstance(case.get("id"), str) or not case["id"]: raise ValueError("corrupt case object")
+            if not isinstance(case, dict) or set(case) != CASE_FIELDS or not isinstance(case.get("id"), str) or not case["id"] or not isinstance(case.get("resource_class"), str) or not case["resource_class"]: raise ValueError("corrupt case object")
             case_ids.append(case["id"])
         if len(case_ids) != len(set(case_ids)) or set(case_ids) != set(report["expected_ids"]) or set(case_ids) != set(report["executed_ids"]):
             raise ValueError("per-report cases do not exactly match expected/executed IDs")
@@ -61,11 +66,11 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
         if sorted(report["executed_ids"]) != sorted(report["expected_ids"]):
             raise ValueError("missing, cancelled, or unexpected executed case")
         for case in report["cases"]:
-            if not isinstance(case, dict) or not isinstance(case.get("id"), str) or case["id"] in by_id:
+            if not isinstance(case, dict) or set(case) != CASE_FIELDS or not isinstance(case.get("id"), str) or case["id"] in by_id:
                 raise ValueError("corrupt or duplicate case result")
             semantic, outcome, result_hash = case.get("semantic_input_hash"), case.get("outcome"), case.get("result_hash")
             duration = case.get("duration_seconds")
-            if type(duration) not in (int, float) or not math.isfinite(duration) or duration < 0 or not isinstance(semantic, str) or outcome != "passed" or result_hash != digest(f"{case['id']}|passed|{semantic}"):
+            if type(duration) not in (int, float) or not math.isfinite(duration) or duration < 0 or not isinstance(semantic, str) or not SHA256.fullmatch(semantic) or outcome != "passed" or result_hash != digest(f"{case['id']}|passed|{semantic}"):
                 raise ValueError("failed, cancelled, or corrupt case result")
             by_id[case["id"]] = case
     if sorted(by_id) != universe:

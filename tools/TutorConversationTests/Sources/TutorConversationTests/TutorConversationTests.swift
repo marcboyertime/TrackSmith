@@ -46,6 +46,7 @@ struct TutorConversationTests {
         let arguments = Array(CommandLine.arguments.dropFirst())
         let ordinaryFlags = Set(["--list-tests", "--shard-index", "--shard-count", "--include", "--exclude", "--output-json"])
         let ordinaryFlagsWithValues = Set(["--shard-index", "--shard-count", "--include", "--exclude", "--output-json"])
+        let consentFlags = Set(["--cloud-text-consent", "--cloud-audio-consent"])
         let hasOrdinarySelection = arguments.contains { ordinaryFlags.contains($0) }
         var positionalModes: [String] = []
         var argumentIndex = 0
@@ -62,9 +63,21 @@ struct TutorConversationTests {
             fputs("error: ordinary-suite sharding and JSON flags are incompatible with named diagnostics\n", stderr)
             Darwin.exit(64)
         }
+        let textConsentModes = Set(["package17-cloud-evaluation", "package17-cloud-health", "package19-cloud-no-tool", "package19-cloud-full-tool", "package19-cloud-repeated-triplets"])
+        let audioConsentModes = Set(["package17-public-audio-evaluation"])
+        let suppliedConsentFlags = Set(arguments.filter { consentFlags.contains($0) })
+        if !suppliedConsentFlags.isEmpty {
+            let modeSet = Set(positionalModes)
+            let textAllowed = modeSet.count == 1 && textConsentModes.contains(modeSet.first ?? "") && suppliedConsentFlags == Set(["--cloud-text-consent"])
+            let audioAllowed = modeSet.count == 1 && audioConsentModes.contains(modeSet.first ?? "") && suppliedConsentFlags == Set(["--cloud-audio-consent"])
+            if !textAllowed && !audioAllowed {
+                fputs("error: consent flags are accepted only by their matching Package 17/19 live harness\n", stderr)
+                Darwin.exit(64)
+            }
+        }
         let selection: Suite.Selection
         do {
-            selection = try Suite.Selection(arguments: arguments)
+            selection = try Suite.Selection(arguments: arguments.filter { !consentFlags.contains($0) })
         } catch {
             fputs("error: \(error)\n", stderr)
             Darwin.exit(64)
@@ -523,7 +536,7 @@ private final class Suite {
             !selection.excludes.contains { matches(item.id, $0) }
         }
         let costs = costSeconds()
-        let useCosts = candidates.allSatisfy { costs[$0.id] != nil }
+        let useCosts = !candidates.isEmpty && candidates.allSatisfy { costs[$0.id] != nil }
         if useCosts {
             candidates.sort { costs[$0.id]! == costs[$1.id]! ? $0.id < $1.id : costs[$0.id]! > costs[$1.id]! }
             var bins = Array(repeating: (load: 0.0, items: [CaseSpec]()), count: selection.shardCount)
