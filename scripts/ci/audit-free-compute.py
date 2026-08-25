@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-import datetime as dt
+import ast
 import json
 import pathlib
 import re
@@ -41,7 +41,6 @@ LANE_FIELDS = {
     "requires_signing_or_install", "artifact_outputs", "expected_maximum_artifact_bytes",
     "change_paths", "safe_for_fork_pull_requests",
 }
-EXCEPTION_FIELDS = {"workflow", "job", "rule", "reason", "owner", "reviewed_on", "expires_on"}
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 DISALLOWED_RUNNER = re.compile(r"self-hosted|larger|gpu|large|xlarge|windows|ubuntu-latest|macos-latest", re.I)
 SECRET_REF = re.compile(r"\bsecrets\s*(?:\.\s*[A-Za-z_][A-Za-z0-9_]*|\[\s*[^\]\r\n]+\s*\])", re.I)
@@ -51,6 +50,9 @@ ENTRYPOINT_COMMAND = re.compile(r"bash (scripts/ci/[A-Za-z0-9_.-]+\.sh)(?: <choi
 SCRIPT_RELATIVE_PATH = re.compile(r"scripts/ci/[A-Za-z0-9_.-]+\.sh$")
 LITERAL_SCRIPT_TOKEN = re.compile(r"(?<![A-Za-z0-9_.\-/])(scripts/ci/[A-Za-z0-9_.-]+\.sh)(?![A-Za-z0-9_.\-/])")
 SCRIPT_CI_PATH_ATTEMPT = re.compile(r"scripts/ci/[^\s'\";|&()]*\.sh\b")
+LOCAL_PYTHON_HELPER = re.compile(r"\b(?:python3?|python)\s+(?:-[A-Za-z0-9_=-]+\s+)*['\"]?((?:scripts|research)/[A-Za-z0-9_.\-/]+\.py)['\"]?")
+LOCAL_PYTHON_ATTEMPT = re.compile(r"(?:scripts|research)/[^\s'\";|&()]*\.py\b")
+DIRECT_LOCAL_HELPER = re.compile(r"(?:^|[;&|]\s*)['\"]?(\./[A-Za-z0-9_.\-/]+)['\"]?")
 SHELL_DEPENDENCY_INVOKER = re.compile(r"^(?:(?:env|command)(?:\s+[-A-Za-z0-9_=]+)*\s+)?(?:bash|sh|source)\b|^\.\s+")
 SHELL_CONTROL_PREFIX = re.compile(r"^(?:(?:if|then|do|while|until)\s+|!\s*|\(\s*)")
 SHELL_ASSIGNMENT_PREFIX = re.compile(r"^(?:[A-Za-z_][A-Za-z0-9_]*=(?:[^\s]+|\"[^\"]*\"|'[^']*')\s+)+")
@@ -70,9 +72,11 @@ SCRIPT_OWNER_SURFACE = re.compile(
 )
 XCODEBUILD_REFERENCE = re.compile(r"\b(?:xcodebuild|xcrun\b[^;|&]*\bxcodebuild)\b", re.I)
 XCODEBUILD_SAFE_QUERY = re.compile(r"\bxcodebuild\s+-(?:version|help|list|showsdks|showBuildSettings)\b|\b(?:command\s+-v|require_command)\s+xcodebuild\b", re.I)
+XCODEBUILD_DYNAMIC = re.compile(r"\bxcode(?:build)?(?:\$\{|\$\(|`)|\b[A-Za-z_][A-Za-z0-9_]*\s*=\s*['\"]?xcode(?:build)?\b", re.I)
 UNSIGNED_XCODEBUILD = re.compile(r"\bCODE_SIGNING_ALLOWED\s*=\s*NO\b", re.I)
 LOGIC_LAUNCH = re.compile(r"\bopen\s+-a\s+['\"]?Logic(?:\s+Pro)?['\"]?(?=\s|$|;|&&|\|\|)", re.I)
 PRIVATE_AUDIO_PATH = re.compile(r"(?:^|[\s'\"])(?:/|~/)[^\s'\"]+\.(?:wav|aiff|mp3|flac)(?=$|[\s'\";])", re.I)
+SOFT_FAILURE = re.compile(r"\|\||\bset\s+\+e\b|\bexit\s+0\b|\btrap\s+.*\bEXIT\b", re.I)
 
 
 def parse_yaml(path: pathlib.Path) -> dict[str, Any]:
@@ -99,6 +103,19 @@ def script_path(relative: str, repo_root: pathlib.Path) -> pathlib.Path | None:
         return None
     if candidate.is_symlink() or not resolved.is_file() or resolved.parent != (repo_root / "scripts/ci").resolve():
         return None
+    return resolved
+
+
+def local_helper_path(relative: str, repo_root: pathlib.Path) -> pathlib.Path | None:
+    if not isinstance(relative, str) or relative.startswith("/") or ".." in pathlib.PurePosixPath(relative).parts:
+        return None
+    candidate = repo_root / relative.removeprefix("./")
+    try:
+        resolved = candidate.resolve(strict=True)
+        resolved.relative_to(repo_root.resolve(strict=True))
+    except (OSError, ValueError):
+        return None
+    if candidate.is_symlink() or not resolved.is_file(): return None
     return resolved
 
 
@@ -152,34 +169,16 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
         elif lane_id == "local_apple_logic_owner":
             if lane["runner_label"] != "not an Actions lane" or type(lane["timeout_minutes"]) is not int or lane["timeout_minutes"] != 0:
                 errors.append("manifest:local_apple_logic_owner: must remain an owner-only non-Actions lane with timeout 0")
-    exceptions = manifest.get("audit_exceptions")
-    if not isinstance(exceptions, list):
-        return errors + ["manifest: audit_exceptions must be a list"]
-    for item in exceptions:
-        if not isinstance(item, dict) or set(item) != EXCEPTION_FIELDS or any(not isinstance(item.get(key), str) or not item[key] for key in EXCEPTION_FIELDS):
-            errors.append("manifest: audit exception must contain exactly workflow, job, rule, reason, owner, reviewed_on, expires_on")
-            continue
-        if any("*" in item[key] for key in ("workflow", "job", "rule")):
-            errors.append("manifest: audit exception cannot use wildcards")
-            continue
-        try:
-            reviewed = dt.date.fromisoformat(item["reviewed_on"])
-            expires = dt.date.fromisoformat(item["expires_on"])
-        except ValueError:
-            errors.append("manifest: audit exception dates must be ISO dates")
-            continue
-        if reviewed > dt.date.today() or expires < dt.date.today():
-            errors.append("manifest: audit exception is future-reviewed or expired")
+    # A checked-in exception is self-authorizable by the same pull request it
+    # would excuse. Keep the contract deliberately exception-free; an external
+    # governance process must resolve any legitimate policy change first.
+    if manifest.get("audit_exceptions") != []:
+        errors.append("manifest: audit_exceptions must be an empty list")
     return errors
 
 
-def exception_applies(manifest: dict[str, Any], workflow: str, job: str, rule: str) -> bool:
-    return any((item["workflow"], item["job"], item["rule"]) == (workflow, job, rule) for item in manifest["audit_exceptions"])
-
-
 def reject(errors: list[str], manifest: dict[str, Any], workflow: str, job: str, rule: str, detail: str) -> None:
-    if not exception_applies(manifest, workflow, job, rule):
-        errors.append(f"{workflow}:{job}: {rule}: {detail}")
+    errors.append(f"{workflow}:{job}: {rule}: {detail}")
 
 
 def strip_shell_comment(line: str) -> str:
@@ -300,6 +299,80 @@ def inline_commands(value: str) -> list[str]:
     return commands
 
 
+def local_python_paths(command: str, repo_root: pathlib.Path) -> set[pathlib.Path]:
+    attempts = {match.group(0) for match in LOCAL_PYTHON_ATTEMPT.finditer(command)}
+    if any("$" in value or "`" in value for value in attempts):
+        raise RuntimeError("dynamic or constructed local Python helper path")
+    literals = attempts
+    paths: set[pathlib.Path] = set()
+    for relative in literals:
+        path = local_helper_path(relative, repo_root)
+        if path is None: raise RuntimeError(f"invalid local Python helper: {relative}")
+        paths.add(path)
+    for match in DIRECT_LOCAL_HELPER.finditer(command):
+        relative = match.group(1)
+        if "$" in relative or "`" in relative: raise RuntimeError("dynamic direct local helper path")
+        path = local_helper_path(relative, repo_root)
+        if path is None: raise RuntimeError(f"invalid direct local helper: {match.group(1)}")
+        if path.suffix == ".py": paths.add(path)
+        elif path.suffix != ".sh" or script_path(relative.removeprefix("./"), repo_root) is None:
+            raise RuntimeError(f"invalid direct local shell helper: {match.group(1)}")
+    return paths
+
+
+def audit_python_helper(path: pathlib.Path, manifest: dict[str, Any], repo_root: pathlib.Path, workflow: str, job: str, errors: list[str], seen: set[pathlib.Path]) -> None:
+    if path in seen: return
+    seen.add(path)
+    try: tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    except (OSError, SyntaxError, UnicodeDecodeError) as error:
+        raise RuntimeError(f"unreadable local Python helper {path.relative_to(repo_root)}: {error}") from error
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not node.args: continue
+        function = node.func.attr if isinstance(node.func, ast.Attribute) else node.func.id if isinstance(node.func, ast.Name) else ""
+        if function not in {"run", "call", "check_call", "check_output", "Popen", "system"}: continue
+        argument = node.args[0]
+        local_children: set[pathlib.Path] = set()
+        if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
+            command = argument.value
+        elif isinstance(argument, (ast.List, ast.Tuple)):
+            rendered_items: list[str] = []
+            for item in argument.elts:
+                if isinstance(item, ast.Constant) and isinstance(item.value, str): rendered_items.append(item.value); continue
+                # A literal path rooted at this repository remains resolvable;
+                # every other computed repo-local helper path fails closed.
+                if isinstance(item, ast.Call) and isinstance(item.func, ast.Name) and item.func.id == "str" and len(item.args) == 1:
+                    parts: list[str] = []
+                    cursor = item.args[0]
+                    while isinstance(cursor, ast.BinOp) and isinstance(cursor.op, ast.Div) and isinstance(cursor.right, ast.Constant) and isinstance(cursor.right.value, str):
+                        parts.append(cursor.right.value); cursor = cursor.left
+                    if isinstance(cursor, ast.Name) and cursor.id == "ROOT":
+                        relative = "/".join(reversed(parts)); child = local_helper_path(relative, repo_root)
+                        if child is not None and child.suffix == ".py": local_children.add(child); rendered_items.append(relative); continue
+                rendered = ast.unparse(item)
+                if "scripts/" in rendered or "research/" in rendered or "./" in rendered:
+                    rendered_items = []
+                    break
+                rendered_items.append(rendered)
+            if not rendered_items:
+                rendered = ast.unparse(argument)
+                if "scripts/" in rendered or "research/" in rendered or "./" in rendered:
+                    raise RuntimeError(f"dynamic local helper execution in {path.relative_to(repo_root)}:{node.lineno}")
+                continue
+            command = " ".join(rendered_items)
+        else:
+            rendered = ast.unparse(argument)
+            if "scripts/" in rendered or "research/" in rendered or "./" in rendered:
+                raise RuntimeError(f"dynamic local helper execution in {path.relative_to(repo_root)}:{node.lineno}")
+            continue
+        # Python helper source is parsed for every nested repo-local execution;
+        # its non-local subprocess arguments are not executed by this closure
+        # walker and are governed by their owning lane/tool boundary.
+        for child in local_python_paths(command, repo_root):
+            audit_python_helper(child, manifest, repo_root, workflow, job, errors, seen)
+        for child in local_children:
+            audit_python_helper(child, manifest, repo_root, workflow, job, errors, seen)
+
+
 def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str, job: str, errors: list[str], detail: str) -> None:
     if SECRET_REF.search(command): reject(errors, manifest, workflow, job, "secrets", f"secret reference in {detail}")
     if SCRIPT_CLOUD_MODEL.search(command): reject(errors, manifest, workflow, job, "cloud_model", f"provider/cloud/model surface in {detail}")
@@ -312,15 +385,20 @@ def audit_command_surface(command: str, manifest: dict[str, Any], workflow: str,
         # cannot conceal the executable from the static closure audit.
         references = len(re.findall(r"\bxcodebuild\b", segment, re.I))
         queries = len(XCODEBUILD_SAFE_QUERY.findall(segment))
+        if XCODEBUILD_DYNAMIC.search(segment):
+            reject(errors, manifest, workflow, job, "xcode_signing", f"dynamic xcodebuild/xcrun construction is forbidden in {detail}")
         if XCODEBUILD_REFERENCE.search(segment) and references > queries and not UNSIGNED_XCODEBUILD.search(segment):
             reject(errors, manifest, workflow, job, "xcode_signing", f"xcodebuild/xcrun build-like invocation lacks CODE_SIGNING_ALLOWED=NO in {detail}")
 
 
 def audit_script_commands(closure: list[tuple[pathlib.Path, list[tuple[int, str]]]], manifest: dict[str, Any], repo_root: pathlib.Path, workflow: str, job: str, errors: list[str]) -> None:
+    seen: set[pathlib.Path] = set()
     for script, commands in closure:
         relative = script.relative_to(repo_root)
         for line_number, command in commands:
             audit_command_surface(command, manifest, workflow, job, errors, f"{relative}:{line_number}")
+            for helper in local_python_paths(command, repo_root):
+                audit_python_helper(helper, manifest, repo_root, workflow, job, errors, seen)
 
 
 def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path, errors: list[str]) -> None:
@@ -335,13 +413,19 @@ def audit_manifest_entrypoints(manifest: dict[str, Any], repo_root: pathlib.Path
         except (OSError, RuntimeError) as error:
             errors.append(f"manifest-entrypoint:{lane_id}: entrypoint: {error}")
             continue
-        audit_script_commands(closure, manifest, repo_root, "manifest-entrypoint", lane_id, errors)
+        try:
+            audit_script_commands(closure, manifest, repo_root, "manifest-entrypoint", lane_id, errors)
+        except RuntimeError as error:
+            errors.append(f"manifest-entrypoint:{lane_id}: helper: {error}")
 
 
 def audit_inline_run(command: str, manifest: dict[str, Any], repo_root: pathlib.Path, workflow: str, job: str, errors: list[str]) -> None:
+    seen: set[pathlib.Path] = set()
     for line_number, inline in enumerate(inline_commands(command), 1):
         detail = f"inline:{line_number}"
         audit_command_surface(inline, manifest, workflow, job, errors, detail)
+        for helper in local_python_paths(inline, repo_root):
+            audit_python_helper(helper, manifest, repo_root, workflow, job, errors, seen)
         literal_paths = {match.group(1) for match in LITERAL_SCRIPT_TOKEN.finditer(inline)}
         attempted_paths = {match.group(0) for match in SCRIPT_CI_PATH_ATTEMPT.finditer(inline)}
         if attempted_paths != literal_paths or (literal_paths and ("$(" in inline or "`" in inline)):
@@ -387,13 +471,58 @@ def audit_workflow_job_binding(workflow: str, job: str, body: dict[str, Any], ma
     if lane_ids is None: return
     commands = {lane["id"]: lane["command"] for lane in manifest["lanes"]}
     allowed = {commands[lane] for lane in lane_ids}
+    if "if" in body or "continue-on-error" in body:
+        errors.append(f"{workflow}:{job}: manifest_entrypoint: required manifest-bound job cannot be conditional or continue-on-error")
     runs = [step["run"] for step in body.get("steps", []) if isinstance(step, dict) and isinstance(step.get("run"), str)]
+    for step in body.get("steps", []):
+        if not isinstance(step, dict):
+            errors.append(f"{workflow}:{job}: manifest_entrypoint: required manifest-bound job has a non-mapping step")
+            continue
+        if "if" in step or "continue-on-error" in step:
+            errors.append(f"{workflow}:{job}: manifest_entrypoint: required manifest-bound step cannot be conditional or continue-on-error")
+        if isinstance(step.get("run"), str) and SOFT_FAILURE.search(step["run"]):
+            errors.append(f"{workflow}:{job}: manifest_entrypoint: required manifest-bound step masks a failure")
     executable = {line for run in runs for line in inline_commands(run)}
     if not allowed.issubset(executable):
         errors.append(f"{workflow}:{job}: manifest_entrypoint: job must execute its exact stable manifest command(s), not a no-op or substituted lane")
     invoked = {line for line in executable if ENTRYPOINT_COMMAND.fullmatch(line)}
     if not invoked.issubset(allowed):
         errors.append(f"{workflow}:{job}: manifest_entrypoint: job invokes an entrypoint outside its bound manifest lane")
+
+
+def manifest_artifact_paths(workflow: str, job: str, manifest: dict[str, Any]) -> set[str] | None:
+    lane_ids = WORKFLOW_JOB_BINDINGS.get((workflow, job))
+    if lane_ids is None: return None
+    lanes = {lane["id"]: lane for lane in manifest["lanes"]}
+    return {path for lane_id in lane_ids for path in lanes[lane_id]["artifact_outputs"]}
+
+
+def audit_artifact_upload(workflow: str, job: str, steps: list[Any], index: int, config: Any, manifest: dict[str, Any], errors: list[str]) -> None:
+    expected = manifest_artifact_paths(workflow, job, manifest)
+    if expected is None:
+        reject(errors, manifest, workflow, job, "artifact_path", "artifact upload is not bound to a manifest lane")
+        return
+    raw_paths = config.get("path") if isinstance(config, dict) else None
+    if not isinstance(raw_paths, str):
+        reject(errors, manifest, workflow, job, "artifact_path", "artifact path must be an exact multiline string")
+        return
+    paths = [line.strip() for line in raw_paths.splitlines() if line.strip()]
+    if len(paths) != len(set(paths)) or set(paths) != expected or any(any(token in path for token in ("*", "?", "[", "]", "..")) for path in paths):
+        reject(errors, manifest, workflow, job, "artifact_path", "artifact paths must exactly equal the manifest-declared compact files")
+    guard = f"python3 scripts/ci/check-artifact-budget.py"
+    preceding = [step.get("run") for step in steps[:index] if isinstance(step, dict) and isinstance(step.get("run"), str)]
+    if not any(guard in run and all(path in run for path in expected) for run in preceding):
+        reject(errors, manifest, workflow, job, "artifact_budget", "artifact upload requires a preceding exact check-artifact-budget guard")
+
+
+def audit_artifact_guard_script(repo_root: pathlib.Path, errors: list[str]) -> None:
+    path = repo_root / "scripts/ci/check-artifact-budget.py"
+    try: source = path.read_text(encoding="utf-8")
+    except OSError as error:
+        errors.append(f"artifact-budget: guard is unreadable: {error}"); return
+    required = ("MAXIMUM_BYTES = 25 * 1024 * 1024", "os.lstat", "stat.S_ISLNK", "stat.S_ISREG", "total > MAXIMUM_BYTES")
+    if any(token not in source for token in required):
+        errors.append("artifact-budget: guard must use lstat regular-file checks and a 25 MB cumulative bound")
 
 
 def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pathlib.Path = ROOT) -> list[str]:
@@ -406,6 +535,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
     if errors:
         return errors
     audit_manifest_entrypoints(manifest, repo_root, errors)
+    audit_artifact_guard_script(repo_root, errors)
     tutor_runner = repo_root / "scripts/ci/run-macos-tutor.sh"
     if tutor_runner.exists():
         tutor_text = tutor_runner.read_text(encoding="utf-8")
@@ -450,7 +580,8 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
                 reject(errors, manifest, workflow, job, "matrix", "matrix jobs are forbidden until a bounded audited contract is added")
             if SECRET_REF.search(serialized): reject(errors, manifest, workflow, job, "secrets", "secret references are forbidden")
             if FORBIDDEN_COMMAND.search(serialized): reject(errors, manifest, workflow, job, "cloud_model", "cloud/model command is forbidden")
-            for step in body.get("steps", []) if isinstance(body.get("steps"), list) else []:
+            steps = body.get("steps", []) if isinstance(body.get("steps"), list) else []
+            for step_index, step in enumerate(steps):
                 if not isinstance(step, dict): continue
                 if "run" in step:
                     if not isinstance(step["run"], str):
@@ -475,6 +606,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
                     artifact_path = str(config.get("path", ""))
                     if not artifact_path or UNSAFE_ARTIFACT.search(artifact_path):
                         reject(errors, manifest, workflow, job, "artifact_path", "artifact path includes unsafe payload")
+                    audit_artifact_upload(workflow, job, steps, step_index, config, manifest, errors)
             audit_workflow_job_binding(workflow, job, body, manifest, errors)
         if DISALLOWED_RUNNER.search(raw): errors.append(f"{workflow}:<workflow>: runner_terms: disallowed runner term appears")
     return errors
@@ -493,8 +625,10 @@ def self_test() -> None:
                     path = repo / match.group(1); path.parent.mkdir(parents=True, exist_ok=True)
                     if path.name == "run-macos-tutor.sh":
                         path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nswift build -c release --product TutorConversationTests\npython3 scripts/ci/cpu_budget.py --cap \"${TRACKSMITH_MAX_TUTOR_SHARDS:-3}\" --reserve 1\n")
+                        (repo / "scripts/ci/cpu_budget.py").write_text("#!/usr/bin/env python3\nprint(1)\n")
                     else:
                         path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf 'safe entrypoint\\n'\n")
+            (repo / "scripts/ci/check-artifact-budget.py").write_text("#!/usr/bin/env python3\nMAXIMUM_BYTES = 25 * 1024 * 1024\nimport os, stat\ntotal = 0\nos.lstat('safe')\nstat.S_ISLNK(0); stat.S_ISREG(0)\nif total > MAXIMUM_BYTES: raise SystemExit(1)\n")
         write_manifest(manifest_data); write_entrypoints(manifest_data); (workflows / "safe.yml").write_text(good)
         if audit(workflows, manifest, repo): raise AssertionError("valid fixture was rejected")
         cases: list[tuple[str, str, dict[str, Any]]] = [
@@ -588,6 +722,45 @@ def self_test() -> None:
         reset_safe_fixture()
         (workflows / "tutor-integrity.yml").write_text(good.replace("  check:\n", "  linux_integrity:\n") + "      - run: bash scripts/ci/run-linux-evaluation.sh\n")
         if not audit(workflows, manifest, repo): raise AssertionError("bound lane substitution fixture was accepted")
+        for name, text in (
+            ("bound-lane-if", good.replace("  check:\n", "  linux_integrity:\n    if: ${{ always() }}\n") + "      - run: bash scripts/ci/run-linux-integrity.sh\n"),
+            ("bound-lane-continue", good.replace("  check:\n", "  linux_integrity:\n    continue-on-error: true\n") + "      - run: bash scripts/ci/run-linux-integrity.sh\n"),
+            ("bound-lane-soft", good.replace("  check:\n", "  linux_integrity:\n") + "      - run: bash scripts/ci/run-linux-integrity.sh || true\n"),
+        ):
+            reset_safe_fixture()
+            (workflows / "tutor-integrity.yml").write_text(text)
+            if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
+        reset_safe_fixture()
+        (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\nxcode$(printf build)\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("dynamic xcode fixture was accepted")
+        reset_safe_fixture()
+        (repo / "scripts/ci/run-linux-integrity.sh").write_text("#!/usr/bin/env bash\nset -euo pipefail\npython3 \"research/scripts/$HELPER.py\"\n")
+        if not audit(workflows, manifest, repo): raise AssertionError("dynamic Python helper fixture was accepted")
+        artifact_job = """name: safe
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  macos_xcode_products:
+    runs-on: macos-15
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - run: bash scripts/ci/run-macos-xcode-products.sh
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          path: |
+            ${{ runner.temp }}/tracksmith-xcode-products/package019-ci-receipt.json
+            ${{ runner.temp }}/tracksmith-xcode-products/xcode-products-report.json
+          retention-days: 3
+"""
+        reset_safe_fixture()
+        (workflows / "tutor-macos-swift.yml").write_text(artifact_job)
+        if not audit(workflows, manifest, repo): raise AssertionError("artifact upload without size guard was accepted")
+        reset_safe_fixture()
+        broad = artifact_job.replace("${{ runner.temp }}/tracksmith-xcode-products/package019-ci-receipt.json", ".")
+        (workflows / "tutor-macos-swift.yml").write_text(broad)
+        if not audit(workflows, manifest, repo): raise AssertionError("broad artifact path was accepted")
 
         def reject_entrypoint(name: str, content: str, helper: str | None = None, symlink_helper: bool = False) -> None:
             reset_safe_fixture()
@@ -641,7 +814,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 74 rejection classes passed (67 retained plus xcode mode/indirection and lane-binding rejection)")
+    print("audit-free-compute self-test: 81 rejection classes passed (74 retained plus fail-closed helper, condition, and artifact rejection)")
 
 
 def main() -> int:

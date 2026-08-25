@@ -44,6 +44,11 @@ def main() -> None:
         cache_key = cache.key(components); entry = cache.path_for(root, cache_key)
         outside = root.parent / (root.name + "-outside"); outside.mkdir()
         sentinel = outside / "sentinel"; sentinel.write_text("outside unchanged")
+        unowned = root / "unowned"; unowned.mkdir()
+        unowned_hex = unowned / ("d" * 64 + ".json"); unowned_hex.write_text("user sentinel")
+        cache.prune(unowned, 0, 0)
+        assert unowned_hex.read_text() == "user sentinel" and not (unowned / cache.INDEX).exists()
+        unowned_hex.unlink(); unowned.rmdir()
         assert cache.load(root, components) is None
         cache.store(root, components, result); assert cache.load(root, components) == result
         assert cache.load(root, {**components, "toolchain_hash": h("changed")}) is None
@@ -93,7 +98,11 @@ def main() -> None:
         assert sentinel.read_text() == "outside unchanged"; entry.unlink()
         temporary = root / f".{cache_key}.json.{'a' * 32}.tmp"; assert cache.TEMPORARY.fullmatch(temporary.name); temporary.write_text("crash leftover")
         unrelated = root / "user-report.json"; unrelated.write_text("user-owned sentinel")
-        cache.prune(root, 1, cache.MAX_ENTRY_BYTES); assert not temporary.exists() and unrelated.read_text() == "user-owned sentinel"
+        hex_sentinel = root / ("b" * 64 + ".json"); hex_sentinel.write_text("not a cache entry")
+        temp_sentinel = root / ("." + "b" * 64 + ".json." + "c" * 32 + ".tmp"); temp_sentinel.write_text("not an owned cache temporary")
+        cache.prune(root, 1, cache.MAX_ENTRY_BYTES)
+        assert not temporary.exists() and unrelated.read_text() == "user-owned sentinel" and hex_sentinel.read_text() == "not a cache entry" and temp_sentinel.read_text() == "not an owned cache temporary"
+        hex_sentinel.unlink(); temp_sentinel.unlink()
         unrelated.unlink()
         cache.store(root, components, result); original: Path | None = None
         def root_for_load(current: Path) -> None:
@@ -115,7 +124,7 @@ def main() -> None:
             original = replace_root(current, outside)
         rejected(lambda: with_race("before-prune-list", root_for_prune, lambda: cache.prune(root, 0, 0)), "raced prune root accepted")
         assert original is not None; restore_root(root, original); assert sentinel.read_text() == "outside unchanged"
-        cache.store(root, components, result); cache.prune(root, 0, 0); assert not list(root.iterdir())
+        cache.store(root, components, result); cache.prune(root, 0, 0); assert [item.name for item in root.iterdir()] == [cache.INDEX]
         sentinel.unlink(); outside.rmdir()
     print("test-case-cache: schema, corruption, stale/toolchain, failure, bounded cache, and descriptor-relative symlink/root races passed")
 

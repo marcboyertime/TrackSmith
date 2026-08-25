@@ -136,7 +136,7 @@
       "requires_secrets": false,
       "requires_logic": false,
       "requires_signing_or_install": false,
-      "artifact_outputs": ["Package 019 CI receipt", "compact Xcode resource report"],
+      "artifact_outputs": ["${{ runner.temp }}/tracksmith-xcode-products/package019-ci-receipt.json", "${{ runner.temp }}/tracksmith-xcode-products/xcode-products-report.json"],
       "expected_maximum_artifact_bytes": 26214400,
       "change_paths": ["project.yml", "apps/CompanionApp/", "packages/ProductionTutor/"],
       "safe_for_fork_pull_requests": true
@@ -154,7 +154,7 @@
       "requires_secrets": false,
       "requires_logic": false,
       "requires_signing_or_install": false,
-      "artifact_outputs": ["Package 019 CI receipt", "compact Xcode resource report"],
+      "artifact_outputs": ["${{ runner.temp }}/tracksmith-xcode-products/package019-ci-receipt.json", "${{ runner.temp }}/tracksmith-xcode-products/xcode-products-report.json"],
       "expected_maximum_artifact_bytes": 26214400,
       "change_paths": ["project.yml", "plugins/AudioUnit/AudioUnitExtension/", "packages/ProductionTutor/"],
       "safe_for_fork_pull_requests": true
