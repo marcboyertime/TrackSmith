@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -16,7 +17,15 @@ from run_tutor_cached import components, semantic
 from shard_protocol import build_contract, digest
 
 
+def list_contexts(binary: Path, root: Path) -> dict[str, tuple[str, str, str, str]]:
+    output = subprocess.run([str(binary), "--list-tests"], cwd=root, check=True, text=True, capture_output=True).stdout
+    rows = [line.split("\t") for line in output.splitlines()]
+    assert rows and all(len(row) == 5 and all(field for field in row) for row in rows), "invalid --list-tests context rows"
+    return {identifier: (resource, name, implementation, shared) for identifier, resource, name, implementation, shared in rows}
+
+
 def main(binary: Path) -> None:
+    binary = binary.resolve()
     root = Path(__file__).resolve().parents[2]
     with tempfile.TemporaryDirectory() as directory:
         temporary = Path(directory); listing = temporary / "list.tsv"
@@ -57,7 +66,27 @@ open(os.environ['TRACKSMITH_TEST_COUNTER'],'a').write(identifier+'\\n')
         assert all(cache.load(cache_root, components(changed, identifier, semantic(changed, identifier, resource, name, case_implementation, shared_evaluator), shared_evaluator)) is None for identifier, (resource, name, case_implementation, shared_evaluator) in listed.items())
         changed_shared = {identifier: (resource, name, case_implementation, digest("changed-package-or-resource")) for identifier, (resource, name, case_implementation, _) in listed.items()}
         assert all(cache.load(cache_root, components(contract, identifier, semantic(contract, identifier, resource, name, case_implementation, shared_evaluator), shared_evaluator)) is None for identifier, (resource, name, case_implementation, shared_evaluator) in changed_shared.items())
-    print("test-tutor-cache-runner: warm hits, one-case miss execution, aggregate equivalence, and policy/shared-dependency invalidation passed")
+        mutation_root = temporary / "resource-mutation-root"
+        source_relative = Path("tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift")
+        source_copy = mutation_root / source_relative
+        source_copy.parent.mkdir(parents=True)
+        shutil.copy2(root / source_relative, source_copy)
+        resource_relative = Path("research/community_knowledge/packages/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model/knowledge_candidates/strategies.jsonl")
+        resource_copy = mutation_root / resource_relative
+        resource_copy.parent.mkdir(parents=True)
+        shutil.copy2(root / resource_relative, resource_copy)
+        before_resource_mutation = list_contexts(binary, mutation_root)
+        resource_copy.write_text(resource_copy.read_text() + "\n")
+        after_resource_mutation = list_contexts(binary, mutation_root)
+        assert before_resource_mutation.keys() == after_resource_mutation.keys() == listed.keys()
+        assert all(before_resource_mutation[identifier][2] == after_resource_mutation[identifier][2] for identifier in listed), "resource mutation changed a per-case body hash"
+        assert all(before_resource_mutation[identifier][3] != after_resource_mutation[identifier][3] for identifier in listed), "Package 15 strategies mutation did not invalidate the shared execution closure"
+        mutation_cache = temporary / "resource-mutation-cache"
+        for identifier, (resource, name, case_implementation, shared_evaluator) in before_resource_mutation.items():
+            value = semantic(contract, identifier, resource, name, case_implementation, shared_evaluator)
+            cache.store(mutation_cache, components(contract, identifier, value, shared_evaluator), {"case_id": identifier, "semantic_input_hash": value, "outcome": "passed", "result_hash": digest(f"{identifier}|passed|{value}")})
+        assert all(cache.load(mutation_cache, components(contract, identifier, semantic(contract, identifier, resource, name, case_implementation, shared_evaluator), shared_evaluator)) is None for identifier, (resource, name, case_implementation, shared_evaluator) in after_resource_mutation.items()), "Package 15 strategies mutation reused a stale cache entry"
+    print("test-tutor-cache-runner: warm hits, one-case miss execution, aggregate equivalence, and policy/shared/Package-15-resource invalidation passed")
 
 
 if __name__ == "__main__":

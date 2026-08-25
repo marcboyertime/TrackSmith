@@ -552,7 +552,20 @@ private final class Suite {
 
     private func executionClosureHash(redactedTutorSource: String) -> String {
         let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
-        let explicit = ["Package.swift", "tools/TutorConversationTests/Resources", "packages", "research/community_knowledge/runtime_projection/p16"]
+        let explicit = [
+            "Package.swift",
+            "tools/TutorConversationTests/Resources",
+            "packages",
+            "research/community_knowledge/packages",
+            "research/community_knowledge/runtime_projection/p16",
+            "project.yml",
+            "plugins/AudioUnit/AudioUnitExtension/Info.plist",
+            "apps/CompanionMacApp/CompanionMacApp.swift",
+            "apps/CompanionMacApp/TutorConversationSessionModel.swift",
+            "apps/CompanionMacApp/TutorConversationView.swift",
+            "apps/CompanionMacApp/SettingsView.swift",
+            "apps/CompanionMacApp/CompanionSessionModel.swift"
+        ]
         var rows = ["tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift|\(sha256(Data(redactedTutorSource.utf8)))"]
         for relative in explicit {
             let url = root.appendingPathComponent(relative)
