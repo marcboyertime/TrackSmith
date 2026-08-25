@@ -44,7 +44,7 @@ def main() -> None:
     try: budget(1, -1); raise AssertionError("negative reserve accepted")
     except ValueError: pass
     logical = __import__("os").cpu_count() or 1
-    if logical > 1: assert budget(MAX_TUTOR_WORKERS, logical - 2) < budget(MAX_TUTOR_WORKERS, 0)
+    if logical > 1: assert budget(MAX_TUTOR_WORKERS, max(1, logical - 2)) < budget(MAX_TUTOR_WORKERS, 0)
     print("test-sharding: LPT tie golden plus missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
 
 def binary_golden(binary: Path) -> None:
