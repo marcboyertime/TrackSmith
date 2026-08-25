@@ -482,7 +482,7 @@ def self_test() -> None:
             return audit(workflows, manifest, repo)
         if closure_chain(32): raise AssertionError("32-file closure was rejected")
         if not closure_chain(33): raise AssertionError("33-file closure was accepted")
-    print("audit-free-compute self-test: 50 rejection classes passed (48 retained plus matrix and recursive-trigger rejection)")
+    print("audit-free-compute self-test: 52 rejection classes passed (48 retained plus matrix, list recursive, scalar recursive, and scalar scheduled rejection)")
 
 
 def main() -> int:

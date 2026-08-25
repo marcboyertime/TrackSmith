@@ -37,6 +37,14 @@ def main() -> None:
         path = Path(directory) / "empty.json"; path.write_text(json.dumps(report(0, 1, [])))
         assert aggregate([path], [])["case_ids"] == []
     empty, fallback = assign([], 8); assert fallback == FALLBACK and len(empty) == 8
+    from cpu_budget import MAX_TUTOR_WORKERS, budget
+    assert budget(MAX_TUTOR_WORKERS, 0) <= MAX_TUTOR_WORKERS
+    try: budget(MAX_TUTOR_WORKERS + 1, 0); raise AssertionError("over-cap worker budget accepted")
+    except ValueError: pass
+    try: budget(1, -1); raise AssertionError("negative reserve accepted")
+    except ValueError: pass
+    logical = __import__("os").cpu_count() or 1
+    if logical > 1: assert budget(MAX_TUTOR_WORKERS, logical - 2) < budget(MAX_TUTOR_WORKERS, 0)
     print("test-sharding: LPT tie golden plus missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
 
 def binary_golden(binary: Path) -> None:
@@ -50,6 +58,8 @@ def binary_golden(binary: Path) -> None:
             output = subprocess.run([str(binary), "--list-tests", "--shard-index", str(index), "--shard-count", str(count)], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()
             actual = [line.split("\t", 1)[0] for line in output]
             assert actual == expected[index], f"Swift/Python assignment mismatch for {index}/{count}"
+    invalid = subprocess.run([str(binary), "--include", "tutor-conversation/01-tool-firewall", "--include", "typo"], cwd=root, capture_output=True, text=True)
+    assert invalid.returncode == 64 and "every --include selector" in invalid.stderr
     print("test-sharding: release-binary Swift/Python assignment golden passed")
 
 _TEMPS: list[tempfile.TemporaryDirectory] = []

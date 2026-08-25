@@ -3,8 +3,10 @@
 from __future__ import annotations
 import argparse, os
 
+MAX_TUTOR_WORKERS = 3
+
 def budget(cap: int, reserve: int = 1) -> int:
-    if cap < 1 or reserve < 0: raise ValueError("invalid CPU budget")
+    if cap < 1 or cap > MAX_TUTOR_WORKERS or reserve < 0: raise ValueError("invalid CPU budget")
     logical = os.cpu_count() or 1
     return max(1, min(cap, max(1, logical - reserve)))
 
