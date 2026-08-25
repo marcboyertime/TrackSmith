@@ -320,7 +320,7 @@ def audit(workflow_dir: pathlib.Path, manifest_path: pathlib.Path, repo_root: pa
         triggers = doc.get("on", doc.get("true", doc.get(True)))
         if triggers == "pull_request_target" or (isinstance(triggers, (list, dict)) and "pull_request_target" in triggers):
             errors.append(f"{workflow}:<workflow>: pull_request_target: forbidden")
-        if isinstance(triggers, (list, dict)) and any(item in triggers for item in ("workflow_run", "repository_dispatch", "schedule")):
+        if (isinstance(triggers, str) and triggers in {"workflow_run", "repository_dispatch", "schedule"}) or (isinstance(triggers, (list, dict)) and any(item in triggers for item in ("workflow_run", "repository_dispatch", "schedule"))):
             errors.append(f"{workflow}:<workflow>: recursive or scheduled trigger is forbidden")
         jobs = doc.get("jobs")
         if not isinstance(jobs, dict) or not jobs:
@@ -390,6 +390,8 @@ def self_test() -> None:
             ("unreviewed-action", good.replace("actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1", "actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1"), manifest_data),
             ("matrix", good.replace("    steps:\n", "    strategy:\n      matrix: { shard: [1, 2] }\n    steps:\n"), manifest_data),
             ("recursive-trigger", good.replace("on: [pull_request]", "on: [workflow_run]"), manifest_data),
+            ("scalar-recursive-trigger", good.replace("on: [pull_request]", "on: workflow_run"), manifest_data),
+            ("scalar-scheduled-trigger", good.replace("on: [pull_request]", "on: schedule"), manifest_data),
         ]
         cache = good + "      - uses: actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1\n"
         malformed = json.loads(json.dumps(manifest_data)); malformed["lanes"].pop()

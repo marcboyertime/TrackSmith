@@ -38,6 +38,8 @@ def aggregate(paths: list[Path], expected_ids: list[str] | None = None) -> dict[
     if len(advertised) != len(set(advertised)):
         raise ValueError("overlapping expected shard assignments")
     universe = sorted(expected_ids) if expected_ids is not None else sorted(advertised)
+    if expected_ids is None and not universe:
+        raise ValueError("empty inferred universe requires an explicit expected case list")
     if sorted(advertised) != universe:
         raise ValueError("missing or unexpected expected case IDs")
     by_id: dict[str, dict[str, Any]] = {}

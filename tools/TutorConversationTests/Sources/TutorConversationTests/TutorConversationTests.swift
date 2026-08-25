@@ -69,11 +69,15 @@ struct TutorConversationTests {
             fputs("error: \(error)\n", stderr)
             Darwin.exit(64)
         }
+        let suite = Suite(selection: selection)
+        if !selection.includes.isEmpty && !suite.hasMatchingInclude() {
+            fputs("error: --include did not match an ordinary test ID\n", stderr)
+            Darwin.exit(64)
+        }
         if selection.listOnly {
-            Suite.printOrdinaryTestList()
+            suite.printSelectedTestList()
             return
         }
-        let suite = Suite(selection: selection)
         if CommandLine.arguments.contains("package6-diagnostics") {
             await suite.runPackageSixDiagnostic()
         } else if CommandLine.arguments.contains("candidate-corpus-diagnostics") {
@@ -250,9 +254,7 @@ private final class Suite {
 
     init(selection: Selection = try! Selection(arguments: [])) { self.selection = selection }
 
-    static func printOrdinaryTestList() {
-        for item in ordinaryCases { print("\(item.id)\t\(item.resourceClass)\t\(item.name)") }
-    }
+    func printSelectedTestList() { for item in fixedSelection.cases { print("\(item.id)\t\(item.resourceClass)\t\(item.name)") } }
 
     private nonisolated static let packageSeventeenCloudMaximumTopicConcurrency = 3
     private nonisolated static let packageSeventeenCloudMaximumAttempts = 2
@@ -520,7 +522,7 @@ private final class Suite {
         let costs = costSeconds()
         let useCosts = candidates.allSatisfy { costs[$0.id] != nil }
         if useCosts {
-            candidates.sort { (costs[$0.id]!, $0.id) > (costs[$1.id]!, $1.id) }
+            candidates.sort { costs[$0.id]! == costs[$1.id]! ? $0.id < $1.id : costs[$0.id]! > costs[$1.id]! }
             var bins = Array(repeating: (load: 0.0, items: [CaseSpec]()), count: selection.shardCount)
             for item in candidates {
                 let target = bins.indices.min { left, right in
@@ -540,6 +542,10 @@ private final class Suite {
     private func shouldRun(_ name: String) -> Bool {
         guard let item = caseSpec(name) else { return true }
         return fixedSelection.cases.contains { $0.id == item.id }
+    }
+
+    func hasMatchingInclude() -> Bool {
+        selection.includes.contains { pattern in Self.ordinaryCases.contains { matches($0.id, pattern) } }
     }
 
     func writeReportIfRequested() throws {

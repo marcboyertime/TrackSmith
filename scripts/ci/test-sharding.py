@@ -22,6 +22,10 @@ def main() -> None:
     case_ids = ["a", "b", "c", "d", "e"]
     bins, algorithm = assign(case_ids, 3, {item: index + 1 for index, item in enumerate(case_ids)})
     assert algorithm == ALGORITHM and sorted(item for bucket in bins for item in bucket) == case_ids
+    equal_bins, _ = assign(["case-b", "case-a", "case-c"], 2, {"case-a": 1, "case-b": 1, "case-c": 1})
+    assert equal_bins == [["case-a", "case-c"], ["case-b"]]
+    swift = (Path(__file__).resolve().parents[2] / "tools/TutorConversationTests/Sources/TutorConversationTests/TutorConversationTests.swift").read_text()
+    assert "costs[$0.id]! == costs[$1.id]! ? $0.id < $1.id" in swift
     reports = [report(index, 3, cases) for index, cases in enumerate(bins)]
     assert aggregate([write_temp(item, index) for index, item in enumerate(reports)], case_ids)["case_ids"] == case_ids
     rejects(reports[:-1], "missing shard accepted")
@@ -30,8 +34,12 @@ def main() -> None:
     corrupt = copy.deepcopy(reports); corrupt[0]["cases"][0]["result_hash"] = "bad"; rejects(corrupt, "corrupt accepted")
     failed = copy.deepcopy(reports); failed[0]["cases"][0]["outcome"] = "failed"; rejects(failed, "failure accepted")
     changed = copy.deepcopy(reports); changed[0]["assignment_algorithm"] = "future"; rejects(changed, "algorithm change accepted")
+    rejects([report(0, 1, [])], "inferred empty universe accepted")
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "empty.json"; path.write_text(json.dumps(report(0, 1, [])))
+        assert aggregate([path], [])["case_ids"] == []
     empty, fallback = assign([], 8); assert fallback == FALLBACK and len(empty) == 8
-    print("test-sharding: adversarial missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
+    print("test-sharding: cross-language LPT tie golden plus missing/duplicate/overlap/corrupt/empty/more-shards/failure/algorithm cases passed")
 
 _TEMPS: list[tempfile.TemporaryDirectory] = []
 def write_temp(value: dict, index: int) -> Path:

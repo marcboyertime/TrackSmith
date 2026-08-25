@@ -11,7 +11,9 @@ swift build -c release --product TutorConversationTests
 binary="$(pwd -P)/.build/release/TutorConversationTests"
 [[ -x "$binary" ]] || { echo "error: TutorConversationTests release binary is missing" >&2; exit 1; }
 requested_shards="${TRACKSMITH_TUTOR_SHARDS:-0}"
-safe_workers="$(python3 scripts/ci/cpu_budget.py --cap "${TRACKSMITH_MAX_TUTOR_SHARDS:-3}" --reserve "${TRACKSMITH_TUTOR_RESERVED_CPUS:-0}")"
+configured_cap="${TRACKSMITH_MAX_TUTOR_SHARDS:-3}"
+[[ "$configured_cap" =~ ^[1-9][0-9]*$ ]] && (( configured_cap <= 3 )) || { echo "error: TRACKSMITH_MAX_TUTOR_SHARDS must be an integer from 1 through 3" >&2; exit 64; }
+safe_workers="$(python3 scripts/ci/cpu_budget.py --cap "$configured_cap" --reserve "${TRACKSMITH_TUTOR_RESERVED_CPUS:-0}")"
 if [[ "$requested_shards" =~ ^[1-9][0-9]*$ ]]; then
   shard_count="$requested_shards"
   if (( shard_count > safe_workers )); then shard_count="$safe_workers"; fi
