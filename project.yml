@@ -5,7 +5,9 @@ options:
     macOS: "14.0"
 packages:
   CorePackage:
-    path: .
+    # A tracked local alias fixes the generated Xcode package reference across
+    # detached checkouts whose directory name is intentionally arbitrary.
+    path: TrackSmithCorePackage
 targets:
   CompanionMacApp:
     type: application
