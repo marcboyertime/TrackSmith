@@ -6,6 +6,12 @@ gate status, or dated evidence record.
 
 ## Active implementation priority: LLM-first TrackSmith Tutor
 
+Package 019 adds a frozen evaluation-only quality suite and deterministic quality
+reports around the existing LLM-first Tutor. This is a calibration checkpoint, not
+evidence that a cloud model, installed app, Logic session, audio listener, or owner
+has evaluated the current product; those rungs require separately recorded consent.
+See [Package 019](PACKAGE_019_TUTOR_QUALITY.md).
+
 The primary product is now a natural, persistent production conversation rather
 than a deterministic answer renderer or processing generator. The north star is
 [`TRACKSMITH_TUTOR_NORTH_STAR.md`](TRACKSMITH_TUTOR_NORTH_STAR.md); implementation

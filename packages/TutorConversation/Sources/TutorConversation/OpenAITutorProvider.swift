@@ -361,12 +361,13 @@ public struct OpenAITutorProvider: TutorConversationProvider, Sendable {
                     "listen_for": ["type": "string"],
                     "why": ["type": "string"],
                     "risk": ["type": "string"],
+                    "stop_condition": ["type": "string"],
                     "undo": ["type": "string"],
                     "visual_target_query": ["type": ["string", "null"]],
                 ],
                 "required": [
                     "title", "logic_location", "action", "starting_range", "listen_for",
-                    "why", "risk", "undo", "visual_target_query",
+                    "why", "risk", "stop_condition", "undo", "visual_target_query",
                 ],
                 "additionalProperties": false,
             ]

@@ -13,6 +13,11 @@ xcuserdata/
 fixtures/generated/*
 !fixtures/generated/.gitkeep
 *.jsonl
+# Reviewed Tier-B General Tutor source inputs. These are structured original
+# synthesis/provenance records, not local raw source text; clean checkouts need
+# them to reproduce the checked-in GeneralTutorKnowledge output.
+!research/knowledge/PRODUCER_JUDGMENT_CORPUS.jsonl
+!research/knowledge/PRODUCER_JUDGMENT_CORPUS_PART_B.jsonl
 # This immutable, shipped candidate package is intentionally versioned. Keep
 # every other JSONL corpus ignored.
 !research/knowledge/community-vocal-quantization-v1/corpus/*.jsonl

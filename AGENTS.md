@@ -1,5 +1,9 @@
 # TrackSmith Agent Policy
 
+## Free-compute CI protocol
+
+For deterministic, no-secret, non-Logic validation, use the versioned lane contract in `ci/tracksmith_compute_lanes.json` and its stable `scripts/ci/` entry points. Preserve the `Tutor integrity / fast-integrity` and `Tutor macOS Swift / swift` required-check surfaces. Only `ubuntu-24.04` and `macos-15` standard hosted runners are permitted in checked-in workflows; do not add caches, paid/larger/GPU/self-hosted runners, secrets, cloud/model execution, signing/install, private audio, Logic, or listening work to this lane. Run `python3 scripts/ci/audit-free-compute.py` and `--self-test` after workflow changes. Keep artifacts compact, temporary, and three days or less; never upload products, DerivedData, `.build`, databases, private audio, credentials, or provider responses. Follow the durable future-Codex protocol in `docs/FREE_COMPUTE_STRATEGY.md`; package additions must assign work to an existing lane or update the manifest and audit contract first.
+
 This repository is TrackSmith. Preserve legacy code, package, application, and bundle
 identifiers unless a task explicitly authorizes renaming them.
 

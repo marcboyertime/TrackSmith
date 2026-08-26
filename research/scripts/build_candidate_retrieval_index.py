@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and audit the Package 018 runtime-only candidate retrieval index.
+"""Build and audit the Package 019 runtime-only candidate retrieval index.
 
 The input is the P16-approved projection already materialized as the fifteen
 runtime JSON resources.  This tool is deliberately outside the application
@@ -25,8 +25,8 @@ PROJECTION = ROOT / "research/community_knowledge/reconciliations/tracksmith-cor
 DATABASE = RESOURCES / "CandidateRetrieval.sqlite"
 MANIFEST = RESOURCES / "CandidateRetrieval.manifest.json"
 SCHEMA_VERSION = "package018-candidate-index/1"
-RETRIEVAL_POLICY_VERSION = "package018-bm25-general-rerank/1"
-TOOL_VERSION = "package018-index-builder/1"
+RETRIEVAL_POLICY_VERSION = "package019-bm25-ordered6-domain-diverse/1"
+TOOL_VERSION = "package019-index-builder/1"
 EXPECTED_CARD_COUNT = 6212
 FORBIDDEN_MARKERS = ("tracksmith-corpus-017", "golden", "expected_answer", "expected answer", "fixture_alias", "evaluation_case")
 STOP_TERMS = {"a", "an", "and", "are", "best", "but", "cannot", "control", "detail", "do", "find", "for", "from", "get", "how", "i", "if", "in", "is", "it", "like", "logic", "make", "mix", "my", "need", "not", "of", "or", "should", "so", "the", "this", "to", "too", "what", "when", "why", "with", "wrong"}

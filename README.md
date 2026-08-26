@@ -2,10 +2,15 @@
 
 A native, conversational production tutor designed to stay beside a musician in
 Logic Pro. Tutor is now the primary product: a persistent streaming LLM conversation
-can use bounded reviewed knowledge, exact capture identities, descriptive local
+that can use bounded reviewed knowledge, exact capture identities, descriptive local
 measurements, optional separately consented model audio listening, explicit user
 outcomes, and read-only visible-Logic observation. It teaches and proposes one
 reversible experiment; the musician performs every Logic edit.
+
+Package 019 adds a frozen evaluation-only 240-case quality suite and deterministic
+reporting without putting labels in runtime resources. It does not claim cloud,
+installed-app, Logic, audio-listening, or owner validation without explicit consent;
+see [Package 019 Tutor quality](docs/PACKAGE_019_TUTOR_QUALITY.md).
 
 Phase 2 adds an exact-WAV local waveform specialist and guarded before/after
 authority. Local waveform results are measurements, not model listening; a

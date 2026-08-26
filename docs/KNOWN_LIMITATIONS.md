@@ -268,6 +268,10 @@
 - Candidate-corpus retrieval is compact lexical evidence, not semantic authority.
   It can return unavailable/corrupt/version-mismatch/disabled states, and neither a
   match nor a retrieval score proves a diagnosis, a procedure, or a heard result.
+- Package 019's frozen 240-case suite and deterministic reports do not constitute
+  cloud-model, installed-app, Logic, audio-listening, model-assisted judgment, or
+  owner-listening evidence. Those consent-gated rungs are intentionally recorded as
+  not run until explicitly authorized.
 - Tutor v1 gate T7 is **CLOSED BOUNDED, NOT PASSED**, not pending. Its partial
   Logic Pro 12.3 exercise covered the signed UI and deterministic step flow but
   did not include the owner's real-lesson/perceptual evidence. Broad-tutor owner

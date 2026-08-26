@@ -4,37 +4,77 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('tutor-macos-swift-pr-{0}', github.event.pull_request.number) || format('tutor-macos-swift-{0}-{1}', github.ref_name, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  swift:
+  macos_swift_core:
+    name: macOS Swift core
     runs-on: macos-15
+    timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
-      - name: Release Tutor build and deterministic gates
-        run: |
-          swift build -c release
-          swift run -c release TestRunner
-          swift run -c release TutorConversationTests
-          swift run -c release TutorConversationTests package16-diagnostics
-          swift run -c release TutorConversationTests package16-golden
-          swift run -c release TutorConversationTests package16-performance
-          swift run -c release TutorConversationTests package16-fallback
-          python3 research/scripts/package16-evidence-release.py --audit
-          swift run -c release TutorConversationTests package17-diagnostics
-          swift run -c release TutorConversationTests package17-performance
-          swift run -c release TutorConversationTests package18-diagnostics
-          python3 research/scripts/build_candidate_retrieval_index.py --check
-          python3 research/scripts/package18_audit.py
-      - name: Unsigned app and AU build
-        run: |
-          brew install xcodegen
-          xcodegen generate
-          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme CompanionMacApp -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package018-derived" CODE_SIGNING_ALLOWED=NO build
-          xcodebuild -project LogicAudioAssistant.xcodeproj -scheme AssistantAudioUnitExtension -configuration Release -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/package018-derived" CODE_SIGNING_ALLOWED=NO build
-          test "$(find "$RUNNER_TEMP/package018-derived" -path '*ProductionTutor.bundle/Contents/Resources/*.json' -type f ! -name 'CandidateRetrieval.manifest.json' | wc -l | tr -d ' ')" = 0
-          ! rg -a -i 'tracksmith-corpus-017|expected_answer|fixture_alias|evaluation_case' "$RUNNER_TEMP/package018-derived/Build/Products/Release"
-      - name: Upload bounded P18 evidence
-        uses: actions/upload-artifact@v4
+      # actions/checkout v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Run locally reproducible Swift core lane
+        run: bash scripts/ci/run-macos-swift-core.sh
+
+  macos_tutor:
+    name: macOS Tutor
+    runs-on: macos-15
+    timeout-minutes: 55
+    steps:
+      # actions/checkout v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Run locally reproducible Tutor lane
+        run: bash scripts/ci/run-macos-tutor.sh
+
+  macos_xcode_products:
+    name: macOS Xcode products
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      # actions/checkout v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Run locally reproducible unsigned Xcode product lane
+        run: bash scripts/ci/run-macos-xcode-products.sh
+      - name: Enforce compact evidence artifact budget
+        run: >-
+          python3 scripts/ci/check-artifact-budget.py
+          --seal-output "${{ runner.temp }}/tracksmith-xcode-products/xcode-evidence.zip"
+          "${{ runner.temp }}/tracksmith-xcode-products/package019-ci-receipt.json"
+          "${{ runner.temp }}/tracksmith-xcode-products/xcode-products-report.json"
+      - name: Upload compact Xcode and Package 019 evidence
+        # actions/upload-artifact v7.0.1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: package-018-evidence
-          path: docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json
+          name: package-019-xcode-evidence
+          path: ${{ runner.temp }}/tracksmith-xcode-products/xcode-evidence.zip
+          retention-days: 3
+          if-no-files-found: error
+
+  swift:
+    name: swift
+    if: ${{ always() }}
+    needs: [macos_swift_core, macos_tutor, macos_xcode_products]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Report required lane results
+        run: |
+          {
+            echo '## Tutor macOS Swift aggregate'
+            echo '| Lane | Result |'
+            echo '| --- | --- |'
+            echo '| macos_swift_core | ${{ needs.macos_swift_core.result }} |'
+            echo '| macos_tutor | ${{ needs.macos_tutor.result }} |'
+            echo '| macos_xcode_products | ${{ needs.macos_xcode_products.result }} |'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test '${{ needs.macos_swift_core.result }}' = success
+          test '${{ needs.macos_tutor.result }}' = success
+          test '${{ needs.macos_xcode_products.result }}' = success
