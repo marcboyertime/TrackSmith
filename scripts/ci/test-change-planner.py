@@ -10,6 +10,10 @@ def main() -> None:
     assert plan(["packages/TutorConversation/Sources/TutorConversation/TutorSystemPolicy.swift"], data)["required_lanes"] == ["macos_swift_core", "macos_tutor"]
     assert plan(["research/community_knowledge/packages/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model/knowledge_candidates/strategies.jsonl"], data)["required_lanes"] == ["linux_integrity", "macos_tutor"]
     assert plan(["research/community_knowledge/runtime_projection/p16/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model.json"], data)["required_lanes"] == ["linux_integrity", "macos_tutor"]
+    assert plan(["research/scripts/build_candidate_retrieval_index.py"], data)["required_lanes"] == ["linux_integrity", "linux_retrieval"]
+    assert plan(["research/scripts/package18_audit.py"], data)["required_lanes"] == ["linux_integrity", "linux_retrieval"]
+    assert plan(["research/scripts/package19_quality_suite.py"], data)["required_lanes"] == ["linux_evaluation", "linux_integrity"]
+    assert plan(["packages/ProductionTutor/Sources/ProductionTutor/ProductionTutor.swift"], data)["required_lanes"] == ["linux_retrieval", "macos_swift_core", "macos_tutor", "macos_xcode_au", "macos_xcode_companion"]
     assert plan(["apps/CompanionMacApp/TutorConversationView.swift"], data)["required_lanes"] == ["macos_tutor", "macos_xcode_companion"]
     assert plan(["apps/CompanionApp/Sources/obsolete.swift"], data)["mode"] == "full"
     assert plan(["plugins/AudioUnit/AudioUnitExtension/Info.plist"], data)["required_lanes"] == ["macos_tutor", "macos_xcode_au"]

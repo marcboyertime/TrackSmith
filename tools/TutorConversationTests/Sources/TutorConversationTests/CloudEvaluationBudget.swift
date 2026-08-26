@@ -78,10 +78,12 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         }
     }
 
-    /// Only a completed response with exact cache-classified usage and a
+    /// Only a completed response with complete cache-classified usage and a
     /// documented tier may reduce a reservation. Any other outcome poisons the
     /// ledger so a missing/ambiguous cache classification cannot be reported as
-    /// confirmed provider spend or permit a later request.
+    /// exact provider spend or permit a later request. The integer ledger is
+    /// deliberately a conservative upper bound because cached reads are
+    /// rounded upward from the published fractional microUSD rates.
     func settle(_ reservation: CloudBudgetReservation, completedResponse: [String: Any]) throws {
         guard let model = completedResponse["model"] as? String, model == "gpt-5.6-sol",
               let tier = completedResponse["service_tier"] as? String, tier == "priority",
@@ -142,9 +144,11 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         guard uncachedInput >= 0 && cacheRead >= 0 && cacheWrite >= 0 && output >= 0 else { throw CloudEvaluationBudgetError.invalid("negative token accounting") }
         let rates: (uncached: Int, cacheRead: Int, cacheWrite: Int, output: Int)
         switch tier {
-        // Cache reads are discounted and rounded upward. Cache writes cost
-        // 1.25x uncached input, so reservations use their 10/20 microUSD
-        // rates rather than treating a write as an ordinary input token.
+        // Cached reads are 0.8/1.6 microUSD but this integer-only safety
+        // ledger rounds them upward to 1/2; therefore settled totals remain
+        // conservative cache-classified upper bounds, never exact spend.
+        // Cache writes cost 1.25x uncached input, so reservations use their
+        // 10/20 microUSD rates rather than ordinary input-token rates.
         case "priority": rates = long ? (16, 2, 20, 60) : (8, 1, 10, 40)
         default: throw CloudEvaluationBudgetError.invalid("unsupported completed service tier")
         }
@@ -270,7 +274,7 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         try withLock {
             let ledger = try read()
             let external = ledger.reservations.first(where: { ($0["state"] as? String) == "external_unknown_reserved" }).flatMap { exactInt($0["reserved_microusd"]) } ?? 0
-            return ["schema_version": Self.schema, "pricing_source": Self.pricingSource, "cap_microusd": ledger.cap, "spent_microusd": ledger.spent, "reserved_microusd": ledger.reserved, "external_unknown_hold_microusd": external, "poisoned": ledger.poisoned, "reservation_count": ledger.reservations.count]
+            return ["schema_version": Self.schema, "pricing_source": Self.pricingSource, "provider_spend_status": "cache_classified_conservative_upper_bound_not_exact", "cap_microusd": ledger.cap, "spent_microusd": ledger.spent, "reserved_microusd": ledger.reserved, "external_unknown_hold_microusd": external, "poisoned": ledger.poisoned, "reservation_count": ledger.reservations.count]
         }
     }
 
@@ -337,7 +341,8 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         let cacheLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("cache.json"), capMicroUSD: 300_000, create: true)
         let cached = try cacheLedger.reserve(request: request)
         try cacheLedger.settle(cached, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": cacheUsage(input: 10, output: 1, read: 3, write: 2)])
-        guard (try cacheLedger.snapshotArtifact())["spent_microusd"] as? Int == 103 else { throw CloudEvaluationBudgetError.invalid("cache-classified settlement did not use separate rates") }
+        let cacheSnapshot = try cacheLedger.snapshotArtifact()
+        guard cacheSnapshot["spent_microusd"] as? Int == 103, cacheSnapshot["provider_spend_status"] as? String == "cache_classified_conservative_upper_bound_not_exact" else { throw CloudEvaluationBudgetError.invalid("cache-classified settlement was not a conservative upper bound") }
         for (name, usage) in [
             ("missing", ["input_tokens": 1, "output_tokens": 1]),
             ("malformed", ["input_tokens": 1, "output_tokens": 1, "total_tokens": 2, "input_tokens_details": ["cached_tokens": 2, "cache_write_tokens": 0]]),

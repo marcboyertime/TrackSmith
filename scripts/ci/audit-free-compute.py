@@ -215,10 +215,13 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
             for lane_id, prefixes in semantic_lanes.items():
                 if not isinstance(prefixes, list) or not all(isinstance(prefix, str) and prefix for prefix in prefixes):
                     errors.append(f"semantic-dependencies:{lane_id}: prefixes must be nonempty strings"); continue
-                declared = lane_map[lane_id]["change_paths"]
-                for prefix in prefixes:
-                    if not any(prefix.startswith(path) or path.startswith(prefix) for path in declared):
-                        errors.append(f"semantic-dependencies:{lane_id}: prefix {prefix} is not covered by compute change_paths")
+                declared = set(lane_map[lane_id]["change_paths"])
+                shared = {prefix for prefix in dependencies.get("shared_prefixes", []) if prefix in declared}
+                semantic = set(prefixes)
+                if semantic | shared != declared:
+                    missing = sorted(declared - semantic - shared)
+                    unexpected = sorted(semantic - declared)
+                    errors.append(f"semantic-dependencies:{lane_id}: exact lane paths disagree with compute manifest (missing={missing}, unexpected={unexpected})")
     except (OSError, json.JSONDecodeError, KeyError, TypeError):
         errors.append("semantic-dependencies: unreadable or incompatible with compute manifest")
     return errors
@@ -862,6 +865,16 @@ def self_test() -> None:
             for file in workflows.glob("*.yml"): file.unlink()
             write_manifest(data); write_entrypoints(data); (workflows / f"{name}.yml").write_text(text)
             if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
+        for name, mutate in (
+            ("semantic-path-missing", lambda value: value["lanes"]["linux_retrieval"].remove("research/scripts/package18_audit.py")),
+            ("semantic-path-broader", lambda value: value["lanes"]["macos_tutor"].append("packages/")),
+        ):
+            semantic = json.loads((ROOT / "ci/semantic_dependencies.json").read_text())
+            mutate(semantic)
+            for file in workflows.glob("*.yml"): file.unlink()
+            write_manifest(manifest_data); write_semantic_dependencies(semantic); write_entrypoints(manifest_data); (workflows / f"{name}.yml").write_text(good)
+            if not audit(workflows, manifest, repo): raise AssertionError(f"negative fixture was accepted: {name}")
+        write_semantic_dependencies()
         def reset_safe_fixture() -> None:
             for file in workflows.glob("*.yml"): file.unlink()
             write_manifest(manifest_data); write_entrypoints(manifest_data)
