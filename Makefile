@@ -1,5 +1,5 @@
 P9_ARCHIVE ?= /tmp/tracksmith-package9.pwHKlg/package.zip
-.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report p17-diagnostics p17-performance p17-evaluation p17-live-evaluation p17-cloud-evaluation p17-cloud-health p17-public-audio-evaluation p18-index-check p18-audit p18-diagnostics p19-suite-freeze p19-suite-check p19-diagnostics p19-deterministic p19-retrieval-calibration p19-experiment-completeness p19-long-context p19-forbidden-resource p19-built-resource-scan p19-scanner-self-test p19-receipt-self-test p19-receipt p19-cloud-budget-init p19-cloud-budget-self-test p19-cloud-no-tool p19-cloud-full-tool p19-cloud-repeated-triplets p19-ci native-build native-verify native-install verify
+.PHONY: general-tutor-knowledge-audit community-corpus-check community-automation-preflight community-saturation-transient-preflight community-phase-stereo-panning-check community-editing-layering-check community-gain-bus-loudness-check community-corpus-preflight-selftest build test tutor-conversation-test tutor-audio-intelligence-lab logic-tutor-observation-probe demo demo-audio preview-demo audition vertical-slice project au-host-probe realtime-heap-probe production-language-knowledge-check tutor-procedure-knowledge-check tutor-evaluation general-tutor-knowledge-check general-tutor-knowledge-audit general-tutor-evaluation vocal-evaluation vocal-evaluation-regression vocal-listening-selfcheck p16-golden p16-performance p16-fallback p16-evidence-audit p16-evidence-smoke p16-controlled-fixtures p16-provider-report p17-diagnostics p17-performance p17-evaluation p17-live-evaluation p17-cloud-evaluation p17-cloud-health p17-public-audio-evaluation p18-index-check p18-audit p18-diagnostics p19-suite-freeze p19-suite-check p19-diagnostics p19-deterministic p19-retrieval-calibration p19-experiment-completeness p19-long-context p19-forbidden-resource p19-built-resource-scan p19-scanner-self-test p19-receipt p19-receipt-self-test p19-cloud-budget-init p19-cloud-budget-self-test p19-cloud-no-tool p19-cloud-full-tool p19-cloud-repeated-triplets p19-ci native-build native-verify native-install verify
 
 build:
 	swift build -c release
@@ -221,13 +221,32 @@ tutor-evaluation:
 	swift run -c release ProductionTutorEvaluation research/evaluation/TRACKSMITH_TUTOR_INTENT_CORPUS_V1.json
 
 vocal-evaluation:
-	swift run -c release VocalProductionEvaluation \
+	@set -eu; temporary="$$(mktemp -d)"; trap 'rm -rf "$$temporary"' EXIT; \
+		swift run -c release VocalProductionEvaluation \
+			--corpus research/evaluation/TRACKSMITH_VOCAL_SEMANTIC_CORPUS_V1.json \
+			--failure-map research/evaluation/tracksmith-vocal-v1/failure-map.json \
+			--output "$$temporary/current-report.json" \
+			--source-revision "$$(git rev-parse HEAD)" \
+			--source-tree-state "$$(if test -z "$$(git status --porcelain)"; then echo clean; else echo dirty; fi)" \
+			--toolchain "$$(swift --version | tr '\n' ' ')"; \
+		python3 research/scripts/check-vocal-evaluation-report.py \
+			--actual "$$temporary/current-report.json" \
+			--expected research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json \
+			--corpus research/evaluation/TRACKSMITH_VOCAL_SEMANTIC_CORPUS_V1.json \
+			--failure-map research/evaluation/tracksmith-vocal-v1/failure-map.json
+
+vocal-evaluation-regression:
+	@git diff --quiet -- research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json
+	@before="$$(git hash-object research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json)"; \
+		make vocal-evaluation; \
+		after="$$(git hash-object research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json)"; \
+		test "$$before" = "$$after"; \
+		git diff --quiet -- research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json
+	python3 research/scripts/check-vocal-evaluation-report.py \
+		--expected research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json \
 		--corpus research/evaluation/TRACKSMITH_VOCAL_SEMANTIC_CORPUS_V1.json \
 		--failure-map research/evaluation/tracksmith-vocal-v1/failure-map.json \
-		--output research/evaluation/tracksmith-vocal-v1/offline-evaluation-report-2026-08-08.json \
-		--source-revision "$$(git rev-parse HEAD)" \
-		--source-tree-state "$$(if test -z "$$(git status --porcelain)"; then echo clean; else echo dirty; fi)" \
-		--toolchain "$$(swift --version | tr '\n' ' ')"
+		--self-test
 
 vocal-listening-selfcheck:
 	swift run -c release VocalListeningStudyCLI selfcheck
