@@ -2247,6 +2247,19 @@ private final class Suite {
         let gitIdentity = packageNineteenSourceIdentity(gitRoot)
         try expect(largeDiff.utf8.count > 128 * 1_024 && (gitIdentity["worktree_patch_sha256"] as? String) == sha256(Data(largeDiff.utf8)) && (gitIdentity["commit"] as? String)?.count == 40 && (gitIdentity["index_tree"] as? String)?.count == 40 && !(gitIdentity.values.contains { String(describing: $0).contains(gitRoot.path) }),
                    "P19 provenance deadlocked, truncated a pipe-capacity git diff, or retained a temporary path")
+        let untrackedRuntime = gitRoot.appendingPathComponent("packages/TutorConversation/Sources/Injected.swift")
+        try FileManager.default.createDirectory(at: untrackedRuntime.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try "enum Injected {}".data(using: .utf8)!.write(to: untrackedRuntime)
+        let untrackedIdentity = packageNineteenSourceIdentity(gitRoot)
+        try expect(untrackedIdentity["runtime_input_provenance"] as? String == "unavailable_untracked_runtime_input_or_identity" && !(untrackedIdentity.values.contains { String(describing: $0).contains("Injected.swift") }),
+                   "P19 provenance accepted or exposed an untracked runtime source")
+        try FileManager.default.removeItem(at: untrackedRuntime)
+        let untrackedResource = gitRoot.appendingPathComponent("packages/ProductionTutor/Sources/ProductionTutor/Resources/Injected.sqlite")
+        try FileManager.default.createDirectory(at: untrackedResource.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try Data("fixture".utf8).write(to: untrackedResource)
+        let untrackedResourceIdentity = packageNineteenSourceIdentity(gitRoot)
+        try expect(untrackedResourceIdentity["runtime_input_provenance"] as? String == "unavailable_untracked_runtime_input_or_identity" && !(untrackedResourceIdentity.values.contains { String(describing: $0).contains("Injected.sqlite") }),
+                   "P19 provenance accepted or exposed an untracked SwiftPM runtime resource")
         let lexicalPrompt = fixturePrompts[0]
         let lexicalResponses = [TutorExperienceLevel.noob, .amateur, .pro].map { level in
             PackageSeventeenCloudResponse(prompt: lexicalPrompt, level: level, outcome: .init(text: "A short bounded answer.", metadata: nil, attempts: 1, terminalStatus: "completed", safeFailure: nil))
@@ -2567,6 +2580,9 @@ private final class Suite {
             throw TestFailure(description: "Package 019 cloud harness requires --cloud-text-consent; zero provider requests were sent")
         }
         let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        guard packageNineteenSourceIdentity(repository)["runtime_input_provenance"] as? String == "complete_tracked_runtime_inputs" else {
+            throw TestFailure(description: "Package 019 cloud harness requires complete tracked runtime/executable/toolchain provenance; zero provider requests were sent")
+        }
         let configuration = TutorProviderConfiguration(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true, maximumOutputTokens: 5_000)
         try expect(Self.packageSeventeenCloudConfigurationIsPinned(configuration), "P19 cloud harness requires gpt-5.6-sol, high effort, and priority service tier")
         let prompts = try packageNineteenCloudPrompts(repository: repository)
@@ -3488,7 +3504,29 @@ private final class Suite {
     }
 
     private func packageNineteenSourceIdentity(_ repository: URL) -> [String: Any] {
-        ["commit": packageNineteenGit(repository, ["rev-parse", "HEAD"]) ?? "unavailable", "index_tree": packageNineteenGit(repository, ["write-tree"]) ?? "unavailable", "worktree_patch_sha256": packageNineteenGit(repository, ["diff", "--no-ext-diff", "--binary", "HEAD"]).map { sha256(Data($0.utf8)) } ?? "unavailable", "boundary": "Commit, staged-tree, and worktree-patch fingerprints disambiguate dirty local state without recording host paths or untracked names."]
+        // These are every SwiftPM manifest, target-source, and resource root
+        // consumed by the P19 executable cloud harness. Any untracked input
+        // under them makes new cloud evidence fail closed; the artifact records
+        // only its status, never a local path or filename.
+        let runtimeInputPathspecs = [
+            "Package.swift",
+            ":(glob)tools/TutorConversationTests/**",
+            ":(glob)packages/TutorConversation/**",
+            ":(glob)packages/ProductionTutor/Sources/ProductionTutor/**",
+        ]
+        let untracked = packageNineteenGit(repository, ["status", "--porcelain=v1", "--untracked-files=all", "--ignored", "--"] + runtimeInputPathspecs)
+        let executableHash = CommandLine.arguments.first.flatMap { try? sha256(Data(contentsOf: URL(fileURLWithPath: $0))) } ?? "unavailable"
+        let toolchain = packageNineteenCommand("/usr/bin/xcrun", ["swiftc", "--version"], repository: repository).map { sha256(Data($0.utf8)) } ?? "unavailable"
+        return ["commit": packageNineteenGit(repository, ["rev-parse", "HEAD"]) ?? "unavailable", "index_tree": packageNineteenGit(repository, ["write-tree"]) ?? "unavailable", "worktree_patch_sha256": packageNineteenGit(repository, ["diff", "--no-ext-diff", "--binary", "HEAD"]).map { sha256(Data($0.utf8)) } ?? "unavailable", "runtime_input_provenance": (untracked?.isEmpty == true && executableHash != "unavailable" && toolchain != "unavailable") ? "complete_tracked_runtime_inputs" : "unavailable_untracked_runtime_input_or_identity", "executable_sha256": executableHash, "swift_toolchain_sha256": toolchain, "boundary": "Commit, staged-tree, worktree-patch, executable, and toolchain fingerprints are path-free; untracked runtime inputs fail closed."]
+    }
+
+    private func packageNineteenCommand(_ executable: String, _ arguments: [String], repository: URL) -> String? {
+        let process = Process(); process.executableURL = URL(fileURLWithPath: executable); process.arguments = arguments; process.currentDirectoryURL = repository
+        let output = Pipe(); process.standardOutput = output; process.standardError = FileHandle.nullDevice
+        guard (try? process.run()) != nil else { return nil }
+        let data = output.fileHandleForReading.readDataToEndOfFile(); process.waitUntilExit()
+        guard process.terminationStatus == 0 else { return nil }
+        return String(decoding: data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func packageNineteenGit(_ repository: URL, _ arguments: [String]) -> String? {

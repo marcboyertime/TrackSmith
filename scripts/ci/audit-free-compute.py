@@ -200,6 +200,27 @@ def manifest_errors(manifest: Any, repo_root: pathlib.Path) -> list[str]:
     # governance process must resolve any legitimate policy change first.
     if manifest.get("audit_exceptions") != []:
         errors.append("manifest: audit_exceptions must be an empty list")
+    # The local semantic planner and the remote lane manifest must agree on
+    # every routed prefix. Otherwise a path rename can silently omit the
+    # required remote job even while each JSON file remains individually valid.
+    try:
+        dependencies = json.loads((repo_root / "ci/semantic_dependencies.json").read_text())
+        semantic_lanes = dependencies.get("lanes") if isinstance(dependencies, dict) else None
+        lane_map = {lane["id"]: lane for lane in lanes if isinstance(lane, dict) and isinstance(lane.get("id"), str)}
+        if not isinstance(semantic_lanes, dict):
+            errors.append("semantic-dependencies: lanes must be an object")
+        elif set(semantic_lanes) != set(LANE_IDS[:8]):
+            errors.append("semantic-dependencies: lane IDs must match Actions lanes")
+        else:
+            for lane_id, prefixes in semantic_lanes.items():
+                if not isinstance(prefixes, list) or not all(isinstance(prefix, str) and prefix for prefix in prefixes):
+                    errors.append(f"semantic-dependencies:{lane_id}: prefixes must be nonempty strings"); continue
+                declared = lane_map[lane_id]["change_paths"]
+                for prefix in prefixes:
+                    if not any(prefix.startswith(path) or path.startswith(prefix) for path in declared):
+                        errors.append(f"semantic-dependencies:{lane_id}: prefix {prefix} is not covered by compute change_paths")
+    except (OSError, json.JSONDecodeError, KeyError, TypeError):
+        errors.append("semantic-dependencies: unreadable or incompatible with compute manifest")
     return errors
 
 
@@ -746,6 +767,9 @@ def self_test() -> None:
     with tempfile.TemporaryDirectory() as temp:
         root = pathlib.Path(temp); repo = root / "repo"; repo.mkdir(); workflows = root / "workflows"; workflows.mkdir(); manifest = root / "lanes.json"
         def write_manifest(data: dict[str, Any]) -> None: manifest.write_text(json.dumps(data))
+        def write_semantic_dependencies(data: dict[str, Any] | None = None) -> None:
+            target = repo / "ci/semantic_dependencies.json"; target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(json.dumps(data if data is not None else json.loads((ROOT / "ci/semantic_dependencies.json").read_text())))
         def write_entrypoints(data: dict[str, Any]) -> None:
             for lane in data.get("lanes", []):
                 match = ENTRYPOINT_COMMAND.fullmatch(lane.get("command", "")) if isinstance(lane, dict) else None
@@ -757,7 +781,7 @@ def self_test() -> None:
                     else:
                         path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf 'safe entrypoint\\n'\n")
             (repo / "scripts/ci/check-artifact-budget.py").write_text((ROOT / "scripts/ci/check-artifact-budget.py").read_text())
-        write_manifest(manifest_data); write_entrypoints(manifest_data); (workflows / "safe.yml").write_text(good)
+        write_manifest(manifest_data); write_semantic_dependencies(); write_entrypoints(manifest_data); (workflows / "safe.yml").write_text(good)
         if audit(workflows, manifest, repo): raise AssertionError("valid fixture was rejected")
         cases: list[tuple[str, str, dict[str, Any]]] = [
             ("paid-runner", good.replace("ubuntu-24.04", "ubuntu-latest"), manifest_data),
@@ -776,6 +800,7 @@ def self_test() -> None:
         ]
         cache = good + "      - uses: actions/cache@3d3c42e5aac5ba805825da76410c181273ba90b1\n"
         malformed = json.loads(json.dumps(manifest_data)); malformed["lanes"].pop()
+        semantic_lane_drift = json.loads(json.dumps(manifest_data)); next(lane for lane in semantic_lane_drift["lanes"] if lane["id"] == "macos_xcode_companion")["change_paths"] = ["apps/CompanionApp/"]
         expired = json.loads(json.dumps(manifest_data)); expired["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-01","expires_on":"2026-08-02"}]
         bad_exception = json.loads(json.dumps(manifest_data)); bad_exception["audit_exceptions"] = [{"workflow":"safe.yml","job":"check","rule":"runner","reason":"fixture","owner":"owner","reviewed_on":"2026-08-23"}]
         soft_budget_true = json.loads(json.dumps(manifest_data)); soft_budget_true["cache_policy"]["soft_budget_bytes"] = True
@@ -787,6 +812,7 @@ def self_test() -> None:
         cases.extend([
             ("cache-disabled", cache, manifest_data),
             ("missing-lane", good, malformed),
+            ("semantic-lane-drift", good, semantic_lane_drift),
             ("expired-exception", good, expired),
             ("malformed-exception", good, bad_exception),
             ("soft-budget-true", good, soft_budget_true),

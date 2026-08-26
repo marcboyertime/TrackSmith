@@ -11,6 +11,7 @@ def main() -> None:
     assert plan(["research/community_knowledge/packages/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model/knowledge_candidates/strategies.jsonl"], data)["required_lanes"] == ["linux_integrity", "macos_tutor"]
     assert plan(["research/community_knowledge/runtime_projection/p16/tracksmith-corpus-015-midi-cc-piano-roll-bounce-freeze-pdc-object-model.json"], data)["required_lanes"] == ["linux_integrity", "macos_tutor"]
     assert plan(["apps/CompanionMacApp/TutorConversationView.swift"], data)["required_lanes"] == ["macos_tutor", "macos_xcode_companion"]
+    assert plan(["apps/CompanionApp/Sources/obsolete.swift"], data)["mode"] == "full"
     assert plan(["plugins/AudioUnit/AudioUnitExtension/Info.plist"], data)["required_lanes"] == ["macos_tutor", "macos_xcode_au"]
     assert plan(["tools/TutorConversationTests/Resources/example.json"], data)["required_lanes"] == ["macos_tutor"]
     assert plan(["Package.swift"], data)["mode"] == "full"

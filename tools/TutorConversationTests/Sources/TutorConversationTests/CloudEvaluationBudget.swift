@@ -78,17 +78,16 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         }
     }
 
-    /// Only a completed response with exact usage and a documented tier may
-    /// reduce a reservation. Any other outcome deliberately keeps it.
+    /// Only a completed response with exact cache-classified usage and a
+    /// documented tier may reduce a reservation. Any other outcome poisons the
+    /// ledger so a missing/ambiguous cache classification cannot be reported as
+    /// confirmed provider spend or permit a later request.
     func settle(_ reservation: CloudBudgetReservation, completedResponse: [String: Any]) throws {
         guard let model = completedResponse["model"] as? String, model == "gpt-5.6-sol",
               let tier = completedResponse["service_tier"] as? String, tier == "priority",
-              let usage = completedResponse["usage"] as? [String: Any],
-              let input = exactInt(usage["input_tokens"]), let output = exactInt(usage["output_tokens"]),
-              input >= 0, output >= 0 else { try poison(); return }
-        let long = input > 272_000
+              let usage = exactUsage(completedResponse["usage"]) else { try poison(); return }
         let actual: Int
-        do { actual = try cost(input: input, output: output, long: long, tier: tier) }
+        do { actual = try cost(uncachedInput: usage.uncachedInput, cacheRead: usage.cacheRead, cacheWrite: usage.cacheWrite, output: usage.output, long: usage.input > 272_000, tier: tier) }
         catch { try poison(); return }
         guard actual <= reservation.microUSD else { try poison(); return }
         try withLock {
@@ -113,21 +112,49 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
             throw CloudEvaluationBudgetError.invalid("unsupported model, tier, or maximum output pricing plan")
         }
         let input = request.body.count
-        return (try cost(input: input, output: output, long: input > 272_000), input, output)
+        // Request bytes bound the input token count conservatively. Before the
+        // response discloses cache classes, reserve every input unit at the
+        // highest cache-write rate rather than assuming a cache hit.
+        return (try cost(uncachedInput: 0, cacheRead: 0, cacheWrite: input, output: output, long: input > 272_000), input, output)
     }
 
-    private func cost(input: Int, output: Int, long: Bool, tier: String = "priority") throws -> Int {
-        guard input >= 0 && output >= 0 else { throw CloudEvaluationBudgetError.invalid("negative token accounting") }
-        let rates: (Int, Int)
+    private struct ExactUsage {
+        let input: Int; let uncachedInput: Int; let cacheRead: Int; let cacheWrite: Int; let output: Int
+    }
+
+    private func exactUsage(_ value: Any?) -> ExactUsage? {
+        guard let usage = value as? [String: Any],
+              let input = exactInt(usage["input_tokens"]), let output = exactInt(usage["output_tokens"]),
+              let total = exactInt(usage["total_tokens"]),
+              let details = usage["input_tokens_details"] as? [String: Any],
+              Set(details.keys) == Set(["cached_tokens", "cache_creation_tokens"]),
+              let cacheRead = exactInt(details["cached_tokens"]), let cacheWrite = exactInt(details["cache_creation_tokens"]),
+              input >= 0, output >= 0, cacheRead >= 0, cacheWrite >= 0,
+              cacheRead <= input, cacheWrite <= input - cacheRead else { return nil }
+        let (sum, overflow) = input.addingReportingOverflow(output)
+        guard !overflow else { return nil }
+        guard total == sum else { return nil }
+        let uncached = input - cacheRead - cacheWrite
+        return .init(input: input, uncachedInput: uncached, cacheRead: cacheRead, cacheWrite: cacheWrite, output: output)
+    }
+
+    private func cost(uncachedInput: Int, cacheRead: Int, cacheWrite: Int, output: Int, long: Bool, tier: String = "priority") throws -> Int {
+        guard uncachedInput >= 0 && cacheRead >= 0 && cacheWrite >= 0 && output >= 0 else { throw CloudEvaluationBudgetError.invalid("negative token accounting") }
+        let rates: (uncached: Int, cacheRead: Int, cacheWrite: Int, output: Int)
         switch tier {
-        case "priority": rates = long ? (16, 60) : (8, 40) // Fast pricing.
+        // Cache reads are discounted; writes are reserved at the documented
+        // worst input rate. Integer microUSD rounds the discounted read upward.
+        case "priority": rates = long ? (16, 2, 16, 60) : (8, 1, 8, 40)
         default: throw CloudEvaluationBudgetError.invalid("unsupported completed service tier")
         }
-        let (inputRate, outputRate) = rates
-        let (inputCost, inputOverflow) = input.multipliedReportingOverflow(by: inputRate)
-        let (outputCost, outputOverflow) = output.multipliedReportingOverflow(by: outputRate)
-        let (total, totalOverflow) = inputCost.addingReportingOverflow(outputCost)
-        guard !inputOverflow && !outputOverflow && !totalOverflow else { throw CloudEvaluationBudgetError.invalid("cost overflow") }
+        let terms = [(uncachedInput, rates.uncached), (cacheRead, rates.cacheRead), (cacheWrite, rates.cacheWrite), (output, rates.output)]
+        var total = 0
+        for (tokens, rate) in terms {
+            let (cost, costOverflow) = tokens.multipliedReportingOverflow(by: rate)
+            let (next, totalOverflow) = total.addingReportingOverflow(cost)
+            guard !costOverflow && !totalOverflow else { throw CloudEvaluationBudgetError.invalid("cost overflow") }
+            total = next
+        }
         return total
     }
 
@@ -250,6 +277,24 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         try withLock { var ledger = try read(); ledger.poisoned = true; try write(ledger) }
     }
 
+    /// A forwarded request whose stream did not yield a trustworthy completed
+    /// response keeps its reservation and closes the ledger to later requests.
+    /// This prevents a partial or malformed SSE stream from being mistaken for
+    /// cache-classified spend while preserving the conservative reservation.
+    func failClosed(_ reservation: CloudBudgetReservation) throws {
+        try withLock {
+            var ledger = try read()
+            guard let index = ledger.reservations.firstIndex(where: {
+                ($0["id"] as? String) == reservation.id && ($0["state"] as? String) == "reserved"
+            }), let reserved = ledger.reservations[index]["reserved_microusd"] as? Int,
+               reserved == reservation.microUSD else {
+                throw CloudEvaluationBudgetError.invalid("unsettled reservation is missing")
+            }
+            ledger.poisoned = true
+            try write(ledger)
+        }
+    }
+
     static func selfTest() async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("tracksmith-p19-budget-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: root) }
@@ -265,28 +310,56 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         let guarded = CloudBudgetedTutorTransport(base: counter, ledger: ledger)
         let body = try JSONSerialization.data(withJSONObject: ["model": "gpt-5.6-sol", "service_tier": "priority", "max_output_tokens": 5_000], options: [.sortedKeys])
         let request = TutorStreamingHTTPRequest(url: OpenAITutorProvider.endpoint, headers: [:], body: body, timeoutSeconds: 1)
-        _ = try await guarded.stream(request)
+        let incomplete = try await guarded.stream(request)
+        for try await _ in incomplete.lines {}
+        guard (try ledger.snapshotArtifact())["poisoned"] as? Bool == true else {
+            throw CloudEvaluationBudgetError.invalid("missing completed response did not close ledger")
+        }
         do { _ = try await guarded.stream(request); throw CloudEvaluationBudgetError.invalid("cap test unexpectedly forwarded") }
         catch is CloudEvaluationBudgetError {}
         guard counter.count == 1 else { throw CloudEvaluationBudgetError.invalid("reservation over cap reached forwarding transport") }
+        func cacheUsage(input: Int, output: Int, read: Int, write: Int) -> [String: Any] {
+            var usage: [String: Any] = [
+                "input_tokens": input,
+                "output_tokens": output,
+                "input_tokens_details": ["cached_tokens": read, "cache_creation_tokens": write],
+            ]
+            let (total, overflow) = input.addingReportingOverflow(output)
+            if !overflow { usage["total_tokens"] = total }
+            return usage
+        }
         let settledLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("settled.json"), capMicroUSD: 300_000, create: true)
         let settled = try settledLedger.reserve(request: request)
-        try settledLedger.settle(settled, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": ["input_tokens": 1, "output_tokens": 1]])
+        try settledLedger.settle(settled, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": cacheUsage(input: 1, output: 1, read: 0, write: 0)])
         let settledSnapshot = try settledLedger.snapshotArtifact()
         guard settledSnapshot["spent_microusd"] as? Int == 48, settledSnapshot["reserved_microusd"] as? Int == 0 else { throw CloudEvaluationBudgetError.invalid("priority settlement did not reduce reservation") }
+        let cacheLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("cache.json"), capMicroUSD: 300_000, create: true)
+        let cached = try cacheLedger.reserve(request: request)
+        try cacheLedger.settle(cached, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": cacheUsage(input: 10, output: 1, read: 3, write: 2)])
+        guard (try cacheLedger.snapshotArtifact())["spent_microusd"] as? Int == 99 else { throw CloudEvaluationBudgetError.invalid("cache-classified settlement did not use separate rates") }
+        for (name, usage) in [
+            ("missing", ["input_tokens": 1, "output_tokens": 1]),
+            ("malformed", ["input_tokens": 1, "output_tokens": 1, "input_tokens_details": ["cached_tokens": 2, "cache_creation_tokens": 0]]),
+        ] as [(String, [String: Any])] {
+            let invalidLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("\(name).json"), capMicroUSD: 300_000, create: true)
+            let invalidReservation = try invalidLedger.reserve(request: request)
+            try invalidLedger.settle(invalidReservation, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": usage])
+            let invalidSnapshot = try invalidLedger.snapshotArtifact()
+            guard invalidSnapshot["poisoned"] as? Bool == true, invalidSnapshot["reserved_microusd"] as? Int == invalidReservation.microUSD else { throw CloudEvaluationBudgetError.invalid("\(name) cache usage released a reservation") }
+        }
         let retained = try settledLedger.reserve(request: request)
-        try settledLedger.settle(retained, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "unsupported", "usage": ["input_tokens": 1, "output_tokens": 1]])
+        try settledLedger.settle(retained, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "unsupported", "usage": cacheUsage(input: 1, output: 1, read: 0, write: 0)])
         guard (try settledLedger.snapshotArtifact())["reserved_microusd"] as? Int == retained.microUSD else { throw CloudEvaluationBudgetError.invalid("untrusted usage released reservation") }
         let poisonLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("poison.json"), capMicroUSD: 300_000, create: true)
         let poisonReservation = try poisonLedger.reserve(request: request)
-        try poisonLedger.settle(poisonReservation, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": ["input_tokens": 9_999_999, "output_tokens": 9_999_999]])
+        try poisonLedger.settle(poisonReservation, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": cacheUsage(input: 9_999_999, output: 9_999_999, read: 0, write: 0)])
         let poisonedCounter = CloudBudgetCountingTransport()
         do { _ = try await CloudBudgetedTutorTransport(base: poisonedCounter, ledger: poisonLedger).stream(request); throw CloudEvaluationBudgetError.invalid("poisoned ledger forwarded") }
         catch is CloudEvaluationBudgetError {}
         guard poisonedCounter.count == 0, (try poisonLedger.snapshotArtifact())["poisoned"] as? Bool == true else { throw CloudEvaluationBudgetError.invalid("poisoned ledger allowed a later forward") }
         let overflowLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("overflow.json"), capMicroUSD: 300_000, create: true)
         let overflowReservation = try overflowLedger.reserve(request: request)
-        try overflowLedger.settle(overflowReservation, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": ["input_tokens": Int.max, "output_tokens": Int.max]])
+        try overflowLedger.settle(overflowReservation, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": cacheUsage(input: Int.max, output: Int.max, read: 0, write: 0)])
         let overflowCounter = CloudBudgetCountingTransport()
         do { _ = try await CloudBudgetedTutorTransport(base: overflowCounter, ledger: overflowLedger).stream(request); throw CloudEvaluationBudgetError.invalid("overflow-poisoned ledger forwarded") }
         catch is CloudEvaluationBudgetError {}
@@ -341,7 +414,13 @@ final class CloudBudgetedTutorTransport: TutorStreamingHTTPTransport, @unchecked
 
     func stream(_ request: TutorStreamingHTTPRequest) async throws -> TutorStreamingHTTPResponse {
         let reservation = try ledger.reserve(request: request)
-        let response = try await base.stream(request)
+        let response: TutorStreamingHTTPResponse
+        do {
+            response = try await base.stream(request)
+        } catch {
+            try? ledger.failClosed(reservation)
+            throw error
+        }
         let wrapped = AsyncThrowingStream<String, Error> { continuation in
             Task {
                 var completed: [String: Any]?
@@ -353,9 +432,17 @@ final class CloudBudgetedTutorTransport: TutorStreamingHTTPTransport, @unchecked
                         }
                         continuation.yield(line)
                     }
-                    if let completed { try ledger.settle(reservation, completedResponse: completed) }
+                    guard let completed else {
+                        try ledger.failClosed(reservation)
+                        continuation.finish()
+                        return
+                    }
+                    try ledger.settle(reservation, completedResponse: completed)
                     continuation.finish()
-                } catch { continuation.finish(throwing: error) }
+                } catch {
+                    try? ledger.failClosed(reservation)
+                    continuation.finish(throwing: error)
+                }
             }
         }
         return .init(statusCode: response.statusCode, headers: response.headers, lines: wrapped)

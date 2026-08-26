@@ -69,14 +69,15 @@ def pool(con: sqlite3.Connection, ts: list[str], conjunction: bool) -> list[dict
     return [{"id": x[0], "package_id": x[1], "question_key": x[2], "domain": x[3], "category": x[4], "primary_terms": set(x[5].split()), "facet_terms": set(x[6].split()), "context_terms": set(x[7].split()), "bm25": x[8]} for x in con.execute(sql, (expression,))]
 
 def select_final(ordered: list[dict], limit: int = 4) -> list[dict]:
-    """Mirror Swift's question-key consumption before domain/package rejection."""
+    """Mirror Swift's transactional P19 selection state transition."""
     selected, questions, domains, package_counts = [], set(), set(), {}
     for item in ordered:
-        if item["question_key"] in questions:
+        # Every constraint is checked against the prior state. A rejected
+        # candidate cannot consume its question key, domain, or package quota.
+        if (item["question_key"] in questions or item["domain"] in domains
+                or package_counts.get(item["package_id"], 0) >= 2):
             continue
         questions.add(item["question_key"])
-        if item["domain"] in domains or package_counts.get(item["package_id"], 0) >= 2:
-            continue
         domains.add(item["domain"])
         package_counts[item["package_id"]] = package_counts.get(item["package_id"], 0) + 1
         selected.append(item)
@@ -85,13 +86,18 @@ def select_final(ordered: list[dict], limit: int = 4) -> list[dict]:
     return selected
 
 def selection_contract_check() -> bool:
-    """Guard the intentionally non-obvious Swift loop ordering without a fixture."""
+    """Label-free regression for rejected-candidate state consumption."""
     rows = [
         {"id": "first", "question_key": "first", "domain": "occupied", "package_id": "p1"},
         {"id": "consume", "question_key": "shared", "domain": "occupied", "package_id": "p2"},
         {"id": "would-diverge", "question_key": "shared", "domain": "available", "package_id": "p2"},
     ]
-    return [row["id"] for row in select_final(rows)] == ["first"]
+    selected = select_final(rows)
+    return ([row["id"] for row in selected] == ["first", "would-diverge"]
+            and len({row["question_key"] for row in selected}) == len(selected)
+            and len({row["domain"] for row in selected}) == len(selected)
+            and all(sum(row["package_id"] == package for row in selected) <= 2
+                    for package in {row["package_id"] for row in selected}))
 
 def indexed(con: sqlite3.Connection, text: str, details: bool = False) -> dict:
     ts = normalized_terms(text)
