@@ -308,7 +308,7 @@ ARTIFACT_PATHS={'suite':SUITE,'manifest':MANIFEST,'candidate_index':INDEX,'candi
 REQUIRED_VALIDATION_KEYS={'suite_check','forbidden_runtime_resource_scan','retrieval_mirror_measurement','swift_package19_diagnostic','live_cloud_evidence_validation','live_cloud_evidence_tamper_regression'}
 SWIFT_DIAGNOSTIC_CLEAN_CHECKOUT='pass_clean_checkout_unbound_host_identity'
 TRACKED_RECEIPT_RUNTIME_EXECUTION='clean_checkout_runtime_sources_unbound_host_execution'
-RUNTIME_INPUT_PATHS=('Package.swift','Package.resolved','.swiftpm/Package.resolved',':(glob)tools/TutorConversationTests/**',':(glob)packages/CAtomics/**',':(glob)packages/PlanSchema/Sources/**',':(glob)packages/DSPCore/Sources/**',':(glob)packages/AudioAnalysis/Sources/**',':(glob)packages/StateStore/Sources/**',':(glob)packages/AgentCore/Sources/**',':(glob)packages/ProductionIntelligence/Sources/**',':(glob)packages/ProductionTutor/Sources/**',':(glob)packages/TutorConversation/Sources/**',':(glob)packages/TutorLogicObserver/Sources/**')
+RUNTIME_INPUT_PATHS=(':(top)Package.swift',':(top)Package.resolved',':(top).swiftpm/Package.resolved',':(top,glob)tools/TutorConversationTests/**',':(top,glob)packages/CAtomics/**',':(top,glob)packages/PlanSchema/Sources/**',':(top,glob)packages/DSPCore/Sources/**',':(top,glob)packages/AudioAnalysis/Sources/**',':(top,glob)packages/StateStore/Sources/**',':(top,glob)packages/AgentCore/Sources/**',':(top,glob)packages/ProductionIntelligence/Sources/**',':(top,glob)packages/ProductionTutor/Sources/**',':(top,glob)packages/TutorConversation/Sources/**',':(top,glob)packages/TutorLogicObserver/Sources/**')
 OPTIONAL_VALIDATION_KEYS={'installed_bundle_resource_scan','AudioUnitHostProbe'}
 
 def index_entries(repository=ROOT):
@@ -358,7 +358,11 @@ def generation_preflight(repository=ROOT):
 def tracked_receipt_runtime_execution(repository=ROOT):
  result=subprocess.run(['git','status','--porcelain=v1','--untracked-files=all','--ignored','--',*RUNTIME_INPUT_PATHS],cwd=repository,capture_output=True,text=True)
  if result.returncode:raise ValueError('P19 tracked receipt runtime provenance is unavailable')
- if any(line.startswith(('?? ','!! ')) for line in result.stdout.splitlines()):raise ValueError('P19 tracked receipt runtime provenance has untracked or ignored runtime input')
+ # Finder metadata is never a SwiftPM source/resource input. Everything else
+ # under the complete, root-anchored closure is dirty input and invalidates the
+ # clean-checkout diagnostic claim, including tracked index/worktree changes.
+ lines=[line for line in result.stdout.splitlines() if not line[3:].endswith('/.DS_Store')]
+ if lines:raise ValueError('P19 tracked receipt runtime provenance has dirty, untracked, or ignored runtime input')
  return TRACKED_RECEIPT_RUNTIME_EXECUTION
 
 def complete_validation(validation):
@@ -397,9 +401,12 @@ def artifact_hashes(bundle=None,repository=ROOT):
  if bundle is not None:hashes['built_bundle_inventory']=bundle_inventory_hash(bundle)
  return hashes
 
-def valid_receipt(path=RECEIPT,bundle=None):
+def valid_receipt(path=RECEIPT,bundle=None,repository=ROOT):
  try:receipt=json.loads(path.read_text())
  except (OSError,json.JSONDecodeError):return None
+ try:
+  if tracked_receipt_runtime_execution(repository)!=TRACKED_RECEIPT_RUNTIME_EXECUTION:return None
+ except ValueError:return None
  if receipt.get('schema')!='package019.validation-receipt/v1' or receipt.get('candidate_fingerprint')!=candidate_fingerprint():return None
  try:
   if bundle is not None:scan(bundle)
@@ -434,16 +441,26 @@ def receipt_self_test():
   if tracked_receipt_runtime_execution(fixture)!=TRACKED_RECEIPT_RUNTIME_EXECUTION:raise AssertionError('clean runtime provenance fixture rejected')
   unrelated=fixture/'.codex'/'local-state';unrelated.parent.mkdir();unrelated.write_text('ignored by receipt scope')
   if tracked_receipt_runtime_execution(fixture)!=TRACKED_RECEIPT_RUNTIME_EXECUTION:raise AssertionError('unrelated untracked state changed runtime provenance')
-  upstream=fixture/'packages/AudioAnalysis/Sources/AudioAnalysis/Injected.swift';upstream.parent.mkdir(parents=True);upstream.write_text('enum Injected {}')
+  receipt_path=fixture/'receipt.json';put(receipt_path,valid)
+  if valid_receipt(receipt_path,repository=fixture) is None:raise AssertionError('clean runtime receipt rejected')
+  tracked=fixture/'packages/AudioAnalysis/Sources/AudioAnalysis/Tracked.swift';tracked.parent.mkdir(parents=True);tracked.write_text('enum Tracked {}')
+  subprocess.run(['git','add',str(tracked.relative_to(fixture))],cwd=fixture,check=True)
+  subprocess.run(['git','-c','user.name=P19','-c','user.email=p19@example.invalid','commit','-qm','runtime fixture'],cwd=fixture,check=True)
+  tracked.write_text('enum Tracked { case changed }')
+  if valid_receipt(receipt_path,repository=fixture) is not None:raise AssertionError('previously valid receipt survived tracked runtime modification')
+  tracked.write_text('enum Tracked {}')
+  upstream=fixture/'packages/AudioAnalysis/Sources/AudioAnalysis/Injected.swift';upstream.parent.mkdir(parents=True,exist_ok=True);upstream.write_text('enum Injected {}')
   try:tracked_receipt_runtime_execution(fixture)
   except ValueError:pass
   else:raise AssertionError('untracked transitive runtime source was accepted')
+  if valid_receipt(receipt_path,repository=fixture) is not None:raise AssertionError('previously valid receipt survived untracked runtime source')
   upstream.unlink()
   (fixture/'.gitignore').write_text('packages/AudioAnalysis/Sources/AudioAnalysis/Ignored.swift\n')
   ignored=fixture/'packages/AudioAnalysis/Sources/AudioAnalysis/Ignored.swift';ignored.write_text('enum Ignored {}')
   try:tracked_receipt_runtime_execution(fixture)
   except ValueError:pass
   else:raise AssertionError('ignored transitive runtime source was accepted')
+  if valid_receipt(receipt_path,repository=fixture) is not None:raise AssertionError('previously valid receipt survived ignored runtime source')
  with tempfile.TemporaryDirectory(prefix='p19-runtime-provenance-nongit-') as temporary:
   try:tracked_receipt_runtime_execution(pathlib.Path(temporary))
   except ValueError:pass
