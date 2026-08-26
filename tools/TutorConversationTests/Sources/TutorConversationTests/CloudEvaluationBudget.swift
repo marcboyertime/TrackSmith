@@ -127,8 +127,8 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
               let input = exactInt(usage["input_tokens"]), let output = exactInt(usage["output_tokens"]),
               let total = exactInt(usage["total_tokens"]),
               let details = usage["input_tokens_details"] as? [String: Any],
-              Set(details.keys) == Set(["cached_tokens", "cache_creation_tokens"]),
-              let cacheRead = exactInt(details["cached_tokens"]), let cacheWrite = exactInt(details["cache_creation_tokens"]),
+              Set(details.keys) == Set(["cached_tokens", "cache_write_tokens"]),
+              let cacheRead = exactInt(details["cached_tokens"]), let cacheWrite = exactInt(details["cache_write_tokens"]),
               input >= 0, output >= 0, cacheRead >= 0, cacheWrite >= 0,
               cacheRead <= input, cacheWrite <= input - cacheRead else { return nil }
         let (sum, overflow) = input.addingReportingOverflow(output)
@@ -142,9 +142,10 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         guard uncachedInput >= 0 && cacheRead >= 0 && cacheWrite >= 0 && output >= 0 else { throw CloudEvaluationBudgetError.invalid("negative token accounting") }
         let rates: (uncached: Int, cacheRead: Int, cacheWrite: Int, output: Int)
         switch tier {
-        // Cache reads are discounted; writes are reserved at the documented
-        // worst input rate. Integer microUSD rounds the discounted read upward.
-        case "priority": rates = long ? (16, 2, 16, 60) : (8, 1, 8, 40)
+        // Cache reads are discounted and rounded upward. Cache writes cost
+        // 1.25x uncached input, so reservations use their 10/20 microUSD
+        // rates rather than treating a write as an ordinary input token.
+        case "priority": rates = long ? (16, 2, 20, 60) : (8, 1, 10, 40)
         default: throw CloudEvaluationBudgetError.invalid("unsupported completed service tier")
         }
         let terms = [(uncachedInput, rates.uncached), (cacheRead, rates.cacheRead), (cacheWrite, rates.cacheWrite), (output, rates.output)]
@@ -322,7 +323,7 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
             var usage: [String: Any] = [
                 "input_tokens": input,
                 "output_tokens": output,
-                "input_tokens_details": ["cached_tokens": read, "cache_creation_tokens": write],
+                "input_tokens_details": ["cached_tokens": read, "cache_write_tokens": write],
             ]
             let (total, overflow) = input.addingReportingOverflow(output)
             if !overflow { usage["total_tokens"] = total }
@@ -336,10 +337,11 @@ final class CloudEvaluationBudgetLedger: @unchecked Sendable {
         let cacheLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("cache.json"), capMicroUSD: 300_000, create: true)
         let cached = try cacheLedger.reserve(request: request)
         try cacheLedger.settle(cached, completedResponse: ["model": "gpt-5.6-sol", "service_tier": "priority", "usage": cacheUsage(input: 10, output: 1, read: 3, write: 2)])
-        guard (try cacheLedger.snapshotArtifact())["spent_microusd"] as? Int == 99 else { throw CloudEvaluationBudgetError.invalid("cache-classified settlement did not use separate rates") }
+        guard (try cacheLedger.snapshotArtifact())["spent_microusd"] as? Int == 103 else { throw CloudEvaluationBudgetError.invalid("cache-classified settlement did not use separate rates") }
         for (name, usage) in [
             ("missing", ["input_tokens": 1, "output_tokens": 1]),
-            ("malformed", ["input_tokens": 1, "output_tokens": 1, "input_tokens_details": ["cached_tokens": 2, "cache_creation_tokens": 0]]),
+            ("malformed", ["input_tokens": 1, "output_tokens": 1, "total_tokens": 2, "input_tokens_details": ["cached_tokens": 2, "cache_write_tokens": 0]]),
+            ("legacy_cache_creation_tokens", ["input_tokens": 1, "output_tokens": 1, "total_tokens": 2, "input_tokens_details": ["cached_tokens": 0, "cache_creation_tokens": 1]]),
         ] as [(String, [String: Any])] {
             let invalidLedger = try CloudEvaluationBudgetLedger(url: root.appendingPathComponent("\(name).json"), capMicroUSD: 300_000, create: true)
             let invalidReservation = try invalidLedger.reserve(request: request)

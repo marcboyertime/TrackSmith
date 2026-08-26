@@ -536,7 +536,7 @@ def reports(bundle=None):
 
 ## Deterministic result
 
-The frozen evaluation-only suite contains {check()['case_count']} cases ({check()['partitions']}). This report omits live Git, worktree, and host-toolchain fields. Package 017/018 historical evidence remains preserved, with 6,212 runtime Package 001-016 cards and zero P17 runtime records. Receipt status: **{'valid' if receipt else 'missing or mismatched; command outcomes unverified'}**. Current held-out top-1/top-4/no-match precision/no-match recall are **{metric_text(held.get('top1_acceptable'))}/{metric_text(held.get('top4_recall'))}/{metric_text(held.get('no_match_precision'))}/{metric_text(held.get('no_match_recall'))}**; they miss the 0.80/0.95/0.90/0.90 gates. Ambiguity is model-withheld.
+The frozen evaluation-only suite contains {check()['case_count']} cases ({check()['partitions']}). This report omits live Git, worktree, and host-toolchain fields. Package 017 historical JSON, cloud receipts, raw logs, and baseline records remain preserved. `PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json` is a refreshed, versioned compatibility/migration report: its frozen Package 018 baseline fields remain preserved, but the report itself is not byte-immutable. The runtime index retains 6,212 Package 001-016 cards and zero P17 runtime records. Receipt status: **{'valid' if receipt else 'missing or mismatched; command outcomes unverified'}**. Current held-out top-1/top-4/no-match precision/no-match recall are **{metric_text(held.get('top1_acceptable'))}/{metric_text(held.get('top4_recall'))}/{metric_text(held.get('no_match_precision'))}/{metric_text(held.get('no_match_recall'))}**; they miss the 0.80/0.95/0.90/0.90 gates. Ambiguity is model-withheld.
 
 ## Authoritative Swift retrieval comparison
 
