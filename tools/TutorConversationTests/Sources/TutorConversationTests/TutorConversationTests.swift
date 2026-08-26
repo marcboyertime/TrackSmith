@@ -2225,6 +2225,12 @@ private final class Suite {
                    "P19 cloud artifact hash contract omitted the exact ordered 12-prompt suite")
         let gitRoot = temporaryRoot("p19-git-provenance")
         defer { try? FileManager.default.removeItem(at: gitRoot) }
+        let nonGitRoot = temporaryRoot("p19-non-git-provenance")
+        defer { try? FileManager.default.removeItem(at: nonGitRoot) }
+        try FileManager.default.createDirectory(at: nonGitRoot, withIntermediateDirectories: true)
+        let nonGitIdentity = packageNineteenSourceIdentity(nonGitRoot)
+        try expect(nonGitIdentity["runtime_input_provenance"] as? String == "unavailable_untracked_runtime_input_or_identity" && !packageNineteenSourceIdentityIsComplete(nonGitIdentity),
+                   "P19 provenance accepted a failed git-status/non-git source identity")
         try FileManager.default.createDirectory(at: gitRoot, withIntermediateDirectories: true)
         try expect(packageNineteenGit(gitRoot, ["init"]) != nil && packageNineteenGit(gitRoot, ["config", "user.email", "p19@example.invalid"]) != nil && packageNineteenGit(gitRoot, ["config", "user.name", "P19 Fixture"]) != nil,
                    "P19 provenance regression could not initialize its local git fixture")
@@ -2587,7 +2593,8 @@ private final class Suite {
             throw TestFailure(description: "Package 019 cloud harness requires --cloud-text-consent; zero provider requests were sent")
         }
         let repository = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
-        guard packageNineteenSourceIdentity(repository)["runtime_input_provenance"] as? String == "complete_tracked_runtime_inputs" else {
+        let sourceIdentity = packageNineteenSourceIdentity(repository)
+        guard packageNineteenSourceIdentityIsComplete(sourceIdentity) else {
             throw TestFailure(description: "Package 019 cloud harness requires complete tracked runtime/executable/toolchain provenance; zero provider requests were sent")
         }
         let configuration = TutorProviderConfiguration(modelIdentifier: "gpt-5.6-sol", reasoningEffort: .high, serviceTier: .priority, cloudTextConsent: true, maximumOutputTokens: 5_000)
@@ -2671,7 +2678,7 @@ private final class Suite {
             "package": "019",
             "lane": packageNineteenLaneName(lane),
             "lane_semantics": toolsEnabled ? "real TutorConversationEngine + all seven production tools; repeated lane independently repeats this exact path" : "current-policy provider-only comparison with no tools sent",
-            "source_identity": packageNineteenSourceIdentity(repository),
+            "source_identity": sourceIdentity,
             "evaluation_hashes": try packageNineteenEvaluationHashes(repository, prompts: prompts),
             "configuration": ["provider": OpenAITutorProvider().providerIdentifier, "model": configuration.modelIdentifier, "reasoning_effort": configuration.reasoningEffort.rawValue, "service_tier": packageNineteenJSONOrNull(configuration.serviceTier?.rawValue), "maximum_output_tokens": configuration.maximumOutputTokens, "store": false, "cloud_text_consent": "explicit --cloud-text-consent", "audio_present": false, "logic_context": toolsEnabled ? "deterministic injected read-only context" : "historical_p17_no_tool_context_source_vocal_plus_level_only"],
             "counts": ["exact_prompt_count": prompts.count, "prompt_count": prompts.count, "levels": levels.map(\.rawValue), "level_count": levels.count, "repetitions": repetitions, "generation_samples": attempts.count, "provider_request_calls": providerRequestCalls, "tool_enabled_samples": attempts.filter { (($0["tools_sent"] as? [String]) ?? []).isEmpty == false }.count, "supporting_judgments": supportingJudgments.count],
@@ -3532,10 +3539,26 @@ private final class Suite {
             ":(glob)packages/TutorLogicObserver/Sources/**",
         ]
         let runtimeStatus = packageNineteenGit(repository, ["status", "--porcelain=v1", "--untracked-files=all", "--ignored", "--"] + runtimeInputPathspecs)
-        let hasUntrackedRuntimeInput = runtimeStatus?.split(separator: "\n").contains { $0.hasPrefix("?? ") || $0.hasPrefix("!! ") } == true
+        let statusSucceeded = runtimeStatus != nil
+        let hasUntrackedRuntimeInput = runtimeStatus?.split(separator: "\n").contains { $0.hasPrefix("?? ") || $0.hasPrefix("!! ") } ?? true
         let executableHash = CommandLine.arguments.first.flatMap { try? sha256(Data(contentsOf: URL(fileURLWithPath: $0))) } ?? "unavailable"
         let toolchain = packageNineteenCommand("/usr/bin/xcrun", ["swiftc", "--version"], repository: repository).map { sha256(Data($0.utf8)) } ?? "unavailable"
-        return ["commit": packageNineteenGit(repository, ["rev-parse", "HEAD"]) ?? "unavailable", "index_tree": packageNineteenGit(repository, ["write-tree"]) ?? "unavailable", "worktree_patch_sha256": packageNineteenGit(repository, ["diff", "--no-ext-diff", "--binary", "HEAD"]).map { sha256(Data($0.utf8)) } ?? "unavailable", "runtime_input_provenance": (!hasUntrackedRuntimeInput && executableHash != "unavailable" && toolchain != "unavailable") ? "complete_tracked_runtime_inputs" : "unavailable_untracked_runtime_input_or_identity", "executable_sha256": executableHash, "swift_toolchain_sha256": toolchain, "boundary": "Commit, staged-tree, worktree-patch, executable, and toolchain fingerprints are path-free; untracked runtime inputs fail closed."]
+        let provisionalIdentity: [String: Any] = ["commit": packageNineteenGit(repository, ["rev-parse", "HEAD"]) ?? "unavailable", "index_tree": packageNineteenGit(repository, ["write-tree"]) ?? "unavailable", "worktree_patch_sha256": packageNineteenGit(repository, ["diff", "--no-ext-diff", "--binary", "HEAD"]).map { sha256(Data($0.utf8)) } ?? "unavailable", "runtime_input_provenance": "complete_tracked_runtime_inputs", "executable_sha256": executableHash, "swift_toolchain_sha256": toolchain]
+        let complete = statusSucceeded && !hasUntrackedRuntimeInput && packageNineteenSourceIdentityIsComplete(provisionalIdentity)
+        return provisionalIdentity.merging(["runtime_input_provenance": complete ? "complete_tracked_runtime_inputs" : "unavailable_untracked_runtime_input_or_identity", "boundary": "Commit, staged-tree, worktree-patch, executable, and toolchain fingerprints are path-free; untracked runtime inputs or missing identities fail closed."]) { _, replacement in replacement }
+    }
+
+    private func packageNineteenSourceIdentityIsComplete(_ identity: [String: Any]) -> Bool {
+        func hexadecimal(_ key: String, _ count: Int) -> Bool {
+            guard let value = identity[key] as? String, value.utf8.count == count else { return false }
+            return value.utf8.allSatisfy { ($0 >= 48 && $0 <= 57) || ($0 >= 97 && $0 <= 102) }
+        }
+        return identity["runtime_input_provenance"] as? String == "complete_tracked_runtime_inputs"
+            && hexadecimal("commit", 40)
+            && hexadecimal("index_tree", 40)
+            && hexadecimal("worktree_patch_sha256", 64)
+            && hexadecimal("executable_sha256", 64)
+            && hexadecimal("swift_toolchain_sha256", 64)
     }
 
     private func packageNineteenCommand(_ executable: String, _ arguments: [String], repository: URL) -> String? {
