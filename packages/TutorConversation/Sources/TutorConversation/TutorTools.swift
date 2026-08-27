@@ -406,22 +406,18 @@ public struct TutorToolExecutor: Sendable {
         let retrievalQuery = [query, goal, object, priorExperiment, evidenceHint].compactMap { $0 }.joined(separator: " ")
         let rankings: [CommunityCandidateCorpusRankedCard]
         let retrievalOutcome: CandidateRetrievalOutcomeKind
-        let retrievalMode: String
         if let candidateCorpus = loadedCandidateCorpus {
             // Injection is reserved for tests: legacy JSON/token ranking remains
             // a migration oracle and is never constructed by the live path.
             rankings = candidateCorpus.ranked(query: retrievalQuery, filters: filters, limit: 4)
             retrievalOutcome = rankings.isEmpty ? .noMatch : .matches
-            retrievalMode = "legacy_test_oracle"
         } else if let indexedRetriever {
             let outcome = await indexedRetriever.rankedOutcome(query: retrievalQuery, filters: filters, limit: 4)
             rankings = outcome.cards
             retrievalOutcome = outcome.kind
-            retrievalMode = "indexed_bm25_general_rerank_provisional"
         } else {
             rankings = []
             retrievalOutcome = .unavailable
-            retrievalMode = "unavailable"
         }
         if Task.isCancelled { throw TutorConversationError.cancelled }
         guard let ranking = rankings.first else {
@@ -493,7 +489,6 @@ public struct TutorToolExecutor: Sendable {
             "non_processing_possibilities": selected.nonProcessingPossibilities ?? [],
             "evidence_needed": selected.evidenceNeeded ?? [],
             "user_intent": selected.userIntent ?? NSNull(),
-            "retrieval_outcome": retrievalOutcome.rawValue,
             "authoritative_supporting_source_ids": selected.authoritativeSupportingSourceIDs ?? [],
             "primary_research_source_ids": selected.primaryResearchSourceIDs ?? [],
             "professional_practice_source_ids": selected.professionalPracticeSourceIDs,
@@ -533,24 +528,18 @@ public struct TutorToolExecutor: Sendable {
         ["authoritative_supporting_source_ids", "primary_research_source_ids", "professional_practice_source_ids", "discovery_language_source_ids", "standards_source_ids"].forEach { key in
             if let values = payload[key] as? [String] { payload[key] = values.filter(selectedSourceSet.contains) }
         }
+        // Ranked-card diagnostics remain internal evaluation data.  This
+        // projection is the entire model-facing boundary: no score, margin,
+        // mode, overlap, ambiguity, or rank explanation may cross it.
         let summaryMatches: [[String: Any]] = rankings.map { candidate in
             ["domain": candidate.card.domain, "title": candidate.card.title,
-             "score": candidate.score, "first_experiment": candidate.card.recommendedFirstExperiment]
+             "first_experiment": candidate.card.recommendedFirstExperiment]
         }
         let querySHA256 = SHA256.hash(data: Data(retrievalQuery.utf8)).map { String(format: "%02x", $0) }.joined()
         let retrievalID = SHA256.hash(data: Data(("package019-bm25-ordered6-domain-diverse/1|" + querySHA256 + "|" + selectedIDs.joined(separator: ",")).utf8)).map { String(format: "%02x", $0) }.joined()
         let output: [String: Any] = [
-            "query": query, "availability": availability.rawValue, "match": payload, "matches": summaryMatches,
-            "retrieval_mode": retrievalMode,
-            "deduplicated_candidate_count": min(ranking.deduplicatedCandidates, 8),
-            "retrieval_diagnostics": [
-                "top_score": ranking.score,
-                "lexical_overlap": ranking.lexicalOverlap,
-                "lexical_coverage": ranking.lexicalCoverage,
-                "top_margin": ranking.scoreMargin,
-                "ambiguous": ranking.ambiguity,
-            ],
-            "coverage_note": "Bounded unreviewed candidate cards, selected by context and diversity. This is lexical structured retrieval, not completed semantic retrieval. Use it for candidate hypotheses and a reversible experiment only; get exact Logic instructions only from get_logic_procedure.",
+            "query": query, "availability": availability.rawValue, "outcome": retrievalOutcome.rawValue, "match": payload, "matches": summaryMatches,
+            "coverage_note": "Bounded unreviewed candidate cards. Use them only for provisional hypotheses and a reversible experiment; get exact Logic instructions only from get_logic_procedure.",
         ]
         let resultSHA256 = SHA256.hash(data: try JSONSerialization.data(withJSONObject: output, options: [.sortedKeys])).map { String(format: "%02x", $0) }.joined()
         let evidence = TutorEvidenceReference(

@@ -268,6 +268,12 @@ public actor TutorConversationEngine {
         var toolResults: [TutorToolResult] = []
         var experimentIDs: [UUID] = []
         var finalMetadata: TutorProviderMetadata?
+        var candidateSearches = 0
+        var candidateQueries = Set<String>()
+        var candidateDomains = Set<String>()
+        var candidateCards = Set<String>()
+        var candidateSearchClosed = false
+        var candidateClosureSent = false
 
         for _ in 0..<Self.maximumToolRounds {
             if Task.isCancelled { throw TutorConversationError.cancelled }
@@ -332,7 +338,34 @@ public actor TutorConversationEngine {
             for call in calls {
                 guard activeTurnID == assistantMessageID else { throw TutorConversationError.staleResult }
                 continuation.yield(.toolActivity(call.name))
-                let result = try await tools.execute(call, context: context)
+                let result: TutorToolResult
+                if call.name == "search_candidate_corpus" {
+                    let normalized = normalizedCandidateQuery(call.argumentsJSON)
+                    if candidateSearchClosed {
+                        guard !candidateClosureSent else { throw TutorConversationError.toolLimitReached }
+                        candidateClosureSent = true
+                        result = try candidateConvergenceResult(call: call, reason: "terminal_or_no_new_candidate_result")
+                    } else if candidateSearches >= 2 {
+                        throw TutorConversationError.toolLimitReached
+                    } else if candidateQueries.contains(normalized) {
+                        candidateSearchClosed = true
+                        candidateClosureSent = true
+                        result = try candidateConvergenceResult(call: call, reason: "identical_or_semantically_unchanged_query")
+                    } else {
+                        candidateQueries.insert(normalized)
+                        candidateSearches += 1
+                        let retrieved = try await tools.execute(call, context: context)
+                        let summary = candidateResultSummary(retrieved.outputJSON)
+                        if summary.terminal || (candidateSearches >= 2 && summary.domains.isSubset(of: candidateDomains) && summary.cards.isSubset(of: candidateCards)) {
+                            candidateSearchClosed = true
+                        }
+                        candidateDomains.formUnion(summary.domains)
+                        candidateCards.formUnion(summary.cards)
+                        result = retrieved
+                    }
+                } else {
+                    result = try await tools.execute(call, context: context)
+                }
                 guard activeTurnID == assistantMessageID, !Task.isCancelled else { throw TutorConversationError.staleResult }
                 toolResults.append(result)
                 providerContinuations.append(TutorProviderContinuation(
@@ -513,6 +546,36 @@ public actor TutorConversationEngine {
         ], options: [.sortedKeys])
         guard data.count <= 128 * 1_024 else { throw TutorConversationError.responseTooLarge }
         return String(decoding: data, as: UTF8.self)
+    }
+
+    private func normalizedCandidateQuery(_ argumentsJSON: String) -> String {
+        guard let data = argumentsJSON.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return argumentsJSON.lowercased().split(whereSeparator: { !$0.isLetter && !$0.isNumber }).sorted().joined(separator: " ")
+        }
+        let relevant = ["query", "goal", "object", "prior_experiment", "evidence", "domain", "category", "role", "section"]
+        return relevant.compactMap { (object[$0] as? String)?.lowercased() }
+            .flatMap { $0.split(whereSeparator: { !$0.isLetter && !$0.isNumber }) }
+            .map(String.init).sorted().joined(separator: " ")
+    }
+
+    private func candidateConvergenceResult(call: TutorToolCall, reason: String) throws -> TutorToolResult {
+        let data = try JSONSerialization.data(withJSONObject: [
+            "availability": "closed", "outcome": "converged", "coverage_note": "Candidate retrieval is closed for this turn. Answer from the available evidence or ask one decision-changing question.", "reason": reason,
+        ], options: [.sortedKeys])
+        return TutorToolResult(call: call, outputJSON: String(decoding: data, as: UTF8.self))
+    }
+
+    private func candidateResultSummary(_ outputJSON: String) -> (terminal: Bool, domains: Set<String>, cards: Set<String>) {
+        guard let data = outputJSON.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return (true, [], []) }
+        let outcome = object["outcome"] as? String ?? ""
+        // Runtime raw values are camelCase.  The underscore aliases preserve
+        // fail-closed behavior if a legacy serialized outcome reaches this
+        // boundary; neither form is exposed as retrieval diagnostics.
+        let terminal = ["noMatch", "queryFailed", "malformedSelectedPayload", "schemaDrift", "corrupt", "disabled", "unavailable", "versionMismatch", "no_match", "query_failed", "malformed_selected_payload", "schema_drift", "version_mismatch"].contains(outcome)
+        let matches = object["matches"] as? [[String: Any]] ?? []
+        return (terminal, Set(matches.compactMap { $0["domain"] as? String }), Set(matches.compactMap { $0["title"] as? String }))
     }
 
     private func fallbackReason(_ error: Error) -> String {

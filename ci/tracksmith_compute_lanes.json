@@ -35,7 +35,7 @@
     },
     {
       "id": "linux_retrieval",
-      "purpose": "Deterministic Package 018 index, SQLite, retrieval, and Package 019 resource-boundary checks.",
+      "purpose": "Deterministic Package 018 index, retrieval recovery audit/baselines, and Package 019 resource-boundary checks.",
       "operating_system": "Linux",
       "architecture": "x64",
       "runner_label": "ubuntu-24.04",
@@ -48,7 +48,7 @@
       "requires_signing_or_install": false,
       "artifact_outputs": [],
       "expected_maximum_artifact_bytes": 0,
-      "change_paths": ["research/scripts/build_candidate_retrieval_index.py", "research/scripts/package18_audit.py", "packages/ProductionTutor/", "docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json"],
+      "change_paths": ["research/scripts/build_candidate_retrieval_index.py", "research/scripts/package18_audit.py", "research/scripts/retrieval_quality_recovery.py", "research/scripts/retrieval_architecture_baselines.py", "research/tutor_quality/retrieval_quality_recovery/", "packages/ProductionTutor/", "docs/evidence/PACKAGE_018_RUNTIME_RETRIEVAL_REPORT.json", "docs/evidence/RETRIEVAL_"],
       "safe_for_fork_pull_requests": true
     },
     {
@@ -107,7 +107,7 @@
     },
     {
       "id": "macos_tutor",
-      "purpose": "Full TutorConversationTests plus Package 016, 018, and 019 diagnostics.",
+      "purpose": "Full TutorConversationTests plus Package 016, 018, frozen Package 019, and retrieval recovery diagnostics.",
       "operating_system": "macOS",
       "architecture": "arm64",
       "runner_label": "macos-15",
@@ -120,7 +120,7 @@
       "requires_signing_or_install": false,
       "artifact_outputs": [],
       "expected_maximum_artifact_bytes": 0,
-      "change_paths": ["packages/TutorConversation/", "packages/ProductionTutor/", "tools/TutorConversationTests/", "research/tutor_quality/", "research/community_knowledge/packages/", "research/community_knowledge/runtime_projection/p16/", "apps/CompanionMacApp/", "plugins/AudioUnit/AudioUnitExtension/Info.plist"],
+      "change_paths": ["packages/TutorConversation/", "packages/ProductionTutor/", "tools/TutorConversationTests/", "research/scripts/retrieval_quality_recovery.py", "research/scripts/retrieval_architecture_baselines.py", "research/tutor_quality/", "research/community_knowledge/packages/", "research/community_knowledge/runtime_projection/p16/", "docs/evidence/RETRIEVAL_", "apps/CompanionMacApp/", "plugins/AudioUnit/AudioUnitExtension/Info.plist"],
       "safe_for_fork_pull_requests": true
     },
     {

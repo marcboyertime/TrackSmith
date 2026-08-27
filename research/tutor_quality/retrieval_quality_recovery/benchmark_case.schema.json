@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "partition", "utterance", "case_kind", "query_form", "acceptable_domains", "hard_negative_sibling_domains", "ambiguity_class", "no_match_class", "authorship_manifest_identity", "adjudication", "content_sha256", "runtime_eligibility", "execution_authority"],
+  "properties": {
+    "case_id": {"type": "string", "minLength": 1},
+    "partition": {"enum": ["development", "calibration", "sealed_blind"]},
+    "utterance": {"type": "string", "minLength": 1},
+    "case_kind": {"enum": ["matchable", "no_match"]},
+    "query_form": {"enum": ["ordinary_natural_language", "jargon_or_colloquial_language", "misspelled_or_noisy_input", "multiple_symptoms", "multi_turn_context", "follow_up_outcome_language", "unavailable_logic_or_listening_context", "adversarial_authority_unsupported_product_or_procedure_trap"]},
+    "acceptable_domains": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "hard_negative_sibling_domains": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "ambiguity_class": {"enum": ["clear", "ambiguous", "abstain"]},
+    "no_match_class": {"type": ["string", "null"], "enum": [null, "insufficient_description", "contextless_follow_up", "out_of_domain", "shopping_only", "execution_or_navigation_only_without_safe_evidence", "nonsense_or_unrecoverable_text"]},
+    "authorship_manifest_identity": {"type": "string", "minLength": 1},
+    "adjudication": {"type": "object", "required": ["state", "steward"], "properties": {"state": {"const": "pending_human_adjudication"}, "steward": {"type": "string", "minLength": 1}}},
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "runtime_eligibility": {"const": "evaluation_only"},
+    "execution_authority": {"const": false}
+  },
+  "allOf": [
+    {"if": {"properties": {"case_kind": {"const": "matchable"}}}, "then": {"properties": {"acceptable_domains": {"minItems": 1}, "hard_negative_sibling_domains": {"minItems": 1}, "no_match_class": {"const": null}}}},
+    {"if": {"properties": {"case_kind": {"const": "no_match"}}}, "then": {"properties": {"acceptable_domains": {"maxItems": 0}, "hard_negative_sibling_domains": {"maxItems": 0}, "no_match_class": {"type": "string", "enum": ["insufficient_description", "contextless_follow_up", "out_of_domain", "shopping_only", "execution_or_navigation_only_without_safe_evidence", "nonsense_or_unrecoverable_text"]}}, "required": ["no_match_class"]}}
+  ]
+}
