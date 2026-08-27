@@ -28,12 +28,15 @@ private actor CandidateRetrieverStub: CandidateRetriever {
     let state: CandidateRetrievalAvailability
     let values: [CommunityCandidateCorpusRankedCard]
     let outcome: CandidateRetrievalOutcomeKind?
+    private var outcomeCalls = 0
     init(_ state: CandidateRetrievalAvailability, _ values: [CommunityCandidateCorpusRankedCard] = [], outcome: CandidateRetrievalOutcomeKind? = nil) { self.state = state; self.values = values; self.outcome = outcome }
     func availability() -> CandidateRetrievalAvailability { state }
     func ranked(query: String, filters: CommunityCandidateCorpusFilters, limit: Int) -> [CommunityCandidateCorpusRankedCard] { values.prefix(limit).map { $0 } }
     func rankedOutcome(query: String, filters: CommunityCandidateCorpusFilters, limit: Int) -> CandidateRetrievalOutcome {
-        .init(kind: outcome ?? (values.isEmpty ? .noMatch : .matches), cards: values.prefix(limit).map { $0 })
+        outcomeCalls += 1
+        return .init(kind: outcome ?? (values.isEmpty ? .noMatch : .matches), cards: values.prefix(limit).map { $0 })
     }
+    func rankedOutcomeCallCount() -> Int { outcomeCalls }
 }
 
 @main
@@ -3632,8 +3635,8 @@ private final class Suite {
 
     private func testPackageEighteenDiagnostic() async throws {
         let policyAudit = TutorSystemPolicy.audit()
-        try expect(policyAudit.passes && policyAudit.version == "package018/1" && policyAudit.utf8Bytes == 2_836 && policyAudit.sha256 == "b38c81c7f61cbfc4b205fcc2555cd0f19042bae5f5564dfa981b3f1f001f73da",
-                   "P18 TutorSystemPolicy audit/hash/version drifted")
+        try expect(policyAudit.passes && policyAudit.version == "retrieval-quality-recovery/1" && policyAudit.utf8Bytes == 3_142 && policyAudit.sha256 == "ee1950e673ff5e1bea2efb4f8845062942eb9050fd9447cb07c27301c3fc16c9",
+                   "P18 TutorSystemPolicy audit/hash/version drifted version=\(policyAudit.version) bytes=\(policyAudit.utf8Bytes) sha=\(policyAudit.sha256)")
         let indexedReadinessStarted = Date()
         let opened = CandidateRetrievalIndex.openBundled()
         let indexedReadinessMilliseconds = Date().timeIntervalSince(indexedReadinessStarted) * 1_000
@@ -3695,11 +3698,18 @@ private final class Suite {
         let executor = try TutorToolExecutor()
         let tool = try await executor.execute(TutorToolCall(callID: "p18-diagnostics", name: "search_candidate_corpus", argumentsJSON: #"{"query":"my vocal gets muddy when guitars arrive"}"#), context: TutorRuntimeContext(sourceType: .vocal))
         let object = try JSONSerialization.jsonObject(with: Data(tool.outputJSON.utf8)) as? [String: Any] ?? [:]
-        let retrieval = object["retrieval_diagnostics"] as? [String: Any] ?? [:]
-        try expect((object["matches"] as? [[String: Any]] ?? []).count <= 4 && retrieval["top_score"] != nil &&
-                   retrieval["lexical_coverage"] != nil && retrieval["top_margin"] != nil &&
-                   !tool.outputJSON.lowercased().contains("sqlite"),
-                   "P18 bounded tool diagnostics or path boundary drifted")
+        func hasForbiddenCandidateDiagnostic(_ value: Any) -> Bool {
+            let forbidden = ["retrieval_diagnostics", "score", "margin", "ambigu", "lexical", "deduplicated", "retrieval_mode", "rank"]
+            if let object = value as? [String: Any] {
+                return object.contains { key, nested in forbidden.contains(where: { key.lowercased().contains($0) }) || hasForbiddenCandidateDiagnostic(nested) }
+            }
+            if let values = value as? [Any] { return values.contains(where: hasForbiddenCandidateDiagnostic) }
+            if let string = value as? String { return forbidden.contains(where: { string.lowercased().contains($0) }) }
+            return false
+        }
+        try expect((object["matches"] as? [[String: Any]] ?? []).count <= 4 &&
+                   !hasForbiddenCandidateDiagnostic(object) && !tool.outputJSON.lowercased().contains("sqlite"),
+                   "P18 candidate model projection leaked a retrieval diagnostic")
         for query in ["what is the best plugin ever", "I cannot find the control I need in Logic", "my mix sounds wrong but I have no more detail"] {
             let abstention = try await executor.execute(TutorToolCall(callID: "p18-abstain-\(query.count)", name: "search_candidate_corpus", argumentsJSON: "{\"query\":\"\(query)\"}"), context: .init(sourceType: .vocal))
             let abstentionObject = try JSONSerialization.jsonObject(with: Data(abstention.outputJSON.utf8)) as? [String: Any] ?? [:]
@@ -3716,10 +3726,7 @@ private final class Suite {
                 let json = try JSONSerialization.jsonObject(with: Data(toolResult.outputJSON.utf8)) as? [String: Any] ?? [:]
                 try expect(json["availability"] as? String == availabilityState.rawValue && ((json["match"] is NSNull) != hasMatch) && !toolResult.outputJSON.localizedCaseInsensitiveContains("sqlite") && !toolResult.outputJSON.localizedCaseInsensitiveContains("package_id"), "P18 all-level state matrix shape/leak drifted state=\(availabilityState.rawValue) hasMatch=\(hasMatch) output=\(toolResult.outputJSON)")
                 if availabilityState != .ready { try expect(toolResult.evidence.first?.kind == .unavailable, "P18 non-ready stub called ranker") }
-                if availabilityState == .ready && values.first?.ambiguity == true {
-                    let diagnostics = json["retrieval_diagnostics"] as? NSDictionary
-                    try expect(diagnostics?["ambiguous"] as? Bool == true, "P18 ambiguity diagnostic drifted diagnostics=\(String(describing: diagnostics)) output=\(toolResult.outputJSON)")
-                }
+                try expect(!hasForbiddenCandidateDiagnostic(json), "P18 state matrix leaked a candidate diagnostic output=\(toolResult.outputJSON)")
             }
         }
         let queryFailure = CandidateRetrieverStub(.ready, outcome: .queryFailed)
@@ -3728,6 +3735,40 @@ private final class Suite {
         let queryFailureJSON = try JSONSerialization.jsonObject(with: Data(queryFailureResult.outputJSON.utf8)) as? [String: Any] ?? [:]
         try expect(queryFailureJSON["availability"] as? String == "ready" && queryFailureJSON["outcome"] as? String == CandidateRetrievalOutcomeKind.queryFailed.rawValue && queryFailureJSON["match"] is NSNull && queryFailureResult.evidence.first?.kind == .unavailable,
                    "P19 typed query failure was collapsed into no-match")
+        let convergenceRoot = temporaryRoot("candidate-convergence")
+        defer { try? FileManager.default.removeItem(at: convergenceRoot) }
+        let convergenceTools = TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateRetriever: CandidateRetrieverStub(.ready, [results[0]]))
+        let convergenceProvider = CandidateConvergenceProvider()
+        let convergenceEngine = TutorConversationEngine(store: TutorConversationStore(rootURL: convergenceRoot), tools: convergenceTools, fallbackProvider: try OfflineTutorProvider())
+        _ = try await collectTurn(convergenceEngine, "Please help my muddy vocal.", .init(sourceType: .vocal), convergenceProvider)
+        let convergenceRequests = convergenceProvider.requestsSnapshot()
+        try expect(convergenceRequests.count == 3 && convergenceRequests[1].continuations.count == 1 && convergenceRequests[2].continuations.count == 2 && convergenceRequests[2].continuations.last?.outputJSON.contains("converged") == true,
+                   "candidate convergence did not reject an identical second search with one bounded closure output")
+        let changedProvider = CandidateQuerySequenceProvider(queries: ["muddy vocal guitars", "late groove after a changed comparison"])
+        let changedEngine = TutorConversationEngine(store: TutorConversationStore(rootURL: temporaryRoot("candidate-changed-query")), tools: convergenceTools, fallbackProvider: try OfflineTutorProvider())
+        _ = try await collectTurn(changedEngine, "Please help my muddy vocal.", .init(sourceType: .vocal), changedProvider)
+        try expect(changedProvider.requestsSnapshot().count == 3 && changedProvider.requestsSnapshot()[2].continuations.count == 2 && !changedProvider.requestsSnapshot()[2].continuations.last!.outputJSON.contains("converged"),
+                   "candidate convergence rejected a genuinely changed second query")
+        for terminal in [CandidateRetrievalOutcomeKind.noMatch, .queryFailed, .malformedSelectedPayload, .schemaDrift, .versionMismatch, .corrupt, .disabled, .unavailable] {
+            let terminalProvider = CandidateQuerySequenceProvider(queries: ["first candidate query", "changed second candidate query"])
+            let terminalRetriever = CandidateRetrieverStub(.ready, outcome: terminal)
+            let terminalTools = TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateCorpus: nil, candidateRetriever: terminalRetriever)
+            let terminalEngine = TutorConversationEngine(store: TutorConversationStore(rootURL: temporaryRoot("candidate-terminal-\(terminal.rawValue)")), tools: terminalTools, fallbackProvider: try OfflineTutorProvider())
+            _ = try await collectTurn(terminalEngine, "Please help.", .init(sourceType: .vocal), terminalProvider)
+            let requests = terminalProvider.requestsSnapshot()
+            let retrievalCalls = await terminalRetriever.rankedOutcomeCallCount()
+            try expect(requests.count == 3 && requests[2].continuations.count == 2 && requests[2].continuations.last?.outputJSON.contains("converged") == true && retrievalCalls == 1,
+                       "terminal candidate outcome did not close without a second retrieval \(terminal.rawValue)")
+        }
+        let noNewProvider = CandidateQuerySequenceProvider(queries: ["first candidate query", "changed second candidate query", "third candidate query"])
+        let noNewRetriever = CandidateRetrieverStub(.ready, [results[0]])
+        let noNewTools = TutorToolExecutor(knowledge: knowledge, procedures: procedures, candidateRetriever: noNewRetriever)
+        let noNewEngine = TutorConversationEngine(store: TutorConversationStore(rootURL: temporaryRoot("candidate-no-new")), tools: noNewTools, fallbackProvider: try OfflineTutorProvider())
+        _ = try await collectTurn(noNewEngine, "Please help.", .init(sourceType: .vocal), noNewProvider)
+        let noNewRequests = noNewProvider.requestsSnapshot()
+        let noNewCalls = await noNewRetriever.rankedOutcomeCallCount()
+        try expect(noNewRequests.count == 4 && noNewRequests[3].continuations.count == 3 && noNewRequests[3].continuations.last?.outputJSON.contains("converged") == true && noNewCalls == 2,
+                   "second no-new candidate result did not close without a third retrieval")
         let packageText = try String(contentsOf: URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Package.swift"))
         try expect(!packageText.contains("community-reverb-delay-v1.json") && !packageText.contains("package019_cloud_prompt_suite.json") && packageText.contains("CandidateRetrieval.sqlite"),
                    "P18 raw candidate resources remain in product package declaration")
@@ -4579,9 +4620,19 @@ private final class Suite {
             callID: "candidate-level", name: "search_candidate_corpus",
             argumentsJSON: #"{"query":"Should I set the fader balance before adding EQ and compression?","domain":"level_balancing"}"#
         ), context: TutorRuntimeContext(sourceType: .fullMix))
+        let levelObject = try JSONSerialization.jsonObject(with: Data(levelResult.outputJSON.utf8)) as? [String: Any] ?? [:]
+        func containsForbiddenDiagnostic(_ value: Any) -> Bool {
+            let terms = ["retrieval_mode", "retrieval_diagnostics", "score", "margin", "ambigu", "lexical", "dedup", "rank"]
+            if let object = value as? [String: Any] {
+                return object.contains { key, nested in terms.contains(where: { key.lowercased().contains($0) }) || containsForbiddenDiagnostic(nested) }
+            }
+            if let values = value as? [Any] { return values.contains(where: containsForbiddenDiagnostic) }
+            return (value as? String).map { string in terms.contains(where: { string.lowercased().contains($0) }) } ?? false
+        }
         try expect(!levelResult.outputJSON.contains(#""id":"level.foundation.static_mix_first""#) &&
-                   levelResult.outputJSON.contains(#""retrieval_mode":"indexed_bm25_general_rerank_provisional""#),
-                   "exact-normalized package-2 retrieval or retrieval-mode disclosure drifted")
+                   levelObject["availability"] as? String == "ready" && levelObject["outcome"] as? String == "matches" &&
+                   !(levelObject["matches"] as? [[String: Any]] ?? []).isEmpty && !containsForbiddenDiagnostic(levelObject),
+                   "package-2 model projection leaked retrieval internals or lost its safe typed shape")
         let eqResult = try await executor.execute(TutorToolCall(
             callID: "candidate-eq", name: "search_candidate_corpus",
             argumentsJSON: #"{"query":"my vocal is muddy","domain":"equalization"}"#
@@ -6395,6 +6446,53 @@ private final class RecordingHTTPTransport: ProviderHTTPTransport, @unchecked Se
 
     var requestCount: Int { lock.withLock { requests.count } }
     var latestRequest: ProviderHTTPRequest? { lock.withLock { requests.last } }
+}
+
+private final class CandidateConvergenceProvider: TutorConversationProvider, @unchecked Sendable {
+    let providerIdentifier = "candidate-convergence-test"
+    private let lock = NSLock()
+    private var requests: [TutorProviderRequest] = []
+
+    func stream(_ request: TutorProviderRequest) -> AsyncThrowingStream<TutorProviderEvent, Error> {
+        lock.withLock { requests.append(request) }
+        let output: [TutorProviderOutputItem]
+        if request.continuations.count < 2 {
+            output = [.functionCall(TutorToolCall(callID: "candidate-\(request.continuations.count + 1)", name: "search_candidate_corpus", argumentsJSON: #"{"query":"muddy vocal guitars"}"#))]
+        } else {
+            output = [.text("I will stop searching and use the available evidence to ask one decision-changing question.")]
+        }
+        return AsyncThrowingStream { continuation in
+            continuation.yield(.completed(metadata: .init(providerIdentifier: self.providerIdentifier, modelIdentifier: "test"), output: output))
+            continuation.finish()
+        }
+    }
+
+    func requestsSnapshot() -> [TutorProviderRequest] { lock.withLock { requests } }
+}
+
+private final class CandidateQuerySequenceProvider: TutorConversationProvider, @unchecked Sendable {
+    let providerIdentifier = "candidate-query-sequence-test"
+    private let queries: [String]
+    private let lock = NSLock()
+    private var requests: [TutorProviderRequest] = []
+
+    init(queries: [String]) { self.queries = queries }
+
+    func stream(_ request: TutorProviderRequest) -> AsyncThrowingStream<TutorProviderEvent, Error> {
+        lock.withLock { requests.append(request) }
+        let output: [TutorProviderOutputItem]
+        if request.continuations.count < queries.count {
+            output = [.functionCall(TutorToolCall(callID: "candidate-sequence-\(request.continuations.count + 1)", name: "search_candidate_corpus", argumentsJSON: #"{"query":"\#(queries[request.continuations.count])"}"#))]
+        } else {
+            output = [.text("I will finish from the available evidence.")]
+        }
+        return AsyncThrowingStream { continuation in
+            continuation.yield(.completed(metadata: .init(providerIdentifier: providerIdentifier, modelIdentifier: "test"), output: output))
+            continuation.finish()
+        }
+    }
+
+    func requestsSnapshot() -> [TutorProviderRequest] { lock.withLock { requests } }
 }
 
 private final class StatefulScriptedProvider: TutorConversationProvider, @unchecked Sendable {

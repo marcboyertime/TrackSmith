@@ -1,0 +1,19 @@
+{
+  "schema_version": "retrieval-quality-recovery-benchmark/1",
+  "execution_authority": false,
+  "case_count": 600,
+  "partitions": {"development": {"cases":300,"match":240,"no_match":60}, "calibration": {"cases":150,"match":120,"no_match":30}, "sealed_blind": {"cases":150,"match":120,"no_match":30}},
+  "human_gold_adjudication_required": true,
+  "external_blind_archive_sha256_required": true,
+  "governance": {
+    "fresh_separate_authorship_required": true,
+    "training_author_visibility_limited_to": ["canonical_cards","structured_fields","collision_reports","aggregate_redacted_development_metrics"],
+    "training_author_must_not_receive": ["raw_benchmark_wording","benchmark_ids","labels","acceptable_sets","calibration_data","sealed_blind_data","copied_or_paraphrased_benchmark_phrasing"],
+    "human_gold_pending": true,
+    "sealed_archive_steward_required": true,
+    "runtime_excluded": true,
+    "execution_authority": false
+  },
+  "old_package019_240_cases": "observed_regression_only_not_a_release_gate",
+  "status": "pending_fresh_authorship_and_human_adjudication"
+}

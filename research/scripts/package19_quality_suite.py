@@ -47,6 +47,7 @@ LIVE_FULL_TOOL=Q/'evaluations/PACKAGE_019_CLOUD_full_tool.json'
 LIVE_REPEATED_TRIPLETS=Q/'evaluations/PACKAGE_019_CLOUD_repeated_triplets.json'
 KNOWN_PRE_FIX_FULL_TOOL_SHA256='e7590e46dfe93c79685f8ab17c889cfca62fc0b1a84b674df6a7c4368f226176'
 KNOWN_REPEATED_TRIPLETS_SHA256='b06d33d01395848c5962ff9e504a6b97d1b0aafbb3e3af7f3741d2c59ca06e89'
+HISTORICAL_CLOUD_POLICY={'version':'package018/1','utf8_bytes':2836,'sha256':'b38c81c7f61cbfc4b205fcc2555cd0f19042bae5f5564dfa981b3f1f001f73da'}
 def live_cloud_evidence(repeated_path=LIVE_REPEATED_TRIPLETS):
  """Fail closed on the sanitized, evaluation-only cloud artifacts.
 
@@ -73,7 +74,7 @@ def live_cloud_evidence(repeated_path=LIVE_REPEATED_TRIPLETS):
   ordered=''.join(f"{index}|{row['topic']}|{row['canonical_question']}\n" for index,row in enumerate(prompts)).encode()
   hashes=evidence.get('evaluation_hashes',{})
   expected_hashes={'suite_sha256':sh(SUITE.read_bytes()),'suite_manifest_sha256':sh(MANIFEST.read_bytes()),'candidate_index_sha256':sh(INDEX.read_bytes()),'candidate_index_manifest_sha256':sh(IM.read_bytes()),'retrieval_policy_version':RETRIEVAL_POLICY_VERSION}
-  if not isinstance(hashes,dict) or any(hashes.get(key)!=value for key,value in expected_hashes.items()) or hashes.get('cloud_prompt_suite')!={'exact_prompt_count':12,'ordered_prompt_suite_sha256':sh(ordered),'prompt_only_file_sha256':sh((Q/'package019_cloud_prompt_suite.json').read_bytes())} or hashes.get('policy')!=policy():raise ValueError(f'P19 {lane} suite/index/prompt hash mismatch')
+  if not isinstance(hashes,dict) or any(hashes.get(key)!=value for key,value in expected_hashes.items()) or hashes.get('cloud_prompt_suite')!={'exact_prompt_count':12,'ordered_prompt_suite_sha256':sh(ordered),'prompt_only_file_sha256':sh((Q/'package019_cloud_prompt_suite.json').read_bytes())} or hashes.get('policy')!=HISTORICAL_CLOUD_POLICY:raise ValueError(f'P19 {lane} suite/index/prompt or historical-policy hash mismatch')
   clean_structure(evidence)
   return evidence.get('source_identity',{})
  no_tool=load(LIVE_NO_TOOL,'no_tool');full_tool=load(LIVE_FULL_TOOL,'full_tool');repeated=load(repeated_path,'repeated_triplets');full_artifact_sha=sh(LIVE_FULL_TOOL.read_bytes());repeated_artifact_sha=sh(repeated_path.read_bytes())
@@ -137,7 +138,7 @@ def live_cloud_evidence(repeated_path=LIVE_REPEATED_TRIPLETS):
   value={'status':status,'artifact_sha256':sh(path.read_bytes()),'artifact_bytes':path.stat().st_size,'schema_version':evidence['schema_version'],'lane':evidence['lane'],'generation_requests':requests,'generation_samples':samples,'completed_generations':completed,'valid_supporting_judgments':judgments,'tools_enabled_samples':tools,'cost':{'cap_microusd':cost['cap_microusd'],'external_unknown_hold_microusd':cost['external_unknown_hold_microusd'],'reserved_microusd':cost['reserved_microusd'],'ledger_snapshot_spent_microusd':cost['spent_microusd'],'provider_spend_status':'legacy_usage_cache_detail_unavailable_not_exact','poisoned':cost['poisoned']},'worktree_provenance':provenance,'runtime_resource_exclusion':'passed_artifacts_outside_live_resource_roots'}
   if partial:value['partial']=partial
   return value
- return {'no_tool':summary(LIVE_NO_TOOL,no_tool,'accepted_completed_no_tool',no_cost,no_provenance,48,36,36,12,0),'full_tool':summary(LIVE_FULL_TOOL,full_tool,'accepted_honest_partial_full_tool',full_cost,full_provenance,142,36,26,5,36),'repeated_triplets':summary(repeated_path,repeated,'accepted_honest_partial_repeated_triplets',repeated_cost,repeated_provenance,446,108,81,18,108,{'fallback_excluded_generations':23,'failed_generations':4,'terminal_failure_samples':27,'terminal_timeout_samples':1,'valid_judgments_by_repetition':repeated_valid_by_repetition,'judgment_dimensions_true_counts':repeated_dimension_true})}
+ return {'historical_cloud_policy':HISTORICAL_CLOUD_POLICY,'current_runtime_policy':policy(),'no_tool':summary(LIVE_NO_TOOL,no_tool,'accepted_completed_no_tool',no_cost,no_provenance,48,36,36,12,0),'full_tool':summary(LIVE_FULL_TOOL,full_tool,'accepted_honest_partial_full_tool',full_cost,full_provenance,142,36,26,5,36),'repeated_triplets':summary(repeated_path,repeated,'accepted_honest_partial_repeated_triplets',repeated_cost,repeated_provenance,446,108,81,18,108,{'fallback_excluded_generations':23,'failed_generations':4,'terminal_failure_samples':27,'terminal_timeout_samples':1,'valid_judgments_by_repetition':repeated_valid_by_repetition,'judgment_dimensions_true_counts':repeated_dimension_true})}
 
 def live_no_tool_evidence():return live_cloud_evidence()['no_tool']
 def live_cloud_evidence_self_test():
@@ -150,6 +151,7 @@ def live_cloud_evidence_self_test():
    'artifact_bytes':lambda value:value['counts'].__setitem__('provider_request_calls',445),
    'source_identity':lambda value:value['source_identity'].__setitem__('worktree_patch_sha256','unavailable'),
    'prohibited_provider_material':lambda value:value.__setitem__('raw_request','forbidden'),
+   'historical_policy':lambda value:value['evaluation_hashes']['policy'].__setitem__('sha256','0'*64),
   }.items():
    value=json.loads(LIVE_REPEATED_TRIPLETS.read_text());mutate(value);path.write_text(json.dumps(value,sort_keys=True))
    try:live_cloud_evidence(path)

@@ -49,7 +49,7 @@ For a future Codex/package change, first assign deterministic Python/corpus/inde
 5. Rerun only failed jobs only when the same-SHA failure is proven transient. Otherwise repair first; do not use a rerun to launder deterministic failures.
 6. Preserve evidence claims: an Actions result establishes only its recorded source/build/test/resource outcome. It does not establish signing, installation, AU registration, Logic behavior, provider/model quality, accessibility observation, or owner listening.
 
-The macOS Tutor lane intentionally regenerates the deterministic Package 019 diagnostic receipt/reports in its clean checkout and rejects tracked drift after the Swift diagnostic. The Xcode lane remains separate: it scans the actual unsigned bundle and seals its two compact temporary reports into one bounded upload snapshot with an internal hash manifest. This retains the former same-checkout diagnostic/report proof without treating the built receipt as tracked evidence.
+The macOS Tutor lane runs Package 019 diagnostics with `TRACKSMITH_P19_DIAGNOSTIC_NO_WRITE=1`; it never regenerates or rewrites historical Package 019 evidence. The same lane and the Linux retrieval lane run the deterministic retrieval-quality recovery audit and float-only observed-regression baseline checks. Those checks remain excluded from runtime resources, make no architecture selection, and leave human/separate-authorship, pilot, blind, installed-app, Logic, listening, and release gates pending. The Xcode lane remains separate: it scans the actual unsigned bundle and seals its two compact temporary reports into one bounded upload snapshot with an internal hash manifest.
 
 ## Phase 2 deterministic acceleration
 

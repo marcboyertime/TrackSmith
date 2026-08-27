@@ -1,0 +1,9 @@
+{
+  "schema_version": "retrieval-quality-recovery-authorship/1",
+  "execution_authority": false,
+  "benchmark_authorship": {"fresh_separate_author_required": true, "author_cannot_view_training_utterances": true, "xhigh_receipt_required": true, "status": "pending_human_separate_authorship"},
+  "training_author_visibility": {"allowed_only": ["canonical_cards", "structured_fields", "collision_reports", "aggregate_redacted_development_metrics"], "forbidden": ["raw_benchmark_wording", "benchmark_ids", "gold_labels", "acceptable_sets", "calibration_data", "sealed_data", "copied_or_paraphrased_benchmark_phrasing"]},
+  "human_gold_adjudication": {"required": true, "status": "pending"},
+  "sealed_external_archive": {"required": true, "sha256_required": true, "status": "pending"},
+  "runtime": {"benchmark_and_contract_excluded": true}
+}
